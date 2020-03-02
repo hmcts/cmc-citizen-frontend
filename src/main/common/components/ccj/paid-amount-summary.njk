@@ -9,9 +9,12 @@
   <div class="column-two-thirds">
 
     <div class="form-group">
-      {% set total = claim.totalAmountTillToday if not amountSettledFor else amountSettledFor + (claim.claimData.feeAmountInPennies | pennies2pounds) %}
-
-      <p>{{ t('Judgment will be entered against the defendant for this amount.') }}</p>
+      {% set total = claim.totalAmountTillToday if amountSettledFor === undefined else amountSettledFor + (claimFee | pennies2pounds) %}
+      {% if interestDetails %}
+        <p>{{ t('The judgment will order the defendant to pay {{ totalAmount }}, including your claim fee and any interest, as shown in this table:', { totalAmount: total | numeral }) }}</p>
+      {% else %}
+        <p>{{ t('The judgment will order the defendant to pay {{ totalAmount }}, including your claim fee, as shown in this table:', { totalAmount: total | numeral }) }}</p>
+      {% endif %}
 
       <table class="table-form">
         <caption class="visuallyhidden">{{ t('Amount payable by the defendant') }}</caption>
@@ -22,9 +25,9 @@
         </tr>
         </thead>
         <tbody>
-        {% if not amountSettledFor %}
+        {% if amountSettledFor === undefined %}
           <tr>
-            <th scope="row">{{ t('Claim amount') }}</th>
+            <th scope="row">{{ t('Amount of claim included') }}</th>
             <td class="numeric last">
               <span class="font-small">{{ claim.claimData.amount.totalAmount() | numeral }}</span>
             </td>
@@ -37,7 +40,7 @@
             </td>
           </tr>
         {% endif %}
-        {% if not amountSettledFor and interestDetails %}
+        {% if amountSettledFor === undefined and interestDetails %}
         <tr>
           <th scope="row">
             {{ interestSnippet(label = 'Interest to date', interestDetails.rate, interestDetails.numberOfDays,
@@ -49,9 +52,9 @@
         </tr>
         {% endif %}
         <tr>
-          <th scope="row">{{ t('Claim fee') }}</th>
+          <th scope="row">{{ t('Amount of claim fee included') }}</th>
           <td class="numeric last">
-            <span class="font-small">{{ claim.claimData.feeAmountInPennies | pennies2pounds | numeral }}</span>
+            <span class="font-small">{{ claimFee | pennies2pounds | numeral }}</span>
           </td>
         </tr>
         {% if alreadyPaid %}

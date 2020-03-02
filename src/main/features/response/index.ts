@@ -1,8 +1,6 @@
 import * as express from 'express'
-import { plainToClass } from 'class-transformer'
 import { Claim } from 'claims/models/claim'
 import { Draft } from '@hmcts/draft-store-client'
-import { Address } from 'forms/models/address'
 import { PartyDetails } from 'forms/models/partyDetails'
 import * as path from 'path'
 
@@ -25,6 +23,13 @@ import { OnlyDefendantLinkedToClaimCanDoIt } from 'guards/onlyDefendantLinkedToC
 import { OAuthHelper } from 'idam/oAuthHelper'
 import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
+import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
+import { PartyType } from 'common/partyType'
+import { IndividualDetails } from 'forms/models/individualDetails'
+import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
+import { CompanyDetails } from 'forms/models/companyDetails'
+import { OrganisationDetails } from 'forms/models/organisationDetails'
+import { AlreadyPaidInFullGuard } from 'guards/alreadyPaidInFullGuard'
 
 function defendantResponseRequestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -38,15 +43,26 @@ function defendantResponseRequestHandler (): express.RequestHandler {
   return AuthorizationMiddleware.requestHandler(requiredRoles, accessDeniedCallback, unprotectedPaths)
 }
 
+function deserializeFn (value: any): PartyDetails {
+  switch (value.type) {
+    case PartyType.INDIVIDUAL.value:
+      return IndividualDetails.fromObject(value)
+    case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
+      return SoleTraderDetails.fromObject(value)
+    case PartyType.COMPANY.value:
+      return CompanyDetails.fromObject(value)
+    case PartyType.ORGANISATION.value:
+      return OrganisationDetails.fromObject(value)
+    default:
+      throw new Error(`Unknown party type: ${value.type}`)
+  }
+}
+
 function initiatePartyFromClaimHandler (req: express.Request, res: express.Response, next: express.NextFunction) {
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
   if (!draft.document.defendantDetails.partyDetails) {
     const claim: Claim = res.locals.claim
-
-    const partyDetails: PartyDetails = plainToClass(PartyDetails, claim.claimData.defendant)
-    partyDetails.address = new Address()
-
-    draft.document.defendantDetails.partyDetails = partyDetails
+    draft.document.defendantDetails.partyDetails = deserializeFn(claim.claimData.defendant)
   }
   next()
 }
@@ -71,12 +87,13 @@ export class Feature {
     app.all(allResponseRoutes, defendantResponseRequestHandler())
     app.all(allResponseRoutes, ClaimMiddleware.retrieveByExternalId)
     app.all(/^\/case\/.+\/response\/(?!receipt|summary|claim-details).*$/, OnlyDefendantLinkedToClaimCanDoIt.check())
+    app.all(allResponseRoutes, AlreadyPaidInFullGuard.requestHandler)
     app.all(
       /^\/case\/.+\/response\/(?!confirmation|counter-claim|receipt|summary|claim-details).*$/,
       ResponseGuard.checkResponseDoesNotExist()
     )
     app.all('/case/*/response/summary', OnlyClaimantLinkedToClaimCanDoIt.check(), ResponseGuard.checkResponseExists())
-    app.all(/^\/case\/.*\/response\/(?!claim-details).*$/, CountyCourtJudgmentRequestedGuard.requestHandler)
+    app.all(/^\/case\/.*\/response\/(?!claim-details|receipt).*$/, CountyCourtJudgmentRequestedGuard.requestHandler)
     app.all(/^\/case\/.*\/response\/statement-of-means\/.*/, OptInFeatureToggleGuard.featureEnabledGuard('admissions'))
     app.all(/^\/case\/.+\/response\/(?!confirmation|receipt|summary).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'response', 100, (value: any): ResponseDraft => {
@@ -88,9 +105,13 @@ export class Feature {
       },
       initiatePartyFromClaimHandler
     )
-    app.all(/^\/case\/.+\/response\/task-list|check-and-send|incomplete-submission.*$/,
+    app.all(/^\/case\/.+\/response\/(?!confirmation|receipt|summary).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'mediation', 100, (value: any): MediationDraft => {
         return new MediationDraft().deserialize(value)
+      }))
+    app.all(/^\/case\/.+\/response\/task-list|check-and-send|incomplete-submission.*$/,
+      DraftMiddleware.requestHandler(new DraftService(), 'directionsQuestionnaire', 100, (value: any): DirectionsQuestionnaireDraft => {
+        return new DirectionsQuestionnaireDraft().deserialize(value)
       }))
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
   }

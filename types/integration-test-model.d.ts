@@ -26,10 +26,13 @@ declare type Claim = {
 declare type Party = {
   type: string
   name: string
+  title?: string
+  firstName?: string
+  lastName?: string
   contactPerson?: string
   address: Address
   correspondenceAddress?: Address
-  mobilePhone?: string
+  phone?: string
   email?: string
   dateOfBirth?: string
 }

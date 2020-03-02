@@ -3,7 +3,7 @@ import { expect } from 'chai'
 import { Paths as ClaimPaths } from 'claim/paths'
 import { Paths as EligibilityPaths } from 'eligibility/paths'
 import * as config from 'config'
-import * as cookieEncrypter from 'cookie-encrypter'
+import * as cookieEncrypter from '@hmcts/cookie-encrypter'
 import { Paths as DashboardPaths } from 'dashboard/paths'
 
 import { cookieName as eligibilityCookieName } from 'eligibility/store'
@@ -231,6 +231,18 @@ describe('Login receiver', async () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
         })
+      })
+    })
+
+    describe('for expired user credentials', () => {
+      it('should redirect to login', async () => {
+        const token = 'I am dummy access token'
+        idamServiceMock.rejectExchangeCode(token)
+
+        await request(app)
+          .get(`${AppPaths.receiver.uri}?code=ABC&state=123`)
+          .set('Cookie', 'state=123')
+          .expect(res => expect(res).to.be.redirect.toLocation(/.*\/login.*/))
       })
     })
   })

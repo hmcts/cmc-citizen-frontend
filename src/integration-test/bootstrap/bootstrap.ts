@@ -5,8 +5,11 @@ import { request } from 'integration-test/helpers/clients/base/request'
 import { RequestResponse } from 'request'
 import { IdamClient } from 'integration-test/helpers/clients/idamClient'
 import { ClaimStoreClient } from 'integration-test/helpers/clients/claimStoreClient'
+import { UserEmails } from 'integration-test/data/test-data'
 
 const citizenAppURL = process.env.CITIZEN_APP_URL
+
+const userEmails: UserEmails = new UserEmails()
 
 class Client {
   static checkHealth (appURL: string): Promise<RequestResponse> {
@@ -31,10 +34,7 @@ function logStartupProblem (response) {
 }
 
 function handleError (error) {
-  const errorBody = () => {
-    return error && error.response ? error.response.body : error
-  }
-  console.log('Error during bootstrap, exiting', errorBody())
+  console.log('Error during bootstrap, exiting', error)
   process.exit(1)
 }
 
@@ -59,6 +59,9 @@ async function waitTillHealthy (appURL: string) {
     if (response.statusCode === 200) {
       console.log(`Service ${appURL} became ready after ${sleepInterval * i} seconds`)
       console.log(`FEATURE_ADMISSIONS=${process.env.FEATURE_ADMISSIONS}`)
+      console.log(`FEATURE_MEDIATION=${process.env.FEATURE_MEDIATION}`)
+      console.log(`FEATURE_DIRECTIONS_QUESTIONNAIRE=${process.env.FEATURE_DIRECTIONS_QUESTIONNAIRE}`)
+      console.log(`FEATURE_INVERSION_OF_CONTROL=${process.env.FEATURE_INVERSION_OF_CONTROL}`)
       return Promise.resolve()
     } else {
       logStartupProblem(response)
@@ -71,7 +74,7 @@ async function waitTillHealthy (appURL: string) {
   return Promise.reject(error)
 }
 
-async function createSmokeTestsUserIfDoesntExist (username: string, userGroup: string, password: string): Promise<void> {
+async function createSmokeTestsUserIfDoesntExist (username: string, userRole: string, password: string): Promise<void> {
   let bearerToken
   try {
     bearerToken = await IdamClient.authenticateUser(username, password)
@@ -80,7 +83,7 @@ async function createSmokeTestsUserIfDoesntExist (username: string, userGroup: s
       return
     }
 
-    await IdamClient.createUser(username, userGroup, password)
+    await IdamClient.createUser(username, userRole, password)
     bearerToken = await IdamClient.authenticateUser(username, password)
   }
 
@@ -96,16 +99,20 @@ async function createSmokeTestsUserIfDoesntExist (username: string, userGroup: s
   }
 }
 
-module.exports = async function (done: () => void) {
-  try {
-    await waitTillHealthy(citizenAppURL)
-    if (process.env.IDAM_URL) {
-      if (process.env.SMOKE_TEST_CITIZEN_USERNAME) {
-        await createSmokeTestsUserIfDoesntExist(process.env.SMOKE_TEST_CITIZEN_USERNAME, 'cmc-private-beta', process.env.SMOKE_TEST_USER_PASSWORD)
+module.exports = {
+  bootstrapAll: function (done) {
+    try {
+      waitTillHealthy(citizenAppURL)
+      if (process.env.IDAM_URL) {
+        if (process.env.SMOKE_TEST_CITIZEN_USERNAME) {
+          createSmokeTestsUserIfDoesntExist(process.env.SMOKE_TEST_CITIZEN_USERNAME, 'citizen', process.env.SMOKE_TEST_USER_PASSWORD)
+          createSmokeTestsUserIfDoesntExist(userEmails.getDefendant(), 'citizen', process.env.SMOKE_TEST_USER_PASSWORD)
+          createSmokeTestsUserIfDoesntExist(userEmails.getClaimant(), 'citizen', process.env.SMOKE_TEST_USER_PASSWORD)
+        }
       }
+    } catch (error) {
+      handleError(error)
     }
-  } catch (error) {
-    handleError(error)
+    done()
   }
-  done()
 }

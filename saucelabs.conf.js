@@ -5,8 +5,8 @@ const supportedBrowsers = require('@hmcts/cmc-supported-browsers').supportedBrow
 
 const browser = requiredValue(process.env.SAUCELABS_BROWSER, 'SAUCELABS_BROWSER')
 const saucelabsTunnelIdentifier = requiredValue(process.env.SAUCELABS_TUNNEL_IDENTIFIER, 'SAUCELABS_TUNNEL_IDENTIFIER')
-const saucelabsUsername = requiredValue(process.env.SAUCELABS_USERNAME, 'SAUCELABS_USERNAME')
-const saucelabsAccessKey = requiredValue(process.env.SAUCELABS_ACCESS_KEY, 'SAUCELABS_ACCESS_KEY')
+const saucelabsUsername = requiredValue(process.env.SAUCE_USERNAME, 'SAUCELABS_USERNAME')
+const saucelabsAccessKey = requiredValue(process.env.SAUCE_ACCESS_KEY, 'SAUCELABS_ACCESS_KEY')
 
 function requiredValue (envVariableValue, variableName) {
   if (envVariableValue && envVariableValue.trim().length > 0) {
@@ -29,22 +29,28 @@ exports.config = {
   tests: './src/integration-test/tests/**/*_test.*',
   output: './output',
   timeout: 10000,
+  multiple: {
+    parallel: {
+      chunks: parseInt(process.env.CHUNKS || '3')
+    }
+  },
   helpers: {
-    WebDriverIO: {
+    WebDriver: {
       url: process.env.CITIZEN_APP_URL || 'https://localhost:3000',
       browser: supportedBrowsers[browser].browserName,
-      waitForTimeout: 60000,
+      waitForTimeout: 30000,
       windowSize: '1600x900',
       uniqueScreenshotNames: true,
       timeouts: {
-        script: 60000,
-        pageLoad: 60000,
-        'page load': 60000
+        script: 30000,
+        pageLoad: 30000,
+        'page load': 30000
       },
-      host: 'ondemand.saucelabs.com',
+      host: 'ondemand.eu-central-1.saucelabs.com',
       port: 80,
-      user: saucelabsUsername,
-      key: saucelabsAccessKey,
+      region: 'eu',
+      user: process.env.SAUCE_USERNAME,
+      key: process.env.SAUCE_ACCESS_KEY,
       desiredCapabilities: setupDesiredCapabilitiesFor(browser, saucelabsTunnelIdentifier)
     },
     IdamHelper: {

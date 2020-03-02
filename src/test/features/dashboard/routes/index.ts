@@ -16,7 +16,6 @@ import { checkAuthorizationGuards } from 'test/features/dashboard/routes/checks/
 import { MomentFactory } from 'shared/momentFactory'
 import {
   baseDefenceData,
-  baseFullAdmissionData,
   basePartialAdmissionData,
   basePayByInstalmentsData,
   basePayBySetDateData,
@@ -28,15 +27,6 @@ import {
 import { baseAcceptationClaimantResponseData } from 'test/data/entity/claimantResponseData'
 
 const cookieName: string = config.get<string>('session.cookieName')
-
-const fullAdmissionClaim = {
-  ...claimStoreServiceMock.sampleClaimObj,
-  responseDeadline: MomentFactory.currentDate().add(1, 'days'),
-  response: {
-    ...baseResponseData,
-    ...baseFullAdmissionData
-  }
-}
 
 const partAdmissionClaim = {
   ...claimStoreServiceMock.sampleClaimObj,
@@ -65,7 +55,7 @@ const testData = [
     claimOverride: {
       responseDeadline: MomentFactory.currentDate().add(1, 'days')
     },
-    claimantAssertions: ['000MC050', 'Your claim has been sent.'],
+    claimantAssertions: ['000MC050', 'Wait for the defendant to respond'],
     defendantAssertions: ['000MC050', 'Respond to claim.', '(1 day remaining)']
   },
   {
@@ -77,44 +67,6 @@ const testData = [
     },
     claimantAssertions: ['000MC050', 'John Doe has requested more time to respond.'],
     defendantAssertions: ['000MC050', 'You need to respond before 4pm on 8 August 2099.']
-  },
-  {
-    status: 'full admission, pay immediately',
-    claim: fullAdmissionClaim,
-    claimOverride: {
-      response: { ...fullAdmissionClaim.response, ...basePayImmediatelyData }
-    },
-    claimantAssertions: ['000MC000', 'The defendant admits they owe all the money. They’ve said that they will pay immediately.'],
-    defendantAssertions: ['000MC000', 'You’ve admitted all of the claim and said you’ll pay the full amount immediately.']
-  },
-  {
-    status: 'full admission, pay immediately, past deadline',
-    claim: fullAdmissionClaim,
-    claimOverride: {
-      response: { ...fullAdmissionClaim.response, ...basePayImmediatelyData },
-      responseDeadline: MomentFactory.currentDate().subtract(1, 'days')
-    },
-    claimantAssertions: ['000MC000', 'The defendant has not responded to your claim. You can request a County Court Judgment against them.'],
-    defendantAssertions: ['000MC000', 'You haven’t responded to the claim.', 'John Smith can now ask for a County Court Judgment (CCJ) against you.', 'You can still respond to this claim before they ask for a CCJ.']
-  },
-  {
-    status: 'full admission, pay by set date',
-    claim: fullAdmissionClaim,
-    claimOverride: {
-      response: { ...fullAdmissionClaim.response, ...basePayBySetDateData }
-    },
-    claimantAssertions: ['000MC000', 'The defendant has offered to pay by a set date. You can accept or reject their offer.'],
-    defendantAssertions: ['000MC000', 'You’ve admitted all of the claim and offered to pay the full amount by 31 December 2050.']
-  },
-  {
-    status: 'full admission, pay by repayment plan',
-    claim: fullAdmissionClaim,
-    claimOverride: {
-      response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
-      amount: 30
-    },
-    claimantAssertions: ['000MC000', 'The defendant has offered to pay in instalments. You can accept or reject their offer.'],
-    defendantAssertions: ['000MC000', 'You’ve admitted all of the claim and offered to pay the full amount in instalments.']
   },
   {
     status: 'partial admission, pay immediately',
@@ -140,11 +92,10 @@ const testData = [
     claim: partAdmissionClaim,
     claimOverride: {
       response: { ...partAdmissionClaim.response, ...basePayImmediatelyData },
-      claimantResponse: baseAcceptationClaimantResponseData,
-      responseDeadline: MomentFactory.currentDate().subtract(1, 'days')
+      claimantResponse: baseAcceptationClaimantResponseData
     },
-    claimantAssertions: ['000MC000', 'The defendant has not responded to your claim. You can request a County Court Judgment against them.'],
-    defendantAssertions: ['000MC000', 'You haven’t responded to the claim.', 'John Smith can now ask for a County Court Judgment (CCJ) against you.', 'You can still respond to this claim before they ask for a CCJ.']
+    claimantAssertions: ['000MC000', 'You’ve accepted the defendant’s part admission. They said they’d pay immediately.'],
+    defendantAssertions: ['000MC000', 'John Smith accepted your admission of £30']
   },
   {
     status: 'partial admission, pay by set date',
@@ -181,8 +132,8 @@ const testData = [
       response: { ...partialAdmissionAlreadyPaidData },
       claimantResponse: { type: 'REJECTION' }
     },
-    claimantAssertions: ['000MC000', 'You’ve rejected the defendant’s admission'],
-    defendantAssertions: ['000MC000', 'John Smith rejected your admission of £3,000']
+    claimantAssertions: ['000MC000', 'Wait for the court to review the case'],
+    defendantAssertions: ['000MC000', 'Wait for the court to review the case']
   },
   {
     status: 'full defence, states paid accepted',
@@ -201,8 +152,8 @@ const testData = [
       response: { ...defenceWithAmountClaimedAlreadyPaidData },
       claimantResponse: { type: 'REJECTION' }
     },
-    claimantAssertions: ['000MC000', 'You’ve rejected the defendant’s admission'],
-    defendantAssertions: ['000MC000', 'John Smith rejected your admission of £100']
+    claimantAssertions: ['000MC000', 'Wait for the court to review the case'],
+    defendantAssertions: ['000MC000', 'Wait for the court to review the case']
   }
 ]
 
@@ -265,15 +216,6 @@ describe('Dashboard page', () => {
               .get(Paths.dashboardPage.uri)
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Make a new money claim'))
-          })
-
-          it('should render page with claim number and status', async () => {
-            draftStoreServiceMock.resolveFindNoDraftFound()
-            claimStoreServiceMock.resolveRetrieveByClaimantId(claimStoreServiceMock.sampleClaimIssueObj)
-            await request(app)
-              .get(Paths.dashboardPage.uri)
-              .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withText('000MC050', 'Your claim has been sent'))
           })
 
           testData.forEach(data => {

@@ -15,7 +15,7 @@
       )) }}
       {{ row('Completion date', paymentIntention.paymentDate | date) }}
     {% elseif paymentIntention.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
-      {{ row('The agreement', t('{{ defendantFullName }} will pay {{ totalAmount }} no later than {{ paymentDate }}',
+      {{ row('The agreement', t('{{ defendantFullName }} will pay the {{ totalAmount }} no later than {{ paymentDate }}.',
         { defendantFullName: claim.response.defendant.name,
           totalAmount: totalAmount | numeral,
           paymentDate: paymentIntention.paymentDate | date

@@ -52,6 +52,7 @@ main {
   }
 
   margin-left: 70px;
+  text-decoration: underline;
 
   &.task-finished {
     @include media (mobile) {
@@ -65,6 +66,8 @@ div {
   &.task-finished {
     background-color: $link-colour;
     float: right;
+    text-align: center;
+    width: 120px;
 
     strong {
       @include media (mobile) {
@@ -95,5 +98,10 @@ div {
 // Stop collapsing divs when empty
 .if-empty {
   min-height: 1rem;
+}
+
+.check-submit-response {
+  margin-left: 50px;
+  margin-top: 10px;
 }
 

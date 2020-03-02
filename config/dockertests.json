@@ -3,10 +3,12 @@
     "testingSupport": true,
     "newFeaturesConsent": true,
     "admissions": true,
-    "paidInFull": true,
     "returnErrorToUser": true,
-    "mediation": false,
-    "directionsQuestionnaire": false
+    "mediation": true,
+    "mediationPilot": true,
+    "directionsQuestionnaire": true,
+    "newDashboardStatus": false,
+    "inversionOfControl": true
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"

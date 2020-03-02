@@ -13,7 +13,8 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { Claim } from 'claims/models/claim'
 import {
   defenceWithDisputeDraft,
-  partiallyAdmittedDefenceWithWhyDoYouDisagreeCompleted
+  partiallyAdmittedDefenceWithWhyDoYouDisagreeCompleted,
+  fullAdmissionWithImmediatePaymentDraft
 } from 'test/data/draft/responseDraft'
 import { MomentFactory } from 'shared/momentFactory'
 import { PartyType } from 'common/partyType'
@@ -31,14 +32,13 @@ import { RejectAllOfClaim, RejectAllOfClaimOption } from 'response/form/models/r
 import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 import { TaskListItem } from 'drafts/tasks/taskListItem'
-import { FeatureToggles } from 'utils/featureToggles'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
+import { FeatureToggles } from 'utils/featureToggles'
 
 const externalId: string = claimStoreServiceMock.sampleClaimObj.externalId
-const features: string[] = ['admissions']
-const mediationTaskLabel = 'Consider free mediation'
-const featureToggleMediationTaskLabel = 'Free telephone mediation'
-const directionsQuestionnaireTaskLabel = 'Tell us more about the claim'
+const mediationTaskLabel = 'Free telephone mediation'
+const directionsQuestionnaireTaskLabel = 'Your hearing requirements'
+
 describe('Defendant response task list builder', () => {
   let claim: Claim
 
@@ -46,34 +46,42 @@ describe('Defendant response task list builder', () => {
     claim = new Claim().deserialize(claimStoreServiceMock.sampleClaimObj)
   })
 
-  describe('"Before you start" section', () => {
+  describe('"Consider other options" section', () => {
     describe('"Do you need more time to respond?" task', () => {
       const responseDraft: ResponseDraft = new ResponseDraft().deserialize(defenceWithDisputeDraft)
       const taskListItemText: string = 'Decide if you need more time to respond'
 
-      it('should be available when defendant tries to respond before due day', () => {
+      it('should be available when defendant tries to respond before due day', async () => {
+        claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
+
         claim.responseDeadline = MomentFactory.currentDate().add(1, 'days')
-        const taskList: TaskList = TaskListBuilder.buildBeforeYouStartSection(responseDraft, claim, MomentFactory.currentDateTime())
+        const taskList: TaskList = await TaskListBuilder.buildBeforeYouStartSection(responseDraft, claim, MomentFactory.currentDateTime())
         expect(taskList.tasks.find(task => task.name === taskListItemText)).not.to.be.undefined
       })
 
-      it('should be available when defendant tries to respond on due day before 4 PM', () => {
+      it('should be available when defendant tries to respond on due day before 4 PM', async () => {
+        claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
+
         claim.responseDeadline = MomentFactory.currentDate()
         const now: moment.Moment = MomentFactory.currentDateTime().hour(15)
-        const taskList: TaskList = TaskListBuilder.buildBeforeYouStartSection(responseDraft, claim, now)
+        const taskList: TaskList = await TaskListBuilder.buildBeforeYouStartSection(responseDraft, claim, now)
         expect(taskList.tasks.find(task => task.name === taskListItemText)).not.to.be.undefined
       })
 
-      it('should not be available when defendant tries to respond on due day after 4 PM', () => {
+      it('should not be available when defendant tries to respond on due day after 4 PM', async () => {
+        claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
+
         claim.responseDeadline = MomentFactory.currentDate()
-        const now: moment.Moment = MomentFactory.currentDateTime().hour(17)
-        const taskList: TaskList = TaskListBuilder.buildBeforeYouStartSection(responseDraft, claim, now)
+        const now: moment.Moment = MomentFactory.currentDateTime().add(14, 'days').hour(17)
+        const taskList: TaskList = await TaskListBuilder.buildBeforeYouStartSection(responseDraft, claim, now)
         expect(taskList.tasks.find(task => task.name === taskListItemText)).to.be.undefined
       })
 
-      it('should not be available when defendant tries to respond after due day', () => {
-        claim.responseDeadline = MomentFactory.currentDate().subtract(1, 'days')
-        const taskList: TaskList = TaskListBuilder.buildBeforeYouStartSection(responseDraft, claim, MomentFactory.currentDateTime())
+      it('should not be available when defendant tries to respond after due day', async () => {
+        claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().subtract(14, 'days').toString())
+
+        claim.responseDeadline = MomentFactory.currentDate().subtract(40, 'days')
+        const taskList: TaskList = await TaskListBuilder.buildBeforeYouStartSection(responseDraft, claim, MomentFactory.currentDateTime())
         expect(taskList.tasks.find(task => task.name === taskListItemText)).to.be.undefined
       })
     })
@@ -104,7 +112,7 @@ describe('Defendant response task list builder', () => {
         isResponseRejectedFullyBecausePaidWhatOwedStub.returns(false)
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claim)
-        expect(taskList.tasks.map(task => task.name)).to.not.contain('Tell us how much you’ve paid')
+        expect(taskList.tasks.map(task => task.name)).not.to.contain('Tell us how much you’ve paid')
       })
     })
 
@@ -138,11 +146,11 @@ describe('Defendant response task list builder', () => {
           new HowMuchHaveYouPaid(claim.totalAmountTillToday + 1)
         )
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
-        expect(taskList.tasks.map(task => task.name)).to.not.contain('Why do you disagree with the amount claimed?')
+        expect(taskList.tasks.map(task => task.name)).not.to.contain('Why do you disagree with the amount claimed?')
       })
     })
 
-    describe('"Why do you disagree with the claim?" task', () => {
+    describe('"Tell us why you disagree with the claim" task', () => {
       let stub: sinon.SinonStub
       const responseDraft: ResponseDraft = new ResponseDraft().deserialize(defenceWithDisputeDraft)
 
@@ -158,14 +166,14 @@ describe('Defendant response task list builder', () => {
         stub.returns(true)
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, claim)
-        expect(taskList.tasks.map(task => task.name)).to.contain('Why do you disagree with the claim?')
+        expect(taskList.tasks.map(task => task.name)).to.contain('Tell us why you disagree with the claim')
       })
 
       it('should be disabled when response is not rejected with dispute', () => {
         stub.returns(false)
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, claim)
-        expect(taskList.tasks.map(task => task.name)).to.not.contain('Why do you disagree with the claim?')
+        expect(taskList.tasks.map(task => task.name)).to.not.contain('Tell us why you disagree with the claim')
       })
     })
 
@@ -203,7 +211,7 @@ describe('Defendant response task list builder', () => {
         draft.fullAdmission = new FullAdmission()
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
-        expect(taskList.tasks.map(task => task.name)).to.not.contain('Decide how you’ll pay')
+        expect(taskList.tasks.map(task => task.name)).not.to.contain('Decide how you’ll pay')
       })
     })
 
@@ -242,7 +250,7 @@ describe('Defendant response task list builder', () => {
         draft.fullAdmission = new FullAdmission()
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
-        expect(taskList.tasks.map(task => task.name)).to.not.contain('Your repayment plan')
+        expect(taskList.tasks.map(task => task.name)).not.to.contain('Your repayment plan')
       })
     })
 
@@ -305,7 +313,7 @@ describe('Defendant response task list builder', () => {
         draft.fullAdmission = new FullAdmission()
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
-        expect(taskList.tasks.map(task => task.name)).to.not.contain('Share your financial details')
+        expect(taskList.tasks.map(task => task.name)).not.to.contain('Share your financial details')
       })
     })
 
@@ -361,8 +369,8 @@ describe('Defendant response task list builder', () => {
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
         expect(taskList.tasks.map(task => task.name)).to.contain('How much have you paid?')
         expect(taskList.tasks.map(task => task.name)).to.contain('Why do you disagree with the amount claimed?')
-        expect(draft.partialAdmission.paymentIntention).eq(undefined)
-        expect(draft.statementOfMeans).eq(undefined)
+        expect(draft.partialAdmission.paymentIntention).to.be.undefined
+        expect(draft.statementOfMeans).to.be.undefined
       })
 
     })
@@ -398,15 +406,18 @@ describe('Defendant response task list builder', () => {
     describe('"Free telephone mediation" task', () => {
       let isResponseRejectedFullyWithDisputeStub: sinon.SinonStub
       let isResponsePartiallyAdmitted: sinon.SinonStub
+      let isResponseRejectedFullyBecausePaidWhatOwed: sinon.SinonStub
 
       beforeEach(() => {
         isResponseRejectedFullyWithDisputeStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyWithDispute')
         isResponsePartiallyAdmitted = sinon.stub(ResponseDraft.prototype, 'isResponsePartiallyAdmitted')
+        isResponseRejectedFullyBecausePaidWhatOwed = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyBecausePaidWhatOwed')
       })
 
       afterEach(() => {
         isResponseRejectedFullyWithDisputeStub.restore()
         isResponsePartiallyAdmitted.restore()
+        isResponseRejectedFullyBecausePaidWhatOwed.restore()
       })
 
       context('should be enabled when', () => {
@@ -414,30 +425,37 @@ describe('Defendant response task list builder', () => {
         it('response is rejected with dispute', () => {
           isResponseRejectedFullyWithDisputeStub.returns(true)
           isResponsePartiallyAdmitted.returns(false)
+          isResponseRejectedFullyBecausePaidWhatOwed.returns(false)
 
           const taskList: TaskList = TaskListBuilder.buildResolvingClaimSection(
             new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new MediationDraft()
           )
 
-          if (FeatureToggles.isEnabled('mediation')) {
-            expect(taskList.tasks.find(task => task.name === featureToggleMediationTaskLabel)).not.to.be.undefined
-          } else {
-            expect(taskList.tasks.find(task => task.name === mediationTaskLabel)).not.to.be.undefined
-          }
+          expect(taskList.tasks.find(task => task.name === mediationTaskLabel)).not.to.be.undefined
+        })
+
+        it('response is rejected with already paid', () => {
+          isResponseRejectedFullyWithDisputeStub.returns(false)
+          isResponsePartiallyAdmitted.returns(false)
+          isResponseRejectedFullyBecausePaidWhatOwed.returns(true)
+
+          const taskList: TaskList = TaskListBuilder.buildResolvingClaimSection(
+            new ResponseDraft().deserialize(partiallyAdmittedDefenceWithWhyDoYouDisagreeCompleted), claim, new MediationDraft()
+          )
+
+          expect(taskList.tasks.find(task => task.name === mediationTaskLabel)).not.to.be.undefined
         })
 
         it('response is partial admission and why do you disagree is completed', () => {
           isResponseRejectedFullyWithDisputeStub.returns(false)
           isResponsePartiallyAdmitted.returns(true)
+          isResponseRejectedFullyBecausePaidWhatOwed.returns(false)
 
           const taskList: TaskList = TaskListBuilder.buildResolvingClaimSection(
             new ResponseDraft().deserialize(partiallyAdmittedDefenceWithWhyDoYouDisagreeCompleted), claim, new MediationDraft()
           )
-          if (FeatureToggles.isEnabled('mediation')) {
-            expect(taskList.tasks.find(task => task.name === featureToggleMediationTaskLabel)).not.to.be.undefined
-          } else {
-            expect(taskList.tasks.find(task => task.name === mediationTaskLabel)).not.to.be.undefined
-          }
+
+          expect(taskList.tasks.find(task => task.name === mediationTaskLabel)).not.to.be.undefined
         })
       })
 
@@ -446,33 +464,318 @@ describe('Defendant response task list builder', () => {
         it('response is not rejected with dispute', () => {
           isResponseRejectedFullyWithDisputeStub.returns(false)
           isResponsePartiallyAdmitted.returns(false)
+          isResponseRejectedFullyBecausePaidWhatOwed.returns(false)
 
           const taskList: TaskList = TaskListBuilder.buildResolvingClaimSection(
             new ResponseDraft().deserialize(defenceWithDisputeDraft), claim
           )
 
-          expect(taskList).to.be.eq(undefined)
+          expect(taskList).to.be.undefined
         })
       })
     })
   })
 
-  describe('"Tell us more about the claim"', () => {
+  describe('"Your hearing requirements"', () => {
     beforeEach(() => {
       claim.features = ['admissions', 'directionsQuestionnaire']
     })
 
-    it('response is partial admission', () => {
+    describe('response is partial admission', () => {
+      it('Give us details in case there is a hearing should appear in task list', () => {
 
+        const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+          new ResponseDraft().deserialize(partiallyAdmittedDefenceWithWhyDoYouDisagreeCompleted), claim, new DirectionsQuestionnaireDraft()
+        )
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          expect(taskList.name).to.contain(directionsQuestionnaireTaskLabel)
+        }
+      })
+
+      it('Give us details in case there is a hearing should be disabled when there is no hearing location selected', () => {
+        const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+          new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft()
+        )
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          expect(taskList.tasks[0].completed).equal(false)
+        }
+      })
+
+      it('Give us details in case there is a hearing should be disabled when there is no expert report selected', () => {
+        const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+          new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft().deserialize({
+            externalId: claim.externalId,
+            selfWitness: { option: { option: 'no' } },
+            hearingLocation: 'central london',
+            expertRequired: { option: 'yes' }
+          })
+        )
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          expect(taskList.tasks[0].completed).equal(false)
+        }
+      })
+
+      it('Give us details in case there is a hearing should be disabled when there is no other witnesses selected', () => {
+        const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+          new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft().deserialize({
+            externalId: claim.externalId,
+            selfWitness: { option: { option: 'no' } },
+            hearingLocation: 'central london',
+            expertRequired: { option: { option: 'yes' } },
+            exportReport: { declared: false, rows: [] }
+          })
+        )
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          expect(taskList.tasks[0].completed).equal(false)
+        }
+      })
+
+      it('Give us details in case there is a hearing should be disabled when there is no availability selected', () => {
+        const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+          new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft().deserialize({
+            externalId: claim.externalId,
+            selfWitness: { option: { option: 'no' } },
+            hearingLocation: 'central london',
+            expertRequired: { option: { option: 'yes' } },
+            otherWitnesses: { otherWitnesses: { option: 'yes' }, howMany: 1 },
+            exportReport: { declared: false, rows: [] }
+          })
+        )
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          expect(taskList.tasks[0].completed).equal(false)
+        }
+      })
+
+      it('Give us details in case there is a hearing should be enabled after choosing availability and next steps', () => {
+        const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+          new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft().deserialize({
+            externalId: claim.externalId,
+            selfWitness: { option: { option: 'no' } },
+            hearingLocation: 'central london',
+            expertRequired: { option: { option: 'no' } },
+            otherWitnesses: { otherWitnesses: { option: 'yes' }, howMany: 1 },
+            availability: { hasUnavailableDates: false, unavailableDates: [] }
+          })
+        )
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          expect(taskList.tasks[0].completed).equal(true)
+        }
+      })
+
+      it('Give us details in case there is a hearing should be disabled when there is no permission for expert not selected', () => {
+        const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+          new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft().deserialize({
+            externalId: claim.externalId,
+            selfWitness: { option: { option: 'no' } },
+            hearingLocation: 'central london',
+            expertRequired: { option: { option: 'yes' } },
+            exportReport: { declared: false, rows: [] },
+            otherWitnesses: { otherWitnesses: { option: 'yes' }, howMany: 1 },
+            availability: { hasUnavailableDates: false, unavailableDates: [] }
+          })
+        )
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          expect(taskList.tasks[0].completed).equal(false)
+        }
+      })
+
+      it('Give us details in case there is a hearing should be disabled when there is no expert evidence selected', () => {
+        const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+          new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft().deserialize({
+            externalId: claim.externalId,
+            selfWitness: { option: { option: 'no' } },
+            hearingLocation: 'central london',
+            expertRequired: { option: { option: 'yes' } },
+            otherWitnesses: { otherWitnesses: { option: 'yes' }, howMany: 1 },
+            availability: { hasUnavailableDates: false, unavailableDates: [] },
+            permissionForExpert: { option: { option: 'yes' } }
+          })
+        )
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          expect(taskList.tasks[0].completed).equal(false)
+        }
+      })
+
+      it('Give us details in case there is a hearing should be disabled when there is no selection of why expert is needed', () => {
+        const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+          new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft().deserialize({
+            externalId: claim.externalId,
+            selfWitness: { option: { option: 'no' } },
+            hearingLocation: 'central london',
+            expertRequired: { option: { option: 'yes' } },
+            exportReport: { declared: false, rows: [] },
+            otherWitnesses: { otherWitnesses: { option: 'yes' }, howMany: 1 },
+            availability: { hasUnavailableDates: false, unavailableDates: [] },
+            permissionForExpert: { option: { option: 'yes' } },
+            expertEvidence: { expertEvidence: { option: 'yes' }, whatToExamine: 'evidence' }
+          })
+        )
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          expect(taskList.tasks[0].completed).equal(false)
+        }
+      })
+
+    })
+
+    describe('response is full defence', () => {
+      it('Give us details in case there is a hearing should appear in task list', () => {
+        const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+          new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft()
+        )
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          expect(taskList.name).to.contain(directionsQuestionnaireTaskLabel)
+        }
+      })
+
+      it('Give us details in case there is a hearing should be disabled when there is no hearing location selected', () => {
+        const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+          new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft()
+        )
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          expect(taskList.tasks[0].completed).equal(false)
+        }
+      })
+
+      it('Give us details in case there is a hearing should be disabled when there is no expert report selected', () => {
+        const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+          new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft().deserialize({
+            externalId: claim.externalId,
+            selfWitness: { option: { option: 'no' } },
+            hearingLocation: 'central london',
+            expertRequired: { option: 'yes' }
+          })
+        )
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          expect(taskList.tasks[0].completed).equal(false)
+        }
+      })
+
+      it('Give us details in case there is a hearing should be disabled when there is no other witnesses selected', () => {
+        const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+          new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft().deserialize({
+            externalId: claim.externalId,
+            selfWitness: { option: { option: 'no' } },
+            hearingLocation: 'central london',
+            expertRequired: { option: { option: 'yes' } },
+            exportReport: { declared: false, rows: [] }
+          })
+        )
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          expect(taskList.tasks[0].completed).equal(false)
+        }
+      })
+
+      it('Give us details in case there is a hearing should be disabled when there is no availability selected', () => {
+        const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+          new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft().deserialize({
+            externalId: claim.externalId,
+            selfWitness: { option: { option: 'no' } },
+            hearingLocation: 'central london',
+            expertRequired: { option: { option: 'yes' } },
+            otherWitnesses: { otherWitnesses: { option: 'yes' }, howMany: 1 },
+            exportReport: { declared: false, rows: [] }
+          })
+        )
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          expect(taskList.tasks[0].completed).equal(false)
+        }
+      })
+
+      it('Give us details in case there is a hearing should be enabled after choosing availability and next steps', () => {
+        const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+          new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft().deserialize({
+            externalId: claim.externalId,
+            selfWitness: { option: { option: 'no' } },
+            hearingLocation: 'central london',
+            expertRequired: { option: { option: 'no' } },
+            otherWitnesses: { otherWitnesses: { option: 'yes' }, howMany: 1 },
+            availability: { hasUnavailableDates: false, unavailableDates: [] }
+          })
+        )
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          expect(taskList.tasks[0].completed).equal(true)
+        }
+      })
+
+      it('Give us details in case there is a hearing should be disabled when there is no permission for expert not selected', () => {
+        const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+          new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft().deserialize({
+            externalId: claim.externalId,
+            selfWitness: { option: { option: 'no' } },
+            hearingLocation: 'central london',
+            expertRequired: { option: { option: 'yes' } },
+            exportReport: { declared: false, rows: [] },
+            otherWitnesses: { otherWitnesses: { option: 'yes' }, howMany: 1 },
+            availability: { hasUnavailableDates: false, unavailableDates: [] }
+          })
+        )
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          expect(taskList.tasks[0].completed).equal(false)
+        }
+      })
+
+      it('Give us details in case there is a hearing should be disabled when there is no expert evidence selected', () => {
+        const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+          new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft().deserialize({
+            externalId: claim.externalId,
+            selfWitness: { option: { option: 'no' } },
+            hearingLocation: 'central london',
+            expertRequired: { option: { option: 'yes' } },
+            otherWitnesses: { otherWitnesses: { option: 'yes' }, howMany: 1 },
+            availability: { hasUnavailableDates: false, unavailableDates: [] },
+            permissionForExpert: { option: { option: 'yes' } }
+          })
+        )
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          expect(taskList.tasks[0].completed).equal(false)
+        }
+      })
+
+      it('Give us details in case there is a hearing should be disabled when there is no selection of why expert is needed', () => {
+        const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+          new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft().deserialize({
+            externalId: claim.externalId,
+            selfWitness: { option: { option: 'no' } },
+            hearingLocation: 'central london',
+            expertRequired: { option: { option: 'yes' } },
+            exportReport: { declared: false, rows: [] },
+            otherWitnesses: { otherWitnesses: { option: 'yes' }, howMany: 1 },
+            availability: { hasUnavailableDates: false, unavailableDates: [] },
+            permissionForExpert: { option: { option: 'yes' } },
+            expertEvidence: { expertEvidence: { option: 'yes' }, whatToExamine: 'evidence' }
+          })
+        )
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          expect(taskList.tasks[0].completed).equal(false)
+        }
+      })
+
+    })
+
+    it('response is full admit', () => {
       const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
-        new ResponseDraft().deserialize(partiallyAdmittedDefenceWithWhyDoYouDisagreeCompleted), claim, new DirectionsQuestionnaireDraft()
+        new ResponseDraft().deserialize(fullAdmissionWithImmediatePaymentDraft), claim, new DirectionsQuestionnaireDraft()
       )
 
-      if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
-        expect(taskList.name).to.contains(directionsQuestionnaireTaskLabel)
-      } else {
-        expect(taskList).to.be.eq(undefined)
-      }
+      expect(taskList).to.be.undefined
     })
   })
 
@@ -503,7 +806,7 @@ describe('Defendant response task list builder', () => {
       isResponseRejectedFullyWithDisputePaidStub.returns(true)
       isResponseRejectedFullyBecausePaidWhatOwedStub.returns(false)
 
-      const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId, features)
+      const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId)
       expect(taskList.tasks.map(task => task.name)).to.contain('Check and submit your response')
     })
 
@@ -512,7 +815,7 @@ describe('Defendant response task list builder', () => {
       isResponseRejectedFullyBecausePaidWhatOwedStub.returns(true)
       isResponsePartiallyAdmittedStub.returns(false)
 
-      const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId, features)
+      const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId)
       expect(taskList.tasks.map(task => task.name)).to.contain('Check and submit your response')
     })
 
@@ -520,14 +823,14 @@ describe('Defendant response task list builder', () => {
       isResponseFullyAdmittedStub.returns(true)
       isResponsePartiallyAdmittedStub.returns(false)
 
-      const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId, features)
+      const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId)
       expect(taskList.tasks.map(task => task.name)).to.contain('Check and submit your response')
     })
 
     it('should be enabled when claim is fully rejected because paid in full gte claim amount', () => {
       isResponseRejectedFullyBecausePaidWhatOwedStub.returns(true)
 
-      const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId, features)
+      const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId)
       expect(taskList.tasks.map(task => task.name)).to.contain('Check and submit your response')
 
     })
@@ -539,8 +842,8 @@ describe('Defendant response task list builder', () => {
       isResponseFullyAdmittedStub.returns(false)
       isResponsePartiallyAdmittedStub.returns(false)
 
-      const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId, features)
-      expect(taskList).to.be.equal(undefined)
+      const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId)
+      expect(taskList).to.be.undefined
     })
   })
 
@@ -555,26 +858,20 @@ describe('Defendant response task list builder', () => {
       isResponseRejectedFullyWithDisputeStub.restore()
     })
 
-    it('Should return "Free telephone mediation" when not completed for fully reject', () => {
+    it('Should return "Free telephone mediation" when not completed for fully reject', async () => {
+      claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
       isResponseRejectedFullyWithDisputeStub.returns(true)
 
-      const tasks: TaskListItem[] = TaskListBuilder.buildRemainingTasks(new ResponseDraft(), claim, new MediationDraft())
-      if (FeatureToggles.isEnabled('mediation')) {
-        expect(tasks.map(task => task.name)).to.contain(featureToggleMediationTaskLabel)
-      } else {
-        expect(tasks.map(task => task.name)).to.contain(mediationTaskLabel)
-      }
+      const tasks: TaskListItem[] = await TaskListBuilder.buildRemainingTasks(new ResponseDraft(), claim, new MediationDraft(), new DirectionsQuestionnaireDraft())
+      expect(tasks.map(task => task.name)).to.contain(mediationTaskLabel)
     })
 
-    it('Should not return "Free telephone mediation" when not fully reject', () => {
+    it('Should not return "Free telephone mediation" when not fully reject', async () => {
+      claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
       isResponseRejectedFullyWithDisputeStub.returns(false)
 
-      const tasks: TaskListItem[] = TaskListBuilder.buildRemainingTasks(new ResponseDraft(), claim, new MediationDraft())
-      if (FeatureToggles.isEnabled('mediation')) {
-        expect(tasks.map(task => task.name)).to.not.contain(featureToggleMediationTaskLabel)
-      } else {
-        expect(tasks.map(task => task.name)).to.not.contain(mediationTaskLabel)
-      }
+      const tasks: TaskListItem[] = await TaskListBuilder.buildRemainingTasks(new ResponseDraft(), claim, new MediationDraft(), new DirectionsQuestionnaireDraft())
+      expect(tasks.map(task => task.name)).not.to.contain(mediationTaskLabel)
     })
   })
 })

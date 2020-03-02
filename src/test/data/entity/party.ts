@@ -23,8 +23,16 @@ export const individual = {
   name: 'John Smith',
   ...addressCorrespondenceAddress,
   dateOfBirth: '1999-01-01',
-  mobilePhone: '0700000001',
+  phone: '0700000001',
   email: 'individual@example.com'
+}
+
+export const individualDefendant = {
+  ...individual,
+  name: 'Mr. John Smith',
+  title: 'Mr.',
+  firstName: 'John',
+  lastName: 'Smith'
 }
 
 export const soleTrader = {
@@ -32,8 +40,17 @@ export const soleTrader = {
   name: 'SoleTrader Smith',
   businessName: 'SoleTrader Ltd.',
   ...addressCorrespondenceAddress,
-  mobilePhone: '0700000002',
+  phone: '0700000002',
   email: 'sole-trader@example.com'
+}
+
+export const soleTraderDefendant = {
+  ...soleTrader,
+  businessName: 'Defendant SoleTrader Ltd.',
+  name: 'Defendant SoleTrader',
+  title: undefined,
+  firstName: 'Defendant',
+  lastName: 'SoleTrader'
 }
 
 export const company = {
@@ -41,7 +58,7 @@ export const company = {
   name: 'Company Ltd.',
   contactPerson: 'Company Smith',
   ...addressCorrespondenceAddress,
-  mobilePhone: '0700000003',
+  phone: '0700000003',
   email: 'company@example.com'
 }
 
@@ -50,6 +67,14 @@ export const organisation = {
   name: 'Organisation.',
   contactPerson: 'Organisation Smith',
   ...addressCorrespondenceAddress,
-  mobilePhone: '0700000004',
+  email: 'organisation@example.com'
+}
+
+export const organisationWithPhone = {
+  type: PartyType.ORGANISATION.value,
+  name: 'Organisation.',
+  contactPerson: 'Organisation Smith',
+  ...addressCorrespondenceAddress,
+  phone: '0700000004',
   email: 'organisation@example.com'
 }

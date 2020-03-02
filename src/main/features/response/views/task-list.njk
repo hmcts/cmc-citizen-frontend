@@ -4,6 +4,7 @@
 {% from "internalLink.njk" import internalLink %}
 
 {% set heading = 'Respond to a money claim' %}
+{% set headingSize = 'xlarge' %}
 
 {% block content %}
 
@@ -46,16 +47,15 @@
         </div>
       {% endif %}
 
-
       {% if submitSection %}
         <div class="task-group">
           {{ taskListHeading(submitSection.name) }}
-
-          {% for item in submitSection.tasks %}
-            {{ task(item.startPageUrl, t(item.name), item.completed, true) }}
-          {% endfor %}
+          <div class="check-submit-response">
+            {{ internalLink(t('Check and submit your response'), ResponsePaths.checkAndSendPage.evaluateUri({ externalId: claim.externalId }), 'button button-primary') }}
+          </div>
         </div>
       {% endif %}
+
     </div>
 
     <div class="column-one-third">
@@ -86,3 +86,4 @@
   </div>
 
 {% endblock %}
+{% block contactForHelp %}{% endblock %}

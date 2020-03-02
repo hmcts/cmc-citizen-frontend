@@ -3,9 +3,11 @@
 
 
 {% if party === MadeBy.CLAIMANT %}
-  {% set heading = t('The hearing will be held at {{ courtName }}', { courtName: courtName }) %}
+  {% set heading = 'The hearing will be held at ' + courtName %}
+  {% set hint = 'Briefly explain your reasons - the court will consider them, though it usually accepts the defendant’s choice' %}
 {% else %}
-  {% set heading = t('The hearing will be held at the claimant’s chosen court') %}
+  {% set heading = 'Do you want to ask for the hearing to be held at a specific court?' %}
+  {% set hint = 'Briefly explain your reasons' %}
 {% endif %}
 
 {% block content %}
@@ -13,29 +15,53 @@
     <div class="column-two-thirds">
       {% if party === MadeBy.CLAIMANT %}
         <p>{{ t('The defendant chose this location.') }}</p>
+       {% if facilities %}
+        <details class="form-group-compound analytics-click-event-trigger" data-event-label="Court-Facilities: Facilities of the chosen court.">
+          <summary>{{ t('See this court’s facilities') }}</summary>
+
+          <div class="panel">
+            {% for facility in facilities %}
+              <h3 class="heading-small form-group-related">{{ facility.name }}</h3>
+              {{ facility.description | safe }}
+            {% endfor %}
+          </div>
+        </details>
+       {% endif %}
+      {% else %}
+        <p>{{ t('If not, the hearing will be held at the court the claimant chooses.') }}</p>
       {% endif %}
-      <form method="post" class="analytics-submit-event-trigger" data-event-action="DQ: Self Witness" data-event-label-from="selfWitness" novalidate>
+
+      <form method="post" class="analytics-submit-event-trigger" data-event-action="DQ: Exceptional circumstance" data-event-label-from="exceptionalCircumstances" novalidate>
         {{ csrfProtection(csrf) }}
 
         {% set error = form.hasErrors() %}
         <fieldset id="exceptionalCircumstances[label]" class="form-group {% if error %} form-group-error {% endif %}">
-          <legend>
-            <span class="visuallyhidden">
-              {{ t('Are there exceptional circumstances (like accessibility needs) which mean you want to ask for the hearing to be held at a different location?') }}
-            </span>
-          </legend>
 
-          <p>{{ t('Are there exceptional circumstances (like accessibility needs) which mean you want to ask for the hearing to be held at a different location?') }}</p>
-          {{
-          radioOption(form = form, label = 'Yes', name = 'exceptionalCircumstances', value = YesNoOption.YES.option, checked = form.valueFor('exceptionalCircumstances').option === YesNoOption.YES.option, bold = true)
+          <legend class="visually-hidden">{{ t(heading) }}</legend>
+
+          {% if party === MadeBy.CLAIMANT %}
+            <h1 class="heading-medium">{{ t('Do you want to request a different court?') }}</h1>
+          {% endif %}
+
+          {{ radioOption(
+            form = form,
+            label = 'Yes',
+            name = 'exceptionalCircumstances',
+            value = YesNoOption.YES.option,
+            checked = form.valueFor('exceptionalCircumstances').option === YesNoOption.YES.option,
+            bold = true)
           }}
           <div class="form-group panel panel-border-narrow js-hidden " id="exceptionalCircumstances-yes" aria-hidden="false">
-            {{ textArea(label = t('Briefly explain your reasons'), form = form, name = 'reason', inputClass = 'form-control-3-4') }}
+            {{ textArea(label = hint, form = form, name = 'reason', inputClass = 'form-control-3-4') }}
           </div>
-          {{
-          radioOption(form = form, label = 'No', name = 'exceptionalCircumstances', value = YesNoOption.NO.option, checked = form.valueFor('exceptionalCircumstances').option === YesNoOption.NO.option, bold = true)
+          {{ radioOption(
+            form = form,
+            label = 'No',
+            name = 'exceptionalCircumstances',
+            value = YesNoOption.NO.option,
+            checked = form.valueFor('exceptionalCircumstances').option === YesNoOption.NO.option,
+            bold = true)
           }}
-
         </fieldset>
 
         {{ saveAndContinueButton() }}

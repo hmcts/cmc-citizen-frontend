@@ -1,36 +1,53 @@
 import * as config from 'config'
 import * as appInsights from 'applicationinsights'
+import * as telemetryProcessors from './telemetryProcessors'
+import { LoggerInstance } from 'winston'
+import { Logger } from '@hmcts/nodejs-logging'
 
-const fileRegexp = new RegExp('(\\..{2,5}$)')
-const uuidRegexp = new RegExp('[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}')
-
-function hideUuidInUrlIfNotStaticFile (url: string): string {
-  if (!fileRegexp.test(url)) {
-    return url.replace(uuidRegexp, '{uuid}')
-  } else {
-    return url
-  }
-}
+const logger: LoggerInstance = Logger.getLogger('customEventTracker')
 
 export class AppInsights {
-  static enable () {
+  private readonly instrumentationKey: string
+  private client: appInsights.TelemetryClient
 
-    appInsights.setup(config.get<string>('secrets.cmc.AppInsightsInstrumentationKey'))
+  constructor (instrumentationKey?: string, client?: appInsights.TelemetryClient) {
+    this.instrumentationKey = instrumentationKey || config.get<string>('secrets.cmc.AppInsightsInstrumentationKey')
+    this.client = client || appInsights.defaultClient
+  }
+
+  enable () {
+    this.setup()
+    this.prepareClientContext(config.get<string>('appInsights.roleName'))
+    this.prepareTelemetryProcessors()
+    this.start()
+  }
+
+  setup (): typeof appInsights.Configuration {
+    return appInsights.setup(this.instrumentationKey)
+      .setDistributedTracingMode(appInsights.DistributedTracingModes.AI_AND_W3C)
+      .setSendLiveMetrics(true)
       .setAutoCollectConsole(true, true)
-    appInsights.defaultClient.context.tags[appInsights.defaultClient.context.keys.cloudRole] = config.get<string>('appInsights.roleName')
+  }
 
-    appInsights.defaultClient.addTelemetryProcessor(function (envelope, contextObjects) {
-      // hide UUID's in operationName URL's that are not static files, so they can be aggregated properly
-      if (envelope.tags) {
-        if (envelope.tags['ai.operation.name']) {
-          envelope.tags['ai.operation.name'] = hideUuidInUrlIfNotStaticFile(envelope.tags['ai.operation.name'])
-        }
-      }
+  getClient () {
+    if (!this.client) {
+      this.client = appInsights.defaultClient
+    }
+    return this.client
+  }
 
-      // always send
-      return true
-    })
+  prepareClientContext (cloudRole: string) {
+    this.getClient().context.tags[this.client.context.keys.cloudRole] = cloudRole
+  }
 
+  prepareTelemetryProcessors () {
+    this.getClient().addTelemetryProcessor(telemetryProcessors.operationNameUUIDHider())
+    if (this.instrumentationKey === 'STDOUT') {
+      this.client.addTelemetryProcessor(telemetryProcessors.errorLogger(logger))
+    }
+  }
+
+  start () {
     appInsights.start()
   }
 }

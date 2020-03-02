@@ -1,0 +1,31 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, emailInput, saveAndContinueButton, errorSummary, textArea %}
+
+{% set heading = t('How and why do you want the order changed?') %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <form novalidate method="post">
+        {{ csrfProtection(csrf) }}
+
+        {% set name = 'reason' %}
+        {% set error = form.errorFor(name) %}
+        <div class="form-group {% if error %} form-group-error {% endif %}">
+          <label for="{{ name }}" id="{{ name }}[label]">
+            <p>{{ t('You can continue without giving details if you prefer. If you enter details {{ otherParty }} will be able to see what you said and add their own comments.',
+                { otherParty: otherParty }) }}</p>
+
+            {% if error %}
+              <span class="error-message">{{ t(error) }}</span>
+            {% endif %}
+          </label>
+
+          <textarea id="{{ name }}" name="{{ name }}" rows="10" class="form-control full-width {% if error %}form-control-error{% endif %}">{{ form.valueFor(name) | default('') }}</textarea>
+        </div>
+
+        {{ saveAndContinueButton() }}
+      </form>
+    </div>
+  </div>
+{% endblock %}

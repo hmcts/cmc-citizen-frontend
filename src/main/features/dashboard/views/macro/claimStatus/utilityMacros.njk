@@ -1,9 +1,11 @@
 {% from "externalLink.njk" import externalLink %}
 {% from "internalLink.njk" import internalLink %}
 
-{% macro downloadResponseLink(claim) %}
-  {{ internalLink(t('Download your response'), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId })) }}
-  {{ t('(PDF)') }}
+{% macro downloadResponseLink(claim, title='Download your response') %}
+  {{ internalLink(t(title), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId })) }}{{ t(' (PDF)') }}{% endmacro %}
+
+{% macro downloadTheirResponseLink(claim) %}
+  {{ internalLink(t('Download their response'), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId })) }}{{ t(' (PDF)') }}
 {% endmacro %}
 
 {% macro viewAndRespondOffer(claim, text = 'View and respond to the offer') %}
@@ -19,8 +21,7 @@
 {% endmacro %}
 
 {% macro downloadAgreementLink(claim) %}
-  {{ internalLink(t('Download the settlement agreement'), OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId })) }}
-  {{ t('(PDF)') }}
+  {{ internalLink(t('Download the settlement agreement'), OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId })) }}{{ t(' (PDF)') }}
 {% endmacro %}
 
 {% macro admissionByCCJCommonInfoClaimDetails(claim) %}
@@ -28,7 +29,13 @@
   <p>{{ t('If you pay the debt within one month of the date of judgment, the CCJ is removed from the public register. You can pay £15 to ' +
       externalLink('apply for a certificate', 'https://www.gov.uk/government/publications/form-n443-application-for-a-certificate-of-satisfaction-or-cancellation') +
       ' that confirms this.') | safe }}</p>
-  <p>{{ t(internalLink('Contact ' + claim.claimData.claimant.name, DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId })) +
-      ' if you need their payment details. Make sure you get receipts for any payments.') | safe }}</p>
+  <p>{{ t(internalLink('Contact ' + claim.claimData.claimant.name, DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId })) + ' if you need their payment details. Make sure you get receipts for any payments.') | safe }}</p>
   <p>{{ downloadResponseLink(claim) }}</p>
+{% endmacro %}
+
+{% macro downloadClaimantDQs(claim) %}
+  {% if claim.response.directionsQuestionnaire %}
+    <p>{{ t('They’ve also sent us their hearing requirements.') }}</p>
+    {{ internalLink(t('Download their hearing requirements '), DirectionsQuestionnairePaths.claimantHearingRequirementsReceiver.evaluateUri({ externalId: claim.externalId }) )}}{{ t('(PDF)') }}
+  {% endif %}
 {% endmacro %}

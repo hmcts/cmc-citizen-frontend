@@ -1,9 +1,171 @@
 {% extends "layout.njk" %}
 
 {% from "table.njk" import tableStart, tableEnd, row, rowWithMultipleValue %}
-{% from "form.njk" import csrfProtection, submitButton, errorSummary %}
+{% from "form.njk" import csrfProtection, submitButton, errorSummary, checkboxSingle %}
+{% from "components/free-mediation/freeMediationCheckAndSendBlock.njk" import freeMediationBlock %}
 
 {% set heading = 'Check your answers' %}
+
+{% macro directionsQuestionnaire() %}
+  {% if(directionsQuestionnaireEnabled) %}
+    {{ tableStart('hearingRequirements', 'Your hearing requirements') }}
+    {% if directionsQuestionnaireDraft.supportRequired.languageSelected or directionsQuestionnaireDraft.supportRequired.signLanguageSelected or
+      directionsQuestionnaireDraft.supportRequired.disabledAccessSelected or directionsQuestionnaireDraft.supportRequired.hearingLoopSelected or
+      directionsQuestionnaireDraft.supportRequired.otherSupportSelected %}
+      {{ rowWithMultipleValue(
+        label = 'Support required for a hearing',
+        values = [
+          directionsQuestionnaireDraft.supportRequired.languageInterpreted + ' interpreter' if directionsQuestionnaireDraft.supportRequired.languageSelected === 'true',
+          directionsQuestionnaireDraft.supportRequired.signLanguageInterpreted + ' interpreter' if directionsQuestionnaireDraft.supportRequired.signLanguageSelected === 'true',
+          t('Disabled access') if directionsQuestionnaireDraft.supportRequired.disabledAccessSelected === 'true',
+          t('Hearing loop') if directionsQuestionnaireDraft.supportRequired.hearingLoopSelected === 'true',
+          t('Other:') if directionsQuestionnaireDraft.supportRequired.otherSupportSelected === 'true',
+          directionsQuestionnaireDraft.supportRequired.otherSupport if directionsQuestionnaireDraft.supportRequired.otherSupportSelected === 'true'
+        ],
+        changeLink = DirectionsQuestionnairePaths.supportPage.evaluateUri({ externalId: claim.externalId }),
+        bold = true
+      ) }}
+    {% else %}
+      {{ row(
+        label = 'Support required for a hearing',
+        value = 'None',
+        changeLink = DirectionsQuestionnairePaths.supportPage.evaluateUri({ externalId: claim.externalId }),
+        bold = true
+      ) }}
+    {% endif %}
+    {% if directionsQuestionnaireDraft.hearingLocation.courtName %}
+      {{ row(
+        label = 'Preferred hearing centre',
+        value = directionsQuestionnaireDraft.hearingLocation.courtName,
+        changeLink = DirectionsQuestionnairePaths.hearingLocationPage.evaluateUri({ externalId: claim.externalId }),
+        bottomBorder = false,
+        bold = true
+      ) }}
+    {% else %}
+      {{ row(
+        label = 'Preferred hearing centre',
+        value = directionsQuestionnaireDraft.hearingLocation.alternativeCourtName,
+        changeLink = DirectionsQuestionnairePaths.hearingLocationPage.evaluateUri({ externalId: claim.externalId }),
+        bottomBorder = false,
+        bold = true
+      ) }}
+    {% endif %}
+    {% if directionsQuestionnaireDraft.exceptionalCircumstances.exceptionalCircumstances.option === YesNoOption.YES.option %}
+      {{ row(
+        label = 'Briefly explain your reasons',
+        value = directionsQuestionnaireDraft.exceptionalCircumstances.reason,
+        changeLink = DirectionsQuestionnairePaths.hearingExceptionalCircumstancesPage.evaluateUri({ externalId: claim.externalId }),
+        bottomBorder = false,
+        bold = true
+      ) }}
+    {% endif %}
+    {% if directionsQuestionnaireDraft.expertRequired.option.option === YesNoOption.YES.option %}
+      {{ row(
+        label = 'Have you already got a report written by an expert?',
+        value = t(directionsQuestionnaireDraft.expertReports.declared.option) | capitalize,
+        changeLink = DirectionsQuestionnairePaths.expertReportsPage.evaluateUri({ externalId: claim.externalId }),
+        bottomBorder = false,
+        topBorder = true,
+        bold = true
+      ) }}
+    {% endif %}
+    {% if directionsQuestionnaireDraft.expertReports.declared.option === YesNoOption.YES.option %}
+      {% for report in directionsQuestionnaireDraft.expertReports.rows %}
+        {{ rowWithMultipleValue(
+          label = 'Report ' + loop.index,
+          values = [
+            t('Expert’s name: {{  expertsName }}', { expertsName:  report.expertName }),
+            t('Date of report: {{  reportDate }}', { reportDate:  report.reportDate.toMoment() | date })
+          ],
+          bottomBorder = false,
+          bold = true
+        ) }}
+      {% endfor %}
+    {% endif %}
+    {% if directionsQuestionnaireDraft.permissionForExpert.option %}
+      {{ row(
+        label = 'Do you want the court’s permission to use an expert?',
+        value = t(directionsQuestionnaireDraft.permissionForExpert.option.option) | capitalize,
+        changeLink = DirectionsQuestionnairePaths.permissionForExpertPage.evaluateUri({ externalId: claim.externalId }),
+        topBorder = true,
+        bold = true
+      ) }}
+    {% endif %}
+    {% if directionsQuestionnaireDraft.expertEvidence.expertEvidence %}
+      {{ row(
+        label = 'Does the claim involve something an expert can still examine?',
+        value = t(directionsQuestionnaireDraft.expertEvidence.expertEvidence.option) | capitalize,
+        changeLink = DirectionsQuestionnairePaths.expertEvidencePage.evaluateUri({ externalId: claim.externalId }),
+        bottomBorder = false,
+        bold = true
+      ) }}
+      {{ row(
+        label = 'What is there to examine?',
+        value = directionsQuestionnaireDraft.expertEvidence.whatToExamine,
+        bold = true
+      ) }}
+    {% endif %}
+    {% if directionsQuestionnaireDraft.whyExpertIsNeeded.explanation %}
+      {{ row(
+        label = 'Briefly explain why you believe an expert is needed',
+        value = directionsQuestionnaireDraft.whyExpertIsNeeded.explanation,
+        changeLink = DirectionsQuestionnairePaths.whyExpertIsNeededPage.evaluateUri({ externalId: claim.externalId }),
+        bottomBorder = false,
+        bold = true
+      ) }}
+    {% endif %}
+    {{ row(
+      label = 'Do you want to give evidence?',
+      value = t(directionsQuestionnaireDraft.selfWitness.option.option) | capitalize,
+      changeLink = DirectionsQuestionnairePaths.selfWitnessPage.evaluateUri({ externalId: claim.externalId }),
+      topBorder = true,
+      bold = true
+    ) }}
+    {% if directionsQuestionnaireDraft.otherWitnesses.otherWitnesses.option === YesNoOption.YES.option %}
+      {{ row(
+        label = 'Other witnesses',
+        value = directionsQuestionnaireDraft.otherWitnesses.howMany,
+        changeLink = DirectionsQuestionnairePaths.selfWitnessPage.evaluateUri({ externalId: claim.externalId }),
+        bold = true
+      ) }}
+    {% else %}
+      {{ row(
+        label = 'Other witnesses',
+        value = directionsQuestionnaireDraft.otherWitnesses.otherWitnesses.option | capitalize,
+        changeLink = DirectionsQuestionnairePaths.selfWitnessPage.evaluateUri({ externalId: claim.externalId }),
+        bold = true
+      ) }}
+    {% endif %}
+    {% if directionsQuestionnaireDraft.availability.hasUnavailableDates %}
+      {{ rowWithMultipleValue(
+        label = 'Dates unavailable',
+        values = datesUnavailable,
+        changeLink = DirectionsQuestionnairePaths.hearingDatesPage.evaluateUri({ externalId: claim.externalId }),
+        bold = true
+      ) }}
+    {% else %}
+      {{ row(
+        label = 'Dates unavailable',
+        value = 'None',
+        changeLink = DirectionsQuestionnairePaths.hearingDatesPage.evaluateUri({ externalId: claim.externalId }),
+        bold = true
+      ) }}
+    {% endif %}
+    {{ tableEnd() }}
+
+    <div class="form-group">
+      <h2 class="heading-medium">{{ t('Confirmation') }}</h2>
+      {{ checkboxSingle(
+        label = 'The hearing requirement details on this page are true to the best of my knowledge.',
+        name = 'directionsQuestionnaireSigned',
+        option = { label: 'The hearing requirement details on this page are true to the best of my knowledge.', value: true },
+        form = form,
+        legendHidden = true
+      ) }}
+      <input type="hidden" name="type" value="{{ form.model.type }}">
+    </div>
+  {% endif %}
+{% endmacro %}
 
 {% block content %}
   <form novalidate method="post">
@@ -11,12 +173,35 @@
 
     {{ tableStart('yourResponse', 'Your response') }}
 
-    {% if alreadyPaid %}
+    {% if dispute and not alreadyPaid %}
+      {{
+      row(
+        label = 'Do you want to proceed with the claim?',
+        value = draft.intentionToProceed.proceed.option | capitalize,
+        changeLink = PartAdmissionPaths.whyDoYouDisagreePage.evaluateUri({ externalId: claim.externalId }),
+        bold = true
+      )
+      }}
 
+      {% if mediationEnabled %}
+        {% if draft.intentionToProceed.proceed.option === YesNoOption.YES.option and claim.response.freeMediation === YesNoOption.YES.option %}
+          {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot, mediationEnabled) }}
+        {% endif %}
+      {% endif %}
+
+      {{ directionsQuestionnaire() }}
+
+      {% if not directionsQuestionnaireEnabled %}
+        {{ tableEnd() }}
+      {% endif %}
+
+    {% elseif alreadyPaid %}
       {% if draft.partPaymentReceived %}
-        {{ row(label = 'Do you agree the defendant has paid ' + amount | numeral + '?', bold = true,
-          value = draft.partPaymentReceived.received | yesNo,
-          changeLink = ClaimantResponsePaths.partPaymentReceivedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
+        <div class="form-group">
+          {{ row(label = 'Do you agree the defendant has paid ' + amount | numeral + '?', bold = true,
+            value = draft.partPaymentReceived.received | yesNo,
+            changeLink = ClaimantResponsePaths.partPaymentReceivedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
+        </div>
       {% endif %}
 
       {% if draft.accepted %}
@@ -34,40 +219,29 @@
           changeLink = ClaimantResponsePaths.rejectionReasonPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
       {% endif %}
 
-      {% if draft.freeMediation and mediationEnabled !== true %}
-        {{ row(label = 'Will you try free mediation?', bold = true, value = draft.freeMediation.option | yesNo,
-          changeLink = ClaimantResponsePaths.freeMediationPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
-      {% endif %}
-
-      {% if mediationEnabled %}
-        {{ tableStart('freeMediation', 'Free telephone mediation') }}
-        {{
-        row(
-          label = 'Will you try free mediation?',
-          value = t(mediationDraft.willYouTryMediation.option) | capitalize,
-          changeLink = MediationPaths.willYouTryMediation.evaluateUri({ externalId: claim.externalId }),
-          bold = true
-        )
-        }}
-        {% if mediationDraft.youCanOnlyUseMediation %}
-          {{
-          row(
-            label = 'Do you agree to the mediation conditions?',
-            value = t(mediationDraft.youCanOnlyUseMediation.option) | capitalize,
-            changeLink = MediationPaths.mediationAgreementPage.evaluateUri({ externalId: claim.externalId }),
-            bold = true
-          )
-          }}
-        {% endif %}
+      {% if claim.response.freeMediation === YesNoOption.YES.option and (draft.accepted.accepted.option === YesNoOption.NO.option
+        or draft.partPaymentReceived.received.option === YesNoOption.NO.option) %}
+        {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot, mediationEnabled) }}
+      {% else %}
         {{ tableEnd() }}
       {% endif %}
+
+      {{ directionsQuestionnaire() }}
+    {% elseif draft.intentionToProceed %}
+      <div class="form-group">
+        {{ row(label = 'Do you want to proceed with the claim?', bold = true, value = draft.intentionToProceed.proceed | yesNo,
+          changeLink = ClaimantResponsePaths.intentionToProceedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
+        {% if draft.intentionToProceed.proceed === YesNoOption.YES and claim.response.freeMediation === YesNoOption.YES.option %}
+          {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot, mediationEnabled) }}
+        {% endif %}
+      </div>
     {% else %}
       {% if draft.settleAdmitted %}
-        {% if draft.settleAdmitted.admitted.option === 'yes' %}
+        {% if draft.settleAdmitted.admitted === YesNoOption.YES %}
           {% set settleAdmittedResponse = 'I accept this amount' %}
         {% else %}
           {% set settleAdmittedResponse = 'I reject this amount' %}
-        {% if draft.freeMediation.option === 'yes' %}
+        {% if draft.freeMediation === YesNoOption.YES %}
           {% set freeMediationResponse =  'Yes' %}
         {% else %}
           {% set freeMediationResponse = 'No' %}
@@ -76,14 +250,14 @@
 
         {{ row(label = 'Do you accept or reject the defendant’s admission?', bold = true, value = settleAdmittedResponse,
           changeLink = ClaimantResponsePaths.settleAdmittedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
-        {% if draft.settleAdmitted.admitted.option === 'no' and claim.response.freeMediation === 'yes' %}
-          {{ row(label = 'Will you try free mediation?', bold = true, value = freeMediationResponse,
-            changeLink = ClaimantResponsePaths.freeMediationPage.evaluateUri({ externalId: draft.externalId }), bottomBorder = true) }}
+        {% if draft.settleAdmitted.admitted === YesNoOption.NO and claim.response.freeMediation === YesNoOption.YES.option %}
+          {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot, mediationEnabled) }}
         {% endif %}
+        {{ directionsQuestionnaire() }}
       {% endif %}
 
       {% if draft.acceptPaymentMethod %}
-        {% if draft.acceptPaymentMethod.accept.option === 'yes' %}
+        {% if draft.acceptPaymentMethod.accept === YesNoOption.YES %}
           {% set acceptPaymentMethodResponse = 'I accept this repayment plan' %}
         {% else %}
           {% set acceptPaymentMethodResponse = 'I reject this repayment plan' %}
@@ -92,24 +266,24 @@
         {{ row(label = 'Do you accept the defendant’s repayment plan?', bold = true, value = acceptPaymentMethodResponse,
           changeLink = ClaimantResponsePaths.acceptPaymentMethodPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
 
-        {% if draft.acceptPaymentMethod.accept.option === 'no' %}
-          {% if paymentIntention.paymentOption === PaymentType.IMMEDIATELY.value %}
+        {% if draft.acceptPaymentMethod.accept === YesNoOption.NO %}
+          {% if claimantPaymentPlan.paymentOption === PaymentType.IMMEDIATELY.value %}
             {% set alternatePaymentMethodResponse = t('Immediately') %}
-          {% elseif paymentIntention.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
-            {% set alternatePaymentMethodResponse = t('In full by {{ deadline }}', { deadline: paymentIntention.paymentDate | date }) %}
-          {% elseif paymentIntention.paymentOption === PaymentType.INSTALMENTS.value %}
+          {% elseif claimantPaymentPlan.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
+            {% set alternatePaymentMethodResponse = t('In full by {{ deadline }}', { deadline: alternatePaymentMethodDate | date }) %}
+          {% elseif claimantPaymentPlan.paymentOption === PaymentType.INSTALMENTS.value %}
             {% set alternatePaymentMethodResponse = t('By instalments') %}
           {% endif %}
 
           {{ row(label = 'How would you like the defendant to pay?', bold = true, value = alternatePaymentMethodResponse,
             changeLink = ClaimantResponsePaths.alternateRepaymentPlanPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
 
-          {% if paymentIntention.paymentOption === PaymentType.INSTALMENTS.value %}
-            {{ row(label = 'Regular payments of', bold = true, value = paymentIntention.repaymentPlan.instalmentAmount | numeral,
+          {% if claimantPaymentPlan.paymentOption === PaymentType.INSTALMENTS.value %}
+            {{ row(label = 'Regular payments of', bold = true, value = claimantPaymentPlan.repaymentPlan.instalmentAmount | numeral,
               changeLink = ClaimantResponsePaths.paymentPlanPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false) }}
-            {{ row(label = 'Frequency of payments', bold = true, value = paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule,
+            {{ row(label = 'Frequency of payments', bold = true, value = claimantPaymentPlan.repaymentPlan.paymentSchedule | renderPaymentSchedule,
               bottomBorder = false) }}
-            {{ row(label = 'Date for first instalment', bold = true, value = paymentIntention.repaymentPlan.firstPaymentDate | date,
+            {{ row(label = 'Date for first instalment', bold = true, value = alternatePaymentMethodDate | date,
               bottomBorder = true) }}
           {% endif %}
         {% endif %}

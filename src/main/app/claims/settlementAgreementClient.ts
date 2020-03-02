@@ -8,20 +8,32 @@ export const claimStoreApiUrl: string = `${config.get<string>('claim-store.url')
 export class SettlementAgreementClient {
 
   rejectSettlementAgreement (externalId: string, user: User): Promise<Claim> {
-    return request.post(`${claimStoreApiUrl}/${externalId}/settlement-agreement/reject`, {
+    const options = {
+      method: 'POST',
+      uri: `${claimStoreApiUrl}/${externalId}/settlement-agreement/reject`,
       body: '',
       headers: {
         Authorization: `Bearer ${user.bearerToken}`
       }
+    }
+
+    return request(options).then(function (response) {
+      return response
     })
   }
 
   countersignSettlementAgreement (externalId: string, user: User): Promise<Claim> {
-    return request.post(`${claimStoreApiUrl}/${externalId}/settlement-agreement/countersign`, {
+    const options = {
+      method: 'POST',
+      uri: `${claimStoreApiUrl}/${externalId}/settlement-agreement/countersign`,
       body: '',
       headers: {
         Authorization: `Bearer ${user.bearerToken}`
       }
+    }
+
+    return request(options).then(function (response) {
+      return response
     })
   }
 

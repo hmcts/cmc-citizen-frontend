@@ -41,7 +41,7 @@ export class DefendantTaskListPage {
   }
 
   selectTaskWhyDoYouDisagreeWithTheClaim (): void {
-    I.click('Why do you disagree with the claim?')
+    I.click('Tell us why you disagree with the claim')
   }
 
   selectTaskWhyDoYouDisagreeWithTheAmountClaimed (): void {
@@ -65,7 +65,11 @@ export class DefendantTaskListPage {
   }
 
   selectTaskFreeMediation (): void {
-    I.click('Consider free mediation')
+    I.click('Free telephone mediation')
+  }
+
+  selectTaskHearingRequirements (): void {
+    I.click('Give us details in case there’s a hearing')
   }
 
 }

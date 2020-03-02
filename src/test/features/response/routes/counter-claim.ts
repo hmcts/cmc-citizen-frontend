@@ -17,6 +17,7 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
 import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
 import * as feesServiceMock from 'test/http-mocks/fees'
+import { verifyRedirectForGetWhenAlreadyPaidInFull } from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = ResponsePaths.counterClaimPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -35,6 +36,7 @@ describe('Defendant response: counter claim page', () => {
       })
 
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
 
       it('should return 500 and render error page when cannot retrieve claim', async () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
@@ -47,6 +49,7 @@ describe('Defendant response: counter claim page', () => {
 
       it('should render page when everything is fine', async () => {
         draftStoreServiceMock.resolveFind('response')
+        draftStoreServiceMock.resolveFind('mediation')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         feesServiceMock.resolveGetIssueFeeRangeGroup()
         feesServiceMock.resolveGetHearingFeeRangeGroup()

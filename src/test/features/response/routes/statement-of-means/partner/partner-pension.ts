@@ -12,6 +12,10 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { StatementOfMeansPaths as Paths } from 'response/paths'
 import { app } from 'main/app'
 import { PartnerPensionOption, ValidationErrors } from 'response/form/models/statement-of-means/partnerPension'
+import {
+  verifyRedirectForGetWhenAlreadyPaidInFull,
+  verifyRedirectForPostWhenAlreadyPaidInFull
+} from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -30,6 +34,8 @@ describe('Statement of means', () => {
         beforeEach(() => {
           idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
         })
+
+        verifyRedirectForGetWhenAlreadyPaidInFull(partnerPensionPage)
 
         it('should return error page when unable to retrieve claim', async () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('Error')
@@ -53,6 +59,7 @@ describe('Statement of means', () => {
         it('should return successful response when claim is retrieved', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .get(partnerPensionPage)
@@ -73,6 +80,8 @@ describe('Statement of means', () => {
         beforeEach(() => {
           idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
         })
+
+        verifyRedirectForPostWhenAlreadyPaidInFull(partnerPensionPage)
 
         it('should return error page when unable to retrieve claim', async () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('Error')
@@ -96,7 +105,8 @@ describe('Statement of means', () => {
         it('should return error page when unable to save draft', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
-          draftStoreServiceMock.rejectSave()
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.rejectUpdate()
 
           await request(app)
             .post(partnerPensionPage)
@@ -108,7 +118,8 @@ describe('Statement of means', () => {
         it('should redirect to dependants page when all is fine and form is valid', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .post(partnerPensionPage)
@@ -122,6 +133,7 @@ describe('Statement of means', () => {
         it('should trigger validation when all is fine and form is invalid', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .post(partnerPensionPage)

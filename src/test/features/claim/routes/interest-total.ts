@@ -81,7 +81,7 @@ describe('Claim issue: interest total page', () => {
 
       it('should return 500 and render error page when form is valid and cannot save draft', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.rejectSave()
+        draftStoreServiceMock.rejectUpdate()
 
         await request(app)
           .post(pagePath)
@@ -95,7 +95,7 @@ describe('Claim issue: interest total page', () => {
 
       it('should redirect to interest continue claiming page when form is valid, amount and reason are entered and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
 
         await request(app)
           .post(pagePath)

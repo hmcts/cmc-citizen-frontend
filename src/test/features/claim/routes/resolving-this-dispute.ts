@@ -45,7 +45,7 @@ describe('Claim issue: resolving this dispute page', () => {
 
       it('should return 500 and render error page when cannot save draft', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.rejectSave()
+        draftStoreServiceMock.rejectUpdate()
 
         await request(app)
           .post(ClaimPaths.resolvingThisDisputerPage.uri)
@@ -55,7 +55,7 @@ describe('Claim issue: resolving this dispute page', () => {
 
       it('should redirect to task list when everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
 
         await request(app)
           .post(ClaimPaths.resolvingThisDisputerPage.uri)

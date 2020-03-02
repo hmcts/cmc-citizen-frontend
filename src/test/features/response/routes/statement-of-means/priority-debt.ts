@@ -6,12 +6,16 @@ import * as config from 'config'
 import { app } from 'main/app'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import { checkAuthorizationGuards } from 'test/routes/authorization-check'
-import { checkNotDefendantInCaseGuard } from '../../../../common/checks/not-defendant-in-case-check'
+import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
 import * as idamServiceMock from 'test/http-mocks/idam'
-import { checkAlreadySubmittedGuard } from '../../../../common/checks/already-submitted-check'
-import { checkCountyCourtJudgmentRequestedGuard } from '../../../../common/checks/ccj-requested-check'
+import { checkAlreadySubmittedGuard } from 'test/common/checks/already-submitted-check'
+import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
 import { expect } from 'chai'
 import { IncomeExpenseSchedule } from 'common/calculate-monthly-income-expense/incomeExpenseSchedule'
+import {
+  verifyRedirectForGetWhenAlreadyPaidInFull,
+  verifyRedirectForPostWhenAlreadyPaidInFull
+} from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = StatementOfMeansPaths.priorityDebtsPage.evaluateUri(
@@ -57,10 +61,12 @@ describe('Defendant response: priority-debt', () => {
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
       checkErrorHandling(method)
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
 
       it('should render page when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         draftStoreServiceMock.resolveFind('response:full-admission')
+        draftStoreServiceMock.resolveFind('mediation')
 
         await request(app)
           .get(pagePath)
@@ -83,11 +89,13 @@ describe('Defendant response: priority-debt', () => {
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
       checkErrorHandling(method)
+      verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
 
       describe('validation should be triggered correctly', () => {
         beforeEach(() => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
         })
 
         it('should trigger validation when negative amount is present', async () => {
@@ -145,7 +153,8 @@ describe('Defendant response: priority-debt', () => {
         it('should save to the draft store', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .post(pagePath)
@@ -172,6 +181,7 @@ describe('Defendant response: priority-debt', () => {
         it('should reset the debt', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .post(pagePath)

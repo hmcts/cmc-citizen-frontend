@@ -73,18 +73,28 @@ export class IdamClient {
       })
       .catch((error: any) => {
         trackCustomEvent('failed to exchange code',{
-          errorValue: error
+          errorValue: {
+            message: error.name,
+            code: error.statusCode
+          }
         })
-        return undefined
+        throw error
       })
   }
 
-  static invalidateSession (jwt: string): Promise<void> {
+  static invalidateSession (jwt: string, bearerToken: string): Promise<void> {
     if (!jwt) {
       return Promise.reject(new Error('JWT is required'))
     }
 
-    const url = `${config.get('idam.api.url')}/session/${jwt}`
-    return request.delete(url)
+    const options = {
+      method: 'DELETE',
+      uri: `${config.get('idam.api.url')}/session/${jwt}`,
+      headers: {
+        Authorization: `Bearer ${bearerToken}`
+      }
+    }
+
+    request(options)
   }
 }

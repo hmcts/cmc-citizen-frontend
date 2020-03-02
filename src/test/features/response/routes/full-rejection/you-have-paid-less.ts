@@ -16,6 +16,10 @@ import { checkAuthorizationGuards } from 'test/common/checks/authorization-check
 import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
 import { checkAlreadySubmittedGuard } from 'test/common/checks/already-submitted-check'
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
+import {
+  verifyRedirectForGetWhenAlreadyPaidInFull,
+  verifyRedirectForPostWhenAlreadyPaidInFull
+} from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = FullRejectionPaths.youHavePaidLessPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -35,6 +39,7 @@ describe('You have paid less page', () => {
 
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
 
       it('should return 500 and render error page when cannot retrieve claim', async () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('Internal service error when retrieving response')
@@ -48,6 +53,7 @@ describe('You have paid less page', () => {
       it('should render page when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         draftStoreServiceMock.resolveFind('response:full-rejection')
+        draftStoreServiceMock.resolveFind('mediation')
 
         await request(app)
           .get(pagePath)
@@ -69,10 +75,12 @@ describe('You have paid less page', () => {
 
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
 
       it('should redirect to task list', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         draftStoreServiceMock.resolveFind('response:full-rejection')
+        draftStoreServiceMock.resolveFind('mediation')
 
         await request(app)
           .post(pagePath)

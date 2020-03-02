@@ -27,7 +27,7 @@
   <meta name="theme-color" content="#0b0c0c" />
 
   {% if development %}
-    <link href="{{ asset_paths['style_vendor'] }}/HTMLCSAuditor.css" rel="stylesheet" />
+    <link href="{{ asset_paths['style_vendor'] }}/HTMLCS.css" rel="stylesheet" />
   {% endif %}
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -91,8 +91,10 @@
     {% endif %}
 
     {% block content %}{% endblock %}
+    {% block contactForHelp %}
+       {% include "includes/contact-us-for-help.njk" %}
+    {% endblock %}
 
-    {% include "includes/report_problem_link.njk" %}
   </main>
 
   <footer class="group js-footer" id="footer" role="contentinfo">

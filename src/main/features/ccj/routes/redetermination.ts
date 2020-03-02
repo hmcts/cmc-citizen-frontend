@@ -8,7 +8,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { User } from 'idam/user'
 import { CCJClient } from 'claims/ccjClient'
 import { ReDetermination } from 'ccj/form/models/reDetermination'
-import { MadeBy } from 'offer/form/models/madeBy'
+import { MadeBy } from 'claims/models/madeBy'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 
 function renderView (form: Form<ReDetermination>, req: express.Request, res: express.Response): void {

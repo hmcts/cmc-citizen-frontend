@@ -16,6 +16,10 @@ import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-r
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 import { ValidationErrors } from 'forms/validation/validationErrors'
 import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
+import {
+  verifyRedirectForGetWhenAlreadyPaidInFull,
+  verifyRedirectForPostWhenAlreadyPaidInFull
+} from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = Paths.impactOfDisputePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -35,6 +39,7 @@ describe('Defendant response: impact of dispute page', () => {
 
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
 
       context('when response and CCJ not submitted', () => {
         it('should return 500 and render error page when cannot retrieve claim', async () => {
@@ -59,6 +64,7 @@ describe('Defendant response: impact of dispute page', () => {
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .get(pagePath)
@@ -89,6 +95,7 @@ describe('Defendant response: impact of dispute page', () => {
 
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
 
       context('when response and CCJ not submitted', () => {
         it('should return 500 and render error page when cannot retrieve claim', async () => {
@@ -113,7 +120,8 @@ describe('Defendant response: impact of dispute page', () => {
         it('should return 500 and render error page when cannot save draft', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response')
-          draftStoreServiceMock.rejectSave()
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.rejectUpdate()
 
           await request(app)
             .post(pagePath)
@@ -125,6 +133,7 @@ describe('Defendant response: impact of dispute page', () => {
         it('should return render page and display validation error when invalid data is sent', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .post(pagePath)
@@ -136,7 +145,8 @@ describe('Defendant response: impact of dispute page', () => {
         it('should redirect to task list page and save draft when all if fine and data is valid', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .post(pagePath)

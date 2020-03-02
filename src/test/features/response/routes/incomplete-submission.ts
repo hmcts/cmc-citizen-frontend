@@ -15,6 +15,7 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
 import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
+import { verifyRedirectForGetWhenAlreadyPaidInFull } from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = ResponsePaths.incompleteSubmissionPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -32,12 +33,14 @@ describe('Defendant response: incomplete submission page', () => {
       })
 
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
     })
 
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       draftStoreServiceMock.resolveFind('response')
       draftStoreServiceMock.resolveFind('mediation')
+      draftStoreServiceMock.resolveFind('directionsQuestionnaire')
       claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
       await request(app)

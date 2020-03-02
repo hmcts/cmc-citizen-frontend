@@ -9,6 +9,8 @@ import { Claim } from 'claims/models/claim'
 import { PartyType } from 'common/partyType'
 import { User } from 'idam/user'
 import { ForbiddenError } from 'errors'
+import { Moment } from 'moment'
+import { DirectionOrder } from 'claims/models/directionOrder'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 const draftExternalId = 'draft'
@@ -20,11 +22,23 @@ export default express.Router()
       const { externalId } = req.params
 
       const claim = externalId !== draftExternalId ? await claimStoreClient.retrieveByExternalId(externalId, res.locals.user as User) : undefined
+      const mediationDeadline: Moment = claim ? await claim.respondToMediationDeadline() : undefined
+      const reconsiderationDeadline: Moment = claim ? await claim.respondToReconsiderationDeadline() : undefined
+      const isReviewOrderEligible: boolean = DirectionOrder.isReviewOrderEligible(reconsiderationDeadline)
+      const judgePilot: boolean = claim ? claim.features !== undefined && claim.features.includes('judgePilotEligible') : false
+
+      const respondToReviewOrderDeadline: Moment = claim ? await claim.respondToReviewOrderDeadline() : undefined
+
       if (claim && claim.claimantId !== res.locals.user.id) {
         throw new ForbiddenError()
       }
       res.render(Paths.claimantPage.associatedView, {
-        claim: claim
+        claim: claim,
+        mediationDeadline: mediationDeadline,
+        reconsiderationDeadline: reconsiderationDeadline,
+        isReviewOrderEligible: isReviewOrderEligible,
+        respondToReviewOrderDeadline: respondToReviewOrderDeadline,
+        judgePilot: judgePilot
       })
     }))
   .post(Paths.claimantPage.uri,
@@ -41,7 +55,7 @@ export default express.Router()
         throw new ForbiddenError()
       }
 
-      if (claim.claimData.defendant.type === PartyType.INDIVIDUAL.value) {
+      if (claim.claimData.defendant.type === PartyType.INDIVIDUAL.value && !claim.retrieveDateOfBirthOfDefendant) {
         res.redirect(CCJPaths.dateOfBirthPage.evaluateUri({ externalId: externalId }))
       } else {
         res.redirect(CCJPaths.paidAmountPage.evaluateUri({ externalId: externalId }))

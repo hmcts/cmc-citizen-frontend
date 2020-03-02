@@ -18,7 +18,7 @@ let Helper = codecept_helper
 class PageHelper extends Helper {
 
   amOnCitizenAppPage (path) {
-    return this.helpers['WebDriverIO'].amOnPage(`${citizenAppBaseURL}${path}`)
+    return this.helpers['WebDriver'].amOnPage(`${citizenAppBaseURL}${path}`)
   }
 
 }

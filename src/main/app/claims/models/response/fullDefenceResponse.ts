@@ -6,6 +6,7 @@ import { DefenceType } from 'claims/models/response/defenceType'
 import { PaymentDeclaration } from 'claims/models/paymentDeclaration'
 import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 import { DefendantTimeline } from 'response/form/models/defendantTimeline'
+import { DirectionsQuestionnaire } from 'claims/models/directions-questionnaire/directionsQuestionnaire'
 
 export interface FullDefenceResponse extends ResponseCommon {
   responseType: ResponseType.FULL_DEFENCE
@@ -13,7 +14,8 @@ export interface FullDefenceResponse extends ResponseCommon {
   paymentDeclaration?: PaymentDeclaration
   defence: string,
   timeline: DefendantTimeline
-  evidence: DefendantEvidence
+  evidence: DefendantEvidence,
+  directionsQuestionnaire?: DirectionsQuestionnaire
 }
 
 export namespace FullDefenceResponse {
@@ -31,7 +33,9 @@ export namespace FullDefenceResponse {
       evidence: {
         rows: input.evidence && input.evidence.rows || [],
         comment: input.evidence && input.evidence.comment || undefined
-      } as DefendantEvidence
+      } as DefendantEvidence,
+      directionsQuestionnaire: input.directionsQuestionnaire &&
+        DirectionsQuestionnaire.fromObject(input.directionsQuestionnaire)
     }
   }
 }

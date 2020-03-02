@@ -14,6 +14,9 @@
     "module": "commonjs",
     "baseUrl": "src" ,
     "paths": {
+      "mock-clients/*": [
+        "main/app/mocks/*"
+      ],
       "payment-hub-client/*": [
         "main/app/pay/*"
       ],
@@ -127,6 +130,9 @@
       ],
       "directions-questionnaire/*": [
         "main/features/directions-questionnaire/*"
+      ],
+      "orders/*": [
+        "main/features/orders/*"
       ]
     },
     "typeRoots": [

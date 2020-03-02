@@ -28,14 +28,16 @@ export function prepareClaimDraft (userEmailAddress: string) {
           }
         }
       },
-      mobilePhone: {
+      phone: {
         number: '(0)207 127 0000'
       }
     },
     defendant: {
       partyDetails: {
         type: PartyType.INDIVIDUAL.value,
-        name: 'Mary Richards',
+        title: 'Mrs.',
+        firstName: 'Mary',
+        lastName: 'Richards',
         address: {
           line1: 'Flat 3A',
           line2: 'Street 1',
@@ -46,6 +48,9 @@ export function prepareClaimDraft (userEmailAddress: string) {
       },
       email: {
         address: userEmailAddress
+      },
+      phone: {
+        number: ''
       }
     },
     amount: {

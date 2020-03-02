@@ -15,7 +15,16 @@ import { DisabilityStatus } from 'claims/models/response/statement-of-means/disa
 export const baseResponseData = {
   defendant: individual,
   moreTimeNeeded: 'no',
-  freeMediation: 'no'
+  freeMediation: 'no',
+  mediationPhoneNumber: undefined,
+  mediationContactPerson: undefined
+}
+
+export const baseResponseDataWithMediation = {
+  defendant: individual,
+  moreTimeNeeded: 'no',
+  freeMediation: 'yes',
+  mediationPhoneNumber: '1234567'
 }
 
 const baseCompanyResponseData = {
@@ -26,7 +35,9 @@ const baseCompanyResponseData = {
 export const baseDefenceData = {
   responseType: 'FULL_DEFENCE',
   defence: 'My defence',
-  freeMediation: 'no'
+  freeMediation: 'no',
+  mediationPhoneNumber: undefined,
+  mediationContactPerson: undefined
 }
 
 export const defenceWithDisputeData = {
@@ -41,20 +52,28 @@ export const defenceWithAmountClaimedAlreadyPaidData = {
   defenceType: 'ALREADY_PAID',
   paymentDeclaration: {
     paidDate: '2017-12-31',
-    paidAmount: '100',
+    paidAmount: 100,
     explanation: 'I paid in cash'
   }
 }
 
 export const baseFullAdmissionData = {
   responseType: 'FULL_ADMISSION',
-  freeMediation: 'no'
+  freeMediation: 'no',
+  mediationPhoneNumber: undefined,
+  mediationContactPerson: undefined
 }
 
 export const basePayImmediatelyData = {
   paymentIntention: {
     paymentOption: PaymentOption.IMMEDIATELY,
     paymentDate: MomentFactory.currentDate().add(5, 'days')
+  }
+}
+export const basePayImmediatelyDatePastData = {
+  paymentIntention: {
+    paymentOption: PaymentOption.IMMEDIATELY,
+    paymentDate: MomentFactory.currentDate().subtract(5, 'days')
   }
 }
 
@@ -70,6 +89,7 @@ export const basePayByInstalmentsData = {
     }
   }
 }
+
 export const basePayBySetDateData = {
   paymentIntention: {
     paymentOption: PaymentOption.BY_SPECIFIED_DATE,
@@ -77,11 +97,10 @@ export const basePayBySetDateData = {
   }
 }
 export const basePartialAdmissionData = {
-  responseType: 'PART_ADMISSION',
-  freeMediation: 'no'
+  responseType: 'PART_ADMISSION'
 }
 
-const basePartialEvidencesAndTimeLines = {
+export const basePartialEvidencesAndTimeLines = {
   evidence: {
     rows: [
       {
@@ -117,6 +136,15 @@ export const partialAdmissionWithImmediatePaymentData = {
   amount: 3000
 }
 
+export const partialAdmissionWithImmediatePaymentDataV2 = {
+  ...baseResponseData,
+  ...basePartialAdmissionData,
+  ...basePartialEvidencesAndTimeLines,
+  defence: 'i have paid more than enough',
+  ...basePayImmediatelyData,
+  amount: 3000
+}
+
 export const partialAdmissionFromStatesPaidDefence = {
   ...baseResponseData,
   ...basePartialAdmissionData,
@@ -133,7 +161,28 @@ export const partialAdmissionFromStatesPaidDefence = {
   evidence: {
     rows: []
   },
-  freeMediation: 'no'
+  freeMediation: 'no',
+  mediationPhoneNumber: undefined,
+  mediationContactPerson: undefined
+}
+
+export const partialAdmissionFromStatesPaidWithMediationDefence = {
+  ...baseResponseData,
+  ...basePartialAdmissionData,
+  amount: 100,
+  paymentDeclaration: {
+    paidDate: '2017-12-31',
+    explanation: 'I paid in cash'
+  },
+  defence: 'bla bla bla',
+  timeline: {
+    rows: [],
+    comment: 'I do not agree'
+  },
+  evidence: {
+    rows: []
+  },
+  freeMediation: 'yes'
 }
 
 export const partialAdmissionAlreadyPaidData = {
@@ -181,6 +230,33 @@ export const partialAdmissionWithPaymentBySetDateData = {
   amount: 3000
 }
 
+export const partialAdmissionWithPaymentBySetDateWithMediationData = {
+  ...baseResponseDataWithMediation,
+  ...basePartialAdmissionData,
+  ...basePartialEvidencesAndTimeLines,
+  defence: 'i have paid more than enough',
+  ...basePayBySetDateData,
+  amount: 3000
+}
+
+export const partialAdmissionWithPaymentByInstalmentsData = {
+  ...baseResponseData,
+  ...basePartialAdmissionData,
+  ...basePartialEvidencesAndTimeLines,
+  defence: 'i have paid more than enough',
+  ...basePayByInstalmentsData,
+  amount: 3000
+}
+
+export const partialAdmissionWithPaymentByInstalmentsWithMediationData = {
+  ...baseResponseDataWithMediation,
+  ...basePartialAdmissionData,
+  ...basePartialEvidencesAndTimeLines,
+  defence: 'i have paid more than enough',
+  ...basePayByInstalmentsData,
+  amount: 3000
+}
+
 export const fullAdmissionWithPaymentByInstalmentsData = {
   ...baseResponseData,
   ...baseFullAdmissionData,
@@ -221,15 +297,6 @@ export const fullAdmissionWithPaymentByInstalmentsDataWithUnReasonablePaymentSch
       paymentLength: '1'
     }
   }
-}
-
-export const partialAdmissionWithPaymentByInstalmentsData = {
-  ...baseResponseData,
-  ...basePartialAdmissionData,
-  ...basePartialEvidencesAndTimeLines,
-  defence: 'i have paid more than enough',
-  ...basePayByInstalmentsData,
-  amount: 3000
 }
 
 export const statementOfMeansWithMandatoryFieldsOnlyData = {
@@ -405,6 +472,27 @@ export const partialAdmissionWithSoMPaymentBySetDateData = {
   }
 }
 
+export const partialAdmissionWithSoMPaymentBySetDateWithMediationData = {
+  ...partialAdmissionWithPaymentBySetDateWithMediationData,
+  statementOfMeans: {
+    ...statementOfMeansWithAllFieldsData
+  }
+}
+
+export const partialAdmissionWithSoMPaymentByInstalmentsDateData = {
+  ...partialAdmissionWithPaymentBySetDateData,
+  statementOfMeans: {
+    ...statementOfMeansWithAllFieldsData
+  }
+}
+
+export const partialAdmissionWithSoMPaymentByInstalmentsWithMediationData = {
+  ...partialAdmissionWithPaymentBySetDateWithMediationData,
+  statementOfMeans: {
+    ...statementOfMeansWithAllFieldsData
+  }
+}
+
 export const partialAdmissionWithPaymentBySetDateCompanyData = {
   ...baseCompanyResponseData,
   ...basePartialAdmissionData,
@@ -470,4 +558,29 @@ export const fullDefenceWithStatesPaidGreaterThanClaimAmount = {
     paidAmount: '20000',
     explanation: 'I paid in cash'
   }
+}
+
+export const fullDefenceData = {
+  ...baseDefenceData
+}
+
+export const fullDefenceWithStatesLessThanClaimAmount = {
+  ...defenceWithAmountClaimedAlreadyPaidData,
+  paymentDeclaration: {
+    paidDate: '2017-12-31',
+    paidAmount: '80',
+    explanation: 'I paid in cash'
+  },
+  responseType: 'PART_ADMISSION'
+}
+
+export const fullDefenceWithStatesLessThanClaimAmountWithMediation = {
+  ...defenceWithAmountClaimedAlreadyPaidData,
+  paymentDeclaration: {
+    paidDate: '2017-12-31',
+    paidAmount: '80',
+    explanation: 'I paid in cash'
+  },
+  responseType: 'PART_ADMISSION',
+  freeMediation: 'yes'
 }

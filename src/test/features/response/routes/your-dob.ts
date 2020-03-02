@@ -18,6 +18,10 @@ import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-r
 import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
 import * as moment from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
+import {
+  verifyRedirectForGetWhenAlreadyPaidInFull,
+  verifyRedirectForPostWhenAlreadyPaidInFull
+} from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = ResponsePaths.defendantDateOfBirthPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -38,6 +42,7 @@ describe('Defendant user details: your date of birth page', () => {
 
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
 
       context('when response not submitted', () => {
         beforeEach(() => {
@@ -46,6 +51,7 @@ describe('Defendant user details: your date of birth page', () => {
 
         it('should render page when everything is fine', async () => {
           draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .get(pagePath)
@@ -68,15 +74,15 @@ describe('Defendant user details: your date of birth page', () => {
 
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
 
       context('when response not submitted', () => {
-        beforeEach(() => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-        })
 
         context('when form is invalid', () => {
           it('should render page when everything is fine', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveFind('mediation')
 
             await request(app)
               .post(pagePath)
@@ -87,8 +93,10 @@ describe('Defendant user details: your date of birth page', () => {
 
         context('when form is valid', () => {
           it('should return 500 and render error page when cannot save draft', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response')
-            draftStoreServiceMock.rejectSave()
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.rejectUpdate()
 
             await request(app)
               .post(pagePath)
@@ -97,22 +105,26 @@ describe('Defendant user details: your date of birth page', () => {
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should redirect to your mobile page when everything is fine', async () => {
+          it('should redirect to your phone page when phone is not provided by claimant', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveUpdate()
 
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send({ known: 'true', date: { year: '1978', month: '1', day: '11' } })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.defendantMobilePage
+                .toLocation(ResponsePaths.defendantPhonePage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
 
           it('should redirect to the under-18 hand-off page when the date is too recent', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response')
-            const fifteenYearsAgo: moment.Moment = MomentFactory.currentDate().add(-15, 'years')
+            draftStoreServiceMock.resolveFind('mediation')
+            const fifteenYearsAgo: moment.Moment = MomentFactory.currentDate().subtract(15, 'years')
 
             await request(app)
               .post(pagePath)
@@ -120,12 +132,27 @@ describe('Defendant user details: your date of birth page', () => {
               .send({
                 known: 'true', date: {
                   year: fifteenYearsAgo.year(),
-                  month: fifteenYearsAgo.month(),
+                  month: fifteenYearsAgo.month() + 1,
                   day: fifteenYearsAgo.date()
                 }
               })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.under18Page
+                  .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+          })
+
+          it('should redirect to task list when phone is provided by claimant', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgPhone)
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveUpdate()
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ known: 'true', date: { year: '1978', month: '1', day: '11' } })
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(ResponsePaths.taskListPage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
         })

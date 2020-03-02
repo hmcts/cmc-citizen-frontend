@@ -3,7 +3,7 @@ import * as config from 'config'
 
 import { Paths } from 'claim/paths'
 
-import { GovPayClient, MockPayClient, PayClient } from 'payment-hub-client/payClient'
+import { GovPayClient, PayClient } from 'payment-hub-client/payClient'
 import { Payment } from 'payment-hub-client/payment'
 
 import { FeesClient } from 'fees/feesClient'
@@ -22,11 +22,12 @@ import { Fee } from 'payment-hub-client/fee'
 import { PaymentRetrieveResponse } from 'payment-hub-client/paymentRetrieveResponse'
 import * as HttpStatus from 'http-status-codes'
 import { FeatureToggles } from 'utils/featureToggles'
-import { FeatureTogglesClient } from 'shared/clients/featureTogglesClient'
 import { trackCustomEvent } from 'logging/customEventTracker'
+import { Claim } from 'claims/models/claim'
+import { MockPayClient } from 'mock-clients/mockPayClient'
+import { FeaturesBuilder } from 'claim/helpers/featuresBuilder'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
-const featureTogglesClient: FeatureTogglesClient = new FeatureTogglesClient()
 
 const logger = Logger.getLogger('router/pay')
 const event: string = config.get<string>('fees.issueFee.event')
@@ -53,29 +54,23 @@ function logError (id: string, payment: Payment, message: string) {
   logger.error(`${message} (User Id : ${id}, Payment: ${JSON.stringify(payment)})`)
 }
 
-async function successHandler (res, next) {
+async function successHandler (req, res, next) {
   const draft: Draft<DraftClaim> = res.locals.claimDraft
   const user: User = res.locals.user
   const externalId: string = draft.document.externalId
-
-  let claimIsAlreadyFullyPersisted: boolean
+  let savedClaim: Claim
 
   try {
-    claimIsAlreadyFullyPersisted = await claimStoreClient.retrieveByExternalId(externalId, user)
-      .then(() => true)
+    const features = await FeaturesBuilder.features(draft, user)
+    savedClaim = await claimStoreClient.saveClaim(draft, user, features)
   } catch (err) {
-    /**
-     * NOT_FOUND -> claim was not submitted yet -> migrate draft
-     */
-    if (err.statusCode === HttpStatus.NOT_FOUND) {
-      claimIsAlreadyFullyPersisted = false
-    } else {
+    if (err.statusCode === HttpStatus.INTERNAL_SERVER_ERROR || err.statusCode === HttpStatus.SERVICE_UNAVAILABLE) {
       logError(
         user.id,
         draft.document.claimant.payment,
-        `Payment processed successfully but there is problem retrieving claim from claim store externalId: ${externalId}.`
+        `Payment processed successfully but there was a problem saving claim '${externalId}' to the claim store.`
       )
-      trackCustomEvent(`Post payment successful but no claim in claim-store for externalId: ${externalId}`,
+      trackCustomEvent(`Post payment successful but unable to store claim in claim-store with externalId: ${externalId}`,
         {
           externalId: externalId,
           payment: draft.document.claimant.payment,
@@ -83,27 +78,24 @@ async function successHandler (res, next) {
         })
       next(err)
       return
+    } else if (err.statusCode === HttpStatus.CONFLICT) {
+      logError(
+        user.id,
+        draft.document.claimant.payment,
+        `Payment processed successfully and claim ${externalId} already exists.`
+      )
+      savedClaim = await claimStoreClient.retrieveByExternalId(externalId, user)
     }
   }
 
-  if (!claimIsAlreadyFullyPersisted) {
-    const roles: string[] = await claimStoreClient.retrieveUserRoles(user)
-
-    if (!roles.length) {
-      logger.error(`missing consent not given role for user, User Id : ${user.id}`)
-    }
-
-    let features: string
-    if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_admissions')) {
-      features = 'admissions'
-    }
-
-    if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_directions_questionnaire')) {
-      features += features === undefined ? 'directionsQuestionnaire' : ', directionsQuestionnaire'
-    }
-    await claimStoreClient.saveClaim(draft, user, features)
+  if (!savedClaim) {
+    throw new Error(`Error saving claim: ${externalId}`)
   }
 
+  const payClient: PayClient = await getPayClient(req)
+  const paymentReference = draft.document.claimant.payment.reference
+  const ccdCaseNumber = savedClaim.ccdCaseId === undefined ? 'UNKNOWN' : String(savedClaim.ccdCaseId)
+  await payClient.update(user, paymentReference, savedClaim.externalId, ccdCaseNumber)
   await new DraftService().delete(draft.id, user.bearerToken)
   res.redirect(Paths.confirmationPage.evaluateUri({ externalId: externalId }))
 }
@@ -138,12 +130,10 @@ export default express.Router()
         }
       }
 
-      const caseReference: string = await claimStoreClient.savePrePayment(externalId, user)
       const feeOutcome: FeeOutcome = await FeesClient.calculateFee(event, amount, channel)
       const payClient: PayClient = await getPayClient(req)
       const payment: Payment = await payClient.create(
         user,
-        caseReference,
         externalId,
         [new Fee(feeOutcome.amount, feeOutcome.code, feeOutcome.version)],
         getReturnURL(req, draft.document.externalId)
@@ -191,7 +181,7 @@ export default express.Router()
           res.redirect(Paths.checkAndSendPage.uri)
           break
         case 'Success':
-          await successHandler(res, next)
+          await successHandler(req, res, next)
           break
         default:
           logPaymentError(user.id, payment)

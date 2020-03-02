@@ -13,10 +13,6 @@ import { expectValidationError, generateString } from 'test/app/forms/models/val
 
 const validAddress = new Address('line1', 'line2', 'line3', 'city', 'bb127nq')
 
-const aVeryLongString = (): string => {
-  return 'aVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongString' +
-    'aVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringa'
-}
 describe('OrganisationDetails', () => {
   let input
   let formInput
@@ -83,7 +79,7 @@ describe('OrganisationDetails', () => {
     })
 
     it('should return error when company name got more than 255 character', () => {
-      organisationDetails.name = aVeryLongString()
+      organisationDetails.name = generateString(256)
       organisationDetails.contactPerson = 'contactPerson'
       organisationDetails.address = validAddress
       let errors: ValidationError[] = validator.validateSync(organisationDetails)
@@ -95,7 +91,7 @@ describe('OrganisationDetails', () => {
       organisationDetails.name = 'claimantPerson'
       organisationDetails.address = validAddress
       let errors: ValidationError[] = validator.validateSync(organisationDetails)
-      expectValidationError(errors, OrganisationDetailsValidationErrors.CONTACT_PERSON_NAME_TOO_LONG.replace('$constraint1', '35'))
+      expectValidationError(errors, OrganisationDetailsValidationErrors.CONTACT_PERSON_NAME_TOO_LONG.replace('$constraint1', '30'))
     })
 
     describe('when "has correspondence address" flag is set to true', () => {

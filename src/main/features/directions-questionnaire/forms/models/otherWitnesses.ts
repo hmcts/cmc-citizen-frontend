@@ -1,5 +1,8 @@
-import { IsDefined, IsInt, Min, ValidateIf } from '@hmcts/class-validator'
-import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
+import { IsDefined, IsInt, Max, Min, ValidateIf } from '@hmcts/class-validator'
+import {
+  ValidationErrors as DefaultValidationErrors,
+  ValidationErrors as GlobalValidationErrors
+} from 'forms/validation/validationErrors'
 import { CompletableTask } from 'models/task'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 import { YesNoOption } from 'models/yesNoOption'
@@ -12,6 +15,8 @@ export class OtherWitnesses implements CompletableTask {
   @IsDefined()
   @IsInt({ message: GlobalValidationErrors.INTEGER_REQUIRED })
   @Min(1, { message: GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED })
+  @Max(100, { message: DefaultValidationErrors.BELOW_OR_EQUAL_TO_100_REQUIRED })
+
   howMany?: number
 
   constructor (otherWitnesses?: YesNoOption, howMany?: number) {
@@ -30,8 +35,8 @@ export class OtherWitnesses implements CompletableTask {
   }
 
   deserialize (input?: any): OtherWitnesses {
-    if (input) {
-      this.otherWitnesses = YesNoOption.fromObject(input.otherWitnesses)
+    if (input && input.otherWitnesses) {
+      this.otherWitnesses = YesNoOption.fromObject(input.otherWitnesses.option)
       if (input.otherWitnesses) {
         this.howMany = toNumberOrUndefined(input.howMany)
       }

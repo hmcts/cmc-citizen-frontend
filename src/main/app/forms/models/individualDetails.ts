@@ -1,8 +1,8 @@
-import { PartyDetails } from './partyDetails'
 import { DateOfBirth } from 'forms/models/dateOfBirth'
 import { PartyType } from 'common/partyType'
+import { SplitNamedPartyDetails } from 'forms/models/splitNamedPartyDetails'
 
-export class IndividualDetails extends PartyDetails {
+export class IndividualDetails extends SplitNamedPartyDetails {
 
   dateOfBirth?: DateOfBirth
 
@@ -16,7 +16,7 @@ export class IndividualDetails extends PartyDetails {
       return input
     }
     const deserialized = new IndividualDetails()
-    Object.assign(deserialized, PartyDetails.fromObject(input))
+    Object.assign(deserialized, SplitNamedPartyDetails.fromObject(input))
     deserialized.type = PartyType.INDIVIDUAL.value
     if (input.dateOfBirth) {
       deserialized.dateOfBirth = DateOfBirth.fromObject(input.dateOfBirth)
@@ -26,7 +26,7 @@ export class IndividualDetails extends PartyDetails {
 
   deserialize (input?: any): IndividualDetails {
     if (input) {
-      Object.assign(this, new PartyDetails().deserialize(input))
+      Object.assign(this, new SplitNamedPartyDetails().deserialize(input))
       this.type = PartyType.INDIVIDUAL.value
       if (input.dateOfBirth) {
         this.dateOfBirth = DateOfBirth.fromObject(input.dateOfBirth)

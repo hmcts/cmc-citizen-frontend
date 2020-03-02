@@ -1,5 +1,5 @@
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
-import { MadeBy } from 'offer/form/models/madeBy'
+import { MadeBy } from 'claims/models/madeBy'
 import { PartyType } from 'integration-test/data/party-type'
 import { Interest } from 'claims/models/interest'
 import { InterestDateType } from 'common/interestDateType'

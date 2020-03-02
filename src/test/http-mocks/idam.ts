@@ -23,6 +23,12 @@ export function resolveExchangeCode (token: string) {
     })
 }
 
+export function rejectExchangeCode (token: string) {
+  mock(apiServiceBaseURL)
+    .post(new RegExp('/oauth2/token.*'))
+    .reply(HttpStatus.UNAUTHORIZED)
+}
+
 export function resolveInvalidateSession (token: string) {
   mock(apiServiceBaseURL)
     .delete(`/session/${token}`)

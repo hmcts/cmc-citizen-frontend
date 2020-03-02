@@ -2,6 +2,7 @@ import { IsDefined, IsIn, IsNotEmpty, ValidateIf } from '@hmcts/class-validator'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { YesNoOption } from 'models/yesNoOption'
 import { IsValidPostcode } from '@hmcts/cmc-validators'
+import { Facilities } from 'court-finder-client/facilities'
 
 export class AlternativeCourtOption {
   static readonly BY_NAME: string = 'name'
@@ -20,6 +21,7 @@ export class ValidationErrors {
 
 export class HearingLocation {
   courtName?: string
+  facilities?: Facilities[]
 
   @IsValidPostcode()
   courtPostcode?: string
@@ -45,6 +47,7 @@ export class HearingLocation {
 
   constructor (courtName?: string,
                courtPostcode?: string,
+               facilities?: Facilities[],
                courtAccepted?: YesNoOption,
                alternativeOption?: string,
                alternativeCourtName?: string,
@@ -52,6 +55,7 @@ export class HearingLocation {
     this.courtAccepted = courtAccepted
     this.courtName = courtName
     this.courtPostcode = courtPostcode
+    this.facilities = facilities
     this.alternativeOption = alternativeOption
     this.alternativeCourtName = alternativeCourtName
     this.alternativePostcode = alternativePostcode
@@ -65,10 +69,12 @@ export class HearingLocation {
     return new HearingLocation(
       value.courtName,
       value.courtPostcode,
+      value.facilities,
       YesNoOption.fromObject(value.courtAccepted),
       value.alternativeOption,
       value.alternativeCourtName,
-      value.alternativePostcode)
+      value.alternativePostcode
+      )
   }
 
   deserialize (input?: any): HearingLocation {
@@ -76,6 +82,7 @@ export class HearingLocation {
       this.courtAccepted = input.courtAccepted
       this.courtName = input.courtName
       this.courtPostcode = input.courtPostcode
+      this.facilities = input.facilities
       this.alternativeOption = input.alternativeOption
       this.alternativeCourtName = input.alternativeCourtName
       this.alternativePostcode = input.alternativePostcode

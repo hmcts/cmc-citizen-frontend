@@ -17,13 +17,14 @@
 
       <h2 class="heading-medium">{{ t('What happens next') }}</h2>
 
-      <p>{{ t('You requested a County Court Judgment on {{ ccjRequestedAt }}. We’ll contact you within 5 days to tell you whether the judgment has been entered.',
+      <p>{{ t('You requested a County Court Judgment on {{ ccjRequestedAt }}.',
           { ccjRequestedAt: ccjRequestedAt | date }) }}
       </p>
+      <p>{{ t('We’ll contact you within 10 working days to tell you whether the judgment has been entered.') }}</p>
       <p>{{ t('{{ defendantName }} can no longer respond to the claim using this service.', { defendantName: defendantName }) }}</p>
       <p>{{ t('If we receive a postal response that they sent before the deadline we’ll reject your request for judgment.') }}</p>
 
-      {% include "includes/service_survey_link.njk" %}
+      {% include "includes/service-survey-link-claimant.njk" %}
 
       <p>{{ internalLink('Go to your account', DashboardPaths.dashboardPage.uri, 'button') | safe }}</p>
 
@@ -32,3 +33,4 @@
   </div>
 
 {% endblock %}
+{% block contactForHelp %}{% endblock %}

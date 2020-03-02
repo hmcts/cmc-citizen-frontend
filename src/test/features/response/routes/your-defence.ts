@@ -17,6 +17,10 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
 import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
+import {
+  verifyRedirectForGetWhenAlreadyPaidInFull,
+  verifyRedirectForPostWhenAlreadyPaidInFull
+} from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const expectedText: string = 'Why do you disagree with the claim'
@@ -37,6 +41,7 @@ describe('Defendant response: defence page', () => {
 
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
 
       context('when response not submitted', () => {
         it('should return 500 and render error page when cannot retrieve claim', async () => {
@@ -50,6 +55,7 @@ describe('Defendant response: defence page', () => {
 
         it('should render page when everything is fine', async () => {
           draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('mediation')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
@@ -73,6 +79,7 @@ describe('Defendant response: defence page', () => {
 
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
 
       context('when response not submitted', () => {
         context('when form is invalid', () => {
@@ -87,6 +94,7 @@ describe('Defendant response: defence page', () => {
 
           it('should render page when everything is fine', async () => {
             draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveFind('mediation')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
@@ -99,7 +107,8 @@ describe('Defendant response: defence page', () => {
         context('when form is valid', () => {
           it('should return 500 and render error page when form is valid and cannot save draft', async () => {
             draftStoreServiceMock.resolveFind('response')
-            draftStoreServiceMock.rejectSave()
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.rejectUpdate()
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
@@ -111,7 +120,8 @@ describe('Defendant response: defence page', () => {
 
           it('should redirect to task list page when form is valid and everything is fine', async () => {
             draftStoreServiceMock.resolveFind('response')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveUpdate()
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)

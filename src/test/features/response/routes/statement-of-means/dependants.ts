@@ -12,6 +12,10 @@ import { checkAlreadySubmittedGuard } from 'test/common/checks/already-submitted
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
 import { app } from 'main/app'
 import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
+import {
+  verifyRedirectForGetWhenAlreadyPaidInFull,
+  verifyRedirectForPostWhenAlreadyPaidInFull
+} from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = StatementOfMeansPaths.dependantsPage.evaluateUri(
@@ -36,6 +40,7 @@ describe('Defendant response: Statement of means: dependants', () => {
 
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
 
       context('when response and CCJ not submitted', () => {
 
@@ -61,6 +66,7 @@ describe('Defendant response: Statement of means: dependants', () => {
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .get(pagePath)
@@ -85,6 +91,7 @@ describe('Defendant response: Statement of means: dependants', () => {
 
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
 
       describe('errors are handled properly', () => {
 
@@ -113,7 +120,8 @@ describe('Defendant response: Statement of means: dependants', () => {
         it('other dependants page when no children', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .post(pagePath)
@@ -129,7 +137,8 @@ describe('Defendant response: Statement of means: dependants', () => {
         it('dependants disability page when some children but 0 between 16 and 19', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .post(pagePath)
@@ -148,7 +157,8 @@ describe('Defendant response: Statement of means: dependants', () => {
         it('education page when > 0 children between 16 and 19', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .post(pagePath)

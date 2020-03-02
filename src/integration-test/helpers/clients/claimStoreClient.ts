@@ -19,11 +19,22 @@ export class ClaimStoreClient {
       return Promise.reject('Claim owner is required')
     }
 
-    return request.get(`${baseURL}/claims/${referenceNumber}`, {
+    const options = {
+      uri: `${baseURL}/claims/${referenceNumber}`,
       headers: {
         Authorization: `Bearer ${owner.bearerToken}`
       }
+    }
+    return request(options).then(function (response) {
+      return response
     })
+  }
+
+  static isOpen (referenceNumber: string): Promise<boolean> {
+    return request.get(`${baseURL}/claims/${referenceNumber}/metadata`, {})
+      .then(function (response) {
+        return response.state === 'OPEN'
+      })
   }
 
   /**
@@ -46,12 +57,13 @@ export class ClaimStoreClient {
       Authorization: `Bearer ${submitter.bearerToken}`,
       Features: features
     }
-    return request.post(`${baseURL}/claims/${claimData.externalId}/pre-payment`, {
-      headers
-    }).then(() => request.post(`${baseURL}/claims/${submitter.id}`, {
+
+    return request.post(`${baseURL}/claims/${submitter.id}`, {
       body: claimData,
       headers
-    }))
+    }).then(function (response) {
+      return response
+    })
   }
 
   /**
@@ -65,10 +77,16 @@ export class ClaimStoreClient {
       return Promise.reject('Defendant is required')
     }
 
-    return request.put(`${baseURL}/claims/defendant/link`, {
+    const options = {
+      method: 'PUT',
+      uri: `${baseURL}/claims/defendant/link`,
       headers: {
         Authorization: `Bearer ${defendant.bearerToken}`
       }
+    }
+
+    return request(options).then(function (response) {
+      return response
     })
   }
 
@@ -91,11 +109,17 @@ export class ClaimStoreClient {
       return Promise.reject('Defendant is required')
     }
 
-    return request.post(`${baseURL}/responses/claim/${externalId}/defendant/${defendant.id}`, {
+    const options = {
+      method: 'POST',
+      uri: `${baseURL}/responses/claim/${externalId}/defendant/${defendant.id}`,
       body: responseData,
       headers: {
         Authorization: `Bearer ${defendant.bearerToken}`
       }
+    }
+
+    return request(options).then(function (response) {
+      return response
     })
   }
 
@@ -104,12 +128,14 @@ export class ClaimStoreClient {
       return Promise.reject(new Error('bearerToken is required'))
     }
 
-    return request
-      .post(`${baseURL}/user/roles`, {
-        body: { role: role },
-        headers: {
-          Authorization: `Bearer ${bearerToken}`
-        }
-      })
+    const options = {
+      method: 'POST',
+      uri: `${baseURL}/user/roles`,
+      body: { role: role },
+      headers: {
+        Authorization: `Bearer ${bearerToken}`
+      }
+    }
+    return request(options).then()
   }
 }

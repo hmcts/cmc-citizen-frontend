@@ -3,7 +3,7 @@
 {% from "form.njk" import csrfProtection, saveAndContinueButton, errorSummary %}
 {% from "party/details.njk" import partyDetailsFragment %}
 
-{% set heading = 'Their details' %}
+{% set heading = 'Enter the defendant’s details' %}
 
 {% block additional_scripts %}
   {% include "postcode-lookup-client-scripts.njk" %}
@@ -20,17 +20,19 @@
           partyDetailsFragment(
             form,
             fields = [
-              { label: 'Full name (include title)', name: 'name' }
+              { label: 'Title', name: 'title' },
+              { label: 'First name', name: 'firstName' },
+              { label: 'Last name', name: 'lastName' }
             ],
             addressSection = {
-              heading: 'Their postal address',
+              heading: 'Their address',
               hint: 'The address must be in England or Wales. Your claim may be invalid if you use the wrong address.',
               secondHint: 'You must enter their usual or last known home address. You cannot use their work address.',
               name: 'address',
               postcodeLookup: true
             },
             showCorrespondenceAddressSection = false,
-            postcodeLabel = 'Enter a postcode'
+            postcodeLabel = 'Enter a UK postcode'
           )
         }}
 

@@ -6,11 +6,15 @@ const links = {
   goBack: '#return-url'
 }
 
+const buttons = {
+  confirm: '//*[@id="confirm"]'
+}
+
 export class PaymentConfirmationPage {
 
   confirmPayment (): void {
     I.waitForText('Confirm your payment')
-    I.click('Confirm payment')
+    I.click(buttons.confirm)
   }
 
   cancelPayment (): void {

@@ -1,5 +1,5 @@
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
-import { Paths, CCJPaths } from 'claimant-response/paths'
+import { CCJPaths, Paths } from 'claimant-response/paths'
 import { AcceptPaymentMethodTask } from 'claimant-response/tasks/acceptPaymentMethodTask'
 import { SettleAdmittedTask } from 'claimant-response/tasks/settleAdmittedTask'
 import { Claim } from 'claims/models/claim'
@@ -14,21 +14,20 @@ import { ViewDefendantResponseTask } from 'claimant-response/tasks/viewDefendant
 import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
 import { ChooseHowToProceedTask } from 'claimant-response/tasks/chooseHowToProceedTask'
 import { SignSettlementAgreementTask } from 'claimant-response/tasks/signSettlementAgreementTask'
-import { FreeMediationTask } from 'claimant-response/tasks/freeMediationTask'
+import { FreeMediationTask } from 'shared/components/free-mediation/freeMediationTask'
 import { FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
 import { ClaimSettledTask } from 'claimant-response/tasks/states-paid/claimSettledTask'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 import { PartPaymentReceivedTask } from 'claimant-response/tasks/states-paid/partPaymentReceivedTask'
 import { StatesPaidHelper } from 'claimant-response/helpers/statesPaidHelper'
+import { DirectionsQuestionnaireHelper } from 'claimant-response/helpers/directionsQuestionnaireHelper'
 import { FeatureToggles } from 'utils/featureToggles'
 import { Paths as MediationPaths } from 'mediation/paths'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 import { Paths as DirectionsQuestionnairePaths } from 'directions-questionnaire/paths'
 import { DetailsInCaseOfHearingTask } from 'claimant-response/tasks/detailsInCaseOfHearingTask'
-import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
-import { MadeBy } from 'offer/form/models/madeBy'
-import { getPreferredParty } from 'directions-questionnaire/helpers/directionsQuestionnaireHelper'
+import { IntentionToProceedTask } from 'claimant-response/tasks/intentionToProceedTask'
 
 const validator: Validator = new Validator()
 
@@ -49,7 +48,7 @@ export class TaskListBuilder {
       )
     )
 
-    return new TaskList('Before you start', tasks)
+    return new TaskList('How they responded', tasks)
   }
 
   static buildStatesPaidHowYouWantToRespondSection (draft: DraftClaimantResponse, claim: Claim, mediationDraft: MediationDraft): TaskList {
@@ -66,21 +65,21 @@ export class TaskListBuilder {
     } else {
       if (StatesPaidHelper.isAlreadyPaidLessThanAmount(claim)) {
         tasks.push(
-          new TaskListItem(`Have you been paid the ${ NumberFormatter.formatMoney(response.amount) }?`,
+          new TaskListItem(`Have you been paid the ${NumberFormatter.formatMoney(response.amount)}?`,
             Paths.partPaymentReceivedPage.evaluateUri({ externalId: externalId }),
             PartPaymentReceivedTask.isCompleted(draft)
           ))
 
         if (draft.partPaymentReceived && draft.partPaymentReceived.received.option === YesNoOption.YES) {
           tasks.push(
-            new TaskListItem(`Settle the claim for ${ NumberFormatter.formatMoney(response.amount) }?`,
+            new TaskListItem(`Settle the claim for ${NumberFormatter.formatMoney(response.amount)}?`,
               Paths.settleClaimPage.evaluateUri({ externalId: externalId }),
               ClaimSettledTask.isCompleted(draft)
             ))
         }
       } else {
         tasks.push(
-          new TaskListItem(`Have you been paid the full ${ NumberFormatter.formatMoney(claim.totalAmountTillDateOfIssue) }?`,
+          new TaskListItem(`Have you been paid the full ${NumberFormatter.formatMoney(claim.totalAmountTillDateOfIssue)}?`,
             Paths.settleClaimPage.evaluateUri({ externalId: externalId }),
             ClaimSettledTask.isCompleted(draft)
           ))
@@ -96,15 +95,15 @@ export class TaskListBuilder {
             new TaskListItem(
               'Free telephone mediation',
               path,
-              FreeMediationTask.isCompleted(draft, mediationDraft)
+              FreeMediationTask.isCompleted(mediationDraft, claim)
             ))
         } else {
-          const path = Paths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+          const path = MediationPaths.tryFreeMediationPage.evaluateUri({ externalId: claim.externalId })
           tasks.push(
             new TaskListItem(
-              'Consider free mediation',
+              'Free telephone mediation',
               path,
-              FreeMediationTask.isCompleted(draft, mediationDraft)
+              FreeMediationTask.isCompleted(mediationDraft, claim)
             ))
         }
       }
@@ -123,19 +122,35 @@ export class TaskListBuilder {
     const externalId: string = claim.externalId
     const tasks: TaskListItem[] = []
 
-    if (claim.response.responseType === ResponseType.FULL_DEFENCE
-      && claim.response.freeMediation === YesNoOption.NO) {
+    if (claim.response.responseType === ResponseType.FULL_DEFENCE) {
       tasks.push(
         new TaskListItem(
-          'Accept or reject their response',
-          Paths.notImplementedYetPage.evaluateUri({ externalId: externalId }),
-          false
+          'Decide whether to proceed',
+          Paths.intentionToProceedPage.evaluateUri({ externalId: externalId }),
+          IntentionToProceedTask.isCompleted(draft.intentionToProceed)
         )
       )
-    }
 
-    if (claim.response.responseType === ResponseType.PART_ADMISSION
-      && claim.response.paymentIntention !== undefined) {
+      if (claim.response.freeMediation === YesNoOption.YES && draft.intentionToProceed && draft.intentionToProceed.proceed.option === YesNoOption.YES) {
+        if (FeatureToggles.isEnabled('mediation')) {
+          const path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+          tasks.push(
+            new TaskListItem(
+              'Free telephone mediation',
+              path,
+              FreeMediationTask.isCompleted(mediationDraft, claim)
+            ))
+        } else {
+          const path = MediationPaths.tryFreeMediationPage.evaluateUri({ externalId: claim.externalId })
+          tasks.push(
+            new TaskListItem(
+              'Free telephone mediation',
+              path,
+              FreeMediationTask.isCompleted(mediationDraft, claim)
+            ))
+        }
+      }
+    } else if (claim.response.responseType === ResponseType.PART_ADMISSION && claim.response.paymentIntention !== undefined) {
       tasks.push(
         new TaskListItem(
           'Accept or reject the ' + NumberFormatter.formatMoney(claim.response.amount),
@@ -158,7 +173,7 @@ export class TaskListBuilder {
 
       this.buildProposeAlternateRepaymentPlanTask(draft, tasks, externalId)
 
-      if (!claim.claimData.defendant.isBusiness()) {
+      if (!claim.claimData.defendant.isBusiness() || (draft.acceptPaymentMethod && draft.acceptPaymentMethod.accept.option === YesNoOption.YES)) {
         this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
       }
 
@@ -166,31 +181,28 @@ export class TaskListBuilder {
       this.buildRequestCountyCourtJudgment(draft, tasks, externalId)
 
       if (claim.response.freeMediation === YesNoOption.YES
-        && draft.settleAdmitted
-        && draft.settleAdmitted.admitted.option === YesNoOption.NO) {
+        && ((draft.settleAdmitted && draft.settleAdmitted.admitted.option === YesNoOption.NO)
+          || (draft.intentionToProceed && draft.intentionToProceed.proceed.option === YesNoOption.YES))) {
         if (FeatureToggles.isEnabled('mediation')) {
           const path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
           tasks.push(
             new TaskListItem(
               'Free telephone mediation',
               path,
-              FreeMediationTask.isCompleted(draft, mediationDraft)
+              FreeMediationTask.isCompleted(mediationDraft, claim)
             ))
         } else {
-          const path = Paths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+          const path = MediationPaths.tryFreeMediationPage.evaluateUri({ externalId: claim.externalId })
           tasks.push(
             new TaskListItem(
-              'Consider free mediation',
+              'Free telephone mediation',
               path,
-              FreeMediationTask.isCompleted(draft, mediationDraft)
+              FreeMediationTask.isCompleted(mediationDraft, claim)
             ))
         }
       }
-    }
-
-    if (claim.response.responseType === ResponseType.FULL_ADMISSION
-      && claim.response.paymentIntention.paymentOption !== PaymentOption.IMMEDIATELY
-    ) {
+    } else if (claim.response.responseType === ResponseType.FULL_ADMISSION
+      && claim.response.paymentIntention.paymentOption !== PaymentOption.IMMEDIATELY) {
       tasks.push(
         new TaskListItem(
           'Accept or reject their repayment plan',
@@ -200,7 +212,7 @@ export class TaskListBuilder {
       )
       this.buildProposeAlternateRepaymentPlanTask(draft, tasks, externalId)
 
-      if (!claim.claimData.defendant.isBusiness()) {
+      if (!claim.claimData.defendant.isBusiness() || (draft.acceptPaymentMethod && draft.acceptPaymentMethod.accept.option === YesNoOption.YES)) {
         this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
       }
 
@@ -208,7 +220,7 @@ export class TaskListBuilder {
       this.buildRequestCountyCourtJudgment(draft, tasks, externalId)
     }
 
-    return new TaskList('How do you want to respond?', tasks)
+    return new TaskList('Choose what to do next', tasks)
   }
 
   private static buildProposeAlternateRepaymentPlanTask (draft: DraftClaimantResponse, tasks: TaskListItem[], externalId: string) {
@@ -290,10 +302,13 @@ export class TaskListBuilder {
     return new TaskList('Submit', tasks)
   }
 
-  static buildRemainingTasks (draft: DraftClaimantResponse, claim: Claim, mediationDraft?: MediationDraft): TaskListItem[] {
+  static buildRemainingTasks (draft: DraftClaimantResponse, claim: Claim, mediationDraft: MediationDraft, directionsQuestionnaireDraft?: DirectionsQuestionnaireDraft): TaskListItem[] {
+    const resolveDirectionsQuestionnaireTaskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(draft, claim, directionsQuestionnaireDraft)
+
     return [].concat(
       TaskListBuilder.buildDefendantResponseSection(draft, claim).tasks,
-      TaskListBuilder.buildHowYouWantToRespondSection(draft, claim, mediationDraft).tasks
+      TaskListBuilder.buildHowYouWantToRespondSection(draft, claim, mediationDraft).tasks,
+      resolveDirectionsQuestionnaireTaskList !== undefined ? resolveDirectionsQuestionnaireTaskList.tasks : []
     )
       .filter(item => !item.completed)
   }
@@ -301,21 +316,14 @@ export class TaskListBuilder {
   static buildDirectionsQuestionnaireSection (draft: DraftClaimantResponse,
                                               claim: Claim,
                                               directionsQuestionnaireDraft?: DirectionsQuestionnaireDraft): TaskList {
-    if (FeatureToggles.isEnabled('directionsQuestionnaire') &&
-      ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire')) {
-      let path: string
-      if (getPreferredParty(claim) === MadeBy.CLAIMANT) {
-        path = DirectionsQuestionnairePaths.hearingLocationPage.evaluateUri({ externalId: claim.externalId })
-      } else {
-        path = DirectionsQuestionnairePaths.hearingExceptionalCircumstancesPage.evaluateUri({ externalId: claim.externalId })
-      }
+    if (DirectionsQuestionnaireHelper.isDirectionsQuestionnaireEligible(draft, claim)) {
 
       return new TaskList(
-        'Tell us more about the claim', [
+        'Your hearing requirements', [
           new TaskListItem(
             `Give us details in case there’s a hearing`,
-            path,
-            DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft)
+            DirectionsQuestionnairePaths.supportPage.evaluateUri({ externalId: claim.externalId }),
+            DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft, claim)
           )
         ]
       )

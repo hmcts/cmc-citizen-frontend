@@ -18,7 +18,7 @@ import { SignatureType } from 'common/signatureType'
 import { ValidationErrors as BasicValidationErrors } from 'ccj/form/models/declaration'
 import { ValidationErrors as QualifiedValidationErrors } from 'ccj/form/models/qualifiedDeclaration'
 import { checkNotClaimantInCaseGuard } from 'test/features/ccj/routes/checks/not-claimant-in-case-check'
-import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
+import { MomentFactory } from 'shared/momentFactory'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const cookieName: string = config.get<string>('session.cookieName')
@@ -78,29 +78,31 @@ describe('CCJ: check and send page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Check your answers', 'Date of birth', 'By instalments'))
             .expect(res => expect(res).to.be.successful.withoutText('/ccj/payment-options', '/ccj/date-of-birth'))
-
         })
 
-        it('should render page when everything is fine when settlement is broken with by set date - cannot change DOB but can change Payment options', async () => {
-          const responseAndSettlementOverride: object = {
-            ...claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj,
-            ...claimStoreServiceMock.settlementWithSetDateAndAcceptation,
-            settlementReachedAt: '2017-07-25T22:45:51.785'
-          }
-          const draftOverride: object = {
-            paymentOption: {
-              option: PaymentType.BY_SET_DATE
+        it('should render page with admitted amount when part admission response has been accepted', async () => {
+          let claimWithAdmission = {
+            ...claimStoreServiceMock.sampleClaimObj,
+            ...claimStoreServiceMock.samplePartialAdmissionWithPayImmediatelyData,
+            ...{
+              countyCourtJudgment: undefined,
+              settlement: undefined,
+              claimantResponse: {
+                type: 'ACCEPTATION'
+              }
             }
           }
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId(responseAndSettlementOverride)
-          draftStoreServiceMock.resolveFind('ccj', draftOverride)
+
+          claimWithAdmission.response.paymentIntention.paymentDate = MomentFactory.currentDate().subtract(1, 'days')
+          claimWithAdmission.response.amount = 10
+
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithAdmission)
+          draftStoreServiceMock.resolveFind('ccj')
 
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Check your answers', 'Date of birth', 'By a set date', '/ccj/payment-options'))
-            .expect(res => expect(res).to.be.successful.withoutText('/ccj/date-of-birth'))
-
+            .expect(res => expect(res).to.be.successful.withText('£10'))
         })
 
         it('should redirect to dashboard when claim is not eligible for CCJ', async () => {
@@ -171,7 +173,7 @@ describe('CCJ: check and send page', () => {
         it('should redirect to confirmation page when signature is qualified', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('ccj')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveUpdate()
           claimStoreServiceMock.resolveSaveCcjForExternalId()
           draftStoreServiceMock.resolveDelete()
 

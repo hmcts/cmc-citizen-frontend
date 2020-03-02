@@ -5,6 +5,7 @@ import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { AbstractModelAccessor, DefaultModelAccessor } from 'shared/components/model-accessor'
 import { Claim } from 'claims/models/claim'
+import * as CCJHelper from 'main/common/helpers/ccjHelper'
 
 class PaidAmountPage extends AbstractPaidAmountPage<DraftCCJ> {
 
@@ -12,8 +13,12 @@ class PaidAmountPage extends AbstractPaidAmountPage<DraftCCJ> {
     return new DefaultModelAccessor('paidAmount', () => new PaidAmount())
   }
 
-  totalAmount (claim: Claim, draft: DraftCCJ): number {
-    return claim.totalAmountTillToday
+  totalAmount (claim: Claim, DraftCCJ): number {
+    if (CCJHelper.isPartAdmissionAcceptation(claim)) {
+      return CCJHelper.amountSettledFor(claim) + CCJHelper.claimFeeInPennies(claim) / 100
+    } else {
+      return claim.totalAmountTillToday
+    }
   }
 }
 

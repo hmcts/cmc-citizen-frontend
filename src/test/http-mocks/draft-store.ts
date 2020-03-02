@@ -10,7 +10,7 @@ import { Defendant } from 'drafts/models/defendant'
 import { Claimant } from 'drafts/models/claimant'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { IndividualDetails } from 'forms/models/individualDetails'
-import { MobilePhone } from 'forms/models/mobilePhone'
+import { Phone } from 'forms/models/phone'
 import { Payment } from 'payment-hub-client/payment'
 import { Address } from 'forms/models/address'
 import { DateOfBirth } from 'forms/models/dateOfBirth'
@@ -141,9 +141,9 @@ const commonIndividualClaimant = {
         } as LocalDate
       } as DateOfBirth
     } as IndividualDetails,
-    mobilePhone: {
+    phone: {
       number: '07000000000'
-    } as MobilePhone,
+    } as Phone,
     payment: {
       reference: '123',
       date_created: 12345,
@@ -159,22 +159,52 @@ const commonIndividualClaimant = {
   } as Claimant
 }
 
+const commonIndividualClaimantIOC = {
+  claimant: {
+    partyDetails: {
+      type: 'individual',
+      name: 'John Smith',
+      address: {
+        line1: 'Apt 99',
+        line2: '',
+        line3: '',
+        city: 'London',
+        postcode: 'bb127nq'
+      } as Address,
+      hasCorrespondenceAddress: false,
+      dateOfBirth: {
+        known: true,
+        date: {
+          day: 31,
+          month: 12,
+          year: 1980
+        } as LocalDate
+      } as DateOfBirth
+    } as IndividualDetails,
+    phone: {
+      number: '07000000000'
+    } as Phone
+  } as Claimant
+}
+
 const commonCompanyClaimant = {
   claimant: {
     partyDetails: {
       type: 'company',
       name: 'Monsters Inc.',
       contactPerson: 'Sully',
-      address: { line1: 'Apartment 99',
+      address: {
+        line1: 'Apartment 99',
         line2: '',
         line3: '',
         city: 'London',
-        postcode: 'SE28 0JE' } as Address,
+        postcode: 'SE28 0JE'
+      } as Address,
       hasCorrespondenceAddress: false
     } as CompanyDetails,
-    mobilePhone: {
+    phone: {
       number: '07000000000'
-    } as MobilePhone,
+    } as Phone,
     payment: {
       reference: '123',
       date_created: 12345,
@@ -230,7 +260,8 @@ const commonIndividualDefendant = {
   defendant: {
     partyDetails: {
       type: 'individual',
-      name: 'Rose Smith',
+      firstName: 'Rose',
+      lastName: 'Smith',
       address: {
         line1: 'Apt 99',
         line2: '',
@@ -240,13 +271,20 @@ const commonIndividualDefendant = {
       },
       hasCorrespondenceAddress: false
     } as IndividualDetails,
-    email: { address: 'example@example.com' }
+    email: { address: 'example@example.com' },
+    phone: { number: '07799889988' }
   } as Defendant
 }
 
 export const sampleClaimDraftObj = {
   ...commonClaimObject,
   ...commonIndividualClaimant,
+  ...commonIndividualDefendant
+} as DraftClaim
+
+export const sampleClaimDraftObjIOC = {
+  ...commonClaimObject,
+  ...commonIndividualClaimantIOC,
   ...commonIndividualDefendant
 } as DraftClaim
 
@@ -259,10 +297,11 @@ export const sampleCompanyClaimDraftObj = {
 const commonIndividualResponsePartial = {
   defendantDetails: {
     email: { address: 'example@example.com' } as Email,
-    mobilePhone: { number: '01223344444' } as MobilePhone,
+    phone: { number: '01223344444' } as Phone,
     partyDetails: {
       type: 'individual',
-      name: 'John Smith',
+      firstName: 'John',
+      lastName: 'Smith',
       address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: 'SE28 0JE' } as Address,
       hasCorrespondenceAddress: false,
       dateOfBirth: {
@@ -283,16 +322,18 @@ const commonIndividualResponsePartial = {
 const commonCompanyResponsePartial = {
   defendantDetails: {
     email: { address: 'example@example.com' } as Email,
-    mobilePhone: { number: '01223344444' } as MobilePhone,
+    phone: { number: '01223344444' } as Phone,
     partyDetails: {
       type: 'company',
       name: 'Monsters Inc.',
       contactPerson: 'Sully',
-      address: { line1: 'Apartment 99',
+      address: {
+        line1: 'Apartment 99',
         line2: '',
         line3: '',
         city: 'London',
-        postcode: 'SE28 0JE' } as Address,
+        postcode: 'SE28 0JE'
+      } as Address,
       hasCorrespondenceAddress: false
     } as CompanyDetails
   } as Defendant,
@@ -393,7 +434,7 @@ export const sampleFullAdmissionResponseDraftObj = {
       schoolCosts: 1,
       foodAndHousekeeping: 1,
       tvAndBroadband: 1,
-      mobilePhone: 1,
+      phone: 1,
       maintenance: 1,
       rows: [{ amount: 10, description: 'bla bla bla' }]
     },
@@ -579,9 +620,102 @@ export const sampleMediationDraftObj = {
   }
 }
 
+export const sampleLegacyMediationDraftObj = {
+  willYouTryMediation: {
+    option: FreeMediationOption.NO
+  }
+}
+
+export const sampleCompanyMediationDraftObj = {
+  willYouTryMediation: {
+    option: FreeMediationOption.YES
+  },
+  youCanOnlyUseMediation: {
+    option: FreeMediationOption.YES
+  },
+  canWeUseCompany: {
+    option: FreeMediationOption.NO,
+    mediationPhoneNumber: '07777777777',
+    mediationContactPerson: 'Mary Richards'
+  }
+}
+
 export const sampleDirectionsQuestionnaireDraftObj = {
-  selfWitness: { selfWitness: false },
-  otherWitnesses: { otherWitnesses: false }
+  selfWitness: {
+    option: {
+      option: 'yes'
+    }
+  },
+  otherWitnesses: {
+    otherWitnesses: {
+      option: 'yes'
+    },
+    howMany: 1
+  },
+  hearingLocation: {
+    courtName: 'Little Whinging, Surrey',
+    courtPostCode: undefined,
+    courtAccepted: { option: 'yes' },
+    alternateCourtName: 'some other court name'
+  },
+  exceptionalCircumstances: {
+    exceptionalCircumstances: { option: 'yes' },
+    reason: 'Poorly pet owl'
+  },
+  availability: {
+    hasUnavailableDates: true,
+    unavailableDates: [
+      { year: 2020, month: 1, day: 4 },
+      { year: 2020, month: 2, day: 8 }
+    ]
+  },
+  supportRequired: {
+    languageSelected: true,
+    languageInterpreted: 'Klingon',
+    signLanguageSelected: true,
+    signLanguageInterpreted: 'Makaton',
+    hearingLoopSelected: true,
+    disabledAccessSelected: true,
+    otherSupportSelected: true,
+    otherSupport: 'Life advice'
+  },
+  expertRequired: {
+    option: {
+      option: 'yes'
+    }
+  },
+  expertReports: {
+    declared: true,
+    rows: [
+      {
+        expertName: 'Prof. McGonagall',
+        reportDate: { year: 2018, month: 1, day: 10 }
+      },
+      {
+        expertName: 'Mr Rubeus Hagrid',
+        reportDate: { year: 2019, month: 2, day: 27 }
+      }
+    ]
+  },
+  permissionForExpert: {
+    option: {
+      option: 'yes'
+    }
+  },
+  expertEvidence: {
+    expertEvidence: {
+      option: 'yes'
+    },
+    whatToExamine: 'Photographs'
+  },
+  whyExpertIsNeeded: {
+    explanation: 'for expert opinion'
+  }
+}
+
+export const sampleOrdersDraftObj = {
+  externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
+  disagreeReason: { reason: 'I want a judge to review it' }
 }
 
 export function resolveFind (draftType: string, draftOverride?: object): mock.Scope {
@@ -590,6 +724,9 @@ export function resolveFind (draftType: string, draftOverride?: object): mock.Sc
   switch (draftType) {
     case 'claim':
       documentDocument = { ...sampleClaimDraftObj, ...draftOverride }
+      break
+    case 'claim:ioc':
+      documentDocument = { ...sampleClaimDraftObjIOC, ...draftOverride }
       break
     case 'claim:company':
       documentDocument = { ...sampleCompanyClaimDraftObj, ...draftOverride }
@@ -620,6 +757,9 @@ export function resolveFind (draftType: string, draftOverride?: object): mock.Sc
       break
     case 'directionsQuestionnaire':
       documentDocument = { ...sampleDirectionsQuestionnaireDraftObj, ...draftOverride }
+      break
+    case 'orders':
+      documentDocument = { ...sampleOrdersDraftObj, ...draftOverride }
       break
     default:
       documentDocument = { ...draftOverride }
@@ -693,13 +833,25 @@ export function rejectFind (reason: string = 'HTTP error'): mock.Scope {
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-export function resolveSave (id: number = 100): mock.Scope {
+export function resolveUpdate (id: number = 100): mock.Scope {
   return mock(serviceBaseURL)
     .put(`/drafts/${id}`)
     .reply(HttpStatus.OK)
 }
 
+export function resolveSave (id: number = 100): mock.Scope {
+  return mock(serviceBaseURL)
+    .post(`/drafts`)
+    .reply(HttpStatus.OK, sampleOrdersDraftObj)
+}
+
 export function rejectSave (id: number = 100, reason: string = 'HTTP error'): mock.Scope {
+  return mock(serviceBaseURL)
+    .post(`/drafts`)
+    .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
+}
+
+export function rejectUpdate (id: number = 100, reason: string = 'HTTP error'): mock.Scope {
   return mock(serviceBaseURL)
     .put(`/drafts/${id}`)
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)

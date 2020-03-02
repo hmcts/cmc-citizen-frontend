@@ -19,7 +19,7 @@ describe('ErrorHandling', () => {
     throw new Error('An error occurred')
   })
 
-  const nextFunction = sinon.spy((req: express.Request, res: express.Response, next: express.NextFunction) => {
+  const nextFunction = sinon.spy(() => {
     // Nothing to do, I'm a mock
   })
 

@@ -13,6 +13,10 @@ import { Paths } from 'response/paths'
 import { app } from 'main/app'
 import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
 import { checkAlreadySubmittedGuard } from 'test/common/checks/already-submitted-check'
+import {
+  verifyRedirectForGetWhenAlreadyPaidInFull,
+  verifyRedirectForPostWhenAlreadyPaidInFull
+} from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -34,6 +38,8 @@ describe('Defendant company response', () => {
         beforeEach(() => {
           idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
         })
+
+        verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
 
         it('should return error page when unable to retrieve claim', async () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('Error')
@@ -57,6 +63,7 @@ describe('Defendant company response', () => {
         it('should return successful response when claim is retrieved', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .get(pagePath)
@@ -79,10 +86,12 @@ describe('Defendant company response', () => {
         })
 
         checkAlreadySubmittedGuard(app, method, pagePath)
+        verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
 
         it('should return 500 and render error page when cannot save draft', async () => {
           draftStoreServiceMock.resolveFind('response:full-admission')
-          draftStoreServiceMock.rejectSave()
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.rejectUpdate()
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
@@ -94,7 +103,8 @@ describe('Defendant company response', () => {
 
         it('should redirect to task list when everything is fine', async () => {
           draftStoreServiceMock.resolveFind('response:full-admission')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveUpdate()
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)

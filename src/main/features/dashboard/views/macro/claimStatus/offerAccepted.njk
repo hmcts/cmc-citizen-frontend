@@ -18,18 +18,6 @@
     <p>{{ t('You’ve agreed to the offer made by {{ defendantName }} and signed an agreement to settle your claim. ', { defendantName: defendantName }) }}</p>
     <p>{{ t('We’ve asked {{ defendantName}} to sign the agreement.', { defendantName: defendantName }) }}</p>
   </div>
-  <h2 class="heading-small">{{ t('Request County Court Judgment') }}</h2>
-  <p>{{ t('If the defendant doesn’t pay or breaks the terms of the settlement agreement, you can '
-      + internalLink('request a County Court Judgment. ', CCJPaths.paidAmountPage.evaluateUri({
-        externalId:claim.externalId }) )) | safe }}</p>
-  <div class="status-block">
-    {% set defendantName = claim.claimData.defendant.name %}
-    <h2 class="heading-small">{{ t('Settle out of court') }}</h2>
-    <p>{{ t('You’ve agreed to the offer made by {{ defendantName }} and signed an agreement to settle your claim. ',
-        { defendantName: defendantName }) }}</p>
-    <p>{{ t('We’ve asked {{ defendantName}} to sign the agreement.',
-        { defendantName: defendantName }) }}</p>
-  </div>
 {% endmacro %}
 
 {% macro offerAcceptedForDefendantDashboard() %}
@@ -40,12 +28,12 @@
 {% macro offerAcceptedForDefendantClaimDetails(claim) %}
   <div class="status-block">
     {% if claim.settlement.isThroughAdmissions() %}
-      <h2 class="heading-small">{{ t('The claimant has accepted your repayment plan') }}</h2>
+      <h2 class="heading-medium">{{ t('The claimant has accepted your repayment plan') }}</h2>
       <p>{{ t('{{ claimantName }} has accepted your plan and asked you to sign a legal agreement that formalises it. The agreement is called a ‘settlement agreement’.',
         { claimantName: claim.claimData.claimant.name }) }}</p>
       <p>{{ t('If you sign the settlement agreement, they can’t request a CCJ against you unless you break the terms.') }}</p>
     {% else %}
-      <h2 class="heading-small">{{ t('Settle out of court') }}</h2>
+      <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
       <p>{{ t('The claimant has accepted your offer and signed a legal agreement. You need to sign the agreement to settle out of court.') }}</p>
       <p>{{ t('When you’ve both signed the agreement, the claim won’t proceed.') }}</p>
     {% endif %}
