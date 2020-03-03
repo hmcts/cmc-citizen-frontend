@@ -3,7 +3,7 @@
   "version": "1.1.1",
   "private": true,
   "engines": {
-    "node": ">=10.15.2"
+    "node": ">=12.0.0"
   },
   "scripts": {
     "setup": "gulp sass copy-files",
@@ -18,8 +18,8 @@
     "test:functional": "./bin/run-functional-tests.sh",
     "test:fullfunctional": "./bin/run-nightly-tests.sh",
     "test:nsp": "nsp check",
-    "test:coverage": "TS_NODE_TRANSPILE_ONLY=true NODE_ENV=mocha LOG_LEVEL=OFF nyc mocha --exit --timeout 8000 --opts mocha.opts $(find src/test \\( -name '*.ts' \\) ! -path '*a11y*')",
-    "test:coverage-unit": "TS_NODE_TRANSPILE_ONLY=true NODE_ENV=mocha LOG_LEVEL=OFF nyc mocha --opts mocha.opts $(find src/test \\( -name '*.ts' \\) ! -path '*a11y*' ! -path '*/routes/*')",
+    "test:coverage": "TS_NODE_TRANSPILE_ONLY=true NODE_ENV=mocha LOG_LEVEL=OFF nyc --cache false mocha --exit --timeout 8000 --opts mocha.opts $(find src/test \\( -name '*.ts' \\) ! -path '*a11y*')",
+    "test:coverage-unit": "TS_NODE_TRANSPILE_ONLY=true NODE_ENV=mocha LOG_LEVEL=OFF nyc --cache false mocha --opts mocha.opts $(find src/test \\( -name '*.ts' \\) ! -path '*a11y*' ! -path '*/routes/*')",
     "test:codacy-upload": "cat ./coverage-report/lcov.info | codacy-coverage",
     "test:codecov-upload": "codecov -f ./coverage-report/lcov.info",
     "test:smoke": "./bin/run-smoke-tests.sh",
@@ -33,7 +33,8 @@
     "@hmcts/class-validator": "^0.9.1-e",
     "@hmcts/cmc-draft-store-middleware": "^2.0.1",
     "@hmcts/cmc-validators": "^0.2.4",
-    "@hmcts/ctsc-web-chat": "^0.3.9",
+    "@hmcts/cookie-encrypter": "^1.0.1",
+    "@hmcts/ctsc-web-chat": "^0.3.10",
     "@hmcts/draft-store-client": "^1.2.1",
     "@hmcts/info-provider": "^1.0.0",
     "@hmcts/nodejs-healthcheck": "^1.5.1",
@@ -60,7 +61,6 @@
     "class-transformer": "^0.2.3",
     "classlist-polyfill": "^1.2.0",
     "config": "^3.2.5",
-    "cookie-encrypter": "^1.0.1",
     "cookie-parser": "^1.4.4",
     "cookies": "^0.8.0",
     "csurf": "^1.10.0",
@@ -128,7 +128,6 @@
     "mochawesome": "^4.1.0",
     "mock-require": "^3.0.3",
     "nock": "^11.7.2",
-    "nsp": "^3.2.1",
     "nyc": "^15.0.0",
     "pa11y": "^5.2.0",
     "randomstring": "^1.1.5",
