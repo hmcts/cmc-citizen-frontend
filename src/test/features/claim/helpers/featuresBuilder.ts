@@ -24,6 +24,50 @@ function mockFeatureFlag (feature: string, enabled: boolean): mock.Scope {
 const user = new User('1', 'user@example.com', 'John', 'Smith', [], 'citizen', '')
 const eligibleDraft = new Draft<DraftClaim>(123, 'claim', new DraftClaim().deserialize(claimDraftData), moment(), moment())
 const pilotLimit = 300
+const dqlimit = 10000
+
+const dqDraft = new Draft<DraftClaim>(123, 'claim', new DraftClaim().deserialize({
+  ...claimDraftData,
+  amount: {
+    rows: [
+      {
+        reason: 'Valid reason',
+        amount: dqlimit
+      }
+    ]
+  },
+  interest: {
+    option: YesNoOption.NO
+  }
+}), moment(), moment())
+
+const dqDraftWithInterest = new Draft<DraftClaim>(123, 'claim', new DraftClaim().deserialize({
+  ...claimDraftData,
+  amount: {
+    rows: [
+      {
+        reason: 'Valid reason',
+        amount: dqlimit
+      }
+    ]
+  }
+}), moment(), moment())
+
+const dqDraftOverLimit = new Draft<DraftClaim>(123, 'claim', new DraftClaim().deserialize({
+  ...claimDraftData,
+  amount: {
+    rows: [
+      {
+        reason: 'Valid reason',
+        amount: dqlimit + 1
+      }
+    ]
+  },
+  interest: {
+    option: YesNoOption.NO
+  }
+}), moment(), moment())
+
 const limitDraft = new Draft<DraftClaim>(123, 'claim', new DraftClaim().deserialize({
   ...claimDraftData,
   amount: {
@@ -141,20 +185,20 @@ describe('FeaturesBuilder', () => {
   })
 
   describe('Directions Questionnaire Feature', () => {
-    it('should add dq to features if flag is set and draft is <= 1000', async () => {
+    it('should add dq to features if flag is set and draft is <= 10000', async () => {
       mockFeatureFlag('cmc_directions_questionnaire', true)
-      const features = await FeaturesBuilder.features(draftWithJudgePilotLimit, user)
+      const features = await FeaturesBuilder.features(dqDraft, user)
       expect(features).to.equal('directionsQuestionnaire')
     })
 
-    it('should add dq to features if principal amount <= 1000 but with interest is > 1000 and flag is set', async () => {
+    it('should add dq to features if principal amount <= 10000 but with interest is > 10000 and flag is set', async () => {
       mockFeatureFlag('cmc_directions_questionnaire', true)
-      const features = await FeaturesBuilder.features(draftWithJudgePilotLimitPlusInterest, user)
+      const features = await FeaturesBuilder.features(dqDraftWithInterest, user)
       expect(features).to.equal('directionsQuestionnaire')
     })
 
-    it('should not dd dq to features if principal amount is > 1000', async () => {
-      const features = await FeaturesBuilder.features(draftWithJudgePilotOverLimit, user)
+    it('should not add dq to features if principal amount is > 10000', async () => {
+      const features = await FeaturesBuilder.features(dqDraftOverLimit, user)
       expect(features).to.be.undefined
     })
 
