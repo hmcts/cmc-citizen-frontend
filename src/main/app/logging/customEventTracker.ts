@@ -15,3 +15,16 @@ export function trackCustomEvent (eventName: string, trackingProperties: {}) {
     logger.error(err.stack)
   }
 }
+
+export function trackTrace (message: string) {
+  try {
+    if (appInsights.defaultClient) {
+      appInsights.defaultClient.trackTrace({
+        message,
+        severity: 1
+      })
+    }
+  } catch (err) {
+    logger.error(err.stack)
+  }
+}

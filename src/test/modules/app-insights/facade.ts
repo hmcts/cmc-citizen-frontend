@@ -33,9 +33,9 @@ describe('Application Insights facade', () => {
       expect(client.telemetryProcessors).to.have.length(1)
     })
 
-    it('should add the error logging telemetry processor if instrumentation key is STDOUT', () => {
+    it('should add the error logging and custom trace telemetry processors if instrumentation key is STDOUT', () => {
       new AppInsights('STDOUT', client).prepareTelemetryProcessors()
-      expect(client.telemetryProcessors).to.have.length(2)
+      expect(client.telemetryProcessors).to.have.length(3)
     })
   })
 })

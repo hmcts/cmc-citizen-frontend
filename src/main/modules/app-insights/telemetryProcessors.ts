@@ -32,3 +32,12 @@ export function errorLogger (logger: LoggerInstance): (envelope: Envelope, conte
     return true
   }
 }
+
+export function traceLogger (logger: LoggerInstance): (envelope: Envelope, contextObjects?: any) => boolean {
+  return (envelope => {
+    if (envelope.data && envelope.data['baseData'] && envelope.data['baseData'].message) {
+      logger.info(`AppInsights trace: ${JSON.stringify(envelope.data['baseData'].message)}`)
+    }
+    return true
+  })
+}

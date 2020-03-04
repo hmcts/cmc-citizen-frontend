@@ -44,6 +44,7 @@ export class AppInsights {
     this.getClient().addTelemetryProcessor(telemetryProcessors.operationNameUUIDHider())
     if (this.instrumentationKey === 'STDOUT') {
       this.client.addTelemetryProcessor(telemetryProcessors.errorLogger(logger))
+      this.client.addTelemetryProcessor(telemetryProcessors.traceLogger(logger))
     }
   }
 

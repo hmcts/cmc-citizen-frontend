@@ -2,6 +2,7 @@ import * as express from 'express'
 import * as config from 'config'
 import * as HttpStatus from 'http-status-codes'
 import * as Cookies from 'cookies'
+import * as CustomEventTracker from 'logging/customEventTracker'
 
 import { JwtExtractor } from 'idam/jwtExtractor'
 import { IdamClient } from 'idam/idamClient'
@@ -37,14 +38,14 @@ export class AuthorizationMiddleware {
       }
 
       if (!jwt) {
-        logger.debug(`Protected path - no JWT - access to ${req.path} rejected`)
+        CustomEventTracker.trackTrace(`Protected path - no JWT - access to ${req.path} rejected`)
         return accessDeniedCallback(req, res)
       } else {
         IdamClient
           .retrieveUserFor(jwt)
           .then((user: User) => {
             if (!user.isInRoles(...requiredRoles)) {
-              logger.error(`Protected path - valid JWT but user not in ${requiredRoles} roles - redirecting to access denied page`)
+              CustomEventTracker.trackTrace(`Protected path - valid JWT but user not in ${requiredRoles} roles - redirecting to access denied page`)
               return accessDeniedCallback(req, res)
             } else {
               res.locals.isLoggedIn = true
@@ -57,7 +58,7 @@ export class AuthorizationMiddleware {
             if (hasTokenExpired(err)) {
               const cookies = new Cookies(req, res)
               cookies.set(sessionCookieName, '')
-              logger.debug(`Protected path - invalid JWT - access to ${req.path} rejected`)
+              CustomEventTracker.trackTrace(`Protected path - invalid JWT - access to ${req.path} rejected`)
               return accessDeniedCallback(req, res)
             }
             return next(err)

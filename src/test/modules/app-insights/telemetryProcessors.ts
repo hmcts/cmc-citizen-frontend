@@ -47,10 +47,12 @@ describe('app-insights telemetryProcessors', () => {
 
   context('errorLogger', () => {
     const ERROR: Envelope = {
-      data: { baseData: {
-        name: 'Test error name',
-        properties: { error: 'Test error description' }
-      } }
+      data: {
+        baseData: {
+          name: 'Test error name',
+          properties: { error: 'Test error description' }
+        }
+      }
     } as unknown as Envelope
 
     it('should throw not error if logger is undefined when envelope is empty', () => {
@@ -76,6 +78,41 @@ describe('app-insights telemetryProcessors', () => {
       expect(telemetryProcessors.errorLogger(logger)(ERROR)).to.be.true
       expect(stack).to.have.length(1)
       expect(stack[0]).to.be.equal(`AppInsights error: {"name":"Test error name","error":"Test error description"}`)
+    })
+  })
+
+  context('traceLogger', () => {
+    const TRACE: Envelope = {
+      data: {
+        baseData: {
+          message: 'Test trace'
+        }
+      }
+    } as unknown as Envelope
+
+    it('should throw not error if logger is undefined when envelope is empty', () => {
+      expect(() => telemetryProcessors.traceLogger(undefined)(EMPTY)).to.not.throw()
+    })
+
+    it('should return true', () => {
+      expect(telemetryProcessors.traceLogger(undefined)(EMPTY)).to.be.true
+    })
+
+    it('should throw error if logger is undefined when envelope holds message data', () => {
+      expect(() => telemetryProcessors.traceLogger(undefined)(TRACE)).to.throw()
+    })
+
+    it('should log the message if logger is valid and envelope holds message data', () => {
+      const stack: string[] = []
+      const logger: LoggerInstance = {
+        stack: [],
+        info: (message: string) => {
+          stack.push(message)
+        }
+      } as unknown as LoggerInstance
+      expect(telemetryProcessors.traceLogger(logger)(TRACE)).to.be.true
+      expect(stack).to.have.length(1)
+      expect(stack[0]).to.be.equal(`AppInsights trace: "Test trace"`)
     })
   })
 })
