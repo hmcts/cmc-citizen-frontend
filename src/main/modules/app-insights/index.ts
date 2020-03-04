@@ -23,7 +23,10 @@ export class AppInsights {
   }
 
   setup (): typeof appInsights.Configuration {
-    return appInsights.setup(this.instrumentationKey).setAutoCollectConsole(true, true)
+    return appInsights.setup(this.instrumentationKey)
+      .setDistributedTracingMode(appInsights.DistributedTracingModes.AI_AND_W3C)
+      .setSendLiveMetrics(true)
+      .setAutoCollectConsole(true, true)
   }
 
   getClient () {
