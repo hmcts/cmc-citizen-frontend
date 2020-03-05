@@ -81,6 +81,13 @@ cmc-claim-store:
           - system-update-password
           - notify-api-key
           - milo-recipient
+          - staff-email
+          - live-support-email
+          - rpa-email-sealed-claim
+          - rpa-email-more-time-requested
+          - rpa-email-response
+          - rpa-email-ccj
+          - rpa-email-paid-in-full
     environment:
       LOG_LEVEL: DEBUG
       DOC_ASSEMBLY_URL: false
