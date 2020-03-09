@@ -7,7 +7,7 @@ properties([
   ])
 ])
 
-@Library("Infrastructure@cmc-features")
+@Library("Infrastructure")
 
 def product = "cmc"
 def component = "citizen-frontend"
