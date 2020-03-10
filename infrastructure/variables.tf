@@ -91,7 +91,7 @@ variable "feature_mediation_pilot" {
 }
 
 variable "feature_web_chat" {
-  default = "true"
+  default = "false"
 }
 
 variable "feature_inversionOfControl" {
