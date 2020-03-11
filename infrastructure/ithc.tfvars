@@ -11,4 +11,4 @@ feature_new_features_consent = "true"
 website_local_cache_sizeinmb = "0"
 node_debug = "child_process,cluster"
 
-feature_testing_support = "true"  # remove before ithc!!!
+feature_testing_support = "true"

@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure")
+@Library("Infrastructure@cmc-features")
 
 String product = "cmc"
 String component = "citizen-frontend"
@@ -13,7 +13,19 @@ def secrets = [
       secret('citizen-oauth-client-secret', 'OAUTH_CLIENT_SECRET'),
       secret('smoke-test-citizen-username', 'SMOKE_TEST_CITIZEN_USERNAME'),
       secret('smoke-test-user-password', 'SMOKE_TEST_USER_PASSWORD')
-    ]
+    ],
+  // below is just for CCD in AKS - to be cleaned up when CCD Helm chart is updated to use flexvolume for secrets
+  's2s-${env}': [
+    secret('microservicekey-ccd-data', 'DATA_STORE_S2S_KEY'),
+    secret('microservicekey-ccd-definition', 'DEFINITION_STORE_S2S_KEY'),
+    secret('microservicekey-ccd-gw', 'API_GATEWAY_S2S_KEY'),
+    secret('microservicekey-ccd-admin', 'ADMIN_S2S_KEY'),
+    secret('microservicekey-ccd-ps', 'PRINT_S2S_KEY')
+  ],
+  'ccd-${env}': [
+    secret('ccd-api-gateway-oauth2-client-secret', 'API_GATEWAY_IDAM_SECRET'),
+    secret('ccd-admin-web-oauth2-client-secret', 'ADMIN_WEB_IDAM_SECRET')
+  ]
 ]
 
 static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
@@ -25,7 +37,7 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
   ]
 }
 
-// Vars needed for AKS testing - keep values in sync with: /src/kubernetes/deployment.template.yaml
+// Vars needed for AKS testing - keep values in sync with: charts/cmc-citizen-frontend/...
 // THESE WILL BE OVERWRITTEN IN ASE DEPLOYMENTS WITH TERRAFORM OUTPUTS.TF
 // THESE CAN BE PICKED UP IN INTEGRATION-TEST CODE DIRECTLY
 env.IDAM_URL = 'https://idam-api.aat.platform.hmcts.net'
@@ -34,6 +46,7 @@ env.FEATURE_ADMISSIONS = 'true'
 env.FEATURE_MEDIATION = 'true'
 env.FEATURE_DIRECTIONS_QUESTIONNAIRE = 'true'
 env.FEATURE_TESTING_SUPPORT = 'true'
+env.FEATURE_INVERSION_OF_CONTROL = 'true'
 // add any others needed to selective testing...
 
 String notificationsChannel = '#cmc-tech-notification'
@@ -64,8 +77,10 @@ withPipeline("nodejs", product, component) {
     }
   }
 
+  enableAksStagingDeployment()
+  disableLegacyDeployment()
+  
   loadVaultSecrets(secrets)
   enableSlackNotifications(notificationsChannel)
-  enableDockerBuild()
   installCharts()
 }

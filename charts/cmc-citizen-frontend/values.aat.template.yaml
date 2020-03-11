@@ -2,11 +2,5 @@ nodejs:
   image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}
   environment:
-    IDAM_API_URL: https://idam-api.aat.platform.hmcts.net
-    IDAM_AUTHENTICATION_WEB_URL: https://idam-web-public.aat.platform.hmcts.net
-    IDAM_S2S_AUTH: http://rpe-service-auth-provider-java.software-engineering
-    PAY_URL: http://payment-api-java.fees-pay
-    FEES_URL: http://fees-register-api-java.fees-pay
-    CLAIM_STORE_URL: http://cmc-claim-store-java
-    DRAFT_STORE_URL: http://draft-store-service-java.software-engineering
-    FEATURE_TOGGLES_API_URL: http://rpe-feature-toggle-api-java.software-engineering
+    FEATURE_TESTING_SUPPORT: true
+    FEATURE_RETURN_ERROR_TO_USER: true
