@@ -8,12 +8,12 @@ xhttp.onreadystatechange = function () {
     var json = JSON.parse(this.response)
 
     webchat_init({
-      uuid: 'script_' + json.cmc['webchat-chat-id'],
-      tenant: json.cmc['webchat-tenant'],
+      uuid: 'script_' + json['cmc-webchat-chat-id'],
+      tenant: json['cmc-webchat-tenant'],
       channel: 'CMC',
-      btnNoAgents: '/' + json.cmc['webchat-tenant'] + '/button_' + json.cmc['webchat-button-no-agents'] + '/img/logo',
-      btnAgentsBusy: '/' + json.cmc['webchat-tenant'] + '/button_' + json.cmc['webchat-button-agents-busy'] + '/img/logo',
-      btnServiceClosed: '/' + json.cmc['webchat-tenant'] + '/button_' + json.cmc['webchat-button-service-closed'] + '/img/logo',
+      btnNoAgents: '/' + json['cmc-webchat-tenant'] + '/button_' + json['cmc-webchat-button-no-agents'] + '/img/logo',
+      btnAgentsBusy: '/' + json['cmc-webchat-tenant'] + '/button_' + json['cmc-webchat-button-agents-busy'] + '/img/logo',
+      btnServiceClosed: '/' + json['cmc-webchat-tenant'] + '/button_' + json['cmc-webchat-button-service-closed'] + '/img/logo',
       chatDownAction: 'showMessage',
       chatLinkFocusable: false,
       textChatDown: 'The web chat service is temporarily unavailable, please try again later.',
