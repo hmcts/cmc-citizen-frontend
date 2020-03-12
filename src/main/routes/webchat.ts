@@ -1,7 +1,7 @@
 import * as express from 'express'
 import * as config from 'config'
 
-class WebChat {
+export class WebChat {
   static main: string = '/webchat'
 
   static filterSecrets (accepted, secrets) {
@@ -10,8 +10,8 @@ class WebChat {
       if (secret.search(accepted) > -1) {
         result[secret] = secrets[secret]
       }
-      return result
     }
+    return result
   }
 }
 
