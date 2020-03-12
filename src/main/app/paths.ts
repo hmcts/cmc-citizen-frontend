@@ -2,7 +2,6 @@ import { RoutablePath } from 'shared/router/routablePath'
 
 export class Paths {
   static readonly homePage = new RoutablePath('/', false)
-  static readonly webchat = new RoutablePath('/webchat', false)
   static readonly resolveBeforeClaimPage = new RoutablePath('/resolve-before-claim', false)
   static readonly receiver = new RoutablePath('/receiver', false)
   static readonly linkDefendantReceiver = new RoutablePath('/receiver/link-defendant', false)
