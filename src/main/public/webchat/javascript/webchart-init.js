@@ -8,7 +8,7 @@ xhttp.onreadystatechange = function () {
     var json = JSON.parse(this.response)
 
     webchat_init({
-      uuid: 'script_' + json['cmc-webchat-chat-id'],
+      uuid: 'script_' + json['cmc-webchat-id'],
       tenant: json['cmc-webchat-tenant'],
       channel: 'CMC',
       btnNoAgents: '/' + json['cmc-webchat-tenant'] + '/button_' + json['cmc-webchat-button-no-agents'] + '/img/logo',
