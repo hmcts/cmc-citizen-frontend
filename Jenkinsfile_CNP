@@ -78,7 +78,7 @@ withPipeline("nodejs", product, component) {
   }
 
   enableAksStagingDeployment()
-  disableLegacyDeploymentOnAAT()
+  disableLegacyDeployment()
   
   loadVaultSecrets(secrets)
   enableSlackNotifications(notificationsChannel)

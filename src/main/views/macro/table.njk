@@ -16,7 +16,7 @@
       <span {% if bold %}class="form-label-bold"{% endif %}>{{ t( label ) }}</span>
     </div>
     <div class="column-one-half {% if not value %}if-empty{% endif %}">
-      <span>{{ value }}</span>
+      <span class="keep-formatting">{{ value }}</span>
     </div>
     {% if changeLink %}
       <div class="column-one-quarter change-link-column">
