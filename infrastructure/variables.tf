@@ -146,3 +146,7 @@ variable "log_level" {
 variable "node_debug" {
   default = ""
 }
+
+variable "enable_ase" {
+  default = false
+}
