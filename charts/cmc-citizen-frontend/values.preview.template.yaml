@@ -64,6 +64,7 @@ idam-pr:
 cmc-claim-store:
   enabled: true
   java:
+    image: hmctspublic.azurecr.io/cmc/claim-store:latest
     releaseNameOverride: ${SERVICE_NAME}-claim-store
     ingressHost: ${SERVICE_FQDN}
     readinessDelay: 90  # ccd-stack will start much slower
