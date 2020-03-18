@@ -14,7 +14,7 @@ feature_mediation = "true"
 feature_directions_questionnaire = "true"
 feature_mediation_pilot = "true"
 feature_inversionOfControl = "true"
-
+feature_web_chat = "true"
 staging_slot_app_settings = {
   CLAIM_STORE_URL = "http://cmc-claim-store-aat-staging.service.core-compute-aat.internal"
 }
