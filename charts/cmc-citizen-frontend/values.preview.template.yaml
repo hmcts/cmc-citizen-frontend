@@ -25,6 +25,7 @@ nodejs:
     FEATURE_FINE_PRINT: true
     FEATURE_NEW_DASHBOARD_STATUS: false
     FEATURE_WEB_CHAT: true
+    FEATURE_SYNC_FEATURES: true
 
 # sub-charts configuration
 

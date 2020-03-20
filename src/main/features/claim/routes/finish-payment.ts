@@ -14,6 +14,7 @@ import { FeaturesBuilder } from 'claim/helpers/featuresBuilder'
 import * as HttpStatus from 'http-status-codes'
 import { ErrorHandling } from 'shared/errorHandling'
 import { noRetryRequest } from 'client/request'
+import { FeatureToggles } from 'utils/featureToggles'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient(noRetryRequest)
 
@@ -31,7 +32,10 @@ export default express.Router()
       const claim: Claim = await claimStoreClient.retrieveByExternalId(externalId, user)
       logger.info('CLAIM IN FINISH PAYMENT: ', JSON.stringify(claim))
       if (ClaimState[claim.state] === ClaimState.AWAITING_CITIZEN_PAYMENT) {
-        const features = await FeaturesBuilder.features(claim.claimData.amount.totalAmount(), user)
+        const features = await FeaturesBuilder.features(FeatureToggles.isEnabled('syncFeatures')
+            ? claim.claimData.amount.totalAmount()
+            : draft.document.amount.totalAmount(),
+          user)
 
         const createdClaim = await claimStoreClient.createCitizenClaim(draft, user, features)
         if (ClaimState[createdClaim.state] === ClaimState.AWAITING_CITIZEN_PAYMENT) {
