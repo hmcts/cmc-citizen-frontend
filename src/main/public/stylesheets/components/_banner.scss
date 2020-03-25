@@ -1,0 +1,69 @@
+@import 'colours';
+
+.hmcts-banner {
+  border: 5px solid $banner-border-colour;
+  color: $banner-text-colour;
+  font-size: 0;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  padding: 10px;
+}
+
+.hmcts-banner-icon {
+  fill: currentColor;
+  float: left;
+  margin-right: 10px;
+}
+
+.hmcts-banner-message {
+  color: $banner-message-colour;
+  display: block;
+  font-family: 'GDS Transport', Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.25;
+  overflow: hidden;
+
+  h2 {
+    margin-bottom: 10px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  p {
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+@media print {
+  .hmcts-banner-message {
+    font-family: sans-serif;
+    font-size: 14pt;
+    line-height: 1.15;
+  }
+}
+
+@media (min-width: 40.0625em) {
+  .hmcts-banner-message {
+    font-size: 19px;
+    line-height: 1.31579;
+  }
+}
+
+.hmcts-banner-assistive {
+  border: 0;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
