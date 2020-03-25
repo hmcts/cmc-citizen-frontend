@@ -31,6 +31,7 @@ import { DirectionOrder } from 'claims/models/directionOrder'
 import { ReviewOrder } from 'claims/models/reviewOrder'
 import { MediationOutcome } from 'claims/models/mediationOutcome'
 import { YesNoOption } from 'models/yesNoOption'
+import { ClaimDocument } from 'claims/models/claimDocument'
 
 interface State {
   status: ClaimStatus
@@ -75,6 +76,7 @@ export class Claim {
   mediationOutcome: string
   pilotCourt: YesNoOption
   paperResponse: YesNoOption
+  claimDocuments?: ClaimDocument[]
 
   get defendantOffer (): Offer {
     if (!this.settlement) {
@@ -371,12 +373,41 @@ export class Claim {
       if (input.paperResponse) {
         this.paperResponse = YesNoOption.fromObject(input.paperResponse)
       }
-    }
+      if (input.claimDocumentCollection && input.claimDocumentCollection.claimDocuments) {
+        this.claimDocuments = input.claimDocumentCollection.claimDocuments.map((value) => {
+          return new ClaimDocument().deserialize(value)
+        })
+      } else {
+        input.claimDocumentCollection = {
+          claimDocuments: [
+            {
+              id: '3f1813ee-5b60-43fd-9160-fa92605dfd6e',
+              documentName: '000MC258-claim-form.pdf',
+              documentType: 'SEALED_CLAIM',
+              createdDatetime: '2020-02-26T14:56:49.264',
+              createdBy: 'OCMC',
+              size: 79777
+            },
+            {
+              id: '08c030fb-f260-446e-8633-8bbc75cd03f8',
+              documentName: '000MC258-claimant-hearing-questions.pdf',
+              documentType: 'CLAIMANT_DIRECTIONS_QUESTIONNAIRE',
+              createdDatetime: '2020-02-26T15:10:13.601',
+              createdBy: 'OCMC',
+              size: 11205
+            }
+          ]
+        }
+        this.claimDocuments = input.claimDocumentCollection.claimDocuments.map((value) => {
+          return new ClaimDocument().deserialize(value)
+        })
+      }
 
-    return this
+      return this
+    }
   }
 
-  isAdmissionsResponse (): boolean {
+  public isAdmissionsResponse (): boolean {
     return (this.response.responseType === ResponseType.FULL_ADMISSION
       || this.response.responseType === ResponseType.PART_ADMISSION)
   }
