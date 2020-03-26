@@ -38,3 +38,16 @@
 .no-bottom-margin {
   margin-bottom: 0;
 }
+
+.tab-section {
+  h2 {
+    margin-top: 0;
+  }
+  ul {
+    li {
+      a {
+        font-size: 19px;
+      }
+    }
+  }
+}

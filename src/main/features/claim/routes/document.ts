@@ -8,6 +8,9 @@ import { DocumentsClient } from 'documents/documentsClient'
 import { ErrorHandling } from 'shared/errorHandling'
 
 import { DownloadUtils } from 'utils/downloadUtils'
+import { UUIDUtils } from 'shared/utils/uuidUtils'
+import * as _ from 'lodash'
+import { ClaimDocument } from 'claims/models/claimDocument'
 
 const documentsClient: DocumentsClient = new DocumentsClient()
 
@@ -17,7 +20,8 @@ export default express.Router()
     ClaimMiddleware.retrieveByExternalId,
     ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
       const claim: Claim = res.locals.claim
-
-      const pdf: Buffer = await documentsClient.getPDF(claim.externalId, 'sealedClaim', res.locals.user.bearerToken)
-      DownloadUtils.downloadPDF(res, pdf, `${claim.claimNumber}-claim-document`)
+      const documentId = UUIDUtils.extractDocumentId(req.path)
+      const document: ClaimDocument = _.find(claim.claimDocuments,{ id : documentId })
+      const pdf: Buffer = await documentsClient.getPDF(claim.externalId, document.documentType, res.locals.user.bearerToken)
+      DownloadUtils.downloadPDF(res, pdf, document.documentName)
     }))
