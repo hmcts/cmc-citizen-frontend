@@ -25,5 +25,9 @@ describe('UUIDUtils', () => {
     it('should return first UUID when many UUIDs are in place', () => {
       expect(UUIDUtils.extractFrom(`/case/${uuid}/claimant/28abbcc8-bd40-49d8-926a-e59fa62c5a2f`)).to.be.equal(uuid)
     })
+
+    it('should return last UUID when many UUIDs are in place', () => {
+      expect(UUIDUtils.extractDocumentId(`/case/28abbcc8-bd40-49d8-926a-e59fa62c5a2f/claimant/${uuid}`)).to.be.equal(uuid)
+    })
   })
 })
