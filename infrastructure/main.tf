@@ -34,61 +34,61 @@ data "azurerm_key_vault" "cmc_key_vault" {
 
 data "azurerm_key_vault_secret" "cookie_encryption_key" {
   name = "citizen-cookie-encryption-key"
-  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
+  key_vault_id = "${data.azurerm_key_vault.cmc_key_vault.id}"
 }
 
 data "azurerm_key_vault_secret" "s2s_secret" {
   name = "cmc-s2s-secret"
-  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
+  key_vault_id = "${data.azurerm_key_vault.cmc_key_vault.id}"
 }
 
 data "azurerm_key_vault_secret" "draft_store_primary" {
   name = "citizen-draft-store-primary"
-  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
+  key_vault_id = "${data.azurerm_key_vault.cmc_key_vault.id}"
 }
 
 data "azurerm_key_vault_secret" "draft_store_secondary" {
   name = "citizen-draft-store-secondary"
-  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
+  key_vault_id = "${data.azurerm_key_vault.cmc_key_vault.id}"
 }
 
 data "azurerm_key_vault_secret" "os_postcode_lookup_api_key" {
   name = "os-postcode-lookup-api-key"
-  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
+  key_vault_id = "${data.azurerm_key_vault.cmc_key_vault.id}"
 }
 
 data "azurerm_key_vault_secret" "oauth_client_secret" {
   name = "citizen-oauth-client-secret"
-  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
+  key_vault_id = "${data.azurerm_key_vault.cmc_key_vault.id}"
 }
 
 data "azurerm_key_vault_secret" "staff_email" {
   name = "staff-email"
-  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
+  key_vault_id = "${data.azurerm_key_vault.cmc_key_vault.id}"
 }
 
 data "azurerm_key_vault_secret" "cmc_webchat_id" {
   name = "cmc-webchat-id"
-  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
+  key_vault_id = "${data.azurerm_key_vault.cmc_key_vault.id}"
 }
 
 data "azurerm_key_vault_secret" "cmc_webchat_tenant" {
   name = "cmc-webchat-tenant"
-  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
+  key_vault_id = "${data.azurerm_key_vault.cmc_key_vault.id}"
 }
 
 data "azurerm_key_vault_secret" "cmc_webchat_button_no_agents" {
   name = "cmc-webchat-button-no-agents"
-  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
+  key_vault_id = "${data.azurerm_key_vault.cmc_key_vault.id}"
 }
 data "azurerm_key_vault_secret" "cmc_webchat_button_busy" {
   name = "cmc-webchat-button-busy"
-  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
+  key_vault_id = "${data.azurerm_key_vault.cmc_key_vault.id}"
 }
 
 data "azurerm_key_vault_secret" "cmc_webchat_button_service_closed" {
   name = "cmc-webchat-button-service-closed"
-  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
+  key_vault_id = "${data.azurerm_key_vault.cmc_key_vault.id}"
 }
 
 module "citizen-frontend" {
