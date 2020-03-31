@@ -107,6 +107,7 @@ module "citizen-frontend" {
   asp_name = "${local.asp_name}"
   asp_rg = "${local.asp_name}"
   instance_size = "${local.sku_size}"
+  enable_ase = "${var.enable_ase}"
   website_local_cache_sizeinmb = "${var.website_local_cache_sizeinmb}"
 
   app_settings = {
@@ -178,6 +179,7 @@ module "citizen-frontend" {
     WEBCHAT_BUTTON_NO_AGENTS = "${data.azurerm_key_vault_secret.cmc_webchat_button_no_agents.value}"
     WEBCHAT_BUTTON_AGENTS_BUSY = "${data.azurerm_key_vault_secret.cmc_webchat_button_busy.value}"
     WEBCHAT_BUTTON_SERVICE_CLOSED = "${data.azurerm_key_vault_secret.cmc_webchat_button_service_closed.value}"
+    DUMMY_VARIABLE = true
   }
 }
 

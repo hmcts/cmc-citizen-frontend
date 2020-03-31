@@ -431,7 +431,8 @@ export class ClaimantResponseSteps {
     I.see(`Do you agree the defendant has paid £105.50`)
     I.see('Yes')
     I.click('input[type=submit]')
-    I.see('You didn’t proceed with the claim')
+    I.see('You’ve accepted their response')
+    I.see('The claim is now settled.')
   }
 
   rejectFullDefencePaidFullAmount (testData: EndToEndTestData): void {

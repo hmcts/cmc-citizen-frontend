@@ -64,34 +64,41 @@ idam-pr:
 cmc-claim-store:
   enabled: true
   java:
+    image: hmctspublic.azurecr.io/cmc/claim-store:prod-e70a08eb
     releaseNameOverride: ${SERVICE_NAME}-claim-store
     ingressHost: ${SERVICE_FQDN}
     readinessDelay: 90  # ccd-stack will start much slower
     livenessDelay:  90  # ccd-stack will start much slower
+    keyVaults:
+      cmc:
+        resourceGroup: cmc
+        secrets:
+          - AppInsightsInstrumentationKey
+          - citizen-oauth-client-secret
+          - claim-store-s2s-secret
+          - anonymous-caseworker-username
+          - anonymous-caseworker-password
+          - system-update-username
+          - system-update-password
+          - notify-api-key
+          - milo-recipient
+          - staff-email
+          - live-support-email
+          - rpa-email-sealed-claim
+          - rpa-email-more-time-requested
+          - rpa-email-response
+          - rpa-email-ccj
+          - rpa-email-paid-in-full
     environment:
       LOG_LEVEL: DEBUG
-      IDAM_S2S_AUTH_URL: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
-      SEND_LETTER_URL: http://rpe-send-letter-service-aat.service.core-compute-aat.internal
-      IDAM_API_URL: https://idam-api.aat.platform.hmcts.net
-      PDF_SERVICE_URL: http://cmc-pdf-service-aat.service.core-compute-aat.internal
-      DOCUMENT_MANAGEMENT_URL: http://dm-store-aat.service.core-compute-aat.internal
-      PAY_URL: http://payment-api-aat.service.core-compute-aat.internal
-      FEES_URL: http://fees-register-api-aat.service.core-compute-aat.internal
       DOC_ASSEMBLY_URL: false
       FRONTEND_BASE_URL: https://www-${SERVICE_FQDN}
       RESPOND_TO_CLAIM_URL: https://${SERVICE_FQDN}/first-contact/start
       CMC_DB_HOST: ${SERVICE_NAME}-postgres
       CMC_DB_USERNAME: hmcts
       CMC_DB_PASSWORD: hmcts
-      CMC_DB_CONNECTION_OPTIONS: '?sslmode=allow'
-      CLAIM_STORE_DB_HOST: ${SERVICE_NAME}-postgres
-      CLAIM_STORE_DB_USERNAME: hmcts
-      CLAIM_STORE_DB_PASSWORD: hmcts
-      CLAIM_STORE_DB_NAME: claimstore
-      CLAIM_STORE_DB_PORT: 5432
+      CMC_DB_CONNECTION_OPTIONS: ''
       CORE_CASE_DATA_API_URL: http://${SERVICE_NAME}-data-store-api
-      LIVE_SUPPORT_RECIPIENT: civilmoneyclaims+live-support-int-tests@gmail.com
-      LIVE_SUPPORT_SENDER: noreply@reform.hmcts.net
 
 ccd:
   enabled: true
@@ -139,7 +146,7 @@ ccd:
       userProfileDatabaseName: user-profile
     definition:
       enabled: true
-      image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.5.7
+      image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.5.10
       environment:
         CCD_DEF_CLAIM_STORE_BASE_URL: http://${SERVICE_NAME}-claim-store
       kvSecretRef: kvcreds
@@ -171,9 +178,9 @@ postgresql:
       CREATE DATABASE features WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
       CREATE DATABASE "data-store" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
       CREATE DATABASE "definition-store" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
+      CREATE DATABASE "user-profile" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
   postgresqlUsername: hmcts
   postgresqlPassword: hmcts
-  postgresqlDatabase: user-profile
   nameOverride: postgres
   persistence:
     enabled: false
