@@ -17,7 +17,7 @@
         {{ t('We’ll send your response to the defendant.') }}
       </p>
 
-      {% include "includes/service_survey_link.njk" %}
+      {% include "includes/service-survey-link-claimant.njk" %}
 
       <p>
         {{ internalLink(t('Finished'), DashboardPaths.dashboardPage.uri, 'button') }}
@@ -28,3 +28,4 @@
     </div>
   </div>
 {% endblock %}
+{% block contactForHelp %}{% endblock %}

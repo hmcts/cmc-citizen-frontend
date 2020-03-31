@@ -14,6 +14,10 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
 import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
+import {
+  verifyRedirectForGetWhenAlreadyPaidInFull,
+  verifyRedirectForPostWhenAlreadyPaidInFull
+} from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
@@ -22,7 +26,7 @@ const pagePath = FullRejectionPaths.howMuchHaveYouPaidPage.evaluateUri({ externa
 const validFormData = { amount: 100, date: { day: 1, month: 1, year: 1990 }, text: 'aaa' }
 const header: string = 'How much have you paid?'
 
-describe(`Defendant: reject all - ${header}`, () => {
+describe('Defendant: reject all - ' + header, () => {
 
   attachDefaultHooks(app)
 
@@ -35,6 +39,8 @@ describe(`Defendant: reject all - ${header}`, () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
+
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
 
       context('when service is unhealthy', () => {
         it('should return 500 and render error page when cannot retrieve claim by external id', async () => {
@@ -82,6 +88,8 @@ describe(`Defendant: reject all - ${header}`, () => {
         idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
 
+      verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
+
       context('when service is unhealthy', () => {
         it('should return 500 and render error page when cannot retrieve claim by external id', async () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
@@ -108,7 +116,7 @@ describe(`Defendant: reject all - ${header}`, () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-rejection')
           draftStoreServiceMock.resolveFind('mediation')
-          draftStoreServiceMock.rejectSave()
+          draftStoreServiceMock.rejectUpdate()
 
           await request(app)
             .post(pagePath)
@@ -166,7 +174,7 @@ function testValidPost (paidDifference: number, admissionsEnabled: boolean, redi
     })
     draftStoreServiceMock.resolveFind('response:full-rejection')
     draftStoreServiceMock.resolveFind('mediation')
-    draftStoreServiceMock.resolveSave()
+    draftStoreServiceMock.resolveUpdate()
 
     await request(app)
       .post(pagePath)

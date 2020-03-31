@@ -17,12 +17,16 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
 import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
+import {
+  verifyRedirectForGetWhenAlreadyPaidInFull,
+  verifyRedirectForPostWhenAlreadyPaidInFull
+} from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const expectedText: string = 'Briefly explain why you can’t pay immediately'
 
 const pagePath = StatementOfMeansPaths.explanationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
-describe('Statement of means: Briefly explain why cannot page immediately page', () => {
+describe('Statement of means: Briefly explain why cannot pay immediately page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
@@ -37,6 +41,7 @@ describe('Statement of means: Briefly explain why cannot page immediately page',
 
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
 
       context('when response not submitted', () => {
         it('should return 500 and render error page when cannot retrieve claims', async () => {
@@ -84,6 +89,7 @@ describe('Statement of means: Briefly explain why cannot page immediately page',
 
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
 
       context('when response not submitted', () => {
         context('when form is invalid', () => {
@@ -112,7 +118,7 @@ describe('Statement of means: Briefly explain why cannot page immediately page',
           it('should return 500 and render error page when form is valid and cannot save draft', async () => {
             draftStoreServiceMock.resolveFind('response:full-admission')
             draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.rejectSave()
+            draftStoreServiceMock.rejectUpdate()
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
@@ -125,7 +131,7 @@ describe('Statement of means: Briefly explain why cannot page immediately page',
           it('should redirect to task list page when form is valid and everything is fine', async () => {
             draftStoreServiceMock.resolveFind('response:full-admission')
             draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)

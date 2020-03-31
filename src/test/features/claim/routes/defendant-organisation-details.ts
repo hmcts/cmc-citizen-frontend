@@ -37,7 +37,7 @@ describe('defendant as organisation details page', () => {
       await request(app)
         .get(ClaimPaths.defendantOrganisationDetailsPage.uri)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.successful.withText('Organisation details'))
+        .expect(res => expect(res).to.be.successful.withText('Enter organisation details'))
     })
   })
 
@@ -57,7 +57,7 @@ describe('defendant as organisation details page', () => {
           .post(ClaimPaths.defendantOrganisationDetailsPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send(nameMissingInput)
-          .expect(res => expect(res).to.be.successful.withText('Organisation details', 'div class="error-summary"', 'Enter name'))
+          .expect(res => expect(res).to.be.successful.withText('Enter organisation details', 'div class="error-summary"', 'Enter name'))
       })
       describe('should render page with error when address is invalid', () => {
         beforeEach(() => {
@@ -69,7 +69,7 @@ describe('defendant as organisation details page', () => {
             .post(ClaimPaths.defendantOrganisationDetailsPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
             .send(invalidAddressInput)
-            .expect(res => expect(res).to.be.successful.withText('Organisation details', 'div class="error-summary"', 'Enter first address line'))
+            .expect(res => expect(res).to.be.successful.withText('Enter organisation details', 'div class="error-summary"', 'Enter first address line'))
         })
         it('city is missing', async () => {
           const invalidAddressInput = { ...input, ...{ address: { line1: 'Apartment 99', line2: '', line3: '', city: '', postcode: 'SE28 0JE' } } }
@@ -77,7 +77,7 @@ describe('defendant as organisation details page', () => {
             .post(ClaimPaths.defendantOrganisationDetailsPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
             .send(invalidAddressInput)
-            .expect(res => expect(res).to.be.successful.withText('Organisation details', 'div class="error-summary"', 'Enter a valid town/city'))
+            .expect(res => expect(res).to.be.successful.withText('Enter organisation details', 'div class="error-summary"', 'Enter a valid town/city'))
         })
         it('postcode is missing', async () => {
           const invalidAddressInput = { ...input, ...{ address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: '' } } }
@@ -85,7 +85,7 @@ describe('defendant as organisation details page', () => {
             .post(ClaimPaths.defendantOrganisationDetailsPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
             .send(invalidAddressInput)
-            .expect(res => expect(res).to.be.successful.withText('Organisation details', 'div class="error-summary"', 'Enter postcode'))
+            .expect(res => expect(res).to.be.successful.withText('Enter organisation details', 'div class="error-summary"', 'Enter postcode'))
         })
       })
 
@@ -99,7 +99,7 @@ describe('defendant as organisation details page', () => {
             .post(ClaimPaths.defendantOrganisationDetailsPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
             .send(invalidCorrespondenceAddressInput)
-            .expect(res => expect(res).to.be.successful.withText('Organisation details', 'div class="error-summary"', 'Enter first correspondence address line'))
+            .expect(res => expect(res).to.be.successful.withText('Enter organisation details', 'div class="error-summary"', 'Enter first correspondence address line'))
         })
         it('city is missing', async () => {
           const invalidCorrespondenceAddressInput = { ...input, ...{ hasCorrespondenceAddress: 'true', correspondenceAddress: { line1: 'Apartment 99', line2: '', line3: '', city: '', postcode: 'SE28 0JE' } } }
@@ -107,7 +107,7 @@ describe('defendant as organisation details page', () => {
             .post(ClaimPaths.defendantOrganisationDetailsPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
             .send(invalidCorrespondenceAddressInput)
-            .expect(res => expect(res).to.be.successful.withText('Organisation details', 'div class="error-summary"', 'Enter correspondence town/city'))
+            .expect(res => expect(res).to.be.successful.withText('Enter organisation details', 'div class="error-summary"', 'Enter correspondence town/city'))
         })
         it('postcode is missing', async () => {
           const invalidCorrespondenceAddressInput = { ...input, ...{ hasCorrespondenceAddress: 'true', correspondenceAddress: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: '' } } }
@@ -115,13 +115,13 @@ describe('defendant as organisation details page', () => {
             .post(ClaimPaths.defendantOrganisationDetailsPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
             .send(invalidCorrespondenceAddressInput)
-            .expect(res => expect(res).to.be.successful.withText('Organisation details', 'div class="error-summary"', 'Enter correspondence address postcode'))
+            .expect(res => expect(res).to.be.successful.withText('Enter organisation details', 'div class="error-summary"', 'Enter correspondence address postcode'))
         })
       })
 
-      it('should redirect to mobile phone page when including contact person ', async () => {
+      it('should redirect to phone page when including contact person ', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
         await request(app)
           .post(ClaimPaths.defendantOrganisationDetailsPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
@@ -129,10 +129,10 @@ describe('defendant as organisation details page', () => {
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.defendantEmailPage.uri))
       })
 
-      it('should redirect to mobile phone page when contact person is not included', async () => {
+      it('should redirect to phone page when contact person is not included', async () => {
         const noContactPersonInput = { ...input, ...{ contactPerson: '' } }
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
         await request(app)
           .post(ClaimPaths.defendantOrganisationDetailsPage.uri)
           .set('Cookie', `${cookieName}=ABC`)

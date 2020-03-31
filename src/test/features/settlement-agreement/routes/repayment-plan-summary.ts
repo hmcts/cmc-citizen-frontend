@@ -15,6 +15,8 @@ import * as settlementAgreementServiceMock from 'test/http-mocks/settlement-agre
 
 import { Paths } from 'settlement-agreement/paths'
 
+import { verifyRedirectForGetWhenAlreadyPaidInFull } from 'test/app/guards/alreadyPaidInFullGuard'
+
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.repaymentPlanSummary.evaluateUri({ externalId: externalId })
@@ -49,9 +51,7 @@ describe('Settlement agreement: repayment plan summary page', () => {
             claimantResponse: {  // guarded
               type: 'ACCEPTATION',
               formaliseOption: 'SETTLEMENT',
-              courtDetermination: {
-
-              }
+              courtDetermination: {}
             }
           })
           await request(app)
@@ -69,15 +69,23 @@ describe('Settlement agreement: repayment plan summary page', () => {
             claimantResponse: {  // guarded
               type: 'ACCEPTATION',
               formaliseOption: 'SETTLEMENT',
-              courtDetermination: {
-
-              }
+              courtDetermination: {}
             }
           })
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('The court’s repayment plan'))
+        })
+
+        verifyRedirectForGetWhenAlreadyPaidInFull(pagePath, {
+          settlement: {
+            ...settlementAgreementServiceMock.sampleSettlementAgreementOffer
+          },
+          claimantResponse: {
+            type: 'ACCEPTATION',
+            formaliseOption: 'SETTLEMENT'
+          }
         })
       })
     })

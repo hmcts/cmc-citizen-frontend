@@ -11,17 +11,18 @@ import { RoutablePath } from 'shared/router/routablePath'
 import { Paths as EligibilityPaths } from 'eligibility/paths'
 import { ErrorPaths as ClaimIssueErrorPaths, Paths as ClaimIssuePaths } from 'claim/paths'
 import { ErrorPaths as DefendantFirstContactErrorPaths, Paths as DefendantFirstContactPaths } from 'first-contact/paths'
-import { FullAdmissionPaths, Paths as DefendantResponsePaths, StatementOfMeansPaths } from 'response/paths'
+import { FullAdmissionPaths, Paths, Paths as DefendantResponsePaths, StatementOfMeansPaths } from 'response/paths'
 import { Paths as ClaimantResponsePaths } from 'claimant-response/paths'
 import { Paths as CCJPaths } from 'ccj/paths'
 import { Paths as OfferPaths } from 'offer/paths'
 import { Paths as PaidInFullPaths } from 'paid-in-full/paths'
 import { Paths as MediationPaths } from 'mediation/paths'
 import { Paths as DirectionQuestionnairePaths } from 'directions-questionnaire/paths'
+import { Paths as OrdersPaths } from 'orders/paths'
 
 import 'test/a11y/mocks'
 import { app } from 'main/app'
-import { MadeBy } from 'offer/form/models/madeBy'
+import { MadeBy } from 'claims/models/madeBy'
 
 app.locals.csrf = 'dummy-token'
 
@@ -30,7 +31,8 @@ const cookieName: string = config.get<string>('session.cookieName')
 const agent = supertest(app)
 
 interface Issue {
-  type
+  type,
+  code
 }
 
 async function runPa11y (url: string): Promise<Issue[]> {
@@ -43,6 +45,8 @@ async function runPa11y (url: string): Promise<Issue[]> {
     }
   })
   return result.issues
+    .filter((issue: Issue) => issue.code !== 'WCAG2AA.Principle2.Guideline2_4.2_4_1.H64.1')
+    .filter((issue: Issue) => issue.code !== 'WCAG2AA.Principle4.Guideline4_1.4_1_2.H91.A.NoContent')
 }
 
 function check (uri: string): void {
@@ -89,9 +93,11 @@ function ensureNoAccessibilityErrors (issues: Issue[]): void {
   expect(errors, `\n${JSON.stringify(errors, null, 2)}\n`).to.be.empty
 }
 
-const excludedPaths: DefendantResponsePaths[] = [
+const excludedPaths: Paths[] = [
+  ClaimIssuePaths.finishPaymentController,
   ClaimIssuePaths.startPaymentReceiver,
   ClaimIssuePaths.finishPaymentReceiver,
+  ClaimIssuePaths.initiatePaymentController,
   ClaimIssuePaths.receiptReceiver,
   ClaimIssuePaths.sealedClaimPdfReceiver,
   DefendantResponsePaths.receiptReceiver,
@@ -99,10 +105,14 @@ const excludedPaths: DefendantResponsePaths[] = [
   OfferPaths.agreementReceiver,
   DefendantFirstContactPaths.receiptReceiver,
   ClaimantResponsePaths.receiptReceiver,
+  DirectionQuestionnairePaths.claimantHearingRequirementsReceiver,
   ClaimantResponsePaths.courtOfferedSetDatePage,
   DirectionQuestionnairePaths.hearingDatesDeleteReceiver,
   DirectionQuestionnairePaths.hearingDatesReplaceReceiver,
-  DirectionQuestionnairePaths.hearingDatesPage
+  DirectionQuestionnairePaths.hearingDatesPage,
+  OrdersPaths.reviewOrderReceiver,
+  OrdersPaths.directionsOrderDocument,
+  MediationPaths.mediationAgreementDocument
 ]
 
 describe('Accessibility', () => {
@@ -135,4 +145,5 @@ describe('Accessibility', () => {
   checkPaths(PaidInFullPaths)
   checkPaths(MediationPaths)
   checkPaths(DirectionQuestionnairePaths)
+  checkPaths(OrdersPaths)
 })

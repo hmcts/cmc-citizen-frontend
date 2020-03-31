@@ -82,14 +82,17 @@ export class IdamClient {
       })
   }
 
-  static invalidateSession (jwt: string): Promise<void> {
+  static invalidateSession (jwt: string, bearerToken: string): Promise<void> {
     if (!jwt) {
       return Promise.reject(new Error('JWT is required'))
     }
 
     const options = {
       method: 'DELETE',
-      uri: `${config.get('idam.api.url')}/session/${jwt}`
+      uri: `${config.get('idam.api.url')}/session/${jwt}`,
+      headers: {
+        Authorization: `Bearer ${bearerToken}`
+      }
     }
 
     request(options)

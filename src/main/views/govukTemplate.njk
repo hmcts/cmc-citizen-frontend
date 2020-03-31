@@ -72,6 +72,10 @@
   <main id="content" role="main">
     {% include "includes/phase_banner_beta.njk" %}
 
+    <div>
+      {% block warning_message %}{% endblock %}
+    </div>
+
     {% if form %}
       {% from "form.njk" import errorSummary %}
       {{ errorSummary(form) }}
@@ -91,8 +95,10 @@
     {% endif %}
 
     {% block content %}{% endblock %}
+    {% block contactForHelp %}
+       {% include "includes/contact-us-for-help.njk" %}
+    {% endblock %}
 
-    {% include "includes/report_problem_link.njk" %}
   </main>
 
   <footer class="group js-footer" id="footer" role="contentinfo">

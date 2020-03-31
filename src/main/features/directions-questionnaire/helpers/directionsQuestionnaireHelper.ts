@@ -1,4 +1,4 @@
-import { MadeBy } from 'offer/form/models/madeBy'
+import { MadeBy } from 'claims/models/madeBy'
 import { Claim } from 'main/app/claims/models/claim'
 import { User } from 'main/app/idam/user'
 

@@ -7,12 +7,11 @@ export class Paths {
   static readonly taskListPage = new RoutablePath(`${responsePath}/task-list`)
   static readonly defendantYourDetailsPage = new RoutablePath(`${responsePath}/your-details`)
   static readonly defendantDateOfBirthPage = new RoutablePath(`${responsePath}/your-dob`)
-  static readonly defendantMobilePage = new RoutablePath(`${responsePath}/your-mobile`)
+  static readonly defendantPhonePage = new RoutablePath(`${responsePath}/your-phone`)
   static readonly moreTimeRequestPage = new RoutablePath(`${responsePath}/more-time-request`)
   static readonly moreTimeConfirmationPage = new RoutablePath(`${responsePath}/more-time-confirmation`)
   static readonly responseTypePage = new RoutablePath(`${responsePath}/response-type`)
   static readonly defencePage = new RoutablePath(`${responsePath}/your-defence`)
-  static readonly freeMediationPage = new RoutablePath(`${responsePath}/free-mediation`)
   static readonly checkAndSendPage = new RoutablePath(`${responsePath}/check-and-send`)
   static readonly confirmationPage = new RoutablePath(`${responsePath}/confirmation`)
   static readonly counterClaimPage = new RoutablePath(`${responsePath}/counter-claim`)
@@ -31,6 +30,7 @@ export class Paths {
   static readonly claimDetailsPage = new RoutablePath(`${responsePath}/claim-details`)
   static readonly summaryPage = new RoutablePath(`${responsePath}/summary`)
   static readonly sendCompanyFinancialDetailsPage = new RoutablePath(`${responsePath}/send-company-financial-details`)
+
 }
 
 const statementOfMeansPath = `${responsePath}/statement-of-means`

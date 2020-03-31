@@ -2,11 +2,13 @@ require('ts-node/register')
 require('tsconfig-paths/register')
 
 const ProxySettings = require('./src/integration-test/config/proxy-settings').ProxySettings
-const bootstrapFn = require('./src/integration-test/bootstrap/bootstrap')
+const bootstrapFn = require('./src/integration-test/bootstrap/bootstrap').bootstrapAll
+const tearDownFn = require('./src/integration-test/bootstrap/teardown').teardownAll
 
 exports.config = {
   name: 'citizen-integration-tests',
   bootstrapAll: bootstrapFn,
+  teardownAll: tearDownFn,
   tests: './src/integration-test/tests/**/*_test.*',
   output: './output',
   timeout: 10000,
@@ -22,6 +24,7 @@ exports.config = {
       browser: process.env.BROWSER || 'chrome',
       url: process.env.CITIZEN_APP_URL || 'https://localhost:3000',
       waitForTimeout: 15000,
+      restart: false,
       desiredCapabilities: {
         proxy: new ProxySettings()
       }

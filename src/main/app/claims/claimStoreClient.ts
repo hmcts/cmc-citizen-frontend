@@ -15,6 +15,9 @@ import { DraftPaidInFull } from 'paid-in-full/draft/draftPaidInFull'
 import { ClaimantResponseConverter } from 'claims/converters/claimantResponseConverter'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
+import { OrdersDraft } from 'orders/draft/ordersDraft'
+import { OrdersConverter } from 'claims/ordersConverter'
+import { ReviewOrder } from 'claims/models/reviewOrder'
 
 export const claimApiBaseUrl: string = `${config.get<string>('claim-store.url')}`
 export const claimStoreApiUrl: string = `${claimApiBaseUrl}/claims`
@@ -75,6 +78,53 @@ export class ClaimStoreClient {
       })
   }
 
+  createCitizenClaim (draft: Draft<DraftClaim>, claimant: User, ...features: string[]): Promise<Claim> {
+    const convertedDraftClaim = ClaimModelConverter.convert(draft.document)
+
+    return this.request
+      .put(`${claimStoreApiUrl}/create-citizen-claim`, {
+        body: convertedDraftClaim,
+        headers: buildCaseSubmissionHeaders(claimant, features)
+      })
+      .then(claim => {
+        return new Claim().deserialize(claim)
+      })
+      .catch((err) => {
+        if (err.statusCode === HttpStatus.CONFLICT) {
+          logger.warn(`Claim ${draft.document.externalId} appears to have been saved successfully on initial timed out attempt, retrieving the saved instance`)
+          return this.retrieveByExternalId(draft.document.externalId, claimant)
+        } else {
+          throw err
+        }
+      })
+  }
+
+  initiatePayment (draft: Draft<DraftClaim>, claimant: User): Promise<string> {
+    const convertedDraftClaim = ClaimModelConverter.convert(draft.document)
+
+    return this.request
+      .post(`${claimStoreApiUrl}/initiate-citizen-payment`, {
+        body: convertedDraftClaim,
+        headers: buildCaseSubmissionHeaders(claimant, [])
+      })
+      .then(response => {
+        return response.nextUrl
+      })
+  }
+
+  resumePayment (draft: Draft<DraftClaim>, claimant: User): Promise<string> {
+    const convertedDraftClaim = ClaimModelConverter.convert(draft.document)
+
+    return this.request
+      .put(`${claimStoreApiUrl}/resume-citizen-payment`, {
+        body: convertedDraftClaim,
+        headers: buildCaseSubmissionHeaders(claimant, [])
+      })
+      .then(response => {
+        return response.nextUrl
+      })
+  }
+
   saveResponseForUser (claim: Claim, draft: Draft<ResponseDraft>, mediationDraft: Draft<MediationDraft>, directionsQuestionnaireDraft: Draft<DirectionsQuestionnaireDraft>, user: User): Promise<void> {
     const response = ResponseModelConverter.convert(draft.document, mediationDraft.document, directionsQuestionnaireDraft.document, claim)
     const externalId: string = claim.externalId
@@ -91,6 +141,25 @@ export class ClaimStoreClient {
     return requestPromiseApi(options).then(function () {
       return Promise.resolve()
     })
+  }
+
+  saveOrder (ordersDraft: OrdersDraft, claim: Claim, user: User): Promise<Claim> {
+    const reviewOrder: ReviewOrder = OrdersConverter.convert(ordersDraft, claim, user)
+    const externalId: string = ordersDraft.externalId
+
+    const options = {
+      method: 'PUT',
+      uri: `${claimStoreApiUrl}/${externalId}/review-order`,
+      body: reviewOrder,
+      headers: {
+        Authorization: `Bearer ${user.bearerToken}`
+      }
+    }
+
+    return requestPromiseApi(options)
+      .then(claim => {
+        return new Claim().deserialize(claim)
+      })
   }
 
   retrieveByClaimantId (user: User): Promise<Claim[]> {
@@ -246,9 +315,9 @@ export class ClaimStoreClient {
     })
   }
 
-  saveClaimantResponse (claim: Claim, draft: Draft<DraftClaimantResponse>, user: User): Promise<void> {
+  saveClaimantResponse (claim: Claim, draft: Draft<DraftClaimantResponse>, mediationDraft: Draft<MediationDraft>, user: User, directionsQuestionnaireDraft?: DirectionsQuestionnaireDraft): Promise<void> {
     const isDefendantBusiness = claim.claimData.defendant.isBusiness()
-    const response = ClaimantResponseConverter.convertToClaimantResponse(draft.document, isDefendantBusiness)
+    const response = ClaimantResponseConverter.convertToClaimantResponse(claim, draft.document, mediationDraft.document, isDefendantBusiness, directionsQuestionnaireDraft)
     const externalId: string = claim.externalId
 
     const options = {

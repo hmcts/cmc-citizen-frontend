@@ -2,7 +2,7 @@
 {% from "form.njk" import csrfProtection, radioGroup, saveAndContinueButton, errorSummary %}
 {% from "table.njk" import tableStart, tableEnd, row, rowWithMultipleValue %}
 
-{% set heading = 'Why do you reject the claim?' %}
+{% set heading = t('Why do you believe you don’t owe {{ claimantName }} any money?', { claimantName: claimantName }) %}
 
 {% block content %}
   <div class="grid-row">

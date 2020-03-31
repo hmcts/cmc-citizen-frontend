@@ -19,7 +19,7 @@ export interface PartialAdmissionResponse extends ResponseCommon {
   freeMediation?: YesNoOption,
   paymentIntention?: PaymentIntention
   statementOfMeans?: StatementOfMeans,
-  directionsQuestionnaire: DirectionsQuestionnaire
+  directionsQuestionnaire?: DirectionsQuestionnaire
 }
 
 export namespace PartialAdmissionResponse {
@@ -45,7 +45,7 @@ export namespace PartialAdmissionResponse {
       paymentIntention: PaymentIntention.deserialize(input.paymentIntention),
       statementOfMeans: input.statementOfMeans,
       directionsQuestionnaire: input.directionsQuestionnaire &&
-        DirectionsQuestionnaire.deserialize(input.directionsQuestionnaire)
+        DirectionsQuestionnaire.fromObject(input.directionsQuestionnaire)
     }
   }
 }

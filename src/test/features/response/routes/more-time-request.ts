@@ -17,6 +17,10 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
 import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
+import {
+  verifyRedirectForGetWhenAlreadyPaidInFull,
+  verifyRedirectForPostWhenAlreadyPaidInFull
+} from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = ResponsePaths.moreTimeRequestPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -36,6 +40,7 @@ describe('Defendant response: more time needed page', () => {
 
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
 
       context('when response not submitted', () => {
         describe('should render editable page', async () => {
@@ -106,6 +111,7 @@ describe('Defendant response: more time needed page', () => {
 
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
 
       context('when response not submitted', () => {
         it('should redirect to confirmation page when more time already requested', async () => {
@@ -141,7 +147,7 @@ describe('Defendant response: more time needed page', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: undefined } })
             draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
 
             await request(app)
               .post(pagePath)
@@ -156,7 +162,7 @@ describe('Defendant response: more time needed page', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: undefined } })
             draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
             claimStoreServiceMock.resolveRequestForMoreTime()
 
             await request(app)
@@ -172,7 +178,7 @@ describe('Defendant response: more time needed page', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: undefined } })
             draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.rejectSave()
+            draftStoreServiceMock.rejectUpdate()
 
             await request(app)
               .post(pagePath)
@@ -194,7 +200,7 @@ describe('Defendant response: more time needed page', () => {
           it('should return 500 when "yes" is selected and cannot request more time', async () => {
             draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: undefined } })
             draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             claimStoreServiceMock.rejectRequestForMoreTime('internal server error when requesting more time')
 

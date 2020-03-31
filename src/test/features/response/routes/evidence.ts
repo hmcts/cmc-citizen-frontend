@@ -17,6 +17,10 @@ import { EvidenceType } from 'forms/models/evidenceType'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
 import { ResponseType } from 'response/form/models/responseType'
+import {
+  verifyRedirectForGetWhenAlreadyPaidInFull,
+  verifyRedirectForPostWhenAlreadyPaidInFull
+} from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = Paths.evidencePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -39,6 +43,7 @@ describe('Defendant response: evidence', () => {
 
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
 
       context('when response and CCJ not submitted', () => {
 
@@ -89,6 +94,7 @@ describe('Defendant response: evidence', () => {
 
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
 
       describe('errors are handled properly', () => {
 
@@ -119,7 +125,7 @@ describe('Defendant response: evidence', () => {
           it('impactOfDisputePage when it is not FULL DEFENCE', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response', { response: { type: ResponseType.PART_ADMISSION } })
-            draftStoreServiceMock.resolveSave(100)
+            draftStoreServiceMock.resolveUpdate(100)
             draftStoreServiceMock.resolveFind('mediation')
 
             await request(app)
@@ -133,7 +139,7 @@ describe('Defendant response: evidence', () => {
           it('taskListPage when it is FULL DEFENCE', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response')
-            draftStoreServiceMock.resolveSave(100)
+            draftStoreServiceMock.resolveUpdate(100)
             draftStoreServiceMock.resolveFind('mediation')
 
             await request(app)
@@ -147,7 +153,7 @@ describe('Defendant response: evidence', () => {
           it('taskListPage when it is PART ADMISSION', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response:partial-admission', { response: { type: ResponseType.PART_ADMISSION } })
-            draftStoreServiceMock.resolveSave(100)
+            draftStoreServiceMock.resolveUpdate(100)
             draftStoreServiceMock.resolveFind('mediation')
 
             await request(app)

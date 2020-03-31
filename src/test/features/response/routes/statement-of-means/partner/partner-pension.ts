@@ -12,6 +12,10 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { StatementOfMeansPaths as Paths } from 'response/paths'
 import { app } from 'main/app'
 import { PartnerPensionOption, ValidationErrors } from 'response/form/models/statement-of-means/partnerPension'
+import {
+  verifyRedirectForGetWhenAlreadyPaidInFull,
+  verifyRedirectForPostWhenAlreadyPaidInFull
+} from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -30,6 +34,8 @@ describe('Statement of means', () => {
         beforeEach(() => {
           idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
         })
+
+        verifyRedirectForGetWhenAlreadyPaidInFull(partnerPensionPage)
 
         it('should return error page when unable to retrieve claim', async () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('Error')
@@ -75,6 +81,8 @@ describe('Statement of means', () => {
           idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
         })
 
+        verifyRedirectForPostWhenAlreadyPaidInFull(partnerPensionPage)
+
         it('should return error page when unable to retrieve claim', async () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('Error')
 
@@ -98,7 +106,7 @@ describe('Statement of means', () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
           draftStoreServiceMock.resolveFind('mediation')
-          draftStoreServiceMock.rejectSave()
+          draftStoreServiceMock.rejectUpdate()
 
           await request(app)
             .post(partnerPensionPage)
@@ -111,7 +119,7 @@ describe('Statement of means', () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
           draftStoreServiceMock.resolveFind('mediation')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .post(partnerPensionPage)

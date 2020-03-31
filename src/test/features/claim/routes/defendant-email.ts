@@ -55,7 +55,7 @@ describe('Claim issue: defendant email page', () => {
 
       it('should return 500 and render error page when form is valid and cannot save draft', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.rejectSave()
+        draftStoreServiceMock.rejectUpdate()
 
         await request(app)
           .post(ClaimPaths.defendantEmailPage.uri)
@@ -64,26 +64,26 @@ describe('Claim issue: defendant email page', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should redirect to task list when form is valid and everything is fine', async () => {
+      it('should redirect to defendant phone page when form is valid and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
 
         await request(app)
           .post(ClaimPaths.defendantEmailPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ address: 'defendant@example.com' })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.taskListPage.uri))
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.defendantPhonePage.uri))
       })
 
-      it('should redirect to task list when no email address is given', async () => {
+      it('should redirect to defendant phone page when no email address is given', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
 
         await request(app)
           .post(ClaimPaths.defendantEmailPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ address: '' })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.taskListPage.uri))
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.defendantPhonePage.uri))
       })
     })
   })

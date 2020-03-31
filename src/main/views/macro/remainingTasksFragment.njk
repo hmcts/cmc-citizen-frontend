@@ -1,0 +1,15 @@
+{% macro remainingTasksFragment(tasks, backLink) %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <p>{{ t('You still need to complete:') }}</p>
+
+      <ul class="list list-bullet">
+        {% for item in tasks %}
+          <li>{{ t(item.name) }}</li>
+        {% endfor %}
+      </ul>
+
+      <a href="{{ backLink }}">{{ t('Back to task list') }}</a>
+    </div>
+  </div>
+{% endmacro %}

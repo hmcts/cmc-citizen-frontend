@@ -1,0 +1,6 @@
+export enum HearingCourtType {
+  EDMONTON = 'N182TN',
+  MANCHESTER = 'M609DJ',
+  BIRMINGHAM = 'B11AA',
+  CLERKENWELL = 'EC1V3RE'
+}

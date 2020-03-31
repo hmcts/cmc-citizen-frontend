@@ -22,12 +22,17 @@ variable "ga_tracking_id" {
   default = "UA-97111056-1"
 }
 
+variable "http_timeout" {
+  description = "Downstream request timeout in ms"
+  default = "10000"
+}
+
 variable "payments_api_url" {
-  default = "http://payment-api-saat.service.core-compute-saat.internal"
+  default = "http://payment-api-aat.service.core-compute-aat.internal"
 }
 
 variable "fees_api_url" {
-  default = "http://fees-register-api-saat.service.core-compute-saat.internal"
+  default = "http://fees-register-api-aat.service.core-compute-aat.internal"
 }
 
 variable "idam_api_url" {
@@ -81,6 +86,18 @@ variable "feature_new_dashboard_status" {
   default = "false"
 }
 
+variable "feature_mediation_pilot" {
+  default = "false"
+}
+
+variable "feature_web_chat" {
+  default = "false"
+}
+
+variable "feature_inversionOfControl" {
+  default = "false"
+}
+
 variable "jenkins_AAD_objectId" {
   type                        = "string"
   description                 = "(Required) The Azure AD object ID of a user, service principal or security group in the Azure Active Directory tenant for the vault. The object ID must be unique for the list of access policies."
@@ -88,10 +105,6 @@ variable "jenkins_AAD_objectId" {
 
 variable "tenant_id" {
   description = "(Required) The Azure Active Directory tenant ID that should be used for authenticating requests to the key vault. This is usually sourced from environemnt variables and not normally required to be specified."
-}
-
-variable "client_id" {
-  description = "(Required) The object ID of a user, service principal or security group in the Azure Active Directory tenant for the vault. The object ID must be unique for the list of access policies. This is usually sourced from environment variables and not normally required to be specified."
 }
 
 variable "node_env" {
@@ -128,4 +141,8 @@ variable "log_level" {
 
 variable "node_debug" {
   default = ""
+}
+
+variable "enable_ase" {
+  default = false
 }

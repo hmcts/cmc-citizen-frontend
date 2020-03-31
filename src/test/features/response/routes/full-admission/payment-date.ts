@@ -8,7 +8,7 @@ import { attachDefaultHooks } from 'test/routes/hooks'
 import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
 import { checkAlreadySubmittedGuard } from 'test/common/checks/already-submitted-check'
 
-import { Paths, FullAdmissionPaths } from 'response/paths'
+import { FullAdmissionPaths, Paths } from 'response/paths'
 
 import { app } from 'main/app'
 
@@ -20,6 +20,10 @@ import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-r
 import * as moment from 'moment'
 import { ValidationErrors } from 'shared/components/payment-intention/model/paymentDate'
 import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
+import {
+  verifyRedirectForGetWhenAlreadyPaidInFull,
+  verifyRedirectForPostWhenAlreadyPaidInFull
+} from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = FullAdmissionPaths.paymentDatePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -53,6 +57,7 @@ describe('Pay by set date: payment date', () => {
 
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
 
       context('when guards are satisfied', () => {
         beforeEach(() => {
@@ -76,7 +81,6 @@ describe('Pay by set date: payment date', () => {
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('What date will you pay on?'))
-            .expect(res => expect(res).to.be.successful.withoutText('<div class="panel">'))
         })
       })
     })
@@ -94,6 +98,7 @@ describe('Pay by set date: payment date', () => {
 
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
 
       context('when guards are satisfied', () => {
         beforeEach(() => {
@@ -112,7 +117,7 @@ describe('Pay by set date: payment date', () => {
         it('should render error page when unable to save draft', async () => {
           draftStoreServiceMock.resolveFind('response:full-admission', draft)
           draftStoreServiceMock.resolveFind('mediation')
-          draftStoreServiceMock.rejectSave()
+          draftStoreServiceMock.rejectUpdate()
 
           await request(app)
             .post(pagePath)
@@ -128,14 +133,14 @@ describe('Pay by set date: payment date', () => {
           await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .send({ })
+            .send({})
             .expect(res => expect(res).to.be.successful.withText(ValidationErrors.DATE_REQUIRED))
         })
 
         it('should redirect to task list when data is valid and user provides a date within 28 days from today', async () => {
           draftStoreServiceMock.resolveFind('response:full-admission', draft)
           draftStoreServiceMock.resolveFind('mediation')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .post(pagePath)
