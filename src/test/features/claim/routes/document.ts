@@ -44,7 +44,7 @@ describe('Document Download', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', Paths.documentPage.evaluateUri({ externalId: externalId, documentId: '3f1813ee-5b60-43fd-9160-fa92605dfd6e' }))
+    checkAuthorizationGuards(app, 'get', Paths.documentPage.evaluateUri({ externalId: externalId, documentURI: 'sealed-claim' }))
 
     describe('for authorized user', () => {
       beforeEach(() => {
@@ -53,7 +53,7 @@ describe('Document Download', () => {
 
       it('should return 500 and render error page when cannot retrieve claim by external id', async () => {
         await request(app)
-          .get(Paths.documentPage.evaluateUri({ externalId: externalId, documentId: '3f1813ee-5b60-43fd-9160-fa92605dfd6e' }))
+          .get(Paths.documentPage.evaluateUri({ externalId: externalId, documentURI: 'sealed-claim' }))
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -64,7 +64,7 @@ describe('Document Download', () => {
         claimStoreServiceMock.rejectRetrieveDocument('Something went wrong')
 
         await request(app)
-          .get(Paths.documentPage.evaluateUri({ externalId: externalId, documentId: '3f1813ee-5b60-43fd-9160-fa92605dfd6e' }))
+          .get(Paths.documentPage.evaluateUri({ externalId: externalId, documentURI: 'sealed-claim' }))
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -75,7 +75,7 @@ describe('Document Download', () => {
         claimStoreServiceMock.resolveRetrieveDocument()
 
         await request(app)
-          .get(Paths.documentPage.evaluateUri({ externalId: externalId, documentId: '3f1813ee-5b60-43fd-9160-fa92605dfd6e' }))
+          .get(Paths.documentPage.evaluateUri({ externalId: externalId, documentURI: 'sealed-claim' }))
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful)
       })

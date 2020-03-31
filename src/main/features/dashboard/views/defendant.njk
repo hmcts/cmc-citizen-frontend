@@ -26,7 +26,7 @@
   <h2 class="heading-medium">{{ t('Claim documents') }}</h2>
   {% for document in claim.claimDocuments %}
     <p>
-      {{ internalLink(document.documentDisplayName, ClaimPaths.documentPage.evaluateUri({ externalId: claim.externalId, documentId: document.id })) }}
+      {{ internalLink(document.documentDisplayName, ClaimPaths.documentPage.evaluateUri({ externalId: claim.externalId, documentURI: document.uri })) }}
       (PDF, {{ (document.size / 1024).toFixed(0) }}KB)
       <br>
       <span style="color:grey; font-size: 15px">

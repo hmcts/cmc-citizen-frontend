@@ -8,6 +8,7 @@ export class ClaimDocument {
   documentManagementBinaryUrl: string
   documentName: string
   documentType: string
+  uri: string
   documentDisplayName: string
   createdDatetime: Moment
   createdBy: string
@@ -18,8 +19,9 @@ export class ClaimDocument {
       this.id = input.id
       this.documentManagementUrl = input.documentManagementUrl
       this.documentManagementBinaryUrl = input.documentManagementBinaryUrl
-      this.documentName = input.documentName
+      this.documentName = input.documentName.replace('.pdf','')
       this.documentType = input.documentType
+      this.uri = this.getDocumentURI(input.documentType)
       this.documentDisplayName = this.getDisplayName(input.documentType)
       this.createdDatetime = MomentFactory.parse(input.createdDatetime)
       this.createdBy = input.createdBy
@@ -31,6 +33,10 @@ export class ClaimDocument {
 
   getDisplayName (documentType: string): string {
 
-    return ClaimDocumentType[documentType]
+    return ClaimDocumentType[documentType].text
+  }
+
+  getDocumentURI (documentType: string): string {
+    return ClaimDocumentType[documentType].uri
   }
 }

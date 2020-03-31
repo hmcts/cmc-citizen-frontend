@@ -26,4 +26,10 @@ describe('ClaimDocument', () => {
     expect(actual).to.be.eq('Download your hearing requirements')
   })
 
+  it('should return uri', () => {
+    const actual: string = claimDocument.getDocumentURI('CLAIMANT_DIRECTIONS_QUESTIONNAIRE')
+
+    expect(actual).to.be.eq('claimant-directions-questionnaire')
+  })
+
 })
