@@ -13,7 +13,7 @@
   <div class="form-group">
     {% if index !== 0 %}<p class="bold">{{ t('Report ' + reportNumber) }}</p>{% endif %}
     {{ textInput('Expert’s name', name = nameKey, form = form) }}
-    {{ dateInput(dateKey, form, 'When is the report dated?', 'For example, ' + ('now' | addDays(-30) | date)) }}
+    {{ dateInput(dateKey, form, 'When is the report dated?', 'For example, ' + ('now' | addDays(-30) | date), bold=false) }}
   </div>
 
 {% endmacro %}

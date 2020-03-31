@@ -13,6 +13,10 @@ import { checkAuthorizationGuards } from 'test/common/checks/authorization-check
 import { checkAlreadySubmittedGuard } from 'test/common/checks/already-submitted-check'
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
 import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
+import {
+  verifyRedirectForGetWhenAlreadyPaidInFull,
+  verifyRedirectForPostWhenAlreadyPaidInFull
+} from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId: string = claimStoreServiceMock.sampleClaimObj.externalId
@@ -36,6 +40,7 @@ describe('Defendant response: timeline', () => {
 
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
 
       context('when response and CCJ not submitted', () => {
 
@@ -86,8 +91,9 @@ describe('Defendant response: timeline', () => {
 
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
 
-      describe('errors are handled propely', () => {
+      describe('errors are handled properly', () => {
 
         it('should return 500 and render error page when cannot retrieve claim', async () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
@@ -118,7 +124,7 @@ describe('Defendant response: timeline', () => {
               claimStoreServiceMock.resolveRetrieveClaimByExternalId()
               draftStoreServiceMock.resolveFind(responseDraftType)
               draftStoreServiceMock.resolveFind('mediation')
-              draftStoreServiceMock.resolveSave(100)
+              draftStoreServiceMock.resolveUpdate(100)
 
               await request(app)
                 .post(pagePath)

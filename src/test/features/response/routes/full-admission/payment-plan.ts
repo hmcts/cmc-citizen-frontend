@@ -16,6 +16,10 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { ResponseType } from 'response/form/models/responseType'
+import {
+  verifyRedirectForGetWhenAlreadyPaidInFull,
+  verifyRedirectForPostWhenAlreadyPaidInFull
+} from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
@@ -34,6 +38,8 @@ describe('Defendant: payment page', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen', 'claimant')
       })
+
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
 
       context('when user authorised', () => {
         it('should return 500 and render error page when cannot retrieve claims', async () => {
@@ -91,6 +97,8 @@ describe('Defendant: payment page', () => {
         idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
 
+      verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
+
       it('should return 500 and render error page when cannot retrieve claim', async () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
@@ -121,7 +129,7 @@ describe('Defendant: payment page', () => {
             }
           })
           draftStoreServiceMock.resolveFind('mediation')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .post(pagePath)

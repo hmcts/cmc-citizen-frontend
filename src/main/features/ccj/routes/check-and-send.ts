@@ -26,8 +26,7 @@ import { CCJPaymentOption, PaymentType } from 'ccj/form/models/ccjPaymentOption'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentDate } from 'shared/components/payment-intention/model/paymentDate'
 import { LocalDate } from 'forms/models/localDate'
-import { ResponseType } from 'claims/models/response/responseType'
-import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
+import * as CCJHelper from 'main/common/helpers/ccjHelper'
 
 function prepareUrls (externalId: string, claim: Claim, draft: Draft<DraftCCJ>): object {
   if (claim.response && claim.isAdmissionsResponse()) {
@@ -85,9 +84,8 @@ function renderView (form: Form<Declaration>, req: express.Request, res: express
 }
 
 function calculateAmountToBePaid (claim: Claim, draft: Draft<DraftCCJ>): number {
-  if (claim.response && claim.response.responseType === ResponseType.PART_ADMISSION
-    && claim.claimantResponse && claim.claimantResponse.type === ClaimantResponseType.ACCEPTATION) {
-    return claim.response.amount - (draft.document.paidAmount.amount || 0) + claim.claimData.feeAmountInPennies / 100
+  if (CCJHelper.isPartAdmissionAcceptation(claim)) {
+    return CCJHelper.amountSettledFor(claim) - (draft.document.paidAmount.amount || 0) + CCJHelper.claimFeeInPennies(claim) / 100
   }
 
   return claim.totalAmountTillToday - (draft.document.paidAmount.amount || 0)

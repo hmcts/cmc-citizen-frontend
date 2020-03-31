@@ -3,30 +3,29 @@ import { YesNoOption } from 'main/app/claims/models/response/core/yesNoOption'
 import { ResponseDraft } from 'main/features/response/draft/responseDraft'
 import { Claim } from 'main/app/claims/models/claim'
 import { FreeMediationOption } from 'main/app/forms/models/freeMediation'
-import { CompanyDetails } from 'main/app/forms/models/companyDetails'
-import { FreeMediation } from 'forms/models/freeMediation'
+import { CompanyDetails } from 'forms/models/companyDetails'
+import { FeatureToggles } from 'utils/featureToggles'
 
 export class FreeMediationUtil {
-  static convertFreeMediation (freeMediation: FreeMediation): YesNoOption {
-    if (!freeMediation || !freeMediation.option) {
-      return YesNoOption.NO
-    } else {
-      return freeMediation.option as YesNoOption
-    }
-  }
 
   static getFreeMediation (mediationDraft: MediationDraft): YesNoOption {
-    const freeMediation = mediationDraft.youCanOnlyUseMediation
-
-    if (!freeMediation || !freeMediation.option) {
-      return YesNoOption.NO
+    if (!FeatureToggles.isEnabled('mediation') && mediationDraft.willYouTryMediation) {
+      return mediationDraft.willYouTryMediation.option as YesNoOption
     } else {
-      return freeMediation.option as YesNoOption
+      const freeMediation = mediationDraft.youCanOnlyUseMediation
+
+      if (!freeMediation || !freeMediation.option) {
+        return YesNoOption.NO
+      } else {
+        return freeMediation.option as YesNoOption
+      }
     }
   }
 
   static getMediationPhoneNumber (claim: Claim, mediationDraft: MediationDraft, draft?: ResponseDraft): string {
-    if (mediationDraft.canWeUseCompany) {
+    if (!FeatureToggles.isEnabled('mediation')) {
+      return undefined
+    } else if (mediationDraft.canWeUseCompany) {
       if (mediationDraft.canWeUseCompany.option === FreeMediationOption.YES) {
         return mediationDraft.canWeUseCompany.mediationPhoneNumberConfirmation
       } else {
@@ -35,9 +34,9 @@ export class FreeMediationUtil {
     } else if (mediationDraft.canWeUse) {
       if (mediationDraft.canWeUse.option === FreeMediationOption.YES) {
         if (!claim.isResponseSubmitted() && draft) {
-          return draft.defendantDetails.mobilePhone.number || undefined
+          return draft.defendantDetails.phone.number || undefined
         } else {
-          return claim.claimData.claimant.mobilePhone || mediationDraft.canWeUse.mediationPhoneNumber
+          return claim.claimData.claimant.phone || mediationDraft.canWeUse.mediationPhoneNumber
         }
       } else {
         return mediationDraft.canWeUse.mediationPhoneNumber
@@ -47,7 +46,9 @@ export class FreeMediationUtil {
   }
 
   static getMediationContactPerson (claim: Claim, mediationDraft: MediationDraft, draft?: ResponseDraft): string {
-    if (mediationDraft.canWeUseCompany) {
+    if (!FeatureToggles.isEnabled('mediation')) {
+      return undefined
+    } else if (mediationDraft.canWeUseCompany) {
       if (mediationDraft.canWeUseCompany.option === FreeMediationOption.YES) {
         if (!claim.isResponseSubmitted() && draft) {
           return (draft.defendantDetails.partyDetails as CompanyDetails).contactPerson || undefined

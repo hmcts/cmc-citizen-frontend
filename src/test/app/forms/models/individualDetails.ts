@@ -111,7 +111,7 @@ describe('IndividualDetails', () => {
       individualDetails.name = undefined
       individualDetails.firstName = undefined
       individualDetails.lastName = 'some name'
-      let errors: ValidationError[] = validator.validateSync(individualDetails)
+      let errors: ValidationError[] = validator.validateSync(individualDetails, { groups: ['defendant'] })
       expectValidationErrorNotPresent(errors, PartyDetailsValidationErrors.NAME_REQUIRED)
       expectValidationError(errors, SplitNamedPartyDetailsValidationErrors.FIRSTNAME_REQUIRED)
       expectValidationErrorNotPresent(errors, SplitNamedPartyDetailsValidationErrors.LASTNAME_REQUIRED)
@@ -139,7 +139,7 @@ describe('IndividualDetails', () => {
       individualDetails.name = undefined
       individualDetails.firstName = 'some name'
       individualDetails.lastName = undefined
-      let errors: ValidationError[] = validator.validateSync(individualDetails)
+      let errors: ValidationError[] = validator.validateSync(individualDetails, { groups: ['defendant'] })
       expectValidationErrorNotPresent(errors, PartyDetailsValidationErrors.NAME_REQUIRED)
       expectValidationErrorNotPresent(errors, SplitNamedPartyDetailsValidationErrors.FIRSTNAME_REQUIRED)
       expectValidationError(errors, SplitNamedPartyDetailsValidationErrors.LASTNAME_REQUIRED)
@@ -340,7 +340,7 @@ describe('IndividualDetails', () => {
       individualDetails.dateOfBirth = new DateOfBirth(true, new LocalDate(2007, 1, 1))
       individualDetails.hasCorrespondenceAddress = true
       individualDetails.correspondenceAddress = validAddress
-      expect(individualDetails.isCompleted()).to.equal(false)
+      expect(individualDetails.isCompleted('defendant')).to.equal(false)
     })
 
     it('should return false when has name is undefined and last name is undefined', () => {
@@ -351,7 +351,7 @@ describe('IndividualDetails', () => {
       individualDetails.dateOfBirth = new DateOfBirth(true, new LocalDate(2007, 1, 1))
       individualDetails.hasCorrespondenceAddress = true
       individualDetails.correspondenceAddress = validAddress
-      expect(individualDetails.isCompleted()).to.equal(false)
+      expect(individualDetails.isCompleted('defendant')).to.equal(false)
     })
 
     it('should return false when has name is undefined and first and last name are undefined', () => {

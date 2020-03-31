@@ -1,5 +1,4 @@
 {% extends "layout.njk" %}
-{% from "subheading.njk" import subheading %}
 {% from "form.njk" import csrfProtection, submitButton %}
 {% from "amountBreakdown.njk" import amountBreakdownTable %}
 {% from "summaryTable.njk" import timelineSummary, evidenceSummary %}
@@ -10,6 +9,7 @@
 {% set responseDeadline = claim.responseDeadline.format('LL') %}
 {% set referenceNumber = claim.claimNumber %}
 {% set evidenceRows = claim.claimData.evidence.getPopulatedRowsOnly() if claim.claimData.evidence %}
+{% set timelineRows = claim.claimData.timeline.getPopulatedRowsOnly() if claim.claimData.timeline %}
 
 {% block content %}
   <div class="grid-row">
@@ -22,10 +22,12 @@
       <p class="bold form-group-related">{{ t('Reason for claim:') }}</p>
       <p>{{ claim.claimData.reason }}</p>
 
-      <div class="form-group">
-        <p><span class="bold-small">{{ t('Timeline') }}</span></p>
-        {{ timelineSummary(claim.claimData.timeline.getPopulatedRowsOnly()) }}
-      </div>
+      {% if timelineRows and timelineRows.length > 0 %}
+        <div class="form-group">
+          <p><span class="bold-small">{{ t('Timeline') }}</span></p>
+          {{ timelineSummary(claim.claimData.timeline.getPopulatedRowsOnly()) }}
+        </div>
+      {% endif %}
 
       {% if evidenceRows and evidenceRows.length > 0 %}
         <div class="form-group">

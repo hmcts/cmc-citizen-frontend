@@ -15,6 +15,10 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
+import {
+  verifyRedirectForGetWhenAlreadyPaidInFull,
+  verifyRedirectForPostWhenAlreadyPaidInFull
+} from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -33,6 +37,7 @@ describe('Defendant response: when did you pay', () => {
       })
 
       checkAlreadySubmittedGuard(app, method, pagePath)
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
 
       context('when response not submitted', () => {
         it('should return 500 and render error page when cannot retrieve claim', async () => {
@@ -78,6 +83,7 @@ describe('Defendant response: when did you pay', () => {
       })
 
       checkAlreadySubmittedGuard(app, method, pagePath)
+      verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
 
       context('when response not submitted', () => {
         context('when form is invalid', () => {
@@ -106,7 +112,7 @@ describe('Defendant response: when did you pay', () => {
           it('should return 500 and render error page when form is valid and cannot save draft', async () => {
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.rejectSave()
+            draftStoreServiceMock.rejectUpdate()
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
@@ -119,7 +125,7 @@ describe('Defendant response: when did you pay', () => {
           it('should redirect to task list page when form is valid and everything is fine', async () => {
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)

@@ -12,10 +12,13 @@ import { app } from 'main/app'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
+import { verifyRedirectForGetWhenAlreadyPaidInFull } from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
-const pagePath = ResponsePaths.receiptReceiver.evaluateUri({ externalId: 'b17af4d2-273f-4999-9895-bce382fa24c8' })
+const pagePath = ResponsePaths.receiptReceiver.evaluateUri({
+  externalId: claimStoreServiceMock.sampleClaimObj.externalId
+})
 
 describe('Defendant response: receipt', () => {
   attachDefaultHooks(app)
@@ -29,14 +32,7 @@ describe('Defendant response: receipt', () => {
         idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
 
-      it('should return 500 and render error page when cannot retrieve claim by defendant id', async () => {
-        claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
-
-        await request(app)
-          .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.serverError.withText('Error'))
-      })
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
 
       it('should return 500 and render error page when cannot retrieve claim by defendant id', async () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
@@ -48,7 +44,6 @@ describe('Defendant response: receipt', () => {
       })
 
       it('should return 500 and render error page when cannot generate PDF', async () => {
-        claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse()
         claimStoreServiceMock.rejectRetrieveDocument('HTTP Error')
 
         await request(app)

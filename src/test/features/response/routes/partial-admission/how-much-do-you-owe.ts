@@ -18,6 +18,10 @@ import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-i
 import { AlreadyPaid } from 'response/form/models/alreadyPaid'
 import { YesNoOption } from 'models/yesNoOption'
 import { HowMuchDoYouOwe } from 'response/form/models/howMuchDoYouOwe'
+import {
+  verifyRedirectForGetWhenAlreadyPaidInFull,
+  verifyRedirectForPostWhenAlreadyPaidInFull
+} from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
@@ -40,6 +44,8 @@ describe('Defendant: partial admission - ' + header, () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
+
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
 
       context('when service is unhealthy', () => {
         it('should return 500 and render error page when cannot retrieve claim by external id', async () => {
@@ -94,6 +100,8 @@ describe('Defendant: partial admission - ' + header, () => {
           idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
         })
 
+        verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
+
         context('when service is unhealthy', () => {
           it('should return 500 and render error page when cannot retrieve claim by external id', async () => {
             claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
@@ -120,7 +128,7 @@ describe('Defendant: partial admission - ' + header, () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response:partial-admission')
             draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.rejectSave()
+            draftStoreServiceMock.rejectUpdate()
 
             await request(app)
               .post(pagePath)
@@ -142,7 +150,7 @@ describe('Defendant: partial admission - ' + header, () => {
 
           it('when form is valid should render page', async () => {
             draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)

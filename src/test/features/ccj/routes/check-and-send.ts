@@ -102,7 +102,7 @@ describe('CCJ: check and send page', () => {
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('£35'))
+            .expect(res => expect(res).to.be.successful.withText('£10'))
         })
 
         it('should redirect to dashboard when claim is not eligible for CCJ', async () => {
@@ -173,7 +173,7 @@ describe('CCJ: check and send page', () => {
         it('should redirect to confirmation page when signature is qualified', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('ccj')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveUpdate()
           claimStoreServiceMock.resolveSaveCcjForExternalId()
           draftStoreServiceMock.resolveDelete()
 

@@ -13,6 +13,10 @@ import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-r
 import { app } from 'main/app'
 import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
 import { BankAccountType } from 'response/form/models/statement-of-means/bankAccountType'
+import {
+  verifyRedirectForGetWhenAlreadyPaidInFull,
+  verifyRedirectForPostWhenAlreadyPaidInFull
+} from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = StatementOfMeansPaths.bankAccountsPage.evaluateUri(
@@ -37,6 +41,7 @@ describe('Defendant response: Statement of means: bank accounts', () => {
 
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
 
       context('when response and CCJ not submitted', () => {
 
@@ -87,6 +92,7 @@ describe('Defendant response: Statement of means: bank accounts', () => {
 
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
 
       describe('errors are handled properly', () => {
 
@@ -116,7 +122,7 @@ describe('Defendant response: Statement of means: bank accounts', () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
           draftStoreServiceMock.resolveFind('mediation')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .post(pagePath)

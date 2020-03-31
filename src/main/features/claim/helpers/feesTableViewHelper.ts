@@ -1,4 +1,3 @@
-import { isUndefined } from 'util'
 import { FeesClient } from 'fees/feesClient'
 import { FeeRange as MergeableRange } from 'claim/helpers/feesTableViewHelper'
 import { FeeRange as ViewFeeRange } from 'fees/models/feeRange'
@@ -78,7 +77,7 @@ export class FeesTableViewHelper {
 
     return items.reduce((feeRangeMerge: FeeRangeMerge[], item: Item) => {
       const overlappedRows: FeeRangeMerge[] = feeRangeMerge.filter((row: FeeRangeMerge) => RangeUtils.areOverlap(item.range, row))
-      if (isUndefined(item.range.amount)) {
+      if (item.range.amount === undefined) {
         throw new Error('Fee amount must be defined')
       }
       if (overlappedRows.length === 0) {
@@ -101,12 +100,12 @@ export class FeesTableViewHelper {
     const hearingFeeRangeGroup: ViewFeeRange[] = await FeesClient.getHearingFeeRangeGroup()
 
     const supportedIssueFees: MergeableRange[] = issueFeeRangeGroup
-      .filter((range: ViewFeeRange) => range.minRange < supportedFeeLimitInGBP)
+      .filter((range: ViewFeeRange) => range.minRange < supportedFeeLimitInGBP && !range.currentVersion.validTo)
       .map((range: ViewFeeRange) => new MergeableRange(
         range.minRange, Math.min(range.maxRange, supportedFeeLimitInGBP), range.currentVersion.flatAmount.amount)
       )
     const supportedHearingFees: MergeableRange[] = hearingFeeRangeGroup
-      .filter((range: ViewFeeRange) => range.minRange < supportedFeeLimitInGBP)
+      .filter((range: ViewFeeRange) => range.minRange < supportedFeeLimitInGBP && !range.currentVersion.validTo)
       .map((range: ViewFeeRange) => new MergeableRange(
         range.minRange, Math.min(range.maxRange, supportedFeeLimitInGBP), range.currentVersion.flatAmount.amount)
       )

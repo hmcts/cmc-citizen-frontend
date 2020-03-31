@@ -1,26 +1,78 @@
 {% from "externalLink.njk" import externalLink %}
 {% from "internalLink.njk" import internalLink %}
-{% from "./utilityMacros.njk" import downloadResponseLink %}
 
-{% macro partAdmitRejectedByClaimantDashboard() %}
-  {{ t('You’ve rejected the defendant’s admission.') }}
+{% from "./claimRejected.njk" import
+  mediationSuccessForClaimantClaimDetails,
+  mediationFailedForOnlineDQClaimantClaimDetails,
+  mediationFailedForOfflineDQClaimantClaimDetails %}
+
+{% macro partAdmitRejectedByClaimantDashboard(claim) %}
+  {% if claim.directionsQuestionnaireDeadline %}
+    {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.FAILED %}
+      {{ t('Mediation was unsuccessful') }}
+    {% else %}
+      {{ t('You’ve rejected the defendant’s admission.') }}
+    {% endif %}
+  {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.FAILED %}
+    {{ t('Mediation was unsuccessful') }}
+  {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
+    {{ t('You both agreed a settlement through mediation') }}
+  {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
+    {{ t('We’ll contact you to try to arrange a mediation appointment') }}
+  {% else %}
+    {{ t('Wait for the court to review the case') }}
+  {% endif %}
 {% endmacro %}
 
 {% macro partAdmitRejectedByClaimantClaimDetails(claim) %}
-  <div class="status-block">
-    <h2 class="heading-small">{{ t('You’ve rejected the defendant’s admission.') }}</h2>
-
-    {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-      <p>{{ t('You’ve both agreed to try mediation. The Small Claims Mediation Service will contact you to arrange an appointment.') }}</p>
-      {{ externalLink('Find out how mediation works', 'https://www.gov.uk/government/publications/small-claims-mediation-service-ex730') }}
+  {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
+    {% if (claim.mediationOutcome === MediationOutcome.SUCCEEDED) %}
+      {{ mediationSuccessForClaimantClaimDetails(claim) }}
+    {% elseif (claim.mediationOutcome === MediationOutcome.FAILED) %}
+      {{ mediationFailedForOfflineDQClaimantClaimDetails(claim) }}
     {% else %}
-      <p>{{ t('You need to ' + internalLink('complete a directions questionnaire form ',
+      <div class="status-block">
+        <h2 class="heading-medium">{{ t('We’ll contact you to try to arrange a mediation appointment') }}</h2>
+        <p>{{ t('You’ve rejected the defendant’s response.') }}</p>
+        <p>{{ t('You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.') }}</p>
+        <p>{{ internalLink(t('Find out how mediation works'), DashboardPaths.howFreeMediationWorksPage.uri) }}</p>
+      </div>
+    {% endif %}
+  {% else %}
+    <div class="status-block">
+      <h2 class="heading-medium">{{ t('Wait for the court to review the case') }}</h2>
+      <p>{{ t('You’ve rejected {{ defendantName }}’s response and said you want to take the case to court.',
+          { defendantName: claim.claimData.defendant.name }) }}</p>
+      <h2 class="heading-small">{{ t('Tell us your hearing requirements') }}</h2>
+
+      <p>{{ t('You need to ' + internalLink(t('complete a directions questionnaire form '),
           DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId })) + 'to tell us more about the claim.') | safe }}</p>
       <p>{{ t('Your claim won’t proceed if you don’t complete and return the form before {{ deadline }}.',
           { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
+    </div>
+  {% endif %}
+{% endmacro %}
+
+{% macro partAdmitRejectedByClaimantDQClaimDetails(claim) %}
+  <div class="status-block">
+    {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
+      {% if (claim.mediationOutcome === MediationOutcome.SUCCEEDED) %}
+        {{ mediationSuccessForClaimantClaimDetails(claim) }}
+      {% elseif (claim.mediationOutcome === MediationOutcome.FAILED) %}
+        {{ mediationFailedForOnlineDQClaimantClaimDetails(claim) }}
+      {% else %}
+        <h2 class="heading-medium">{{ t('We’ll contact you to try to arrange a mediation appointment') }}</h2>
+
+        <p>{{ t('You rejected the defendant’s admission of {{ amount }}', { amount: claim.response.amount | numeral }) }}</p>
+        <p>{{ t('You’ve both agreed to try mediation. We’ll contact you to arrange a call with the mediator.') }}</p>
+        <p>{{ internalLink(t('Find out how mediation works'), DashboardPaths.howFreeMediationWorksPage.uri) }}</p>
+      {% endif %}
+    {% else %}
+      <h2 class="heading-medium">{{ t('Wait for the court to review the case') }}</h2>
+
+      <p>{{ t('You’ve rejected {{ defendantName }}’s response and said you want to take the case to court.',
+          { defendantName: claim.claimData.defendant.name }) }}</p>
+      <p>{{ t('The court will review the case. We’ll contact you to tell you what to do next.') }}</p>
     {% endif %}
-
-    <p>{{ downloadResponseLink(claim) }}</p>
-
   </div>
 {% endmacro %}

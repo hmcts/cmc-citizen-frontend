@@ -25,6 +25,12 @@ import { PartyType } from 'common/partyType'
 import { DefenceType } from 'claims/models/response/defenceType'
 import { User } from 'idam/user'
 import { ClaimTemplate } from 'claims/models/claimTemplate'
+import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
+import { CalendarClient } from 'claims/calendarClient'
+import { DirectionOrder } from 'claims/models/directionOrder'
+import { ReviewOrder } from 'claims/models/reviewOrder'
+import { MediationOutcome } from 'claims/models/mediationOutcome'
+import { YesNoOption } from 'models/yesNoOption'
 
 interface State {
   status: ClaimStatus
@@ -34,6 +40,7 @@ export class Claim {
   id: number
   claimantId: string
   externalId: string
+  state: string
   defendantId: string
   claimNumber: string
   responseDeadline: Moment
@@ -62,6 +69,12 @@ export class Claim {
   reDeterminationRequestedAt: Moment
   ccdCaseId: number
   template: ClaimTemplate
+  directionOrder: DirectionOrder
+  reviewOrder: ReviewOrder
+  intentionToProceedDeadline?: Moment
+  mediationOutcome: string
+  pilotCourt: YesNoOption
+  paperResponse: YesNoOption
 
   get defendantOffer (): Offer {
     if (!this.settlement) {
@@ -80,11 +93,28 @@ export class Claim {
     return this.respondedAt.clone().add(daysForService + daysForResponse, 'days')
   }
 
-  get respondToMediationDeadline (): Moment {
+  async respondToMediationDeadline (): Promise<Moment> {
     if (!this.respondedAt) {
       return undefined
     }
-    return this.respondedAt.clone().add('5', 'days')
+
+    return new CalendarClient().getNextWorkingDayAfterDays(this.respondedAt, 5)
+  }
+
+  async respondToReviewOrderDeadline (): Promise<Moment> {
+    if (!this.reviewOrder) {
+      return undefined
+    }
+
+    return new CalendarClient().getNextWorkingDayAfterDays(this.reviewOrder.requestedAt, 19)
+  }
+
+  async respondToReconsiderationDeadline (): Promise<Moment> {
+    if (!this.directionOrder) {
+      return undefined
+    }
+
+    return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, 19)
   }
 
   get remainingDays (): number {
@@ -129,6 +159,14 @@ export class Claim {
       return ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED
     } else if (this.moneyReceivedOn && this.countyCourtJudgmentRequestedAt) {
       return ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
+    } else if (this.hasOrderBeenDrawn()) {
+      if (this.reviewOrder) {
+        return ClaimStatus.REVIEW_ORDER_REQUESTED
+      } else {
+        return ClaimStatus.ORDER_DRAWN
+      }
+    } else if (this.paperResponse && this.paperResponse === YesNoOption.YES) {
+      return ClaimStatus.DEFENDANT_PAPER_RESPONSE
     } else if (this.moneyReceivedOn) {
       return ClaimStatus.PAID_IN_FULL
     } else if (this.countyCourtJudgmentRequestedAt) {
@@ -163,14 +201,20 @@ export class Claim {
       return ClaimStatus.CLAIMANT_ACCEPTED_COURT_PLAN_SETTLEMENT
     } else if (this.isSettlementReached()) {
       return ClaimStatus.OFFER_SETTLEMENT_REACHED
-    } else if (this.isResponseSubmitted()) {
-      return ClaimStatus.RESPONSE_SUBMITTED
+    } else if (this.hasClaimantRejectedDefendantDefenceWithoutDQs()) {
+      return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ
+    } else if (this.hasIntentionToProceedDeadlinePassed()) {
+      return ClaimStatus.INTENTION_TO_PROCEED_DEADLINE_PASSED
+    } else if (this.hasDefendantRejectedClaimWithDQs()) {
+      return ClaimStatus.DEFENDANT_REJECTS_WITH_DQS
     } else if (this.hasClaimantAcceptedStatesPaid()) {
       return ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID
     } else if (this.hasClaimantRejectedStatesPaid()) {
       return ClaimStatus.CLAIMANT_REJECTED_STATES_PAID
     } else if (this.hasClaimantRejectedPartAdmission()) {
       return ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION
+    } else if (this.hasClaimantRejectedPartAdmissionDQs()) {
+      return ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION_DQ
     } else if (this.hasClaimantRejectedDefendantResponse() && this.isDefendantBusiness()) {
       return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE
     } else if (this.hasClaimantRejectedDefendantDefence()) {
@@ -185,6 +229,8 @@ export class Claim {
       return ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY
     } else if (this.eligibleForCCJ) {
       return ClaimStatus.ELIGIBLE_FOR_CCJ
+    } else if (this.isResponseSubmitted()) {
+      return ClaimStatus.RESPONSE_SUBMITTED
     } else if (this.isInterlocutoryJudgmentRequestedOnAdmissions()) {
       return ClaimStatus.REDETERMINATION_BY_JUDGE
     } else if (this.isClaimantResponseSubmitted()) {
@@ -214,6 +260,7 @@ export class Claim {
     if (this.isPaidInFullLinkEligible()) {
       statuses.push({ status: ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE })
     }
+
     return statuses
   }
 
@@ -228,6 +275,7 @@ export class Claim {
   get partAdmissionPayImmediatelyPastPaymentDate (): boolean {
     return this.response
       && this.claimantResponse
+      && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION
       && (this.response.responseType === ResponseType.PART_ADMISSION)
       && this.response.paymentIntention
       && this.response.paymentIntention.paymentOption === PaymentOption.IMMEDIATELY
@@ -246,9 +294,11 @@ export class Claim {
   deserialize (input: any): Claim {
     if (input) {
       this.id = input.id
+      this.state = input.state
       this.claimantId = input.submitterId
       this.externalId = input.externalId
       this.defendantId = input.defendantId
+      this.state = input.state
       this.claimNumber = input.referenceNumber
       this.createdAt = MomentFactory.parse(input.createdAt)
       this.responseDeadline = MomentFactory.parse(input.responseDeadline)
@@ -302,6 +352,24 @@ export class Claim {
       }
       if (input.ccdCaseId) {
         this.ccdCaseId = input.ccdCaseId
+      }
+      if (input.directionOrder) {
+        this.directionOrder = DirectionOrder.deserialize(input.directionOrder)
+      }
+      if (input.reviewOrder) {
+        this.reviewOrder = new ReviewOrder().deserialize(input.reviewOrder)
+      }
+      this.intentionToProceedDeadline = input.intentionToProceedDeadline && MomentFactory.parse(input.intentionToProceedDeadline)
+      if (input.mediationOutcome) {
+        this.mediationOutcome = input.mediationOutcome
+      }
+
+      if (input.pilotCourt) {
+        this.pilotCourt = YesNoOption.fromObject(input.pilotCourt)
+      }
+
+      if (input.paperResponse) {
+        this.paperResponse = YesNoOption.fromObject(input.paperResponse)
       }
     }
 
@@ -380,6 +448,10 @@ export class Claim {
       return false
     }
 
+    if (this.mediationOutcome !== undefined && this.mediationOutcome === MediationOutcome.SUCCEEDED) {
+      return false
+    }
+
     if (this.isResponseSubmitted() && this.response.responseType === ResponseType.PART_ADMISSION && (this.response && !this.response.paymentDeclaration)) {
       return true
     }
@@ -388,7 +460,7 @@ export class Claim {
       return true
     }
 
-    if (this.isOfferAccepted() || this.hasClaimantRejectedPartAdmission() || this.hasRedeterminationBeenRequested()) {
+    if (this.isOfferAccepted() || this.hasClaimantRejectedPartAdmission() || this.hasClaimantRejectedPartAdmissionDQs() || this.hasRedeterminationBeenRequested()) {
       return true
     }
 
@@ -400,8 +472,20 @@ export class Claim {
       return false
     }
 
-    return (((this.response && (this.response as FullAdmissionResponse).paymentIntention.paymentOption !== PaymentOption.IMMEDIATELY && !this.isSettlementReachedThroughAdmission()
-      && this.isResponseSubmitted()) && !(this.countyCourtJudgmentRequestedAt && this.hasClaimantAcceptedAdmissionWithCCJ())) || !this.response)
+    if (this.hasClaimantRejectedDefendantDefence()) {
+      return true
+    }
+
+    if (this.hasClaimantRejectedDefendantDefenceWithoutDQs()) {
+      return true
+    }
+
+    return (((this.response && (this.response as FullAdmissionResponse).paymentIntention
+      && (this.response as FullAdmissionResponse).paymentIntention.paymentOption !==
+      PaymentOption.IMMEDIATELY
+      && !this.isSettlementReachedThroughAdmission() && this.isResponseSubmitted())
+      && !(this.countyCourtJudgmentRequestedAt && this.hasClaimantAcceptedAdmissionWithCCJ()))
+      || !this.response)
   }
 
   private isDefendantBusiness (): boolean {
@@ -447,11 +531,14 @@ export class Claim {
       const now = MomentFactory.currentDate()
       if (offer && offer.paymentIntention) {
         switch (offer.paymentIntention.paymentOption) {
-          case PaymentOption.BY_SPECIFIED_DATE : const paymentDate = offer.paymentIntention.paymentDate
+          case PaymentOption.BY_SPECIFIED_DATE :
+            const paymentDate = offer.paymentIntention.paymentDate
             return (paymentDate.isAfter(now) || paymentDate.isSame(now))
-          case PaymentOption.INSTALMENTS : const firstPaymentDate = offer.paymentIntention.repaymentPlan.firstPaymentDate
+          case PaymentOption.INSTALMENTS :
+            const firstPaymentDate = offer.paymentIntention.repaymentPlan.firstPaymentDate
             return (firstPaymentDate.isAfter(now) || firstPaymentDate.isSame(now))
-          case PaymentOption.IMMEDIATELY : return true
+          case PaymentOption.IMMEDIATELY :
+            return true
         }
       }
     }
@@ -474,7 +561,8 @@ export class Claim {
   }
 
   private hasClaimantRejectedDefendantResponse (): boolean {
-    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
+    return !ClaimFeatureToggles.isFeatureEnabledOnClaim(this, 'directionsQuestionnaire') &&
+      this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
   }
 
   private hasClaimantAcceptedDefendantPartAdmissionResponseWithAlternativePaymentIntention (): boolean {
@@ -512,7 +600,12 @@ export class Claim {
   }
 
   private hasClaimantRejectedPartAdmission (): boolean {
-    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
+    return !ClaimFeatureToggles.isFeatureEnabledOnClaim(this, 'directionsQuestionnaire') && this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
+      && this.response.responseType === ResponseType.PART_ADMISSION
+  }
+
+  private hasClaimantRejectedPartAdmissionDQs (): boolean {
+    return ClaimFeatureToggles.isFeatureEnabledOnClaim(this, 'directionsQuestionnaire') && this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
       && this.response.responseType === ResponseType.PART_ADMISSION
   }
 
@@ -551,7 +644,13 @@ export class Claim {
   }
 
   private hasClaimantRejectedDefendantDefence (): boolean {
-    return this.claimantResponse
+    return ClaimFeatureToggles.isFeatureEnabledOnClaim(this, 'directionsQuestionnaire') && this.claimantResponse
+      && this.claimantResponse.type === ClaimantResponseType.REJECTION
+      && (this.response.responseType === ResponseType.FULL_DEFENCE && this.response.defenceType === DefenceType.DISPUTE)
+  }
+
+  private hasClaimantRejectedDefendantDefenceWithoutDQs (): boolean {
+    return !ClaimFeatureToggles.isFeatureEnabledOnClaim(this, 'directionsQuestionnaire') && this.claimantResponse
       && this.claimantResponse.type === ClaimantResponseType.REJECTION
       && (this.response.responseType === ResponseType.FULL_DEFENCE && this.response.defenceType === DefenceType.DISPUTE)
   }
@@ -568,5 +667,25 @@ export class Claim {
     return this.claimantResponse
       && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION
       && (this.response.responseType === ResponseType.FULL_DEFENCE && this.response.defenceType === DefenceType.DISPUTE)
+  }
+
+  private hasDefendantRejectedClaimWithDQs (): boolean {
+    return ClaimFeatureToggles.isFeatureEnabledOnClaim(this, 'directionsQuestionnaire')
+      && this.isResponseSubmitted()
+      && this.response.responseType === ResponseType.FULL_DEFENCE
+  }
+
+  private hasOrderBeenDrawn (): boolean {
+    return !!this.directionOrder
+  }
+
+  public isIntentionToProceedEligible (): boolean {
+    const dateIntentionToProceedWasReleased: Moment = MomentFactory.parse('2019-09-09').hour(15).minute(12)
+    return this.createdAt.isAfter(dateIntentionToProceedWasReleased)
+  }
+
+  private hasIntentionToProceedDeadlinePassed (): boolean {
+    return !this.claimantResponse && this.response && this.response.responseType === ResponseType.FULL_DEFENCE && MomentFactory.currentDateTime().isAfter(this.intentionToProceedDeadline.clone().hour(16)) &&
+      this.isIntentionToProceedEligible()
   }
 }

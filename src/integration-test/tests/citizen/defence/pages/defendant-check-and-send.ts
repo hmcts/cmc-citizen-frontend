@@ -1,9 +1,11 @@
 import I = CodeceptJS.I
+import { DefenceType } from 'integration-test/data/defence-type'
 
 const I: I = actor()
 
 const fields = {
   checkboxFactsTrue: 'input#signedtrue',
+  checkboxHearingRequirementsTrue: 'input#directionsQuestionnaireSignedtrue',
   signerName: 'input[id=signerName]',
   signerRole: 'input[id=signerRole]'
 }
@@ -14,14 +16,17 @@ const buttons = {
 
 export class DefendantCheckAndSendPage {
 
-  signStatementOfTruthAndSubmit (signerName: string, signerRole: string): void {
+  signStatementOfTruthAndSubmit (signerName: string, signerRole: string, defenceType: DefenceType): void {
     I.fillField(fields.signerName, signerName)
     I.fillField(fields.signerRole, signerRole)
-    this.checkFactsTrueAndSubmit()
+    this.checkFactsTrueAndSubmit(defenceType)
   }
 
-  checkFactsTrueAndSubmit (): void {
+  checkFactsTrueAndSubmit (defenceType: DefenceType): void {
     I.checkOption(fields.checkboxFactsTrue)
+    if (defenceType !== DefenceType.FULL_ADMISSION && process.env.FEATURE_DIRECTIONS_QUESTIONNAIRE === 'true') {
+      I.checkOption(fields.checkboxHearingRequirementsTrue)
+    }
     I.click(buttons.submit)
   }
 
@@ -32,7 +37,7 @@ export class DefendantCheckAndSendPage {
     I.see('Why this is what you owe?')
     I.see('Your timeline of events (optional)')
     I.see('Your evidence (optional)')
-    I.see('Consider free mediation')
+    I.see('Free telephone mediation')
   }
 
   verifyFactsPartialResponseIBelieveIPaidWhatIOwe (): void {
@@ -43,7 +48,7 @@ export class DefendantCheckAndSendPage {
     I.see('Explain why you don’t owe the full amount')
     I.see('Your timeline of events (optional)')
     I.see('Your evidence (optional)')
-    I.see('Consider free mediation')
+    I.see('Free telephone mediation')
   }
 
 }

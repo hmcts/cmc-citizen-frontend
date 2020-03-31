@@ -1,0 +1,36 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import submitButton, errorSummary %}
+{% from "support.njk" import supportWidget %}
+{% from "internalLink.njk" import internalLink %}
+
+{% set headingVisible = false %}
+{% set heading = 'You’ve asked the court to review the order' %}
+
+{% block content %}
+
+  <div class="grid-row">
+    <div class="column-two-thirds">
+
+      <div class="govuk-box-highlight">
+        <h1 class="bold-large">{{ t('You’ve asked the court to review the order') }}</h1>
+        <p class="receipt-download-container">
+          {{ internalLink(t('Download request for review of order'), OrdersPaths.reviewOrderReceiver.evaluateUri({ externalId: claim.externalId})) }}{{ t('(PDF)') }}
+        </p>
+      </div>
+
+      <h2 class="heading-medium">{{ t('What happens next') }}</h2>
+
+      <p>{{ t('We’ll tell {{ otherParty }} you’ve made the request. They’ll have until {{ deadline }} to add comments of their own.',
+          { otherParty: otherParty, deadline: deadline | date }) }}
+      </p>
+      <p>{{ t('A judge will then review the order and any comments. We’ll contact you both by post to tell you what to do next.') }}</p>
+      <p>{{ t('Continue doing everything the order tells you to do unless you hear that a judge has changed it.') }}</p>
+
+      <p>{{ internalLink('Go to your account', DashboardPaths.dashboardPage.uri, 'button') | safe }}</p>
+
+      {{ supportWidget() }}
+    </div>
+  </div>
+
+{% endblock %}
+{% block contactForHelp %}{% endblock %}

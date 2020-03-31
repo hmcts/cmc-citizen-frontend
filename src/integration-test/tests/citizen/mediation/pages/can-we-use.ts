@@ -7,18 +7,20 @@ const buttons = {
 }
 
 const fields = {
-  mediationPhoneNumber: 'input[id="mediationPhoneNumber"]'
+  mediationPhoneNumber: 'input[id="mediationPhoneNumber"]',
+  optionYes: 'input[id=optionyes]',
+  optionNo: 'input[id=optionno]'
 }
 
 export class CanWeUsePage {
 
   chooseYes (): void {
-    I.checkOption('Yes')
+    I.checkOption(fields.optionYes)
     I.click(buttons.submit)
   }
 
   chooseNo (mediationPhoneNumber: string): void {
-    I.checkOption('No')
+    I.checkOption(fields.optionNo)
     I.fillField(fields.mediationPhoneNumber, mediationPhoneNumber)
     I.click(buttons.submit)
   }

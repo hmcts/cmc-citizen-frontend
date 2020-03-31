@@ -1,0 +1,18 @@
+.web-chat {
+  p {
+    margin-bottom: 0;
+  }
+}
+
+.heading-medium {
+  &.contact-mail {
+    margin-bottom: 5px;
+    margin-top: 1.05263em;
+  }
+
+  &.contact-us {
+    margin-bottom: 5px;
+    margin-top: 10px;
+  }
+}
+

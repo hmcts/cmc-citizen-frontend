@@ -8,6 +8,7 @@
 {% from "internalLink.njk" import internalLink %}
 
 {% set evidenceRows = claim.claimData.evidence.getPopulatedRowsOnly() if claim.claimData.evidence %}
+{% set timelineRows = claim.claimData.timeline.getPopulatedRowsOnly() if claim.claimData.timeline %}
 
 {% block content %}
   <div class="grid-row">
@@ -19,10 +20,12 @@
       <p><span class="bold-small">{{ t('Reason for claim') }}:</span></p>
       <p>{{ claim.claimData.reason }}</p>
 
-      <div class="form-group">
-        <p><span class="bold-small">{{ t('Timeline') }}</span></p>
-        {{ timelineSummary(claim.claimData.timeline.getPopulatedRowsOnly()) }}
-      </div>
+      {% if timelineRows and timelineRows.length > 0 %}
+        <div class="form-group">
+          <p><span class="bold-small">{{ t('Timeline') }}</span></p>
+          {{ timelineSummary(timelineRows) }}
+        </div>
+      {% endif %}
 
       {% if evidenceRows and evidenceRows.length > 0 %}
         <div class="form-group">

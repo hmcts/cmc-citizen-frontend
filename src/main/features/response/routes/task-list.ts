@@ -20,7 +20,7 @@ export default express.Router()
       const draftMediation: Draft<MediationDraft> = res.locals.mediationDraft
       const claim: Claim = res.locals.claim
       const directionQuestionnaireDraft = res.locals.directionsQuestionnaireDraft
-      const beforeYouStartSection = TaskListBuilder
+      const beforeYouStartSection = await TaskListBuilder
         .buildBeforeYouStartSection(draft.document, claim, MomentFactory.currentDateTime())
       const respondToClaimSection = TaskListBuilder
         .buildRespondToClaimSection(draft.document, claim)
@@ -32,7 +32,7 @@ export default express.Router()
         directionsQuestionnaireSection = TaskListBuilder.buildDirectionsQuestionnaireSection(draft.document, claim, directionQuestionnaireDraft.document)
       }
 
-      const submitSection = TaskListBuilder.buildSubmitSection(claim, draft.document, claim.externalId, claim.features)
+      const submitSection = TaskListBuilder.buildSubmitSection(claim, draft.document, claim.externalId)
 
       res.render(Paths.taskListPage.associatedView,
         {

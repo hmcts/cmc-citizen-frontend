@@ -12,6 +12,7 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { sampleClaimDraftObj } from 'test/http-mocks/draft-store'
 import * as data from 'test/data/entity/settlement'
+import { MomentFactory } from 'shared/momentFactory'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId: string = sampleClaimDraftObj.externalId
@@ -36,33 +37,13 @@ const defendantName = claimStoreServiceMock.sampleClaimObj.claim.defendants[0].n
 
 const testData = [
   {
-    status: 'Should show offer to settle made',
-    claim: {
-      ...data.claim,
-      ...data.responses.fullRejection,
-      ...data.nonMonetaryOfferAwaitingClaimantResponsePartyStatements
-    },
-    claimantAssertions: [
-      'They said they dispute your claim.',
-      'complete a directions questionnaire',
-      `${claimStoreServiceMock.sampleClaimObj.claim.defendants[0].name} has made an offer to settle out of court.`,
-      'View and respond to the offer'
-    ],
-    defendantAssertions: [
-      'You’ve rejected the claim and said you don’t want to use mediation to solve it.',
-      'You’ll have to go to a hearing.',
-      'complete a directions questionnaire',
-      'You made an offer to settle the claim out of court.',
-      `${claimStoreServiceMock.sampleClaimObj.claim.claimants[0].name} can accept or reject your offer.`
-    ]
-  },
-  {
     status: 'Should show case settled when part-admit pay-by-set-date settlement reached',
     claim: {
       ...data.claim,
       ...data.responses.partialAdmission,
       ...data.payBySetDateSettlementReachedPartyStatements
     },
+    claimOverride: {},
     claimantAssertions: [
       'You’ve both signed a settlement agreement',
       'Download the settlement agreement'
@@ -79,6 +60,7 @@ const testData = [
       ...data.responses.fullAdmission,
       ...data.payBySetDateSettlementReachedPartyStatements
     },
+    claimOverride: {},
     claimantAssertions: [
       'You’ve both signed a settlement agreement',
       'Download the settlement agreement'
@@ -96,6 +78,7 @@ const testData = [
       ...data.claimantResponses.acceptBySettlement,
       ...data.nonMonetaryOfferSettlementReachedPartyStatements
     },
+    claimOverride: {},
     claimantAssertions: [
       'Agreement signed',
       'You’ve both signed a legal agreement. The claim is now settled.',
@@ -115,6 +98,7 @@ const testData = [
       ...data.claimantResponses.acceptWithNewPlan,
       ...data.defendantRejectsSettlementPartyStatements
     },
+    claimOverride: {},
     claimantAssertions: [
       'The defendant has rejected your settlement agreement',
       'You can request a County Court Judgment (CCJ) against them',
@@ -134,6 +118,7 @@ const testData = [
       ...data.claimantResponses.acceptWithNewPlan,
       ...data.defendantRejectsSettlementPartyStatements
     },
+    claimOverride: {},
     claimantAssertions: [
       'The defendant has rejected your settlement agreement',
       'You can request a County Court Judgment (CCJ) against them',
@@ -153,6 +138,7 @@ const testData = [
       ...data.claimantResponses.acceptsWithCourtPlan,
       ...data.claimantAcceptsCourtOfferPartyStatements
     },
+    claimOverride: {},
     claimantAssertions: [
       'You’ve signed a settlement agreement',
       `We’ve emailed ${defendantName} the repayment plan and the settlement agreement for them to sign.`,
@@ -172,6 +158,7 @@ const testData = [
       ...data.claimantResponses.acceptsWithCourtPlan,
       ...data.claimantAcceptsCourtOfferPartyStatements
     },
+    claimOverride: {},
     claimantAssertions: [
       'You’ve signed a settlement agreement',
       `We’ve emailed ${defendantName} the repayment plan and the settlement agreement for them to sign.`,
@@ -185,14 +172,73 @@ const testData = [
   }
 ]
 
+const legacyClaimDetails = [
+  {
+    status: 'Legacy - Should show offer to settle made',
+    claim: {
+      ...data.claim,
+      ...data.responses.fullRejection,
+      ...data.nonMonetaryOfferAwaitingClaimantResponsePartyStatements
+    },
+    claimOverride: {
+      createdAt: '2019-09-01',
+      issuedOn: '2019-09-01'
+    },
+    claimantAssertions: [
+      'The defendant has rejected your claim',
+      'They said they dispute your claim.',
+      'Your claim won’t proceed if you don’t complete and return the form before',
+      `${claimStoreServiceMock.sampleClaimObj.claim.defendants[0].name} has made an offer to settle out of court.`,
+      'View and respond to the offer'
+    ],
+    defendantAssertions: [
+      'Your response to the claim',
+      'You’ve rejected the claim and said you don’t want to use mediation to solve it. You’ll have to go to a hearing.',
+      'complete a directions questionnaire',
+      'Your defence will be cancelled if you don’t complete and return the form before',
+      'You made an offer to settle the claim out of court.',
+      `${claimStoreServiceMock.sampleClaimObj.claim.claimants[0].name} can accept or reject your offer.`
+    ]
+  }
+]
+
+const mediationDQEnabledClaimDetails = [
+  {
+    status: 'Mediation and DQ enabled - Should show offer to settle made',
+    claim: {
+      ...data.claim,
+      ...data.responses.fullRejection,
+      ...data.nonMonetaryOfferAwaitingClaimantResponsePartyStatements
+    },
+    claimOverride: {},
+    claimantAssertions: [
+      'Decide whether to proceed',
+      'John Doe has rejected your claim.',
+      'You need to decide whether to proceed with the claim. You need to respond before',
+      'Your claim won’t continue if you don’t respond by then.',
+      `${claimStoreServiceMock.sampleClaimObj.claim.defendants[0].name} has made an offer to settle out of court.`,
+      'View and respond to the offer'
+    ],
+    defendantAssertions: [
+      'Wait for the claimant to respond',
+      'You’ve rejected the claim.',
+      'You said you don’t want to use mediation to solve it. You might have to go to a hearing.',
+      'We’ll contact you when the claimant responds.',
+      'You made an offer to settle the claim out of court.',
+      `${claimStoreServiceMock.sampleClaimObj.claim.claimants[0].name} can accept or reject your offer.`
+    ]
+  }
+]
+
 describe('Settlement claim statuses', () => {
   beforeEach(() => app.locals.csrf = 'dummy-token')
 
-  testData.forEach(data => {
+  mediationDQEnabledClaimDetails.forEach(data => {
     context(data.status, () => {
       it(claimantContext.party, async () => {
         idamServiceMock.resolveRetrieveUserFor(claimantContext.id, 'citizen')
-        claimStoreServiceMock.resolveRetrieveByExternalId(data.claim)
+        claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride)
+        claimStoreServiceMock.mockNextWorkingDay(MomentFactory.parse('2019-07-01'))
 
         await request(app)
           .get(claimantContext.url)
@@ -202,7 +248,60 @@ describe('Settlement claim statuses', () => {
 
       it(defendantContext.party, async () => {
         idamServiceMock.resolveRetrieveUserFor(defendantContext.id, 'citizen')
-        claimStoreServiceMock.resolveRetrieveByExternalId(data.claim)
+        claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride)
+        claimStoreServiceMock.mockNextWorkingDay(MomentFactory.parse('2019-07-01'))
+
+        await request(app)
+          .get(defendantContext.url)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
+      })
+    })
+  })
+
+  legacyClaimDetails.forEach(data => {
+    context(data.status, () => {
+      it(claimantContext.party, async () => {
+        idamServiceMock.resolveRetrieveUserFor(claimantContext.id, 'citizen')
+        claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride)
+        claimStoreServiceMock.mockNextWorkingDay(MomentFactory.parse('2019-07-01'))
+
+        await request(app)
+          .get(claimantContext.url)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
+      })
+
+      it(defendantContext.party, async () => {
+        idamServiceMock.resolveRetrieveUserFor(defendantContext.id, 'citizen')
+        claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride)
+        claimStoreServiceMock.mockNextWorkingDay(MomentFactory.parse('2019-07-01'))
+
+        await request(app)
+          .get(defendantContext.url)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
+      })
+    })
+  })
+
+  testData.forEach(data => {
+    context(data.status, () => {
+      it(claimantContext.party, async () => {
+        idamServiceMock.resolveRetrieveUserFor(claimantContext.id, 'citizen')
+        claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride)
+        claimStoreServiceMock.mockNextWorkingDay(MomentFactory.parse('2019-07-01'))
+
+        await request(app)
+          .get(claimantContext.url)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
+      })
+
+      it(defendantContext.party, async () => {
+        idamServiceMock.resolveRetrieveUserFor(defendantContext.id, 'citizen')
+        claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride)
+        claimStoreServiceMock.mockNextWorkingDay(MomentFactory.parse('2019-07-01'))
 
         await request(app)
           .get(defendantContext.url)

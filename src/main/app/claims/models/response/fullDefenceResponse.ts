@@ -15,7 +15,7 @@ export interface FullDefenceResponse extends ResponseCommon {
   defence: string,
   timeline: DefendantTimeline
   evidence: DefendantEvidence,
-  directionsQuestionnaire: DirectionsQuestionnaire
+  directionsQuestionnaire?: DirectionsQuestionnaire
 }
 
 export namespace FullDefenceResponse {
@@ -35,7 +35,7 @@ export namespace FullDefenceResponse {
         comment: input.evidence && input.evidence.comment || undefined
       } as DefendantEvidence,
       directionsQuestionnaire: input.directionsQuestionnaire &&
-        DirectionsQuestionnaire.deserialize(input.directionsQuestionnaire)
+        DirectionsQuestionnaire.fromObject(input.directionsQuestionnaire)
     }
   }
 }

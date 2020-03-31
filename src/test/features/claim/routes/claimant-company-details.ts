@@ -104,14 +104,14 @@ describe('claimant as company details page', () => {
         })
       })
 
-      it('should redirect to mobile phone page when everything is fine ', async () => {
+      it('should redirect to phone page when everything is fine ', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
         await request(app)
           .post(ClaimPaths.claimantCompanyDetailsPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send(input)
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.claimantMobilePage.uri))
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.claimantPhonePage.uri))
       })
     })
   })

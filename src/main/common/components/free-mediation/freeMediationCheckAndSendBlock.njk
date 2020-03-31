@@ -1,14 +1,30 @@
 {% from "table.njk" import tableStart, tableEnd, row %}
 
-{% macro freeMediationBlock(claim, draft, mediationDraft, contactPerson, contactNumber) %}
-  {{ tableStart('freeMediation', 'Consider free mediation') }}
-  {{ row(
-    label = 'Will you try free mediation?',
-    value = t(mediationDraft.willYouTryMediation.option) | capitalize,
-    changeLink = MediationPaths.willYouTryMediation.evaluateUri({ externalId: claim.externalId }),
-    bold = true
-  ) }}
-  {% if mediationDraft.youCanOnlyUseMediation %}
+{% macro freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot, mediationEnabled) %}
+  {{ tableStart('freeMediation', 'Free telephone mediation') }}
+  {% if not mediationEnabled %}
+    {{ row(
+      label = 'Free mediation?',
+      value = t(mediationDraft.willYouTryMediation.option) | capitalize,
+      changeLink = MediationPaths.tryFreeMediationPage.evaluateUri({ externalId: claim.externalId }),
+      bold = true
+    ) }}
+  {% elseif mediationPilot and mediationDraft.willYouTryMediation.option %}
+    {{ row(
+      label = 'Will you try free mediation?',
+      value = t(mediationDraft.willYouTryMediation.option) | capitalize,
+      changeLink = MediationPaths.howMediationWorksPage.evaluateUri({ externalId: claim.externalId }),
+      bold = true
+    ) }}
+  {% else %}
+    {{ row(
+      label = 'Will you try free mediation?',
+      value = t(mediationDraft.willYouTryMediation.option) | capitalize,
+      changeLink = MediationPaths.willYouTryMediation.evaluateUri({ externalId: claim.externalId }),
+      bold = true
+    ) }}
+  {% endif %}
+  {% if mediationEnabled and mediationDraft.willYouTryMediation.option === YesNoOption.YES.option %}
     {{ row(
       label = 'Agree to mediation conditions',
       value = t(mediationDraft.youCanOnlyUseMediation.option) | capitalize,
@@ -17,7 +33,7 @@
     ) }}
   {% endif %}
   {% if mediationDraft.canWeUseCompany %}
-    {% if mediationDraft.mediationPhoneNumberConfirmation %}
+    {% if mediationDraft.canWeUseCompany.mediationPhoneNumberConfirmation %}
       {{ row(
         label = 'Contact number',
         value = t(mediationDraft.canWeUseCompany.mediationPhoneNumberConfirmation) | capitalize,

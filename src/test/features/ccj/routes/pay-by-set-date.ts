@@ -105,7 +105,7 @@ describe('CCJ - Pay by set date', () => {
         it('should return 500 and render error page when cannot save ccj draft', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('ccj')
-          draftStoreServiceMock.rejectSave()
+          draftStoreServiceMock.rejectUpdate()
 
           await request(app)
             .post(pagePath)
@@ -117,7 +117,7 @@ describe('CCJ - Pay by set date', () => {
         it('should redirect to check and send page', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('ccj')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .post(pagePath)

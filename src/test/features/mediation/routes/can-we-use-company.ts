@@ -17,23 +17,29 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
 import { FreeMediationOption } from 'forms/models/freeMediation'
-import { FeatureToggles } from 'utils/featureToggles'
+import {
+  verifyRedirectForGetWhenAlreadyPaidInFull,
+  verifyRedirectForPostWhenAlreadyPaidInFull
+} from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = MediationPaths.canWeUseCompanyPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
-if (FeatureToggles.isEnabled('mediation')) {
-  describe('Free mediation: can we use company page', () => {
-    attachDefaultHooks(app)
+describe('Free mediation: can we use company page', () => {
+  attachDefaultHooks(app)
 
-    describe('on GET', () => {
-      const method = 'get'
-      checkAuthorizationGuards(app, method, pagePath)
+  describe('on GET', () => {
+    const method = 'get'
+    checkAuthorizationGuards(app, method, pagePath)
+
+    describe('as defendant', () => {
 
       context('when user authorised', () => {
         beforeEach(() => {
           idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
         })
+
+        verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
 
         it('should return 500 and render error page when cannot retrieve claim', async () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
@@ -44,7 +50,7 @@ if (FeatureToggles.isEnabled('mediation')) {
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
         it('should render page when everything is fine', async () => {
-          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('mediation', { canWeUseCompany: undefined })
           draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
           claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
 
@@ -53,108 +59,130 @@ if (FeatureToggles.isEnabled('mediation')) {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Mary Richards the right person for the mediation service to call'))
         })
+
       })
     })
 
-    describe('on POST', () => {
-      const method = 'post'
-      checkAuthorizationGuards(app, method, pagePath)
-
-      context('when defendant authorised', () => {
-        beforeEach(() => {
-          idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
-        })
-
-        checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
-
-        context('when response not submitted', () => {
-          it('should return 500 and render error page when cannot retrieve claim', async () => {
-            claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
-
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.serverError.withText('Error'))
-          })
-
-        })
-        context('when form is valid', () => {
-          it('should redirect to defendant task list when defendant says yes', async () => {
-            draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
-            draftStoreServiceMock.resolveSave()
-            claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
-
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send({ option: FreeMediationOption.YES, mediationPhoneNumberConfirmation: '07777777777' })
-              .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.taskListPage
-                  .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
-          })
-
-          it('should show validation error when defendant says yes with no phone number', async () => {
-            draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
-            claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
-
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send({ option: FreeMediationOption.YES, mediationPhoneNumberConfirmation: undefined })
-              .expect(res => expect(res).to.be.successful.withText('div class="error-summary"'))
-          })
-
-          it('should redirect to response task list when no was chosen and a phone number and a contact is given', async () => {
-            draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
-            draftStoreServiceMock.resolveSave()
-            claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
-
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send({
-                option: FreeMediationOption.NO,
-                mediationPhoneNumber: '07777777777',
-                mediationContactPerson: 'Mary Richards'
-              })
-              .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.taskListPage
-                  .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
-          })
-
-          it('should show validation error when defendant says no with no phone number', async () => {
-            draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
-            claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
-
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send({ option: FreeMediationOption.NO, mediationPhoneNumber: undefined })
-              .expect(res => expect(res).to.be.successful.withText('div class="error-summary"'))
-          })
-
-          it('should show validation error when defendant says no with no contact name', async () => {
-            draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
-            claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
-
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send({
-                option: FreeMediationOption.NO,
-                mediationPhoneNumber: '07777777777',
-                mediationContactPerson: undefined
-              })
-              .expect(res => expect(res).to.be.successful.withText('div class="error-summary"'))
-          })
-        })
+    describe('as claimant', () => {
+      beforeEach(() => {
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.submitterId, 'citizen')
       })
-      // TODO implement claimant response tests when response saving is done
+
+      it('should render page when everything is fine', async () => {
+        draftStoreServiceMock.resolveFind('mediation', { canWeUseCompany: undefined })
+        draftStoreServiceMock.resolveFind('claimantResponse')
+        claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId({
+          ...claimStoreServiceMock.sampleClaimIssueOrgVOrgObj,
+          ...claimStoreServiceMock.sampleFullAdmissionWithPaymentBySetDateResponseObj
+        })
+
+        await request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('Enter this person’s phone number, including extension if required'))
+      })
     })
   })
-}
+
+  describe('on POST', () => {
+    const method = 'post'
+    checkAuthorizationGuards(app, method, pagePath)
+
+    context('when defendant authorised', () => {
+      beforeEach(() => {
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
+      })
+
+      checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
+
+      context('when response not submitted', () => {
+        it('should return 500 and render error page when cannot retrieve claim', async () => {
+          claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.serverError.withText('Error'))
+        })
+
+      })
+      context('when form is valid', () => {
+        it('should redirect to defendant task list when defendant says yes', async () => {
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
+          draftStoreServiceMock.resolveUpdate()
+          claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({ option: FreeMediationOption.YES, mediationPhoneNumberConfirmation: '07777777777' })
+            .expect(res => expect(res).to.be.redirect
+              .toLocation(ResponsePaths.taskListPage
+                .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+        })
+
+        it('should show validation error when defendant says yes with no phone number', async () => {
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
+          claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({ option: FreeMediationOption.YES, mediationPhoneNumberConfirmation: undefined })
+            .expect(res => expect(res).to.be.successful.withText('div class="error-summary"'))
+        })
+
+        it('should redirect to response task list when no was chosen and a phone number and a contact is given', async () => {
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
+          draftStoreServiceMock.resolveUpdate()
+          claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({
+              option: FreeMediationOption.NO,
+              mediationPhoneNumber: '07777777777',
+              mediationContactPerson: 'Mary Richards'
+            })
+            .expect(res => expect(res).to.be.redirect
+              .toLocation(ResponsePaths.taskListPage
+                .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+        })
+
+        it('should show validation error when defendant says no with no phone number', async () => {
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
+          claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({ option: FreeMediationOption.NO, mediationPhoneNumber: undefined })
+            .expect(res => expect(res).to.be.successful.withText('div class="error-summary"'))
+        })
+
+        it('should show validation error when defendant says no with no contact name', async () => {
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
+          claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({
+              option: FreeMediationOption.NO,
+              mediationPhoneNumber: '07777777777',
+              mediationContactPerson: undefined
+            })
+            .expect(res => expect(res).to.be.successful.withText('div class="error-summary"'))
+        })
+      })
+    })
+    // TODO implement claimant response tests when response saving is done
+  })
+})

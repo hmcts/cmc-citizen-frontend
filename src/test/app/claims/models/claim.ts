@@ -4,7 +4,7 @@ import { MomentFactory } from 'shared/momentFactory'
 import { expect } from 'chai'
 import { Settlement } from 'claims/models/settlement'
 import { StatementType } from 'offer/form/models/statementType'
-import { MadeBy } from 'offer/form/models/madeBy'
+import { MadeBy } from 'claims/models/madeBy'
 import { Offer } from 'claims/models/offer'
 import { ClaimStatus } from 'claims/models/claimStatus'
 import { ResponseType } from 'claims/models/response/responseType'
@@ -40,6 +40,10 @@ import { TheirDetails } from 'claims/models/details/theirs/theirDetails'
 import { User } from 'idam/user'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 import * as data from 'test/data/entity/settlement'
+import { FeatureToggles } from 'utils/featureToggles'
+import { MediationOutcome } from 'claims/models/mediationOutcome'
+import { defenceClaimData } from 'test/data/entity/claimData'
+import { YesNoOption } from 'models/yesNoOption'
 
 describe('Claim', () => {
   describe('eligibleForCCJ', () => {
@@ -142,6 +146,7 @@ describe('Claim', () => {
     beforeEach(() => {
       claim = new Claim()
       claim.responseDeadline = MomentFactory.currentDate().add(1, 'day')
+      claim.intentionToProceedDeadline = MomentFactory.currentDateTime().add(33, 'days')
     });
 
     [true, false].forEach(isMoreTimeRequested => {
@@ -165,6 +170,12 @@ describe('Claim', () => {
       claim.moreTimeRequested = true
 
       expect(claim.status).to.be.equal(ClaimStatus.MORE_TIME_REQUESTED)
+    })
+
+    it('should return DEFENDANT_PAPER_RESPONSE when a paper response received', () => {
+      claim.paperResponse = YesNoOption.YES
+
+      expect(claim.status).to.be.equal(ClaimStatus.DEFENDANT_PAPER_RESPONSE)
     });
 
     [true, false].forEach(isMoreTimeRequested => {
@@ -395,6 +406,19 @@ describe('Claim', () => {
       expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION)
     })
 
+    it('should return CLAIMANT_REJECTED_PART_ADMISSION_DQ when the claimant rejects the part admission with DQs', () => {
+      claim.claimantResponse = rejectionClaimantResponseData
+      claim.claimantRespondedAt = MomentFactory.currentDate()
+      claim.claimData = {
+        defendant: new Individual().deserialize(individual)
+      }
+      claim.response = {
+        responseType: ResponseType.PART_ADMISSION
+      }
+      claim.features = ['admissions', 'directionsQuestionnaire']
+      expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION_DQ)
+    })
+
     it('should return CCJ_AFTER_SETTLEMENT_BREACHED when the claimant requests a CCJ after settlement terms broken', () => {
       const paymentIntention = {
         paymentOption: PaymentOption.BY_SPECIFIED_DATE,
@@ -478,7 +502,7 @@ describe('Claim', () => {
         paymentOption: PaymentOption.INSTALMENTS,
         repaymentPlan: {
           instalmentAmount: 100,
-          firstPaymentDate: MomentFactory.currentDate().add(1,'day'),
+          firstPaymentDate: MomentFactory.currentDate().add(1, 'day'),
           paymentSchedule: PaymentSchedule.EACH_WEEK,
           completionDate: '2051-12-31',
           paymentLength: '1'
@@ -566,6 +590,62 @@ describe('Claim', () => {
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID)
     })
 
+    if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+      it('should contain the claim status DEFENDANT_REJECTS_WITH_DQS only when defendant reject with DQs', () => {
+        claim.respondedAt = moment()
+        claim.features = ['admissions', 'directionsQuestionnaire']
+        claim.response = {
+          paymentIntention: null,
+          responseType: 'FULL_DEFENCE',
+          freeMediation: 'no'
+        }
+
+        expect(claim.stateHistory).to.have.lengthOf(2)
+        expect(claim.stateHistory[0].status).to.equal(ClaimStatus.DEFENDANT_REJECTS_WITH_DQS)
+      })
+
+      it('should contain the claim status ORDER_DRAWN only when the legal advisor has drawn the order', () => {
+        claim.respondedAt = moment()
+        claim.features = ['admissions', 'directionsQuestionnaire']
+        claim.response = {
+          paymentIntention: null,
+          responseType: 'FULL_DEFENCE',
+          freeMediation: 'no'
+        }
+        claim.directionOrder = {
+          directions: [
+            {
+              id: 'd2832981-a23a-4a4c-8b6a-a013c2c8a637',
+              directionParty: 'BOTH',
+              directionType: 'DOCUMENTS',
+              directionActionedDate: '2019-09-20'
+            },
+            {
+              id: '8e3a20c2-10a4-49fd-b1a7-da66b088f978',
+              directionParty: 'BOTH',
+              directionType: 'EYEWITNESS',
+              directionActionedDate: '2019-09-20'
+            }
+          ],
+          paperDetermination: 'no',
+          preferredDQCourt: 'Central London County Court',
+          hearingCourt: 'CLERKENWELL',
+          hearingCourtName: 'Clerkenwell and Shoreditch County Court and Family Court',
+          hearingCourtAddress: {
+            line1: 'The Gee Street Courthouse',
+            line2: '29-41 Gee Street',
+            city: 'London',
+            postcode: 'EC1V 3RE'
+          },
+          estimatedHearingDuration: 'HALF_HOUR',
+          createdOn: MomentFactory.currentDate().subtract(1, 'day')
+        }
+
+        expect(claim.stateHistory).to.have.lengthOf(2)
+        expect(claim.stateHistory[0].status).to.equal(ClaimStatus.ORDER_DRAWN)
+      })
+    }
+
     context('should return CLAIMANT_REJECTED_STATES_PAID', () => {
       it('when defendant states paid amount equal to claim amount', () => {
         claim.totalAmountTillToday = 100
@@ -634,7 +714,7 @@ describe('Claim', () => {
           type: 'REJECTION'
         }
 
-        expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE)
+        expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ)
       })
 
       it('when claimant accepts defendants defence', () => {
@@ -672,16 +752,22 @@ describe('Claim', () => {
 
   describe('respondToMediationDeadline', () => {
 
-    it('should add 5 days to the response deadline', () => {
+    it('should return mediation deadline date', () => {
       const claim = new Claim()
       claim.respondedAt = moment()
 
-      expect(claim.respondToMediationDeadline.toISOString()).to.equal(claim.respondedAt.add(5, 'days').toISOString())
+      claimStoreMock.mockNextWorkingDay(MomentFactory.parse('2019-06-28'))
+
+      claim.respondToMediationDeadline().then(
+        res => expect(res.format('YYYY-MM-DD'))
+          .to.equal(MomentFactory.parse('2019-06-28').format('YYYY-MM-DD'))
+      )
     })
 
-    it('should return undefined if claim is not responded to', () => {
+    it('should return undefined if claim is not responded to', async () => {
       const claim = new Claim()
-      expect(claim.respondToMediationDeadline).to.equal(undefined)
+      const mediationDeadline = await claim.respondToMediationDeadline()
+      expect(mediationDeadline).to.be.undefined
     })
   })
 
@@ -746,12 +832,35 @@ describe('Claim', () => {
     })
   })
 
+  describe('mediationOutcome', () => {
+    let claim
+
+    beforeEach(() => {
+      claim = new Claim().deserialize(defenceClaimData)
+      claim.responseDeadline = MomentFactory.currentDate().add(1, 'day')
+      claim.intentionToProceedDeadline = MomentFactory.currentDateTime().add(33, 'days')
+      claim.response = FullDefenceResponse.deserialize(defenceWithDisputeData)
+    })
+
+    it('should return FAILED when mediation is failed', () => {
+      claim.mediationOutcome = MediationOutcome.FAILED
+      expect(claim.mediationOutcome).to.be.equal('FAILED')
+    })
+
+    it('should return SUCCEEDED when mediation is success', () => {
+      claim.mediationOutcome = MediationOutcome.SUCCEEDED
+      expect(claim.mediationOutcome).to.be.equal('SUCCEEDED')
+    })
+
+  })
+
   describe('stateHistory', () => {
     let claim
 
     beforeEach(() => {
       claim = new Claim()
       claim.responseDeadline = MomentFactory.currentDate().add(1, 'day')
+      claim.intentionToProceedDeadline = MomentFactory.currentDateTime().add(33, 'days')
     })
 
     it('should return OFFER_SUBMITTED, RESPONSE_SUBMITTED and PAID_IN_FULL_LINK_ELIGIBLE if an offer has been submitted.', () => {
@@ -864,6 +973,37 @@ describe('Claim', () => {
       expect(claim.stateHistory).to.have.lengthOf(1)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.OFFER_SETTLEMENT_REACHED)
     })
+
+    if (FeatureToggles.isEnabled('mediation')) {
+      it('should contain CLAIMANT_REJECTED_DEFENDANT_DEFENCE status when claimant has reject defence and DQs is enabled', () => {
+        claim.respondedAt = moment()
+        claim.features = ['admissions', 'directionsQuestionnaire']
+        claim.response = {
+          responseType: ResponseType.FULL_DEFENCE,
+          defenceType: DefenceType.DISPUTE
+        }
+        claim.claimantResponse = {
+          type: ClaimantResponseType.REJECTION
+        }
+        expect(claim.stateHistory).to.have.lengthOf(2)
+        expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE)
+        expect(claim.stateHistory[1].status).to.equal(ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE)
+      })
+    }
+
+    it('should contain CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ status when claimant has reject defence and DQs is not enabled', () => {
+      claim.respondedAt = moment()
+      claim.response = {
+        responseType: ResponseType.FULL_DEFENCE,
+        defenceType: DefenceType.DISPUTE
+      }
+      claim.claimantResponse = {
+        type: ClaimantResponseType.REJECTION
+      }
+      expect(claim.stateHistory).to.have.lengthOf(2)
+      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ)
+      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE)
+    })
   })
 
   describe('paidInFullCCJPaidWithinMonth', () => {
@@ -883,6 +1023,24 @@ describe('Claim', () => {
       claim.moneyReceivedOn = MomentFactory.currentDate().add(2, 'month')
       claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate()
       expect(claim.isCCJPaidWithinMonth()).to.be.false
+    })
+  })
+
+  describe('isIntentionToProceedEligible', () => {
+    let claim
+
+    beforeEach(() => {
+      claim = new Claim()
+    })
+
+    it('should return true when createdAt is after 09/09/19 3:12', () => {
+      claim.createdAt = MomentFactory.currentDate()
+      expect(claim.isIntentionToProceedEligible()).to.be.true
+    })
+
+    it('should return false when createdAt is before 09/09/19 3:12', () => {
+      claim.createdAt = MomentFactory.parse('2019-09-08')
+      expect(claim.isIntentionToProceedEligible()).to.be.false
     })
   })
 

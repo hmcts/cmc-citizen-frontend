@@ -17,6 +17,8 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
 import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
+import { MomentFactory } from 'shared/momentFactory'
+import { verifyRedirectForGetWhenAlreadyPaidInFull } from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = ResponsePaths.taskListPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -36,6 +38,7 @@ describe('Defendant response: task list page', () => {
 
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
 
       context('when response not submitted', () => {
         it('should return 500 and render error page when cannot retrieve claim', async () => {
@@ -52,6 +55,7 @@ describe('Defendant response: task list page', () => {
           draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
 
           await request(app)
             .get(pagePath)
@@ -64,6 +68,7 @@ describe('Defendant response: task list page', () => {
           draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
 
           await request(app)
             .get(pagePath)
