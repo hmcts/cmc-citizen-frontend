@@ -75,7 +75,7 @@
     "i18next-express-middleware": "^1.9.1",
     "i18next-sprintf-postprocessor": "^0.2.2",
     "jquery": "3.4.1",
-    "js-base64": "^2.5.1",
+    "js-base64": "^2.5.2",
     "lodash": "^4.17.15",
     "mime": "^2.4.4",
     "moment": "^2.24.0",
