@@ -1,7 +1,7 @@
-import { FeatureToggles } from 'utils/featureToggles'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { User } from 'idam/user'
 import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
+import * as config from 'config'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 const launchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
@@ -15,32 +15,55 @@ export class FeaturesBuilder {
   static async features (amount: number, user: User): Promise<string> {
     const roles: string[] = await claimStoreClient.retrieveUserRoles(user)
 
-    let features = ''
-    if (await launchDarklyClient.variation(user, roles, 'cmc_admissions')) {
-      features = 'admissions'
-    }
-
-    if (amount <= this.MEDIATION_PILOT_AMOUNT) {
-      if (await launchDarklyClient.variation(user, roles, 'cmc_mediation_pilot')) {
-        features += features === '' ? 'mediationPilot' : ', mediationPilot'
+    let features = []
+    for (const featureDef of FEATURES) {
+      if (amount <= featureDef.threshold) {
+        const ldVariation = await launchDarklyClient.variation(user, roles, featureDef.toggle)
+        if (ldVariation || (ldVariation === undefined && config.get<string>(`featureToggles.${featureDef.setting}`))) {
+          features.push(featureDef.feature)
+        }
       }
     }
-
-    if (amount <= this.LA_PILOT_THRESHOLD) {
-      if (await launchDarklyClient.variation(user, roles, 'cmc_legal_advisor')) {
-        features += features === '' ? 'LAPilotEligible' : ', LAPilotEligible'
-      }
-    } else if (amount <= this.JUDGE_PILOT_THRESHOLD) {
-      if (await launchDarklyClient.variation(user, roles, 'cmc_judge_pilot')) {
-        features += features === '' ? 'judgePilotEligible' : ', judgePilotEligible'
-      }
-    }
-
-    if (amount <= this.ONLINE_DQ_THRESHOLD) {
-      if (FeatureToggles.isEnabled('directionsQuestionnaire') && await launchDarklyClient.variation(user, roles, 'cmc_directions_questionnaire')) {
-        features += features === '' ? 'directionsQuestionnaire' : ', directionsQuestionnaire'
-      }
-    }
-    return (features === '') ? undefined : features
+    return features.length === 0 ? undefined : features.join(', ')
   }
 }
+
+type FeatureDefinition = {
+  feature: string
+  toggle: string
+  setting: string
+  threshold: number
+}
+
+const FEATURES: FeatureDefinition[] = [
+  {
+    feature: 'admissions',
+    toggle: 'admissions',
+    setting: 'admissions',
+    threshold: Number.MAX_VALUE
+  },
+  {
+    feature: 'mediationPilot',
+    toggle: 'mediation_pilot',
+    setting: 'mediationPilot',
+    threshold: FeaturesBuilder.MEDIATION_PILOT_AMOUNT
+  },
+  {
+    feature: 'LAPilotEligible',
+    toggle: 'legal_advisor_pilot',
+    setting: 'legalAdvisorPilot',
+    threshold: FeaturesBuilder.LA_PILOT_THRESHOLD
+  },
+  {
+    feature: 'judgePilotEligible',
+    toggle: 'judge_pilot',
+    setting: 'judgePilot',
+    threshold: FeaturesBuilder.JUDGE_PILOT_THRESHOLD
+  },
+  {
+    feature: 'directionsQuestionnaire',
+    toggle: 'directions_questionnaire',
+    setting: 'directionsQuestionnaire',
+    threshold: FeaturesBuilder.ONLINE_DQ_THRESHOLD
+  }
+]
