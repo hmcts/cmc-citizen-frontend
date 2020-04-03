@@ -1,34 +1,17 @@
 /* tslint:disable:no-unused-expression */
 import { expect } from 'chai'
 
-import { FeaturesBuilder } from 'claim/helpers/featuresBuilder'
+import { FEATURES, FeaturesBuilder } from 'claim/helpers/featuresBuilder'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { User } from 'idam/user'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import { app } from 'main/app'
 import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
-import * as ld from 'ldclient-node'
+import { anything, instance, mock, reset, when } from 'ts-mockito'
 
-let featureAdmissions: boolean = false
-let featureJudgePilot: boolean = false
-let featureLAPilot: boolean = false
-let featureMediationPilot: boolean = false
-let featureOnlineDQs: boolean = false
-
-const LaunchDarklyClientMock: LaunchDarklyClient = {
-  async variation (user: User, roles: string[], featureKey: string): Promise<ld.LDFlagValue> {
-    switch (featureKey) {
-      case 'admissions': return featureAdmissions
-      case 'judge_pilot': return featureJudgePilot
-      case 'legal_advisor_pilot': return featureLAPilot
-      case 'mediation_pilot': return featureMediationPilot
-      case 'directions_questionnaire': return featureOnlineDQs
-    }
-  }
-}
-
-const featuresBuilder = new FeaturesBuilder(new ClaimStoreClient(), LaunchDarklyClientMock)
+const mockLaunchDarklyClient: LaunchDarklyClient = mock(LaunchDarklyClient)
+const featuresBuilder = new FeaturesBuilder(new ClaimStoreClient(), instance(mockLaunchDarklyClient))
 
 const user = new User('1', 'user@example.com', 'John', 'Smith', [], 'citizen', '')
 
@@ -39,6 +22,12 @@ const MIN_THRESHOLD = Math.min(
   FeaturesBuilder.ONLINE_DQ_THRESHOLD
 )
 
+function enableFeatures (...features: string[]) {
+  FEATURES.map(feature => feature.toggle)
+    .forEach(toggle => when(mockLaunchDarklyClient.variation(anything(), anything(), toggle))
+      .thenResolve(Promise.resolve(features.indexOf(toggle) >= 0)))
+}
+
 describe('FeaturesBuilder', () => {
   attachDefaultHooks(app)
 
@@ -47,16 +36,12 @@ describe('FeaturesBuilder', () => {
   })
 
   afterEach(() => {
-    featureAdmissions = false
-    featureJudgePilot = false
-    featureLAPilot = false
-    featureMediationPilot = false
-    featureOnlineDQs = false
+    reset(mockLaunchDarklyClient)
   })
 
   describe('Admissions Feature', () => {
     it('should add admissions to features if flag is set', async () => {
-      featureAdmissions = true
+      enableFeatures('admissions')
       const features = await featuresBuilder.features(1, user)
       expect(features).to.equal('admissions')
     })
@@ -64,12 +49,13 @@ describe('FeaturesBuilder', () => {
 
   describe('Directions Questionnaire Feature', () => {
     it(`should add dq to features if flag is set and amount <= ${FeaturesBuilder.ONLINE_DQ_THRESHOLD}`, async () => {
-      featureOnlineDQs = true
+      enableFeatures('directions_questionnaire')
       const features = await featuresBuilder.features(FeaturesBuilder.ONLINE_DQ_THRESHOLD, user)
       expect(features).to.equal('directionsQuestionnaire')
     })
 
     it(`should not add dq to features if amount > ${FeaturesBuilder.ONLINE_DQ_THRESHOLD}`, async () => {
+      const featuresBuilder = new FeaturesBuilder(new ClaimStoreClient(), instance(mockLaunchDarklyClient))
       const features = await featuresBuilder.features(FeaturesBuilder.ONLINE_DQ_THRESHOLD + 0.01, user)
       expect(features).to.be.undefined
     })
@@ -78,7 +64,7 @@ describe('FeaturesBuilder', () => {
 
   describe('Mediation Pilot Feature', () => {
     it(`should add mediation pilot to features if amount <= ${FeaturesBuilder.MEDIATION_PILOT_AMOUNT} and flag is set`, async () => {
-      featureMediationPilot = true
+      enableFeatures('mediation_pilot')
       const features = await featuresBuilder.features(FeaturesBuilder.MEDIATION_PILOT_AMOUNT, user)
       expect(features).to.equal('mediationPilot')
     })
@@ -91,7 +77,7 @@ describe('FeaturesBuilder', () => {
 
   describe('Legal advisor Pilot Feature', () => {
     it(`should add legal advisor eligible to features if amount <= ${FeaturesBuilder.LA_PILOT_THRESHOLD} and flag is set`, async () => {
-      featureLAPilot = true
+      enableFeatures('legal_advisor_pilot')
       const features = await featuresBuilder.features(FeaturesBuilder.LA_PILOT_THRESHOLD, user)
       expect(features).to.equal('LAPilotEligible')
     })
@@ -104,7 +90,7 @@ describe('FeaturesBuilder', () => {
 
   describe('Judge Pilot Feature', () => {
     it(`should add judge pilot eligible to features if amount <= ${FeaturesBuilder.JUDGE_PILOT_THRESHOLD} and flag is set`, async () => {
-      featureJudgePilot = true
+      enableFeatures('judge_pilot')
       const features = await featuresBuilder.features(FeaturesBuilder.JUDGE_PILOT_THRESHOLD, user)
       expect(features).to.equal('judgePilotEligible')
     })
@@ -116,9 +102,7 @@ describe('FeaturesBuilder', () => {
   })
 
   it(`should add legal advisor, dqOnline and mediation pilot to features if principal amount <= ${MIN_THRESHOLD} and flags are set`, async () => {
-    featureOnlineDQs = true
-    featureLAPilot = true
-    featureMediationPilot = true
+    enableFeatures('legal_advisor_pilot', 'directions_questionnaire', 'mediation_pilot')
     const features = await featuresBuilder.features(MIN_THRESHOLD, user)
     expect(features).to.equal('mediationPilot, LAPilotEligible, directionsQuestionnaire')
   })

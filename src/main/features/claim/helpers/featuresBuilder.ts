@@ -40,7 +40,7 @@ type FeatureDefinition = {
   threshold: number
 }
 
-const FEATURES: FeatureDefinition[] = [
+export const FEATURES: FeatureDefinition[] = [
   {
     feature: 'admissions',
     toggle: 'admissions',
