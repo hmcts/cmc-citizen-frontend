@@ -2,7 +2,7 @@ import * as config from 'config'
 import { User } from 'idam/user'
 import * as ld from 'ldclient-node'
 
-const sdkKeys: string = config.get<string>('secrets.cmc.launchDarkly-sdk-key')
+const sdkKey: string = config.get<string>('secrets.cmc.launchDarkly-sdk-key')
 const ldConfig = {
   offline: config.get<boolean>('launchDarkly.offline')
 }
@@ -16,17 +16,17 @@ export class LaunchDarklyClient {
 
   static initClient () {
     if (!LaunchDarklyClient.client) {
-      LaunchDarklyClient.client = ld.init(sdkKeys, ldConfig)
+      LaunchDarklyClient.client = ld.init(sdkKey, ldConfig)
     }
   }
 
-  async variation (user: User, roles: string[], featureKey: string, f?: () => void): Promise<ld.LDFlagValue> {
+  async variation (user: User, roles: string[], featureKey: string): Promise<ld.LDFlagValue> {
     const ldUser: ld.LDUser = {
       key: user.id,
       custom: {
         roles
       }
     }
-    return LaunchDarklyClient.client.variation(featureKey, ldUser, false)
+    return LaunchDarklyClient.client.variation(featureKey, ldUser, undefined)
   }
 }
