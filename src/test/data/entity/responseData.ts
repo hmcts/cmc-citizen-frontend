@@ -584,9 +584,3 @@ export const fullDefenceWithStatesLessThanClaimAmountWithMediation = {
   responseType: 'PART_ADMISSION',
   freeMediation: 'yes'
 }
-
-export const withMediation = {
-  freeMediation: 'yes',
-  mediationContactPerson: 'Mary Richards',
-  mediationPhoneNumber: '07777777777'
-}
