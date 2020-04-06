@@ -146,7 +146,7 @@ ccd:
       userProfileDatabaseName: user-profile
     definition:
       enabled: true
-      image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.5.10
+      image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.5.12
       environment:
         CCD_DEF_CLAIM_STORE_BASE_URL: http://${SERVICE_NAME}-claim-store
       kvSecretRef: kvcreds
