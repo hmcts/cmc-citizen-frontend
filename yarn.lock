@@ -468,11 +468,6 @@
   resolved "https://registry.yarnpkg.com/@types/mocha/-/mocha-7.0.1.tgz#5d7ec2a789a1f77c59b7ad071b9d50bf1abbfc9e"
   integrity sha512-L/Nw/2e5KUaprNJoRA33oly+M8X8n0K+FwLTbYqwTcR14wdPWeRkigBLfSFpN/Asf9ENZTMZwLxjtjeYucAA4Q==
 
-"@types/mocha@^5.2.7":
-  version "5.2.7"
-  resolved "https://registry.yarnpkg.com/@types/mocha/-/mocha-5.2.7.tgz#315d570ccb56c53452ff8638738df60726d5b6ea"
-  integrity sha512-NYrtPht0wGzhwe9+/idPaBB+TqkY9AhTvOLMkThm0IoEfLaiVQZwBwyJ5puCkO3AUCWrmcoePjp2mbFocKy4SQ==
-
 "@types/node@*", "@types/node@<13.5.1":
   version "13.5.0"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-13.5.0.tgz#4e498dbf355795a611a87ae5ef811a8660d42662"
@@ -1739,13 +1734,12 @@ code-point-at@^1.0.0:
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
   integrity sha1-DQcLTQQ6W+ozovGkDi7bPZpMz3c=
 
-codeceptjs@2.4.3:
-  version "2.4.3"
-  resolved "https://registry.yarnpkg.com/codeceptjs/-/codeceptjs-2.4.3.tgz#cf6d7146cdc38b8ade036b7e700618dfd9ae6bc7"
-  integrity sha512-XbpWZpoUxqkatBu5m4GzXIJujnXk81qUbrK1nc8WeZk4WxlusWvVkSeWLjf1zwWZ0f7gFUEGcJnCrdtolmp9GQ==
+codeceptjs@2.6.1:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/codeceptjs/-/codeceptjs-2.6.1.tgz#db972a1cf5e654c6b015433ab82ee112a65bc52a"
+  integrity sha512-ZaH1cYHDVaVWDc1uUp3xJK/hSdopFh/siCjFiFvtXHSu4JMDJXmXqODJTjQ1H7YrYjFCx5TmxIIXGI7M+ffoYg==
   dependencies:
     "@codeceptjs/configure" "^0.4.0"
-    "@types/mocha" "^5.2.7"
     allure-js-commons "^1.3.2"
     arrify "^2.0.1"
     axios "^0.19.1"
@@ -1764,13 +1758,13 @@ codeceptjs@2.4.3:
     js-beautify "^1.10.2"
     lodash.clonedeep "^4.5.0"
     lodash.merge "^4.6.2"
-    mkdirp "^0.5.1"
+    mkdirp "^1.0.3"
     mocha "^6.2.2"
     mocha-junit-reporter "^1.23.1"
     ms "^2.1.2"
     parse-function "^5.5.0"
     promise-retry "^1.1.1"
-    requireg "^0.1.8"
+    requireg "^0.2.2"
     resq "^1.7.0"
     semver "^6.2.0"
     sprintf-js "^1.1.1"
@@ -5525,6 +5519,11 @@ mkdirp@0.5.1, "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.1:
   dependencies:
     minimist "0.0.8"
 
+mkdirp@^1.0.3:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-1.0.4.tgz#3eb5ed62622756d79a5f0e2a221dfebad75c2f7e"
+  integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
+
 mocha-junit-reporter@^1.23.1, mocha-junit-reporter@^1.23.3:
   version "1.23.3"
   resolved "https://registry.yarnpkg.com/mocha-junit-reporter/-/mocha-junit-reporter-1.23.3.tgz#941e219dd759ed732f8641e165918aa8b167c981"
@@ -7094,10 +7093,10 @@ require-uncached@^1.0.2:
     caller-path "^0.1.0"
     resolve-from "^1.0.0"
 
-requireg@^0.1.8:
-  version "0.1.8"
-  resolved "https://registry.yarnpkg.com/requireg/-/requireg-0.1.8.tgz#75c1d495294fa5ddfd51e4fcca4965c44f1ed8b1"
-  integrity sha512-qjbwnviLXg4oZiAFEr1ExbevkUPaEiP1uPGSoFCVgCCcbo4PXv9SmiJpXNYmgTBCZ8fY1Jy+sk7F9/kPNepeDw==
+requireg@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/requireg/-/requireg-0.2.2.tgz#437e77a5316a54c9bcdbbf5d1f755fe093089830"
+  integrity sha512-nYzyjnFcPNGR3lx9lwPPPnuQxv6JWEZd2Ci0u9opN7N5zUEPIhY/GbL3vMGOr2UXwEg9WwSyV9X9Y/kLFgPsOg==
   dependencies:
     nested-error-stacks "~2.0.1"
     rc "~1.2.7"
