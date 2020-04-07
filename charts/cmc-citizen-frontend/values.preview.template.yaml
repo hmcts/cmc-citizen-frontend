@@ -1,5 +1,4 @@
 tags:
-  postgresql-pod: false
   ccd-idam-pr: true
 
 postgresql:
