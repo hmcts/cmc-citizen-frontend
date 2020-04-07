@@ -79,7 +79,7 @@ describe('CCJ - repayment plan summary page', () => {
 
           claimStoreServiceMock.resolveRetrieveClaimByExternalId({
             response: {
-              ...partialAdmissionWithImmediatePaymentData,
+              ...partialAdmissionWithImmediatePaymentData(),
               amount: 3000
             },
             respondedAt: MomentFactory.currentDateTime(),
@@ -106,7 +106,7 @@ describe('CCJ - repayment plan summary page', () => {
         it('should render correctly when repayment option is SET_DATE', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId({
             response: {
-              ...partialAdmissionWithImmediatePaymentData,
+              ...partialAdmissionWithImmediatePaymentData(),
               amount: 3000
             },
             respondedAt: MomentFactory.currentDateTime(),

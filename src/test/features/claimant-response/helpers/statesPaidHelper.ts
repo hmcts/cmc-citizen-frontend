@@ -49,7 +49,7 @@ describe('statesPaidHelper', () => {
       const claim: Claim = new Claim().deserialize(
         {
           ...sampleClaimObj,
-          response: partialAdmissionWithImmediatePaymentData
+          response: partialAdmissionWithImmediatePaymentData()
         }
       )
 
@@ -101,7 +101,7 @@ describe('statesPaidHelper', () => {
       const claim: Claim = new Claim().deserialize(
         {
           ...sampleClaimObj,
-          response: fullAdmissionWithImmediatePaymentData
+          response: fullAdmissionWithImmediatePaymentData()
         }
       )
 
@@ -136,7 +136,7 @@ describe('statesPaidHelper', () => {
       const claim: Claim = new Claim().deserialize(
         {
           ...sampleClaimObj,
-          response: fullAdmissionWithImmediatePaymentData
+          response: fullAdmissionWithImmediatePaymentData()
         }
       )
 
