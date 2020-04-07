@@ -18,7 +18,6 @@ postgresql:
       CREATE DATABASE "user-profile" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
   postgresqlUsername: hmcts
   postgresqlPassword: hmcts
-  nameOverride: postgres
   persistence:
     enabled: false
     
@@ -53,7 +52,7 @@ rpe-feature-toggle-api:
   java:
     releaseNameOverride: ${SERVICE_NAME}-ftr-tgl
     environment:
-      FEATURES_DB_HOST: ${SERVICE_NAME}-postgres
+      FEATURES_DB_HOST: ${SERVICE_NAME}-postgresql
       FEATURES_DB_NAME: features
       FEATURES_DB_USER_NAME: hmcts
       FEATURES_DB_PASSWORD: hmcts
@@ -114,7 +113,7 @@ cmc-claim-store:
       DOC_ASSEMBLY_URL: false
       FRONTEND_BASE_URL: https://www-${SERVICE_FQDN}
       RESPOND_TO_CLAIM_URL: https://${SERVICE_FQDN}/first-contact/start
-      CMC_DB_HOST: ${SERVICE_NAME}-postgres
+      CMC_DB_HOST: ${SERVICE_NAME}-postgresql
       CMC_DB_USERNAME: hmcts
       CMC_DB_PASSWORD: hmcts
       CMC_DB_CONNECTION_OPTIONS: ''
@@ -185,7 +184,7 @@ ccd:
   ccd-definition-importer:
     image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.5.10
     environment:
-      CCD_DEF_CLAIM_STORE_BASE_URL: http://${SERVICE_NAME}-java
+      CCD_DEF_CLAIM_STORE_BASE_URL: http://${SERVICE_NAME}-claim-store
     definitionFilename: cmc-ccd.xlsx
     userRoles:
       - citizen
