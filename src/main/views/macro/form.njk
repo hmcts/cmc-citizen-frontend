@@ -166,12 +166,12 @@
            {% if checked %}checked{% endif %}>
     <label for="{{ idValue }}">
       {% if hint == '' %}
-        {{ t(label) }}
+        {{ t(label) | safe }}
       {% else %}
         {% if bold %}
-          <strong class="bold-small">{{ t(label) }}</strong>
+          <strong class="bold-small">{{ t(label) | safe }}</strong>
         {% else %}
-          {{ t(label) }}
+          {{ t(label) | safe }}
         {% endif %}
         <br>
         <span {% if greyHint != false %}class="form-hint"{% endif %}>{{ t(hint) }}</span>
