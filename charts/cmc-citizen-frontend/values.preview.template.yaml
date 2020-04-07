@@ -20,7 +20,7 @@ postgresql:
   postgresqlPassword: hmcts
   persistence:
     enabled: false
-    
+
 nodejs:
   image: ${IMAGE_NAME}
   ingressIP: ${INGRESS_IP}
