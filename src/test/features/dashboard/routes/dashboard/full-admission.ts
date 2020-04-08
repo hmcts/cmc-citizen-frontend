@@ -95,7 +95,7 @@ function testData () {
       claim: fullAdmissionClaim,
       claimOverride: {
         response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
-        claimantResponse: { ...claimantReferredToJudgeResponse }
+        claimantResponse: { ...claimantReferredToJudgeResponse() }
       },
       claimantAssertions: ['Awaiting judge’s review.'],
       defendantAssertions: [fullAdmissionClaim.claim.claimants[0].name + ' requested a County Court Judgment against you']
