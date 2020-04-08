@@ -17,13 +17,13 @@ describe('ClaimDocument', () => {
   it('should return document display name', () => {
     const actual: ClaimDocument = claimDocument.deserialize(claimDocumentSample)
 
-    expect(actual.documentDisplayName).to.be.eq('Download the sealed claim')
+    expect(actual.documentDisplayName).to.be.eq('Download claim')
   })
 
   it('should return text', () => {
     const actual: string = claimDocument.getDisplayName('CLAIMANT_DIRECTIONS_QUESTIONNAIRE')
 
-    expect(actual).to.be.eq('Download your hearing requirements')
+    expect(actual).to.be.eq('Download the claimant\'s hearing requirements')
   })
 
   it('should return uri', () => {
