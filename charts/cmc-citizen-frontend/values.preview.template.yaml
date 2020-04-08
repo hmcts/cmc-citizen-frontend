@@ -183,6 +183,13 @@ ccd:
 
   ccd-definition-importer:
     image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.5.10
+    keyVaults:
+      "cmc":
+        excludeEnvironmentSuffix: false
+        secrets:
+          - ccd-importer-username-preprod
+          - ccd-importer-password-preprod
+          - ccd-importer-client-secret-preprod
     environment:
       CCD_DEF_CLAIM_STORE_BASE_URL: http://${SERVICE_NAME}-claim-store
     definitionFilename: cmc-ccd.xlsx
