@@ -176,7 +176,6 @@ ccd:
 
   ccd-user-profile-importer:
     image: hmctspublic.azurecr.io/ccd/user-profile-importer:db2r9a
-    aadIdentityName: ccd
     users:
       - civilmoneyclaims+ccd@gmail.com|CMC|MoneyClaimCase|open
       - civilmoneyclaims+judge@gmail.com|CMC|MoneyClaimCase|orderForJudgeReview
@@ -184,7 +183,6 @@ ccd:
 
   ccd-definition-importer:
     image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.5.10
-    aadIdentityName: ccd
     environment:
       CCD_DEF_CLAIM_STORE_BASE_URL: http://${SERVICE_NAME}-claim-store
     definitionFilename: cmc-ccd.xlsx
