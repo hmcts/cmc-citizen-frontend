@@ -117,7 +117,7 @@ cmc-claim-store:
       CMC_DB_USERNAME: hmcts
       CMC_DB_PASSWORD: hmcts
       CMC_DB_CONNECTION_OPTIONS: ''
-      CORE_CASE_DATA_API_URL: http://${SERVICE_NAME}-data-store-api
+      CORE_CASE_DATA_API_URL: http://${SERVICE_NAME}-ccd-data-store-api
 
 ccd:
   enabled: true
