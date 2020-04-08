@@ -1,42 +1,34 @@
 export class ClaimDocumentType {
   static readonly ORDER_DIRECTIONS = {
-    text: 'Download the court’s order',
-    uri: 'court-order'
+    text: 'Download the judgment order',
+    uri: 'judgment-order'
   }
   static readonly SEALED_CLAIM = {
-    text: 'Download the sealed claim',
+    text: 'Download claim',
     uri: 'sealed-claim'
   }
   static readonly CLAIM_ISSUE_RECEIPT = {
-    text: 'Download the claim issue receipt',
+    text: 'Download claim ',
     uri: 'claim-receipt'
   }
   static readonly DEFENDANT_RESPONSE_RECEIPT = {
-    text: 'Download the defendant response receipt',
+    text: 'Download the defendant\'s response and hearing requirements',
     uri: 'response-receipt'
   }
-  static readonly CLAIMANT_RESPONSE_RECEIPT = {
-    text: 'Download the claimant response receipt',
-    uri: 'claimant-response-receipt'
-  }
   static readonly CCJ_REQUEST = {
-    text: 'Download the ccj receipt',
+    text: 'Download the judgment',
     uri: 'ccj-receipt'
   }
   static readonly SETTLEMENT_AGREEMENT = {
     text: 'Download the settlement agreement',
     uri: 'settlement-agreement'
   }
-  static readonly DEFENDANT_PIN_LETTER = {
-    text: 'Download the pin letter',
-    uri: 'pin-letter'
-  }
   static readonly CLAIMANT_DIRECTIONS_QUESTIONNAIRE = {
-    text: 'Download your hearing requirements',
+    text: 'Download the claimant\'s hearing requirements',
     uri: 'claimant-directions-questionnaire'
   }
   static readonly REVIEW_ORDER = {
-    text: 'Download request for review of order',
+    text: 'Download the request to review the order',
     uri: 'review-order'
   }
 }

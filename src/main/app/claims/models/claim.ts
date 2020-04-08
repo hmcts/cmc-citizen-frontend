@@ -32,6 +32,7 @@ import { ReviewOrder } from 'claims/models/reviewOrder'
 import { MediationOutcome } from 'claims/models/mediationOutcome'
 import { YesNoOption } from 'models/yesNoOption'
 import { ClaimDocument } from 'claims/models/claimDocument'
+import * as _ from 'lodash'
 
 interface State {
   status: ClaimStatus
@@ -374,9 +375,11 @@ export class Claim {
         this.paperResponse = YesNoOption.fromObject(input.paperResponse)
       }
       if (input.claimDocumentCollection && input.claimDocumentCollection.claimDocuments) {
-        this.claimDocuments = input.claimDocumentCollection.claimDocuments.map((value) => {
+        this.claimDocuments = _.sortBy(input.claimDocumentCollection.claimDocuments.map((value) => {
           return new ClaimDocument().deserialize(value)
-        })
+        }), [function (o) {
+          return o.createdDatetime
+        }]).reverse()
       }
 
       return this
