@@ -15,7 +15,8 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkAuthorizationGuards } from 'test/features/dashboard/routes/checks/authorization-check'
 import { MomentFactory } from 'shared/momentFactory'
 import {
-  partialAdmissionFromStatesPaidDefence, partialAdmissionFromStatesPaidWithMediationDefence
+  partialAdmissionFromStatesPaidDefence,
+  partialAdmissionFromStatesPaidWithMediationDefence
 } from 'test/data/entity/responseData'
 import {
   claimantRejectAlreadyPaid,
@@ -24,66 +25,70 @@ import {
 } from 'test/data/entity/fullDefenceData'
 import { MediationOutcome } from 'claims/models/mediationOutcome'
 
-const statesPaidClaim = {
-  ...claimStoreServiceMock.sampleClaimObj,
-  responseDeadline: MomentFactory.currentDate().add(1, 'days'),
-  ...respondedAt
+function statesPaidClaim () {
+  return {
+    ...claimStoreServiceMock.sampleClaimObj,
+    responseDeadline: MomentFactory.currentDate().add(1, 'days'),
+    ...respondedAt()
+  }
 }
 
 const cookieName: string = config.get<string>('session.cookieName')
 
-const testData = [
-  {
-    status: 'States paid defence - defendant paid what he believed he owed - claimant rejects',
-    claim: statesPaidClaim,
-    claimOverride: {
-      response: {
-        ...partialAdmissionFromStatesPaidDefence
+function testData () {
+  return [
+    {
+      status: 'States paid defence - defendant paid what he believed he owed - claimant rejects',
+      claim: statesPaidClaim(),
+      claimOverride: {
+        response: {
+          ...partialAdmissionFromStatesPaidDefence
+        },
+        ...claimantRejectAlreadyPaid()
       },
-      ...claimantRejectAlreadyPaid
+      claimantAssertions: ['Wait for the court to review the case'],
+      defendantAssertions: ['Wait for the court to review the case']
     },
-    claimantAssertions: ['Wait for the court to review the case'],
-    defendantAssertions: ['Wait for the court to review the case']
-  },
-  {
-    status: 'States paid defence with mediation - defendant paid what he believed he owed with mediation - claimant rejects',
-    claim: statesPaidClaim,
-    claimOverride: {
-      response: {
-        ...partialAdmissionFromStatesPaidWithMediationDefence
+    {
+      status: 'States paid defence with mediation - defendant paid what he believed he owed with mediation - claimant rejects',
+      claim: statesPaidClaim(),
+      claimOverride: {
+        response: {
+          ...partialAdmissionFromStatesPaidWithMediationDefence
+        },
+        ...claimantRejectAlreadyPaidWithMediation()
       },
-      ...claimantRejectAlreadyPaidWithMediation
+      claimantAssertions: ['We’ll contact you to try to arrange a mediation appointment'],
+      defendantAssertions: ['We’ll contact you to try to arrange a mediation appointment']
     },
-    claimantAssertions: ['We’ll contact you to try to arrange a mediation appointment'],
-    defendantAssertions: ['We’ll contact you to try to arrange a mediation appointment']
-  },
-  {
-    status: 'States paid defence with mediation - defendant paid what he believed he owed with mediation - claimant rejects - mediation failed',
-    claim: statesPaidClaim,
-    claimOverride: {
-      response: {
-        ...partialAdmissionFromStatesPaidWithMediationDefence
+    {
+      status: 'States paid defence with mediation - defendant paid what he believed he owed with mediation - claimant rejects - mediation failed',
+      claim: statesPaidClaim(),
+      claimOverride: {
+        response: {
+          ...partialAdmissionFromStatesPaidWithMediationDefence
+        },
+        ...claimantRejectAlreadyPaidWithMediation(),
+        mediationOutcome: MediationOutcome.FAILED
       },
-      ...claimantRejectAlreadyPaidWithMediation,
-      mediationOutcome: MediationOutcome.FAILED
+      claimantAssertions: ['Mediation was unsuccessful'],
+      defendantAssertions: ['Mediation was unsuccessful']
     },
-    claimantAssertions: ['Mediation was unsuccessful'],
-    defendantAssertions: ['Mediation was unsuccessful']
-  },
-  {
-    status: 'States paid defence with mediation - defendant paid what he believed he owed with mediation - claimant rejects - mediation success',
-    claim: statesPaidClaim,
-    claimOverride: {
-      response: {
-        ...partialAdmissionFromStatesPaidWithMediationDefence
+    {
+      status: 'States paid defence with mediation - defendant paid what he believed he owed with mediation - claimant rejects - mediation success',
+      claim: statesPaidClaim(),
+      claimOverride: {
+        response: {
+          ...partialAdmissionFromStatesPaidWithMediationDefence
+        },
+        ...claimantRejectAlreadyPaidWithMediation(),
+        mediationOutcome: MediationOutcome.SUCCEEDED
       },
-      ...claimantRejectAlreadyPaidWithMediation,
-      mediationOutcome: MediationOutcome.SUCCEEDED
-    },
-    claimantAssertions: ['You both agreed a settlement through mediation'],
-    defendantAssertions: ['You both agreed a settlement through mediation']
-  }
-]
+      claimantAssertions: ['You both agreed a settlement through mediation'],
+      defendantAssertions: ['You both agreed a settlement through mediation']
+    }
+  ]
+}
 
 describe('Dashboard page', () => {
   attachDefaultHooks(app)
@@ -102,7 +107,7 @@ describe('Dashboard page', () => {
             claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
           })
 
-          testData.forEach(data => {
+          testData().forEach(data => {
             it(`should render dashboard: ${data.status}`, async () => {
               draftStoreServiceMock.resolveFindNoDraftFound()
               claimStoreServiceMock.resolveRetrieveByClaimantId(data.claim, data.claimOverride)
@@ -119,7 +124,7 @@ describe('Dashboard page', () => {
             claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
           })
 
-          testData.forEach(data => {
+          testData().forEach(data => {
             it(`should render dashboard: ${data.status}`, async () => {
               draftStoreServiceMock.resolveFindNoDraftFound()
               claimStoreServiceMock.resolveRetrieveByDefendantId(data.claim.referenceNumber, '1', data.claim, data.claimOverride)
