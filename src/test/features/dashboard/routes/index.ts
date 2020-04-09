@@ -48,114 +48,116 @@ const fullDefenceClaim = {
   }
 }
 
-const testData = [
-  {
-    status: 'claim issued',
-    claim: claimStoreServiceMock.sampleClaimIssueObj,
-    claimOverride: {
-      responseDeadline: MomentFactory.currentDate().add(1, 'days')
+function testData () {
+  return [
+    {
+      status: 'claim issued',
+      claim: claimStoreServiceMock.sampleClaimIssueObj,
+      claimOverride: {
+        responseDeadline: MomentFactory.currentDate().add(1, 'days')
+      },
+      claimantAssertions: ['000MC050', 'Wait for the defendant to respond'],
+      defendantAssertions: ['000MC050', 'Respond to claim.', '(1 day remaining)']
     },
-    claimantAssertions: ['000MC050', 'Wait for the defendant to respond'],
-    defendantAssertions: ['000MC050', 'Respond to claim.', '(1 day remaining)']
-  },
-  {
-    status: 'requested more time',
-    claim: claimStoreServiceMock.sampleClaimIssueObj,
-    claimOverride: {
-      moreTimeRequested: true,
-      responseDeadline: '2099-08-08'
+    {
+      status: 'requested more time',
+      claim: claimStoreServiceMock.sampleClaimIssueObj,
+      claimOverride: {
+        moreTimeRequested: true,
+        responseDeadline: '2099-08-08'
+      },
+      claimantAssertions: ['000MC050', 'John Doe has requested more time to respond.'],
+      defendantAssertions: ['000MC050', 'You need to respond before 4pm on 8 August 2099.']
     },
-    claimantAssertions: ['000MC050', 'John Doe has requested more time to respond.'],
-    defendantAssertions: ['000MC050', 'You need to respond before 4pm on 8 August 2099.']
-  },
-  {
-    status: 'partial admission, pay immediately',
-    claim: partAdmissionClaim,
-    claimOverride: {
-      response: { ...partAdmissionClaim.response, ...basePayImmediatelyData }
+    {
+      status: 'partial admission, pay immediately',
+      claim: partAdmissionClaim,
+      claimOverride: {
+        response: { ...partAdmissionClaim.response, ...basePayImmediatelyData() }
+      },
+      claimantAssertions: ['000MC000', 'Respond to the defendant.'],
+      defendantAssertions: ['000MC000', 'You’ve admitted part of the claim.']
     },
-    claimantAssertions: ['000MC000', 'Respond to the defendant.'],
-    defendantAssertions: ['000MC000', 'You’ve admitted part of the claim.']
-  },
-  {
-    status: 'partial admission, pay immediately, offer accepted',
-    claim: partAdmissionClaim,
-    claimOverride: {
-      response: { ...partAdmissionClaim.response, ...basePayImmediatelyData },
-      claimantResponse: baseAcceptationClaimantResponseData
+    {
+      status: 'partial admission, pay immediately, offer accepted',
+      claim: partAdmissionClaim,
+      claimOverride: {
+        response: { ...partAdmissionClaim.response, ...basePayImmediatelyData() },
+        claimantResponse: baseAcceptationClaimantResponseData
+      },
+      claimantAssertions: ['000MC000', 'You’ve accepted the defendant’s part admission. They said they’d pay immediately.'],
+      defendantAssertions: ['000MC000', 'John Smith accepted your admission of £30']
     },
-    claimantAssertions: ['000MC000', 'You’ve accepted the defendant’s part admission. They said they’d pay immediately.'],
-    defendantAssertions: ['000MC000', 'John Smith accepted your admission of £30']
-  },
-  {
-    status: 'partial admission, pay immediately, offer accepted, payment past deadline',
-    claim: partAdmissionClaim,
-    claimOverride: {
-      response: { ...partAdmissionClaim.response, ...basePayImmediatelyData },
-      claimantResponse: baseAcceptationClaimantResponseData
+    {
+      status: 'partial admission, pay immediately, offer accepted, payment past deadline',
+      claim: partAdmissionClaim,
+      claimOverride: {
+        response: { ...partAdmissionClaim.response, ...basePayImmediatelyData() },
+        claimantResponse: baseAcceptationClaimantResponseData
+      },
+      claimantAssertions: ['000MC000', 'You’ve accepted the defendant’s part admission. They said they’d pay immediately.'],
+      defendantAssertions: ['000MC000', 'John Smith accepted your admission of £30']
     },
-    claimantAssertions: ['000MC000', 'You’ve accepted the defendant’s part admission. They said they’d pay immediately.'],
-    defendantAssertions: ['000MC000', 'John Smith accepted your admission of £30']
-  },
-  {
-    status: 'partial admission, pay by set date',
-    claim: partAdmissionClaim,
-    claimOverride: {
-      response: { ...partAdmissionClaim.response, ...basePayBySetDateData }
+    {
+      status: 'partial admission, pay by set date',
+      claim: partAdmissionClaim,
+      claimOverride: {
+        response: { ...partAdmissionClaim.response, ...basePayBySetDateData }
+      },
+      claimantAssertions: ['000MC000', 'Respond to the defendant.'],
+      defendantAssertions: ['000MC000', 'You’ve admitted part of the claim.']
     },
-    claimantAssertions: ['000MC000', 'Respond to the defendant.'],
-    defendantAssertions: ['000MC000', 'You’ve admitted part of the claim.']
-  },
-  {
-    status: 'partial admission, pay by repayment plan',
-    claim: partAdmissionClaim,
-    claimOverride: {
-      response: { ...partAdmissionClaim.response, ...basePayByInstalmentsData }
+    {
+      status: 'partial admission, pay by repayment plan',
+      claim: partAdmissionClaim,
+      claimOverride: {
+        response: { ...partAdmissionClaim.response, ...basePayByInstalmentsData }
+      },
+      claimantAssertions: ['000MC000', 'Respond to the defendant.'],
+      defendantAssertions: ['000MC000', 'You’ve admitted part of the claim.']
     },
-    claimantAssertions: ['000MC000', 'Respond to the defendant.'],
-    defendantAssertions: ['000MC000', 'You’ve admitted part of the claim.']
-  },
-  {
-    status: 'partial admission, states paid accepted',
-    claim: partAdmissionClaim,
-    claimOverride: {
-      response: { ...partialAdmissionAlreadyPaidData },
-      claimantResponse: { type: 'ACCEPTATION' }
+    {
+      status: 'partial admission, states paid accepted',
+      claim: partAdmissionClaim,
+      claimOverride: {
+        response: { ...partialAdmissionAlreadyPaidData },
+        claimantResponse: { type: 'ACCEPTATION' }
+      },
+      claimantAssertions: ['000MC000', 'This claim is settled.'],
+      defendantAssertions: ['000MC000', 'This claim is settled.']
     },
-    claimantAssertions: ['000MC000', 'This claim is settled.'],
-    defendantAssertions: ['000MC000', 'This claim is settled.']
-  },
-  {
-    status: 'partial admission, states paid rejected',
-    claim: partAdmissionClaim,
-    claimOverride: {
-      response: { ...partialAdmissionAlreadyPaidData },
-      claimantResponse: { type: 'REJECTION' }
+    {
+      status: 'partial admission, states paid rejected',
+      claim: partAdmissionClaim,
+      claimOverride: {
+        response: { ...partialAdmissionAlreadyPaidData },
+        claimantResponse: { type: 'REJECTION' }
+      },
+      claimantAssertions: ['000MC000', 'Wait for the court to review the case'],
+      defendantAssertions: ['000MC000', 'Wait for the court to review the case']
     },
-    claimantAssertions: ['000MC000', 'Wait for the court to review the case'],
-    defendantAssertions: ['000MC000', 'Wait for the court to review the case']
-  },
-  {
-    status: 'full defence, states paid accepted',
-    claim: fullDefenceClaim,
-    claimOverride: {
-      response: { ...defenceWithAmountClaimedAlreadyPaidData },
-      claimantResponse: { type: 'ACCEPTATION' }
+    {
+      status: 'full defence, states paid accepted',
+      claim: fullDefenceClaim,
+      claimOverride: {
+        response: { ...defenceWithAmountClaimedAlreadyPaidData },
+        claimantResponse: { type: 'ACCEPTATION' }
+      },
+      claimantAssertions: ['000MC000', 'This claim is settled.'],
+      defendantAssertions: ['000MC000', 'This claim is settled.']
     },
-    claimantAssertions: ['000MC000', 'This claim is settled.'],
-    defendantAssertions: ['000MC000', 'This claim is settled.']
-  },
-  {
-    status: 'full defence, states paid rejected',
-    claim: fullDefenceClaim,
-    claimOverride: {
-      response: { ...defenceWithAmountClaimedAlreadyPaidData },
-      claimantResponse: { type: 'REJECTION' }
-    },
-    claimantAssertions: ['000MC000', 'Wait for the court to review the case'],
-    defendantAssertions: ['000MC000', 'Wait for the court to review the case']
-  }
-]
+    {
+      status: 'full defence, states paid rejected',
+      claim: fullDefenceClaim,
+      claimOverride: {
+        response: { ...defenceWithAmountClaimedAlreadyPaidData },
+        claimantResponse: { type: 'REJECTION' }
+      },
+      claimantAssertions: ['000MC000', 'Wait for the court to review the case'],
+      defendantAssertions: ['000MC000', 'Wait for the court to review the case']
+    }
+  ]
+}
 
 describe('Dashboard page', () => {
   attachDefaultHooks(app)
@@ -218,7 +220,7 @@ describe('Dashboard page', () => {
               .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Make a new money claim'))
           })
 
-          testData.forEach(data => {
+          testData().forEach(data => {
             it(`should render dashboard: ${data.status}`, async () => {
               draftStoreServiceMock.resolveFindNoDraftFound()
               claimStoreServiceMock.resolveRetrieveByClaimantId(data.claim, data.claimOverride)
@@ -253,7 +255,7 @@ describe('Dashboard page', () => {
               .expect(res => expect(res).to.be.successful.withText('000MC050', 'Respond to claim'))
           })
 
-          testData.forEach(data => {
+          testData().forEach(data => {
             it(`should render dashboard: ${data.status}`, async () => {
               draftStoreServiceMock.resolveFindNoDraftFound()
               claimStoreServiceMock.resolveRetrieveByDefendantId(data.claim.referenceNumber, '1', data.claim, data.claimOverride)
