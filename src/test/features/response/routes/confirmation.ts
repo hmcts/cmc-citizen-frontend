@@ -39,7 +39,7 @@ describe('Defendant response: confirmation page', () => {
       verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
 
       it('when part admit pay immediately should render page when everything is fine', async () => {
-        claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.samplePartialAdmissionWithPayImmediatelyDataV2)
+        claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.samplePartialAdmissionWithPayImmediatelyDataV2())
 
         await request(app)
           .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
