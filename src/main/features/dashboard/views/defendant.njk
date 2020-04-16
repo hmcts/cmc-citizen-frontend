@@ -17,13 +17,13 @@
 {% endblock %}
 
 {% set latestUpdate %}
-  <div>
+  <div class="latest-update-section">
     {{ caseHistoryForDefendantClaimDetails(claim, reconsiderationDeadline, isReviewOrderEligible, respondToReviewOrderDeadline, judgePilot) }}
   </div>
 {% endset %}
 
 {% set documents %}
-  <h2 class="heading-medium">{{ t('Claim documents') }}</h2>
+  <h2 class="heading-medium no-top-margin">{{ t('Claim documents') }}</h2>
   {% for document in claim.claimDocuments %}
     <p>
       {{ internalLink(document.documentDisplayName, ClaimPaths.documentPage.evaluateUri({ externalId: claim.externalId, documentURI: document.uri })) }}

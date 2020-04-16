@@ -39,10 +39,21 @@
   margin-bottom: 0;
 }
 
-.tab-section {
-  h2 {
-    margin-top: 0;
+.no-top-margin {
+  margin-top: 0;
+}
+
+.latest-update-section {
+  .status-block {
+    &:first-of-type {
+      h2 {
+        margin-top: 0;
+      }
+    }
   }
+}
+
+.tab-section {
   ul {
     li {
       a {

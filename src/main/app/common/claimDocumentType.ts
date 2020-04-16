@@ -8,7 +8,7 @@ export class ClaimDocumentType {
     uri: 'sealed-claim'
   }
   static readonly CLAIM_ISSUE_RECEIPT = {
-    text: 'Download claim ',
+    text: 'Download claim',
     uri: 'claim-receipt'
   }
   static readonly DEFENDANT_RESPONSE_RECEIPT = {
