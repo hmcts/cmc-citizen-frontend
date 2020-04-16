@@ -109,6 +109,6 @@
     }
   },
   "launchDarkly": {
-    "offline": "LD_OFFLINE_FLAG"
+    "offline": "LAUNCH_DARKLY_OFFLINE_MODE"
   }
 }
