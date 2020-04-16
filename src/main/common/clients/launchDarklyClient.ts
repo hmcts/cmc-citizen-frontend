@@ -27,6 +27,7 @@ export class LaunchDarklyClient {
         roles
       }
     }
+    // use undefined as the default to defer responsibility for determining the default to the consumer
     return LaunchDarklyClient.client.variation(featureKey, ldUser, undefined)
   }
 }

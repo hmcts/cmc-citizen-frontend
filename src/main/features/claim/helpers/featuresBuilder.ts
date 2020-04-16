@@ -24,6 +24,7 @@ export class FeaturesBuilder {
     for (const feature of FEATURES) {
       if (amount <= feature.threshold) {
         const ldVariation = await this.launchDarklyClient.variation(user, roles, feature.toggle)
+        // ldVariation will be undefined if we're in offline mode, in which case look at the local toggles
         if (ldVariation || (ldVariation === undefined && config.get<string>(`featureToggles.${feature.setting}`))) {
           features.push(feature.feature)
         }
