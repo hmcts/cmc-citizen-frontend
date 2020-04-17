@@ -368,14 +368,16 @@ function testData () {
         'A County Court Judgment has been issued against the defendant.',
         'We’ll post a copy of the judgment to you and to John Doe',
         'A judge will decide what John Doe can afford to pay, based on their financial details.',
-        'We’ll contact you to tell you what to do next.'
+        'We’ll contact you by post to tell you what to do next.'
+        'Your online account won’t be updated - any further updates will be by post.'
       ],
       defendantAssertions: ['000MC050',
         'John Smith requested a County Court Judgment (CCJ) against you',
         'They rejected your repayment plan.',
         'They also rejected a repayment plan determined by the court, based on the financial details you provided.',
         'When we’ve processed the request we’ll post a copy of the judgment to you and to John Smith.',
-        'A judge will make a repayment plan. We’ll contact you to tell you what to do next.',
+        'A judge will make a repayment plan. We’ll contact you by post to to tell you what to do next.',
+        'Your online account won’t be updated - any further updates will be by post.'
         'Download your response'
       ]
     },
