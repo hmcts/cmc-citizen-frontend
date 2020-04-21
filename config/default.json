@@ -47,6 +47,7 @@
   },
   "pay": {
     "url": "http://localhost:4421",
+    "return-url": "https://localhost:3000",
     "service-name": "CMC",
     "currency": "GBP",
     "site-id": "AA00",
