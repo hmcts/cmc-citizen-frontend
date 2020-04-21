@@ -14,16 +14,20 @@ export const ccjDeterminationByInstalment = {
   defendantDateOfBirth: '2000-01-01'
 }
 
-export const ccjDeterminationBySpecifiedDate = {
-  ccjType: 'DETERMINATION',
-  payBySetDate: MomentFactory.currentDate().add(2, 'year'),
-  paymentOption: 'BY_SPECIFIED_DATE',
-  defendantDateOfBirth: '1999-01-01'
+export function ccjDeterminationBySpecifiedDate () {
+  return {
+    ccjType: 'DETERMINATION',
+    payBySetDate: MomentFactory.currentDate().add(2, 'year'),
+    paymentOption: 'BY_SPECIFIED_DATE',
+    defendantDateOfBirth: '1999-01-01'
+  }
 }
 
-export const ccjAdmissionBySpecifiedDate = {
-  ccjType: 'ADMISSIONS',
-  payBySetDate: MomentFactory.currentDate().add(2, 'year'),
-  paymentOption: 'BY_SPECIFIED_DATE',
-  defendantDateOfBirth: '1999-01-01'
+export function ccjAdmissionBySpecifiedDate () {
+  return {
+    ccjType: 'ADMISSIONS',
+    payBySetDate: MomentFactory.currentDate().add(2, 'year'),
+    paymentOption: 'BY_SPECIFIED_DATE',
+    defendantDateOfBirth: '1999-01-01'
+  }
 }

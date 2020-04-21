@@ -371,7 +371,7 @@ describe('Claim', () => {
       claim.claimantRespondedAt = MomentFactory.currentDate()
       claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate()
       claim.settlement = prepareSettlementWithDefendantRejection(PaymentIntention.deserialize(paymentIntention), MadeBy.DEFENDANT)
-      claim.settlementReachedAt = data.defendantRejectsSettlementPartyStatements.settlementReachedAt
+      claim.settlementReachedAt = data.defendantRejectsSettlementPartyStatements().settlementReachedAt
 
       expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REQUESTS_CCJ_AFTER_DEFENDANT_REJECTS_SETTLEMENT)
     })
@@ -836,7 +836,7 @@ describe('Claim', () => {
     let claim
 
     beforeEach(() => {
-      claim = new Claim().deserialize(defenceClaimData)
+      claim = new Claim().deserialize(defenceClaimData())
       claim.responseDeadline = MomentFactory.currentDate().add(1, 'day')
       claim.intentionToProceedDeadline = MomentFactory.currentDateTime().add(33, 'days')
       claim.response = FullDefenceResponse.deserialize(defenceWithDisputeData)
