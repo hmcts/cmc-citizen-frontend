@@ -227,13 +227,6 @@ export const sampleStatementOfMeansWithDefendantPension = {
   ...sampleIncomesWithPensionData
 }
 
-export const sampleStatementOfMeansWithPartnerPension = {
-  ...sampleStatementOfMeans,
-  ...sampleExpensesData,
-  ...sampleIncomesWithPensionData,
-  ...samplePartnerDetails
-}
-
 export const sampleStatementOfMeansAllAllowances = {
   ...sampleStatementOfMeansWithDefendantPension,
   ...sampleOneDependantDetails,

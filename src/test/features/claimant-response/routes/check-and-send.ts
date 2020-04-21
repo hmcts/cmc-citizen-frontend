@@ -310,7 +310,7 @@ describe('Claimant response: check and send page', () => {
         })
 
         it(`should render page successfully when Defendant's part admit pay immediately response is accepted`, async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPayImmediatelyData)
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPayImmediatelyData())
           draftStoreServiceMock.resolveFind(draftType,
             {
               settleAdmitted: {
@@ -338,7 +338,7 @@ describe('Claimant response: check and send page', () => {
         if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
           it(`should render page with hearing requirements when Defendant's part admit pay immediately response is rejected`, async () => {
             const dqPartAdmit = {
-              ...claimStoreServiceMock.samplePartialAdmissionWithPayImmediatelyData,
+              ...claimStoreServiceMock.samplePartialAdmissionWithPayImmediatelyData(),
               features: ['directionsQuestionnaire']
             }
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(dqPartAdmit)
@@ -369,7 +369,7 @@ describe('Claimant response: check and send page', () => {
 
         it(`should render page without hearing requirements when Defendant's part admit pay immediately response is accepted`, async () => {
           const dqPartAdmit = {
-            ...claimStoreServiceMock.samplePartialAdmissionWithPayImmediatelyData,
+            ...claimStoreServiceMock.samplePartialAdmissionWithPayImmediatelyData(),
             features: ['directionsQuestionnaire']
           }
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(dqPartAdmit)

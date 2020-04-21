@@ -275,7 +275,7 @@ describe('Claimant response task list builder', () => {
         })
 
         it('should not be available when payment will be made immediately', () => {
-          claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: partialAdmissionWithImmediatePaymentData } })
+          claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: partialAdmissionWithImmediatePaymentData() } })
           draft = new DraftClaimantResponse().deserialize({
             ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
               settleAdmitted: undefined
@@ -315,7 +315,7 @@ describe('Claimant response task list builder', () => {
         })
 
         it('should not be available when response type is full admission and payment will be made immediately', () => {
-          claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: fullAdmissionWithImmediatePaymentData } })
+          claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: fullAdmissionWithImmediatePaymentData() } })
 
           const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(draft, claim, new MediationDraft())
           expect(taskList.tasks.find(task => task.name === 'Accept or reject their repayment plan')).to.be.undefined
@@ -481,7 +481,7 @@ describe('Claimant response task list builder', () => {
         })
 
         it('should not be available when payment will be made immediately', () => {
-          claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: partialAdmissionWithImmediatePaymentData } })
+          claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: partialAdmissionWithImmediatePaymentData() } })
           draft = new DraftClaimantResponse().deserialize({
             ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
               acceptPaymentMethod: undefined
@@ -555,7 +555,7 @@ describe('Claimant response task list builder', () => {
         })
 
         it('should not be available when payment will be made immediately', () => {
-          claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: fullAdmissionWithImmediatePaymentData } })
+          claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: fullAdmissionWithImmediatePaymentData() } })
 
           const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(draft, claim, new MediationDraft())
           expect(taskList.tasks.find(task => task.name === taskName)).to.be.undefined
@@ -621,7 +621,7 @@ describe('Claimant response task list builder', () => {
         })
 
         it('should not be available when claimant decided to proceed with settlement', () => {
-          claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: fullAdmissionWithImmediatePaymentData } })
+          claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: fullAdmissionWithImmediatePaymentData() } })
           draft = new DraftClaimantResponse().deserialize({
             ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
               formaliseRepaymentPlan: {

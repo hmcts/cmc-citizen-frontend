@@ -1,10 +1,10 @@
 dependencies:
   - name: nodejs
-    version: ~1.9.0
+    version: ~1.10.0
     repository: '@hmctspublic'
 
   - name: idam-pr
-    version: ~2.2.3
+    version: ~2.2.5
     repository: '@hmctspublic'
     condition: idam-pr.enabled
 
@@ -14,7 +14,7 @@ dependencies:
     condition: rpe-feature-toggle-api.enabled
 
   - name: cmc-claim-store
-    version: ~3.2.9
+    version: ~4.0.9
     repository: '@hmctspublic'
     condition: cmc-claim-store.enabled
 
@@ -24,6 +24,6 @@ dependencies:
     condition: postgresql.enabled
 
   - name: ccd
-    version: ~3.3.1
+    version: ~4.2.2
     repository: '@hmctspublic'
     condition: ccd.enabled
