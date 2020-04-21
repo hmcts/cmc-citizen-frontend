@@ -12,7 +12,7 @@ export class ClaimDocumentType {
     uri: 'claim-receipt'
   }
   static readonly DEFENDANT_RESPONSE_RECEIPT = {
-    text: 'Download the defendant\'s response and hearing requirements',
+    text: 'Download the defendant\'s response',
     uri: 'response-receipt'
   }
   static readonly CCJ_REQUEST = {
