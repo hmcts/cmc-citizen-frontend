@@ -36,6 +36,7 @@ nodejs:
     HTTP_TIMEOUT: 60000
     FEATURE_TOGGLES_API_URL: http://${SERVICE_NAME}-ftr-tgl
     CLAIM_STORE_URL: http://${SERVICE_NAME}-claim-store
+    PAY_RETURN_URL: https://www-${SERVICE_FQDN}
 
     # config to make non prod testing easier
     FEATURE_TESTING_SUPPORT: true
