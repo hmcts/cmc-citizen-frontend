@@ -1,6 +1,3 @@
-tags:
-  ccd-idam-pr: true
-
 postgresql:
   enabled: true
   image:
