@@ -109,7 +109,7 @@
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "codacy-coverage": "3.4.0",
-    "codeceptjs": "2.4.3",
+    "codeceptjs": "2.6.2",
     "codecov": "^3.6.5",
     "debug": "^4.1.1",
     "gulp-livereload": "^4.0.2",
