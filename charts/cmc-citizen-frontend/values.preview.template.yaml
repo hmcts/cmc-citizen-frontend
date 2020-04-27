@@ -108,7 +108,7 @@ cmc-claim-store:
           - rpa-email-paid-in-full
     environment:
       LOG_LEVEL: DEBUG
-      DOC_ASSEMBLY_URL: false
+      DOC_ASSEMBLY_URL: http://dg-docassembly-aat.service.core-compute-aat.internal
       FRONTEND_BASE_URL: https://www-${SERVICE_FQDN}
       RESPOND_TO_CLAIM_URL: https://${SERVICE_FQDN}/first-contact/start
       CMC_DB_HOST: ${SERVICE_NAME}-postgresql
