@@ -161,7 +161,8 @@ ccd:
 
   ccd-definition-store-api:
     java:
-      image: hmctspublic.azurecr.io/ccd/definition-store-api:prod-77f5956b
+      image: hmctspublic.azurecr.io/ccd/definition-store-api:latest
+      imagePullPolicy: Always
       keyVaults:
       environment:
         DEFINITION_STORE_IDAM_KEY: ${DEFINITION_STORE_S2S_KEY}
