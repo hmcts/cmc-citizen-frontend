@@ -29,6 +29,12 @@
   &:not(:last-of-type) {
     border-bottom: 1px solid $grey-2;
   }
+
+  .latest-update-section &:first-of-type {
+    h2 {
+      margin-top: 0;
+    }
+  }
 }
 
 .about-claim-widget {
@@ -43,22 +49,10 @@
   margin-top: 0;
 }
 
-.latest-update-section {
-  .status-block {
-    &:first-of-type {
-      h2 {
-        margin-top: 0;
-      }
-    }
-  }
-}
-
 .tab-section {
-  ul {
-    li {
-      a {
-        font-size: 19px;
-      }
+  ul > li {
+    a {
+      font-size: 19px;
     }
   }
 }
