@@ -85,8 +85,8 @@ cmc-claim-store:
     releaseNameOverride: ${SERVICE_NAME}-claim-store
     ingressHost: ${SERVICE_FQDN}
     imagePullPolicy: Always
-    readinessDelay: 90  # ccd-stack will start much slower
-    livenessDelay:  90  # ccd-stack will start much slower
+    readinessDelay: 250  # ccd-stack will start much slower
+    livenessDelay:  250  # ccd-stack will start much slower
     keyVaults:
       cmc:
         resourceGroup: cmc
