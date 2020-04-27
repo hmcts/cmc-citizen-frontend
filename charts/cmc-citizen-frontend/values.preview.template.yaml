@@ -81,7 +81,7 @@ idam-pr:
 cmc-claim-store:
   enabled: true
   java:
-    image: hmctspublic.azurecr.io/cmc/claim-store:latest
+    image: hmctspublic.azurecr.io/cmc/claim-store:pr-1669
     releaseNameOverride: ${SERVICE_NAME}-claim-store
     ingressHost: ${SERVICE_FQDN}
     imagePullPolicy: Always
@@ -186,7 +186,7 @@ ccd:
       - civilmoneyclaims+la@gmail.com|CMC|MoneyClaimCase|readyForDirections
 
   ccd-definition-importer:
-    image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.5.15.4
+    image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:roc-7890
     environment:
       CCD_DEF_CLAIM_STORE_BASE_URL: http://${SERVICE_NAME}-claim-store
     definitionFilename: cmc-ccd.xlsx
