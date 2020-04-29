@@ -135,14 +135,14 @@ function legacyClaimDetails () {
         'A County Court Judgment has been issued against the defendant.',
         'We’ll post a copy of the judgment to you and to John Doe',
         'A judge will decide what John Doe can afford to pay, based on their financial details.',
-        'We’ll contact you to tell you what to do next.',
+        'We’ll contact you by post to tell you what to do next.',
         'Tell us you’ve ended the claim'
       ],
       defendantAssertions: [partAdmissionClaim().claim.claimants[0].name + ' requested a County Court Judgment (CCJ) against you',
         'They accepted your offer to pay £30. They rejected your repayment plan.',
         'They also rejected a repayment plan determined by the court, based on the financial details you provided.',
         'When we’ve processed the request we’ll post a copy of the judgment to you and to John Smith.',
-        'A judge will make a repayment plan. We’ll contact you to tell you what to do next.',
+        'A judge will make a repayment plan. We’ll contact you by post to tell you what to do next.',
         'Download your response'
       ]
     },
@@ -421,14 +421,14 @@ function legacyClaimDetails () {
         'A County Court Judgment has been issued against the defendant.',
         'We’ll post a copy of the judgment to you and to John Doe',
         'A judge will decide what John Doe can afford to pay, based on their financial details.',
-        'We’ll contact you to tell you what to do next.',
+        'We’ll contact you by post to tell you what to do next.',
         'Tell us you’ve ended the claim'
       ],
       defendantAssertions: ['John Smith requested a County Court Judgment (CCJ) against you',
         'They accepted your offer to pay £30. They rejected your repayment plan.',
         'They also rejected a repayment plan determined by the court, based on the financial details you provided.',
         'When we’ve processed the request we’ll post a copy of the judgment to you and to John Smith.',
-        'A judge will make a repayment plan. We’ll contact you to tell you what to do next.',
+        'A judge will make a repayment plan. We’ll contact you by post to tell you what to do next.',
         'Download your response'
       ]
     },
