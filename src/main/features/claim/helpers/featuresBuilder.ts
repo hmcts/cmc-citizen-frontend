@@ -6,7 +6,7 @@ import * as config from 'config'
 export class FeaturesBuilder {
   static readonly MEDIATION_PILOT_AMOUNT = 500
   static readonly LA_PILOT_THRESHOLD = 300
-  static readonly JUDGE_PILOT_THRESHOLD = 1000
+  static readonly JUDGE_PILOT_THRESHOLD = 10000
   static readonly ONLINE_DQ_THRESHOLD = 10000
 
   readonly claimStoreClient: ClaimStoreClient

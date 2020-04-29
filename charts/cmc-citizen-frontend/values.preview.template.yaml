@@ -83,6 +83,7 @@ cmc-claim-store:
     image: hmctspublic.azurecr.io/cmc/claim-store:latest
     releaseNameOverride: ${SERVICE_NAME}-claim-store
     ingressHost: ${SERVICE_FQDN}
+    imagePullPolicy: Always
     readinessDelay: 90  # ccd-stack will start much slower
     livenessDelay:  90  # ccd-stack will start much slower
     keyVaults:
@@ -160,7 +161,8 @@ ccd:
 
   ccd-definition-store-api:
     java:
-      image: hmctspublic.azurecr.io/ccd/definition-store-api:prod-77f5956b
+      image: hmctspublic.azurecr.io/ccd/definition-store-api:latest
+      imagePullPolicy: Always
       keyVaults:
       environment:
         DEFINITION_STORE_IDAM_KEY: ${DEFINITION_STORE_S2S_KEY}
@@ -183,7 +185,7 @@ ccd:
       - civilmoneyclaims+la@gmail.com|CMC|MoneyClaimCase|readyForDirections
 
   ccd-definition-importer:
-    image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.5.15.4
+    image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.5.16
     environment:
       CCD_DEF_CLAIM_STORE_BASE_URL: http://${SERVICE_NAME}-claim-store
     definitionFilename: cmc-ccd.xlsx
