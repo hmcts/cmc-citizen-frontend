@@ -1,6 +1,3 @@
-tags:
-  ccd-idam-pr: true
-
 postgresql:
   enabled: true
   image:
@@ -86,6 +83,7 @@ cmc-claim-store:
     image: hmctspublic.azurecr.io/cmc/claim-store:latest
     releaseNameOverride: ${SERVICE_NAME}-claim-store
     ingressHost: ${SERVICE_FQDN}
+    imagePullPolicy: Always
     readinessDelay: 90  # ccd-stack will start much slower
     livenessDelay:  90  # ccd-stack will start much slower
     keyVaults:
@@ -110,7 +108,7 @@ cmc-claim-store:
           - rpa-email-paid-in-full
     environment:
       LOG_LEVEL: DEBUG
-      DOC_ASSEMBLY_URL: false
+      DOC_ASSEMBLY_URL: http://dg-docassembly-aat.service.core-compute-aat.internal
       FRONTEND_BASE_URL: https://www-${SERVICE_FQDN}
       RESPOND_TO_CLAIM_URL: https://${SERVICE_FQDN}/first-contact/start
       CMC_DB_HOST: ${SERVICE_NAME}-postgresql
@@ -151,6 +149,8 @@ ccd:
       keyVaults:
       environment:
         IDAM_OAUTH2_AW_CLIENT_SECRET: ${ADMIN_WEB_IDAM_SECRET}
+    idam-pr:
+      enabled: true
 
   ccd-user-profile-api:
     java:
@@ -162,10 +162,13 @@ ccd:
   ccd-definition-store-api:
     java:
       image: hmctspublic.azurecr.io/ccd/definition-store-api:latest
+      imagePullPolicy: Always
       keyVaults:
       environment:
         DEFINITION_STORE_IDAM_KEY: ${DEFINITION_STORE_S2S_KEY}
         DEFINITION_STORE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_gw,ccd_admin,cmc_claim_store
+        IDAM_USER_URL: https://idam-web-public.aat.platform.hmcts.net
+        OIDC_ISSUER: https://forgerock-am.service.core-compute-idam-aat.internal:8443/openam/oauth2/hmcts
 
   ccd-data-store-api:
     java:
@@ -182,7 +185,7 @@ ccd:
       - civilmoneyclaims+la@gmail.com|CMC|MoneyClaimCase|readyForDirections
 
   ccd-definition-importer:
-    image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.5.15.4
+    image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.5.16
     environment:
       CCD_DEF_CLAIM_STORE_BASE_URL: http://${SERVICE_NAME}-claim-store
     definitionFilename: cmc-ccd.xlsx
