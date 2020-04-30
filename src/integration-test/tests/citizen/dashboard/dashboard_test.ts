@@ -10,11 +10,11 @@ const dashboardClaimDetails: DashboardClaimDetails = new DashboardClaimDetails()
 
 Feature('Dashboard')
 
-Scenario('Check newly created claim is in my account dashboard with correct claim amount @citizen', { retries: 3 }, async (I: I) => {
+Scenario('Check newly created claim is in my account dashboard with correct claim amount @citizen', { retries: 3 }, async (I: I, loginAs) => {
   const email: string = userSteps.getClaimantEmail()
   const claimData: ClaimData = createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
   const claimRef: string = await I.createClaim(claimData, email)
-  userSteps.login(email)
+  await I.loggedInAs(await loginAs('claimant').then(() => 'Claimant'))
   I.waitForOpenClaim(claimRef)
   I.click('My account')
   I.see('Your money claims account')

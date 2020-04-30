@@ -31,7 +31,6 @@ export class Helper {
     if (testData.defenceType === undefined) {
       testData.defenceType = DefenceType.FULL_REJECTION_WITH_DISPUTE
     }
-    defenceSteps.loginAsDefendant(testData.defendantEmail)
     I.click(testData.claimRef)
     I.click('Respond to claim')
     defenceSteps.makeDefenceAndSubmit(
@@ -50,14 +49,12 @@ export class Helper {
     if (testData.paymentOption === undefined) {
       testData.paymentOption = PaymentOption.IMMEDIATELY
     }
-    defenceSteps.loginAsDefendant(testData.defendantEmail)
     I.click(testData.claimRef)
     I.click('Respond to claim')
     defenceSteps.makeFullAdmission(testData.defendant, testData.defendantPartyType, testData.paymentOption, testData.claimantName, false)
   }
 
   finishResponseWithHandOff (claimRef: string, defendant: Party, claimant: Party, defendantEmail: string, defenceType: DefenceType): void {
-    defenceSteps.loginAsDefendant(defendantEmail)
     I.click(claimRef)
     defenceSteps.sendDefenceResponseHandOff(claimRef, defendant, claimant, defenceType)
   }

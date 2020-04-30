@@ -21,6 +21,9 @@ class PageHelper extends Helper {
     return this.helpers['WebDriver'].amOnPage(`${citizenAppBaseURL}${path}`)
   }
 
+  async loggedInAs(loginObj) {
+    return Promise.resolve()
+  }
 }
 
 module.exports = PageHelper

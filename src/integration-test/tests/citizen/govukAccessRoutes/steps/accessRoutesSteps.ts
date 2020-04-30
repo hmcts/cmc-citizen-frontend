@@ -1,6 +1,4 @@
 import I = CodeceptJS.I
-import { LoginPage } from 'integration-test/tests/citizen/home/pages/login'
-import { DEFAULT_PASSWORD } from 'integration-test/data/test-data'
 
 const I: I = actor()
 const returnToClaimPage = '/return-to-claim'
@@ -18,8 +16,6 @@ const ccbcReference = 'A1QZ1234'
 const mcolText = 'Money Claim Online'
 const dashboardHeading = 'Your money claims account'
 
-const loginPage = new LoginPage()
-
 export class AccessRoutesSteps {
   returnToClaimMcol (): void {
     I.amOnPage(returnToClaimPage)
@@ -28,11 +24,13 @@ export class AccessRoutesSteps {
     I.see(mcolText)
   }
 
-  returnToClaimMoneyClaims (reference: string, username: string): void {
+  returnToClaimMoneyClaims (reference: string): void {
     I.amOnPage(returnToClaimPage)
     I.fillField(selectors.reference, reference)
     I.click(selectors.submit)
-    loginPage.login(username, DEFAULT_PASSWORD)
+  }
+
+  checkDashboard () {
     I.see(dashboardHeading)
   }
 
@@ -44,13 +42,11 @@ export class AccessRoutesSteps {
     I.see(mcolText)
   }
 
-  dontHaveAReferenceMoneyClaims (username: string): void {
+  dontHaveAReferenceMoneyClaims (): void {
     I.amOnPage(returnToClaimPage)
     I.click(selectors.noClaimNumberLink)
     I.checkOption(selectors.moneyclaimsRadio)
     I.click(selectors.submit)
-    loginPage.login(username, DEFAULT_PASSWORD)
-    I.see(dashboardHeading)
   }
 
   respondToClaimMcol (): void {

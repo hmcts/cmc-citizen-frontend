@@ -4,6 +4,10 @@ require('tsconfig-paths/register')
 const ProxySettings = require('./src/integration-test/config/proxy-settings').ProxySettings
 const bootstrapFn = require('./src/integration-test/bootstrap/bootstrap').bootstrapAll
 const tearDownFn = require('./src/integration-test/bootstrap/teardown').teardownAll
+const UserEmails = require('./src/integration-test/data/test-data').UserEmails
+const DEFAULT_PASSWORD = require('./src/integration-test/data/test-data').DEFAULT_PASSWORD
+
+const userEmails = new UserEmails()
 
 exports.config = {
   name: 'citizen-integration-tests',
@@ -37,6 +41,47 @@ exports.config = {
     },
     PageHelper: {
       require: './src/integration-test/helpers/pageHelper'
+    }
+  },
+  plugins: {
+    autoLogin: {
+      enabled: true,
+      saveToFile: true,
+      inject: 'loginAs', // use `loginAs` instead of login
+      users: {
+        claimant: {
+          login: async (I) => {
+            I.amOnCitizenAppPage('/');
+            I.fillField('#username', userEmails.getClaimant());
+            I.fillField('#password', DEFAULT_PASSWORD);
+            I.click('input[type=submit]');
+          },
+          restore: async (I, cookies) => {
+            await I.amOnCitizenAppPage('/');
+            await I.setCookie(cookies);
+          },
+          check: async (I) => {
+            await I.amOnCitizenAppPage('/');
+            await I.waitForText('My account');
+          },
+        },
+        defendant: {
+          login: async (I) => {
+            I.amOnCitizenAppPage('/');
+            I.fillField('#username', userEmails.getDefendant());
+            I.fillField('#password', DEFAULT_PASSWORD);
+            I.click('input[type=submit]');
+          },
+          restore: async (I, cookies) => {
+            await I.amOnCitizenAppPage('/');
+            await I.setCookie(cookies);
+          },
+          check: async (I) => {
+            await I.amOnCitizenAppPage('/');
+            await I.waitForText('My account');
+          },
+        },
+      }
     }
   },
   mocha: {

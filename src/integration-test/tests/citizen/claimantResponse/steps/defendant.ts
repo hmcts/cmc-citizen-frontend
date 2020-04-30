@@ -59,7 +59,6 @@ export class DefendantResponseSteps {
   }
 
   disputeClaimAsAlreadyPaid (testData: EndToEndTestData, claimantResponseTestData: ClaimantResponseTestData, isClaimTotalPaid: boolean): void {
-    defenceSteps.loginAsDefendant(testData.defendantEmail)
     I.click(testData.claimRef)
     I.click('Respond to claim')
     defenceSteps.confirmYourDetails(createDefendant(testData.defendantPartyType, false))

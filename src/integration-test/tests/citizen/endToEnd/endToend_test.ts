@@ -8,27 +8,32 @@ const helperSteps: Helper = new Helper()
 Feature('E2E tests for Claim and Defence response')
 
 // Warning : Changing the text description of this scenario, could cause failure when running ZAP security test
-Scenario('I can as an Individual make a claim against an Individual Without a defendant email address and are able to pay on the Gov Pay page @citizen', { retries: 3 }, async (I: I) => {
+Scenario('I can as an Individual make a claim against an Individual Without a defendant email address and are able to pay on the Gov Pay page @citizen', { retries: 3 }, async (I: I, loginAs) => {
   const testData = await EndToEndTestData.prepareDataWithNoDefendantEmail(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
+  await I.loggedInAs(await loginAs('defendant').then(() => 'Defendant'))
   helperSteps.finishResponse(testData, false, false)
 })
 
-Scenario('I can as Sole Trader make a claim against an Individual and are able to pay on the Gov Pay page @nightly', { retries: 3 }, async (I: I) => {
+Scenario('I can as Sole Trader make a claim against an Individual and are able to pay on the Gov Pay page @nightly', { retries: 3 }, async (I: I, loginAs) => {
   const testData = await EndToEndTestData.prepareData(I, PartyType.SOLE_TRADER, PartyType.INDIVIDUAL)
+  await I.loggedInAs(await loginAs('defendant').then(() => 'Defendant'))
   helperSteps.finishResponse(testData)
 })
 
-Scenario('I can as a Individual make a claim against a Company and are able to pay on the Gov Pay page @nightly', { retries: 3 }, async (I: I) => {
+Scenario('I can as a Individual make a claim against a Company and are able to pay on the Gov Pay page @nightly', { retries: 3 }, async (I: I, loginAs) => {
   const testData = await EndToEndTestData.prepareData(I, PartyType.COMPANY, PartyType.INDIVIDUAL)
+  await I.loggedInAs(await loginAs('defendant').then(() => 'Defendant'))
   helperSteps.finishResponse(testData)
 })
 
-Scenario('I can as a Company make a claim against a company and are able to pay on the Gov Pay page @nightly', { retries: 3 }, async (I: I) => {
+Scenario('I can as a Company make a claim against a company and are able to pay on the Gov Pay page @nightly', { retries: 3 }, async (I: I, loginAs) => {
   const testData = await EndToEndTestData.prepareData(I, PartyType.COMPANY, PartyType.COMPANY)
+  await I.loggedInAs(await loginAs('defendant').then(() => 'Defendant'))
   helperSteps.finishResponse(testData)
 })
 
-Scenario('I can as a Organisation make a claim against an Individual and are able to pay on the Gov Pay page @nightly', { retries: 3 }, async (I: I) => {
+Scenario('I can as a Organisation make a claim against an Individual and are able to pay on the Gov Pay page @nightly', { retries: 3 }, async (I: I, loginAs) => {
   const testData = await EndToEndTestData.prepareData(I, PartyType.ORGANISATION, PartyType.INDIVIDUAL)
+  await I.loggedInAs(await loginAs('defendant').then(() => 'Defendant'))
   helperSteps.finishResponse(testData)
 })

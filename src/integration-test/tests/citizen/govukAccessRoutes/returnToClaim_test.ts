@@ -13,16 +13,21 @@ Scenario('I can enter a CCBC reference and get sent to MCOL @nightly', { retries
   accessRoutesSteps.returnToClaimMcol()
 })
 
-Scenario('I can enter a moneyclaims reference and login to see the dashboard @citizen', { retries: 3 }, async (I: I) => {
+Scenario('I can enter a moneyclaims reference and login to see the dashboard @citizen', { retries: 3 }, async (I: I, loginAs) => {
   const claimantEmail: string = userSteps.getClaimantEmail()
   const claimRef = await I.createClaim(createClaimData(PartyType.SOLE_TRADER, PartyType.INDIVIDUAL), claimantEmail)
-  accessRoutesSteps.returnToClaimMoneyClaims(claimRef, claimantEmail)
+  accessRoutesSteps.returnToClaimMoneyClaims(claimRef)
+  await I.loggedInAs(await loginAs('claimant').then(() => 'Claimant'))
+  accessRoutesSteps.checkDashboard()
+
 })
 
-Scenario('I can select don’t have a claim number and choose to go to moneyclaims, login and see the dashboard @nightly', { retries: 3 }, async (I: I) => {
+Scenario('I can select don’t have a claim number and choose to go to moneyclaims, login and see the dashboard @nightly', { retries: 3 }, async (I: I, loginAs) => {
   const claimantEmail: string = userSteps.getClaimantEmail()
   await I.createClaim(createClaimData(PartyType.SOLE_TRADER, PartyType.INDIVIDUAL), claimantEmail)
-  accessRoutesSteps.dontHaveAReferenceMoneyClaims(claimantEmail)
+  accessRoutesSteps.dontHaveAReferenceMoneyClaims()
+  await I.loggedInAs(await loginAs('claimant').then(() => 'Claimant'))
+  accessRoutesSteps.checkDashboard()
 })
 
 Scenario('I can select don’t have a claim number and choose to go to MCOL @nightly', { retries: 3 }, (I: I) => {
