@@ -42,11 +42,11 @@ export class AccessRoutesSteps {
     I.see(mcolText)
   }
 
-  dontHaveAReferenceMoneyClaims (): void {
+  async dontHaveAReferenceMoneyClaims () {
     I.amOnPage(returnToClaimPage)
     I.click(selectors.noClaimNumberLink)
     I.checkOption(selectors.moneyclaimsRadio)
-    I.click(selectors.submit)
+    await I.click(selectors.submit)
   }
 
   respondToClaimMcol (): void {
