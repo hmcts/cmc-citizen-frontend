@@ -24,16 +24,31 @@
 
 {% set documents %}
   <h2 class="heading-medium no-top-margin">{{ t('Claim documents') }}</h2>
-  {% for document in claim.claimDocuments %}
+  {% if claim.claimDocuments.length > 0 %}
+    {% for document in claim.claimDocuments %}
+      <p>
+        {{ internalLink(document.documentDisplayName, ClaimPaths.documentPage.evaluateUri({ externalId: claim.externalId, documentURI: document.uri })) }}
+        {% if document.size !== 0 %}
+          (PDF, {{ (document.size / 1000).toFixed(0) }}KB)
+        {% else %}
+          (PDF)
+        {% endif %}
+        <br>
+        <span style="color:grey; font-size: 15px">
+                Created: {{ document.createdDatetime.format('LL') }}
+              </span>
+      </p>
+    {% endfor %}
+  {% else %}
     <p>
-      {{ internalLink(document.documentDisplayName, ClaimPaths.documentPage.evaluateUri({ externalId: claim.externalId, documentURI: document.uri })) }}
-      (PDF, {{ (document.size / 1000).toFixed(0) }}KB)
+      {{ internalLink('Download claim', ClaimPaths.documentPage.evaluateUri({ externalId: claim.externalId, documentURI: 'claim-receipt' })) }}
+      (PDF)
       <br>
       <span style="color:grey; font-size: 15px">
-              Created: {{ document.createdDatetime.format('LL') }}
-            </span>
+                Created: {{ claim.createdAt.format('LL') }}
+              </span>
     </p>
-  {% endfor %}
+  {% endif %}
 {% endset %}
 
 {% block content %}
