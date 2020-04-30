@@ -84,10 +84,10 @@ export class DefenceSteps {
     return IdamClient.getPin(claim.letterHolderId)
   }
 
-  enterClaimReference (claimRef: string): void {
+  async enterClaimReference (claimRef: string) {
     defendantStartPage.open()
     defendantStartPage.start()
-    defendantEnterClaimRefPage.enterClaimReference(claimRef)
+    return defendantEnterClaimRefPage.enterClaimReference(claimRef)
   }
 
   async enterClaimPin (claimRef: string, authorisation: string): Promise<void> {

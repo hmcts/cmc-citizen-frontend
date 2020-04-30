@@ -12,13 +12,15 @@ const buttons = {
 
 export class DefendantEnterClaimReferencePage {
 
-  open (): void {
-    I.amOnCitizenAppPage('/first-contact/claim-reference')
+  async open () {
+    await I.amOnCitizenAppPage('/first-contact/claim-reference')
+    return Promise.resolve()
   }
 
-  enterClaimReference (claimReference: string): void {
-    I.fillField(fields.claimReference, claimReference)
+  async enterClaimReference (claimReference: string) {
+    await I.fillField(fields.claimReference, claimReference)
 
-    I.click(buttons.submit)
+    await I.click(buttons.submit)
+    return Promise.resolve()
   }
 }
