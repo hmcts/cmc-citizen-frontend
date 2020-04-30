@@ -363,12 +363,9 @@ function testData () {
         response: { ...fullAdmissionClaim.response, ...basePayBySetDateData }
       },
       claimantAssertions: ['000MC050',
-        'Awaiting judge’s review',
-        'You’ve rejected the defendant’s repayment plan and an alternative plan suggested by the court.',
-        'A County Court Judgment has been issued against the defendant.',
-        'We’ll post a copy of the judgment to you and to John Doe',
-        'A judge will decide what John Doe can afford to pay, based on their financial details.',
-        'We’ll contact you by post to tell you what to do next.',
+        'Wait for a judge to review the case',
+        'You’ve rejected the defendant’s repayment plan and haven’t been able to agree to an alternative plan.',
+        'A judge will review the case. We’ll contact you by post to tell you what to do next.',
         'Your online account won’t be updated - any further updates will be by post.'
       ],
       defendantAssertions: ['000MC050',
@@ -391,12 +388,9 @@ function testData () {
         response: { ...partialAdmissionWithSoMPaymentBySetDateData }
       },
       claimantAssertions: ['000MC050',
-        'Awaiting judge’s review',
-        'You’ve rejected the defendant’s repayment plan and an alternative plan suggested by the court.',
-        'A County Court Judgment has been issued against the defendant.',
-        'We’ll post a copy of the judgment to you and to John Doe',
-        'A judge will decide what John Doe can afford to pay, based on their financial details.',
-        'We’ll contact you by post to tell you what to do next.',
+        'Wait for a judge to review the case',
+        'You’ve rejected the defendant’s repayment plan and haven’t been able to agree to an alternative plan.',
+        'A judge will review the case. We’ll contact you by post to tell you what to do next.',
         'Your online account won’t be updated - any further updates will be by post.'
       ],
       defendantAssertions: ['000MC050',
@@ -445,12 +439,10 @@ function testData () {
         response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData }
       },
       claimantAssertions: ['000MC050',
-        'Awaiting judge’s review',
-        'You’ve rejected the defendant’s repayment plan and an alternative plan suggested by the court.',
-        'A County Court Judgment has been issued against the defendant.',
-        'We’ll post a copy of the judgment to you and to John Doe',
-        'A judge will decide what John Doe can afford to pay, based on their financial details.',
-        'We’ll contact you by post to tell you what to do next.'
+        'Wait for a judge to review the case',
+        'You’ve rejected the defendant’s repayment plan and haven’t been able to agree to an alternative plan.',
+        'A judge will review the case. We’ll contact you by post to tell you what to do next.',
+        'Your online account won’t be updated - any further updates will be by post.'
       ],
       defendantAssertions: ['000MC050',
         'Wait for a judge to make a repayment plan',
