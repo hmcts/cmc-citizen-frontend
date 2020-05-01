@@ -161,6 +161,87 @@
         }
       ],
       "startDate": "2019-04-05T00:00:00.000Z"
+    },
+    {
+      "personal": [
+        {
+          "item": "SINGLE_18_TO_24",
+          "weekly": 58.90,
+          "monthly": 255.23
+        },
+        {
+          "item": "SINGLE_OVER_25",
+          "weekly": 74.35,
+          "monthly": 322.18
+        },
+        {
+          "item": "DEFENDANT_UNDER_25_PARTNER_UNDER_18",
+          "weekly": 58.90,
+          "monthly": 255.23
+        },
+        {
+          "item": "DEFENDANT_OVER_25_PARTNER_UNDER_18",
+          "weekly": 74.35,
+          "monthly": 322.18
+        },
+        {
+          "item": "DEFENDANT_AND_PARTNER_OVER_18",
+          "weekly": 116.80,
+          "monthly": 506.13
+        }
+      ],
+      "dependant": [
+        {
+          "item": "EACH",
+          "weekly": 68.27,
+          "monthly": 295.84
+        }
+      ],
+      "pensioner": [
+        {
+          "item": "DEFENDANT_ONLY",
+          "weekly": 99.40,
+          "monthly": 430.73
+        },
+        {
+          "item": "DEFENDANT_AND_PARTNER",
+          "weekly": 148.40,
+          "monthly": 643.07
+        }
+      ],
+      "disability": [
+        {
+          "item": "DEFENDANT_ONLY",
+          "weekly": 34.95,
+          "monthly": 151.45
+        },
+        {
+          "item": "DEFENDANT_AND_PARTNER",
+          "weekly": 49.80,
+          "monthly": 215.80
+        },
+        {
+          "item": "DEFENDANT_ONLY_SEVERE",
+          "weekly": 66.95,
+          "monthly": 290.12
+        },
+        {
+          "item": "DEFENDANT_AND_PARTNER_SEVERE",
+          "weekly": 133.90,
+          "monthly": 255.23
+        },
+        {
+          "item": "DEPENDANT",
+          "weekly": 65.52,
+          "monthly": 283.92
+        },
+        {
+          "item": "CARER",
+          "weekly": 37.50,
+          "monthly": 162.50
+        }
+      ],
+      "startDate": "2020-04-27T12:55:00.000Z"
     }]
 }
 
