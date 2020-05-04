@@ -30,7 +30,7 @@
       externalLink('apply for a certificate', 'https://www.gov.uk/government/publications/form-n443-application-for-a-certificate-of-satisfaction-or-cancellation') +
       ' that confirms this.') | safe }}</p>
   <p>{{ t(internalLink('Contact ' + claim.claimData.claimant.name, DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId })) + ' if you need their payment details. Make sure you get receipts for any payments.') | safe }}</p>
-  <p>{{ t('Your online account won’t be updated with the progress of this claim - any further updates will also be by post.') }}</p>
+  <p>{{ t('Your online account won’t be updated with the progress of this claim - any further updates will be by post.') }}</p>
   <p>{{ downloadResponseLink(claim) }}</p>
 {% endmacro %}
 
