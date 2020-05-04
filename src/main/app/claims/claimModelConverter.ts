@@ -38,8 +38,11 @@ import { InterestTypeOption } from 'claim/form/models/interestType'
 import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
 import { Phone } from 'forms/models/phone'
 import * as config from 'config'
+import { Logger } from '@hmcts/nodejs-logging'
 
 export const paymentReturnUrlBase: string = `${config.get<string>('pay.return-url')}`
+
+const logger = Logger.getLogger('claims/ClaimModelConverter')
 
 export class ClaimModelConverter {
 
@@ -251,6 +254,7 @@ export class ClaimModelConverter {
   private static makeShallowCopy (payment: Payment, externalId: string): Payment {
     if (!payment || Object.keys(payment).length === 0) {
       const paymentReturnUrl: string = paymentReturnUrlBase + `/claim/${externalId}/finish-payment`
+      logger.info('RETURN URL PAYMENT: ', paymentReturnUrl)
       return {
         return_url: paymentReturnUrl
       }
