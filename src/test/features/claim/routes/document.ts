@@ -11,7 +11,6 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { Paths } from 'claim/paths'
-import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -52,6 +51,7 @@ describe('Document Download', () => {
       })
 
       it('should return 500 and render error page when cannot retrieve claim by external id', async () => {
+        claimStoreServiceMock.rejectRetrieveClaimByExternalId()
         await request(app)
           .get(Paths.documentPage.evaluateUri({ externalId: externalId, documentURI: 'sealed-claim' }))
           .set('Cookie', `${cookieName}=ABC`)
@@ -59,7 +59,6 @@ describe('Document Download', () => {
       })
 
       it('should return 500 and render error page when cannot generate PDF', async () => {
-        draftStoreServiceMock.resolveFind('claim', { externalId })
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimDocuments)
         claimStoreServiceMock.rejectRetrieveDocument('Something went wrong')
 
@@ -70,7 +69,6 @@ describe('Document Download', () => {
       })
 
       it('should return receipt when everything is fine', async () => {
-        draftStoreServiceMock.resolveFind('claim', { externalId })
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimDocuments)
         claimStoreServiceMock.resolveRetrieveDocument()
 
