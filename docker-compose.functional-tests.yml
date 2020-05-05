@@ -3,16 +3,19 @@ version: '2.1'
 services:
     citizen-integration-tests:
       image: hmctspublic.azurecr.io/cmc/citizen-integration-tests:${CITIZEN_INTEGRATION_TESTS_VERSION:-latest}
+      entrypoint:
+        - bin/sh
+        - BACKEND_TEST_URL="${TEST_URL/https:\/\//https://claim-store-}"
       command: test:integration --grep @citizen
       environment:
         - WEB_DRIVER_HOST=remote-webdriver
-        - CITIZEN_APP_URL=${FRONTEND_URL}
+        - CITIZEN_APP_URL=${TEST_URL}
         - http_proxy=http://proxyout.reform.hmcts.net:8080
         - https_proxy=http://proxyout.reform.hmcts.net:8080
         - no_proxy=remote-webdriver
         - IDAM_URL
         - OAUTH_CLIENT_SECRET
-        - CLAIM_STORE_URL=${BACKEND_URL}
+        - CLAIM_STORE_URL=BACKEND_TEST_URL
         - HEALTHCHECK_CITIZEN=true
         - FEATURE_ADMISSIONS
         - FEATURE_MEDIATION
