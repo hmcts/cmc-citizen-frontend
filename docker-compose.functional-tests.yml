@@ -6,13 +6,13 @@ services:
       command: test:integration --grep @citizen
       environment:
         - WEB_DRIVER_HOST=remote-webdriver
-        - CITIZEN_APP_URL=${TEST_URL}
+        - CITIZEN_APP_URL=${FRONTEND_URL}
         - http_proxy=http://proxyout.reform.hmcts.net:8080
         - https_proxy=http://proxyout.reform.hmcts.net:8080
         - no_proxy=remote-webdriver
         - IDAM_URL
         - OAUTH_CLIENT_SECRET
-        - CLAIM_STORE_URL
+        - CLAIM_STORE_URL=${BACKEND_URL}
         - HEALTHCHECK_CITIZEN=true
         - FEATURE_ADMISSIONS
         - FEATURE_MEDIATION
