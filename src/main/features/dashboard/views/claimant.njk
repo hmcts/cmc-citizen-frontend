@@ -50,7 +50,7 @@
               </span>
       </p>
     {% endfor %}
-  {% else %}
+  {% elseif(claim) %}
     <p>
     {{ internalLink('Download claim', ClaimPaths.documentPage.evaluateUri({ externalId: claim.externalId, documentURI: 'claim-receipt' })) }}
     (PDF)
