@@ -25,10 +25,6 @@ nodejs:
   ingressHost: ${SERVICE_FQDN}
   readinessDelay: 90  # claim-store will start much slower
   livenessDelay: 90  # claim-store will start much slower
-  registerAdditionalDns:
-    enabled: true
-    secondaryIngressHost: ${SERVICE_FQDN}
-    prefix: www
   environment:
     LOG_LEVEL: DEBUG
     HTTP_TIMEOUT: 60000
