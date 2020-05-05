@@ -22,11 +22,13 @@ nodejs:
   image: ${IMAGE_NAME}
   ingressIP: ${INGRESS_IP}
   consulIP: ${CONSUL_LB_IP}
+  ingressHost: ${SERVICE_FQDN}
   readinessDelay: 90  # claim-store will start much slower
   livenessDelay: 90  # claim-store will start much slower
   registerAdditionalDns:
     enabled: true
-    primaryIngressHost: ${SERVICE_FQDN}
+    secondaryIngressHost: ${SERVICE_FQDN}
+    prefix: www
   environment:
     LOG_LEVEL: DEBUG
     HTTP_TIMEOUT: 60000
