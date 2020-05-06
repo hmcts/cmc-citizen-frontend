@@ -3,21 +3,18 @@ version: '2.1'
 services:
     citizen-integration-tests:
       image: hmctspublic.azurecr.io/cmc/citizen-integration-tests:${CITIZEN_INTEGRATION_TESTS_VERSION:-latest}
-      entrypoint:
-        - bin/sh
-        - BACKEND_TEST_URL="${TEST_URL/https:\/\//https://claim-store-}"
       command: test:integration --grep @smoke-test
       environment:
         - WEB_DRIVER_HOST=remote-webdriver
-        - CITIZEN_APP_URL=${TEST_URL}
+        - CITIZEN_APP_URL=cmc-citizen-frontend-pr-2308.service.core-compute-preview.internal
+        - CLAIM_STORE_URL=claim-store-cmc-citizen-frontend-pr-2308.service.core-compute-preview.internal
+        - IDAM_URL
         - http_proxy=http://proxyout.reform.hmcts.net:8080
         - https_proxy=http://proxyout.reform.hmcts.net:8080
         - no_proxy=remote-webdriver
-        - IDAM_URL
         - OAUTH_CLIENT_SECRET
         - SMOKE_TEST_CITIZEN_USERNAME
         - SMOKE_TEST_USER_PASSWORD
-        - CLAIM_STORE_URL=BACKEND_TEST_URL
         - HEALTHCHECK_CITIZEN=true
         - CHUNKS=1
         - FEATURE_ADMISSIONS
