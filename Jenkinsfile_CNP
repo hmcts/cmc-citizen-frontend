@@ -33,7 +33,6 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 // Vars needed for AKS testing - keep values in sync with: charts/cmc-citizen-frontend/...
 // THESE WILL BE OVERWRITTEN IN ASE DEPLOYMENTS WITH TERRAFORM OUTPUTS.TF
 // THESE CAN BE PICKED UP IN INTEGRATION-TEST CODE DIRECTLY
-echo "PR_Test_URL -> " env.CITIZEN_APP_URL
 env.IDAM_URL = 'https://idam-api.aat.platform.hmcts.net'
 env.CLAIM_STORE_URL = 'http://cmc-claim-store-aat.service.core-compute-aat.internal'
 env.FEATURE_ADMISSIONS = 'true'
@@ -44,6 +43,10 @@ env.FEATURE_INVERSION_OF_CONTROL = 'true'
 // add any others needed to selective testing...
 
 String notificationsChannel = '#cmc-tech-notification'
+
+onPreview {
+  log.info "PR_Test_URL"
+}
 
 withPipeline("nodejs", product, component) {
 
