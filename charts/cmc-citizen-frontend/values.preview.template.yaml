@@ -86,6 +86,7 @@ cmc-claim-store:
     registerAdditionalDns:
       enabled: true
       primaryIngressHost: claim-store-${SERVICE_FQDN}
+      prefix: www
     imagePullPolicy: Always
     readinessDelay: 250  # ccd-stack will start much slower
     livenessDelay:  250  # ccd-stack will start much slower

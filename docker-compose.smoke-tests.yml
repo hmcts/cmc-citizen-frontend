@@ -7,7 +7,7 @@ services:
       environment:
         - WEB_DRIVER_HOST=remote-webdriver
         - CITIZEN_APP_URL=https://cmc-citizen-frontend-pr-2308.service.core-compute-preview.internal
-        - CLAIM_STORE_URL=http://claim-store-cmc-citizen-frontend-pr-2308.service.core-compute-preview.internal
+        - CLAIM_STORE_URL=http://www-claim-store-cmc-citizen-frontend-pr-2308.service.core-compute-preview.internal
         - IDAM_URL
         - http_proxy=http://proxyout.reform.hmcts.net:8080
         - https_proxy=http://proxyout.reform.hmcts.net:8080
