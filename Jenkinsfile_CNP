@@ -44,14 +44,17 @@ env.FEATURE_INVERSION_OF_CONTROL = 'true'
 
 String notificationsChannel = '#cmc-tech-notification'
 
-onPreview {
-  log.info "PR_Test_URL"
-}
-
 withPipeline("nodejs", product, component) {
 
   after('build') {
     yarnBuilder.yarn('setup')
+  }
+
+  before('test'){
+    onPR {
+      log.info "PR_Test_URL"
+      log.info $TEST_URL
+    }
   }
 
   after('test') {
