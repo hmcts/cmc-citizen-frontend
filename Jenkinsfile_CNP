@@ -30,7 +30,7 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
   ]
 }
 
-static String generateBackendUrl(String testUrl) {
+def String generateBackendUrl(String testUrl) {
   String backendUrl = 'http://cmc-claim-store-aat.service.core-compute-aat.internal'
   if (testUrl?.trim()) {
      String tempUrl = testUrl.minus('https://')
