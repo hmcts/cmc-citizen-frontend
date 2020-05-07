@@ -34,10 +34,10 @@ static String generateBackendUrl(String testUrl) {
   String backendUrl = 'http://cmc-claim-store-aat.service.core-compute-aat.internal'
   if (testUrl?.trim()) {
      String tempUrl = testUrl.minus('https://')
-     echo 'generateBackendUrl -> tempUrl ' + tempUrl
+     println('generateBackendUrl -> tempUrl ' + tempUrl)
 
      backendUrl = 'http://claim-store-' + tempUrl
-     echo 'generateBackendUrl -> backendUrl ' + backendUrl
+     println('generateBackendUrl -> backendUrl ' + backendUrl)
   }
   return backendUrl
 }
