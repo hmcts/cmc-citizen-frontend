@@ -30,6 +30,18 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
   ]
 }
 
+static String generateBackendUrl(String testUrl) {
+  String backendUrl = 'http://cmc-claim-store-aat.service.core-compute-aat.internal'
+  if (testUrl?.trim()) {
+     String tempUrl = testUrl.minus('https://')
+     echo 'generateBackendUrl -> tempUrl ' + tempUrl
+
+     backendUrl = 'http://claim-store-' + tempUrl
+     echo 'generateBackendUrl -> backendUrl ' + backendUrl
+  }
+  return backendUrl
+}
+
 // Vars needed for AKS testing - keep values in sync with: charts/cmc-citizen-frontend/...
 // THESE WILL BE OVERWRITTEN IN ASE DEPLOYMENTS WITH TERRAFORM OUTPUTS.TF
 // THESE CAN BE PICKED UP IN INTEGRATION-TEST CODE DIRECTLY
@@ -54,7 +66,8 @@ withPipeline("nodejs", product, component) {
     onPR {
       log.info "PR_Test_URL -> "
       log.info env.TEST_URL
-      log.info "kkk"
+      generateBackendUrl(env.TEST_URL)
+      log.info "kkk ->"
     }
   }
 
@@ -62,7 +75,8 @@ withPipeline("nodejs", product, component) {
     onPR {
       log.info "PR_Test_URL -> "
       log.info env.TEST_URL
-      log.info "kkk"
+      generateBackendUrl(env.TEST_URL)
+      log.info "kkk ->"
     }
   }
 
