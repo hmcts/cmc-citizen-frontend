@@ -32,11 +32,10 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 
 def String generateBackendUrl(String testUrl) {
   String backendUrl = 'http://cmc-claim-store-aat.service.core-compute-aat.internal'
+  String backendStart = 'claim-store-'
   if (testUrl?.trim()) {
      String tempUrl = testUrl.minus('https://')
-     println('generateBackendUrl -> tempUrl ' + tempUrl)
-
-     backendUrl = 'http://claim-store-' + tempUrl
+     backendUrl = 'http://' + backendStart + tempUrl
      println('generateBackendUrl -> backendUrl ' + backendUrl)
   }
   return backendUrl
@@ -66,7 +65,7 @@ withPipeline("nodejs", product, component) {
     onPR {
       log.info "PR_Test_URL -> "
       log.info env.TEST_URL
-      generateBackendUrl(env.TEST_URL)
+      env.CLAIM_STORE_URL = generateBackendUrl(env.TEST_URL)
       log.info "kkk ->"
     }
   }
@@ -75,7 +74,7 @@ withPipeline("nodejs", product, component) {
     onPR {
       log.info "PR_Test_URL -> "
       log.info env.TEST_URL
-      generateBackendUrl(env.TEST_URL)
+      env.CLAIM_STORE_URL = generateBackendUrl(env.TEST_URL)
       log.info "kkk ->"
     }
   }
