@@ -53,7 +53,7 @@ withPipeline("nodejs", product, component) {
   before('test'){
     onPR {
       log.info "PR_Test_URL"
-      log.info $env.TEST_URL
+      log.info env.TEST_URL
     }
   }
 
