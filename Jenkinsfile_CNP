@@ -50,14 +50,14 @@ withPipeline("nodejs", product, component) {
     yarnBuilder.yarn('setup')
   }
 
-  before('Smoke Test - AKS preview'){
+  before('smoketest:preview'){
     onPR {
       log.info "PR_Test_URL"
       log.info env.TEST_URL
     }
   }
 
-  before('Functional Test - AKS preview'){
+  before('functionalTest:preview'){
     onPR {
       log.info "PR_Test_URL"
       log.info env.TEST_URL
