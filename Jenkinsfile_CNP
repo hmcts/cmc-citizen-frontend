@@ -30,15 +30,14 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
   ]
 }
 
-def String generateBackendUrl(String testUrl) {
-  String backendUrl = 'http://cmc-claim-store-aat.service.core-compute-aat.internal'
-  String backendStart = 'claim-store-'
+def String generateClaimStoreUrl(String testUrl) {
+  String claimStoreUrl = 'http://cmc-claim-store-aat.service.core-compute-aat.internal'
+  String startOfClaimStoreServiceName = 'claim-store-'
   if (testUrl?.trim()) {
-     String tempUrl = testUrl.minus('https://')
-     backendUrl = 'http://' + backendStart + tempUrl
-     println('generateBackendUrl -> backendUrl ' + backendUrl)
+     claimStoreUrl = 'http://' + startOfClaimStoreServiceName + testUrl.minus('https://')
+     println('generateClaimStoreUrl -> ' + claimStoreUrl)
   }
-  return backendUrl
+  return claimStoreUrl
 }
 
 // Vars needed for AKS testing - keep values in sync with: charts/cmc-citizen-frontend/...
@@ -63,19 +62,15 @@ withPipeline("nodejs", product, component) {
 
   before('smoketest:preview'){
     onPR {
-      log.info "PR_Test_URL -> "
       log.info env.TEST_URL
-      env.CLAIM_STORE_URL = generateBackendUrl(env.TEST_URL)
-      log.info "kkk ->"
+      env.CLAIM_STORE_URL = generateClaimStoreUrl(env.TEST_URL)
     }
   }
 
   before('functionalTest:preview'){
     onPR {
-      log.info "PR_Test_URL -> "
       log.info env.TEST_URL
-      env.CLAIM_STORE_URL = generateBackendUrl(env.TEST_URL)
-      log.info "kkk ->"
+      env.CLAIM_STORE_URL = generateClaimStoreUrl(env.TEST_URL)
     }
   }
 
