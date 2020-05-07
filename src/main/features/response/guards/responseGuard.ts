@@ -6,6 +6,7 @@ import { Logger } from '@hmcts/nodejs-logging'
 import { Claim } from 'claims/models/claim'
 import { NotFoundError } from 'errors'
 import { Paths as DashboardPaths } from 'dashboard/paths'
+import { YesNoOption } from 'models/yesNoOption'
 
 const logger = Logger.getLogger('response/guards/responseGuard')
 
@@ -19,7 +20,7 @@ export class ResponseGuard {
   static checkResponseDoesNotExist (): express.RequestHandler {
     const allowed = (res: express.Response) => {
       const claim: Claim = res.locals.claim
-      return claim.response === undefined
+      return claim.response === undefined && claim.paperResponse !== YesNoOption.YES
     }
     const accessDeniedCallback = (req: express.Request, res: express.Response) => {
       logger.warn('State guard: response already exists - redirecting to dashboard')
