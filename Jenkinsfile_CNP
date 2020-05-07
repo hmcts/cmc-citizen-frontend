@@ -52,15 +52,13 @@ withPipeline("nodejs", product, component) {
 
   before('smoketest:preview'){
     onPR {
-      log.info "PR_Test_URL"
-      log.info env.TEST_URL
+      log.info "PR_Test_URL -> " env.TEST_URL
     }
   }
 
   before('functionalTest:preview'){
     onPR {
-      log.info "PR_Test_URL"
-      log.info env.TEST_URL
+      log.info "PR_Test_URL -> " env.TEST_URL
     }
   }
 
