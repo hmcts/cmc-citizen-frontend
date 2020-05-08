@@ -18,11 +18,12 @@
       <p>{{ t('They also rejected a repayment plan determined by the court, based on the financial details you provided.') }}</p>
       <p>{{ t('When we’ve processed the request we’ll post a copy of the judgment to you and to {{ claimantName }}.',
           { claimantName: claim.claimData.claimant.name }) }}</p>
-      <p>{{ t('A judge will make a repayment plan. We’ll contact you to tell you what to do next.') }}</p>
+      <p>{{ t('A judge will make a repayment plan. We’ll contact you by post to tell you what to do next.') }}</p>
     {% elif claim.reDetermination.partyType === MadeBy.DEFENDANT %}
       <h2 class="heading-medium">{{ t('You’ve rejected the claimant’s repayment plan') }}</h2>
-      <p>{{ t('A judge will review the case. We’ll contact you to tell you what to do next.') }}</p>
+      <p>{{ t('A judge will review the case. We’ll contact you by post to tell you what to do next.') }}</p>
     {% endif %}
+    <p>{{ t('Your online account won’t be updated - any further updates will be by post.') }}</p>
     <p>{{ downloadResponseLink(claim) }}</p>
   </div>
 {% endmacro %}
