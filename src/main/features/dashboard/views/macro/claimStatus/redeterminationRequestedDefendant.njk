@@ -6,15 +6,20 @@
 
 {% macro redeterminationDefendantClaimDetails(claim) %}
   <div class="status-block">
-    {% if claim.reDetermination.partyType === MadeBy.CLAIMANT
-      or claim.isInterlocutoryJudgmentRequestedOnAdmissions() %}
-      <h2 class="heading-medium">{{ t('{{ claimantName }} requested a County Court Judgment (CCJ) against you',
-          { claimantName: claim.claimData.claimant.name }) }}</h2>
+    {% if claim.reDetermination.partyType === MadeBy.CLAIMANT or claim.isInterlocutoryJudgmentRequestedOnAdmissions() %}
+
+      <h2 class="heading-medium">{{ t('Wait for a judge to make a repayment plan') }}</h2>
+      <p>{{ t('A County Court Judgment (CCJ) has been issued against you.') }}</p>
+
       {% if claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
-        <p>{{ t('They rejected your repayment plan.') }}</p>
+        <p>{{ t('{{ claimantName }} rejected your repayment plan and requested a CCJ against you.', { claimantName: claim.claimData.claimant.name }) }}</p>
+
       {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
-          <p>{{ t('They accepted your offer to pay {{ partAdmitAmount }}. They rejected your repayment plan.', { partAdmitAmount: claim.response.amount | numeral }) }}</p>
+          <p>{{ t('{{ claimantName }} accepted your offer to pay {{ partAdmitAmount }}. They rejected your repayment plan and requested a CCJ against you.',
+           { partAdmitAmount: claim.response.amount | numeral, claimantName: claim.claimData.claimant.name }) }}</p>
+
       {% endif %}
+
       <p>{{ t('They also rejected a repayment plan determined by the court, based on the financial details you provided.') }}</p>
       <p>{{ t('When we’ve processed the request we’ll post a copy of the judgment to you and to {{ claimantName }}.',
           { claimantName: claim.claimData.claimant.name }) }}</p>

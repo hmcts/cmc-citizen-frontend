@@ -77,7 +77,7 @@ function legacyClaimDetails () {
         'Tell us you’ve ended the claim'
       ],
       defendantAssertions: ['Your response to the claim',
-        'You’ve said you owe £30 and offered to pay John Smith immediately.',
+        `You’ve said you owe £30 and offered to pay ${partAdmissionClaim().claim.claimants[0].name} immediately.`,
         'We’ll contact you when they respond.',
         'Download your response'
       ]
@@ -99,7 +99,7 @@ function legacyClaimDetails () {
         'Tell us you’ve ended the claim'
       ],
       defendantAssertions: ['Your response to the claim',
-        'You’ve said you owe £30 and offered to pay John Smith immediately.',
+        `You’ve said you owe £30 and offered to pay ${partAdmissionClaim().claim.claimants[0].name} immediately.`,
         'We’ll contact you when they respond.',
         'Download your response'
       ]
@@ -118,7 +118,7 @@ function legacyClaimDetails () {
         'Tell us you’ve ended the claim'
       ],
       defendantAssertions: ['Your response to the claim',
-        'You’ve said you owe £30 and offered to pay John Smith by',
+        `You’ve said you owe £30 and offered to pay ${partAdmissionClaim().claim.claimants[0].name} by`,
         'We’ll contact you when they respond.',
         'Download your response'
       ]
@@ -130,19 +130,21 @@ function legacyClaimDetails () {
         response: { ...partAdmissionClaim().response, ...basePayBySetDateData },
         claimantResponse: { ...claimantReferredToJudgeResponse() }
       },
-      claimantAssertions: ['Awaiting judge’s review',
-        'You’ve rejected the defendant’s repayment plan and an alternative plan suggested by the court.',
-        'A County Court Judgment has been issued against the defendant.',
-        'We’ll post a copy of the judgment to you and to John Doe',
-        'A judge will decide what John Doe can afford to pay, based on their financial details.',
-        'We’ll contact you by post to tell you what to do next.',
+      claimantAssertions: [
+        'Wait for a judge to review the case',
+        'You’ve rejected the defendant’s repayment plan and haven’t been able to agree to an alternative plan.',
+        'A judge will review the case. We’ll contact you by post to tell you what to do next.',
+        'Your online account won’t be updated - any further updates will be by post.',
         'Tell us you’ve ended the claim'
       ],
-      defendantAssertions: [partAdmissionClaim().claim.claimants[0].name + ' requested a County Court Judgment (CCJ) against you',
-        'They accepted your offer to pay £30. They rejected your repayment plan.',
+      defendantAssertions: [
+        'Wait for a judge to make a repayment plan',
+        'A County Court Judgment (CCJ) has been issued against you.',
+        `${partAdmissionClaim().claim.claimants[0].name} accepted your offer to pay £30. They rejected your repayment plan and requested a CCJ against you.`,
         'They also rejected a repayment plan determined by the court, based on the financial details you provided.',
-        'When we’ve processed the request we’ll post a copy of the judgment to you and to John Smith.',
+        `When we’ve processed the request we’ll post a copy of the judgment to you and to ${partAdmissionClaim().claim.claimants[0].name}.`,
         'A judge will make a repayment plan. We’ll contact you by post to tell you what to do next.',
+        'Your online account won’t be updated - any further updates will be by post.',
         'Download your response'
       ]
     },
@@ -158,13 +160,13 @@ function legacyClaimDetails () {
         ...settlementOfferAcceptBySetDate()
       },
       claimantAssertions: ['You’ve signed a settlement agreement',
-        'We’ve emailed John Doe the repayment plan and the settlement agreement for them to sign.',
+        `We’ve emailed ${partAdmissionClaim().claim.defendants[0].name} the repayment plan and the settlement agreement for them to sign.`,
         'They must respond by',
         'We’ll email you when they respond.',
         'If they do not respond you can request a County Court Judgment.',
         'Tell us you’ve ended the claim'
       ],
-      defendantAssertions: [`John Smith asked you to sign a settlement agreement`,
+      defendantAssertions: [`${partAdmissionClaim().claim.claimants[0].name} asked you to sign a settlement agreement`,
         'They accepted your repayment plan and asked you to sign a settlement agreement to formalise it.',
         'If you sign the agreement, they can’t request a County Court Judgment against you unless you break the terms.',
         'If you don’t sign or respond by ',
@@ -185,11 +187,11 @@ function legacyClaimDetails () {
       claimantAssertions: ['The defendant has not signed your settlement agreement',
         'You can request a County Court Judgment (CCJ) against them based on the repayment plan shown in the agreement.',
         'The court will make an order requiring them to pay the money. It does not guarantee that they pay it.',
-        'John Doe can still sign the settlement agreement until you request a CCJ.',
+        `${partAdmissionClaim().claim.defendants[0].name} can still sign the settlement agreement until you request a CCJ.`,
         'Request a County Court Judgment',
         'Tell us you’ve ended the claim'
       ],
-      defendantAssertions: [`John Smith asked you to sign a settlement agreement`,
+      defendantAssertions: [`${partAdmissionClaim().claim.claimants[0].name} asked you to sign a settlement agreement`,
         'They accepted your repayment plan and asked you to sign a settlement agreement to formalise it.',
         'If you sign the agreement, they can’t request a County Court Judgment against you unless you break the terms.',
         'If you don’t sign or respond by ',
@@ -261,11 +263,11 @@ function legacyClaimDetails () {
         'Request a County Court Judgment (CCJ)'
       ],
       defendantAssertions: ['You rejected the settlement agreement',
-        'John Smith can request a County Court Judgment (CCJ) against you.',
+        `${partAdmissionClaim().claim.claimants[0].name} can request a County Court Judgment (CCJ) against you.`,
         'A CCJ would order you to repay the money in line with the terms of the agreement.',
         'The court has reviewed the repayment plan and believes you can afford it.',
-        'If John Smith requests a CCJ, you can ask a judge to consider changing the plan, based on your financial details.',
-        'We’ll email you when John Smith responds',
+        `If ${partAdmissionClaim().claim.claimants[0].name} requests a CCJ, you can ask a judge to consider changing the plan, based on your financial details.`,
+        `We’ll email you when ${partAdmissionClaim().claim.claimants[0].name} responds`,
         'Download your response'
       ]
     },
@@ -279,14 +281,14 @@ function legacyClaimDetails () {
         ...settlementOfferAcceptBySetDate()
       },
       claimantAssertions: ['You’ve signed a settlement agreement',
-        'We’ve emailed John Doe the repayment plan and the settlement agreement for them to sign.',
+        `We’ve emailed ${partAdmissionClaim().claim.defendants[0].name} the repayment plan and the settlement agreement for them to sign.`,
         'They must respond by',
         'We’ll email you when they respond.',
         'If they do not respond you can request a County Court Judgment.',
         'Tell us you’ve ended the claim'
       ],
-      defendantAssertions: ['John Smith rejected your repayment plan.',
-        'John Smith accepted your offer to pay £30 but rejected your repayment plan.',
+      defendantAssertions: [`${partAdmissionClaim().claim.claimants[0].name} rejected your repayment plan.`,
+        `${partAdmissionClaim().claim.claimants[0].name} accepted your offer to pay £30 but rejected your repayment plan.`,
         'They accepted a new repayment plan determined by the court, based on the financial details you provided.',
         'They asked you to sign a settlement agreement to formalise the plan.',
         'If you sign the agreement, they can’t request a County Court Judgment against you unless you break the terms.',
@@ -308,10 +310,10 @@ function legacyClaimDetails () {
       claimantAssertions: ['The defendant has not signed your settlement agreement',
         'You can request a County Court Judgment (CCJ) against them based on the repayment plan shown in the agreement.',
         'The court will make an order requiring them to pay the money. It does not guarantee that they pay it.',
-        'John Doe can still sign the settlement agreement until you request a CCJ.',
+        `${partAdmissionClaim().claim.defendants[0].name} can still sign the settlement agreement until you request a CCJ.`,
         'Request a County Court Judgment'
       ],
-      defendantAssertions: ['John Smith asked you to sign a settlement agreement',
+      defendantAssertions: [`${partAdmissionClaim().claim.claimants[0].name} asked you to sign a settlement agreement`,
         'They accepted your repayment plan and asked you to sign a settlement agreement to formalise it.',
         'If you sign the agreement, they can’t request a County Court Judgment against you unless you break the terms.',
         'If you don’t sign or respond by ',
@@ -382,11 +384,11 @@ function legacyClaimDetails () {
         'Request a County Court Judgment (CCJ)'
       ],
       defendantAssertions: ['You rejected the settlement agreement',
-        'John Smith can request a County Court Judgment (CCJ) against you.',
+        `${partAdmissionClaim().claim.claimants[0].name} can request a County Court Judgment (CCJ) against you.`,
         'A CCJ would order you to repay the money in line with the terms of the agreement.',
         'The court has reviewed the repayment plan and believes you can afford it.',
-        'If John Smith requests a CCJ, you can ask a judge to consider changing the plan, based on your financial details.',
-        'We’ll email you when John Smith responds',
+        `If ${partAdmissionClaim().claim.claimants[0].name} requests a CCJ, you can ask a judge to consider changing the plan, based on your financial details.`,
+        `We’ll email you when ${partAdmissionClaim().claim.claimants[0].name} responds`,
         'Download your response'
       ]
     },
@@ -404,7 +406,7 @@ function legacyClaimDetails () {
         'Tell us you’ve ended the claim'
       ],
       defendantAssertions: ['Your response to the claim',
-        'You’ve said you owe £30 and offered to pay John Smith £100 every week starting',
+        `You’ve said you owe £30 and offered to pay ${partAdmissionClaim().claim.claimants[0].name} £100 every week starting`,
         'We’ll contact you when they respond.',
         'Download your response'
       ]
@@ -416,19 +418,21 @@ function legacyClaimDetails () {
         response: { ...partAdmissionClaim().response, ...basePayByInstalmentsData },
         claimantResponse: { ...claimantReferredToJudgeResponseForInstalments() }
       },
-      claimantAssertions: ['Awaiting judge’s review',
-        'You’ve rejected the defendant’s repayment plan and an alternative plan suggested by the court.',
-        'A County Court Judgment has been issued against the defendant.',
-        'We’ll post a copy of the judgment to you and to John Doe',
-        'A judge will decide what John Doe can afford to pay, based on their financial details.',
-        'We’ll contact you by post to tell you what to do next.',
+      claimantAssertions: [
+        'Wait for a judge to review the case',
+        'You’ve rejected the defendant’s repayment plan and haven’t been able to agree to an alternative plan.',
+        'A judge will review the case. We’ll contact you by post to tell you what to do next.',
+        'Your online account won’t be updated - any further updates will be by post.',
         'Tell us you’ve ended the claim'
       ],
-      defendantAssertions: ['John Smith requested a County Court Judgment (CCJ) against you',
-        'They accepted your offer to pay £30. They rejected your repayment plan.',
+      defendantAssertions: [
+        'Wait for a judge to make a repayment plan',
+        'A County Court Judgment (CCJ) has been issued against you.',
+        `${partAdmissionClaim().claim.claimants[0].name} accepted your offer to pay £30. They rejected your repayment plan and requested a CCJ against you.`,
         'They also rejected a repayment plan determined by the court, based on the financial details you provided.',
-        'When we’ve processed the request we’ll post a copy of the judgment to you and to John Smith.',
+        `When we’ve processed the request we’ll post a copy of the judgment to you and to ${partAdmissionClaim().claim.claimants[0].name}.`,
         'A judge will make a repayment plan. We’ll contact you by post to tell you what to do next.',
+        'Your online account won’t be updated - any further updates will be by post.',
         'Download your response'
       ]
     },
@@ -442,13 +446,13 @@ function legacyClaimDetails () {
         ...settlementOfferAcceptInInstalment()
       },
       claimantAssertions: ['You’ve signed a settlement agreement',
-        'We’ve emailed John Doe the repayment plan and the settlement agreement for them to sign.',
+        `We’ve emailed ${partAdmissionClaim().claim.defendants[0].name} the repayment plan and the settlement agreement for them to sign.`,
         'They must respond by',
         'We’ll email you when they respond.',
         'If they do not respond you can request a County Court Judgment.',
         'Tell us you’ve ended the claim'
       ],
-      defendantAssertions: ['John Smith asked you to sign a settlement agreement',
+      defendantAssertions: [`${partAdmissionClaim().claim.claimants[0].name} asked you to sign a settlement agreement`,
         'They accepted your repayment plan and asked you to sign a settlement agreement to formalise it.',
         'If you sign the agreement, they can’t request a County Court Judgment against you unless you break the terms.',
         'If you don’t sign or respond by',
@@ -469,11 +473,11 @@ function legacyClaimDetails () {
       claimantAssertions: ['The defendant has not signed your settlement agreement',
         'You can request a County Court Judgment (CCJ) against them based on the repayment plan shown in the agreement.',
         'The court will make an order requiring them to pay the money. It does not guarantee that they pay it.',
-        'John Doe can still sign the settlement agreement until you request a CCJ.',
+        `${partAdmissionClaim().claim.defendants[0].name} can still sign the settlement agreement until you request a CCJ.`,
         'Request a County Court Judgment',
         'Tell us you’ve ended the claim'
       ],
-      defendantAssertions: ['John Smith asked you to sign a settlement agreement',
+      defendantAssertions: [`${partAdmissionClaim().claim.claimants[0].name} asked you to sign a settlement agreement`,
         'They accepted your repayment plan and asked you to sign a settlement agreement to formalise it.',
         'If you sign the agreement, they can’t request a County Court Judgment against you unless you break the terms.',
         'If you don’t sign or respond by ',
@@ -545,11 +549,11 @@ function legacyClaimDetails () {
         'Request a County Court Judgment'
       ],
       defendantAssertions: ['You rejected the settlement agreement',
-        'John Smith can request a County Court Judgment (CCJ) against you.',
+        `${partAdmissionClaim().claim.claimants[0].name} can request a County Court Judgment (CCJ) against you.`,
         'A CCJ would order you to repay the money in line with the terms of the agreement.',
         'The court has reviewed the repayment plan and believes you can afford it.',
-        'If John Smith requests a CCJ, you can ask a judge to consider changing the plan, based on your financial details.',
-        'We’ll email you when John Smith responds',
+        `If ${partAdmissionClaim().claim.claimants[0].name} requests a CCJ, you can ask a judge to consider changing the plan, based on your financial details.`,
+        `We’ll email you when ${partAdmissionClaim().claim.claimants[0].name} responds`,
         'Download your response'
       ]
     },
@@ -563,14 +567,14 @@ function legacyClaimDetails () {
         ...settlementOfferAcceptInInstalment()
       },
       claimantAssertions: ['You’ve signed a settlement agreement',
-        'We’ve emailed John Doe the repayment plan and the settlement agreement for them to sign.',
+        `We’ve emailed ${partAdmissionClaim().claim.defendants[0].name} the repayment plan and the settlement agreement for them to sign.`,
         'They must respond by',
         'We’ll email you when they respond.',
         'If they do not respond you can request a County Court Judgment.',
         'Tell us you’ve ended the claim'
       ],
-      defendantAssertions: ['John Smith rejected your repayment plan.',
-        'John Smith accepted your offer to pay £30 but rejected your repayment plan.',
+      defendantAssertions: [`${partAdmissionClaim().claim.claimants[0].name} rejected your repayment plan.`,
+        `${partAdmissionClaim().claim.claimants[0].name} accepted your offer to pay £30 but rejected your repayment plan.`,
         'They accepted a new repayment plan determined by the court, based on the financial details you provided.',
         'They asked you to sign a settlement agreement to formalise the plan.',
         'If you sign the agreement, they can’t request a County Court Judgment against you unless you break the terms.',
@@ -592,11 +596,11 @@ function legacyClaimDetails () {
       claimantAssertions: ['The defendant has not signed your settlement agreement',
         'You can request a County Court Judgment (CCJ) against them based on the repayment plan shown in the agreement.',
         'The court will make an order requiring them to pay the money. It does not guarantee that they pay it.',
-        'John Doe can still sign the settlement agreement until you request a CCJ.',
+        `${partAdmissionClaim().claim.defendants[0].name} can still sign the settlement agreement until you request a CCJ.`,
         'Request a County Court Judgment',
         'Tell us you’ve ended the claim'
       ],
-      defendantAssertions: ['John Smith asked you to sign a settlement agreement',
+      defendantAssertions: [`${partAdmissionClaim().claim.claimants[0].name} asked you to sign a settlement agreement`,
         'They accepted your repayment plan and asked you to sign a settlement agreement to formalise it.',
         'If you sign the agreement, they can’t request a County Court Judgment against you unless you break the terms.',
         'If you don’t sign or respond by',
@@ -666,11 +670,11 @@ function legacyClaimDetails () {
         'Request a County Court Judgment'
       ],
       defendantAssertions: ['You rejected the settlement agreement',
-        'John Smith can request a County Court Judgment (CCJ) against you.',
+        `${partAdmissionClaim().claim.claimants[0].name} can request a County Court Judgment (CCJ) against you.`,
         'A CCJ would order you to repay the money in line with the terms of the agreement.',
         'The court has reviewed the repayment plan and believes you can afford it.',
-        'If John Smith requests a CCJ, you can ask a judge to consider changing the plan, based on your financial details.',
-        'We’ll email you when John Smith responds',
+        `If ${partAdmissionClaim().claim.claimants[0].name} requests a CCJ, you can ask a judge to consider changing the plan, based on your financial details.`,
+        `We’ll email you when ${partAdmissionClaim().claim.claimants[0].name} responds`,
         'Download your response'
       ]
     },
@@ -687,7 +691,7 @@ function legacyClaimDetails () {
         'Tell us you’ve ended the claim'
       ],
       defendantAssertions: ['Your response to the claim',
-        'We’ve emailed John Smith telling them when and how you said you paid the claim.',
+        `We’ve emailed ${partAdmissionClaim().claim.claimants[0].name} telling them when and how you said you paid the claim.`,
         'We’ll contact you to let you know how they respond. They can confirm you’ve paid and the claim is settled, or they can proceed with it.',
         'Download your response'
       ]
@@ -713,7 +717,7 @@ function legacyClaimDetails () {
       claimantAssertions: ['Wait for the court to review the case',
         'You’ve rejected ' + partAdmissionClaim().claim.defendants[0].name + '’s response and said you want to take the case to court.'
       ],
-      defendantAssertions: ['John Smith has rejected your admission of',
+      defendantAssertions: [`${partAdmissionClaim().claim.claimants[0].name} has rejected your admission of`,
         'They believe you owe them the full £200 claimed.',
         'You might have to go to a hearing. We’ll contact you if we set a hearing date to tell you how to prepare.',
         'You need to',

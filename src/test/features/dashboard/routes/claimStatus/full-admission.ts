@@ -74,7 +74,7 @@ function testData () {
       ],
       defendantAssertions: [
         'Your response to the claim',
-        'You said you’ll pay John Smith £200 before 4pm on',
+        `You said you’ll pay ${fullAdmissionClaim.claim.claimants[0].name} £200 before 4pm on`,
         'If you pay by cheque or transfer the money must be clear in their account.',
         'If they don’t receive the money by then, they can request a County Court Judgment against you.',
         'you need their payment details. Make sure you get receipts for any payments.',
@@ -100,7 +100,7 @@ function testData () {
       ],
       defendantAssertions: [
         'Your response to the claim',
-        `You said you’ll pay John Smith £200 before 4pm on`,
+        `You said you’ll pay ${fullAdmissionClaim.claim.claimants[0].name} £200 before 4pm on`,
         'If you pay by cheque or transfer the money must be clear in their account.',
         'If they don’t receive the money by then, they can request a County Court Judgment against you.',
         'you need their payment details. Make sure you get receipts for any payments.',
@@ -134,18 +134,20 @@ function testData () {
         claimantResponse: { ...claimantReferredToJudgeResponse() }
       },
       claimantAssertions: [
-        'Awaiting judge’s review',
-        `You’ve rejected the defendant’s repayment plan and an alternative plan suggested by the court.`,
-        'A County Court Judgment has been issued against the defendant.',
-        `A judge will decide what ${fullAdmissionClaim.claim.defendants[0].name} can afford to pay, based on their financial details.`,
+        'Wait for a judge to review the case',
+        'You’ve rejected the defendant’s repayment plan and haven’t been able to agree to an alternative plan.',
+        'A judge will review the case. We’ll contact you by post to tell you what to do next.',
         'Your online account won’t be updated - any further updates will be by post.'
       ],
       defendantAssertions: [
-        fullAdmissionClaim.claim.claimants[0].name + ' requested a County Court Judgment (CCJ) against you',
-        'They rejected your repayment plan.',
+        'Wait for a judge to make a repayment plan',
+        'A County Court Judgment (CCJ) has been issued against you.',
+        `${fullAdmissionClaim.claim.claimants[0].name} rejected your repayment plan and requested a CCJ against you.`,
         'They also rejected a repayment plan determined by the court, based on the financial details you provided.',
         `When we’ve processed the request we’ll post a copy of the judgment to you and to ${fullAdmissionClaim.claim.claimants[0].name}.`,
-        'Download your response', 'Your online account won’t be updated - any further updates will be by post.'
+        'A judge will make a repayment plan. We’ll contact you by post to tell you what to do next.',
+        'Your online account won’t be updated - any further updates will be by post.',
+        'Download your response'
       ]
     },
     {
@@ -397,16 +399,19 @@ function testData () {
         claimantResponse: { ...claimantReferredToJudgeResponseForInstalments() }
       },
       claimantAssertions: [
-        'Awaiting judge’s review',
-        `You’ve rejected the defendant’s repayment plan and an alternative plan suggested by the court.`,
-        'A County Court Judgment has been issued against the defendant.',
-        `A judge will decide what ${fullAdmissionClaim.claim.defendants[0].name} can afford to pay, based on their financial details.`
+        'Wait for a judge to review the case',
+        'You’ve rejected the defendant’s repayment plan and haven’t been able to agree to an alternative plan.',
+        'A judge will review the case. We’ll contact you by post to tell you what to do next.',
+        'Your online account won’t be updated - any further updates will be by post.'
       ],
       defendantAssertions: [
-        fullAdmissionClaim.claim.claimants[0].name + ' requested a County Court Judgment (CCJ) against you',
-        'They rejected your repayment plan.',
+        'Wait for a judge to make a repayment plan',
+        'A County Court Judgment (CCJ) has been issued against you.',
+        `${fullAdmissionClaim.claim.claimants[0].name} rejected your repayment plan and requested a CCJ against you.`,
         'They also rejected a repayment plan determined by the court, based on the financial details you provided.',
         `When we’ve processed the request we’ll post a copy of the judgment to you and to ${fullAdmissionClaim.claim.claimants[0].name}.`,
+        'We’ll contact you by post to tell you what to do next.',
+        'Your online account won’t be updated - any further updates will be by post.',
         'Download your response'
       ]
     },
