@@ -355,7 +355,7 @@ function testData () {
       ]
     },
     {
-      status: 'CCJ - full admission, pay by set date, rejected the defendants repayment plan and rejected alternative plan suggested by the court.',
+      status: 'CCJ - full admission, pay by set date, rejected the defendants repayment plan and rejected alternative plan suggested by the court',
       claim: claimStoreServiceMock.sampleClaimIssueObj,
       claimOverride: {
         claimantResponse: { 'type': 'ACCEPTATION', 'formaliseOption': 'REFER_TO_JUDGE' },
@@ -368,19 +368,20 @@ function testData () {
         'A judge will review the case. We’ll contact you by post to tell you what to do next.',
         'Your online account won’t be updated - any further updates will be by post.'
       ],
-      defendantAssertions: ['000MC050',
+      defendantAssertions: [
+        '000MC050',
         'Wait for a judge to make a repayment plan',
         'A County Court Judgment (CCJ) has been issued against you.',
         'John Smith rejected your repayment plan and requested a CCJ against you.',
         'They also rejected a repayment plan determined by the court, based on the financial details you provided.',
-        'A judge will make a repayment plan. We’ll contact you to tell you what to do next.',
-        'We’ll post a copy of the judgment to you and to John Smith.',
+        'When we’ve processed the request we’ll post a copy of the judgment to you and to John Smith.',
+        'A judge will make a repayment plan. We’ll contact you by post to tell you what to do next.',
         'Your online account won’t be updated - any further updates will be by post.',
         'Download your response'
       ]
     },
     {
-      status: 'CCJ - part admission, pay by set date, rejected the defendants repayment plan and rejected alternative plan suggested by the court.',
+      status: 'CCJ - part admission, pay by set date, rejected the defendants repayment plan and rejected alternative plan suggested by the court',
       claim: claimStoreServiceMock.sampleClaimIssueObj,
       claimOverride: {
         claimantResponse: { 'type': 'ACCEPTATION', 'formaliseOption': 'REFER_TO_JUDGE' },
@@ -393,13 +394,14 @@ function testData () {
         'A judge will review the case. We’ll contact you by post to tell you what to do next.',
         'Your online account won’t be updated - any further updates will be by post.'
       ],
-      defendantAssertions: ['000MC050',
+      defendantAssertions: [
+        '000MC050',
         'Wait for a judge to make a repayment plan',
         'A County Court Judgment (CCJ) has been issued against you.',
         'John Smith accepted your offer to pay £3,000. They rejected your repayment plan and requested a CCJ against you.',
         'They also rejected a repayment plan determined by the court, based on the financial details you provided.',
-        'A judge will make a repayment plan. We’ll contact you to tell you what to do next.',
-        'We’ll post a copy of the judgment to you and to John Smith.',
+        '>When we’ve processed the request we’ll post a copy of the judgment to you and to John Smith.',
+        'A judge will make a repayment plan. We’ll contact you by post to tell you what to do next.',
         'Your online account won’t be updated - any further updates will be by post.',
         'Download your response'
       ]
@@ -431,7 +433,7 @@ function testData () {
       ]
     },
     {
-      status: 'CCJ - full admission, pay by repayment plan, rejected the defendants repayment plan and rejected alternative plan suggested by the court.',
+      status: 'CCJ - full admission, pay by repayment plan, rejected the defendants repayment plan and rejected alternative plan suggested by the court',
       claim: claimStoreServiceMock.sampleClaimIssueObj,
       claimOverride: {
         claimantResponse: { 'type': 'ACCEPTATION', 'formaliseOption': 'REFER_TO_JUDGE' },
@@ -444,13 +446,14 @@ function testData () {
         'A judge will review the case. We’ll contact you by post to tell you what to do next.',
         'Your online account won’t be updated - any further updates will be by post.'
       ],
-      defendantAssertions: ['000MC050',
+      defendantAssertions: [
+        '000MC050',
         'Wait for a judge to make a repayment plan',
         'A County Court Judgment (CCJ) has been issued against you.',
         'John Smith rejected your repayment plan and requested a CCJ against you.',
         'They also rejected a repayment plan determined by the court, based on the financial details you provided.',
-        'A judge will make a repayment plan. We’ll contact you to tell you what to do next.',
-        'We’ll post a copy of the judgment to you and to John Smith.',
+        'When we’ve processed the request we’ll post a copy of the judgment to you and to John Smith.',
+        'A judge will make a repayment plan. We’ll contact you by post to tell you what to do next.',
         'Your online account won’t be updated - any further updates will be by post.',
         'Download your response'
       ]

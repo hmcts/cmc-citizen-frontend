@@ -144,8 +144,8 @@ function testData () {
         'A County Court Judgment (CCJ) has been issued against you.',
         `${fullAdmissionClaim.claim.claimants[0].name} rejected your repayment plan and requested a CCJ against you.`,
         'They also rejected a repayment plan determined by the court, based on the financial details you provided.',
-        'A judge will make a repayment plan. We’ll contact you to tell you what to do next.',
-        `We’ll post a copy of the judgment to you and to ${fullAdmissionClaim.claim.claimants[0].name}.`,
+        `When we’ve processed the request we’ll post a copy of the judgment to you and to ${fullAdmissionClaim.claim.claimants[0].name}.`,
+        'A judge will make a repayment plan. We’ll contact you by post to tell you what to do next.',
         'Your online account won’t be updated - any further updates will be by post.',
         'Download your response'
       ]
@@ -409,8 +409,8 @@ function testData () {
         'A County Court Judgment (CCJ) has been issued against you.',
         `${fullAdmissionClaim.claim.claimants[0].name} rejected your repayment plan and requested a CCJ against you.`,
         'They also rejected a repayment plan determined by the court, based on the financial details you provided.',
-        'A judge will make a repayment plan. We’ll contact you to tell you what to do next.',
-        `We’ll post a copy of the judgment to you and to ${fullAdmissionClaim.claim.claimants[0].name}.`,
+        `When we’ve processed the request we’ll post a copy of the judgment to you and to ${fullAdmissionClaim.claim.claimants[0].name}.`,
+        'We’ll contact you by post to tell you what to do next.',
         'Your online account won’t be updated - any further updates will be by post.',
         'Download your response'
       ]

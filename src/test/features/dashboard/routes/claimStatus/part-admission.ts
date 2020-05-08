@@ -137,12 +137,13 @@ function legacyClaimDetails () {
         'Your online account won’t be updated - any further updates will be by post.',
         'Tell us you’ve ended the claim'
       ],
-      defendantAssertions: ['Wait for a judge to make a repayment plan',
+      defendantAssertions: [
+        'Wait for a judge to make a repayment plan',
         'A County Court Judgment (CCJ) has been issued against you.',
         `${partAdmissionClaim().claim.claimants[0].name} accepted your offer to pay £30. They rejected your repayment plan and requested a CCJ against you.`,
         'They also rejected a repayment plan determined by the court, based on the financial details you provided.',
-        'A judge will make a repayment plan. We’ll contact you to tell you what to do next.',
-        `We’ll post a copy of the judgment to you and to ${partAdmissionClaim().claim.claimants[0].name}.`,
+        `When we’ve processed the request we’ll post a copy of the judgment to you and to ${partAdmissionClaim().claim.claimants[0].name}.`,
+        'A judge will make a repayment plan. We’ll contact you by post to tell you what to do next.',
         'Your online account won’t be updated - any further updates will be by post.',
         'Download your response'
       ]
@@ -424,12 +425,13 @@ function legacyClaimDetails () {
         'Your online account won’t be updated - any further updates will be by post.',
         'Tell us you’ve ended the claim'
       ],
-      defendantAssertions: ['Wait for a judge to make a repayment plan',
+      defendantAssertions: [
+        'Wait for a judge to make a repayment plan',
         'A County Court Judgment (CCJ) has been issued against you.',
         `${partAdmissionClaim().claim.claimants[0].name} accepted your offer to pay £30. They rejected your repayment plan and requested a CCJ against you.`,
         'They also rejected a repayment plan determined by the court, based on the financial details you provided.',
-        'A judge will make a repayment plan. We’ll contact you to tell you what to do next.',
-        `We’ll post a copy of the judgment to you and to ${partAdmissionClaim().claim.claimants[0].name}.`,
+        `When we’ve processed the request we’ll post a copy of the judgment to you and to ${partAdmissionClaim().claim.claimants[0].name}.`,
+        'A judge will make a repayment plan. We’ll contact you by post to tell you what to do next.',
         'Your online account won’t be updated - any further updates will be by post.',
         'Download your response'
       ]
