@@ -50,8 +50,13 @@
         {{ t('You need to send them your company’s financial details if you haven’t already.') }}</p>
         {{ internalLink( t('Get {{ claimantName }}’s contact details.', { claimantName: claimant.name }),
           claimantDetailsPageURI ) }} </p>
-      {% endif %}
+
+          {{ t('We’ll contact you by post when they respond.') }} </p>
+          {{ t('Your online account won’t be updated - any further updates will be by post.') }} </p>
+
+      {% else %}
         <p>{{ t('We’ll contact you when they respond.') }}</p>
+      {% endif %}
     {% endif %}
 
     <p>{{ downloadResponseLink(claim) }}</p>

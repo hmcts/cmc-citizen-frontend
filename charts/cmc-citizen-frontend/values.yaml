@@ -15,6 +15,7 @@ nodejs:
     FEATURE_TOGGLES_API_URL: http://rpe-feature-toggle-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
     IDAM_S2S_AUTH: http://rpe-service-auth-provider-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
     PAY_URL: http://payment-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
+    PAY_RETURN_URL: https://moneyclaims.{{ .Values.global.environment }}.platform.hmcts.net
     FEES_URL: http://fees-register-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
     DRAFT_STORE_URL: http://draft-store-service-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
     CLAIM_STORE_URL: http://cmc-claim-store-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
