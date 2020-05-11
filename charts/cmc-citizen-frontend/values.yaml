@@ -53,6 +53,7 @@ nodejs:
         - cmc-webchat-button-agents-busy
         - cmc-webchat-button-service-closed
         - postcode-lookup-api-key
+        - launchDarkly-sdk-key
 
 idam-pr:
   enabled: false
