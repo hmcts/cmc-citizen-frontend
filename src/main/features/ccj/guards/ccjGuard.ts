@@ -2,6 +2,7 @@ import * as express from 'express'
 import { Claim } from 'claims/models/claim'
 import { Paths } from 'dashboard/paths'
 import { Logger } from '@hmcts/nodejs-logging'
+import { YesNoOption } from 'models/yesNoOption'
 
 const logger = Logger.getLogger('ccj/guards/ccjGuard')
 
@@ -10,9 +11,10 @@ export class CCJGuard {
   static async requestHandler (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
     const claim: Claim = res.locals.claim
 
-    if (claim.eligibleForCCJ
+    if ((claim.eligibleForCCJ
       || claim.eligibleForCCJAfterBreachedSettlementTerms
-      || claim.isSettlementAgreementRejected) {
+      || claim.isSettlementAgreementRejected)
+      && !(claim.paperResponse === YesNoOption.YES)) {
       next()
     } else {
       logger.warn(`Claim ${claim.claimNumber} not eligible for a CCJ - redirecting to dashboard page`)
