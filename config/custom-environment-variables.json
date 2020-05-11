@@ -43,7 +43,8 @@
     }
   },
   "pay": {
-    "url": "PAY_URL"
+    "url": "PAY_URL",
+    "return-url": "PAY_RETURN_URL"
   },
   "eligibility": {
     "cookie": {
