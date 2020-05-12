@@ -37,6 +37,12 @@ import { InterestBreakdown } from 'claims/models/interestBreakdown'
 import { InterestTypeOption } from 'claim/form/models/interestType'
 import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
 import { Phone } from 'forms/models/phone'
+import * as config from 'config'
+import { Logger } from '@hmcts/nodejs-logging'
+
+export const paymentReturnUrlBase: string = `${config.get<string>('pay.return-url')}`
+
+const logger = Logger.getLogger('claims/ClaimModelConverter')
 
 export class ClaimModelConverter {
 
@@ -47,7 +53,7 @@ export class ClaimModelConverter {
     claimData.amount = new ClaimAmountBreakdown().deserialize(draftClaim.amount)
     claimData.claimants = [this.convertClaimantDetails(draftClaim)]
     claimData.defendants = [this.convertDefendantDetails(draftClaim)]
-    claimData.payment = this.makeShallowCopy(draftClaim.claimant.payment)
+    claimData.payment = this.makeShallowCopy(draftClaim.claimant.payment, draftClaim.externalId)
     claimData.reason = draftClaim.reason.reason
     claimData.timeline = { rows: draftClaim.timeline.getPopulatedRowsOnly() } as ClaimantTimeline
     claimData.evidence = { rows: convertEvidence(draftClaim.evidence) as any } as Evidence
@@ -245,9 +251,13 @@ export class ClaimModelConverter {
    * @param {Payment} payment - payment object retrieved from Payment HUB using {@link PayClient#retrieve}
    * @returns {Payment} - simplified payment object required by the backend API
    */
-  private static makeShallowCopy (payment: Payment): Payment {
+  private static makeShallowCopy (payment: Payment, externalId: string): Payment {
     if (!payment || Object.keys(payment).length === 0) {
-      return undefined
+      const paymentReturnUrl: string = paymentReturnUrlBase + `/claim/${externalId}/finish-payment`
+      logger.info('RETURN URL PAYMENT: ', paymentReturnUrl)
+      return {
+        return_url: paymentReturnUrl
+      }
     }
     return {
       reference: payment.reference,

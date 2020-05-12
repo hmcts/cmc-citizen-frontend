@@ -184,7 +184,7 @@ describe('ResponseModelConverter', () => {
       context('full admission conversion', () => {
         it('should convert full admission paid immediately', () => {
           const responseDraft = prepareResponseDraft(fullAdmissionWithImmediatePaymentDraft, individualDetails)
-          const responseData = prepareResponseData(fullAdmissionWithImmediatePaymentData, individual)
+          const responseData = prepareResponseData(fullAdmissionWithImmediatePaymentData(), individual)
           const claim: Claim = new Claim().deserialize({
             ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
           })
@@ -200,7 +200,7 @@ describe('ResponseModelConverter', () => {
               ...sampleMediationDraftObj
             }, individualSplitNameDetails)
           const responseData = prepareResponseData({
-            ...fullAdmissionWithImmediatePaymentData
+            ...fullAdmissionWithImmediatePaymentData()
           }, individualDefendant)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
@@ -279,7 +279,7 @@ describe('ResponseModelConverter', () => {
 
         it('should convert partial admission paid immediately', () => {
           const responseDraft = prepareResponseDraft(partialAdmissionWithImmediatePaymentDraft, individualDetails)
-          const responseData = preparePartialResponseData({ ...partialAdmissionWithImmediatePaymentData, ...directionsQuestionnaireResponseData }, individual)
+          const responseData = preparePartialResponseData({ ...partialAdmissionWithImmediatePaymentData(), ...directionsQuestionnaireResponseData }, individual)
           const claim: Claim = new Claim().deserialize({
             ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
           })
@@ -463,7 +463,7 @@ describe('ResponseModelConverter', () => {
               ...sampleMediationDraftObj
             }, individualDetails)
           const responseData = prepareResponseData({
-            ...fullAdmissionWithImmediatePaymentData,
+            ...fullAdmissionWithImmediatePaymentData(),
             ...mediationResponseData
           }, individual)
           const claim: Claim = new Claim().deserialize({
@@ -481,7 +481,7 @@ describe('ResponseModelConverter', () => {
               ...sampleMediationDraftObj
             }, individualSplitNameDetails)
           const responseData = prepareResponseData({
-            ...fullAdmissionWithImmediatePaymentData,
+            ...fullAdmissionWithImmediatePaymentData(),
             ...mediationResponseData
           }, individualDefendant)
           const claim: Claim = new Claim().deserialize({
@@ -590,7 +590,7 @@ describe('ResponseModelConverter', () => {
             ...sampleMediationDraftObj
           }, individualDetails)
           const responseData = preparePartialResponseData({
-            ...partialAdmissionWithImmediatePaymentData,
+            ...partialAdmissionWithImmediatePaymentData(),
             ...mediationResponseData,
             ...directionsQuestionnaireResponseData
           }, individual)
@@ -786,7 +786,7 @@ describe('ResponseModelConverter', () => {
       context('full admission conversion', () => {
         it('should convert full admission paid immediately', () => {
           const responseDraft = prepareResponseDraft(fullAdmissionWithImmediatePaymentDraft, individualDetails)
-          const responseData = prepareResponseData(fullAdmissionWithImmediatePaymentData, individual)
+          const responseData = prepareResponseData(fullAdmissionWithImmediatePaymentData(), individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
           expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize(sampleLegacyMediationDraftObj), directionsQuestionnaireDraft, claim)))
@@ -795,7 +795,7 @@ describe('ResponseModelConverter', () => {
 
         it('should convert full admission paid immediately with title, firstname and lastname', () => {
           const responseDraft = prepareResponseDraft(fullAdmissionWithImmediatePaymentDraft, individualSplitNameDetails)
-          const responseData = prepareResponseData(fullAdmissionWithImmediatePaymentData, individualDefendant)
+          const responseData = prepareResponseData(fullAdmissionWithImmediatePaymentData(), individualDefendant)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
           expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize(sampleLegacyMediationDraftObj), directionsQuestionnaireDraft, claim)))
@@ -863,7 +863,7 @@ describe('ResponseModelConverter', () => {
 
         it('should convert partial admission paid immediately', () => {
           const responseDraft = prepareResponseDraft(partialAdmissionWithImmediatePaymentDraft, individualDetails)
-          const responseData = preparePartialResponseData(partialAdmissionWithImmediatePaymentData, individual)
+          const responseData = preparePartialResponseData(partialAdmissionWithImmediatePaymentData(), individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
           expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize(sampleLegacyMediationDraftObj), directionsQuestionnaireDraft, claim)))
@@ -1033,7 +1033,7 @@ describe('ResponseModelConverter', () => {
               ...sampleMediationDraftObj
             }, individualDetails)
           const responseData = prepareResponseData({
-            ...fullAdmissionWithImmediatePaymentData,
+            ...fullAdmissionWithImmediatePaymentData(),
             ...mediationResponseData
           }, individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
@@ -1049,7 +1049,7 @@ describe('ResponseModelConverter', () => {
               ...sampleMediationDraftObj
             }, individualSplitNameDetails)
           const responseData = prepareResponseData({
-            ...fullAdmissionWithImmediatePaymentData,
+            ...fullAdmissionWithImmediatePaymentData(),
             ...mediationResponseData
           }, individualDefendant)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
@@ -1145,7 +1145,7 @@ describe('ResponseModelConverter', () => {
             ...sampleMediationDraftObj
           }, individualDetails)
           const responseData = preparePartialResponseData({
-            ...partialAdmissionWithImmediatePaymentData,
+            ...partialAdmissionWithImmediatePaymentData(),
             ...mediationResponseData
           }, individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
