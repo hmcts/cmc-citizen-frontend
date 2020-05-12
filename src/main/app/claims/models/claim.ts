@@ -31,6 +31,7 @@ import { DirectionOrder } from 'claims/models/directionOrder'
 import { ReviewOrder } from 'claims/models/reviewOrder'
 import { MediationOutcome } from 'claims/models/mediationOutcome'
 import { YesNoOption } from 'models/yesNoOption'
+import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
 
 interface State {
   status: ClaimStatus
@@ -75,6 +76,7 @@ export class Claim {
   mediationOutcome: string
   pilotCourt: YesNoOption
   paperResponse: YesNoOption
+  proceedOfflineReason: string
 
   get defendantOffer (): Offer {
     if (!this.settlement) {
@@ -167,6 +169,8 @@ export class Claim {
       }
     } else if (this.paperResponse && this.paperResponse === YesNoOption.YES) {
       return ClaimStatus.DEFENDANT_PAPER_RESPONSE
+    } else if (this.checkProceedOffileReason()) {
+      return ClaimStatus.PROCEED_OFFLINE
     } else if (this.moneyReceivedOn) {
       return ClaimStatus.PAID_IN_FULL
     } else if (this.countyCourtJudgmentRequestedAt) {
@@ -370,6 +374,10 @@ export class Claim {
 
       if (input.paperResponse) {
         this.paperResponse = YesNoOption.fromObject(input.paperResponse)
+      }
+
+      if (input.proceedOfflineReason) {
+        this.proceedOfflineReason = input.proceedOfflineReason
       }
     }
 
@@ -687,5 +695,9 @@ export class Claim {
   private hasIntentionToProceedDeadlinePassed (): boolean {
     return !this.claimantResponse && this.response && this.response.responseType === ResponseType.FULL_DEFENCE && MomentFactory.currentDateTime().isAfter(this.intentionToProceedDeadline.clone().hour(16)) &&
       this.isIntentionToProceedEligible()
+  }
+
+  private checkProceedOffileReason (): boolean {
+    return (this.proceedOfflineReason && (this.proceedOfflineReason === ProceedOfflineReason.APPLICATION_BY_DEFENDANT || this.proceedOfflineReason === ProceedOfflineReason.APPLICATION_BY_CLAIMANT))
   }
 }

@@ -44,6 +44,7 @@ import { FeatureToggles } from 'utils/featureToggles'
 import { MediationOutcome } from 'claims/models/mediationOutcome'
 import { defenceClaimData } from 'test/data/entity/claimData'
 import { YesNoOption } from 'models/yesNoOption'
+import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
 
 describe('Claim', () => {
   describe('eligibleForCCJ', () => {
@@ -176,6 +177,12 @@ describe('Claim', () => {
       claim.paperResponse = YesNoOption.YES
 
       expect(claim.status).to.be.equal(ClaimStatus.DEFENDANT_PAPER_RESPONSE)
+    })
+
+    it('should return PROCEED_OFFLINE when a proceed offline response received', () => {
+      claim.proceedOfflineReason = ProceedOfflineReason.APPLICATION_BY_DEFENDANT
+
+      expect(claim.status).to.be.equal(ClaimStatus.PROCEED_OFFLINE)
     });
 
     [true, false].forEach(isMoreTimeRequested => {
