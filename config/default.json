@@ -47,6 +47,7 @@
   },
   "pay": {
     "url": "http://localhost:4421",
+    "return-url": "https://localhost:3000",
     "service-name": "CMC",
     "currency": "GBP",
     "site-id": "AA00",
@@ -87,6 +88,8 @@
     "mediation": false,
     "mediationPilot": false,
     "directionsQuestionnaire": false,
+    "legalAdvisorPilot": false,
+    "judgePilot": false,
     "newDashboardStatus": false,
     "webChat": true,
     "inversionOfControl": true
@@ -114,7 +117,11 @@
       "cmc-webchat-tenant": "aG1jdHNzdGFnaW5nMDE",
       "cmc-webchat-button-no-agents": "7732814745cac6f4603c4d1.53357933",
       "cmc-webchat-button-agents-busy": "2042157415cc19c95669039.65793052",
-      "cmc-webchat-button-service-closed": "20199488815cc1a89e0861d5.73103009"
+      "cmc-webchat-button-service-closed": "20199488815cc1a89e0861d5.73103009",
+      "launchDarkly-sdk-key": "LAUNCH_DARKLY_SDK_KEY"
     }
+  },
+  "launchDarkly": {
+    "offline": false
   }
 }
