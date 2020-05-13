@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure@cmc-features")
+@Library("Infrastructure")
 
 String product = "cmc"
 String component = "citizen-frontend"
@@ -30,6 +30,16 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
   ]
 }
 
+def String generateClaimStoreUrl(String testUrl) {
+  String claimStoreUrl = 'http://cmc-claim-store-aat.service.core-compute-aat.internal'
+  String startOfClaimStoreServiceName = 'claim-store-'
+  if (testUrl?.trim()) {
+     claimStoreUrl = 'http://' + startOfClaimStoreServiceName + testUrl.minus('https://')
+     println('generateClaimStoreUrl -> ' + claimStoreUrl)
+  }
+  return claimStoreUrl
+}
+
 // Vars needed for AKS testing - keep values in sync with: charts/cmc-citizen-frontend/...
 // THESE WILL BE OVERWRITTEN IN ASE DEPLOYMENTS WITH TERRAFORM OUTPUTS.TF
 // THESE CAN BE PICKED UP IN INTEGRATION-TEST CODE DIRECTLY
@@ -45,23 +55,23 @@ env.FEATURE_INVERSION_OF_CONTROL = 'true'
 String notificationsChannel = '#cmc-tech-notification'
 
 withPipeline("nodejs", product, component) {
-//  after('checkout') {
-//    onMaster {
-//      withCredentials([usernamePassword(credentialsId: 'jenkins-github-hmcts-api-token', passwordVariable: 'BEARER_TOKEN', usernameVariable: 'USERNAME')]) {
-//        try {
-//          def url = sh(returnStdout: true, script: 'git config remote.origin.url').replace('github.com', '${BEARER_TOKEN}@github.com')
-//          sh('git remote set-url origin ' + url)
-//          sh('git fetch origin demo:demo')
-//          sh('git push --force origin HEAD:demo')
-//        } catch (err) {
-//          notifyBuildEvent channel: notificationsChannel, color: 'warning', message: 'Failed to update demo branch'
-//        }
-//      }
-//    }
-//  }
 
   after('build') {
     yarnBuilder.yarn('setup')
+  }
+
+  before('smoketest:preview'){
+    onPR {
+      log.info env.TEST_URL
+      env.CLAIM_STORE_URL = generateClaimStoreUrl(env.TEST_URL)
+    }
+  }
+
+  before('functionalTest:preview'){
+    onPR {
+      log.info env.TEST_URL
+      env.CLAIM_STORE_URL = generateClaimStoreUrl(env.TEST_URL)
+    }
   }
 
   after('test') {
@@ -75,5 +85,4 @@ withPipeline("nodejs", product, component) {
   
   loadVaultSecrets(secrets)
   enableSlackNotifications(notificationsChannel)
-  installCharts()
 }

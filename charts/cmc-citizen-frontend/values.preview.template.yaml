@@ -22,18 +22,15 @@ nodejs:
   image: ${IMAGE_NAME}
   ingressIP: ${INGRESS_IP}
   consulIP: ${CONSUL_LB_IP}
+  ingressHost: ${SERVICE_FQDN}
   readinessDelay: 90  # claim-store will start much slower
   livenessDelay: 90  # claim-store will start much slower
-  registerAdditionalDns:
-    enabled: true
-    primaryIngressHost: ${SERVICE_FQDN}
-    prefix: www
   environment:
     LOG_LEVEL: DEBUG
     HTTP_TIMEOUT: 60000
     FEATURE_TOGGLES_API_URL: http://${SERVICE_NAME}-ftr-tgl
     CLAIM_STORE_URL: http://${SERVICE_NAME}-claim-store
-    PAY_RETURN_URL: https://www-${SERVICE_FQDN}
+    PAY_RETURN_URL: https://${SERVICE_FQDN}
 
     # config to make non prod testing easier
     FEATURE_TESTING_SUPPORT: true
@@ -76,14 +73,14 @@ idam-pr:
   enabled: true
   redirect_uris:
     Money Claims - Citizen:
-      - https://www-${SERVICE_FQDN}/receiver
+      - https://${SERVICE_FQDN}/receiver
 
 cmc-claim-store:
   enabled: true
   java:
     image: hmctspublic.azurecr.io/cmc/claim-store:latest
     releaseNameOverride: ${SERVICE_NAME}-claim-store
-    ingressHost: ${SERVICE_FQDN}
+    ingressHost: claim-store-${SERVICE_FQDN}
     imagePullPolicy: Always
     readinessDelay: 250  # ccd-stack will start much slower
     livenessDelay:  250  # ccd-stack will start much slower
@@ -110,7 +107,7 @@ cmc-claim-store:
     environment:
       LOG_LEVEL: DEBUG
       DOC_ASSEMBLY_URL: http://dg-docassembly-aat.service.core-compute-aat.internal
-      FRONTEND_BASE_URL: https://www-${SERVICE_FQDN}
+      FRONTEND_BASE_URL: https://${SERVICE_FQDN}
       RESPOND_TO_CLAIM_URL: https://${SERVICE_FQDN}/first-contact/start
       CMC_DB_HOST: ${SERVICE_NAME}-postgresql
       CMC_DB_USERNAME: hmcts
