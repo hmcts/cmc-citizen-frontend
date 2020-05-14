@@ -12,7 +12,6 @@
         { defendantName: claim.claimData.defendant.name }) }}</h2>
     <p>{{ t('When we’ve processed your request, we’ll post a copy of the judgment to you and to {{ defendantName }}',
         { defendantName: claim.claimData.defendant.name }) }}</p>
-    <p>{{ t('Your online account won’t be updated with the progress of this claim - any further updates will be by post.') }}</p>
     <p>{{ internalLink('View the repayment plan', CCJPaths.repaymentPlanSummaryPage.evaluateUri({ externalId: claim.externalId, madeBy: MadeBy.CLAIMANT.value }), 'button button-secondary') }}</p>
     <p>{{ t('When you’ve been paid in full, you need to let us know.') }}</p>
     {{ paidInFullClaimantButtonClaimDetails(claim,'Tell us you’ve been paid') }}
