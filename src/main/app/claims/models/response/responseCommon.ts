@@ -10,6 +10,7 @@ import { Company } from 'claims/models/details/yours/company'
 import { Organisation } from 'claims/models/details/yours/organisation'
 
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
+import { ResponseMethod } from 'claims/models/response/responseMethod'
 
 export interface ResponseCommon {
   responseType: ResponseType
@@ -19,7 +20,7 @@ export interface ResponseCommon {
   mediationPhoneNumber?: string
   mediationContactPerson?: string
   statementOfTruth?: StatementOfTruth
-  responseMethod?: string
+  responseMethod?: ResponseMethod
 }
 
 export namespace ResponseCommon {
