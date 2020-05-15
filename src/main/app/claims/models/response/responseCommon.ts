@@ -19,12 +19,14 @@ export interface ResponseCommon {
   mediationPhoneNumber?: string
   mediationContactPerson?: string
   statementOfTruth?: StatementOfTruth
+  responseMethod?: string
 }
 
 export namespace ResponseCommon {
   export function deserialize (input: any): ResponseCommon {
     return {
       responseType: input.responseType,
+      responseMethod: input.responseMethod,
       defendant: deserializeDefendantDetails(input.defendant),
       freeMediation: input.freeMediation,
       mediationPhoneNumber: input.mediationPhoneNumber,
