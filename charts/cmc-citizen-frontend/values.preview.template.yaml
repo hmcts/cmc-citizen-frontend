@@ -42,33 +42,6 @@ nodejs:
 
 # sub-charts configuration
 
-rpe-feature-toggle-api:
-  enabled: true
-  java:
-    releaseNameOverride: ${SERVICE_NAME}-ftr-tgl
-    environment:
-      FEATURES_DB_HOST: ${SERVICE_NAME}-postgresql
-      FEATURES_DB_NAME: features
-      FEATURES_DB_USER_NAME: hmcts
-      FEATURES_DB_PASSWORD: hmcts
-    postgresql:
-      image:
-        tag: '11.3.0'
-  importer:
-    apiUrl: http://${SERVICE_NAME}-ftr-tgl/api/ff4j/store/features/
-    kvSecretRef: kvcreds
-    cron:
-      enabled: false
-    oneoff:
-      command: /scripts/add-weighted-toggle.sh cmc_admissions 'CMC admissions' '1.0' &&
-        /scripts/add-weighted-toggle.sh cmc_directions_questionnaire 'CMC Directions Questionnaire' '1.0' &&
-        /scripts/add-weighted-toggle.sh cmc_mediation_pilot 'CMC Mediation Pilot' '1.0' &&
-        /scripts/add-weighted-toggle.sh cmc_legal_advisor 'CMC LEGAL ADVISOR' '1.0' &&
-        /scripts/add-weighted-toggle.sh cmc_judge_pilot 'CMC Judge Pilot' '1.0' &&
-        /scripts/add-toggle.sh cmc_defence_reminders 'CMC defence reminders' false
-      enabled: true
-      permissions: cmc-new-features-consent-given
-
 idam-pr:
   enabled: true
   redirect_uris:
