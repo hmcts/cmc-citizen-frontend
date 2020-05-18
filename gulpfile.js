@@ -30,6 +30,15 @@ gulp.task('sass', (done) => {
     .pipe(sass())
     .pipe(gulp.dest(stylesheetsDirectory))
     .pipe(livereload())
+
+  gulp.src(govUkFrontendRoot + '/*.scss')
+    .pipe(plumber())
+    .pipe(sass({
+      includePaths: [
+        `${govUkFrontendRoot}/**/*.scss`
+      ]
+    }))
+    .pipe(gulp.dest(`${stylesheetsDirectory}/govuk-frontend/`))
   done()
 })
 
@@ -207,7 +216,6 @@ gulp.task('default',
   gulp.series(
     gulp.parallel(
       'sass',
-      'sass-govuk-frontend',
       'copy-files',
     ),
     gulp.parallel(
