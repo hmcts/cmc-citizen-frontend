@@ -8,11 +8,6 @@ dependencies:
     repository: '@hmctspublic'
     condition: idam-pr.enabled
 
-  - name: rpe-feature-toggle-api
-    version: ~3.2.0
-    repository: '@hmctspublic'
-    condition: rpe-feature-toggle-api.enabled
-
   - name: cmc-claim-store
     version: ~4.1.3
     repository: '@hmctspublic'
