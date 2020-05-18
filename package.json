@@ -32,7 +32,7 @@
   "dependencies": {
     "@hmcts/class-validator": "^0.9.1-e",
     "@hmcts/cmc-draft-store-middleware": "^2.0.1",
-    "@hmcts/cmc-validators": "^0.2.4",
+    "@hmcts/cmc-validators": "^0.2.6",
     "@hmcts/cookie-encrypter": "^1.0.1",
     "@hmcts/ctsc-web-chat": "^0.3.10",
     "@hmcts/draft-store-client": "^1.2.1",
