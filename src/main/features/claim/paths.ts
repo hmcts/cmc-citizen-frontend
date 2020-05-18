@@ -42,6 +42,7 @@ export class Paths {
   static readonly newFeaturesConsentPage = new RoutablePath('/claim/new-features-consent')
   static readonly initiatePaymentController = new RoutablePath('/claim/initiate-payment')
   static readonly finishPaymentController = new RoutablePath('/claim/:externalId/finish-payment')
+  static readonly documentPage = new RoutablePath('/claim/:externalId/document/:documentURI')
 
 }
 
