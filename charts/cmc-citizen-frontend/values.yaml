@@ -57,8 +57,6 @@ nodejs:
 
 idam-pr:
   enabled: false
-rpe-feature-toggle-api:
-  enabled: false
 postgresql:
   enabled: false
 ccd:
