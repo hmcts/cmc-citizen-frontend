@@ -4399,26 +4399,6 @@ inquirer@^3.3.0:
     strip-ansi "^4.0.0"
     through "^2.3.6"
 
-inquirer@^3.3.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/inquirer/-/inquirer-3.3.0.tgz#9dd2f2ad765dcab1ff0443b491442a20ba227dc9"
-  integrity sha512-h+xtnyk4EwKvFWHrUYsWErEVR+igKtLdchu+o0Z1RL7VU/jVMFbYir2bp6bAj8efFNxWqHX0dIss6fJQ+/+qeQ==
-  dependencies:
-    ansi-escapes "^3.0.0"
-    chalk "^2.0.0"
-    cli-cursor "^2.1.0"
-    cli-width "^2.0.0"
-    external-editor "^2.0.4"
-    figures "^2.0.0"
-    lodash "^4.3.0"
-    mute-stream "0.0.7"
-    run-async "^2.2.0"
-    rx-lite "^4.0.8"
-    rx-lite-aggregates "^4.0.8"
-    string-width "^2.1.0"
-    strip-ansi "^4.0.0"
-    through "^2.3.6"
-
 inquirer@^6.5.2:
   version "6.5.2"
   resolved "https://registry.yarnpkg.com/inquirer/-/inquirer-6.5.2.tgz#ad50942375d036d327ff528c08bd5fab089928ca"
@@ -5770,15 +5750,15 @@ mocha-multi@^1.1.3:
     mkdirp "^0.5.1"
     object-assign "^4.1.1"
 
-mocha-parallel-tests@^2.2.2:
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/mocha-parallel-tests/-/mocha-parallel-tests-2.2.2.tgz#4a45dcf77961def902eb8fec387268c0431e61ea"
-  integrity sha512-TeakNjchBtm18EHi14keQPdHHwgXGIuDowh9BeelfImvZ36n2l1HRAs61PJWPinzG6HV34myUc3pYZCbysyOCw==
+mocha-parallel-tests@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/mocha-parallel-tests/-/mocha-parallel-tests-2.3.0.tgz#92d5cf0a3c9ba71b1a9c08a7b56194c023a58de1"
+  integrity sha512-GdU55VkOCXK2aBmjFzBE11RsSolA71WJppucU3BrTbMUpGIWnTidrje5Hvdr+hOolynEiv6fHWyoNT41mq4HkA==
   dependencies:
     circular-json "^0.5.9"
     debug "^4.1.1"
-    uuid "^3.3.2"
-    yargs "^13.2.4"
+    uuid "^3.4.0"
+    yargs "^13.3.0"
 
 mocha@^5.2.0:
   version "5.2.0"
@@ -6455,15 +6435,6 @@ os-locale@^1.4.0:
   integrity sha1-IPnxeuKe00XoveWDsT0gCYA8FNk=
   dependencies:
     lcid "^1.0.0"
-
-os-locale@^2.0.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/os-locale/-/os-locale-2.1.0.tgz#42bc2900a6b5b8bd17376c8e882b65afccf24bf2"
-  integrity sha512-3sslG3zJbEYcaC4YVAvDorjGxc7tv6KVATnLPZONiljsUncvihe9BQoVCEs0RZ1kmf4Hk9OBqlZfJZWI4GanKA==
-  dependencies:
-    execa "^0.7.0"
-    lcid "^1.0.0"
-    mem "^1.1.0"
 
 os-locale@^2.0.0:
   version "2.1.0"
@@ -9475,7 +9446,7 @@ yargs-unparser@1.6.0:
     lodash "^4.17.15"
     yargs "^13.3.0"
 
-yargs@13.3.0, yargs@^13.2.2, yargs@^13.2.4, yargs@^13.3.0:
+yargs@13.3.0, yargs@^13.2.2, yargs@^13.3.0:
   version "13.3.0"
   resolved "https://registry.yarnpkg.com/yargs/-/yargs-13.3.0.tgz#4c657a55e07e5f2cf947f8a366567c04a0dedc83"
   integrity sha512-2eehun/8ALW8TLoIl7MVaRUrg+yCnenu8B4kBlRxj3GJGDKU1Og7sMXPNm1BYyM1DOJmTZ4YeN/Nwxv+8XJsUA==
