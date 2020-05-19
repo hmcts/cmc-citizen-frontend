@@ -3,7 +3,7 @@
 {% if claim.response.responseType === domain.ResponseType.PART_ADMISSION and page === 1 %}
   {% set heading = 'How they want to pay' %}
 {% else %}
-  {% set heading = 'The defendant’s response' %}
+  {% set heading = 'The defendant’s response (defendants-response.njk)' %}
 {% endif %}
 
 {% from "form.njk" import csrfProtection, submitButton, errorSummary %}
