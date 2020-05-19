@@ -452,7 +452,7 @@ describe('Claim issue: post payment callback receiver', () => {
         describe('when claim does not exist', () => {
 
           it('should return 500 and render error page when cannot save claim', async () => {
-            when(mockLaunchDarklyClient.variation(testUser, testRoles,'admissions')).thenResolve(Promise.resolve(false))
+            when(mockLaunchDarklyClient.variation(testUser, testRoles, 'admissions', false)).thenResolve(Promise.resolve(false))
             draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
@@ -469,7 +469,7 @@ describe('Claim issue: post payment callback receiver', () => {
           })
 
           it('should return 500 and render error page when cannot delete draft', async () => {
-            when(mockLaunchDarklyClient.variation(testUser, testRoles,'admissions')).thenResolve(Promise.resolve(false))
+            when(mockLaunchDarklyClient.variation(testUser, testRoles, 'admissions', false)).thenResolve(Promise.resolve(false))
             draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
@@ -488,7 +488,7 @@ describe('Claim issue: post payment callback receiver', () => {
           })
 
           it('should return 500 and render error page when feature toggle api fails', async () => {
-            when(mockLaunchDarklyClient.variation(testUser, testRoles,'admissions')).thenResolve(Promise.resolve(false))
+            when(mockLaunchDarklyClient.variation(testUser, testRoles, 'admissions', false)).thenResolve(Promise.resolve(false))
             draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
@@ -517,7 +517,7 @@ describe('Claim issue: post payment callback receiver', () => {
           })
 
           it('should redirect to confirmation page when everything is fine', async () => {
-            when(mockLaunchDarklyClient.variation(testUser,testRoles,'admissions')).thenResolve(Promise.resolve(false))
+            when(mockLaunchDarklyClient.variation(testUser, testRoles, 'admissions', false)).thenResolve(Promise.resolve(false))
             draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
@@ -536,7 +536,7 @@ describe('Claim issue: post payment callback receiver', () => {
           })
 
           it('should redirect to confirmation page when user have not given any consent', async () => {
-            when(mockLaunchDarklyClient.variation(testUser, testRoles,'admissions')).thenResolve(Promise.resolve(false))
+            when(mockLaunchDarklyClient.variation(testUser, testRoles, 'admissions', false)).thenResolve(Promise.resolve(false))
             draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
