@@ -179,6 +179,8 @@
       {{ ccjRequestedForClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.RESPONSE_SUBMITTED %}
       {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
+        {% elif claim.response.responseMethod == ResponseMethod.OCON_FORM %}
+          {{ claimRejectedWithDQsForClaimantDashboard }}
         {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
           {{ claimRejectedAlreadyPaidForClaimantClaimDetails(claim) }}
         {% else %}
@@ -266,6 +268,8 @@
   {% for state in claim.stateHistory %}
     {% if state.status === ClaimStatus.NO_RESPONSE %}
       {{ noResponseForDefendantClaimDetails(claim) }}
+    {% elif claim.response.responseMethod == ResponseMethod.OCON_FORM %}
+      {{ claimRejectedWithDQsForDefendantDashboard }}
     {% elif state.status === ClaimStatus.PAID_IN_FULL %}
       {{ paidInFullDefendantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED %}
