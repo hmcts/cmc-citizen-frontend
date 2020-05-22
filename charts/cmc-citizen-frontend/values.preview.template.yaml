@@ -9,7 +9,6 @@ postgresql:
     init.sql: |-
       CREATE DATABASE cmc WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
       CREATE DATABASE "claimstore" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
-      CREATE DATABASE features WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
       CREATE DATABASE "data-store" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
       CREATE DATABASE "definition-store" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
       CREATE DATABASE "user-profile" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
@@ -22,18 +21,15 @@ nodejs:
   image: ${IMAGE_NAME}
   ingressIP: ${INGRESS_IP}
   consulIP: ${CONSUL_LB_IP}
+  ingressHost: ${SERVICE_FQDN}
   readinessDelay: 90  # claim-store will start much slower
   livenessDelay: 90  # claim-store will start much slower
-  registerAdditionalDns:
-    enabled: true
-    primaryIngressHost: ${SERVICE_FQDN}
-    prefix: www
   environment:
     LOG_LEVEL: DEBUG
     HTTP_TIMEOUT: 60000
     FEATURE_TOGGLES_API_URL: http://${SERVICE_NAME}-ftr-tgl
     CLAIM_STORE_URL: http://${SERVICE_NAME}-claim-store
-    PAY_RETURN_URL: https://www-${SERVICE_FQDN}
+    PAY_RETURN_URL: https://${SERVICE_FQDN}
 
     # config to make non prod testing easier
     FEATURE_TESTING_SUPPORT: true
@@ -45,45 +41,18 @@ nodejs:
 
 # sub-charts configuration
 
-rpe-feature-toggle-api:
-  enabled: true
-  java:
-    releaseNameOverride: ${SERVICE_NAME}-ftr-tgl
-    environment:
-      FEATURES_DB_HOST: ${SERVICE_NAME}-postgresql
-      FEATURES_DB_NAME: features
-      FEATURES_DB_USER_NAME: hmcts
-      FEATURES_DB_PASSWORD: hmcts
-    postgresql:
-      image:
-        tag: '11.3.0'
-  importer:
-    apiUrl: http://${SERVICE_NAME}-ftr-tgl/api/ff4j/store/features/
-    kvSecretRef: kvcreds
-    cron:
-      enabled: false
-    oneoff:
-      command: /scripts/add-weighted-toggle.sh cmc_admissions 'CMC admissions' '1.0' &&
-        /scripts/add-weighted-toggle.sh cmc_directions_questionnaire 'CMC Directions Questionnaire' '1.0' &&
-        /scripts/add-weighted-toggle.sh cmc_mediation_pilot 'CMC Mediation Pilot' '1.0' &&
-        /scripts/add-weighted-toggle.sh cmc_legal_advisor 'CMC LEGAL ADVISOR' '1.0' &&
-        /scripts/add-weighted-toggle.sh cmc_judge_pilot 'CMC Judge Pilot' '1.0' &&
-        /scripts/add-toggle.sh cmc_defence_reminders 'CMC defence reminders' false
-      enabled: true
-      permissions: cmc-new-features-consent-given
-
 idam-pr:
   enabled: true
   redirect_uris:
     Money Claims - Citizen:
-      - https://www-${SERVICE_FQDN}/receiver
+      - https://${SERVICE_FQDN}/receiver
 
 cmc-claim-store:
   enabled: true
   java:
     image: hmctspublic.azurecr.io/cmc/claim-store:latest
     releaseNameOverride: ${SERVICE_NAME}-claim-store
-    ingressHost: ${SERVICE_FQDN}
+    ingressHost: claim-store-${SERVICE_FQDN}
     imagePullPolicy: Always
     readinessDelay: 250  # ccd-stack will start much slower
     livenessDelay:  250  # ccd-stack will start much slower
@@ -110,7 +79,7 @@ cmc-claim-store:
     environment:
       LOG_LEVEL: DEBUG
       DOC_ASSEMBLY_URL: http://dg-docassembly-aat.service.core-compute-aat.internal
-      FRONTEND_BASE_URL: https://www-${SERVICE_FQDN}
+      FRONTEND_BASE_URL: https://${SERVICE_FQDN}
       RESPOND_TO_CLAIM_URL: https://${SERVICE_FQDN}/first-contact/start
       CMC_DB_HOST: ${SERVICE_NAME}-postgresql
       CMC_DB_USERNAME: hmcts
@@ -186,7 +155,7 @@ ccd:
       - civilmoneyclaims+la@gmail.com|CMC|MoneyClaimCase|readyForDirections
 
   ccd-definition-importer:
-    image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.5.16
+    image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.5.18
     environment:
       CCD_DEF_CLAIM_STORE_BASE_URL: http://${SERVICE_NAME}-claim-store
     definitionFilename: cmc-ccd.xlsx

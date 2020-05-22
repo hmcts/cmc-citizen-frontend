@@ -46,6 +46,7 @@ import { Paths as MediationPaths } from 'mediation/paths'
 import { Paths as DirectionsQuestionnairePaths } from 'features/directions-questionnaire/paths'
 import { Paths as OrdersPaths } from 'features/orders/paths'
 import { Paths as TestingSupportPaths } from 'testing-support/paths'
+import { Paths as ClaimPaths } from 'features/claim/paths'
 import { FullRejectionPaths, PartAdmissionPaths, Paths as ResponsePaths } from 'features/response/paths'
 import { HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
@@ -169,6 +170,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('ClaimStatus', ClaimStatus)
 
     nunjucksEnv.addGlobal('AppPaths', AppPaths)
+    nunjucksEnv.addGlobal('ClaimPaths', ClaimPaths)
     nunjucksEnv.addGlobal('ClaimantResponsePaths', ClaimantResponsePaths)
     nunjucksEnv.addGlobal('DashboardPaths', DashboardPaths)
     nunjucksEnv.addGlobal('CCJPaths', CCJPaths)

@@ -3,34 +3,95 @@
 {% from "./macro/caseHistory.njk" import caseHistoryForClaimantClaimDetails %}
 {% from "../../claim/views/macro/about-claim-widget.njk" import aboutClaimWidget %}
 {% from "internalLink.njk" import internalLink %}
+{% from "../../../common/components/imported/tabs/macro.njk" import govukTabs %}
 
 {% set headingVisible = false %}
 {% set heading = 'Claim status' %}
 
+{% block additional_head %}
+  <link rel="stylesheet" href="{{ asset_paths['style'] }}/govuk-frontend/all.css"/>
+{% endblock %}
+
+{% block additional_scripts %}
+  <script src="{{ asset_paths['js_vendor'] }}/components/tabs/tabs.js"></script>
+  <script src="{{ asset_paths['js'] }}/tabs.js"></script>
+{% endblock %}
+
+{% set latestUpdate %}
+  <div class="latest-update-section">
+    {% if claim %}
+      {{ caseHistoryForClaimantClaimDetails(claim, csrf, mediationDeadline, reconsiderationDeadline, isReviewOrderEligible, respondToReviewOrderDeadline, judgePilot) }}
+    {% else %}
+      <h2 class="heading-medium no-bottom-margin">{{ t('This claim has not been submitted') }}</h2>
+      <p>
+        {{ t('Your claim is saved as a draft.') }}
+      </p>
+      <p>
+        {{ internalLink(t('Continue with claim'), ClaimPaths.taskListPage.uri) }}
+      </p>
+    {% endif %}
+  </div>
+{% endset %}
+
+{% set documents %}
+  <h2 class="heading-medium no-top-margin">{{ t('Claim documents') }}</h2>
+  {% if claim.claimDocuments.length > 0 %}
+    {% for document in claim.claimDocuments %}
+      <p>
+        {{ internalLink(document.documentDisplayName, ClaimPaths.documentPage.evaluateUri({ externalId: claim.externalId, documentURI: document.uri })) }}
+        {% if document.size !== 0 %}
+          (PDF, {{ (document.size / 1000).toFixed(0) }}KB)
+        {% else %}
+          (PDF)
+        {% endif %}
+        <br>
+        <span style="color:grey; font-size: 15px">
+                Created: {{ document.createdDatetime.format('LL') }}
+              </span>
+      </p>
+    {% endfor %}
+  {% elseif(claim) %}
+    <p>
+    {{ internalLink('Download claim', ClaimPaths.documentPage.evaluateUri({ externalId: claim.externalId, documentURI: 'claim-receipt' })) }}
+    (PDF)
+    <br>
+    <span style="color:grey; font-size: 15px">
+                Created: {{ claim.createdAt.format('LL') }}
+              </span>
+    </p>
+  {% endif %}
+{% endset %}
+
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      <div class="form-group-related no-bottom-margin">
+      <div class="form-group-related">
         {% if claim.claimNumber %}
-          <h2 class="heading-medium no-bottom-margin">{{ claim.claimData.claimant.name }} v {{ claim.claimData.defendant.name }}</h2>
+          <h2 class="heading-medium no-bottom-margin">{{ claim.claimData.claimant.name }}
+            v {{ claim.claimData.defendant.name }}</h2>
         {% endif %}
         <span class="font-xsmall">{{ t('Claim number:') }} {{ claim.claimNumber if claim else 'Draft' }}</span>
       </div>
-      <div>
-        {% if claim %}
-          {{ caseHistoryForClaimantClaimDetails(claim, csrf, mediationDeadline, reconsiderationDeadline, isReviewOrderEligible, respondToReviewOrderDeadline, judgePilot) }}
-        {% else %}
-          <h2 class="heading-medium no-bottom-margin">{{ t('This claim has not been submitted') }}</h2>
-          <p>
-            {{ t('Your claim is saved as a draft.') }}
-          </p>
-          <p>
-            {{ internalLink(t('Continue with claim'), ClaimPaths.taskListPage.uri) }}
-          </p>
-        {% endif %}
-      </div>
+      {{ govukTabs({
+        classes: 'tab-section',
+        items: [
+          {
+            label: t('Latest update'),
+            id: "latest-update",
+            panel: {
+              html: latestUpdate
+            }
+          },
+          {
+            label: t('Documents'),
+            id: "documents",
+            panel: {
+              html: documents
+            }
+          }
+        ]
+      }) }}
     </div>
-
     {% if claim %}
       <div class="column-one-third">
         {{ aboutClaimWidget(claim = claim, otherParty = 'defendant') }}

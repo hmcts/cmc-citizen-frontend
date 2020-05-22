@@ -27,4 +27,15 @@ describe('DocumentsClient', () => {
     expect(() => client.getDefendantResponseReceiptPDF(externalId, ''))
       .to.throw(Error, 'User authorisation cannot be blank')
   })
+
+  it('should throw error when not given an empty bearerToken to getPDF', () => {
+    expect(() => client.getPDF(externalId, 'ORDER_DIRECTIONS', ''))
+      .to.throw(Error, 'User authorisation cannot be blank')
+  })
+
+  it('should throw error when given empty ExternalId to getPDF', () => {
+    expect(() => client.getPDF('', 'ORDER_DIRECTIONS', bearerToken))
+      .to.throw(Error, 'Claim external ID cannot be blank')
+  })
+
 })
