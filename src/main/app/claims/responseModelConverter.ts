@@ -70,6 +70,7 @@ import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/dir
 import { DirectionsQuestionnaire } from 'claims/models/directions-questionnaire/directionsQuestionnaire'
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
+import { ResponseMethod } from 'claims/models/response/responseMethod'
 
 export class ResponseModelConverter {
 
@@ -93,6 +94,7 @@ export class ResponseModelConverter {
   private static convertFullDefence (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): FullDefenceResponse {
     return {
       responseType: ResponseType.FULL_DEFENCE,
+      responseMethod: ResponseMethod.DIGITAL,
       defendant: this.convertPartyDetails(draft.defendantDetails),
       defenceType: this.inferDefenceType(draft),
       defence: draft.defence.text,
@@ -121,6 +123,7 @@ export class ResponseModelConverter {
   private static convertFullDefenceAsPartialAdmission (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): PartialAdmissionResponse {
     return {
       responseType: ResponseType.PART_ADMISSION,
+      responseMethod: ResponseMethod.DIGITAL,
       amount: draft.rejectAllOfClaim.howMuchHaveYouPaid.amount,
       paymentDeclaration: {
         paidDate: draft.rejectAllOfClaim.howMuchHaveYouPaid.date.asString(),
@@ -148,6 +151,7 @@ export class ResponseModelConverter {
   private static convertFullAdmission (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft): FullAdmissionResponse {
     return {
       responseType: ResponseType.FULL_ADMISSION,
+      responseMethod: ResponseMethod.DIGITAL,
       freeMediation: FreeMediationUtil.getFreeMediation(mediationDraft),
       mediationPhoneNumber: FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft, draft),
       mediationContactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft, draft),
