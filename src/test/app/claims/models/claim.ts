@@ -183,6 +183,18 @@ describe('Claim', () => {
       claim.proceedOfflineReason = ProceedOfflineReason.APPLICATION_BY_DEFENDANT
 
       expect(claim.status).to.be.equal(ClaimStatus.PROCEED_OFFLINE)
+    })
+
+    it('should return PROCEED_OFFLINE when a proceed offline response received', () => {
+      claim.proceedOfflineReason = ProceedOfflineReason.APPLICATION_BY_CLAIMANT
+
+      expect(claim.status).to.be.equal(ClaimStatus.PROCEED_OFFLINE)
+    })
+
+    it('should return PROCEED_OFFLINE when a proceed offline response received', () => {
+      claim.proceedOfflineReason = ProceedOfflineReason.OTHER
+
+      expect(claim.status).to.be.equal(ClaimStatus.NO_RESPONSE)
     });
 
     [true, false].forEach(isMoreTimeRequested => {

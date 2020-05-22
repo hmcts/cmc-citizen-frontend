@@ -169,7 +169,7 @@ export class Claim {
       }
     } else if (this.paperResponse && this.paperResponse === YesNoOption.YES) {
       return ClaimStatus.DEFENDANT_PAPER_RESPONSE
-    } else if (this.checkProceedOffileReason()) {
+    } else if (this.checkProceedOfflineReason()) {
       return ClaimStatus.PROCEED_OFFLINE
     } else if (this.moneyReceivedOn) {
       return ClaimStatus.PAID_IN_FULL
@@ -697,7 +697,7 @@ export class Claim {
       this.isIntentionToProceedEligible()
   }
 
-  private checkProceedOffileReason (): boolean {
+  private checkProceedOfflineReason (): boolean {
     return (this.proceedOfflineReason && (this.proceedOfflineReason === ProceedOfflineReason.APPLICATION_BY_DEFENDANT || this.proceedOfflineReason === ProceedOfflineReason.APPLICATION_BY_CLAIMANT))
   }
 }
