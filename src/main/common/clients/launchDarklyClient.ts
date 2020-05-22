@@ -20,14 +20,13 @@ export class LaunchDarklyClient {
     }
   }
 
-  async variation (user: User, roles: string[], featureKey: string): Promise<ld.LDFlagValue> {
+  async variation (user: User, roles: string[], featureKey: string, offlineDefault): Promise<ld.LDFlagValue> {
     const ldUser: ld.LDUser = {
       key: user.id,
       custom: {
         roles
       }
     }
-    // use undefined as the default to defer responsibility for determining the default to the consumer
-    return LaunchDarklyClient.client.variation(featureKey, ldUser, undefined)
+    return LaunchDarklyClient.client.variation(featureKey, ldUser, offlineDefault)
   }
 }
