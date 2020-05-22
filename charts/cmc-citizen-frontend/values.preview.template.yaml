@@ -9,7 +9,6 @@ postgresql:
     init.sql: |-
       CREATE DATABASE cmc WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
       CREATE DATABASE "claimstore" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
-      CREATE DATABASE features WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
       CREATE DATABASE "data-store" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
       CREATE DATABASE "definition-store" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
       CREATE DATABASE "user-profile" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
@@ -41,33 +40,6 @@ nodejs:
     FEATURE_WEB_CHAT: true
 
 # sub-charts configuration
-
-rpe-feature-toggle-api:
-  enabled: true
-  java:
-    releaseNameOverride: ${SERVICE_NAME}-ftr-tgl
-    environment:
-      FEATURES_DB_HOST: ${SERVICE_NAME}-postgresql
-      FEATURES_DB_NAME: features
-      FEATURES_DB_USER_NAME: hmcts
-      FEATURES_DB_PASSWORD: hmcts
-    postgresql:
-      image:
-        tag: '11.3.0'
-  importer:
-    apiUrl: http://${SERVICE_NAME}-ftr-tgl/api/ff4j/store/features/
-    kvSecretRef: kvcreds
-    cron:
-      enabled: false
-    oneoff:
-      command: /scripts/add-weighted-toggle.sh cmc_admissions 'CMC admissions' '1.0' &&
-        /scripts/add-weighted-toggle.sh cmc_directions_questionnaire 'CMC Directions Questionnaire' '1.0' &&
-        /scripts/add-weighted-toggle.sh cmc_mediation_pilot 'CMC Mediation Pilot' '1.0' &&
-        /scripts/add-weighted-toggle.sh cmc_legal_advisor 'CMC LEGAL ADVISOR' '1.0' &&
-        /scripts/add-weighted-toggle.sh cmc_judge_pilot 'CMC Judge Pilot' '1.0' &&
-        /scripts/add-toggle.sh cmc_defence_reminders 'CMC defence reminders' false
-      enabled: true
-      permissions: cmc-new-features-consent-given
 
 idam-pr:
   enabled: true
@@ -183,7 +155,7 @@ ccd:
       - civilmoneyclaims+la@gmail.com|CMC|MoneyClaimCase|readyForDirections
 
   ccd-definition-importer:
-    image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.5.16
+    image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.5.18
     environment:
       CCD_DEF_CLAIM_STORE_BASE_URL: http://${SERVICE_NAME}-claim-store
     definitionFilename: cmc-ccd.xlsx

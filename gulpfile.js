@@ -11,6 +11,8 @@ const fs = require('fs')
 const repoRoot = path.join(__dirname, '/')
 const govUkFrontendToolkitRoot = path.join(repoRoot, 'node_modules/govuk_frontend_toolkit/stylesheets')
 const govUkElementRoot = path.join(repoRoot, 'node_modules/govuk-elements-sass/public/sass')
+const govUkFrontendRoot = path.join(repoRoot, 'node_modules/govuk-frontend/govuk/')
+const appDirectory = `./src/main/common/components/imported`
 
 const assetsDirectory = './src/main/public'
 const stylesheetsDirectory = `${assetsDirectory}/stylesheets`
@@ -28,6 +30,15 @@ gulp.task('sass', (done) => {
     .pipe(sass())
     .pipe(gulp.dest(stylesheetsDirectory))
     .pipe(livereload())
+
+  gulp.src(govUkFrontendRoot + '/*.scss')
+    .pipe(plumber())
+    .pipe(sass({
+      includePaths: [
+        `${govUkFrontendRoot}/**/*.scss`
+      ]
+    }))
+    .pipe(gulp.dest(`${stylesheetsDirectory}/govuk-frontend/`))
   done()
 })
 
@@ -38,8 +49,46 @@ gulp.task('copy-files', (done) => {
   copyA11ySniffer()
   copyClientModules()
   copyDatePickerDependencies()
+  copyComponents()
+  copyGovukFrontendFonts()
   done()
 })
+
+gulp.task('sass-govuk-frontend', (done) => {
+  gulp.src(govUkFrontendRoot + '/*.scss')
+    .pipe(plumber())
+    .pipe(sass({
+      includePaths: [
+        `${govUkFrontendRoot}/**/*.scss`
+      ]
+    }))
+    .pipe(gulp.dest(`${stylesheetsDirectory}/govuk-frontend/`))
+  done()
+})
+
+function copyComponent(component) {
+  gulp.src([
+    `./node_modules/govuk-frontend/govuk/components/${component}/**/*.njk`,
+    `./node_modules/govuk-frontend/govuk/components/${component}/**/*.ts`
+  ])
+    .pipe(gulp.dest(`${appDirectory}/${component}/`))
+
+  gulp.src([
+    `./node_modules/govuk-frontend/govuk/components/${component}/**/*.js`,
+  ])
+    .pipe(gulp.dest(`${assetsDirectory}/js/lib/components/${component}/`))
+}
+
+function copyComponents () {
+  ['tabs'].forEach(copyComponent)
+}
+
+function copyGovukFrontendFonts() {
+  gulp.src([
+    `./node_modules/govuk-frontend/govuk/assets/fonts/**/*.*`,
+  ])
+    .pipe(gulp.dest(`${assetsDirectory}/assets/fonts/`))
+}
 
 function copyWebChatTemplate () {
   gulp.src([

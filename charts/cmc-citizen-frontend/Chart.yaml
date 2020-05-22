@@ -1,7 +1,7 @@
 apiVersion: v1
 name: cmc-citizen-frontend
 home: https://github.com/hmcts/cmc-citizen-frontend
-version: 3.3.4
+version: 3.3.5
 description: Helm chart for the HMCTS CMC Citizen Frontend service
 # be aware when bumping version that it is used elsewhere, e.g.:
 # chart-cmc - demo: https://github.com/hmcts/chart-cmc/tree/master/cmc
