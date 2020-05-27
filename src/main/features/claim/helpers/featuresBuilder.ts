@@ -19,18 +19,22 @@ export class FeaturesBuilder {
 
   async features (amount: number, user: User): Promise<string> {
     const roles: string[] = await this.claimStoreClient.retrieveUserRoles(user)
+    if (!roles.includes('cmc-new-features-consent-given')) {
+      // all features require consent
+      return undefined
+    }
 
     let features = []
     for (const feature of FEATURES) {
       if (amount <= feature.threshold) {
-        const ldVariation = await this.launchDarklyClient.variation(user, roles, feature.toggle)
-        // ldVariation will be undefined if we're in offline mode, in which case look at the local toggles
-        if (ldVariation || (ldVariation === undefined && config.get<string>(`featureToggles.${feature.setting}`))) {
+        const offlineDefault = config.get<boolean>(`featureToggles.${feature.setting}`) || false
+        const ldVariation = await this.launchDarklyClient.variation(user, roles, feature.toggle, offlineDefault)
+        if (ldVariation) {
           features.push(feature.feature)
         }
       }
     }
-    return features.length === 0 ? undefined : features.join(', ')
+    return (!features || features.length === 0) ? undefined : features.join(', ')
   }
 }
 
