@@ -124,7 +124,7 @@
     {{ ccjRequestedForClaimantDashboard(claim) }}
   {% elif status === ClaimStatus.REDETERMINATION_BY_JUDGE %}
     {{ redeterminationClaimantDashboard() }}
-  {% elif claim.response.responseMethod == ResponseMethod..OCON_FORM %}
+  {% elif claim.response.responseMethod == ResponseMethod.OCON_FORM %}
     {{ claimRejectedWithDQsForClaimantDashboard(claim) }}
   {% elif status === ClaimStatus.DEFENDANT_PAPER_RESPONSE %}
     {{ paperResponseForClaimantDashboard() }}
