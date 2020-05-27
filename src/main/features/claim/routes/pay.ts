@@ -26,8 +26,11 @@ import { trackCustomEvent } from 'logging/customEventTracker'
 import { Claim } from 'claims/models/claim'
 import { MockPayClient } from 'mock-clients/mockPayClient'
 import { FeaturesBuilder } from 'claim/helpers/featuresBuilder'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
+const launchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
+const featuresBuilder: FeaturesBuilder = new FeaturesBuilder(claimStoreClient, launchDarklyClient)
 
 const logger = Logger.getLogger('router/pay')
 const event: string = config.get<string>('fees.issueFee.event')
@@ -61,7 +64,7 @@ async function successHandler (req, res, next) {
   let savedClaim: Claim
 
   try {
-    const features = await FeaturesBuilder.features(draft, user)
+    const features = await featuresBuilder.features(draft.document.amount.totalAmount(), user)
     savedClaim = await claimStoreClient.saveClaim(draft, user, features)
   } catch (err) {
     if (err.statusCode === HttpStatus.INTERNAL_SERVER_ERROR || err.statusCode === HttpStatus.SERVICE_UNAVAILABLE) {

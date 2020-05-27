@@ -4,7 +4,7 @@ import * as config from 'config'
 import * as path from 'path'
 import * as favicon from 'serve-favicon'
 import * as cookieParser from 'cookie-parser'
-import * as cookieEncrypter from 'cookie-encrypter'
+import * as cookieEncrypter from '@hmcts/cookie-encrypter'
 
 import * as bodyParser from 'body-parser'
 import { ForbiddenError, NotFoundError } from 'errors'

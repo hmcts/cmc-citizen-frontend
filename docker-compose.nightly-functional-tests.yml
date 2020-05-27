@@ -6,15 +6,15 @@ services:
       command: test:integration
       environment:
         - WEB_DRIVER_HOST=remote-webdriver
-        - CITIZEN_APP_URL=${FRONTEND_URL}
+        - CITIZEN_APP_URL=${TEST_URL}
+        - CLAIM_STORE_URL
+        - IDAM_URL
         - http_proxy=http://proxyout.reform.hmcts.net:8080
         - https_proxy=http://proxyout.reform.hmcts.net:8080
         - no_proxy=remote-webdriver
-        - IDAM_URL
         - OAUTH_CLIENT_SECRET
         - SMOKE_TEST_CITIZEN_USERNAME
         - SMOKE_TEST_USER_PASSWORD
-        - CLAIM_STORE_URL=${BACKEND_URL}
         - HEALTHCHECK_CITIZEN=true
         - FEATURE_ADMISSIONS
         - FEATURE_MEDIATION

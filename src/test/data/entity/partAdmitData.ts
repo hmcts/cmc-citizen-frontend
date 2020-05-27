@@ -5,80 +5,97 @@ import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 import { basePartialAdmissionData, baseResponseData, basePartialEvidencesAndTimeLines } from './responseData'
 
-export const immediatePaymentIntention = {
-  paymentDate: MomentFactory.currentDate().add(5, 'days'),
-  paymentOption: PaymentOption.IMMEDIATELY
-}
-
-export const bySetByDatePaymentIntention = {
-  paymentDate: MomentFactory.currentDate().add(30, 'days'),
-  paymentOption: PaymentOption.BY_SPECIFIED_DATE
-}
-
-export const bySetByDatePaymentIntentionPastDeadline = {
-  paymentDate: MomentFactory.currentDate().subtract(1, 'days'),
-  paymentOption: PaymentOption.BY_SPECIFIED_DATE
-}
-
-export const instalmentsPaymentIntentionPastDeadline = {
-  paymentOption: PaymentOption.INSTALMENTS,
-  repaymentPlan: {
-    completionDate: MomentFactory.currentDate().subtract(12, 'months'),
-    firstPaymentDate: MomentFactory.currentDate().subtract(1, 'days'),
-    instalmentAmount: 10,
-    paymentLength: '10 months',
-    paymentSchedule: PaymentSchedule.EVERY_MONTH
+function immediatePaymentIntention () {
+  return {
+    paymentDate: MomentFactory.currentDate().add(5, 'days'),
+    paymentOption: PaymentOption.IMMEDIATELY
   }
 }
 
-export const instalmentsPaymentIntention = {
-  paymentOption: PaymentOption.INSTALMENTS,
-  repaymentPlan: {
-    completionDate: MomentFactory.currentDate().add(12, 'months'),
-    firstPaymentDate: MomentFactory.currentDate().add(15, 'days'),
-    instalmentAmount: 10,
-    paymentLength: '10 months',
-    paymentSchedule: PaymentSchedule.EVERY_MONTH
-  }
-
-}
-
-export const courtDeterminationBySpecifiedDate = {
-  courtDecision: {
-    ...bySetByDatePaymentIntention
-  },
-  courtPaymentIntention: {
-    paymentDate: MomentFactory.maxDate(),
-    paymentOption: PaymentOption.BY_SPECIFIED_DATE,
-    decisionType: 'DEFENDANT',
-    rejectionReason: 'test'
+function bySetByDatePaymentIntention () {
+  return {
+    paymentDate: MomentFactory.currentDate().add(30, 'days'),
+    paymentOption: PaymentOption.BY_SPECIFIED_DATE
   }
 }
 
-export const courtDeterminationInInstalments = {
-  courtDecision: {
-    ...instalmentsPaymentIntention
-  },
-  courtPaymentIntention: {
-    paymentDate: MomentFactory.maxDate(),
-    paymentOption: PaymentOption.BY_SPECIFIED_DATE,
-    decisionType: 'DEFENDANT',
-    rejectionReason: 'test'
+function bySetByDatePaymentIntentionPastDeadline () {
+  return {
+    paymentDate: MomentFactory.currentDate().subtract(1, 'days'),
+    paymentOption: PaymentOption.BY_SPECIFIED_DATE
   }
 }
 
-export const claimantReferredToJudgeResponse = {
-  claimantPaymentIntention: { ...immediatePaymentIntention },
-  courtDetermination: { ...courtDeterminationBySpecifiedDate },
-  formaliseOption: FormaliseOption.REFER_TO_JUDGE,
-  type: ClaimantResponseType.ACCEPTATION
+function instalmentsPaymentIntentionPastDeadline () {
+  return {
+    paymentOption: PaymentOption.INSTALMENTS,
+    repaymentPlan: {
+      completionDate: MomentFactory.currentDate().subtract(12, 'months'),
+      firstPaymentDate: MomentFactory.currentDate().subtract(1, 'days'),
+      instalmentAmount: 10,
+      paymentLength: '10 months',
+      paymentSchedule: PaymentSchedule.EVERY_MONTH
+    }
+  }
 }
 
-export const claimantReferredToJudgeResponseForInstalments = {
-  claimantPaymentIntention: { ...immediatePaymentIntention },
-  courtDetermination: { ...courtDeterminationInInstalments },
-  formaliseOption: FormaliseOption.REFER_TO_JUDGE,
-  type: ClaimantResponseType.ACCEPTATION
+export function instalmentsPaymentIntention () {
+  return {
+    paymentOption: PaymentOption.INSTALMENTS,
+    repaymentPlan: {
+      completionDate: MomentFactory.currentDate().add(12, 'months'),
+      firstPaymentDate: MomentFactory.currentDate().add(15, 'days'),
+      instalmentAmount: 10,
+      paymentLength: '10 months',
+      paymentSchedule: PaymentSchedule.EVERY_MONTH
+    }
+  }
+}
+
+function courtDeterminationBySpecifiedDate () {
+  return {
+    courtDecision: {
+      ...bySetByDatePaymentIntention()
+    },
+    courtPaymentIntention: {
+      paymentDate: MomentFactory.maxDate(),
+      paymentOption: PaymentOption.BY_SPECIFIED_DATE,
+      decisionType: 'DEFENDANT',
+      rejectionReason: 'test'
+    }
+  }
+}
+
+function courtDeterminationInInstalments () {
+  return {
+    courtDecision: {
+      ...instalmentsPaymentIntention()
+    },
+    courtPaymentIntention: {
+      paymentDate: MomentFactory.maxDate(),
+      paymentOption: PaymentOption.BY_SPECIFIED_DATE,
+      decisionType: 'DEFENDANT',
+      rejectionReason: 'test'
+    }
+  }
+}
+
+export function claimantReferredToJudgeResponse () {
+  return {
+    claimantPaymentIntention: { ...immediatePaymentIntention() },
+    courtDetermination: { ...courtDeterminationBySpecifiedDate() },
+    formaliseOption: FormaliseOption.REFER_TO_JUDGE,
+    type: ClaimantResponseType.ACCEPTATION
+  }
+}
+
+export function claimantReferredToJudgeResponseForInstalments () {
+  return {
+    claimantPaymentIntention: { ...immediatePaymentIntention() },
+    courtDetermination: { ...courtDeterminationInInstalments() },
+    formaliseOption: FormaliseOption.REFER_TO_JUDGE,
+    type: ClaimantResponseType.ACCEPTATION
+  }
 }
 
 export const claimantAcceptRepaymentPlan = {
@@ -86,185 +103,202 @@ export const claimantAcceptRepaymentPlan = {
   type: ClaimantResponseType.ACCEPTATION
 }
 
-export const claimantAcceptRepaymentPlanByDetermination = {
-  claimantPaymentIntention: { ...immediatePaymentIntention },
-  courtDetermination: { ...courtDeterminationBySpecifiedDate },
-  ...claimantAcceptRepaymentPlan
+export function claimantAcceptRepaymentPlanByDetermination () {
+  return {
+    claimantPaymentIntention: { ...immediatePaymentIntention() },
+    courtDetermination: { ...courtDeterminationBySpecifiedDate() },
+    ...claimantAcceptRepaymentPlan
+  }
 }
 
-export const claimantAcceptRepaymentPlanInInstalmentsByDetermination = {
-  claimantPaymentIntention: { ...immediatePaymentIntention },
-  courtDetermination: { ...courtDeterminationInInstalments },
-  ...claimantAcceptRepaymentPlan
+export function claimantAcceptRepaymentPlanInInstalmentsByDetermination () {
+  return {
+    claimantPaymentIntention: { ...immediatePaymentIntention() },
+    courtDetermination: { ...courtDeterminationInInstalments() },
+    ...claimantAcceptRepaymentPlan
+  }
 }
 
-export const claimantResponseAt = {
-  claimantRespondedAt: MomentFactory.currentDate()
+function defendantOffersSettlementBySetDate () {
+  return [{
+    type: 'OFFER',
+    madeBy: 'DEFENDANT',
+    offer: {
+      content: 'test',
+      completionDate: MomentFactory.currentDate().add(1, 'day'),
+      paymentIntention: { ...bySetByDatePaymentIntention() }
+    }
+  }]
 }
 
-export const defendantOffersSettlementBySetDate = [{
-  type: 'OFFER',
-  madeBy: 'DEFENDANT',
-  offer: {
-    content: 'test',
-    completionDate: MomentFactory.currentDate().add(1, 'day'),
-    paymentIntention: { ...bySetByDatePaymentIntention }
-  }
-}]
+function defendantOffersSettlementByInstalments () {
+  return [{
+    type: 'OFFER',
+    madeBy: 'DEFENDANT',
+    offer: {
+      content: 'test',
+      completionDate: MomentFactory.currentDate().add(12, 'months'),
+      paymentIntention: { ...instalmentsPaymentIntention() }
+    }
+  }]
+}
 
-export const defendantOffersSettlementByInstalments = [{
-  type: 'OFFER',
-  madeBy: 'DEFENDANT',
-  offer: {
-    content: 'test',
-    completionDate: MomentFactory.currentDate().add(12, 'months'),
-    paymentIntention: { ...instalmentsPaymentIntention }
-  }
-}]
+function defendantOffersSettlementBySetDatePastPaymentDeadline () {
+  return [{
+    type: 'OFFER',
+    madeBy: 'DEFENDANT',
+    offer: {
+      content: 'test',
+      completionDate: MomentFactory.currentDate().subtract(2, 'day'),
+      paymentIntention: { ...bySetByDatePaymentIntentionPastDeadline() }
+    }
+  }]
+}
 
-export const defendantOffersSettlementBySetDatePastPaymentDeadline = [{
-  type: 'OFFER',
-  madeBy: 'DEFENDANT',
-  offer: {
-    content: 'test',
-    completionDate: MomentFactory.currentDate().subtract(2, 'day'),
-    paymentIntention: { ...bySetByDatePaymentIntentionPastDeadline }
-  }
-}]
+function defendantOffersSettlementInInstalmentsPastPaymentDeadline () {
+  return [{
+    type: 'OFFER',
+    madeBy: 'DEFENDANT',
+    offer: {
+      content: 'test',
+      completionDate: MomentFactory.currentDate().add(12, 'months'),
+      paymentIntention: { ...instalmentsPaymentIntentionPastDeadline() }
+    }
+  }]
+}
 
-export const defendantOffersSettlementInInstalmentsPastPaymentDeadline = [{
-  type: 'OFFER',
-  madeBy: 'DEFENDANT',
-  offer: {
-    content: 'test',
-    completionDate: MomentFactory.currentDate().add(12, 'months'),
-    paymentIntention: { ...instalmentsPaymentIntentionPastDeadline }
-  }
-}]
-
-export const claimantAcceptOffer = [{
+const claimantAcceptOffer = [{
   madeBy: 'CLAIMANT',
   type: 'ACCEPTATION'
 }]
 
-export const claimantRejectOffer = [{
-  madeBy: 'CLAIMANT',
-  tyoe: 'REJECTION'
-}]
-
-export const defendantCounterSign = [{
+const defendantCounterSign = [{
   madeBy: 'DEFENDANT',
   type: 'COUNTERSIGNATURE'
 }]
 
-export const defendantRejected = [{
+const defendantRejected = [{
   madeBy: 'DEFENDANT',
   type: 'REJECTION'
 }]
 
-export const defendantPartialAdmission = [{
-  madeBy: 'DEFENDANT',
-  responseType: 'PART_ADMISSION',
-  freeMediation: 'no'
-}]
-
-export const settledWithAgreementBySetDate = {
-  settlement: {
-    partyStatements: [
-      ...defendantOffersSettlementBySetDate,
-      ...claimantAcceptOffer,
-      ...defendantCounterSign
-    ]
-  },
-  settlementReachedAt: MomentFactory.currentDate()
-}
-
-export const settledWithAgreementInInstalments = {
-  settlement: {
-    partyStatements: [
-      ...defendantOffersSettlementByInstalments,
-      ...claimantAcceptOffer,
-      ...defendantCounterSign
-    ]
-  },
-  settlementReachedAt: MomentFactory.currentDate()
-}
-
-export const defendantRejectedSettlementOfferAcceptBySetDate = {
-  settlement: {
-    partyStatements: [
-      ...defendantOffersSettlementBySetDate,
-      ...claimantAcceptOffer,
-      ...defendantRejected
-    ]
-  },
-  settlementReachedAt: MomentFactory.currentDate()
-}
-
-export const defendantRejectedSettlementOfferAcceptInInstalments = {
-  settlement: {
-    partyStatements: [
-      ...defendantOffersSettlementByInstalments,
-      ...claimantAcceptOffer,
-      ...defendantRejected
-    ]
-  },
-  settlementReachedAt: MomentFactory.currentDate()
-}
-
-export const settledWithAgreementBySetDatePastPaymentDeadline = {
-  settlement: {
-    partyStatements: [
-      ...defendantOffersSettlementBySetDatePastPaymentDeadline,
-      ...claimantAcceptOffer,
-      ...defendantCounterSign
-    ]
-  },
-  settlementReachedAt: MomentFactory.currentDate().subtract(7, 'days')
-}
-
-export const settledWithAgreementInInstalmentsPastPaymentDeadline = {
-  settlement: {
-    partyStatements: [
-      ...defendantOffersSettlementInInstalmentsPastPaymentDeadline,
-      ...claimantAcceptOffer,
-      ...defendantCounterSign
-    ]
-  },
-  settlementReachedAt: MomentFactory.currentDate().subtract(7, 'days')
-}
-
-export const settlementOfferAcceptBySetDate = {
-  settlement: {
-    partyStatements: [
-      ...defendantOffersSettlementBySetDate,
-      ...claimantAcceptOffer
-    ]
+export function settledWithAgreementBySetDate () {
+  return {
+    settlement: {
+      partyStatements: [
+        ...defendantOffersSettlementBySetDate(),
+        ...claimantAcceptOffer,
+        ...defendantCounterSign
+      ]
+    },
+    settlementReachedAt: MomentFactory.currentDate()
   }
 }
 
-export const settlementOfferAcceptInInstalment = {
-  settlement: {
-    partyStatements: [
-      ...defendantOffersSettlementByInstalments,
-      ...claimantAcceptOffer
-    ]
+export function settledWithAgreementInInstalments () {
+  return {
+    settlement: {
+      partyStatements: [
+        ...defendantOffersSettlementByInstalments(),
+        ...claimantAcceptOffer,
+        ...defendantCounterSign
+      ]
+    },
+    settlementReachedAt: MomentFactory.currentDate()
   }
 }
 
-export const settlementOfferBySetDate = {
-  settlement: {
-    partyStatements: [
-      ...defendantOffersSettlementBySetDate
-    ]
+export function defendantRejectedSettlementOfferAcceptBySetDate () {
+  return {
+    settlement: {
+      partyStatements: [
+        ...defendantOffersSettlementBySetDate(),
+        ...claimantAcceptOffer,
+        ...defendantRejected
+      ]
+    },
+    settlementReachedAt: MomentFactory.currentDate()
   }
 }
 
-export const settlementOfferByInstalments = {
-  settlement: {
-    partyStatements: [
-      ...defendantOffersSettlementByInstalments
-    ]
+export function defendantRejectedSettlementOfferAcceptInInstalments () {
+  return {
+    settlement: {
+      partyStatements: [
+        ...defendantOffersSettlementByInstalments(),
+        ...claimantAcceptOffer,
+        ...defendantRejected
+      ]
+    },
+    settlementReachedAt: MomentFactory.currentDate()
+  }
+}
+
+export function settledWithAgreementBySetDatePastPaymentDeadline () {
+  return {
+    settlement: {
+      partyStatements: [
+        ...defendantOffersSettlementBySetDatePastPaymentDeadline(),
+        ...claimantAcceptOffer,
+        ...defendantCounterSign
+      ]
+    },
+    settlementReachedAt: MomentFactory.currentDate().subtract(7, 'days')
+  }
+}
+
+export function settledWithAgreementInInstalmentsPastPaymentDeadline () {
+  return {
+    settlement: {
+      partyStatements: [
+        ...defendantOffersSettlementInInstalmentsPastPaymentDeadline(),
+        ...claimantAcceptOffer,
+        ...defendantCounterSign
+      ]
+    },
+    settlementReachedAt: MomentFactory.currentDate().subtract(7, 'days')
+  }
+}
+
+export function settlementOfferAcceptBySetDate () {
+  return {
+    settlement: {
+      partyStatements: [
+        ...defendantOffersSettlementBySetDate(),
+        ...claimantAcceptOffer
+      ]
+    }
+  }
+}
+
+export function settlementOfferAcceptInInstalment () {
+  return {
+    settlement: {
+      partyStatements: [
+        ...defendantOffersSettlementByInstalments(),
+        ...claimantAcceptOffer
+      ]
+    }
+  }
+}
+
+export function settlementOfferBySetDate () {
+  return {
+    settlement: {
+      partyStatements: [
+        ...defendantOffersSettlementBySetDate()
+      ]
+    }
+  }
+}
+
+export function settlementOfferByInstalments () {
+  return {
+    settlement: {
+      partyStatements: [
+        ...defendantOffersSettlementByInstalments()
+      ]
+    }
   }
 }
 

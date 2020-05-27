@@ -109,6 +109,7 @@ describe('Defendant response: check and send page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.successful.withText('Statement of truth'))
               .expect(res => expect(res).to.be.successful.withText('I believe that the facts stated in this response are true.'))
+              .expect(res => expect(res).to.be.successful.withText('I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.'))
               .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
           })
 
@@ -137,6 +138,7 @@ describe('Defendant response: check and send page', () => {
                   'Dates unavailable',
                   'Statement of truth',
                   'I believe that the facts stated in this response are true.' ,
+                  'I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.',
                   'The hearing requirement details on this page are true to the best of my knowledge.',
                   '<input id="signedtrue" type="checkbox" name="signed" value="true"',
                   'Your timeline of what happened',
@@ -215,6 +217,7 @@ describe('Defendant response: check and send page', () => {
                 '<input id="signerName" name="signerName"',
                 '<input id="signerRole" name="signerRole"',
                 'I believe that the facts stated in this response are true.',
+                'I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.',
                 '<input id="signedtrue" type="checkbox" name="signed" value="true"',
                 'timeline date',
                 'something awesome happened'
@@ -292,6 +295,7 @@ describe('Defendant response: check and send page', () => {
                   '<input id="signerName" name="signerName"',
                   '<input id="signerRole" name="signerRole"',
                   'I believe that the facts stated in this response are true.',
+                  'I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.',
                   '<input id="signedtrue" type="checkbox" name="signed" value="true"',
                   '<input id="directionsQuestionnaireSignedtrue" type="checkbox" name="directionsQuestionnaireSigned" value="true"',
                   'photo of a cat',
@@ -306,6 +310,7 @@ describe('Defendant response: check and send page', () => {
                   '<input id="signerName" name="signerName"',
                   '<input id="signerRole" name="signerRole"',
                   'I believe that the facts stated in this response are true.',
+                  'I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.',
                   '<input id="signedtrue" type="checkbox" name="signed" value="true"',
                   'photo of a cat',
                   'their evidence is invalid'

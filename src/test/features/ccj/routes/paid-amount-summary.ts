@@ -74,7 +74,7 @@ describe('CCJ - paid amount summary page', () => {
       it('should render page using admitted amount when defendant response is part admission', async () => {
         let claimWithAdmission = {
           ...claimStoreServiceMock.sampleClaimObj,
-          ...claimStoreServiceMock.samplePartialAdmissionWithPayImmediatelyData,
+          ...claimStoreServiceMock.samplePartialAdmissionWithPayImmediatelyData(),
           ...{
             countyCourtJudgment: undefined,
             settlement: undefined,

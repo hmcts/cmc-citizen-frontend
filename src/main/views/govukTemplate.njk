@@ -72,6 +72,10 @@
   <main id="content" role="main">
     {% include "includes/phase_banner_beta.njk" %}
 
+    <div>
+      {% block warning_message %}{% endblock %}
+    </div>
+
     {% if form %}
       {% from "form.njk" import errorSummary %}
       {{ errorSummary(form) }}

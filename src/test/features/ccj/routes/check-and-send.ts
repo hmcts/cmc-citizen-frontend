@@ -83,7 +83,7 @@ describe('CCJ: check and send page', () => {
         it('should render page with admitted amount when part admission response has been accepted', async () => {
           let claimWithAdmission = {
             ...claimStoreServiceMock.sampleClaimObj,
-            ...claimStoreServiceMock.samplePartialAdmissionWithPayImmediatelyData,
+            ...claimStoreServiceMock.samplePartialAdmissionWithPayImmediatelyData(),
             ...{
               countyCourtJudgment: undefined,
               settlement: undefined,

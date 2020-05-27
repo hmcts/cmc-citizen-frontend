@@ -79,7 +79,7 @@ describe('directionsQuestionnaireHelper', () => {
     const claim: Claim = new Claim().deserialize(
       {
         ...sampleClaimObj,
-        response: partialAdmissionWithImmediatePaymentData,
+        response: partialAdmissionWithImmediatePaymentData(),
         features: ['directionsQuestionnaire']
       }
     )
@@ -98,7 +98,7 @@ describe('directionsQuestionnaireHelper', () => {
     const claim: Claim = new Claim().deserialize(
       {
         ...sampleClaimObj,
-        response: fullAdmissionWithImmediatePaymentData,
+        response: fullAdmissionWithImmediatePaymentData(),
         features: ['directionsQuestionnaire']
       }
     )

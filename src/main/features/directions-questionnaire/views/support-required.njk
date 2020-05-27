@@ -23,7 +23,7 @@
                 {{ textInput(label = 'Enter the sign language you need', form = form, name = 'signLanguageInterpreted', inputClass = 'form-group-related') }}
               {% endcall %}
             {% call expandableCheckboxOption(form = form, name = 'languageSelected', value = 'true', label = "Language interpreter", checked = form.valueFor('languageSelected'), headerEnabled = false) %}
-              {{ textInput(label = 'What language needs to be interpreted?', hint = 'You’ll have to arrange and pay for interpreters except for Welsh.', form = form, name = 'languageInterpreted', inputClass = '') }}
+              {{ textInput(label = 'What language needs to be interpreted?', hint = 'You may have to arrange and pay for interpreters except for Welsh. The court will tell you.', form = form, name = 'languageInterpreted', inputClass = '') }}
             {% endcall %}
             {% call expandableCheckboxOption(form = form, name = 'otherSupportSelected', value = 'true', label = 'Other support', checked = form.valueFor('otherSupportSelected'), headerEnabled = false) %}
               {{ textArea(label = 'The court can’t guarantee extra support, but it will consider other needs relating to physical or mental health impairments', form = form, name = 'otherSupport') }}

@@ -3,7 +3,7 @@ import { expect } from 'chai'
 import { Paths as ClaimPaths } from 'claim/paths'
 import { Paths as EligibilityPaths } from 'eligibility/paths'
 import * as config from 'config'
-import * as cookieEncrypter from 'cookie-encrypter'
+import * as cookieEncrypter from '@hmcts/cookie-encrypter'
 import { Paths as DashboardPaths } from 'dashboard/paths'
 
 import { cookieName as eligibilityCookieName } from 'eligibility/store'
