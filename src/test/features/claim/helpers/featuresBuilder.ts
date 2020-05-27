@@ -13,7 +13,7 @@ import { anything, instance, mock, reset, when } from 'ts-mockito'
 const mockLaunchDarklyClient: LaunchDarklyClient = mock(LaunchDarklyClient)
 const featuresBuilder = new FeaturesBuilder(new ClaimStoreClient(), instance(mockLaunchDarklyClient))
 
-const user = new User('1', 'user@example.com', 'John', 'Smith', [], 'citizen', '')
+const user = new User('1', 'user@example.com', 'John', 'Smith', ['cmc-new-features-consent-given'], 'citizen', '')
 
 const MIN_THRESHOLD = Math.min(
   FeaturesBuilder.JUDGE_PILOT_THRESHOLD,
@@ -24,7 +24,7 @@ const MIN_THRESHOLD = Math.min(
 
 function enableFeatures (...features: string[]) {
   FEATURES.map(feature => feature.toggle)
-    .forEach(toggle => when(mockLaunchDarklyClient.variation(anything(), anything(), toggle))
+    .forEach(toggle => when(mockLaunchDarklyClient.variation(anything(), anything(), toggle, anything()))
       .thenResolve(Promise.resolve(features.indexOf(toggle) >= 0)))
 }
 
@@ -32,7 +32,7 @@ describe('FeaturesBuilder', () => {
   attachDefaultHooks(app)
 
   beforeEach(() => {
-    claimStoreServiceMock.resolveRetrieveUserRoles()
+    claimStoreServiceMock.resolveRetrieveUserRoles(user.roles[0])
   })
 
   afterEach(() => {
