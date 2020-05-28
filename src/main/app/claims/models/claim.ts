@@ -32,6 +32,9 @@ import { ReviewOrder } from 'claims/models/reviewOrder'
 import { MediationOutcome } from 'claims/models/mediationOutcome'
 import { YesNoOption } from 'models/yesNoOption'
 import { ResponseMethod } from 'claims/models/response/responseMethod'
+import { ClaimDocument } from 'claims/models/claimDocument'
+import * as _ from 'lodash'
+import { ClaimDocumentType } from 'common/claimDocumentType'
 
 interface State {
   status: ClaimStatus
@@ -76,6 +79,7 @@ export class Claim {
   mediationOutcome: string
   pilotCourt: YesNoOption
   paperResponse: YesNoOption
+  claimDocuments?: ClaimDocument[]
 
   get defendantOffer (): Offer {
     if (!this.settlement) {
@@ -374,12 +378,19 @@ export class Claim {
       if (input.paperResponse) {
         this.paperResponse = YesNoOption.fromObject(input.paperResponse)
       }
-    }
+      if (input.claimDocumentCollection && input.claimDocumentCollection.claimDocuments) {
+        this.claimDocuments = _.sortBy(input.claimDocumentCollection.claimDocuments.filter(value => ClaimDocumentType[value.documentType] !== undefined).map((value) => {
+          return new ClaimDocument().deserialize(value)
+        }), [function (o) {
+          return o.createdDatetime
+        }]).reverse()
+      }
 
-    return this
+      return this
+    }
   }
 
-  isAdmissionsResponse (): boolean {
+  public isAdmissionsResponse (): boolean {
     return (this.response.responseType === ResponseType.FULL_ADMISSION
       || this.response.responseType === ResponseType.PART_ADMISSION)
   }
