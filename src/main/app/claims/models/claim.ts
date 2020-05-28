@@ -1,36 +1,37 @@
-import { Moment } from 'moment'
-import { ClaimData } from 'claims/models/claimData'
-import { MomentFactory } from 'shared/momentFactory'
-import { Response } from 'claims/models/response'
-import { ResponseType } from 'claims/models/response/responseType'
-import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
-import { ClaimantResponse } from 'claims/models/claimantResponse'
-import { Settlement } from 'claims/models/settlement'
-import { Offer } from 'claims/models/offer'
-import { ClaimStatus } from 'claims/models/claimStatus'
-import { isPastDeadline } from 'claims/isPastDeadline'
-import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
-import { PaymentOption } from 'claims/models/paymentOption'
-import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
-import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
-import { calculateMonthIncrement } from 'common/calculate-month-increment/calculateMonthIncrement'
-import { AcceptationClaimantResponse } from 'claims/models/claimant-response/acceptationClaimantResponse'
-import { ReDetermination } from 'claims/models/claimant-response/reDetermination'
-import { FormaliseOption } from 'claims/models/claimant-response/formaliseOption'
-import { StatementType } from 'offer/form/models/statementType'
-import { DateOfBirth } from 'forms/models/dateOfBirth'
-import { Individual } from 'claims/models/details/yours/individual'
-import { LocalDate } from 'forms/models/localDate'
-import { PartyType } from 'common/partyType'
-import { DefenceType } from 'claims/models/response/defenceType'
-import { User } from 'idam/user'
-import { ClaimTemplate } from 'claims/models/claimTemplate'
-import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
-import { CalendarClient } from 'claims/calendarClient'
-import { DirectionOrder } from 'claims/models/directionOrder'
-import { ReviewOrder } from 'claims/models/reviewOrder'
-import { MediationOutcome } from 'claims/models/mediationOutcome'
-import { YesNoOption } from 'models/yesNoOption'
+import {Moment} from 'moment'
+import {ClaimData} from 'claims/models/claimData'
+import {MomentFactory} from 'shared/momentFactory'
+import {Response} from 'claims/models/response'
+import {ResponseType} from 'claims/models/response/responseType'
+import {CountyCourtJudgment} from 'claims/models/countyCourtJudgment'
+import {ClaimantResponse} from 'claims/models/claimantResponse'
+import {Settlement} from 'claims/models/settlement'
+import {Offer} from 'claims/models/offer'
+import {ClaimStatus} from 'claims/models/claimStatus'
+import {isPastDeadline} from 'claims/isPastDeadline'
+import {FullAdmissionResponse} from 'claims/models/response/fullAdmissionResponse'
+import {PaymentOption} from 'claims/models/paymentOption'
+import {CountyCourtJudgmentType} from 'claims/models/countyCourtJudgmentType'
+import {ClaimantResponseType} from 'claims/models/claimant-response/claimantResponseType'
+import {calculateMonthIncrement} from 'common/calculate-month-increment/calculateMonthIncrement'
+import {AcceptationClaimantResponse} from 'claims/models/claimant-response/acceptationClaimantResponse'
+import {ReDetermination} from 'claims/models/claimant-response/reDetermination'
+import {FormaliseOption} from 'claims/models/claimant-response/formaliseOption'
+import {StatementType} from 'offer/form/models/statementType'
+import {DateOfBirth} from 'forms/models/dateOfBirth'
+import {Individual} from 'claims/models/details/yours/individual'
+import {LocalDate} from 'forms/models/localDate'
+import {PartyType} from 'common/partyType'
+import {DefenceType} from 'claims/models/response/defenceType'
+import {User} from 'idam/user'
+import {ClaimTemplate} from 'claims/models/claimTemplate'
+import {ClaimFeatureToggles} from 'utils/claimFeatureToggles'
+import {CalendarClient} from 'claims/calendarClient'
+import {DirectionOrder} from 'claims/models/directionOrder'
+import {ReviewOrder} from 'claims/models/reviewOrder'
+import {MediationOutcome} from 'claims/models/mediationOutcome'
+import {YesNoOption} from 'models/yesNoOption'
+import {ResponseMethod} from 'claims/models/response/responseMethod'
 
 interface State {
   status: ClaimStatus
@@ -165,7 +166,7 @@ export class Claim {
       } else {
         return ClaimStatus.ORDER_DRAWN
       }
-    } else if (this.paperResponse && this.paperResponse === YesNoOption.YES) {
+    } else if (this.response.responseMethod === ResponseMethod.OFFLINE) {
       return ClaimStatus.DEFENDANT_PAPER_RESPONSE
     } else if (this.moneyReceivedOn) {
       return ClaimStatus.PAID_IN_FULL
@@ -205,6 +206,8 @@ export class Claim {
       return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ
     } else if (this.hasIntentionToProceedDeadlinePassed()) {
       return ClaimStatus.INTENTION_TO_PROCEED_DEADLINE_PASSED
+    } else if (this.response.responseMethod === ResponseMethod.OCON_FORM) {
+      return ClaimStatus.DEFENDANT_OCON_OFFLINE_RESPONSE
     } else if (this.hasDefendantRejectedClaimWithDQs()) {
       return ClaimStatus.DEFENDANT_REJECTS_WITH_DQS
     } else if (this.hasClaimantAcceptedStatesPaid()) {
