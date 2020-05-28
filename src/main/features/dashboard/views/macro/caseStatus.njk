@@ -238,7 +238,7 @@
     {{ redeterminationDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.CCJ_REQUESTED %}
     {{ ccjRequestedForDefendantDashboard(claim) }}
-  {% elif claim.status === ClaimStatus.DEFENDANT_OCON_OFFLINE_RESPONSE%}
+  {% elif status === ClaimStatus.DEFENDANT_OCON_OFFLINE_RESPONSE%}
     {{ claimRejectedWithDQsForDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.DEFENDANT_PAPER_RESPONSE %}
     {{ paperResponseForDefendantDashboard() }}
