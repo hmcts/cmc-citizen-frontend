@@ -4,6 +4,7 @@ export const directionsQuestionnairePath = '/case/:externalId/directions-questio
 
 export class Paths {
   static readonly hearingLocationPage = new RoutablePath(`${directionsQuestionnairePath}/hearing-location`)
+  static readonly hearingLocationResultPage = new RoutablePath(`${directionsQuestionnairePath}/name-results`)
   static readonly selfWitnessPage = new RoutablePath(`${directionsQuestionnairePath}/self-witness`)
   static readonly otherWitnessesPage = new RoutablePath(`${directionsQuestionnairePath}/other-witnesses`)
   static readonly supportPage = new RoutablePath(`${directionsQuestionnairePath}/support-required`)

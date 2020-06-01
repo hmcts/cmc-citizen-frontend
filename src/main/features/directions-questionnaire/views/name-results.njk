@@ -1,0 +1,45 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, radioOption, saveAndContinueButton, errorSummary, numericInput, textInput, radioGroup %}
+
+{% if party === MadeBy.DEFENDANT and (claim.claimData.defendant.type === PartyType.ORGANISATION.value or claim.claimData.defendant.type === PartyType.COMPANY.value) %}
+  {% set heading = 'Request a hearing location' %}
+{% else %}
+  {% set heading = 'Choose a hearing location' %}
+{% endif %}
+
+
+{% block content %}
+  <p>{{ t('The following courts match') }} '{{ searchString }}'.</p>
+  <p>Select the court you want to request:</p>
+
+  <form method="post" class="analytics-submit-event-trigger" data-event-action="DQ: Hearing Location Search"
+        data-event-label-from="courtSearchSelection" novalidate>
+    {{ csrfProtection(csrf) }}
+    <fieldset>
+      <div>
+        {% for court in courts %}
+          {{ radioOption(form = form, label = court.name, name = 'alternativeOption', value = court.name, checked = form.valueFor('alternativeOption') === 'postcode', bold = true) }}
+          <details class="form-group analytics-click-event-trigger" data-event-label="Court-Facilities: Facilities of the chosen court.">
+            <summary>
+              <span class="link">{{ t('See this court’s facilities') }}</span>
+            </summary>
+
+            <div class="panel">
+              {% for facility in court.facilities %}
+                <h3 class="heading-small form-group-related">{{ facility.name }}</h3>
+                {{ facility.description | safe }}
+              {% endfor %}
+            </div>
+          </details>
+        {% else %}
+          <!-- No courts found, fallback page-->
+        {% endfor %}
+      </div>
+    </fieldset>
+
+    <p>
+    {{ saveAndContinueButton() }}
+    </p>
+
+  </form>
+{% endblock %}

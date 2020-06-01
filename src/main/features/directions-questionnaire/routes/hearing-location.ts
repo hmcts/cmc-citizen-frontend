@@ -110,6 +110,9 @@ export default express.Router()
 
             await new DraftService().save(draft, user.bearerToken)
             res.redirect(Paths.expertPage.evaluateUri({ externalId: res.locals.claim.externalId }))
+          } else if (form.model.courtAccepted === YesNoOption.NO && form.model.alternativeOption === AlternativeCourtOption.BY_SEARCH) {
+            console.log(Paths.hearingLocationResultPage.evaluateUri({ externalId: res.locals.claim.externalId } ) + `?name=${form.model.alternativeCourtName}`)
+            res.redirect(Paths.hearingLocationResultPage.evaluateUri({ externalId: res.locals.claim.externalId } ) + `?name=${form.model.alternativeCourtName}`)
           } else {
             if (form.model.alternativeOption !== undefined && form.model.alternativeOption === AlternativeCourtOption.BY_NAME) {
               draft.document.hearingLocation.alternativeCourtName = ''
