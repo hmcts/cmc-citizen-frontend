@@ -1,0 +1,25 @@
+{% macro claimTransferredClaimDetails() %}
+  <div class="status-block">
+    <h2 class="heading-medium"> {{ t('We\'ve sent this case to the court') }} </h2>
+    <p>{{  t('Your online account won\'t be updated - any further updates will be by post from Lincoln County Court.') }}</p>
+    <p>{{  t('If you need to send any forms, letters or documents about the claim, send them to this address:') }}</p>
+    <p{{  t('>Lincoln County Court') }}<br>
+      {{  t('360 High St') }}<br>
+      {{  t('Lincoln') }}<br>
+      {{  t('LN5 7PS') }}
+    </p>
+    <p>{{  t('Contact the court if you have any questions about the claim.') }}</p>
+    <p>
+      <a target="_blank" href="https://www.gov.uk/find-court-tribunal">{{  t('Find County Court contact details') }}</a>
+      {{  t(' (opens in a new window).') }}
+    </p>
+  </div>
+{% endmacro %}
+
+{% macro claimTransferredDefendantClaimDetails() %}
+  {{ claimTransferredClaimDetails() }}
+{% endmacro %}
+
+{% macro claimTransferredClaimantClaimDetails() %}
+  {{ claimTransferredClaimDetails() }}
+{% endmacro %}

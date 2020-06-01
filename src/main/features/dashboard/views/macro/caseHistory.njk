@@ -136,6 +136,11 @@
   paperResponseForDefendantClaimDetails
 %}
 
+{% from "./claimStatus/claimTransferred.njk" import
+  claimTransferredDefendantClaimDetails,
+  claimTransferredClaimantClaimDetails
+%}
+
 {% macro caseHistoryForClaimantClaimDetails(claim, csrf, mediationDeadline, reconsiderationDeadline, isReviewOrderEligible, respondToReviewOrderDeadline, judgePilot) %}
   {% for state in claim.stateHistory %}
     {% if state.status === ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE %}
