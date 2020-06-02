@@ -11,13 +11,15 @@ import { Income, IncomeType } from 'claims/models/response/statement-of-means/in
 import { Expense, ExpenseType } from 'claims/models/response/statement-of-means/expense'
 import { PaymentFrequency } from 'claims/models/response/core/paymentFrequency'
 import { DisabilityStatus } from 'claims/models/response/statement-of-means/disabilityStatus'
+import { ResponseMethod } from 'claims/models/response/responseMethod'
 
 export const baseResponseData = {
   defendant: individual,
   moreTimeNeeded: 'no',
   freeMediation: 'no',
   mediationPhoneNumber: undefined,
-  mediationContactPerson: undefined
+  mediationContactPerson: undefined,
+  responseMethod: ResponseMethod.DIGITAL
 }
 
 const baseCompanyResponseData = {
