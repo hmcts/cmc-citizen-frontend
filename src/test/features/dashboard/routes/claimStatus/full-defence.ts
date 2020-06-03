@@ -702,7 +702,7 @@ const mediationDQEnabledClaimDetails = [
     status: 'Full defence - defendant dispute all of the claim and rejects mediation with directions questionnaire enabled',
     claim: fullDefenceClaim(),
     claimOverride: {
-      ...directionsQuestionnaireDeadline,
+      ...directionsQuestionnaireDeadline(),
       features: ['directionsQuestionnaire'],
       response: {
         ...baseResponseData,
