@@ -5,6 +5,8 @@
     "returnErrorToUser": true,
     "mediation": true,
     "mediationPilot": true,
+    "legalAdvisorPilot": true,
+    "judgePilot": true,
     "directionsQuestionnaire": true,
     "newDashboardStatus": true,
     "inversionOfControl": true
