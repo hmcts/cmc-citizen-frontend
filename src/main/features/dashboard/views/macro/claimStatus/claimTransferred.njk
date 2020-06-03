@@ -23,3 +23,15 @@
 {% macro claimTransferredClaimantClaimDetails() %}
   {{ claimTransferredClaimDetails() }}
 {% endmacro %}
+
+{% macro claimTransferredClaimStatus() %}
+      {{ t('Case sent to court') }}
+{% endmacro %}
+
+{% macro claimTransferredDefendantClaimStatus() %}
+  {{ claimTransferredClaimStatus() }}
+{% endmacro %}
+
+{% macro claimTransferredClaimantClaimStatus() %}
+  {{ claimTransferredClaimStatus() }}
+{% endmacro %}
