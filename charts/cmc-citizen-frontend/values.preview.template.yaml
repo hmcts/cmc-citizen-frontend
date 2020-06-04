@@ -86,8 +86,6 @@ cmc-claim-store:
       CMC_DB_PASSWORD: hmcts
       CMC_DB_CONNECTION_OPTIONS: ''
       CORE_CASE_DATA_API_URL: http://${SERVICE_NAME}-ccd-data-store-api
-      FEATURE_TOGGLES_CTSC_ENABLED: true
-      FEATURE_TOGGLES_STAFF_EMAILS_ENABLED: false
 
 ccd:
   enabled: true
@@ -157,7 +155,7 @@ ccd:
       - civilmoneyclaims+la@gmail.com|CMC|MoneyClaimCase|readyForDirections
 
   ccd-definition-importer:
-    image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.6.0
+    image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.6.1
     environment:
       CCD_DEF_CLAIM_STORE_BASE_URL: http://${SERVICE_NAME}-claim-store
     definitionFilename: cmc-ccd.xlsx
