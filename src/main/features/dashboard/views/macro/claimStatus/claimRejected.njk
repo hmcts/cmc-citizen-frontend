@@ -8,7 +8,7 @@
 
 {% macro claimRejectedAlreadyPaidForClaimantClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-medium">{{ t('The defendant’s response (claimRejected.njk-1)') }}</h2>
+    <h2 class="heading-medium">{{ t('The defendant’s response') }}</h2>
     <p>{{ t('{{ defendantName }} says they paid you {{ amount }} on {{ paymentDate }}.',
         { defendantName: claim.claimData.defendant.name, amount: claim.response.paymentDeclaration.paidAmount | numeral, paymentDate: claim.response.paymentDeclaration.paidDate | date }) }}</p>
     <p>{{ t('You can accept or reject this response.') }}</p>
