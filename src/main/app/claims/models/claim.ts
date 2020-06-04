@@ -170,7 +170,7 @@ export class Claim {
       } else {
         return ClaimStatus.ORDER_DRAWN
       }
-    } else if (this.isOfflineOconFormResponse()) {
+    } else if (this.isOfflineResponse()) {
       return ClaimStatus.DEFENDANT_PAPER_RESPONSE
     } else if (this.moneyReceivedOn) {
       return ClaimStatus.PAID_IN_FULL
@@ -210,8 +210,8 @@ export class Claim {
       return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ
     } else if (this.hasIntentionToProceedDeadlinePassed()) {
       return ClaimStatus.INTENTION_TO_PROCEED_DEADLINE_PASSED
-    } else if (this.isOfflineOconFormResponse()) {
-      return ClaimStatus.DEFENDANT_OCON_OFFLINE_RESPONSE
+    } else if (this.isOconFormResponse()) {
+      return ClaimStatus.DEFENDANT_OCON_FORM_RESPONSE
     } else if (this.hasDefendantRejectedClaimWithDQs()) {
       return ClaimStatus.DEFENDANT_REJECTS_WITH_DQS
     } else if (this.hasClaimantAcceptedStatesPaid()) {
@@ -703,7 +703,11 @@ export class Claim {
       this.isIntentionToProceedEligible()
   }
 
-  private isOfflineOconFormResponse (): boolean {
+  private isOconFormResponse (): boolean {
+    return this.response !== undefined && this.response.responseMethod === ResponseMethod.OCON_FORM
+  }
+
+  private isOfflineResponse (): boolean {
     return this.response !== undefined && this.response.responseMethod === ResponseMethod.OFFLINE
   }
 }
