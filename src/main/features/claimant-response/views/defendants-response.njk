@@ -3,7 +3,7 @@
 {% if claim.response.responseType === domain.ResponseType.PART_ADMISSION and page === 1 %}
   {% set heading = 'How they want to pay' %}
 {% else %}
-  {% set heading = 'The defendant’s response (defendants-response.njk)' %}
+  {% set heading = 'The defendant’s response' %}
 {% endif %}
 
 {% from "form.njk" import csrfProtection, submitButton, errorSummary %}
@@ -66,7 +66,12 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE and not alreadyPaid %}
+      {% if claim.response.responseMethod == domain.ResponseMethod.OCON_FORM %}
+        <p>{{ t('{{ defendantName }} has rejected the claim. They responded on paper.', { defendantName: defendantName }) }}</p>
+        <p>{{ t('To see what they said, ') }}{{ internalLink(t('download their response and hearing requirements'),
+            ResponsePaths.scannedResponseForm.evaluateUri({ externalId: claim.externalId })) }}
+          {{ t('(PDF)') }}</p>
+      {% elif claim.response.responseType === domain.ResponseType.FULL_DEFENCE and not alreadyPaid %}
         <p>{{ t('{{ defendantName }} has rejected the claim.', { defendantName: defendantName }) }}</p>
 
         <h2 class="heading-medium">{{ t('Their defence') }}</h2>
