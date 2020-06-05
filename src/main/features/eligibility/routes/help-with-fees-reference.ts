@@ -5,7 +5,7 @@ import { YesNoOption } from 'models/yesNoOption'
 import { EligibilityCheck, eligible, notEligible } from 'eligibility/model/eligibilityCheck'
 import { NotEligibleReason } from 'eligibility/notEligibleReason'
 
-class HelpWithFeesEligibilityPage extends EligibilityPage<YesNoOption> {
+class HelpWithFeesReferenceEligibilityPage extends EligibilityPage<YesNoOption> {
   constructor () {
     super(Paths.helpWithFeesReferencePage, Paths.singleDefendantPage, 'helpWithFeesReference')
   }
@@ -16,4 +16,4 @@ class HelpWithFeesEligibilityPage extends EligibilityPage<YesNoOption> {
 }
 
 /* tslint:disable:no-default-export */
-export default new HelpWithFeesEligibilityPage().buildRouter()
+export default new HelpWithFeesReferenceEligibilityPage().buildRouter()
