@@ -1,6 +1,5 @@
 import * as express from 'express'
 
-import { Paths } from 'eligibility/paths'
 import { RoutablePath } from 'shared/router/routablePath'
 import { ErrorHandling } from 'shared/errorHandling'
 
@@ -56,8 +55,10 @@ export abstract class EligibilityPage<T> {
 
     if (result.eligible) {
       res.redirect(this.nextPagePath.uri)
+    } else if (result.notEligibleReason) {
+      res.redirect(`${result.notEligiblePage.uri}?reason=${result.notEligibleReason}`)
     } else {
-      res.redirect(`${Paths.notEligiblePage.uri}?reason=${result.notEligibleReason}`)
+      res.redirect(result.notEligiblePage.uri)
     }
   }
 

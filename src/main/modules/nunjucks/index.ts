@@ -38,6 +38,7 @@ import { ClaimStatus } from 'claims/models/claimStatus'
 import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 import { Paths as AppPaths } from 'paths'
 import { Paths as DashboardPaths } from 'features/dashboard/paths'
+import { Paths as EligibilityPaths } from 'eligibility/paths'
 import { Paths as CCJPaths } from 'features/ccj/paths'
 import { Paths as StatePaidPaths } from 'features/paid-in-full/paths'
 import { Paths as ClaimantResponsePaths } from 'features/claimant-response/paths'
@@ -180,6 +181,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('ClaimPaths', ClaimPaths)
     nunjucksEnv.addGlobal('ClaimantResponsePaths', ClaimantResponsePaths)
     nunjucksEnv.addGlobal('DashboardPaths', DashboardPaths)
+    nunjucksEnv.addGlobal('EligibilityPaths', EligibilityPaths)
     nunjucksEnv.addGlobal('CCJPaths', CCJPaths)
     nunjucksEnv.addGlobal('StatePaidPaths', StatePaidPaths)
     nunjucksEnv.addGlobal('ResponsePaths', ResponsePaths)

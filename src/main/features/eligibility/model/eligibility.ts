@@ -13,6 +13,9 @@ export class Eligibility {
   @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: ['helpWithFees'] })
   helpWithFees?: YesNoOption
 
+  @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: ['helpWithFeesReference'] })
+  helpWithFeesReference?: YesNoOption
+
   @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: ['claimantAddress'] })
   claimantAddress?: YesNoOption
 
@@ -39,6 +42,7 @@ export class Eligibility {
 
   constructor (claimValue?: ClaimValue,
                helpWithFees?: YesNoOption,
+               helpWithFeesReference?: YesNoOption,
                claimantAddress?: YesNoOption,
                defendantAddress?: YesNoOption,
                eighteenOrOver?: YesNoOption,
@@ -49,6 +53,7 @@ export class Eligibility {
                claimIsForTenancyDeposit?: YesNoOption) {
     this.claimValue = claimValue
     this.helpWithFees = helpWithFees
+    this.helpWithFeesReference = helpWithFeesReference
     this.claimantAddress = claimantAddress
     this.defendantAddress = defendantAddress
     this.eighteenOrOver = eighteenOrOver
@@ -66,6 +71,7 @@ export class Eligibility {
     return new Eligibility(
       ClaimValue.fromObject(input.claimValue),
       YesNoOption.fromObject(input.helpWithFees),
+      YesNoOption.fromObject(input.helpWithFeesReference),
       YesNoOption.fromObject(input.claimantAddress),
       YesNoOption.fromObject(input.defendantAddress),
       YesNoOption.fromObject(input.eighteenOrOver),
@@ -84,6 +90,9 @@ export class Eligibility {
       }
       if (input.helpWithFees) {
         this.helpWithFees = YesNoOption.fromObject(input.helpWithFees.option)
+      }
+      if (input.helpWithFeesReference) {
+        this.helpWithFeesReference = YesNoOption.fromObject(input.helpWithFeesReference.option)
       }
       if (input.claimantAddress) {
         this.claimantAddress = YesNoOption.fromObject(input.claimantAddress.option)
@@ -116,7 +125,7 @@ export class Eligibility {
 
   get eligible (): boolean {
     return this.claimValue === ClaimValue.UNDER_10000 &&
-      this.helpWithFees === YesNoOption.NO &&
+      (this.helpWithFees === YesNoOption.NO || (this.helpWithFees === YesNoOption.YES && this.helpWithFeesReference === YesNoOption.YES)) &&
       this.claimantAddress === YesNoOption.YES &&
       this.defendantAddress === YesNoOption.YES &&
       this.eighteenOrOver === YesNoOption.YES &&
