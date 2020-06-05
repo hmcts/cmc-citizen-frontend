@@ -313,6 +313,7 @@
         { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
     <p>{{ t('You also need to send a copy of the form to {{ defendantName }}', { defendantName: claim.claimData.defendant.name }) }}</p>
     <p>{{ _downloadResponseLink(claim, 'Download their response') }}</p>
+    <p>{{ t('Your online account won’t be updated with the progress of this claim - any further updates will be by post.') }}</p>
   </div>
 {% endmacro %}
 
@@ -329,6 +330,7 @@
     <p>{{ t('Your defence will be cancelled if you don’t complete and return the form before 4pm on {{ deadline }}.',
         { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
     <p>{{ t('You also need to send a copy of the form to {{ claimantName }}', { claimantName: claim.claimData.claimant.name } ) }}</p>
+    <p>{{ t('Your online account won’t be updated with the progress of this claim - any further updates will be by post.') }}</p>
   </div>
 {% endmacro %}
 
@@ -373,7 +375,7 @@
     <p>{{ t('You must make sure we receive the form before 4pm on {{ deadline }}, or we’ll cancel your claim.',
         { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
     <p>{{ t('You also need to send a copy of the form to {{ defendantName }}', { defendantName: claim.claimData.defendant.name } ) }}</p>
-    <p>{{ t('Your online account won’t be updated with any more details about this claim.') }}</p>
+    <p>{{ t('Your online account won’t be updated with the progress of this claim - any further updates will be by post.') }}</p>
   </div>
 {% endmacro %}
 
@@ -402,7 +404,7 @@
     <p>{{ t('You must make sure we receive the form before 4pm on {{ deadline }}, or we’ll cancel your defence.',
         { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
     <p>{{ t('You also need to send a copy of the form to {{ claimantName }}', { claimantName: claim.claimData.claimant.name } ) }}</p>
-    <p>{{ t('Your online account won’t be updated with any more details about this claim.') }}</p>
+    <p>{{ t('Your online account won’t be updated with the progress of this claim - any further updates will be by post.') }}</p>
   </div>
 {% endmacro %}
 
