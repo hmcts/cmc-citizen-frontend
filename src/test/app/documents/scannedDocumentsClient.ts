@@ -4,10 +4,10 @@ import * as chaiAsPromised from 'chai-as-promised'
 
 import { ScannedDocumentsClient } from 'documents/scannedDocumentsClient'
 
-const mockClient = 'http://localhost'
+const mockClient = 'http://localhost/scanned-documents'
 
 describe('ScannedDocumentsClient', () => {
-  const client: ScannedDocumentsClient = new ScannedDocumentsClient()
+  const client: ScannedDocumentsClient = new ScannedDocumentsClient(mockClient)
   const bearerToken = 'IUgiYGOFUHSODFIUGHPASIYYUGLIYFGKUTF&TF'
   const externalId = 'b17af4d2-273f-4999-9895-bce382fa24c8'
 
@@ -22,10 +22,7 @@ describe('ScannedDocumentsClient', () => {
     nock(mockClient)
       .get(/\/scanned-documents\/.+/)
       .reply(200, expectedResponse)
-    return client.getScannedResponseFormPDF('C333CC', 'bearer')
-      .then((response: any) => {
-        chai.expect(response).eql(expectedResponse)
-      })
+    return client.getScannedResponseFormPDF(externalId, bearerToken)
   })
 
   it('should should retreive the scanned response form for a case', () => {
