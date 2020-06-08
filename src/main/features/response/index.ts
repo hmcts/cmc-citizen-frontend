@@ -30,7 +30,7 @@ import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
 import { CompanyDetails } from 'forms/models/companyDetails'
 import { OrganisationDetails } from 'forms/models/organisationDetails'
 import { AlreadyPaidInFullGuard } from 'guards/alreadyPaidInFullGuard'
-import {ResponseMethod} from "claims/models/response/responseMethod";
+import { ResponseMethod } from 'claims/models/response/responseMethod'
 
 function defendantResponseRequestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
