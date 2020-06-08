@@ -1,12 +1,16 @@
 import * as config from 'config'
-import { request } from 'client/request'
 import { StringUtils } from 'utils/stringUtils'
+import * as requestDefault from 'request'
+import * as requestPromise from 'request-promise-native'
 
 const claimStoreBaseUrl = config.get<string>('claim-store.url')
 
 export class ScannedDocumentsClient {
 
-  constructor (public documentsUrl: string = `${claimStoreBaseUrl}/scanned-documents`) {
+  constructor (public documentsUrl: string = `${claimStoreBaseUrl}/scanned-documents`,
+               private readonly request: requestDefault.RequestAPI<requestPromise.RequestPromise,
+                 requestPromise.RequestPromiseOptions,
+                 requestDefault.RequiredUriUrl> = requestPromise) {
   }
 
   public getScannedResponseFormPDF (claimExternalId: string, bearerToken: string): Promise<Buffer> {
@@ -33,7 +37,7 @@ export class ScannedDocumentsClient {
       encoding: null
     }
 
-    return request(options).then(function (response) {
+    return this.request(options).then(function (response) {
       return response
     })
   }
