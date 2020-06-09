@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { Paths } from 'directions-questionnaire/paths'
 import { Form } from 'forms/form'
-import { AlternativeCourtOption, HearingLocation } from 'directions-questionnaire/forms/models/hearingLocation'
+import { HearingLocation } from 'directions-questionnaire/forms/models/hearingLocation'
 import { Draft } from '@hmcts/draft-store-client'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 import { ErrorHandling } from 'shared/errorHandling'
@@ -25,17 +25,20 @@ function renderPage (res: express.Response, form: Form<HearingLocation>, fallbac
 export default express.Router()
   .get(Paths.hearingLocationResultPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
     try {
-      const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
       const searchParam = req.query.name
 
       const courts: Court[] = await Court.getCourtsByName(searchParam)
-      let courtDetails: CourtDetails[] = []
+      if (courts) {
+        let courtDetails: CourtDetails[] = []
 
-      for (let court of courts) {
-        courtDetails.push(await Court.getCourtDetails(court.slug))
+        for (let court of courts) {
+          courtDetails.push(await Court.getCourtDetails(court.slug))
+        }
+        renderPage(res, new Form<HearingLocation>(new HearingLocation()), false, courtDetails, searchParam)
+      } else {
+        renderPage(res, new Form<HearingLocation>(new HearingLocation()), true, undefined, searchParam)
       }
 
-      renderPage(res, new Form<HearingLocation>(new HearingLocation()), true, courtDetails, searchParam)
     } catch (err) {
       next(err)
     }
@@ -48,7 +51,17 @@ export default express.Router()
         renderPage(res, form, false, [], '')
       } else {
         try {
+
           const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
+          const courtDetails: string[] = form.model.alternativeCourtName.split(':')
+          if (courtDetails.length === 2) {
+            draft.document.hearingLocation = form.model
+            draft.document.hearingLocation.alternativeCourtName = courtDetails[0]
+            draft.document.hearingLocationSlug = courtDetails[1]
+          } else {
+            draft.document.hearingLocation = form.model
+          }
+
           const user: User = res.locals.user
           await new DraftService().save(draft, user.bearerToken)
           res.redirect(Paths.expertPage.evaluateUri({ externalId: res.locals.claim.externalId }))

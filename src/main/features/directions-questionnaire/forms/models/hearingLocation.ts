@@ -48,7 +48,7 @@ export class HearingLocation {
 
   constructor (courtName?: string,
                courtPostcode?: string,
-               facilities?: Facilities[],
+               facilities?  : Facilities[],
                courtAccepted?: YesNoOption,
                alternativeOption?: string,
                alternativeCourtName?: string,

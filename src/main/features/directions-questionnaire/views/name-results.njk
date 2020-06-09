@@ -7,38 +7,45 @@
   {% set heading = 'Choose a hearing location' %}
 {% endif %}
 
-
 {% block content %}
-  <p>{{ t('The following courts match') }} '{{ searchString }}'.</p>
-  <p>Select the court you want to request:</p>
-
   <form method="post" class="analytics-submit-event-trigger" data-event-action="DQ: Hearing Location Search"
         data-event-label-from="courtSearchSelection" novalidate>
     {{ csrfProtection(csrf) }}
-    <fieldset>
+    <fieldset id="nameResults[label]" class="form-group {% if form.hasErrors() %} form-group-error {% endif %}">
+      <legend class="visually-hidden">{{ t(heading) }}</legend>
       <div>
-        {% for court in courts %}
-          {{ radioOption(form = form, label = court.name, name = 'alternativeOption', value = court.name, checked = form.valueFor('alternativeOption') === 'postcode', bold = true) }}
-          <details class="form-group analytics-click-event-trigger" data-event-label="Court-Facilities: Facilities of the chosen court.">
-            <summary>
-              <span class="link">{{ t('See this court’s facilities') }}</span>
-            </summary>
-
-            <div class="panel">
-              {% for facility in court.facilities %}
-                <h3 class="heading-small form-group-related">{{ facility.name }}</h3>
-                {{ facility.description | safe }}
-              {% endfor %}
-            </div>
-          </details>
+        {% if fallbackPage %}
+          <p>{{ t('Tell us your preferred location for a hearing, in case the claim goes to one.') }}</p>
+          <p>{{ t('We’ll use the location you choose unless the claimant has an exceptional reason to object, for example accessibility needs.') }}</p>
+          <h1 class="heading-medium">{{ t('Enter a court name') }}</h1>
+          {{ textInput(form = form, name = 'alternativeCourtName', inputClass = 'form-control-1-100') }}
+          <input type="hidden" name="alternativeOption" value="search">
         {% else %}
-          <!-- No courts found, fallback page-->
-        {% endfor %}
+          <p>{{ t('The following courts match') }} '{{ searchString }}'.</p>
+          <p>Select the court you want to request:</p>
+          <input type="hidden" name="alternativeOption" value="search">
+          {% for court in courts %}
+            {{ radioOption(form = form, label = court.name, name = 'alternativeCourtName', value = court.name, bold = true) }}
+            <details class="form-group analytics-click-event-trigger"
+                     data-event-label="Court-Facilities: Facilities of the chosen court.">
+              <summary>
+                <span class="link">{{ t('See this court’s facilities') }}</span>
+              </summary>
+
+              <div class="panel">
+                {% for facility in court.facilities %}
+                  <h3 class="heading-small form-group-related">{{ facility.name }}</h3>
+                  {{ facility.description | safe }}
+                {% endfor %}
+              </div>
+            </details>
+          {% endfor %}
+        {% endif %}
       </div>
     </fieldset>
 
     <p>
-    {{ saveAndContinueButton() }}
+      {{ saveAndContinueButton() }}
     </p>
 
   </form>
