@@ -37,8 +37,6 @@ export class ScannedDocumentsClient {
       encoding: null
     }
 
-    return this.request(options).then(function (response) {
-      return response
-    })
+    return this.request(options)
   }
 }
