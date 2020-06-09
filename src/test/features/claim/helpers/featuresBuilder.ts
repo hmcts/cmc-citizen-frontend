@@ -112,4 +112,12 @@ describe('FeaturesBuilder', () => {
     const features = await featuresBuilder.features(FeaturesBuilder.LA_PILOT_THRESHOLD, user)
     expect(features).to.equal('LAPilotEligible')
   })
+
+  describe('Service Slow Feature', () => {
+    it('should show service slow banner if flag is set', async () => {
+      enableFeatures('service_slow_banner')
+      const features = await featuresBuilder.features(1, user)
+      expect(features).to.equal('service_slow_banner')
+    })
+  })
 })
