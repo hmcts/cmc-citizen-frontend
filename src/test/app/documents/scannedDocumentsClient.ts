@@ -25,13 +25,6 @@ describe('ScannedDocumentsClient', () => {
     return client.getScannedResponseFormPDF(externalId, bearerToken)
   })
 
-  it('should should retreive the scanned response form for a case', () => {
-
-    chai.expect(() => client.getScannedResponseFormPDF(
-      undefined, bearerToken))
-      .to.throw(Error, 'Claim external ID cannot be blank')
-  })
-
   it('should throw error when given undefined ExternalId', () => {
     chai.expect(() => client.getScannedResponseFormPDF(
       undefined, bearerToken))
