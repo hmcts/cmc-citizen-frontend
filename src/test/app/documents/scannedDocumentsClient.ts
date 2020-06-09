@@ -1,3 +1,6 @@
+/* Allow chai assertions which don't end in a function call, e.g. expect(thing).to.be.undefined */
+/* tslint:disable:no-unused-expression */
+
 import * as nock from 'nock'
 import * as chai from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
@@ -15,14 +18,15 @@ describe('ScannedDocumentsClient', () => {
 
   it('should should retrieve the scanned response form for a case', () => {
 
-    const expectedResponse = {
+    const expectedPayload = {
       url: 'http://localhost/scanneddoc'
     }
 
     nock(mockClient)
       .get(/\/scanned-documents\/.+/)
-      .reply(200, expectedResponse)
-    return client.getScannedResponseFormPDF(externalId, bearerToken)
+      .reply(200, expectedPayload)
+
+    chai.expect(client.getScannedResponseFormPDF(externalId, bearerToken)).to.not.be.undefined
   })
 
   it('should throw error when given undefined ExternalId', () => {
