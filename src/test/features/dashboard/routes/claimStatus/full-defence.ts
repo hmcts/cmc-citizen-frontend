@@ -36,6 +36,7 @@ import {
 import { MediationOutcome } from 'claims/models/mediationOutcome'
 import { DefenceType } from 'claims/models/response/defenceType'
 import { YesNoOption } from 'models/yesNoOption'
+import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -698,6 +699,53 @@ function testData () {
         'Because you responded to the claim using a paper form, all further action in this claim will be by post.',
         'Your online account won’t be updated with the progress of this claim.',
         'If ' + fullDefenceClaim().claim.claimants[0].name + ' chooses to continue the claim we’ll post you a copy of their response. This will explain what you need to do next.'
+      ]
+    },
+    {
+      status: 'Full defence - claimant asked to proceed offline',
+      claim: fullDefenceClaim(),
+      claimOverride: {
+        response: {
+          ...baseResponseData,
+          ...baseDefenceData,
+          freeMediation: FreeMediationOption.YES
+        },
+        proceedOfflineReason: ProceedOfflineReason.APPLICATION_BY_CLAIMANT
+      },
+      claimantAssertions: [
+        'Wait for us to contact you by post',
+        'You applied by post to change something about the claim',
+        'You might have to go to a hearing.',
+        `We’ll contact you by post to tell you what to do next.`,
+        `Your online account won’t be updated - any further updates will be by post.`
+      ],
+      defendantAssertions: [
+        fullDefenceClaim().claim.claimants[0].name + ' applied by post to change something about the claim',
+        `We’ll post you a copy of their application. This will explain what you need to do next.`,
+        `Your online account won’t be updated - any further updates will be by post.`
+      ]
+    },
+    {
+      status: 'Full defence - defendant asked to proceed offline',
+      claim: fullDefenceClaim(),
+      claimOverride: {
+        response: {
+          ...baseResponseData,
+          ...baseDefenceData,
+          freeMediation: FreeMediationOption.YES
+        },
+        proceedOfflineReason: ProceedOfflineReason.APPLICATION_BY_DEFENDANT
+      },
+      claimantAssertions: [
+        fullDefenceClaim().claim.defendants[0].name + ' applied by post to change something about the claim',
+        'We’ll post you a copy of their application. This will explain what you need to do next.',
+        'Your online account won’t be updated - any further updates will be by post.'
+      ],
+      defendantAssertions: [
+        'You applied by post to change something about the claim',
+        'You might have to go to a hearing.',
+        'We’ll contact you by post to tell you what to do next.',
+        'Your online account won’t be updated - any further updates will be by post.'
       ]
     }
   ]
