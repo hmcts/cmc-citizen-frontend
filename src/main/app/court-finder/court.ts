@@ -38,8 +38,6 @@ export class Court {
     const courtFinderClient: CourtFinderClient = new CourtFinderClient()
     const courtDetailsResponse: CourtDetailsResponse = await courtFinderClient.getCourtDetails(slug)
 
-    console.log(courtDetailsResponse)
-
     return courtDetailsResponse.courtDetails
   }
 }
