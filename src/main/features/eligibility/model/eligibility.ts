@@ -4,6 +4,8 @@ import { ValidationErrors } from 'forms/validation/validationErrors'
 import { ClaimValue } from 'eligibility/model/claimValue'
 import { ClaimType } from 'eligibility/model/claimType'
 import { DefendantAgeOption } from 'eligibility/model/defendantAgeOption'
+import * as config from 'config'
+import * as toBoolean from 'to-boolean'
 
 export class Eligibility {
 
@@ -125,7 +127,7 @@ export class Eligibility {
 
   get eligible (): boolean {
     return this.claimValue === ClaimValue.UNDER_10000 &&
-      (this.helpWithFees === YesNoOption.NO || (this.helpWithFees === YesNoOption.YES && this.helpWithFeesReference === YesNoOption.YES)) &&
+      this.helpWithFeeEligible() &&
       this.claimantAddress === YesNoOption.YES &&
       this.defendantAddress === YesNoOption.YES &&
       this.eighteenOrOver === YesNoOption.YES &&
@@ -134,5 +136,13 @@ export class Eligibility {
       this.singleDefendant === YesNoOption.NO &&
       this.governmentDepartment === YesNoOption.NO &&
       this.claimIsForTenancyDeposit === YesNoOption.NO
+  }
+
+  helpWithFeeEligible (): boolean {
+    if (toBoolean(config.get('featureToggles.helpWithFees'))) {
+      return (this.helpWithFees === YesNoOption.NO || (this.helpWithFees === YesNoOption.YES && this.helpWithFeesReference === YesNoOption.YES))
+    } else {
+      return this.helpWithFees === YesNoOption.NO
+    }
   }
 }

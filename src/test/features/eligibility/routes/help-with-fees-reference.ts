@@ -15,7 +15,7 @@ import { NotEligibleReason } from 'eligibility/notEligibleReason'
 const pagePath: string = Paths.helpWithFeesReferencePage.uri
 const pageRedirect: string = Paths.singleDefendantPage.uri
 const expectedTextOnPage: string = 'Do you have a Help With Fees reference number?'
-const notEligibleReason: string = NotEligibleReason.HELP_WITH_FEES
+const notEligibleReason: string = NotEligibleReason.HELP_WITH_FEES_REFERENCE
 
 describe('Claim eligibility: help with fees reference page', () => {
   attachDefaultHooks(app)

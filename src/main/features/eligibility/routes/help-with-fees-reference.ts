@@ -11,7 +11,7 @@ class HelpWithFeesReferenceEligibilityPage extends EligibilityPage<YesNoOption> 
   }
 
   checkEligibility (value: YesNoOption): EligibilityCheck {
-    return value === YesNoOption.YES ? eligible() : notEligible(NotEligibleReason.HELP_WITH_FEES)
+    return value === YesNoOption.YES ? eligible() : notEligible(NotEligibleReason.HELP_WITH_FEES_REFERENCE)
   }
 }
 

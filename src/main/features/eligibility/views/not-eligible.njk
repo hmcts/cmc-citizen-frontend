@@ -3,7 +3,7 @@
 {% from "externalLink.njk" import externalLink %}
 {% from "internalLink.njk" import internalLink %}
 
-{% if reason === NotEligibleReason.HELP_WITH_FEES %}
+{% if reason === NotEligibleReason.HELP_WITH_FEES_REFERENCE %}
   {% set heading = 'Decide whether to apply for Help With Fees' %}
 {% else %}
   {% set heading = 'You can’t use this service' %}
@@ -54,6 +54,10 @@
         <p>{{ t('You might be able to get advice from organisations like ' + externalLink('Citizens Advice', citizensAdviceUrl)
             + ' about making a claim.') | safe }}</p>
       {% elseif reason === NotEligibleReason.HELP_WITH_FEES %}
+        <p>{{ t('You need to use a paper form if you want ' + externalLink('help paying your court fees', feesHelpUri ) + '.') | safe }}</p>
+        <p>{{ t(externalLink('Download a paper form', n1FormUrl) + ', complete it and return it to make your claim.') | safe }}</p>
+        {{ paperFormAddress() }}
+      {% elseif reason === NotEligibleReason.HELP_WITH_FEES_REFERENCE %}
         <p>You can either:</p>
       <ul class="list list-bullet">
         <li>{{ t(externalLink('apply for Help With Fees ', feesHelpUri, '', false ) + ' and make a claim using a Help With Fees number') | safe }}</li>
