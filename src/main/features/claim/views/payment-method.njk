@@ -1,0 +1,32 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, radioOption, textInput, saveAndContinueButton %}
+
+{% set heading = 'How do you want to pay for your claim?' %}
+
+{% block content %}
+
+  <div class="grid-row">
+    <div class="column-two-thirds">
+
+      <form novalidate method="post">
+        {{ csrfProtection(csrf) }}
+
+        <fieldset>
+          <legend class="visually-hidden">{{ t(heading) }}</legend>
+
+          {{ radioOption('By card', 'helpWithFees', form, 'false', checked = not form.valueFor('helpWithFees')) }}
+
+          {{ radioOption('I have a Help With Fees number', 'helpWithFees', form, 'true', checked = form.valueFor('helpWithFees')) }}
+          <div class="form-group panel panel-border-narrow js-hidden" id="helpWithFees-true" aria-hidden="false">
+            {{ textInput('' if form.errorFor('helpWithFeesNumber') else 'Enter the Help With Fees number',
+              'helpWithFeesNumber', form, hint = '') }}
+          </div>
+        </fieldset>
+
+        {{ saveAndContinueButton() }}
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}

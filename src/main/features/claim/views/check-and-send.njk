@@ -144,8 +144,13 @@
           )
         }}
 
-        {% set submitButtonLabel = t('Submit and continue to payment ') %}
-        {{ submitButton(submitButtonLabel + '(' + (claimAmountTotal.feeAmount | numeral) + ')') }}
+        {% if (helpWithFees) %}
+          {% set submitButtonLabel = t('Submit') %}
+        {% else %}
+          {% set submitButtonLabel = t('Submit and continue to payment') + ' (' + (claimAmountTotal.feeAmount | numeral) + ')' %}
+        {% endif %}
+
+        {{ submitButton(submitButtonLabel) }}
         <input type="hidden" name="type" value="{{ form.model.type }}">
       </div>
     </div>

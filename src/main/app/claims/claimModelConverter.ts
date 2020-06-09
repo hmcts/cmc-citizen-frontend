@@ -57,6 +57,7 @@ export class ClaimModelConverter {
     claimData.reason = draftClaim.reason.reason
     claimData.timeline = { rows: draftClaim.timeline.getPopulatedRowsOnly() } as ClaimantTimeline
     claimData.evidence = { rows: convertEvidence(draftClaim.evidence) as any } as Evidence
+    claimData.helpWithFeesNumber = draftClaim.paymentMethod ? draftClaim.paymentMethod.helpWithFeesNumber : undefined
     if (draftClaim.claimant.payment) {
       claimData.feeAmountInPennies = MoneyConverter.convertPoundsToPennies(draftClaim.claimant.payment.amount)
     }

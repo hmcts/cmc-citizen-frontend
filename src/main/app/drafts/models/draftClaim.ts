@@ -19,6 +19,7 @@ import { InterestEndDate } from 'claim/form/models/interestEndDate'
 import { InterestTotal } from 'claim/form/models/interestTotal'
 import { InterestContinueClaiming } from 'claim/form/models/interestContinueClaiming'
 import { InterestHowMuch } from 'claim/form/models/interestHowMuch'
+import { PaymentMethod } from 'claim/form/models/paymentMethod'
 
 export class DraftClaim extends DraftDocument {
 
@@ -42,6 +43,7 @@ export class DraftClaim extends DraftDocument {
   qualifiedStatementOfTruth?: QualifiedStatementOfTruth
   timeline: ClaimantTimeline = new ClaimantTimeline()
   evidence: Evidence = new Evidence()
+  paymentMethod: PaymentMethod = new PaymentMethod()
 
   deserialize (input: any): DraftClaim {
     if (input) {
@@ -74,6 +76,7 @@ export class DraftClaim extends DraftDocument {
       }
       this.timeline = new ClaimantTimeline().deserialize(input.timeline) as ClaimantTimeline
       this.evidence = new Evidence().deserialize(input.evidence) as Evidence
+      this.paymentMethod = new PaymentMethod().deserialize(input.paymentMethod) as PaymentMethod
     }
     return this
   }

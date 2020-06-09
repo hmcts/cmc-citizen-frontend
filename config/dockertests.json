@@ -8,7 +8,8 @@
     "mediationPilot": true,
     "directionsQuestionnaire": true,
     "newDashboardStatus": false,
-    "inversionOfControl": true
+    "inversionOfControl": true,
+    "helpWithFees": true
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"

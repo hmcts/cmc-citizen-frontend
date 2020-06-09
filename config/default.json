@@ -92,7 +92,8 @@
     "judgePilot": false,
     "newDashboardStatus": false,
     "webChat": true,
-    "inversionOfControl": true
+    "inversionOfControl": true,
+    "helpWithFees": false
   },
   "oauth": {
     "clientId": "cmc_citizen"

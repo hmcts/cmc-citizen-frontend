@@ -1,6 +1,4 @@
 import * as express from 'express'
-import * as config from 'config'
-import * as toBoolean from 'to-boolean'
 
 import { Paths } from 'claim/paths'
 import { Form } from 'forms/form'
@@ -23,6 +21,7 @@ import { QualifiedStatementOfTruth } from 'forms/models/qualifiedStatementOfTrut
 import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { Draft } from '@hmcts/draft-store-client'
+import { FeatureToggles } from 'utils/featureToggles'
 
 async function getClaimAmountTotal (draft: DraftClaim): Promise<TotalAmount> {
   const interest: number = await draftInterestAmount(draft)
@@ -123,7 +122,8 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response, next: 
         claimantPartyDetailsPageUri: getClaimantPartyDetailsPageUri(draft.document.claimant.partyDetails),
         defendantPartyDetailsPageUri: getDefendantPartyDetailsPageUri(draft.document.defendant.partyDetails),
         paths: Paths,
-        form: form
+        form,
+        helpWithFees: FeatureToggles.isEnabled('helpWithFees')
       })
     }).catch(next)
 }
@@ -150,10 +150,14 @@ export default express.Router()
           draft.document.qualifiedStatementOfTruth = form.model as QualifiedStatementOfTruth
           await new DraftService().save(draft, user.bearerToken)
         }
-        if (toBoolean(config.get('featureToggles.inversionOfControl'))) {
-          res.redirect(Paths.initiatePaymentController.uri)
+        if (FeatureToggles.isEnabled('helpWithFees')) {
+          res.redirect(Paths.paymentMethodPage.uri)
         } else {
-          res.redirect(Paths.startPaymentReceiver.uri)
+          if (FeatureToggles.isEnabled('inversionOfControl')) {
+            res.redirect(Paths.initiatePaymentController.uri)
+          } else {
+            res.redirect(Paths.startPaymentReceiver.uri)
+          }
         }
       }
     })

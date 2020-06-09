@@ -10,7 +10,8 @@
     "judgePilot": true,
     "directionsQuestionnaire": true,
     "newDashboardStatus": true,
-    "inversionOfControl": true
+    "inversionOfControl": true,
+    "helpWithFees": true
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"

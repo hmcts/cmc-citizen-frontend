@@ -1,0 +1,20 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, submitButton %}
+{% from "table.njk" import row %}
+
+{% set heading = 'Check your Help With Fees payment' %}
+
+{% block content %}
+
+  <form novalidate method="post">
+    {{ csrfProtection(csrf) }}
+    <fieldset>
+      <legend class="visually-hidden">{{ t(heading) }}</legend>
+      {{ row('Help With Fees reference number', helpWithFeesNumber, editPage, bold = true) }}
+    </fieldset>
+
+    <p>{{ submitButton('Submit claim') }}</p>
+
+  </form>
+
+{% endblock %}
