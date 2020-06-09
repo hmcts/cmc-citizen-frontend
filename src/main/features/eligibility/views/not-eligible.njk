@@ -60,8 +60,8 @@
       {% elseif reason === NotEligibleReason.HELP_WITH_FEES_REFERENCE %}
         <p>You can either:</p>
       <ul class="list list-bullet">
-        <li>{{ t(externalLink('apply for Help With Fees ', feesHelpUri, '', false ) + ' and make a claim using a Help With Fees number') | safe }}</li>
-        <li>{{ internalLink( t('continue making this claim '), EligibilityPaths.startPage.uri) | safe }} {{ t(' and pay a fee based on the amount you claim' ) }}</li>
+        <li>{{ t(externalLink('apply for Help With Fees', feesHelpUri, '', false ) + ' and make a claim using a Help With Fees number') | safe }}</li>
+        <li>{{ internalLink( t('continue making this claim'), EligibilityPaths.startPage.uri) | safe }} {{ t(' and pay a fee based on the amount you claim' ) }}</li>
       </ul>
       {% elseif reason === NotEligibleReason.CLAIMANT_ADDRESS %}
         <p>{{ t('You need to have an address in the UK to make a money claim.') }}</p>
