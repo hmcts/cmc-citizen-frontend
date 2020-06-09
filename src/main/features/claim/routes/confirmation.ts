@@ -16,5 +16,5 @@ export default express.Router()
       const user: User = res.locals.user
       const claim: Claim = await claimStoreClient.retrieveByExternalId(externalId, user)
 
-      res.render(Paths.confirmationPage.associatedView, { claim: claim })
+      res.render(Paths.confirmationPage.associatedView, { claim })
     }))

@@ -1,0 +1,46 @@
+{% from "internalLink.njk" import internalLink %}
+
+{% macro cardPaymentView(defendantName, claimNumber, externalId, responseDeadline) %}
+  <div class="govuk-box-highlight">
+    <h1 class="bold-large">{{ t('Claim submitted') }}</h1>
+    <div class="reference-number">
+      <span>{{ t('Your claim number:') }}</span>
+      <h1 class="bold-large">{{ claimNumber }}</h1>
+    </div>
+    <p class="receipt-download-container">
+      {{ internalLink(t('Download your claim form'), ClaimPaths.receiptReceiver.evaluateUri({ externalId: externalId })) }}
+    </p>
+  </div>
+
+  <h2 class="heading-medium">{{ t('What happens next') }}</h2>
+  <p>{{ t('{{ defendantName }} has until 4pm on {{ responseDeadline }} to respond to your claim. They can request an extra 14 days if they need it.',
+      { defendantName: defendantName, responseDeadline: responseDeadline | date }) }}</p>
+  <p>{{ t('You can request a County Court Judgment against them if they don’t respond by the deadline.') }}</p>
+{% endmacro %}
+
+{% macro helpWithFeesView(defendantName, externalId) %}
+  <div class="govuk-box-highlight">
+    <h1 class="bold-large">{{ t('Claim submitted') }}</h1>
+    <div class="reference-number">
+      <span>{{ t('Your reference number:') }}</span>
+      <h1 class="bold-large">{{ externalId }}</h1>
+    </div>
+    <p class="receipt-download-container">
+      {{ internalLink(t('Download your draft claim form'), ClaimPaths.receiptReceiver.evaluateUri({ externalId: externalId })) }}
+    </p>
+  </div>
+
+  <h2 class="heading-medium">{{ t('What happens next') }}</h2>
+  <p>{{ t('We’ll check the result of your Help With Fees application and email you within 5 days.') }}</p>
+
+  <p class="heading-medium">{{ t('If you qualify for the whole court fee to be paid') }}</p>
+  <p>{{ t('We’ll issue your claim and send it to {{ defendantName }}.', { defendantName: defendantName }) }}</p>
+
+  <p class="heading-medium">{{ t('If you qualify for part or no court fee to be paid') }}</p>
+  <p>{{ t('We’ll tell you how much you need to pay to get the claim issued.') }}</p>
+
+  <p class="heading-medium">{{ t('After a claim is issued') }}</p>
+  <p>{{ t('{{ defendantName }} will have 14 days to respond. They can ask for an extra 14 days if they need it.',
+      { defendantName: defendantName }) }}</p>
+  <p>{{ t('You can request a County Court Judgment (CCJ) against them if they don’t respond.') }}</p>
+{% endmacro %}
