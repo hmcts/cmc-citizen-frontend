@@ -76,7 +76,7 @@ export class DraftClaim extends DraftDocument {
       }
       this.timeline = new ClaimantTimeline().deserialize(input.timeline) as ClaimantTimeline
       this.evidence = new Evidence().deserialize(input.evidence) as Evidence
-      this.paymentMethod = new PaymentMethod().deserialize(input.paymentMethod) as PaymentMethod
+      this.paymentMethod = new PaymentMethod().deserialize(input.paymentMethod)
     }
     return this
   }
