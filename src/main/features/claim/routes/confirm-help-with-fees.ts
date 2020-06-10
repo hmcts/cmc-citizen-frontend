@@ -30,13 +30,12 @@ export default express.Router()
   })
   .post(
     Paths.confirmHelpWithFeesPage.uri,
-    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<DraftClaim> = res.locals.claimDraft
-      console.log(`WIBBLE! draft = ${JSON.stringify(draft)}`)
       const user: User = res.locals.user
       const features = await featuresBuilder.features(draft.document.amount.totalAmount(), user)
 
-      await claimStoreClient.saveClaim(draft, user, features)
+      await claimStoreClient.saveHelpWithFeesClaim(draft, user, features)
       await new DraftService().delete(draft.id, user.bearerToken)
 
       res.redirect(Paths.confirmationPage.evaluateUri({ externalId: draft.document.externalId }))
