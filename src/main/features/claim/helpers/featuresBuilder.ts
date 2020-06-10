@@ -75,11 +75,5 @@ export const FEATURES: FeatureDefinition[] = [
     toggle: 'directions_questionnaire',
     setting: 'directionsQuestionnaire',
     validForAmount: amount => amount <= FeaturesBuilder.ONLINE_DQ_THRESHOLD
-  },
-  {
-    feature: 'serviceSlowBanner',
-    toggle: 'service_slow_banner',
-    setting: 'serviceSlowBanner',
-    validForAmount: () => true
   }
 ]
