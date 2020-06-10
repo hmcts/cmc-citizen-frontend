@@ -26,7 +26,7 @@
       <h1 class="bold-large">{{ externalId }}</h1>
     </div>
     <p class="receipt-download-container">
-      {{ internalLink(t('Download your draft claim form'), ClaimPaths.receiptReceiver.evaluateUri({ externalId: externalId })) }}
+      {{ internalLink(t('Download your draft claim form'), ClaimPaths.draftReceiptReceiver.evaluateUri({ externalId: externalId })) }}
     </p>
   </div>
 

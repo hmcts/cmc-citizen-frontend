@@ -17,6 +17,10 @@ export class DocumentsClient {
     return this.getPDF(claimExternalId, 'claimIssueReceipt', bearerToken)
   }
 
+  getDraftClaimReceiptPDF (claimExternalId: string, bearerToken: string): Promise<Buffer> {
+    return this.getPDF(claimExternalId, 'draftClaimReceipt', bearerToken)
+  }
+
   getDefendantResponseReceiptPDF (claimExternalId: string, bearerToken: string): Promise<Buffer> {
     return this.getPDF(claimExternalId, 'defendantResponseReceipt', bearerToken)
   }
