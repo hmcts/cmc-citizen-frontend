@@ -100,6 +100,10 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
 
 }
 
+if (FeatureToggles.isEnabled('newDashboardStatus')) {
+  logger.info('FeatureToggles.newDashboardStatus enabled')
+}
+
 // Below method overrides the moment's toISOString method, which is used by RequestPromise
 // to convert moment object to String
 moment.prototype.toISOString = function () {
