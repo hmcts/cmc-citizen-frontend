@@ -98,4 +98,10 @@ describe('FeaturesBuilder', () => {
     const features = await featuresBuilder.features(MIN_THRESHOLD, user)
     expect(features).to.equal('mediationPilot, LAPilotEligible, directionsQuestionnaire')
   })
+
+  it(`should not add judge pilot if legal advisor pilot is eligible`, async () => {
+    enableFeatures('legal_advisor_pilot', 'judge_pilot')
+    const features = await featuresBuilder.features(FeaturesBuilder.LA_PILOT_THRESHOLD, user)
+    expect(features).to.equal('LAPilotEligible')
+  })
 })
