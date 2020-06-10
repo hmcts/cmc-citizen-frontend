@@ -151,8 +151,10 @@
       {{ paidInFullCCJCancelledClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED %}
       {{ paidInFullCCJSatisfiedClaimantClaimDetails(claim) }}
-    {% elif state.status === ClaimStatus.NO_RESPONSE %}
+      {% elif state.status === ClaimStatus.NO_RESPONSE %}
       {{ noResponseForClaimantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.TRANSFERRED %}
+      {{ claimTransferredClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.MORE_TIME_REQUESTED %}
       {{ moreTimeRequestedForClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
@@ -279,6 +281,8 @@
       {{ paidInFullCCJSatisfiedDefendantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.MORE_TIME_REQUESTED %}
       {{ moreTimeRequestedForDefendantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.TRANSFERRED %}
+      {{ claimTransferredDefendantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
       {{ ccjEligibleForDefendantClaimDetails(claim, csrf) }}
     {% elif state.status === ClaimStatus.DEFENDANT_PAPER_RESPONSE %}

@@ -32,6 +32,7 @@ import { ReviewOrder } from 'claims/models/reviewOrder'
 import { MediationOutcome } from 'claims/models/mediationOutcome'
 import { YesNoOption } from 'models/yesNoOption'
 import { ClaimDocument } from 'claims/models/claimDocument'
+import { TransferContent } from 'claims/models/transferContent'
 import * as _ from 'lodash'
 import { ClaimDocumentType } from 'common/claimDocumentType'
 
@@ -79,6 +80,7 @@ export class Claim {
   pilotCourt: YesNoOption
   paperResponse: YesNoOption
   claimDocuments?: ClaimDocument[]
+  transferContent?: TransferContent
 
   get defendantOffer (): Offer {
     if (!this.settlement) {
@@ -161,6 +163,8 @@ export class Claim {
   get status (): ClaimStatus {
     if (this.moneyReceivedOn && this.countyCourtJudgmentRequestedAt && this.isCCJPaidWithinMonth()) {
       return ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED
+    } else if (this.state === 'TRANSFERRED') {
+      return ClaimStatus.TRANSFERRED
     } else if (this.moneyReceivedOn && this.countyCourtJudgmentRequestedAt) {
       return ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
     } else if (this.hasOrderBeenDrawn()) {
@@ -241,8 +245,6 @@ export class Claim {
       return ClaimStatus.CLAIMANT_RESPONSE_SUBMITTED
     } else if (this.moreTimeRequested) {
       return ClaimStatus.MORE_TIME_REQUESTED
-    } else if (this.state === 'TRANSFERRED') {
-      return ClaimStatus.TRANSFERRED
     } else if (!this.response) {
       return ClaimStatus.NO_RESPONSE
     } else {
@@ -372,6 +374,10 @@ export class Claim {
 
       if (input.pilotCourt) {
         this.pilotCourt = YesNoOption.fromObject(input.pilotCourt)
+      }
+
+      if(input.transferContent) {
+        this.transferContent = new TransferContent().deserialize(input.transferContent)
       }
 
       if (input.paperResponse) {
