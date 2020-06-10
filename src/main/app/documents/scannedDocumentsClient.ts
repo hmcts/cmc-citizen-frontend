@@ -14,7 +14,7 @@ export class ScannedDocumentsClient {
   }
 
   public getScannedResponseFormPDF (claimExternalId: string, bearerToken: string): Promise<Buffer> {
-    return this.getPDF(claimExternalId, 'OCON9x', bearerToken)
+    return this.getPDF(claimExternalId, 'OCON9X', bearerToken)
   }
 
   private getPDF (claimExternalId: string, documentTemplate: string, bearerToken: string): Promise<Buffer> {
