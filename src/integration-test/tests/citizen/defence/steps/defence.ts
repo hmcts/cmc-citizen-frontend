@@ -7,12 +7,11 @@ import { DefendantEnterClaimPinNumberPage } from 'integration-test/tests/citizen
 import { DefendantEnterClaimReferencePage } from 'integration-test/tests/citizen/defence/pages/defendant-enter-claim-reference'
 import { DefendantHowMuchHaveYouPaidPage } from 'integration-test/tests/citizen/defence/pages/defendant-how-much-have-you-paid'
 import { DefendantImpactOfDisputePage } from 'integration-test/tests/citizen/defence/pages/defendant-impact-of-dispute'
-import { DefendantMobilePage } from 'integration-test/tests/citizen/defence/pages/defendant-mobile'
 import { DefendantMoreTimeRequestPage } from 'integration-test/tests/citizen/defence/pages/defendant-more-time-request'
 import { DefendantNameAndAddressPage } from 'integration-test/tests/citizen/defence/pages/defendant-name-and-address'
 import { DefendantPaymentDatePage } from 'integration-test/tests/citizen/defence/pages/defendant-payment-date'
 import { DefendantPaymentPlanPage } from 'integration-test/tests/citizen/defence/pages/defendant-payment-plan'
-import { DefendantRegisterPage } from 'integration-test/tests/citizen/defence/pages/defendant-register'
+// import { DefendantRegisterPage } from 'integration-test/tests/citizen/defence/pages/defendant-register'
 import { DefendantRejectAllOfClaimPage } from 'integration-test/tests/citizen/defence/pages/defendant-reject-all-of-claim'
 import { DefendantStartPage } from 'integration-test/tests/citizen/defence/pages/defendant-start'
 import { DefendantTaskListPage } from 'integration-test/tests/citizen/defence/pages/defendant-task-list'
@@ -34,6 +33,7 @@ import { AlreadyPaidPage } from 'integration-test/tests/citizen/defence/pages/st
 import { DefendantHaveYouPaidTheClaimantTheAmountYouAdmitYouOwePage } from 'integration-test/tests/citizen/defence/pages/defendant-have-you-paid-the-claimant-the-amount-you-admit-you-owe'
 import { DefendantHowMuchYouOwePage } from 'integration-test/tests/citizen/defence/pages/defendant-how-much-you-owe'
 import { MediationSteps } from 'integration-test/tests/citizen/mediation/steps/mediation'
+import { DefendantPhonePage } from 'integration-test/tests/citizen/defence/pages/defendant-phone'
 import I = CodeceptJS.I
 
 const I: I = actor()
@@ -41,10 +41,10 @@ const defendantStartPage: DefendantStartPage = new DefendantStartPage()
 const defendantEnterClaimRefPage: DefendantEnterClaimReferencePage = new DefendantEnterClaimReferencePage()
 const defendantEnterPinPage: DefendantEnterClaimPinNumberPage = new DefendantEnterClaimPinNumberPage()
 const defendantViewClaimPage: DefendantViewClaimPage = new DefendantViewClaimPage()
-const defendantRegisterPage: DefendantRegisterPage = new DefendantRegisterPage()
+// const defendantRegisterPage: DefendantRegisterPage = new DefendantRegisterPage()
 const defendantNameAndAddressPage: DefendantNameAndAddressPage = new DefendantNameAndAddressPage()
 const defendantDobPage: DefendantDobPage = new DefendantDobPage()
-const defendantMobilePage: DefendantMobilePage = new DefendantMobilePage()
+const defendantPhonePage: DefendantPhonePage = new DefendantPhonePage()
 const defendantMoreTimeRequestPage: DefendantMoreTimeRequestPage = new DefendantMoreTimeRequestPage()
 const defendantDefenceTypePage: DefendantDefenceTypePage = new DefendantDefenceTypePage()
 const defendantRejectAllOfClaimPage: DefendantRejectAllOfClaimPage = new DefendantRejectAllOfClaimPage()
@@ -103,11 +103,12 @@ export class DefenceSteps {
   }
 
   loginAsDefendant (defendantEmail: string): void {
-    defendantRegisterPage.clickLinkIAlreadyHaveAnAccount()
+    // defendantRegisterPage.clickLinkIAlreadyHaveAnAccount()
+    loginPage.open()
     loginPage.login(defendantEmail, DEFAULT_PASSWORD)
   }
 
-  confirmYourDetails (defendant: Party): void {
+  confirmYourDetails (defendant: Party, expectPhonePage: boolean = false): void {
 
     defendantSteps.selectTaskConfirmYourDetails()
     defendantNameAndAddressPage.enterAddress(updatedAddress)
@@ -115,7 +116,10 @@ export class DefenceSteps {
     if (defendant.type === PartyType.INDIVIDUAL) {
       defendantDobPage.enterDOB(defendant.dateOfBirth)
     }
-    defendantMobilePage.enterMobile(defendant.mobilePhone)
+
+    if (expectPhonePage) {
+      defendantPhonePage.enterPhone(defendant.phone)
+    }
   }
 
   requestNoExtraTimeToRespond (): void {
@@ -289,12 +293,13 @@ export class DefenceSteps {
     defendantType: PartyType,
     defenceType: DefenceType,
     isRequestMoreTimeToRespond: boolean = true,
-    isClaimAlreadyPaid: boolean = true
+    isClaimAlreadyPaid: boolean = true,
+    expectPhonePage: boolean = false
   ): void {
     I.see('Confirm your details')
     I.see('Decide if you need more time to respond')
     I.see('Choose a response')
-    this.confirmYourDetails(defendantParty)
+    this.confirmYourDetails(defendantParty, expectPhonePage)
     I.see('COMPLETE')
 
     if (isRequestMoreTimeToRespond) {

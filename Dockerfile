@@ -1,5 +1,5 @@
 # ---- Base image ----
-FROM hmctspublic.azurecr.io/base/node/stretch-slim-lts-8:8-stretch-slim as base
+FROM hmctspublic.azurecr.io/base/node:12-alpine as base
 RUN yarn config set proxy "$http_proxy" && yarn config set https-proxy "$https_proxy"
 COPY package.json yarn.lock ./
 RUN yarn install --production \
@@ -7,7 +7,7 @@ RUN yarn install --production \
 
 # ---- Build image ----
 FROM base as build
-RUN yarn install
+RUN PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true yarn install
 COPY tsconfig.json gulpfile.js server.js ./
 COPY --chown=hmcts:hmcts src/main ./src/main
 RUN yarn setup

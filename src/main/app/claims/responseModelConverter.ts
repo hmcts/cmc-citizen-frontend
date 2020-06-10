@@ -70,6 +70,7 @@ import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/dir
 import { DirectionsQuestionnaire } from 'claims/models/directions-questionnaire/directionsQuestionnaire'
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
+import { ResponseMethod } from 'claims/models/response/responseMethod'
 
 export class ResponseModelConverter {
 
@@ -93,6 +94,7 @@ export class ResponseModelConverter {
   private static convertFullDefence (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): FullDefenceResponse {
     return {
       responseType: ResponseType.FULL_DEFENCE,
+      responseMethod: ResponseMethod.DIGITAL,
       defendant: this.convertPartyDetails(draft.defendantDetails),
       defenceType: this.inferDefenceType(draft),
       defence: draft.defence.text,
@@ -121,6 +123,7 @@ export class ResponseModelConverter {
   private static convertFullDefenceAsPartialAdmission (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): PartialAdmissionResponse {
     return {
       responseType: ResponseType.PART_ADMISSION,
+      responseMethod: ResponseMethod.DIGITAL,
       amount: draft.rejectAllOfClaim.howMuchHaveYouPaid.amount,
       paymentDeclaration: {
         paidDate: draft.rejectAllOfClaim.howMuchHaveYouPaid.date.asString(),
@@ -148,6 +151,7 @@ export class ResponseModelConverter {
   private static convertFullAdmission (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft): FullAdmissionResponse {
     return {
       responseType: ResponseType.FULL_ADMISSION,
+      responseMethod: ResponseMethod.DIGITAL,
       freeMediation: FreeMediationUtil.getFreeMediation(mediationDraft),
       mediationPhoneNumber: FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft, draft),
       mediationContactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft, draft),
@@ -168,6 +172,7 @@ export class ResponseModelConverter {
 
     return {
       responseType: ResponseType.PART_ADMISSION,
+      responseMethod: ResponseMethod.DIGITAL,
       amount: amount,
       paymentDeclaration: draft.partialAdmission.howMuchHaveYouPaid.date
         && draft.partialAdmission.howMuchHaveYouPaid.text
@@ -311,6 +316,15 @@ export class ResponseModelConverter {
         if ((defendant.partyDetails as IndividualDetails).dateOfBirth) {
           (party as Individual).dateOfBirth = (defendant.partyDetails as IndividualDetails).dateOfBirth.date.asString()
         }
+        if ((defendant.partyDetails as IndividualDetails).title) {
+          (party as Individual).title = (defendant.partyDetails as IndividualDetails).title
+        }
+        if ((defendant.partyDetails as IndividualDetails).firstName) {
+          (party as Individual).firstName = (defendant.partyDetails as IndividualDetails).firstName
+        }
+        if ((defendant.partyDetails as IndividualDetails).lastName) {
+          (party as Individual).lastName = (defendant.partyDetails as IndividualDetails).lastName
+        }
         break
       case PartyType.COMPANY.value:
         party = new Company()
@@ -329,6 +343,16 @@ export class ResponseModelConverter {
         if ((defendant.partyDetails as SoleTraderDetails).businessName) {
           (party as SoleTrader).businessName = (defendant.partyDetails as SoleTraderDetails).businessName
         }
+
+        if ((defendant.partyDetails as SoleTraderDetails).title) {
+          (party as SoleTrader).title = (defendant.partyDetails as SoleTraderDetails).title
+        }
+        if ((defendant.partyDetails as SoleTraderDetails).firstName) {
+          (party as SoleTrader).firstName = (defendant.partyDetails as SoleTraderDetails).firstName
+        }
+        if ((defendant.partyDetails as SoleTraderDetails).lastName) {
+          (party as SoleTrader).lastName = (defendant.partyDetails as SoleTraderDetails).lastName
+        }
         break
     }
     party.address = new Address().deserialize(defendant.partyDetails.address)
@@ -338,11 +362,12 @@ export class ResponseModelConverter {
     if (defendant.partyDetails.name) {
       party.name = defendant.partyDetails.name
     }
+
     if (defendant.email) {
       party.email = defendant.email.address
     }
-    if (defendant.mobilePhone) {
-      party.mobilePhone = defendant.mobilePhone.number
+    if (defendant.phone) {
+      party.phone = defendant.phone.number
     }
     return party
   }

@@ -1,45 +1,171 @@
-tags:
-  - rpe-feature-toggle-api-pod
-  - idam-pr
-
 postgresql:
-  enabled: true # for rpe-feature-toggle-api
-
-rpe-feature-toggle-api:
-  java:
-    releaseNameOverride: ${SERVICE_NAME}-java
-    postgresql:
-      image:
-        tag: '11.3.0'
-  importer:
-    apiUrl: http://${SERVICE_NAME}-java/api/ff4j/store/features/
-    kvSecretRef: kvcreds
-    cron:
-      enabled: false
-    oneoff:
-      command: /scripts/add-weighted-toggle.sh cmc_admissions 'CMC admissions' '1.0' &&
-        /scripts/add-weighted-toggle.sh cmc_directions_questionnaire 'CMC Directions Questionnaire' '1.0' &&
-        /scripts/add-weighted-toggle.sh cmc_mediation_pilot 'CMC Mediation Pilot' '1.0' &&
-        /scripts/add-toggle.sh cmc_defence_reminders 'CMC defence reminders' false
-      enabled: true
-      permissions: cmc-new-features-consent-given
+  enabled: true
+  image:
+    tag: '11.3.0'
+  resources:
+    requests:
+      cpu: 25m
+  initdbScripts:
+    init.sql: |-
+      CREATE DATABASE cmc WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
+      CREATE DATABASE "claimstore" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
+      CREATE DATABASE "data-store" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
+      CREATE DATABASE "definition-store" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
+      CREATE DATABASE "user-profile" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
+  postgresqlUsername: hmcts
+  postgresqlPassword: hmcts
+  persistence:
+    enabled: false
 
 nodejs:
   image: ${IMAGE_NAME}
+  ingressIP: ${INGRESS_IP}
+  consulIP: ${CONSUL_LB_IP}
   ingressHost: ${SERVICE_FQDN}
+  readinessDelay: 90  # claim-store will start much slower
+  livenessDelay: 90  # claim-store will start much slower
   environment:
     LOG_LEVEL: DEBUG
     HTTP_TIMEOUT: 60000
-    FEATURE_TOGGLES_API_URL: http://${SERVICE_NAME}-java
-    IDAM_API_URL: https://idam-api.aat.platform.hmcts.net
-    IDAM_AUTHENTICATION_WEB_URL: https://idam-web-public.aat.platform.hmcts.net
-    IDAM_S2S_AUTH: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
-    PAY_URL: http://payment-api-aat.service.core-compute-aat.internal
-    FEES_URL: http://fees-register-api-aat.service.core-compute-aat.internal
-    CLAIM_STORE_URL: http://cmc-claim-store-aat.service.core-compute-aat.internal
-    DRAFT_STORE_URL: http://draft-store-service-aat.service.core-compute-aat.internal
+    FEATURE_TOGGLES_API_URL: http://${SERVICE_NAME}-ftr-tgl
+    CLAIM_STORE_URL: http://${SERVICE_NAME}-claim-store
+    PAY_RETURN_URL: https://${SERVICE_FQDN}
+
+    # config to make non prod testing easier
+    FEATURE_TESTING_SUPPORT: true
+    FEATURE_RETURN_ERROR_TO_USER: true
+    # features
+    FEATURE_FINE_PRINT: true
+    FEATURE_NEW_DASHBOARD_STATUS: false
+    FEATURE_WEB_CHAT: true
+
+# sub-charts configuration
 
 idam-pr:
+  enabled: true
   redirect_uris:
     Money Claims - Citizen:
       - https://${SERVICE_FQDN}/receiver
+
+cmc-claim-store:
+  enabled: true
+  java:
+    image: hmctspublic.azurecr.io/cmc/claim-store:latest
+    releaseNameOverride: ${SERVICE_NAME}-claim-store
+    ingressHost: claim-store-${SERVICE_FQDN}
+    imagePullPolicy: Always
+    readinessDelay: 250  # ccd-stack will start much slower
+    livenessDelay:  250  # ccd-stack will start much slower
+    keyVaults:
+      cmc:
+        resourceGroup: cmc
+        secrets:
+          - AppInsightsInstrumentationKey
+          - citizen-oauth-client-secret
+          - claim-store-s2s-secret
+          - anonymous-caseworker-username
+          - anonymous-caseworker-password
+          - system-update-username
+          - system-update-password
+          - notify-api-key
+          - milo-recipient
+          - staff-email
+          - live-support-email
+          - rpa-email-sealed-claim
+          - rpa-email-more-time-requested
+          - rpa-email-response
+          - rpa-email-ccj
+          - rpa-email-paid-in-full
+    environment:
+      LOG_LEVEL: DEBUG
+      DOC_ASSEMBLY_URL: http://dg-docassembly-aat.service.core-compute-aat.internal
+      FRONTEND_BASE_URL: https://${SERVICE_FQDN}
+      RESPOND_TO_CLAIM_URL: https://${SERVICE_FQDN}/first-contact/start
+      CMC_DB_HOST: ${SERVICE_NAME}-postgresql
+      CMC_DB_USERNAME: hmcts
+      CMC_DB_PASSWORD: hmcts
+      CMC_DB_CONNECTION_OPTIONS: ''
+      CORE_CASE_DATA_API_URL: http://${SERVICE_NAME}-ccd-data-store-api
+
+ccd:
+  enabled: true
+  ccd:
+    s2s:
+      enabled: false
+    postgresql:
+      enabled: false
+    adminWeb:
+      enabled: true
+
+  ingressHost: ${SERVICE_FQDN}
+  ingressIP: ${INGRESS_IP}
+  consulIP: ${CONSUL_LB_IP}
+
+  global:
+    idamApiUrl: https://idam-api.aat.platform.hmcts.net
+    idamWebUrl: https://idam-web-public.aat.platform.hmcts.net
+    s2sUrl: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
+    ccdAdminWebIngress: ccd-admin-web-${SERVICE_FQDN}
+    ccdDefinitionStoreUrl: http://${SERVICE_NAME}-ccd-definition-store
+    ccdUserProfileUrl: http://${SERVICE_NAME}-ccd-user-profile-api
+    postgresUsername: hmcts
+    postgresPassword: hmcts
+    devMode: true
+
+  ccd-admin-web:
+    nodejs:
+      image: hmctspublic.azurecr.io/ccd/admin-web:latest
+      ingressHost: ccd-admin-web-${SERVICE_FQDN}
+      keyVaults:
+      environment:
+        IDAM_OAUTH2_AW_CLIENT_SECRET: ${ADMIN_WEB_IDAM_SECRET}
+    idam-pr:
+      enabled: true
+
+  ccd-user-profile-api:
+    java:
+      image: hmctspublic.azurecr.io/ccd/user-profile-api:latest
+      keyVaults:
+      environment:
+        USER_PROFILE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_definition,ccd_admin,cmc_claim_store
+
+  ccd-definition-store-api:
+    java:
+      image: hmctspublic.azurecr.io/ccd/definition-store-api:latest
+      imagePullPolicy: Always
+      keyVaults:
+      environment:
+        DEFINITION_STORE_IDAM_KEY: ${DEFINITION_STORE_S2S_KEY}
+        DEFINITION_STORE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_gw,ccd_admin,cmc_claim_store
+        IDAM_USER_URL: https://idam-web-public.aat.platform.hmcts.net
+        OIDC_ISSUER: https://forgerock-am.service.core-compute-idam-aat.internal:8443/openam/oauth2/hmcts
+
+  ccd-data-store-api:
+    java:
+      image: hmctspublic.azurecr.io/ccd/data-store-api:latest
+      keyVaults:
+      environment:
+        DATA_STORE_IDAM_KEY: ${DATA_STORE_S2S_KEY}
+
+  ccd-user-profile-importer:
+    image: hmctspublic.azurecr.io/ccd/user-profile-importer:db2r9a
+    users:
+      - civilmoneyclaims+ccd@gmail.com|CMC|MoneyClaimCase|open
+      - civilmoneyclaims+judge@gmail.com|CMC|MoneyClaimCase|orderForJudgeReview
+      - civilmoneyclaims+la@gmail.com|CMC|MoneyClaimCase|readyForDirections
+
+  ccd-definition-importer:
+    image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.6.1
+    environment:
+      CCD_DEF_CLAIM_STORE_BASE_URL: http://${SERVICE_NAME}-claim-store
+    definitionFilename: cmc-ccd.xlsx
+    userRoles:
+      - citizen
+      - caseworker-cmc
+      - caseworker-cmc-solicitor
+      - caseworker-cmc-systemupdate
+      - letter-holder
+      - caseworker-autotest1
+      - caseworker-cmc-anonymouscitizen
+      - caseworker-cmc-judge
+      - caseworker-cmc-legaladvisor

@@ -57,19 +57,6 @@ const testData = [
       'You can still respond to this claim before they ask for a CCJ.']
   },
   {
-    status: 'CCJ - full admission, pay immediately, past deadline',
-    claim: fullAdmissionClaim,
-    claimOverride: {
-      response: { ...fullAdmissionClaim.response, paymentIntention: {
-        paymentOption: PaymentOption.IMMEDIATELY,
-        paymentDate: MomentFactory.currentDate().subtract(5, 'days')
-      } },
-      responseDeadline: MomentFactory.currentDate().subtract(16, 'days')
-    },
-    claimantAssertions: ['000MC000', 'The defendant admits they owe all the money. They’ve said that they will pay immediately.'],
-    defendantAssertions: ['000MC000', 'You’ve admitted all of the claim and said you’ll pay the full amount immediately.']
-  },
-  {
     status: 'CCJ - full admission, pay immediately, past deadline - claimant requests CCJ',
     claim: fullAdmissionClaim,
     claimOverride: {
@@ -82,7 +69,7 @@ const testData = [
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       responseDeadline: MomentFactory.currentDate().subtract(16, 'days')
     },
-    claimantAssertions: ['000MC000', 'You requested a County Court Judgment on '],
+    claimantAssertions: ['000MC000', 'Wait for the judgment to be confirmed'],
     defendantAssertions: ['000MC000', 'The claimant has requested a County Court Judgment (CCJ) against you on']
   },
   {
@@ -182,7 +169,7 @@ const testData = [
           paymentOption: 'BY_SPECIFIED_DATE'
         }
       },
-      countyCourtJudgment: { ...ccjDeterminationBySpecifiedDate },
+      countyCourtJudgment: { ...ccjDeterminationBySpecifiedDate() },
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...fullAdmissionClaim.response, ...basePayBySetDateData }
     },
@@ -204,7 +191,7 @@ const testData = [
           paymentOption: 'BY_SPECIFIED_DATE'
         }
       },
-      countyCourtJudgment: { ...ccjDeterminationBySpecifiedDate },
+      countyCourtJudgment: { ...ccjDeterminationBySpecifiedDate() },
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...partialAdmissionWithSoMPaymentBySetDateData }
     },
@@ -273,7 +260,7 @@ const testData = [
     claimOverride: {
       settlement: claimStoreServiceMock.partySettlementWithSetDateAndAcceptation,
       claimantResponse: { type: 'ACCEPTATION', formaliseOption: 'SETTLEMENT' },
-      countyCourtJudgment: { ...ccjDeterminationBySpecifiedDate },
+      countyCourtJudgment: { ...ccjDeterminationBySpecifiedDate() },
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData }
     },
@@ -297,7 +284,7 @@ const testData = [
           paymentOption: 'BY_SPECIFIED_DATE'
         }
       },
-      countyCourtJudgment: { ...ccjAdmissionBySpecifiedDate },
+      countyCourtJudgment: { ...ccjAdmissionBySpecifiedDate() },
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData }
     },
@@ -320,7 +307,7 @@ const testData = [
           paymentOption: 'BY_SPECIFIED_DATE'
         }
       },
-      countyCourtJudgment: { ...ccjAdmissionBySpecifiedDate },
+      countyCourtJudgment: { ...ccjAdmissionBySpecifiedDate() },
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData }
     },
@@ -344,7 +331,7 @@ const testData = [
           paymentOption: 'BY_SPECIFIED_DATE'
         }
       },
-      countyCourtJudgment: { ...ccjAdmissionBySpecifiedDate },
+      countyCourtJudgment: { ...ccjAdmissionBySpecifiedDate() },
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData }
     },
@@ -367,7 +354,7 @@ const testData = [
           paymentOption: 'BY_SPECIFIED_DATE'
         }
       },
-      countyCourtJudgment: { ...ccjAdmissionBySpecifiedDate },
+      countyCourtJudgment: { ...ccjAdmissionBySpecifiedDate() },
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData }
     },
@@ -390,7 +377,7 @@ const testData = [
           paymentOption: 'BY_SPECIFIED_DATE'
         }
       },
-      countyCourtJudgment: { ...ccjAdmissionBySpecifiedDate },
+      countyCourtJudgment: { ...ccjAdmissionBySpecifiedDate() },
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...partialAdmissionWithSoMPaymentBySetDateData }
     },
@@ -413,7 +400,7 @@ const testData = [
           paymentOption: 'BY_SPECIFIED_DATE'
         }
       },
-      countyCourtJudgment: { ...ccjAdmissionBySpecifiedDate },
+      countyCourtJudgment: { ...ccjAdmissionBySpecifiedDate() },
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...partialAdmissionWithSoMPaymentBySetDateData }
     },
@@ -429,7 +416,7 @@ const testData = [
         type: 'ACCEPTATION',
         formaliseOption: 'SETTLEMENT'
       },
-      countyCourtJudgment: { ...ccjAdmissionBySpecifiedDate },
+      countyCourtJudgment: { ...ccjAdmissionBySpecifiedDate() },
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...partialAdmissionWithSoMPaymentBySetDateData }
     },

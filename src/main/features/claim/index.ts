@@ -33,7 +33,8 @@ export class Feature {
     app.all(/^\/claim\/(?!start|amount-exceeded|new-features-consent|.+\/confirmation|.+\/receipt|.+\/sealed-claim).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'claim', 100, (value: any): DraftClaim => {
         return new DraftClaim().deserialize(value)
-      }),
+      }))
+    app.all(/^\/claim\/(?!start|amount-exceeded|new-features-consent|.+\/confirmation|.+\/receipt|.+\/sealed-claim|.+\/finish-payment|.+\/document).*$/,
       ClaimEligibilityGuard.requestHandler()
     )
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))

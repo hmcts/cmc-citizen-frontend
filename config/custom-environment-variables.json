@@ -43,7 +43,8 @@
     }
   },
   "pay": {
-    "url": "PAY_URL"
+    "url": "PAY_URL",
+    "return-url": "PAY_RETURN_URL"
   },
   "eligibility": {
     "cookie": {
@@ -77,7 +78,9 @@
     "mediation": "FEATURE_MEDIATION",
     "mediationPilot": "FEATURE_MEDIATION_PILOT",
     "directionsQuestionnaire": "FEATURE_DIRECTIONS_QUESTIONNAIRE",
-    "newDashboardStatus": "FEATURE_NEW_DASHBOARD_STATUS"
+    "newDashboardStatus": "FEATURE_NEW_DASHBOARD_STATUS",
+    "webChat": "FEATURE_WEB_CHAT",
+    "inversionOfControl": "FEATURE_INVERSION_OF_CONTROL"
   },
 
   "oauth": {
@@ -97,7 +100,16 @@
       "citizen-oauth-client-secret": "OAUTH_CLIENT_SECRET",
       "os-postcode-lookup-api-key": "POSTCODE_LOOKUP_API_KEY",
       "encryptionKey": "COOKIE_ENCRYPTION_KEY",
-      "AppInsightsInstrumentationKey":"APPINSIGHTS_INSTRUMENTATIONKEY"
+      "AppInsightsInstrumentationKey":"APPINSIGHTS_INSTRUMENTATIONKEY",
+      "launchDarkly-sdk-key": "LAUNCH_DARKLY_SDK_KEY",
+      "cmc-webchat-id": "WEBCHAT_CHAT_ID",
+      "cmc-webchat-tenant": "WEBCHAT_TENANT",
+      "cmc-webchat-button-no-agents": "WEBCHAT_BUTTON_NO_AGENTS",
+      "cmc-webchat-button-agents-busy": "WEBCHAT_BUTTON_AGENTS_BUSY",
+      "cmc-webchat-button-service-closed": "WEBCHAT_BUTTON_SERVICE_CLOSED"
     }
+  },
+  "launchDarkly": {
+    "offline": "LAUNCH_DARKLY_OFFLINE_MODE"
   }
 }

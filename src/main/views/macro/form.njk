@@ -13,7 +13,7 @@
     <input id="{{ name }}" name="{{ name }}" type="{{ type }}" autocomplete="{{ autocomplete | default('on') }}"
            class="form-control {{ inputClass }} {% if error %}form-control-error{% endif %}"
            {% if maxLength %}maxlength="{{ maxLength }}"{% endif %}
-           value="{{ (form.rawDataFor(name) if error else form.valueFor(name)) | default('') }}">
+             value="{{ (form.rawDataFor(name) if error else form.valueFor(name)) | default('') }}">
   </div>
 {% endmacro %}
 
@@ -166,12 +166,12 @@
            {% if checked %}checked{% endif %}>
     <label for="{{ idValue }}">
       {% if hint == '' %}
-        {{ t(label) }}
+        {{ t(label) | safe }}
       {% else %}
         {% if bold %}
-          <strong class="bold-small">{{ t(label) }}</strong>
+          <strong class="bold-small">{{ t(label) | safe }}</strong>
         {% else %}
-          {{ t(label) }}
+          {{ t(label) | safe }}
         {% endif %}
         <br>
         <span {% if greyHint != false %}class="form-hint"{% endif %}>{{ t(hint) }}</span>
@@ -382,6 +382,7 @@
           </div>
         </details>
         {% endif %}
+      </details>
     </fieldset>
   </div>
 {% endmacro %}

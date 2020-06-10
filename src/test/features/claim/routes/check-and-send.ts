@@ -1,6 +1,7 @@
 import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
+import * as toBoolean from 'to-boolean'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
@@ -68,7 +69,16 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('Should validate check-and-send Page hyperlink with correct location and span', async () => {
-        draftStoreServiceMock.resolveFind('claim',{ claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: individualDetails } , defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: defendantIndividualDetails } })
+        draftStoreServiceMock.resolveFind('claim', {
+          claimant: {
+            ...draftStoreServiceMock.sampleClaimDraftObj.claimant,
+            partyDetails: individualDetails
+          },
+          defendant: {
+            ...draftStoreServiceMock.sampleClaimDraftObj.defendant,
+            partyDetails: defendantIndividualDetails
+          }
+        })
         feesServiceMock.resolveCalculateIssueFee()
 
         await request(app)
@@ -76,11 +86,9 @@ describe('Claim issue: check and send page', () => {
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('Check your answers'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/claimant-individual-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
-          .expect(res => expect(res).to.be.successful.withText('<a href="/claim/claimant-individual-details" class="bold">Change <span class="visuallyhidden">address</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/claimant-dob" class="bold">Change <span class="visuallyhidden">date of birth</span></a>'))
-          .expect(res => expect(res).to.be.successful.withText('<a href="/claim/claimant-mobile" class="bold">Change <span class="visuallyhidden">contact number (optional)</span></a>'))
+          .expect(res => expect(res).to.be.successful.withText('<a href="/claim/claimant-phone" class="bold">Change <span class="visuallyhidden">contact number (optional)</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-individual-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
-          .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-individual-details" class="bold">Change <span class="visuallyhidden">address</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-email" class="bold">Change <span class="visuallyhidden">email</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/amount" class="bold">Change <span class="visuallyhidden">claim amount breakdown</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/interest" class="bold">Change <span class="visuallyhidden">claim interest</span></a>'))
@@ -89,25 +97,30 @@ describe('Claim issue: check and send page', () => {
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/reason" class="bold">Change <span class="visuallyhidden">why you believe you’re owed the money:</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/timeline" class="bold">Change <span class="visuallyhidden">timeline of what happened</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/evidence" class="bold">Change <span class="visuallyhidden">your evidence (optional)</span></a>'))
-          .expect(res => expect(res).to.be.successful.withText('Statement of truth','I believe that the facts stated in this claim are true.'))
+          .expect(res => expect(res).to.be.successful.withText('Statement of truth', 'I believe that the facts stated in this claim are true.','I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.'))
           .expect(res => expect(res).to.be.successful.withText('input id="signedtrue" type="checkbox" name="signed" value="true"'))
           .expect(res => expect(res).to.be.successful.withText('input type="submit" class="button"'))
       })
 
       it('Should validate that a claim made by individual against soleTrader and their details', async () => {
         draftStoreServiceMock.resolveFind('claim',
-          { defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: defendantSoleTraderDetails } })
+          {
+            defendant: {
+              ...draftStoreServiceMock.sampleClaimDraftObj.defendant,
+              partyDetails: defendantSoleTraderDetails
+            }
+          })
         feesServiceMock.resolveCalculateIssueFee()
 
         await request(app)
           .get(ClaimPaths.checkAndSendPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/claimant-individual-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
-          .expect(res => expect(res).to.be.successful.withText('Full name','John Smith'))
-          .expect(res => expect(res).to.be.successful.withText('Statement of truth','I believe that the facts stated in this claim are true.'))
+          .expect(res => expect(res).to.be.successful.withText('Full name', 'John Smith'))
+          .expect(res => expect(res).to.be.successful.withText('Statement of truth', 'I believe that the facts stated in this claim are true.', 'I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.'))
           .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-sole-trader-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
-          .expect(res => expect(res).to.be.successful.withText('Business name','Trading as Defendant SoleTrader Ltd.'))
+          .expect(res => expect(res).to.be.successful.withText('Business name', 'Trading as Defendant SoleTrader Ltd.'))
       })
 
       it('Should validate that a claim made by individual against company and their details.', async () => {
@@ -119,8 +132,8 @@ describe('Claim issue: check and send page', () => {
           .get(ClaimPaths.checkAndSendPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/claimant-individual-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
-          .expect(res => expect(res).to.be.successful.withText('Full name','John Smith'))
-          .expect(res => expect(res).to.be.successful.withText('Statement of truth','I believe that the facts stated in this claim are true.'))
+          .expect(res => expect(res).to.be.successful.withText('Full name', 'John Smith'))
+          .expect(res => expect(res).to.be.successful.withText('Statement of truth', 'I believe that the facts stated in this claim are true.', 'I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.'))
           .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-company-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Company Ltd.'))
@@ -137,8 +150,8 @@ describe('Claim issue: check and send page', () => {
           .get(ClaimPaths.checkAndSendPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/claimant-individual-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
-          .expect(res => expect(res).to.be.successful.withText('Full name','John Smith'))
-          .expect(res => expect(res).to.be.successful.withText('Statement of truth','I believe that the facts stated in this claim are true.'))
+          .expect(res => expect(res).to.be.successful.withText('Full name', 'John Smith'))
+          .expect(res => expect(res).to.be.successful.withText('Statement of truth', 'I believe that the facts stated in this claim are true.', 'I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.'))
           .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-organisation-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Organisation.'))
@@ -147,15 +160,24 @@ describe('Claim issue: check and send page', () => {
 
       it('Should validate that a claim made by soleTrader against soleTrader and their details', async () => {
         draftStoreServiceMock.resolveFind('claim',
-          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: claimantSoleTraderDetails }, defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: defendantSoleTraderDetails } })
+          {
+            claimant: {
+              ...draftStoreServiceMock.sampleClaimDraftObj.claimant,
+              partyDetails: claimantSoleTraderDetails
+            },
+            defendant: {
+              ...draftStoreServiceMock.sampleClaimDraftObj.defendant,
+              partyDetails: defendantSoleTraderDetails
+            }
+          })
         feesServiceMock.resolveCalculateIssueFee()
 
         await request(app)
           .get(ClaimPaths.checkAndSendPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/claimant-sole-trader-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
-          .expect(res => expect(res).to.be.successful.withText('Business name','Trading as Claimant SoleTrader Ltd.'))
-          .expect(res => expect(res).to.be.successful.withText('Statement of truth','I believe that the facts stated in this claim are true.'))
+          .expect(res => expect(res).to.be.successful.withText('Business name', 'Trading as Claimant SoleTrader Ltd.'))
+          .expect(res => expect(res).to.be.successful.withText('Statement of truth', 'I believe that the facts stated in this claim are true.', 'I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.'))
           .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-sole-trader-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Trading as Defendant SoleTrader Ltd.'))
@@ -163,15 +185,20 @@ describe('Claim issue: check and send page', () => {
 
       it('Should validate that a claim made by soleTrader against individual and their details', async () => {
         draftStoreServiceMock.resolveFind('claim',
-          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: claimantSoleTraderDetails } })
+          {
+            claimant: {
+              ...draftStoreServiceMock.sampleClaimDraftObj.claimant,
+              partyDetails: claimantSoleTraderDetails
+            }
+          })
         feesServiceMock.resolveCalculateIssueFee()
 
         await request(app)
           .get(ClaimPaths.checkAndSendPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/claimant-sole-trader-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
-          .expect(res => expect(res).to.be.successful.withText('Business name','Trading as Claimant SoleTrader Ltd.'))
-          .expect(res => expect(res).to.be.successful.withText('Statement of truth','I believe that the facts stated in this claim are true.'))
+          .expect(res => expect(res).to.be.successful.withText('Business name', 'Trading as Claimant SoleTrader Ltd.'))
+          .expect(res => expect(res).to.be.successful.withText('Statement of truth', 'I believe that the facts stated in this claim are true.', 'I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.'))
           .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-individual-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Full name'))
@@ -180,15 +207,23 @@ describe('Claim issue: check and send page', () => {
 
       it('Should validate that a claim made by soleTrader against company and their details', async () => {
         draftStoreServiceMock.resolveFind('claim',
-          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: claimantSoleTraderDetails }, defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: companyDetails } })
+          {
+            claimant: {
+              ...draftStoreServiceMock.sampleClaimDraftObj.claimant,
+              partyDetails: claimantSoleTraderDetails
+            }, defendant: {
+              ...draftStoreServiceMock.sampleClaimDraftObj.defendant,
+              partyDetails: companyDetails
+            }
+          })
         feesServiceMock.resolveCalculateIssueFee()
 
         await request(app)
           .get(ClaimPaths.checkAndSendPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/claimant-sole-trader-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
-          .expect(res => expect(res).to.be.successful.withText('Business name','Trading as Claimant SoleTrader Ltd.'))
-          .expect(res => expect(res).to.be.successful.withText('Statement of truth','I believe that the facts stated in this claim are true.'))
+          .expect(res => expect(res).to.be.successful.withText('Business name', 'Trading as Claimant SoleTrader Ltd.'))
+          .expect(res => expect(res).to.be.successful.withText('Statement of truth', 'I believe that the facts stated in this claim are true.', 'I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.'))
           .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-company-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Company Ltd.'))
@@ -196,15 +231,20 @@ describe('Claim issue: check and send page', () => {
 
       it('Should validate that a claim made by soleTrader against organisation and their details', async () => {
         draftStoreServiceMock.resolveFind('claim',
-          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: claimantSoleTraderDetails }, defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: organisationDetails } })
+          {
+            claimant: {
+              ...draftStoreServiceMock.sampleClaimDraftObj.claimant,
+              partyDetails: claimantSoleTraderDetails
+            }, defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: organisationDetails }
+          })
         feesServiceMock.resolveCalculateIssueFee()
 
         await request(app)
           .get(ClaimPaths.checkAndSendPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/claimant-sole-trader-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
-          .expect(res => expect(res).to.be.successful.withText('Business name','Trading as Claimant SoleTrader Ltd.'))
-          .expect(res => expect(res).to.be.successful.withText('Statement of truth','I believe that the facts stated in this claim are true.'))
+          .expect(res => expect(res).to.be.successful.withText('Business name', 'Trading as Claimant SoleTrader Ltd.'))
+          .expect(res => expect(res).to.be.successful.withText('Statement of truth', 'I believe that the facts stated in this claim are true.', 'I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.'))
           .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-organisation-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Organisation.'))
@@ -214,7 +254,10 @@ describe('Claim issue: check and send page', () => {
 
       it('Should validate that a claim made by company against company and their details', async () => {
         draftStoreServiceMock.resolveFind('claim',
-          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: companyDetails }, defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: companyDetails } })
+          {
+            claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: companyDetails },
+            defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: companyDetails }
+          })
         feesServiceMock.resolveCalculateIssueFee()
 
         await request(app)
@@ -222,8 +265,8 @@ describe('Claim issue: check and send page', () => {
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/claimant-company-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Company Ltd.'))
-          .expect(res => expect(res).to.be.successful.withText('<input id="signerName" name="signerName"','<input id="signerRole" name="signerRole"'))
-          .expect(res => expect(res).to.be.successful.withText('Statement of truth','I believe that the facts stated in this claim are true.'))
+          .expect(res => expect(res).to.be.successful.withText('<input id="signerName" name="signerName"', '<input id="signerRole" name="signerRole"'))
+          .expect(res => expect(res).to.be.successful.withText('Statement of truth', 'I believe that the facts stated in this claim are true.', 'I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.'))
           .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-company-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Company Ltd.'))
@@ -241,8 +284,8 @@ describe('Claim issue: check and send page', () => {
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/claimant-company-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Company Ltd.'))
-          .expect(res => expect(res).to.be.successful.withText('<input id="signerName" name="signerName"','<input id="signerRole" name="signerRole"'))
-          .expect(res => expect(res).to.be.successful.withText('Statement of truth','I believe that the facts stated in this claim are true.'))
+          .expect(res => expect(res).to.be.successful.withText('<input id="signerName" name="signerName"', '<input id="signerRole" name="signerRole"'))
+          .expect(res => expect(res).to.be.successful.withText('Statement of truth', 'I believe that the facts stated in this claim are true.', 'I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.'))
           .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-individual-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Full name'))
@@ -252,7 +295,13 @@ describe('Claim issue: check and send page', () => {
 
       it('Should validate that a claim made by company against soleTrader and their details', async () => {
         draftStoreServiceMock.resolveFind('claim',
-          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: companyDetails }, defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: defendantSoleTraderDetails } })
+          {
+            claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: companyDetails },
+            defendant: {
+              ...draftStoreServiceMock.sampleClaimDraftObj.defendant,
+              partyDetails: defendantSoleTraderDetails
+            }
+          })
         feesServiceMock.resolveCalculateIssueFee()
 
         await request(app)
@@ -260,8 +309,8 @@ describe('Claim issue: check and send page', () => {
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/claimant-company-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Company Ltd.'))
-          .expect(res => expect(res).to.be.successful.withText('<input id="signerName" name="signerName"','<input id="signerRole" name="signerRole"'))
-          .expect(res => expect(res).to.be.successful.withText('Statement of truth','I believe that the facts stated in this claim are true.'))
+          .expect(res => expect(res).to.be.successful.withText('<input id="signerName" name="signerName"', '<input id="signerRole" name="signerRole"'))
+          .expect(res => expect(res).to.be.successful.withText('Statement of truth', 'I believe that the facts stated in this claim are true.', 'I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.'))
           .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-sole-trader-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Business name'))
@@ -270,7 +319,10 @@ describe('Claim issue: check and send page', () => {
 
       it('Should validate that a claim made by company against organisation and their details', async () => {
         draftStoreServiceMock.resolveFind('claim',
-          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: companyDetails }, defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: organisationDetails } })
+          {
+            claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: companyDetails },
+            defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: organisationDetails }
+          })
         feesServiceMock.resolveCalculateIssueFee()
 
         await request(app)
@@ -278,8 +330,8 @@ describe('Claim issue: check and send page', () => {
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/claimant-company-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Company Ltd.'))
-          .expect(res => expect(res).to.be.successful.withText('<input id="signerName" name="signerName"','<input id="signerRole" name="signerRole"'))
-          .expect(res => expect(res).to.be.successful.withText('Statement of truth','I believe that the facts stated in this claim are true.'))
+          .expect(res => expect(res).to.be.successful.withText('<input id="signerName" name="signerName"', '<input id="signerRole" name="signerRole"'))
+          .expect(res => expect(res).to.be.successful.withText('Statement of truth', 'I believe that the facts stated in this claim are true.', 'I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.'))
           .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-organisation-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Organisation.'))
@@ -288,7 +340,10 @@ describe('Claim issue: check and send page', () => {
 
       it('Should validate that a claim made by organisation against organisation and their details', async () => {
         draftStoreServiceMock.resolveFind('claim',
-          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: organisationDetails }, defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: organisationDetails } })
+          {
+            claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: organisationDetails },
+            defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: organisationDetails }
+          })
         feesServiceMock.resolveCalculateIssueFee()
 
         await request(app)
@@ -296,8 +351,8 @@ describe('Claim issue: check and send page', () => {
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/claimant-organisation-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Organisation.'))
-          .expect(res => expect(res).to.be.successful.withText('<input id="signerName" name="signerName"','<input id="signerRole" name="signerRole"'))
-          .expect(res => expect(res).to.be.successful.withText('Statement of truth','I believe that the facts stated in this claim are true.'))
+          .expect(res => expect(res).to.be.successful.withText('<input id="signerName" name="signerName"', '<input id="signerRole" name="signerRole"'))
+          .expect(res => expect(res).to.be.successful.withText('Statement of truth', 'I believe that the facts stated in this claim are true.', 'I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.'))
           .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-organisation-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Organisation.'))
@@ -314,8 +369,8 @@ describe('Claim issue: check and send page', () => {
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/claimant-organisation-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Organisation.'))
-          .expect(res => expect(res).to.be.successful.withText('<input id="signerName" name="signerName"','<input id="signerRole" name="signerRole"'))
-          .expect(res => expect(res).to.be.successful.withText('Statement of truth','I believe that the facts stated in this claim are true.'))
+          .expect(res => expect(res).to.be.successful.withText('<input id="signerName" name="signerName"', '<input id="signerRole" name="signerRole"'))
+          .expect(res => expect(res).to.be.successful.withText('Statement of truth', 'I believe that the facts stated in this claim are true.', 'I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.'))
           .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-individual-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Full name'))
@@ -325,7 +380,13 @@ describe('Claim issue: check and send page', () => {
 
       it('Should validate that a claim made by organisation against soleTrader and their details', async () => {
         draftStoreServiceMock.resolveFind('claim',
-          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: organisationDetails }, defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: defendantSoleTraderDetails } })
+          {
+            claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: organisationDetails },
+            defendant: {
+              ...draftStoreServiceMock.sampleClaimDraftObj.defendant,
+              partyDetails: defendantSoleTraderDetails
+            }
+          })
         feesServiceMock.resolveCalculateIssueFee()
 
         await request(app)
@@ -333,8 +394,8 @@ describe('Claim issue: check and send page', () => {
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/claimant-organisation-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Organisation.'))
-          .expect(res => expect(res).to.be.successful.withText('<input id="signerName" name="signerName"','<input id="signerRole" name="signerRole"'))
-          .expect(res => expect(res).to.be.successful.withText('Statement of truth','I believe that the facts stated in this claim are true.'))
+          .expect(res => expect(res).to.be.successful.withText('<input id="signerName" name="signerName"', '<input id="signerRole" name="signerRole"'))
+          .expect(res => expect(res).to.be.successful.withText('Statement of truth', 'I believe that the facts stated in this claim are true.', 'I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.'))
           .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-sole-trader-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Business name'))
@@ -343,7 +404,10 @@ describe('Claim issue: check and send page', () => {
 
       it('Should validate that a claim made by organisation against company and their details', async () => {
         draftStoreServiceMock.resolveFind('claim',
-          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: organisationDetails }, defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: companyDetails } })
+          {
+            claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: organisationDetails },
+            defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: companyDetails }
+          })
         feesServiceMock.resolveCalculateIssueFee()
 
         await request(app)
@@ -351,8 +415,8 @@ describe('Claim issue: check and send page', () => {
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/claimant-organisation-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Organisation.'))
-          .expect(res => expect(res).to.be.successful.withText('<input id="signerName" name="signerName"','<input id="signerRole" name="signerRole"'))
-          .expect(res => expect(res).to.be.successful.withText('Statement of truth','I believe that the facts stated in this claim are true.'))
+          .expect(res => expect(res).to.be.successful.withText('<input id="signerName" name="signerName"', '<input id="signerRole" name="signerRole"'))
+          .expect(res => expect(res).to.be.successful.withText('Statement of truth', 'I believe that the facts stated in this claim are true.', 'I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.'))
           .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-company-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Company Ltd.'))
@@ -405,13 +469,16 @@ describe('Claim issue: check and send page', () => {
 
       it('should redirect to payment page when form is valid and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
-
+        let nextPage: string = ClaimPaths.startPaymentReceiver.uri
+        if (toBoolean(config.get('featureToggles.inversionOfControl'))) {
+          nextPage = ClaimPaths.initiatePaymentController.uri
+        }
         await request(app)
           .post(ClaimPaths.checkAndSendPage.uri)
           .send({ type: SignatureType.BASIC })
           .set('Cookie', `${cookieName}=ABC`)
           .send({ signed: 'true' })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPaymentReceiver.uri))
+          .expect(res => expect(res).to.be.redirect.toLocation(nextPage))
       })
     })
   })

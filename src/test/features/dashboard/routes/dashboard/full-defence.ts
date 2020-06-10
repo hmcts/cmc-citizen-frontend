@@ -19,203 +19,321 @@ import { FreeMediationOption } from 'forms/models/freeMediation'
 import {
   baseDefenceData,
   baseResponseData,
-  defenceWithAmountClaimedAlreadyPaidData
+  defenceWithAmountClaimedAlreadyPaidData,
+  defenceWithDisputeData
 } from 'test/data/entity/responseData'
 
 import {
-  respondedAt,
   claimantRejectAlreadyPaid,
   directionsQuestionnaireDeadline,
+  intentionToProceedDeadline,
+  respondedAt,
+  settledWithAgreement,
   settlementOffer,
   settlementOfferAccept,
-  settlementOfferReject,
-  settledWithAgreement
+  settlementOfferReject
 } from 'test/data/entity/fullDefenceData'
 import { DefenceType } from 'claims/models/response/defenceType'
+import { MediationOutcome } from 'claims/models/mediationOutcome'
+import { YesNoOption } from 'models/yesNoOption'
+import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
-const fullDefenceClaim = {
-  ...claimStoreServiceMock.sampleClaimObj,
-  responseDeadline: MomentFactory.currentDate().add(1, 'days'),
-  response: {
-    ...baseResponseData,
-    ...baseDefenceData,
-    amount: 30
-  },
-  ...respondedAt
+function fullDefenceClaim () {
+  return {
+    ...claimStoreServiceMock.sampleClaimObj,
+    responseDeadline: MomentFactory.currentDate().add(1, 'days'),
+    response: {
+      ...baseResponseData,
+      ...baseDefenceData,
+      amount: 30
+    },
+    ...respondedAt()
+  }
 }
 
-const testData = [
-  {
-    status: 'Full defence - defendant paid what he believe',
-    claim: fullDefenceClaim,
-    claimOverride: {
-      response: { ...defenceWithAmountClaimedAlreadyPaidData }
-    },
-    claimantAssertions: [fullDefenceClaim.claim.defendants[0].name + ' believes that they’ve paid the claim in full.'],
-    defendantAssertions: ['We’ve emailed ' + fullDefenceClaim.claim.claimants[0].name + ' telling them when and how you said you paid the claim.']
-  },
-  {
-    status: 'Full defence - defendant paid what he believe - claimant rejected defendant response',
-    claim: fullDefenceClaim,
-    claimOverride: {
-      response: { ...defenceWithAmountClaimedAlreadyPaidData },
-      ...claimantRejectAlreadyPaid,
-      ...directionsQuestionnaireDeadline
-    },
-    claimantAssertions: ['You’ve rejected the defendant’s admission.'],
-    defendantAssertions: [fullDefenceClaim.claim.claimants[0].name + ' rejected your admission of £100']
-  },
-  {
-    status: 'Full defence - defendant dispute all of the claim and accepts mediation',
-    claim: fullDefenceClaim,
-    claimOverride: {
-      response: {
-        ...baseResponseData,
-        ...baseDefenceData,
-        freeMediation: FreeMediationOption.YES
-      }
-    },
-    claimantAssertions: [fullDefenceClaim.claim.defendants[0].name + ' has rejected the claim. They’ve suggested a mediation session to help resolve this dispute.'],
-    defendantAssertions: ['You’ve rejected the claim and suggested mediation. We’ll ask the claimant if they agree to take part in mediation.']
-  },
-  {
-    status: 'Full defence - defendant dispute all of the claim and reject mediation',
-    claim: fullDefenceClaim,
-    claimOverride: {
-      response: {
-        ...baseResponseData,
-        ...baseDefenceData
+function testData () {
+  return [
+    {
+      status: 'Full defence - defendant paid what he believe',
+      claim: fullDefenceClaim(),
+      claimOverride: {
+        response: { ...defenceWithAmountClaimedAlreadyPaidData }
       },
-      ...directionsQuestionnaireDeadline
+      claimantAssertions: [fullDefenceClaim().claim.defendants[0].name + ' believes that they’ve paid the claim in full.'],
+      defendantAssertions: ['We’ve emailed ' + fullDefenceClaim().claim.claimants[0].name + ' telling them when and how you said you paid the claim.']
     },
-    claimantAssertions: [fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim.'],
-    defendantAssertions: ['You’ve rejected the claim.']
-  },
-  {
-    status: 'Full defence - defendant dispute all of the claim and accepts mediation - defendant offers settlement to settle out of court',
-    claim: fullDefenceClaim,
-    claimOverride: {
-      response: {
-        ...baseResponseData,
-        ...baseDefenceData,
-        freeMediation: FreeMediationOption.YES
+    {
+      status: 'Full defence - defendant paid what he believe - claimant does not proceed in time',
+      claim: fullDefenceClaim(),
+      claimOverride: {
+        response: { ...defenceWithAmountClaimedAlreadyPaidData },
+        ...intentionToProceedDeadline()
       },
-      ...directionsQuestionnaireDeadline,
-      ...settlementOffer
+      claimantAssertions: ['This claim has ended'],
+      defendantAssertions: ['This claim has ended']
     },
-    claimantAssertions: [fullDefenceClaim.claim.defendants[0].name + ' has rejected the claim. They’ve suggested a mediation session to help resolve this dispute.'],
-    defendantAssertions: ['You’ve rejected the claim and suggested mediation. We’ll ask the claimant if they agree to take part in mediation.']
-  },
-  {
-    status: 'Full defence - defendant dispute all of the claim and reject mediation - defendant offers settlement to settle out of court',
-    claim: fullDefenceClaim,
-    claimOverride: {
-      response: {
-        ...baseResponseData,
-        ...baseDefenceData
+    {
+      status: 'Full defence - defendant paid what he believe - claimant rejected defendant response',
+      claim: fullDefenceClaim(),
+      claimOverride: {
+        response: { ...defenceWithAmountClaimedAlreadyPaidData },
+        ...claimantRejectAlreadyPaid(),
+        ...directionsQuestionnaireDeadline()
       },
-      ...directionsQuestionnaireDeadline,
-      ...settlementOffer
+      claimantAssertions: ['You’ve rejected the defendant’s admission.'],
+      defendantAssertions: [fullDefenceClaim().claim.claimants[0].name + ' rejected your admission of £100']
     },
-    claimantAssertions: [fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim.'],
-    defendantAssertions: ['You’ve rejected the claim.']
-  },
-  {
-    status: 'Full defence - defendant dispute all of the claim and accepts mediation - defendant offers settlement to settle out of court - claimant accepted offer',
-    claim: fullDefenceClaim,
-    claimOverride: {
-      response: {
-        ...baseResponseData,
-        ...baseDefenceData,
-        freeMediation: FreeMediationOption.YES
+    {
+      status: 'Full defence - defendant dispute all of the claim and accepts mediation',
+      claim: fullDefenceClaim(),
+      claimOverride: {
+        response: {
+          ...baseResponseData,
+          ...baseDefenceData,
+          freeMediation: FreeMediationOption.YES
+        }
       },
-      ...directionsQuestionnaireDeadline,
-      ...settlementOfferAccept
+      claimantAssertions: [fullDefenceClaim().claim.defendants[0].name + ' has rejected the claim. They’ve suggested a mediation session to help resolve this dispute.'],
+      defendantAssertions: ['You’ve rejected the claim and suggested mediation. We’ll ask the claimant if they agree to take part in mediation.']
     },
-    claimantAssertions: [fullDefenceClaim.claim.defendants[0].name + ' has rejected the claim. They’ve suggested a mediation session to help resolve this dispute.'],
-    defendantAssertions: ['You’ve rejected the claim and suggested mediation. We’ll ask the claimant if they agree to take part in mediation.']
-  },
-  {
-    status: 'Full defence - defendant dispute all of the claim and reject mediation - defendant offers settlement to settle out of court - claimant accepted offer',
-    claim: fullDefenceClaim,
-    claimOverride: {
-      response: {
-        ...baseResponseData,
-        ...baseDefenceData
+    {
+      status: 'Full defence - defendant sent paper response',
+      claim: fullDefenceClaim(),
+      claimOverride: {
+        response: {
+          ...baseResponseData,
+          ...baseDefenceData,
+          freeMediation: FreeMediationOption.YES
+        },
+        paperResponse: YesNoOption.YES.option
       },
-      ...directionsQuestionnaireDeadline,
-      ...settlementOfferAccept
+      claimantAssertions: ['The claim will continue by post'],
+      defendantAssertions: ['The claim will continue by post']
     },
-    claimantAssertions: [fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim.'],
-    defendantAssertions: ['You’ve rejected the claim.']
-  },
-  {
-    status: 'Full defence - defendant dispute all of the claim and accepts mediation - defendant offers settlement to settle out of court - claimant rejected offer',
-    claim: fullDefenceClaim,
-    claimOverride: {
-      response: {
-        ...baseResponseData,
-        ...baseDefenceData,
-        freeMediation: FreeMediationOption.YES
+    {
+      status: 'Full defence - claimant asked to proceed offline',
+      claim: fullDefenceClaim(),
+      claimOverride: {
+        response: {
+          ...baseResponseData,
+          ...baseDefenceData,
+          freeMediation: FreeMediationOption.YES
+        },
+        proceedOfflineReason: ProceedOfflineReason.APPLICATION_BY_CLAIMANT
       },
-      ...directionsQuestionnaireDeadline,
-      ...settlementOfferReject
+      claimantAssertions: ['You applied to change the claim'],
+      defendantAssertions: ['The claimant applied to change something about the claim']
     },
-    claimantAssertions: [fullDefenceClaim.claim.defendants[0].name + ' has rejected the claim. They’ve suggested a mediation session to help resolve this dispute.'],
-    defendantAssertions: ['You’ve rejected the claim and suggested mediation. We’ll ask the claimant if they agree to take part in mediation.']
-  },
-  {
-    status: 'Full defence - defendant dispute all of the claim and reject mediation - defendant offers settlement to settle out of court - claimant rejected offer',
-    claim: fullDefenceClaim,
-    claimOverride: {
-      response: {
-        ...baseResponseData,
-        ...baseDefenceData
+    {
+      status: 'Full defence - defendant asked to proceed offline',
+      claim: fullDefenceClaim(),
+      claimOverride: {
+        response: {
+          ...baseResponseData,
+          ...baseDefenceData,
+          freeMediation: FreeMediationOption.YES
+        },
+        proceedOfflineReason: ProceedOfflineReason.APPLICATION_BY_DEFENDANT
       },
-      ...directionsQuestionnaireDeadline,
-      ...settlementOfferReject
+      claimantAssertions: ['The defendant applied to change something about the claim'],
+      defendantAssertions: ['You applied to change the claim']
     },
-    claimantAssertions: [fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim.'],
-    defendantAssertions: ['You’ve rejected the claim.']
-  },
-  {
-    status: 'Full defence - defendant dispute all of the claim - defendant offers settlement to settle out of court - claim settled with agreement',
-    claim: fullDefenceClaim,
-    claimOverride: {
-      response: {
-        ...baseResponseData,
-        ...baseDefenceData
+    {
+      status: 'Full defence - defendant dispute all of the claim and reject mediation',
+      claim: fullDefenceClaim(),
+      claimOverride: {
+        response: {
+          ...baseResponseData,
+          ...baseDefenceData
+        },
+        ...directionsQuestionnaireDeadline()
       },
-      ...directionsQuestionnaireDeadline,
-      ...settledWithAgreement
+      claimantAssertions: [fullDefenceClaim().claim.defendants[0].name + ' has rejected your claim.'],
+      defendantAssertions: ['You’ve rejected the claim.']
     },
-    claimantAssertions: ['You’ve both signed a legal agreement. The claim is now settled.'],
-    defendantAssertions: ['You’ve both signed a legal agreement. The claim is now settled.']
-  },
-  {
-    status: 'Full defence - defendant disputes the claim - claimant rejected defendant response with mediation - no online DQ',
-    claim: fullDefenceClaim,
-    claimOverride: {
-      response: {
-        ...baseResponseData,
-        ...baseDefenceData,
-        freeMediation: FreeMediationOption.YES,
-        defenceType: DefenceType.DISPUTE
+    {
+      status: 'Full defence - defendant dispute all of the claim and rejects mediation - claimant does not do intention to proceed',
+      claim: fullDefenceClaim(),
+      claimOverride: {
+        response: {
+          ...defenceWithDisputeData
+        },
+        ...directionsQuestionnaireDeadline(),
+        ...intentionToProceedDeadline()
       },
-      claimantResponse: {
-        freeMediation: 'yes',
-        settleForAmount: 'no',
-        type: 'REJECTION'
-      },
-      claimantRespondedAt: MomentFactory.currentDate(),
-      ...directionsQuestionnaireDeadline
+      claimantAssertions: ['This claim has ended'],
+      defendantAssertions: ['This claim has ended']
     },
-    claimantAssertions: ['We will contact you to try to arrange a meditation appointment'],
-    defendantAssertions: ['We will contact you to try to arrange a meditation appointment']
-  }
-]
+    {
+      status: 'Full defence - defendant dispute all of the claim and accepts mediation - defendant offers settlement to settle out of court',
+      claim: fullDefenceClaim(),
+      claimOverride: {
+        response: {
+          ...baseResponseData,
+          ...baseDefenceData,
+          freeMediation: FreeMediationOption.YES
+        },
+        ...directionsQuestionnaireDeadline(),
+        ...settlementOffer()
+      },
+      claimantAssertions: [fullDefenceClaim().claim.defendants[0].name + ' has rejected the claim. They’ve suggested a mediation session to help resolve this dispute.'],
+      defendantAssertions: ['You’ve rejected the claim and suggested mediation. We’ll ask the claimant if they agree to take part in mediation.']
+    },
+    {
+      status: 'Full defence - defendant dispute all of the claim and reject mediation - defendant offers settlement to settle out of court',
+      claim: fullDefenceClaim(),
+      claimOverride: {
+        response: {
+          ...baseResponseData,
+          ...baseDefenceData
+        },
+        ...directionsQuestionnaireDeadline(),
+        ...settlementOffer()
+      },
+      claimantAssertions: [fullDefenceClaim().claim.defendants[0].name + ' has rejected your claim.'],
+      defendantAssertions: ['You’ve rejected the claim.']
+    },
+    {
+      status: 'Full defence - defendant dispute all of the claim and accepts mediation - defendant offers settlement to settle out of court - claimant accepted offer',
+      claim: fullDefenceClaim(),
+      claimOverride: {
+        response: {
+          ...baseResponseData,
+          ...baseDefenceData,
+          freeMediation: FreeMediationOption.YES
+        },
+        ...directionsQuestionnaireDeadline(),
+        ...settlementOfferAccept()
+      },
+      claimantAssertions: [fullDefenceClaim().claim.defendants[0].name + ' has rejected the claim. They’ve suggested a mediation session to help resolve this dispute.'],
+      defendantAssertions: ['You’ve rejected the claim and suggested mediation. We’ll ask the claimant if they agree to take part in mediation.']
+    },
+    {
+      status: 'Full defence - defendant dispute all of the claim and reject mediation - defendant offers settlement to settle out of court - claimant accepted offer',
+      claim: fullDefenceClaim(),
+      claimOverride: {
+        response: {
+          ...baseResponseData,
+          ...baseDefenceData
+        },
+        ...directionsQuestionnaireDeadline(),
+        ...settlementOfferAccept()
+      },
+      claimantAssertions: [fullDefenceClaim().claim.defendants[0].name + ' has rejected your claim.'],
+      defendantAssertions: ['You’ve rejected the claim.']
+    },
+    {
+      status: 'Full defence - defendant dispute all of the claim and accepts mediation - defendant offers settlement to settle out of court - claimant rejected offer',
+      claim: fullDefenceClaim(),
+      claimOverride: {
+        response: {
+          ...baseResponseData,
+          ...baseDefenceData,
+          freeMediation: FreeMediationOption.YES
+        },
+        ...directionsQuestionnaireDeadline(),
+        ...settlementOfferReject()
+      },
+      claimantAssertions: [fullDefenceClaim().claim.defendants[0].name + ' has rejected the claim. They’ve suggested a mediation session to help resolve this dispute.'],
+      defendantAssertions: ['You’ve rejected the claim and suggested mediation. We’ll ask the claimant if they agree to take part in mediation.']
+    },
+    {
+      status: 'Full defence - defendant dispute all of the claim and reject mediation - defendant offers settlement to settle out of court - claimant rejected offer',
+      claim: fullDefenceClaim(),
+      claimOverride: {
+        response: {
+          ...baseResponseData,
+          ...baseDefenceData
+        },
+        ...directionsQuestionnaireDeadline(),
+        ...settlementOfferReject()
+      },
+      claimantAssertions: [fullDefenceClaim().claim.defendants[0].name + ' has rejected your claim.'],
+      defendantAssertions: ['You’ve rejected the claim.']
+    },
+    {
+      status: 'Full defence - defendant dispute all of the claim - defendant offers settlement to settle out of court - claim settled with agreement',
+      claim: fullDefenceClaim(),
+      claimOverride: {
+        response: {
+          ...baseResponseData,
+          ...baseDefenceData
+        },
+        ...directionsQuestionnaireDeadline(),
+        ...settledWithAgreement()
+      },
+      claimantAssertions: ['You’ve both signed a legal agreement. The claim is now settled.'],
+      defendantAssertions: ['You’ve both signed a legal agreement. The claim is now settled.']
+    },
+    {
+      status: 'Full defence - defendant disputes the claim - claimant rejected defendant response with mediation - no online DQ',
+      claim: fullDefenceClaim(),
+      claimOverride: {
+        response: {
+          ...baseResponseData,
+          ...baseDefenceData,
+          freeMediation: FreeMediationOption.YES,
+          defenceType: DefenceType.DISPUTE
+        },
+        claimantResponse: {
+          freeMediation: 'yes',
+          settleForAmount: 'no',
+          type: 'REJECTION'
+        },
+        claimantRespondedAt: MomentFactory.currentDate(),
+        ...directionsQuestionnaireDeadline()
+      },
+      claimantAssertions: ['We will contact you to try to arrange a mediation appointment'],
+      defendantAssertions: ['We will contact you to try to arrange a mediation appointment']
+    },
+    {
+      status: 'Full defence - defendant disputes the claim - claimant rejected defendant response with mediation - mediation failed',
+      claim: fullDefenceClaim(),
+      claimOverride: {
+        response: {
+          ...baseResponseData,
+          ...baseDefenceData,
+          freeMediation: FreeMediationOption.YES,
+          defenceType: DefenceType.DISPUTE
+        },
+        claimantResponse: {
+          freeMediation: 'yes',
+          settleForAmount: 'no',
+          type: 'REJECTION'
+        },
+        claimantRespondedAt: MomentFactory.currentDate(),
+        ...directionsQuestionnaireDeadline(),
+        mediationOutcome: MediationOutcome.FAILED
+      },
+      claimantAssertions: ['Mediation was unsuccessful'],
+      defendantAssertions: ['Mediation was unsuccessful']
+    },
+    {
+      status: 'Full defence - defendant disputes the claim - claimant rejected defendant response with mediation - mediation success',
+      claim: fullDefenceClaim(),
+      claimOverride: {
+        response: {
+          ...baseResponseData,
+          ...baseDefenceData,
+          freeMediation: FreeMediationOption.YES,
+          defenceType: DefenceType.DISPUTE
+        },
+        claimantResponse: {
+          freeMediation: 'yes',
+          settleForAmount: 'no',
+          type: 'REJECTION'
+        },
+        claimantRespondedAt: MomentFactory.currentDate(),
+        ...directionsQuestionnaireDeadline(),
+        mediationOutcome: MediationOutcome.SUCCEEDED
+      },
+      claimantAssertions: ['You both agreed a settlement through mediation'],
+      defendantAssertions: ['You both agreed a settlement through mediation']
+    }
+  ]
+}
 
 describe('Dashboard page', () => {
   attachDefaultHooks(app)
@@ -234,7 +352,7 @@ describe('Dashboard page', () => {
             claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
           })
 
-          testData.forEach(data => {
+          testData().forEach(data => {
             it(`should render dashboard: ${data.status}`, async () => {
               draftStoreServiceMock.resolveFindNoDraftFound()
               claimStoreServiceMock.resolveRetrieveByClaimantId(data.claim, data.claimOverride)
@@ -251,7 +369,7 @@ describe('Dashboard page', () => {
             claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
           })
 
-          testData.forEach(data => {
+          testData().forEach(data => {
             it(`should render dashboard: ${data.status}`, async () => {
               draftStoreServiceMock.resolveFindNoDraftFound()
               claimStoreServiceMock.resolveRetrieveByDefendantId(data.claim.referenceNumber, '1', data.claim, data.claimOverride)

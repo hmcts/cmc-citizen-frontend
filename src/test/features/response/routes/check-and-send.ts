@@ -27,6 +27,11 @@ import { InterestDate } from 'claims/models/interestDate'
 import { Interest } from 'claims/models/interest'
 import { fullAdmissionWithPaymentByInstalmentsDataCompany } from 'test/data/entity/responseData'
 import { FeatureToggles } from 'utils/featureToggles'
+import { MomentFactory } from 'shared/momentFactory'
+import {
+  verifyRedirectForGetWhenAlreadyPaidInFull,
+  verifyRedirectForPostWhenAlreadyPaidInFull
+} from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -52,6 +57,7 @@ describe('Defendant response: check and send page', () => {
 
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
 
       context('when response not submitted', () => {
         it('should redirect to incomplete submission when not all tasks are completed', async () => {
@@ -59,6 +65,7 @@ describe('Defendant response: check and send page', () => {
           draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
 
           await request(app)
             .get(pagePath)
@@ -81,6 +88,7 @@ describe('Defendant response: check and send page', () => {
           draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
 
           await request(app)
             .get(pagePath)
@@ -94,12 +102,14 @@ describe('Defendant response: check and send page', () => {
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
 
             await request(app)
               .get(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.successful.withText('Statement of truth'))
               .expect(res => expect(res).to.be.successful.withText('I believe that the facts stated in this response are true.'))
+              .expect(res => expect(res).to.be.successful.withText('I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.'))
               .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
           })
 
@@ -109,6 +119,7 @@ describe('Defendant response: check and send page', () => {
               draftStoreServiceMock.resolveFind('mediation')
               draftStoreServiceMock.resolveFind('directionsQuestionnaire')
               claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
+              claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
 
               await request(app)
                 .get(pagePath)
@@ -127,6 +138,7 @@ describe('Defendant response: check and send page', () => {
                   'Dates unavailable',
                   'Statement of truth',
                   'I believe that the facts stated in this response are true.' ,
+                  'I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.',
                   'The hearing requirement details on this page are true to the best of my knowledge.',
                   '<input id="signedtrue" type="checkbox" name="signed" value="true"',
                   'Your timeline of what happened',
@@ -195,6 +207,7 @@ describe('Defendant response: check and send page', () => {
               }
             }
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreOverride)
+            claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
 
             await request(app)
               .get(pagePath)
@@ -204,6 +217,7 @@ describe('Defendant response: check and send page', () => {
                 '<input id="signerName" name="signerName"',
                 '<input id="signerRole" name="signerRole"',
                 'I believe that the facts stated in this response are true.',
+                'I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.',
                 '<input id="signedtrue" type="checkbox" name="signed" value="true"',
                 'timeline date',
                 'something awesome happened'
@@ -270,6 +284,7 @@ describe('Defendant response: check and send page', () => {
               }
             }
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreOverride)
+            claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
 
             if (FeatureToggles.isEnabled('directionsQuestionnaire') && (draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.DEFENCE || draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.PART_ADMISSION)) {
               await request(app)
@@ -280,6 +295,7 @@ describe('Defendant response: check and send page', () => {
                   '<input id="signerName" name="signerName"',
                   '<input id="signerRole" name="signerRole"',
                   'I believe that the facts stated in this response are true.',
+                  'I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.',
                   '<input id="signedtrue" type="checkbox" name="signed" value="true"',
                   '<input id="directionsQuestionnaireSignedtrue" type="checkbox" name="directionsQuestionnaireSigned" value="true"',
                   'photo of a cat',
@@ -294,6 +310,7 @@ describe('Defendant response: check and send page', () => {
                   '<input id="signerName" name="signerName"',
                   '<input id="signerRole" name="signerRole"',
                   'I believe that the facts stated in this response are true.',
+                  'I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.',
                   '<input id="signedtrue" type="checkbox" name="signed" value="true"',
                   'photo of a cat',
                   'their evidence is invalid'
@@ -317,6 +334,7 @@ describe('Defendant response: check and send page', () => {
 
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
 
       context('when response not submitted', () => {
         it('should redirect to incomplete submission when not all tasks are completed', async () => {
@@ -324,6 +342,7 @@ describe('Defendant response: check and send page', () => {
           draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
 
           await request(app)
             .post(pagePath)
@@ -349,6 +368,7 @@ describe('Defendant response: check and send page', () => {
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
 
             await request(app)
               .post(pagePath)
@@ -363,6 +383,7 @@ describe('Defendant response: check and send page', () => {
               draftStoreServiceMock.resolveFind('mediation')
               draftStoreServiceMock.resolveFind('directionsQuestionnaire')
               claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+              claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
 
               let sendData: any = { signed: 'true', type: SignatureType.BASIC }
               if (FeatureToggles.isEnabled('directionsQuestionnaire') && (draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.DEFENCE || draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.PART_ADMISSION)) {
@@ -398,6 +419,7 @@ describe('Defendant response: check and send page', () => {
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             claimStoreServiceMock.rejectSaveResponse('HTTP error')
+            claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
 
             await request(app)
               .post(pagePath)
@@ -413,6 +435,7 @@ describe('Defendant response: check and send page', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             claimStoreServiceMock.resolveSaveResponse()
             draftStoreServiceMock.rejectDelete()
+            claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
 
             await request(app)
               .post(pagePath)
@@ -429,6 +452,7 @@ describe('Defendant response: check and send page', () => {
             claimStoreServiceMock.resolveSaveResponse()
             draftStoreServiceMock.resolveDelete()
             draftStoreServiceMock.resolveDelete()
+            claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
 
             let sendData: any = { signed: 'true', type: SignatureType.BASIC }
             if (FeatureToggles.isEnabled('directionsQuestionnaire') && (draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.DEFENCE || draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.PART_ADMISSION)) {
@@ -458,6 +482,7 @@ describe('Defendant response: check and send page', () => {
             draftStoreServiceMock.resolveUpdate()
             draftStoreServiceMock.resolveDelete()
             draftStoreServiceMock.resolveDelete()
+            claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
             if (FeatureToggles.isEnabled('directionsQuestionnaire') && (draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.DEFENCE || draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.PART_ADMISSION)) {
               draftStoreServiceMock.resolveDelete()
             }
@@ -478,6 +503,7 @@ describe('Defendant response: check and send page', () => {
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
 
             await request(app)
               .post(pagePath)

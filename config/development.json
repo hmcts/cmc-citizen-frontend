@@ -6,8 +6,11 @@
     "returnErrorToUser": true,
     "mediation": true,
     "mediationPilot": true,
+    "legalAdvisorPilot": true,
+    "judgePilot": true,
     "directionsQuestionnaire": true,
-    "newDashboardStatus": true
+    "newDashboardStatus": true,
+    "inversionOfControl": true
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"

@@ -25,17 +25,14 @@ const whyYouDisagreePage: DefendantWhyDoYouDisagreePage = new DefendantWhyDoYouD
 const mediationSteps: MediationSteps = new MediationSteps()
 const directionsQuestionnaireSteps: DirectionsQuestionnaireSteps = new DirectionsQuestionnaireSteps()
 const defendantTaskListPage: DefendantTaskListPage = new DefendantTaskListPage()
-const claimDetailsHeading: string = 'Claim details'
 
 export class DefendantResponseSteps {
 
   disputeAllClaim (testData: EndToEndTestData, claimantResponseTestData: ClaimantResponseTestData): void {
-    I.waitForText(claimDetailsHeading)
-    defenceSteps.respondToClaim()
     defenceSteps.loginAsDefendant(testData.defendantEmail)
     I.click(testData.claimRef)
     I.click('Respond to claim')
-    defenceSteps.confirmYourDetails(createDefendant(testData.defendantPartyType))
+    defenceSteps.confirmYourDetails(createDefendant(testData.defendantPartyType, false))
     defenceSteps.requestNoExtraTimeToRespond()
     defenceSteps.rejectAllOfClaimAsDisputeClaim()
     defendantSteps.selectTaskWhyDoYouDisagreeWithTheClaim()
@@ -62,12 +59,10 @@ export class DefendantResponseSteps {
   }
 
   disputeClaimAsAlreadyPaid (testData: EndToEndTestData, claimantResponseTestData: ClaimantResponseTestData, isClaimTotalPaid: boolean): void {
-    I.waitForText(claimDetailsHeading)
-    defenceSteps.respondToClaim()
     defenceSteps.loginAsDefendant(testData.defendantEmail)
     I.click(testData.claimRef)
     I.click('Respond to claim')
-    defenceSteps.confirmYourDetails(createDefendant(testData.defendantPartyType))
+    defenceSteps.confirmYourDetails(createDefendant(testData.defendantPartyType, false))
     defenceSteps.requestNoExtraTimeToRespond()
     defenceSteps.rejectAllOfClaimAsAlreadyPaid()
     defendantSteps.selectTaskTellUsHowMuchYouHavePaid()
@@ -94,7 +89,7 @@ export class DefendantResponseSteps {
       )
     }
     defendantTaskListPage.selectTaskFreeMediation()
-    mediationSteps.rejectMediation()
+    mediationSteps.rejectMediationByDisagreeing()
     defendantTaskListPage.selectTaskHearingRequirements()
     directionsQuestionnaireSteps.acceptDirectionsQuestionnaireYesJourney()
     defendantSteps.selectCheckAndSubmitYourDefence()

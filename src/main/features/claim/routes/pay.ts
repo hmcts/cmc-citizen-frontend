@@ -22,13 +22,15 @@ import { Fee } from 'payment-hub-client/fee'
 import { PaymentRetrieveResponse } from 'payment-hub-client/paymentRetrieveResponse'
 import * as HttpStatus from 'http-status-codes'
 import { FeatureToggles } from 'utils/featureToggles'
-import { FeatureTogglesClient } from 'shared/clients/featureTogglesClient'
 import { trackCustomEvent } from 'logging/customEventTracker'
 import { Claim } from 'claims/models/claim'
 import { MockPayClient } from 'mock-clients/mockPayClient'
+import { FeaturesBuilder } from 'claim/helpers/featuresBuilder'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
-const featureTogglesClient: FeatureTogglesClient = new FeatureTogglesClient()
+const launchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
+const featuresBuilder: FeaturesBuilder = new FeaturesBuilder(claimStoreClient, launchDarklyClient)
 
 const logger = Logger.getLogger('router/pay')
 const event: string = config.get<string>('fees.issueFee.event')
@@ -62,32 +64,8 @@ async function successHandler (req, res, next) {
   let savedClaim: Claim
 
   try {
-    const roles: string[] = await claimStoreClient.retrieveUserRoles(user)
-
-    if (!roles.length) {
-      logger.error(`missing consent not given role for user, User Id : ${user.id}`)
-    }
-
-    let features: string
-    if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_admissions')) {
-      features = 'admissions'
-    }
-
-    if (draft.document.amount.totalAmount() <= 300 && FeatureToggles.isEnabled('directionsQuestionnaire')) {
-      if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_directions_questionnaire')) {
-        features += features === undefined ? 'directionsQuestionnaire' : ', directionsQuestionnaire'
-      }
-    }
-
-    const totalAmount = await draftClaimAmountWithInterest(draft.document)
-    if (totalAmount <= 300) {
-      if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_mediation_pilot')) {
-        features += features === undefined ? 'mediationPilot' : ', mediationPilot'
-      }
-    }
-
+    const features = await featuresBuilder.features(draft.document.amount.totalAmount(), user)
     savedClaim = await claimStoreClient.saveClaim(draft, user, features)
-
   } catch (err) {
     if (err.statusCode === HttpStatus.INTERNAL_SERVER_ERROR || err.statusCode === HttpStatus.SERVICE_UNAVAILABLE) {
       logError(
@@ -112,14 +90,15 @@ async function successHandler (req, res, next) {
       savedClaim = await claimStoreClient.retrieveByExternalId(externalId, user)
     }
   }
-  const payClient: PayClient = await getPayClient(req)
-  const paymentReference = draft.document.claimant.payment.reference
 
-  if (savedClaim) {
-    const ccdCaseNumber = savedClaim.ccdCaseId === undefined ? 'UNKNOWN' : String(savedClaim.ccdCaseId)
-    await payClient.update(user, paymentReference, savedClaim.externalId, ccdCaseNumber)
+  if (!savedClaim) {
+    throw new Error(`Error saving claim: ${externalId}`)
   }
 
+  const payClient: PayClient = await getPayClient(req)
+  const paymentReference = draft.document.claimant.payment.reference
+  const ccdCaseNumber = savedClaim.ccdCaseId === undefined ? 'UNKNOWN' : String(savedClaim.ccdCaseId)
+  await payClient.update(user, paymentReference, savedClaim.externalId, ccdCaseNumber)
   await new DraftService().delete(draft.id, user.bearerToken)
   res.redirect(Paths.confirmationPage.evaluateUri({ externalId: externalId }))
 }

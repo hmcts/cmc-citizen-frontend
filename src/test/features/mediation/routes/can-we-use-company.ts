@@ -17,6 +17,10 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
 import { FreeMediationOption } from 'forms/models/freeMediation'
+import {
+  verifyRedirectForGetWhenAlreadyPaidInFull,
+  verifyRedirectForPostWhenAlreadyPaidInFull
+} from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = MediationPaths.canWeUseCompanyPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -28,28 +32,54 @@ describe('Free mediation: can we use company page', () => {
     const method = 'get'
     checkAuthorizationGuards(app, method, pagePath)
 
-    context('when user authorised', () => {
+    describe('as defendant', () => {
+
+      context('when user authorised', () => {
+        beforeEach(() => {
+          idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
+        })
+
+        verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
+
+        it('should return 500 and render error page when cannot retrieve claim', async () => {
+          claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.serverError.withText('Error'))
+        })
+        it('should render page when everything is fine', async () => {
+          draftStoreServiceMock.resolveFind('mediation', { canWeUseCompany: undefined })
+          draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
+          claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Mary Richards the right person for the mediation service to call'))
+        })
+
+      })
+    })
+
+    describe('as claimant', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.submitterId, 'citizen')
       })
 
-      it('should return 500 and render error page when cannot retrieve claim', async () => {
-        claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
-
-        await request(app)
-          .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.serverError.withText('Error'))
-      })
       it('should render page when everything is fine', async () => {
-        draftStoreServiceMock.resolveFind('mediation')
-        draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
-        claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
+        draftStoreServiceMock.resolveFind('mediation', { canWeUseCompany: undefined })
+        draftStoreServiceMock.resolveFind('claimantResponse')
+        claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId({
+          ...claimStoreServiceMock.sampleClaimIssueOrgVOrgObj,
+          ...claimStoreServiceMock.sampleFullAdmissionWithPaymentBySetDateResponseObj
+        })
 
         await request(app)
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Mary Richards the right person for the mediation service to call'))
+          .expect(res => expect(res).to.be.successful.withText('Enter this person’s phone number, including extension if required'))
       })
     })
   })
@@ -64,6 +94,7 @@ describe('Free mediation: can we use company page', () => {
       })
 
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
 
       context('when response not submitted', () => {
         it('should return 500 and render error page when cannot retrieve claim', async () => {

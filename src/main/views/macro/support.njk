@@ -1,26 +1,52 @@
 {% from "externalLink.njk" import externalLink %}
 
+{% macro _webChatWidget(label = 'Web chat') %}
+    {% if featureToggles.webChat %}
+        <h2 class="heading-medium contact-us">{{ t(label)}}</h2>
+        <div id="ctsc-web-chat" class="web-chat"></div>
+    {% endif %}
+{% endmacro%}
+
+{% macro _emailWidget(email = supportEmailAddress) %}
+    <h2 class="heading-medium contact-mail">{{ t('Email') }}</h2>
+    <p><a href="mailto:{{t(email)}}">{{ t(email)}}</a>
+      <span class="block">{{ t("We'll get back to you within 10 days.") }}</span>
+    </p>
+{% endmacro%}
+
+{% macro _phoneWidget(phoneNumber = '0300 123 7050') %}
+    <h2 class="heading-medium contact-us">{{ t('Telephone') }}</h2>
+    <p>{{ t(phoneNumber) }}
+      <span class="block">{{ t("Monday to Friday, 9am to 5pm.") }}</span>
+      <span class="block">{{ _callCharges()}}</span>
+    </p>
+{% endmacro %}
+
+{% macro _holidayWidget() %}
+  {% if (toDate() < toDate("2020-01-02") and toDate() >= toDate("2019-12-01")) %}
+    <h2 class="heading-medium contact-us"> {{ t('Christmas hours')}}</h2>
+    <p>{{ t("We're closed 25, 26, 27 December, and 1 January.")}}</p>
+  {% endif %}
+{% endmacro %}
+
 {% macro supportWidget(label = 'Help and support') %}
     <h2 class="heading-medium">{{ t(label) }}</h2>
-    <pre>{{ t("Email: " + supportEmailAddress) }}</pre>
-    <pre>{{ t('Telephone: 0300 123 7050') }}</pre>
-    <pre>{{ t("Hours: 9am to 5pm, Monday to Friday") }}</pre>
-    {{ _callCharges() }}
+    {{ _webChatWidget() }}
+    {{ _emailWidget() }}
+    {{ _phoneWidget() }}
+    {{ _holidayWidget() }}
 {% endmacro %}
 
 {% macro mcolSupportWidget(label = 'Help and advice') %}
   <h2 class="heading-medium">{{ t(label) }}</h2>
-  <pre>{{ t('Money Claim Online helpdesk') }}</pre>
-  <pre>{{ t('Email: ccbc@hmcts.gsi.gov.uk') }}</pre>
-  <pre>{{ t('Telephone: 0300 123 1057') }}</pre>
-  <pre>{{ t('Monday to Friday, 8:30am to 5pm') }}</pre>
-  {{ _callCharges() }}
+  {{ _webChatWidget() }}
+  {{ _emailWidget('ccbc@hmcts.gsi.gov.uk') }}
+  {{ _phoneWidget('0300 123 1057') }}
+  {{ _holidayWidget() }}
 {% endmacro %}
 
 {% macro _callCharges() %}
-  <p>
     {{ externalLink(t('Find out about call charges'), 'https://www.gov.uk/call-charges') }}
-  </p>
 {% endmacro %}
 
 {% macro citizensAdviceWidget() %}
@@ -28,4 +54,18 @@
   {{ t('You might be able to get advice about the claim from') }}
   {{ externalLink(t('Citizens Advice'), 'https://www.citizensadvice.org.uk/about-us/contact-us/') }}.
 </p>
+{% endmacro %}
+
+
+{% macro contactUsForHelp() %}
+<details style="margin-top: 35px">
+
+  <summary><span class="summary">{{ t('Contact us for help') }}</span></summary>
+  <div class="panel">
+    {{ _webChatWidget() }}
+    {{ _emailWidget() }}
+    {{ _phoneWidget() }}
+    {{ _holidayWidget() }}
+  </div>
+</details>
 {% endmacro %}

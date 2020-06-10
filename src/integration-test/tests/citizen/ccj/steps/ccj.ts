@@ -29,13 +29,15 @@ const ccjRepaymentPlan: PaymentPlan = {
 }
 
 const paymentBySetDate = '2025-01-01'
-const defendant: Party = createDefendant(PartyType.INDIVIDUAL)
+const defendant: Party = createDefendant(PartyType.INDIVIDUAL, false)
 const defendantPaidAmount = 35.50
 
 export class CountyCourtJudgementSteps {
 
   requestCCJ (claimRef: string, defendantType: PartyType): void {
-    testingSupport.makeClaimAvailableForCCJ(claimRef)
+    if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
+      testingSupport.makeClaimAvailableForCCJ(claimRef)
+    }
     dashboardSteps.startCCJ(claimRef)
     if (defendantType === PartyType.INDIVIDUAL) {
       I.see('Do you know the defendant’s date of birth?')

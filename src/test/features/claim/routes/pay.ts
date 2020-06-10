@@ -9,7 +9,6 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
-import * as featureToggleApiMock from 'test/http-mocks/feature-toggle-store'
 
 import * as feesServiceMock from 'test/http-mocks/fees'
 import * as payServiceMock from 'test/http-mocks/pay'
@@ -21,7 +20,7 @@ import { Defendant } from 'drafts/models/defendant'
 import { Claimant } from 'drafts/models/claimant'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { IndividualDetails } from 'forms/models/individualDetails'
-import { MobilePhone } from 'forms/models/mobilePhone'
+import { Phone } from 'forms/models/phone'
 import { Payment } from 'payment-hub-client/payment'
 import { Address } from 'forms/models/address'
 import { DateOfBirth } from 'forms/models/dateOfBirth'
@@ -38,7 +37,11 @@ import { InterestEndDate, InterestEndDateOption } from 'claim/form/models/intere
 import { InterestDateType } from 'common/interestDateType'
 import { InterestStartDate } from 'claim/form/models/interestStartDate'
 import { YesNoOption } from 'models/yesNoOption'
+import { mock, reset, when } from 'ts-mockito'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
+import { User } from 'idam/user'
 
+const mockLaunchDarklyClient: LaunchDarklyClient = mock(LaunchDarklyClient)
 const draftType = 'claim'
 
 const cookieName: string = config.get<string>('session.cookieName')
@@ -48,6 +51,8 @@ const failureMessage: string = 'failure message'
 const externalId: string = draftStoreServiceMock.sampleClaimDraftObj.externalId
 
 let overrideClaimDraftObj
+let testRoles: string[]
+let testUser: User
 
 describe('Claim issue: initiate payment receiver', () => {
   attachDefaultHooks(app)
@@ -81,9 +86,9 @@ describe('Claim issue: initiate payment receiver', () => {
               } as LocalDate
             } as DateOfBirth
           } as IndividualDetails,
-          mobilePhone: {
+          phone: {
             number: '07000000000'
-          } as MobilePhone,
+          } as Phone,
           payment: {
             reference: '123',
             date_created: 12345,
@@ -281,9 +286,9 @@ describe('Claim issue: post payment callback receiver', () => {
               } as LocalDate
             } as DateOfBirth
           } as IndividualDetails,
-          mobilePhone: {
+          phone: {
             number: '07000000000'
-          } as MobilePhone,
+          } as Phone,
           payment: {
             reference: '123',
             date_created: 12345,
@@ -338,6 +343,8 @@ describe('Claim issue: post payment callback receiver', () => {
         } as Reason
       } as DraftClaim
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+      testRoles = ['testRole1', 'testRole2']
+      testUser = new User('testId','','','', testRoles, '','')
     })
 
     it('should return 500 and error page when cannot retrieve payment', async () => {
@@ -420,6 +427,10 @@ describe('Claim issue: post payment callback receiver', () => {
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
             draftStoreServiceMock.resolveUpdate()
+            claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
+            claimStoreServiceMock.rejectSaveClaimForUser('reason', 409)
+            claimStoreServiceMock.resolveRetrieveByExternalId()
+            payServiceMock.resolveUpdate()
             draftStoreServiceMock.resolveDelete()
 
             await request(app)
@@ -441,26 +452,28 @@ describe('Claim issue: post payment callback receiver', () => {
         describe('when claim does not exist', () => {
 
           it('should return 500 and render error page when cannot save claim', async () => {
+            when(mockLaunchDarklyClient.variation(testUser, testRoles, 'admissions', false)).thenResolve(Promise.resolve(false))
             draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
             draftStoreServiceMock.resolveUpdate()
             claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
-            featureToggleApiMock.resolveIsAdmissionsAllowed()
             claimStoreServiceMock.rejectSaveClaimForUser()
 
             await request(app)
               .get(Paths.finishPaymentReceiver.uri)
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
+
+            reset(mockLaunchDarklyClient)
           })
 
           it('should return 500 and render error page when cannot delete draft', async () => {
+            when(mockLaunchDarklyClient.variation(testUser, testRoles, 'admissions', false)).thenResolve(Promise.resolve(false))
             draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
             draftStoreServiceMock.resolveUpdate()
-            featureToggleApiMock.resolveIsAdmissionsAllowed()
             claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
             claimStoreServiceMock.resolveSaveClaimForUser()
             payServiceMock.resolveUpdate()
@@ -470,20 +483,24 @@ describe('Claim issue: post payment callback receiver', () => {
               .get(Paths.finishPaymentReceiver.uri)
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
+
+            reset(mockLaunchDarklyClient)
           })
 
-          it('should return 404 and render error page when feature toggle api fails', async () => {
+          it('should return 500 and render error page when feature toggle api fails', async () => {
+            when(mockLaunchDarklyClient.variation(testUser, testRoles, 'admissions', false)).thenResolve(Promise.resolve(false))
             draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
             draftStoreServiceMock.resolveUpdate()
             claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
-            featureToggleApiMock.rejectIsAdmissionsAllowed()
 
             await request(app)
               .get(Paths.finishPaymentReceiver.uri)
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.notFound)
+              .expect(res => expect(res).to.be.serverError)
+
+            reset(mockLaunchDarklyClient)
           })
 
           it('should return 500 and render error page when retrieve user roles fails', async () => {
@@ -500,12 +517,12 @@ describe('Claim issue: post payment callback receiver', () => {
           })
 
           it('should redirect to confirmation page when everything is fine', async () => {
+            when(mockLaunchDarklyClient.variation(testUser, testRoles, 'admissions', false)).thenResolve(Promise.resolve(false))
             draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
             draftStoreServiceMock.resolveUpdate()
             claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
-            featureToggleApiMock.resolveIsAdmissionsAllowed()
             claimStoreServiceMock.resolveSaveClaimForUser()
             draftStoreServiceMock.resolveDelete()
             payServiceMock.resolveUpdate()
@@ -514,15 +531,17 @@ describe('Claim issue: post payment callback receiver', () => {
               .get(Paths.finishPaymentReceiver.uri)
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.redirect.toLocation(`/claim/${externalId}/confirmation`))
+
+            reset(mockLaunchDarklyClient)
           })
 
           it('should redirect to confirmation page when user have not given any consent', async () => {
+            when(mockLaunchDarklyClient.variation(testUser, testRoles, 'admissions', false)).thenResolve(Promise.resolve(false))
             draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
             draftStoreServiceMock.resolveUpdate()
             claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-not-given')
-            featureToggleApiMock.resolveIsAdmissionsAllowed(false)
             claimStoreServiceMock.resolveSaveClaimForUser()
             draftStoreServiceMock.resolveDelete()
             payServiceMock.resolveUpdate()
@@ -531,6 +550,8 @@ describe('Claim issue: post payment callback receiver', () => {
               .get(Paths.finishPaymentReceiver.uri)
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.redirect.toLocation(`/claim/${externalId}/confirmation`))
+
+            reset(mockLaunchDarklyClient)
           })
         })
       })

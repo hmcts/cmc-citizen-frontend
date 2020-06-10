@@ -1,12 +1,10 @@
 import I = CodeceptJS.I
-import { DateParser } from 'integration-test/utils/date-parser'
 
 const I: I = actor()
 
-const fields = {
-  day: 'input[id=\'date[day]\']',
-  month: 'input[id=\'date[month]\']',
-  year: 'input[id=\'date[year]\']'
+const radioButtons = {
+  optionYes: 'input[id=acceptedyes]',
+  optionNo: 'input[id=acceptedno]'
 }
 
 const buttons = {
@@ -15,16 +13,13 @@ const buttons = {
 
 export class ClaimantSettleClaimPage {
 
-  enterDate (date: string): void {
-    const [ year, month, day ] = DateParser.parse(date)
-
-    I.fillField(fields.day, day)
-    I.fillField(fields.month, month)
-    I.fillField(fields.year, year)
-  }
-
-  saveAndContinue (): void {
+  selectAcceptedYes (): void {
+    I.checkOption(radioButtons.optionYes)
     I.click(buttons.submit)
   }
 
+  selectAcceptedNo (): void {
+    I.checkOption(radioButtons.optionNo)
+    I.click(buttons.submit)
+  }
 }

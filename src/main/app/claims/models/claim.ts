@@ -29,6 +29,12 @@ import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { CalendarClient } from 'claims/calendarClient'
 import { DirectionOrder } from 'claims/models/directionOrder'
 import { ReviewOrder } from 'claims/models/reviewOrder'
+import { MediationOutcome } from 'claims/models/mediationOutcome'
+import { YesNoOption } from 'models/yesNoOption'
+import { ClaimDocument } from 'claims/models/claimDocument'
+import * as _ from 'lodash'
+import { ClaimDocumentType } from 'common/claimDocumentType'
+import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
 
 interface State {
   status: ClaimStatus
@@ -38,6 +44,7 @@ export class Claim {
   id: number
   claimantId: string
   externalId: string
+  state: string
   defendantId: string
   claimNumber: string
   responseDeadline: Moment
@@ -68,6 +75,12 @@ export class Claim {
   template: ClaimTemplate
   directionOrder: DirectionOrder
   reviewOrder: ReviewOrder
+  intentionToProceedDeadline?: Moment
+  mediationOutcome: string
+  pilotCourt: YesNoOption
+  paperResponse: YesNoOption
+  claimDocuments?: ClaimDocument[]
+  proceedOfflineReason: string
 
   get defendantOffer (): Offer {
     if (!this.settlement) {
@@ -158,6 +171,10 @@ export class Claim {
       } else {
         return ClaimStatus.ORDER_DRAWN
       }
+    } else if (this.paperResponse && this.paperResponse === YesNoOption.YES) {
+      return ClaimStatus.DEFENDANT_PAPER_RESPONSE
+    } else if (this.checkProceedOfflineReason()) {
+      return ClaimStatus.PROCEED_OFFLINE
     } else if (this.moneyReceivedOn) {
       return ClaimStatus.PAID_IN_FULL
     } else if (this.countyCourtJudgmentRequestedAt) {
@@ -194,10 +211,10 @@ export class Claim {
       return ClaimStatus.OFFER_SETTLEMENT_REACHED
     } else if (this.hasClaimantRejectedDefendantDefenceWithoutDQs()) {
       return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ
+    } else if (this.hasIntentionToProceedDeadlinePassed()) {
+      return ClaimStatus.INTENTION_TO_PROCEED_DEADLINE_PASSED
     } else if (this.hasDefendantRejectedClaimWithDQs()) {
       return ClaimStatus.DEFENDANT_REJECTS_WITH_DQS
-    } else if (this.isResponseSubmitted()) {
-      return ClaimStatus.RESPONSE_SUBMITTED
     } else if (this.hasClaimantAcceptedStatesPaid()) {
       return ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID
     } else if (this.hasClaimantRejectedStatesPaid()) {
@@ -220,6 +237,8 @@ export class Claim {
       return ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY
     } else if (this.eligibleForCCJ) {
       return ClaimStatus.ELIGIBLE_FOR_CCJ
+    } else if (this.isResponseSubmitted()) {
+      return ClaimStatus.RESPONSE_SUBMITTED
     } else if (this.isInterlocutoryJudgmentRequestedOnAdmissions()) {
       return ClaimStatus.REDETERMINATION_BY_JUDGE
     } else if (this.isClaimantResponseSubmitted()) {
@@ -283,9 +302,11 @@ export class Claim {
   deserialize (input: any): Claim {
     if (input) {
       this.id = input.id
+      this.state = input.state
       this.claimantId = input.submitterId
       this.externalId = input.externalId
       this.defendantId = input.defendantId
+      this.state = input.state
       this.claimNumber = input.referenceNumber
       this.createdAt = MomentFactory.parse(input.createdAt)
       this.responseDeadline = MomentFactory.parse(input.responseDeadline)
@@ -346,12 +367,35 @@ export class Claim {
       if (input.reviewOrder) {
         this.reviewOrder = new ReviewOrder().deserialize(input.reviewOrder)
       }
-    }
+      this.intentionToProceedDeadline = input.intentionToProceedDeadline && MomentFactory.parse(input.intentionToProceedDeadline)
+      if (input.mediationOutcome) {
+        this.mediationOutcome = input.mediationOutcome
+      }
 
-    return this
+      if (input.pilotCourt) {
+        this.pilotCourt = YesNoOption.fromObject(input.pilotCourt)
+      }
+
+      if (input.paperResponse) {
+        this.paperResponse = YesNoOption.fromObject(input.paperResponse)
+      }
+      if (input.claimDocumentCollection && input.claimDocumentCollection.claimDocuments) {
+        this.claimDocuments = _.sortBy(input.claimDocumentCollection.claimDocuments.filter(value => ClaimDocumentType[value.documentType] !== undefined).map((value) => {
+          return new ClaimDocument().deserialize(value)
+        }), [function (o) {
+          return o.createdDatetime
+        }]).reverse()
+      }
+
+      if (input.proceedOfflineReason) {
+        this.proceedOfflineReason = input.proceedOfflineReason
+      }
+
+      return this
+    }
   }
 
-  isAdmissionsResponse (): boolean {
+  public isAdmissionsResponse (): boolean {
     return (this.response.responseType === ResponseType.FULL_ADMISSION
       || this.response.responseType === ResponseType.PART_ADMISSION)
   }
@@ -423,6 +467,10 @@ export class Claim {
       return false
     }
 
+    if (this.mediationOutcome !== undefined && this.mediationOutcome === MediationOutcome.SUCCEEDED) {
+      return false
+    }
+
     if (this.isResponseSubmitted() && this.response.responseType === ResponseType.PART_ADMISSION && (this.response && !this.response.paymentDeclaration)) {
       return true
     }
@@ -431,7 +479,7 @@ export class Claim {
       return true
     }
 
-    if (this.isOfferAccepted() || this.hasClaimantRejectedPartAdmission() || this.hasRedeterminationBeenRequested()) {
+    if (this.isOfferAccepted() || this.hasClaimantRejectedPartAdmission() || this.hasClaimantRejectedPartAdmissionDQs() || this.hasRedeterminationBeenRequested()) {
       return true
     }
 
@@ -443,7 +491,7 @@ export class Claim {
       return false
     }
 
-    if (this.hasClaimantRejectedDefendantDefence() || this.hasClaimantRejectedPartAdmissionDQs()) {
+    if (this.hasClaimantRejectedDefendantDefence()) {
       return true
     }
 
@@ -502,11 +550,14 @@ export class Claim {
       const now = MomentFactory.currentDate()
       if (offer && offer.paymentIntention) {
         switch (offer.paymentIntention.paymentOption) {
-          case PaymentOption.BY_SPECIFIED_DATE : const paymentDate = offer.paymentIntention.paymentDate
+          case PaymentOption.BY_SPECIFIED_DATE :
+            const paymentDate = offer.paymentIntention.paymentDate
             return (paymentDate.isAfter(now) || paymentDate.isSame(now))
-          case PaymentOption.INSTALMENTS : const firstPaymentDate = offer.paymentIntention.repaymentPlan.firstPaymentDate
+          case PaymentOption.INSTALMENTS :
+            const firstPaymentDate = offer.paymentIntention.repaymentPlan.firstPaymentDate
             return (firstPaymentDate.isAfter(now) || firstPaymentDate.isSame(now))
-          case PaymentOption.IMMEDIATELY : return true
+          case PaymentOption.IMMEDIATELY :
+            return true
         }
       }
     }
@@ -648,7 +699,16 @@ export class Claim {
   }
 
   public isIntentionToProceedEligible (): boolean {
-    return (this.directionsQuestionnaireDeadline && this.directionsQuestionnaireDeadline.isAfter(MomentFactory.parse('2019-09-29')) ||
-      this.directionsQuestionnaireDeadline === undefined)
+    const dateIntentionToProceedWasReleased: Moment = MomentFactory.parse('2019-09-09').hour(15).minute(12)
+    return this.createdAt.isAfter(dateIntentionToProceedWasReleased)
+  }
+
+  private hasIntentionToProceedDeadlinePassed (): boolean {
+    return !this.claimantResponse && this.response && this.response.responseType === ResponseType.FULL_DEFENCE && MomentFactory.currentDateTime().isAfter(this.intentionToProceedDeadline.clone().hour(16)) &&
+      this.isIntentionToProceedEligible()
+  }
+
+  private checkProceedOfflineReason (): boolean {
+    return (this.proceedOfflineReason && (this.proceedOfflineReason === ProceedOfflineReason.APPLICATION_BY_DEFENDANT || this.proceedOfflineReason === ProceedOfflineReason.APPLICATION_BY_CLAIMANT))
   }
 }
