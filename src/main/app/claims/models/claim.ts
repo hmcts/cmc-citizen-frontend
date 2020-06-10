@@ -35,6 +35,7 @@ import { ClaimDocument } from 'claims/models/claimDocument'
 import { TransferContent } from 'claims/models/transferContent'
 import * as _ from 'lodash'
 import { ClaimDocumentType } from 'common/claimDocumentType'
+import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
 
 interface State {
   status: ClaimStatus
@@ -80,6 +81,7 @@ export class Claim {
   pilotCourt: YesNoOption
   paperResponse: YesNoOption
   claimDocuments?: ClaimDocument[]
+  proceedOfflineReason: string
   transferContent?: TransferContent
 
   get defendantOffer (): Offer {
@@ -175,6 +177,8 @@ export class Claim {
       }
     } else if (this.paperResponse && this.paperResponse === YesNoOption.YES) {
       return ClaimStatus.DEFENDANT_PAPER_RESPONSE
+    } else if (this.checkProceedOfflineReason()) {
+      return ClaimStatus.PROCEED_OFFLINE
     } else if (this.moneyReceivedOn) {
       return ClaimStatus.PAID_IN_FULL
     } else if (this.countyCourtJudgmentRequestedAt) {
@@ -389,6 +393,10 @@ export class Claim {
         }), [function (o) {
           return o.createdDatetime
         }]).reverse()
+      }
+
+      if (input.proceedOfflineReason) {
+        this.proceedOfflineReason = input.proceedOfflineReason
       }
 
       return this
@@ -706,5 +714,9 @@ export class Claim {
   private hasIntentionToProceedDeadlinePassed (): boolean {
     return !this.claimantResponse && this.response && this.response.responseType === ResponseType.FULL_DEFENCE && MomentFactory.currentDateTime().isAfter(this.intentionToProceedDeadline.clone().hour(16)) &&
       this.isIntentionToProceedEligible()
+  }
+
+  private checkProceedOfflineReason (): boolean {
+    return (this.proceedOfflineReason && (this.proceedOfflineReason === ProceedOfflineReason.APPLICATION_BY_DEFENDANT || this.proceedOfflineReason === ProceedOfflineReason.APPLICATION_BY_CLAIMANT))
   }
 }

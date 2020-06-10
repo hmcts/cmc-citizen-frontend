@@ -136,6 +136,10 @@
   paperResponseForDefendantClaimDetails
 %}
 
+{% from "./claimStatus/offlineResponse.njk" import
+  offlineResponseForDefendantClaimDetails,
+  offlineResponseForClaimantClaimDetails %}
+  
 {% from "./claimStatus/claimTransferred.njk" import
   claimTransferredDefendantClaimDetails,
   claimTransferredClaimantClaimDetails
@@ -163,6 +167,8 @@
       {% endif %}
     {% elif state.status === ClaimStatus.DEFENDANT_PAPER_RESPONSE %}
       {{ paperResponseForClaimantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.PROCEED_OFFLINE %}
+      {{ offlineResponseForClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE %}
       {{ claimFullAdmissionPayImmediatelyPastDeadlineForClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_PART_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE %}
@@ -287,6 +293,8 @@
       {{ ccjEligibleForDefendantClaimDetails(claim, csrf) }}
     {% elif state.status === ClaimStatus.DEFENDANT_PAPER_RESPONSE %}
       {{ paperResponseForDefendantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.PROCEED_OFFLINE %}
+      {{ offlineResponseForDefendantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ %}
       {{ admissionByCCJDefendantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.CCJ_AFTER_SETTLEMENT_BREACHED or
