@@ -27,18 +27,21 @@ export default express.Router()
     try {
       const searchParam = req.query.name
 
-      const courts: Court[] = await Court.getCourtsByName(searchParam)
-      if (courts) {
-        let courtDetails: CourtDetails[] = []
-
-        for (let court of courts) {
-          courtDetails.push(await Court.getCourtDetails(court.slug))
-        }
-        renderPage(res, new Form<HearingLocation>(new HearingLocation()), false, courtDetails, searchParam)
+      if (!searchParam) {
+        renderPage(res, new Form<HearingLocation>(new HearingLocation()), true, [], searchParam)
       } else {
-        renderPage(res, new Form<HearingLocation>(new HearingLocation()), true, undefined, searchParam)
-      }
+        const courts: Court[] = await Court.getCourtsByName(searchParam)
+        if (courts) {
+          let courtDetails: CourtDetails[] = []
 
+          for (let court of courts) {
+            courtDetails.push(await Court.getCourtDetails(court.slug))
+          }
+          renderPage(res, new Form<HearingLocation>(new HearingLocation()), false, courtDetails, searchParam)
+        } else {
+          renderPage(res, new Form<HearingLocation>(new HearingLocation()), true, undefined, searchParam)
+        }
+      }
     } catch (err) {
       next(err)
     }
