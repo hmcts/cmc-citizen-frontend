@@ -215,7 +215,7 @@ export class Nunjucks {
       return date ? new Date(date) : new Date()
     })
     nunjucksEnv.addGlobal('warningBanner', (): boolean => toBoolean(featureToggles
-      .isWarningBannerEnabled('warning_banner', express().response.locals.users)))
+      .isWarningBannerEnabled('warning_banner', app.response.locals.users)))
   }
 
   private convertPropertiesToBoolean (featureToggles: { [key: string]: any }): { [key: string]: boolean } {

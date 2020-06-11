@@ -37,6 +37,6 @@ export class FeatureToggles {
 
   async isWarningBannerEnabled (toggle: string, user: User): Promise<boolean> {
     const roles: string[] = await this.claimStoreClient.retrieveUserRoles(user)
-    return this.launchDarklyClient.variation(user, roles, toggle, false)
+    return this.launchDarklyClient.variation(user, roles, toggle, true)
   }
 }
