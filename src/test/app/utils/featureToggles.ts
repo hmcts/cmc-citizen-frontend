@@ -5,7 +5,7 @@ import * as toBoolean from 'to-boolean'
 import { FeatureToggles } from 'utils/featureToggles'
 import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
-import { anything, instance, mock, when } from 'ts-mockito'
+import { instance } from 'ts-mockito'
 
 describe('FeatureToggles', () => {
   describe('isAnyEnabled', () => {
@@ -31,10 +31,8 @@ describe('FeatureToggles', () => {
 
   describe('isWarningBannerEnabled', () => {
     it('should return true if warningBanner toggle exists', async () => {
-      const mockLaunchDarklyClient: LaunchDarklyClient = mock(LaunchDarklyClient)
-      const featureToggles = new FeatureToggles(new ClaimStoreClient(), instance(mockLaunchDarklyClient))
-      when(mockLaunchDarklyClient.default(anything(), anything()))
-        .thenResolve(Promise.resolve(true))
+      const launchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
+      const featureToggles = new FeatureToggles(new ClaimStoreClient(), instance(launchDarklyClient))
       expect(featureToggles.isWarningBannerEnabled()).to.equal(true)
     })
   })
