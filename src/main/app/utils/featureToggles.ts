@@ -34,7 +34,7 @@ export class FeatureToggles {
       .some((featureName) => toBoolean(config.get<boolean>(`featureToggles.${featureName}`)))
   }
 
-  async isWarningBannerEnabled (toggle: string, defaultValue: boolean): Promise<boolean> {
-    return this.launchDarklyClient.warning(toggle, defaultValue)
+  async isWarningBannerEnabled (): Promise<boolean> {
+    return this.launchDarklyClient.default('warning_banner', true)
   }
 }

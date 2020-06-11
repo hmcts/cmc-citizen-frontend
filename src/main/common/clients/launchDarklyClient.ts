@@ -30,7 +30,7 @@ export class LaunchDarklyClient {
     return LaunchDarklyClient.client.variation(featureKey, ldUser, offlineDefault)
   }
 
-  async warning (featureKey: string, offlineDefault): Promise<ld.LDFlagValue> {
+  async default (featureKey: string, offlineDefault): Promise<ld.LDFlagValue> {
     const roles: string[] = []
     const ldUser: ld.LDUser = {
       key: 'citizen-frontend',
