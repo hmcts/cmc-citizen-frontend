@@ -7,7 +7,8 @@
 {% macro ccjRequestedForClaimantClaimDetails(claim) %}
   <div class="status-block">
     <h2 class="heading-medium">{{ t('Wait for the judgment to be confirmed') }}</h2>
-    <p>{{ t('We’ll contact you within 10 working days to tell you whether the judgment has been entered.') }}</p>
+    <p>{{ t('We’ll send you a letter within 10 working days to tell you whether the judgment has been entered.') }}</p>
+    <p>{{ t('Your online account won’t be updated with the progress of this claim - any further updates will be by post.') }}</p>
     <p>{{ t('{{ defendantName }} can no longer respond to your claim using this service - they may have responded by post.',
         { defendantName: claim.claimData.defendant.name }) }}</p>
     <p>{{ t('It’s possible we received a postal response before the deadline but hadn’t processed it when you requested judgment.') }}</p>
@@ -28,5 +29,6 @@
     <p>{{ t('It’s possible we received your postal response before the deadline but hadn’t processed it when they requested judgment.') }}</p>
     <p>{{ t('If we discover this has happened, we’ll reject their request.') }}</p>
     <p>{{ t('Otherwise we’ll post a copy of the CCJ to you and to {{ claimantName }} and explain what to do next.', { claimantName : claim.claimData.claimant.name }) }}</p>
+    <p>{{ t('Your online account won’t be updated with the progress of this claim - any further updates will be by post.')}}</p>
   </div>
 {% endmacro %}
