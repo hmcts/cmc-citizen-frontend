@@ -3,6 +3,9 @@ import * as config from 'config'
 import * as toBoolean from 'to-boolean'
 
 import { FeatureToggles } from 'utils/featureToggles'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
+import { ClaimStoreClient } from 'claims/claimStoreClient'
+import { anything, instance, mock, when } from 'ts-mockito'
 
 describe('FeatureToggles', () => {
   describe('isAnyEnabled', () => {
@@ -23,6 +26,16 @@ describe('FeatureToggles', () => {
 
     it('should throw an error if toggle does not exist', () => {
       expect(() => FeatureToggles.isEnabled('I am not a valid toggle name')).to.throw(Error)
+    })
+  })
+
+  describe('isWarningBannerEnabled', () => {
+    it('should return true if warningBanner toggle exists', async () => {
+      const mockLaunchDarklyClient: LaunchDarklyClient = mock(LaunchDarklyClient)
+      const featureToggles = new FeatureToggles(new ClaimStoreClient(), instance(mockLaunchDarklyClient))
+      when(mockLaunchDarklyClient.default(anything(), anything()))
+        .thenResolve(Promise.resolve(true))
+      expect(featureToggles.isWarningBannerEnabled()).to.equal(true)
     })
   })
 })
