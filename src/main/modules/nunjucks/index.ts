@@ -74,13 +74,9 @@ import { ResponseType as DomainResponseType } from 'claims/models/response/respo
 import { FeaturesBuilder } from 'claim/helpers/featuresBuilder'
 import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
 import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
-import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { FeatureToggles } from 'utils/featureToggles'
 
-const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 const launchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
-const featureToggles: FeatureToggles = new FeatureToggles(claimStoreClient, launchDarklyClient)
-
 const packageDotJson = require('../../../../package.json')
 
 const appAssetPaths = {
@@ -216,8 +212,8 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('toDate', function (date) {
       return date ? new Date(date) : new Date()
     })
-    nunjucksEnv.addGlobal('warningBanner', (): boolean => toBoolean(featureToggles
-      .isWarningBannerEnabled()))
+    nunjucksEnv.addGlobal('warningBanner', (): boolean => toBoolean(FeatureToggles
+      .isWarningBannerEnabled(launchDarklyClient)))
   }
 
   private convertPropertiesToBoolean (featureToggles: { [key: string]: any }): { [key: string]: boolean } {

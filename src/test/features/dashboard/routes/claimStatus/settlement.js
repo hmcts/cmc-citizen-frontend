@@ -1,0 +1,255 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const chai_1 = require("chai");
+const request = require("supertest");
+const config = require("config");
+require("test/routes/expectations");
+const paths_1 = require("dashboard/paths");
+const app_1 = require("main/app");
+const idamServiceMock = require("test/http-mocks/idam");
+const claimStoreServiceMock = require("test/http-mocks/claim-store");
+const draft_store_1 = require("test/http-mocks/draft-store");
+const data = require("test/data/entity/settlement");
+const momentFactory_1 = require("shared/momentFactory");
+const cookieName = config.get('session.cookieName');
+const externalId = draft_store_1.sampleClaimDraftObj.externalId;
+const claimantPagePath = paths_1.Paths.claimantPage.evaluateUri({ externalId });
+const defendantPagePath = paths_1.Paths.defendantPage.evaluateUri({ externalId });
+const claimantContext = {
+    party: 'claimant',
+    id: claimStoreServiceMock.sampleClaimObj.submitterId,
+    url: claimantPagePath
+};
+const defendantContext = {
+    party: 'defendant',
+    id: claimStoreServiceMock.sampleClaimObj.defendantId,
+    url: defendantPagePath
+};
+const claimantName = claimStoreServiceMock.sampleClaimObj.claim.claimants[0].name;
+const defendantName = claimStoreServiceMock.sampleClaimObj.claim.defendants[0].name;
+function testData() {
+    return [
+        {
+            status: 'Should show case settled when part-admit pay-by-set-date settlement reached',
+            claim: Object.assign(Object.assign(Object.assign({}, data.claim), data.responses().partialAdmission), data.payBySetDateSettlementReachedPartyStatements()),
+            claimOverride: {},
+            claimantAssertions: [
+                'You’ve both signed a settlement agreement',
+                'Download the settlement agreement'
+            ],
+            defendantAssertions: [
+                'You’ve both signed a settlement agreement',
+                'Download the settlement agreement'
+            ]
+        },
+        {
+            status: 'Should show case settled when full-admit pay-by-set-date settlement reached',
+            claim: Object.assign(Object.assign(Object.assign({}, data.claim), data.responses().fullAdmission), data.payBySetDateSettlementReachedPartyStatements()),
+            claimOverride: {},
+            claimantAssertions: [
+                'You’ve both signed a settlement agreement',
+                'Download the settlement agreement'
+            ],
+            defendantAssertions: [
+                'You’ve both signed a settlement agreement',
+                'Download the settlement agreement'
+            ]
+        },
+        {
+            status: 'Should show offer settlement reached',
+            claim: Object.assign(Object.assign(Object.assign(Object.assign({}, data.claim), data.responses().partialAdmission), data.claimantResponses().acceptBySettlement), data.nonMonetaryOfferSettlementReachedPartyStatements()),
+            claimOverride: {},
+            claimantAssertions: [
+                'Agreement signed',
+                'You’ve both signed a legal agreement. The claim is now settled.',
+                'Download the settlement agreement'
+            ],
+            defendantAssertions: [
+                'Agreement signed',
+                'You’ve both signed a legal agreement. The claim is now settled.',
+                'Download the settlement agreement'
+            ]
+        },
+        {
+            status: 'Should show part-admit settlement rejected',
+            claim: Object.assign(Object.assign(Object.assign(Object.assign({}, data.claim), data.responses().partialAdmission), data.claimantResponses().acceptWithNewPlan), data.defendantRejectsSettlementPartyStatements()),
+            claimOverride: {},
+            claimantAssertions: [
+                'The defendant has rejected your settlement agreement',
+                'You can request a County Court Judgment (CCJ) against them',
+                'Request a County Court Judgment (CCJ)'
+            ],
+            defendantAssertions: [
+                'You rejected the settlement agreement',
+                `${claimantName} can request a County Court Judgment (CCJ) against you`,
+                'Download your response'
+            ]
+        },
+        {
+            status: 'Should show full-admit settlement rejected',
+            claim: Object.assign(Object.assign(Object.assign(Object.assign({}, data.claim), data.responses().fullAdmission), data.claimantResponses().acceptWithNewPlan), data.defendantRejectsSettlementPartyStatements()),
+            claimOverride: {},
+            claimantAssertions: [
+                'The defendant has rejected your settlement agreement',
+                'You can request a County Court Judgment (CCJ) against them',
+                'Request a County Court Judgment (CCJ)'
+            ],
+            defendantAssertions: [
+                'You rejected the settlement agreement',
+                `${claimantName} can request a County Court Judgment (CCJ) against you`,
+                'Download your response'
+            ]
+        },
+        {
+            status: 'Should show claimant accepted court plan part-admit settlement',
+            claim: Object.assign(Object.assign(Object.assign(Object.assign({}, data.claim), data.responses().partialAdmission), data.claimantResponses().acceptsWithCourtPlan), data.claimantAcceptsCourtOfferPartyStatements()),
+            claimOverride: {},
+            claimantAssertions: [
+                'You’ve signed a settlement agreement',
+                `We’ve emailed ${defendantName} the repayment plan and the settlement agreement for them to sign.`,
+                'If they do not respond you can request a County Court Judgment.'
+            ],
+            defendantAssertions: [
+                'They asked you to sign a settlement agreement to formalise the plan.',
+                'If you sign the agreement, they can’t request a County Court Judgment against you unless you break the terms.',
+                'View the repayment plan'
+            ]
+        },
+        {
+            status: 'Should show claimant accepted court plan full-admit settlement',
+            claim: Object.assign(Object.assign(Object.assign(Object.assign({}, data.claim), data.responses().fullAdmission), data.claimantResponses().acceptsWithCourtPlan), data.claimantAcceptsCourtOfferPartyStatements()),
+            claimOverride: {},
+            claimantAssertions: [
+                'You’ve signed a settlement agreement',
+                `We’ve emailed ${defendantName} the repayment plan and the settlement agreement for them to sign.`,
+                'If they do not respond you can request a County Court Judgment.'
+            ],
+            defendantAssertions: [
+                'They asked you to sign a settlement agreement to formalise the plan.',
+                'If you sign the agreement, they can’t request a County Court Judgment against you unless you break the terms.',
+                'View the repayment plan'
+            ]
+        }
+    ];
+}
+function legacyClaimDetails() {
+    return [
+        {
+            status: 'Legacy - Should show offer to settle made',
+            claim: Object.assign(Object.assign(Object.assign({}, data.claim), data.responses().fullRejection), data.nonMonetaryOfferAwaitingClaimantResponsePartyStatements()),
+            claimOverride: {
+                createdAt: '2019-09-01',
+                issuedOn: '2019-09-01'
+            },
+            claimantAssertions: [
+                'The defendant has rejected your claim',
+                'They said they dispute your claim.',
+                'Your claim won’t proceed if you don’t complete and return the form before',
+                `${claimStoreServiceMock.sampleClaimObj.claim.defendants[0].name} has made an offer to settle out of court.`,
+                'View and respond to the offer'
+            ],
+            defendantAssertions: [
+                'Your response to the claim',
+                'You’ve rejected the claim and said you don’t want to use mediation to solve it. You’ll have to go to a hearing.',
+                'complete a directions questionnaire',
+                'Your defence will be cancelled if you don’t complete and return the form before',
+                'You made an offer to settle the claim out of court.',
+                `${claimStoreServiceMock.sampleClaimObj.claim.claimants[0].name} can accept or reject your offer.`
+            ]
+        }
+    ];
+}
+function mediationDQEnabledClaimDetails() {
+    return [
+        {
+            status: 'Mediation and DQ enabled - Should show offer to settle made',
+            claim: Object.assign(Object.assign(Object.assign({}, data.claim), data.responses().fullRejection), data.nonMonetaryOfferAwaitingClaimantResponsePartyStatements()),
+            claimOverride: {},
+            claimantAssertions: [
+                'Decide whether to proceed',
+                'John Doe has rejected your claim.',
+                'You need to decide whether to proceed with the claim. You need to respond before',
+                'Your claim won’t continue if you don’t respond by then.',
+                `${claimStoreServiceMock.sampleClaimObj.claim.defendants[0].name} has made an offer to settle out of court.`,
+                'View and respond to the offer'
+            ],
+            defendantAssertions: [
+                'Wait for the claimant to respond',
+                'You’ve rejected the claim.',
+                'You said you don’t want to use mediation to solve it. You might have to go to a hearing.',
+                'We’ll contact you when the claimant responds.',
+                'You made an offer to settle the claim out of court.',
+                `${claimStoreServiceMock.sampleClaimObj.claim.claimants[0].name} can accept or reject your offer.`
+            ]
+        }
+    ];
+}
+describe('Settlement claim statuses', () => {
+    beforeEach(() => app_1.app.locals.csrf = 'dummy-token');
+    mediationDQEnabledClaimDetails().forEach(data => {
+        context(data.status, () => {
+            it(claimantContext.party, async () => {
+                idamServiceMock.resolveRetrieveUserFor(claimantContext.id, 'citizen');
+                claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride);
+                claimStoreServiceMock.mockNextWorkingDay(momentFactory_1.MomentFactory.parse('2019-07-01'));
+                await request(app_1.app)
+                    .get(claimantContext.url)
+                    .set('Cookie', `${cookieName}=ABC`)
+                    .expect(res => chai_1.expect(res).to.be.successful.withText(...data.claimantAssertions));
+            });
+            it(defendantContext.party, async () => {
+                idamServiceMock.resolveRetrieveUserFor(defendantContext.id, 'citizen');
+                claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride);
+                claimStoreServiceMock.mockNextWorkingDay(momentFactory_1.MomentFactory.parse('2019-07-01'));
+                await request(app_1.app)
+                    .get(defendantContext.url)
+                    .set('Cookie', `${cookieName}=ABC`)
+                    .expect(res => chai_1.expect(res).to.be.successful.withText(...data.defendantAssertions));
+            });
+        });
+    });
+    legacyClaimDetails().forEach(data => {
+        context(data.status, () => {
+            it(claimantContext.party, async () => {
+                idamServiceMock.resolveRetrieveUserFor(claimantContext.id, 'citizen');
+                claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride);
+                claimStoreServiceMock.mockNextWorkingDay(momentFactory_1.MomentFactory.parse('2019-07-01'));
+                await request(app_1.app)
+                    .get(claimantContext.url)
+                    .set('Cookie', `${cookieName}=ABC`)
+                    .expect(res => chai_1.expect(res).to.be.successful.withText(...data.claimantAssertions));
+            });
+            it(defendantContext.party, async () => {
+                idamServiceMock.resolveRetrieveUserFor(defendantContext.id, 'citizen');
+                claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride);
+                claimStoreServiceMock.mockNextWorkingDay(momentFactory_1.MomentFactory.parse('2019-07-01'));
+                await request(app_1.app)
+                    .get(defendantContext.url)
+                    .set('Cookie', `${cookieName}=ABC`)
+                    .expect(res => chai_1.expect(res).to.be.successful.withText(...data.defendantAssertions));
+            });
+        });
+    });
+    testData().forEach(data => {
+        context(data.status, () => {
+            it(claimantContext.party, async () => {
+                idamServiceMock.resolveRetrieveUserFor(claimantContext.id, 'citizen');
+                claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride);
+                claimStoreServiceMock.mockNextWorkingDay(momentFactory_1.MomentFactory.parse('2019-07-01'));
+                await request(app_1.app)
+                    .get(claimantContext.url)
+                    .set('Cookie', `${cookieName}=ABC`)
+                    .expect(res => chai_1.expect(res).to.be.successful.withText(...data.claimantAssertions));
+            });
+            it(defendantContext.party, async () => {
+                idamServiceMock.resolveRetrieveUserFor(defendantContext.id, 'citizen');
+                claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride);
+                claimStoreServiceMock.mockNextWorkingDay(momentFactory_1.MomentFactory.parse('2019-07-01'));
+                await request(app_1.app)
+                    .get(defendantContext.url)
+                    .set('Cookie', `${cookieName}=ABC`)
+                    .expect(res => chai_1.expect(res).to.be.successful.withText(...data.defendantAssertions));
+            });
+        });
+    });
+});

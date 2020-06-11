@@ -1,0 +1,120 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const chai_1 = require("chai");
+const request = require("supertest");
+const config = require("config");
+const hooks_1 = require("test/routes/hooks");
+require("test/routes/expectations");
+const authorization_check_1 = require("test/features/claim/routes/checks/authorization-check");
+const paths_1 = require("claimant-response/paths");
+const app_1 = require("main/app");
+const idamServiceMock = require("test/http-mocks/idam");
+const draftStoreServiceMock = require("test/http-mocks/draft-store");
+const claimStoreServiceMock = require("test/http-mocks/claim-store");
+const formaliseRepaymentPlanOption_1 = require("features/claimant-response/form/models/formaliseRepaymentPlanOption");
+const cookieName = config.get('session.cookieName');
+const externalId = claimStoreServiceMock.sampleClaimObj.externalId;
+const pagePath = paths_1.Paths.chooseHowToProceedPage.evaluateUri({ externalId: externalId });
+const pageContent = 'Choose how to proceed';
+const defendantPartialAdmissionResponse = claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj;
+describe('Claimant response: choose how to proceed page', () => {
+    hooks_1.attachDefaultHooks(app_1.app);
+    describe('on GET', () => {
+        authorization_check_1.checkAuthorizationGuards(app_1.app, 'get', pagePath);
+        describe('for authorized user', () => {
+            beforeEach(() => {
+                idamServiceMock.resolveRetrieveUserFor('1', 'citizen');
+            });
+            it('should return 500 and render error page when cannot retrieve claims', async () => {
+                claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error');
+                await request(app_1.app)
+                    .get(pagePath)
+                    .set('Cookie', `${cookieName}=ABC`)
+                    .expect(res => chai_1.expect(res).to.be.serverError.withText('Error'));
+            });
+            it('should return 500 and render error page when cannot retrieve claimantResponse draft', async () => {
+                draftStoreServiceMock.rejectFind('Error');
+                claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse);
+                await request(app_1.app)
+                    .get(pagePath)
+                    .set('Cookie', `${cookieName}=ABC`)
+                    .expect(res => chai_1.expect(res).to.be.serverError.withText('Error'));
+            });
+            it('should render page when everything is fine', async () => {
+                draftStoreServiceMock.resolveFind('claimantResponse');
+                claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse);
+                await request(app_1.app)
+                    .get(pagePath)
+                    .set('Cookie', `${cookieName}=ABC`)
+                    .expect(res => chai_1.expect(res).to.be.successful.withText(pageContent));
+            });
+        });
+    });
+    describe('on POST', () => {
+        describe('authorization guards', () => {
+            authorization_check_1.checkAuthorizationGuards(app_1.app, 'post', pagePath);
+        });
+        describe('for authorized user', () => {
+            beforeEach(() => {
+                idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.submitterId, 'citizen');
+            });
+            context('when middleware failure', () => {
+                it('should return 500 when cannot retrieve claim by external id', async () => {
+                    claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error');
+                    await request(app_1.app)
+                        .post(pagePath)
+                        .set('Cookie', `${cookieName}=ABC`)
+                        .send({ option: formaliseRepaymentPlanOption_1.FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value })
+                        .expect(res => chai_1.expect(res).to.be.serverError.withText('Error'));
+                });
+                it('should return 500 when cannot retrieve claimantResponse draft', async () => {
+                    draftStoreServiceMock.rejectFind('Error');
+                    claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse);
+                    await request(app_1.app)
+                        .post(pagePath)
+                        .set('Cookie', `${cookieName}=ABC`)
+                        .send({ option: formaliseRepaymentPlanOption_1.FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value })
+                        .expect(res => chai_1.expect(res).to.be.serverError.withText('Error'));
+                });
+            });
+            it('should render page when form is invalid and everything is fine', async () => {
+                draftStoreServiceMock.resolveFind('claimantResponse');
+                claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse);
+                await request(app_1.app)
+                    .post(pagePath)
+                    .set('Cookie', `${cookieName}=ABC`)
+                    .expect(res => chai_1.expect(res).to.be.successful.withText(pageContent, 'div class="error-summary"'));
+            });
+            it('should return 500 and render error page when form is valid and cannot save draft', async () => {
+                draftStoreServiceMock.resolveFind('claimantResponse');
+                claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse);
+                draftStoreServiceMock.rejectUpdate();
+                await request(app_1.app)
+                    .post(pagePath)
+                    .set('Cookie', `${cookieName}=ABC`)
+                    .send({ option: formaliseRepaymentPlanOption_1.FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value })
+                    .expect(res => chai_1.expect(res).to.be.serverError.withText('Error'));
+            });
+            it('should redirect to task list page when `signSettlementAgreement` is selected and everything is fine', async () => {
+                draftStoreServiceMock.resolveFind('claimantResponse');
+                claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse);
+                draftStoreServiceMock.resolveUpdate();
+                await request(app_1.app)
+                    .post(pagePath)
+                    .set('Cookie', `${cookieName}=ABC`)
+                    .send({ option: formaliseRepaymentPlanOption_1.FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value })
+                    .expect(res => chai_1.expect(res).to.be.redirect.toLocation(paths_1.Paths.taskListPage.evaluateUri({ externalId: externalId })));
+            });
+            it('should redirect to task list page when `requestCCJ` is selected and everything is fine', async () => {
+                draftStoreServiceMock.resolveFind('claimantResponse');
+                claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse);
+                draftStoreServiceMock.resolveUpdate();
+                await request(app_1.app)
+                    .post(pagePath)
+                    .set('Cookie', `${cookieName}=ABC`)
+                    .send({ option: formaliseRepaymentPlanOption_1.FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT.value })
+                    .expect(res => chai_1.expect(res).to.be.redirect.toLocation(paths_1.Paths.taskListPage.evaluateUri({ externalId: externalId })));
+            });
+        });
+    });
+});

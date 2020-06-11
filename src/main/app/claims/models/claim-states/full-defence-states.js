@@ -1,0 +1,20 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var FullDefenceStates;
+(function (FullDefenceStates) {
+    FullDefenceStates["FULL_DEFENCE"] = "full-defence";
+    FullDefenceStates["FD_ALREADY_PAID"] = "fd-already-paid";
+    FullDefenceStates["FD_ALREADY_PAID_RESPONSE"] = "fd-already-paid-response";
+    FullDefenceStates["FD_ALREADY_PAID_ACCEPT"] = "fd-already-paid-accept";
+    FullDefenceStates["FD_ALREADY_PAID_REJECT"] = "fd-already-paid-reject";
+    FullDefenceStates["FD_REJECT_WITH_MEDIATION"] = "fd-reject-with-mediation";
+    FullDefenceStates["FD_REJECT_WITHOUT_MEDIATION"] = "fd-reject-without-mediation";
+    FullDefenceStates["FD_SETTLEMENT_OFFER_WITH_MEDIATION"] = "fd-settlement-offer-with-mediation";
+    FullDefenceStates["FD_SETTLEMENT_OFFER_WITHOUT_MEDIATION"] = "fd-settlement-offer-without-mediation";
+    FullDefenceStates["FD_SETTLEMENT_OFFER_REJECT_WITH_MEDIATION"] = "fd-settlement-offer-reject-with-mediation";
+    FullDefenceStates["FD_SETTLEMENT_OFFER_REJECT_WITHOUT_MEDIATION"] = "fd-settlement-offer-reject-without-mediation";
+    FullDefenceStates["FD_MADE_AGREEMENT_WITH_MEDIATION"] = "fd-made-agreement-with-mediation";
+    FullDefenceStates["FD_MADE_AGREEMENT_WITHOUT_MEDIATION"] = "fd-made-agreement-without-mediation";
+    FullDefenceStates["FD_SETTLED_WITH_AGREEMENT"] = "fd-settled-with-agreement";
+    FullDefenceStates["FD_SETTLED"] = "fd-settled";
+})(FullDefenceStates = exports.FullDefenceStates || (exports.FullDefenceStates = {}));
