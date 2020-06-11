@@ -23,6 +23,17 @@ export class Court {
     }
   }
 
+  static async getCourtsByName (name: string): Promise<Court[]> {
+    const courtFinderClient: CourtFinderClient = new CourtFinderClient()
+    const response: CourtFinderResponse = await courtFinderClient.findMoneyClaimCourtsByName(name)
+
+    if (response.statusCode !== 200 || response.courts.length === 0) {
+      return undefined
+    } else {
+      return response.courts
+    }
+  }
+
   static async getCourtDetails (slug: string): Promise<CourtDetails> {
     const courtFinderClient: CourtFinderClient = new CourtFinderClient()
     const courtDetailsResponse: CourtDetailsResponse = await courtFinderClient.getCourtDetails(slug)
