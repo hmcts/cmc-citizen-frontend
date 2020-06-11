@@ -35,6 +35,6 @@ export class FeatureToggles {
   }
 
   async isWarningBannerEnabled (): Promise<boolean> {
-    return this.launchDarklyClient.default('warning_banner', true)
+    return this.launchDarklyClient.default('warning_banner', false)
   }
 }
