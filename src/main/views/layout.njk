@@ -10,9 +10,11 @@
   <p>{{ t(cookieText) | safe }}</p>
 {% endblock %}
 
-{% if warningBanner %}
-        {% include "includes/banner.njk" %}
-{% endif %}
+{% block warning_message %}
+  {% if warningBanner %}
+    {% include "includes/banner.njk" %}
+  {% endif %}
+{% endblock %}
 
 {% block proposition_header %}
   {% include "includes/propositional_navigation.njk" %}
