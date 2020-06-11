@@ -45,6 +45,7 @@ type FeatureDefinition = {
   validForAmount: (amount: number) => boolean
 }
 
+
 export const FEATURES: FeatureDefinition[] = [
   {
     feature: 'admissions',

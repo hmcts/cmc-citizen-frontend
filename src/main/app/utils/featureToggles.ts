@@ -1,7 +1,17 @@
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
+import { ClaimStoreClient } from 'claims/claimStoreClient'
+import { User } from 'idam/user'
 
 export class FeatureToggles {
+  readonly claimStoreClient: ClaimStoreClient
+  readonly launchDarklyClient: LaunchDarklyClient
+
+  constructor (claimStoreClient: ClaimStoreClient, launchDarklyClient: LaunchDarklyClient) {
+    this.claimStoreClient = claimStoreClient
+    this.launchDarklyClient = launchDarklyClient
+  }
   static isEnabled (featureName: string): boolean {
     return FeatureToggles.isAnyEnabled(featureName)
   }
@@ -23,5 +33,10 @@ export class FeatureToggles {
     }
     return featureNames
       .some((featureName) => toBoolean(config.get<boolean>(`featureToggles.${featureName}`)))
+  }
+
+  async isWarningBannerEnabled (toggle: string, user: User): Promise<boolean> {
+    const roles: string[] = await this.claimStoreClient.retrieveUserRoles(user)
+    return this.launchDarklyClient.variation(user, roles, toggle, false)
   }
 }
