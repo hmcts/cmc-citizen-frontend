@@ -380,7 +380,7 @@ export class Claim {
         this.pilotCourt = YesNoOption.fromObject(input.pilotCourt)
       }
 
-      if(input.transferContent) {
+      if (input.transferContent) {
         this.transferContent = new TransferContent().deserialize(input.transferContent)
       }
 
@@ -724,7 +724,7 @@ export class Claim {
     return (this.proceedOfflineReason && (this.proceedOfflineReason === ProceedOfflineReason.APPLICATION_BY_DEFENDANT || this.proceedOfflineReason === ProceedOfflineReason.APPLICATION_BY_CLAIMANT))
   }
 
-  private hasBeenTransferred () : boolean {
+  private hasBeenTransferred (): boolean {
     return this.state === 'TRANSFERRED'
   }
 }

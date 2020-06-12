@@ -1,6 +1,6 @@
-import { Moment } from 'moment';
-import { MomentFactory } from 'shared/momentFactory';
-import { Address } from 'claims/models/address';
+import { Moment } from 'moment'
+import { MomentFactory } from 'shared/momentFactory'
+import { Address } from 'claims/models/address'
 
 export class TransferContent {
   dateOfTransfer: Moment
