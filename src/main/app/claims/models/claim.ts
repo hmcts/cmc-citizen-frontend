@@ -165,7 +165,7 @@ export class Claim {
   get status (): ClaimStatus {
     if (this.moneyReceivedOn && this.countyCourtJudgmentRequestedAt && this.isCCJPaidWithinMonth()) {
       return ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED
-    } else if (this.state === 'TRANSFERRED') {
+    } else if (this.hasBeenTransferred()) {
       return ClaimStatus.TRANSFERRED
     } else if (this.moneyReceivedOn && this.countyCourtJudgmentRequestedAt) {
       return ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
@@ -507,6 +507,10 @@ export class Claim {
       return true
     }
 
+    if (this.hasBeenTransferred()) {
+      return false
+    }
+
     return (((this.response && (this.response as FullAdmissionResponse).paymentIntention
       && (this.response as FullAdmissionResponse).paymentIntention.paymentOption !==
       PaymentOption.IMMEDIATELY
@@ -718,5 +722,9 @@ export class Claim {
 
   private checkProceedOfflineReason (): boolean {
     return (this.proceedOfflineReason && (this.proceedOfflineReason === ProceedOfflineReason.APPLICATION_BY_DEFENDANT || this.proceedOfflineReason === ProceedOfflineReason.APPLICATION_BY_CLAIMANT))
+  }
+
+  private hasBeenTransferred () : boolean {
+    return this.state === 'TRANSFERRED'
   }
 }
