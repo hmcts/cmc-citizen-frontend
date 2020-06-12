@@ -7,9 +7,10 @@ import { Facilities } from 'court-finder-client/facilities'
 export class AlternativeCourtOption {
   static readonly BY_NAME: string = 'name'
   static readonly BY_POSTCODE: string = 'postcode'
+  static readonly BY_SEARCH: string = 'search'
 
   static all (): string[] {
-    return [this.BY_NAME, this.BY_POSTCODE]
+    return [this.BY_NAME, this.BY_POSTCODE, this.BY_SEARCH]
   }
 }
 
