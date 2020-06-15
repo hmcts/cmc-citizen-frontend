@@ -33,7 +33,9 @@ describe('TransferContents', () => {
       let result = new TransferContents().deserialize({
         dateOfTransfer: '2020-01-01'
       })
-      expect(result.dateOfTransfer).to.be.equals(MomentFactory.parse('2020-01-01'))
+      expect(result.dateOfTransfer.year()).to.be.equals(2020)
+      expect(result.dateOfTransfer.month()).to.be.equals(1)
+      expect(result.dateOfTransfer.day()).to.be.equals(1)
     })
 
     it('should return a TransferContents instance with set field "reasonForTransfer" from given object', () => {
@@ -57,7 +59,8 @@ describe('TransferContents', () => {
           postcode: 'bb127nq'
         }
       })
-      expect(result.hearingCourtAddress).to.be.equals(new Address('first line', undefined, undefined, undefined, 'bb127nq'))
+      expect(result.hearingCourtAddress.line1).to.be.equals('first line')
+      expect(result.hearingCourtAddress.postcode).to.be.equals('bb127nq')
     })
   })
 })
