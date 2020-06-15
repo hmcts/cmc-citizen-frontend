@@ -3,8 +3,6 @@
 
 import { expect } from 'chai'
 import { TransferContents } from 'claims/models/transferContents'
-import { MomentFactory } from 'shared/momentFactory'
-import { Address } from 'forms/models/address'
 
 describe('TransferContents', () => {
 
