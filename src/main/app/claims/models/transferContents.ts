@@ -8,9 +8,6 @@ export class TransferContents {
   hearingCourtName: string
   hearingCourtAddress: Address
 
-  constructor () {
-  }
-
   deserialize (input: any): TransferContents {
     if (input) {
       this.dateOfTransfer = MomentFactory.parse(input.dateOfTransfer)
