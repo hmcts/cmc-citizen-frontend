@@ -10,7 +10,9 @@ export class TransferContents {
 
   deserialize (input: any): TransferContents {
     if (input) {
-      this.dateOfTransfer = MomentFactory.parse(input.dateOfTransfer)
+      if (input.dateOfTransfer) {
+        this.dateOfTransfer = MomentFactory.parse(input.dateOfTransfer)
+      }
       this.reasonForTransfer = input.reasonForTransfer
       this.hearingCourtName = input.hearingCourtName
       this.hearingCourtAddress = new Address().deserialize(input.hearingCourtAddress)
