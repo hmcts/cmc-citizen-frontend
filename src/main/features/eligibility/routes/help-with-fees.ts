@@ -12,13 +12,13 @@ class HelpWithFeesEligibilityPage extends EligibilityPage<YesNoOption> {
     if (toBoolean(config.get('featureToggles.helpWithFees'))) {
       super(Paths.helpWithFeesPage, Paths.helpWithFeesReferencePage, 'helpWithFees')
     } else {
-      super(Paths.helpWithFeesPage, Paths.singleDefendantPage, 'helpWithFees')
+      super(Paths.helpWithFeesPage, Paths.eligiblePage, 'helpWithFees')
     }
   }
 
   checkEligibility (value: YesNoOption): EligibilityCheck {
     if (toBoolean(config.get('featureToggles.helpWithFees'))) {
-      return value === YesNoOption.YES ? eligible() : notEligible(undefined, Paths.singleDefendantPage)
+      return value === YesNoOption.YES ? eligible() : notEligible(undefined, Paths.eligiblePage)
     } else {
       return value === YesNoOption.NO ? eligible() : notEligible(NotEligibleReason.HELP_WITH_FEES)
     }

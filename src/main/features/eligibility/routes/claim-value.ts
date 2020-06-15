@@ -7,7 +7,7 @@ import { NotEligibleReason } from 'eligibility/notEligibleReason'
 
 class ClaimValueEligibilityPage extends EligibilityPage<ClaimValue> {
   constructor () {
-    super(Paths.claimValuePage, Paths.helpWithFeesPage, 'claimValue')
+    super(Paths.claimValuePage, Paths.singleDefendantPage, 'claimValue')
   }
 
   checkEligibility (value: ClaimValue): EligibilityCheck {

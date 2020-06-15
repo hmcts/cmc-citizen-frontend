@@ -13,7 +13,7 @@ import { YesNoOption } from 'models/yesNoOption'
 import { NotEligibleReason } from 'eligibility/notEligibleReason'
 
 const pagePath: string = Paths.helpWithFeesReferencePage.uri
-const pageRedirect: string = Paths.singleDefendantPage.uri
+const pageRedirect: string = Paths.eligiblePage.uri
 const expectedTextOnPage: string = 'Do you have a Help With Fees reference number?'
 const notEligibleReason: string = NotEligibleReason.HELP_WITH_FEES_REFERENCE
 

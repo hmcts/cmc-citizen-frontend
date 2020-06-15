@@ -12,7 +12,7 @@ import { app } from 'main/app'
 import { YesNoOption } from 'models/yesNoOption'
 
 const pagePath: string = Paths.helpWithFeesPage.uri
-const pageRedirect: string = Paths.singleDefendantPage.uri
+const pageRedirect: string = Paths.eligiblePage.uri
 const expectedTextOnPage: string = 'Do you need help paying your court fees?'
 
 describe('Claim eligibility: help with fees page', () => {
