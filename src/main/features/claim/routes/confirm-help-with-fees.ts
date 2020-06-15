@@ -34,8 +34,14 @@ export default express.Router()
       const draft: Draft<DraftClaim> = res.locals.claimDraft
       const user: User = res.locals.user
       const features = await featuresBuilder.features(draft.document.amount.totalAmount(), user)
-
-      await claimStoreClient.saveHelpWithFeesClaim(draft, user, features)
+      // try to find an existing claim
+      // if nothing, continue using POST
+        await claimStoreClient.saveHelpWithFeesClaim(draft, user, features)
+      // else check the status
+      //   awaiting citizen payment? -> PUT resumeHWF
+      //      if successful payment? -> consume payment's redirect URL
+      //      else continue to confirmation (REVISIT)
+      //   else? -> continue to confirmation page
       await new DraftService().delete(draft.id, user.bearerToken)
 
       res.redirect(Paths.confirmationPage.evaluateUri({ externalId: draft.document.externalId }))

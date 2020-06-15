@@ -59,7 +59,8 @@ export const claimData = {
   },
   evidence: {
     rows: []
-  }
+  },
+  helpWithFeesNumber: 'HWF01234'
 }
 
 export function defenceClaimData () {

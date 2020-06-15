@@ -1,7 +1,6 @@
 import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
-import * as toBoolean from 'to-boolean'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
@@ -97,7 +96,7 @@ describe('Claim issue: check and send page', () => {
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/reason" class="bold">Change <span class="visuallyhidden">why you believe you’re owed the money:</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/timeline" class="bold">Change <span class="visuallyhidden">timeline of what happened</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/evidence" class="bold">Change <span class="visuallyhidden">your evidence (optional)</span></a>'))
-          .expect(res => expect(res).to.be.successful.withText('Statement of truth', 'I believe that the facts stated in this claim are true.','I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.'))
+          .expect(res => expect(res).to.be.successful.withText('Statement of truth', 'I believe that the facts stated in this claim are true.', 'I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.'))
           .expect(res => expect(res).to.be.successful.withText('input id="signedtrue" type="checkbox" name="signed" value="true"'))
           .expect(res => expect(res).to.be.successful.withText('input type="submit" class="button"'))
       })
@@ -467,12 +466,9 @@ describe('Claim issue: check and send page', () => {
           .expect(res => expect(res).to.be.successful.withText('Check your answers', 'div class="error-summary"'))
       })
 
-      it('should redirect to payment page when form is valid and everything is fine', async () => {
+      it('should redirect to payment method page when form is valid and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        let nextPage: string = ClaimPaths.startPaymentReceiver.uri
-        if (toBoolean(config.get('featureToggles.inversionOfControl'))) {
-          nextPage = ClaimPaths.initiatePaymentController.uri
-        }
+        let nextPage: string = ClaimPaths.paymentMethodPage.uri
         await request(app)
           .post(ClaimPaths.checkAndSendPage.uri)
           .send({ type: SignatureType.BASIC })

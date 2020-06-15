@@ -787,6 +787,12 @@ export function resolveSaveClaimForUser () {
     .reply(HttpStatus.OK, { ...sampleClaimObj })
 }
 
+export function resolveSaveHelpWithFeesClaimForUser () {
+  mock(`${serviceBaseURL}/claims`)
+    .post(new RegExp('/[0-9]+/hwf'))
+    .reply(HttpStatus.OK, { ...sampleClaimObj })
+}
+
 export function rejectSaveClaimForUser (reason: string = 'HTTP error', status: number = HttpStatus.INTERNAL_SERVER_ERROR) {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp('/[0-9]+'))

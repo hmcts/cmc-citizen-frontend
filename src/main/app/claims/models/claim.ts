@@ -313,7 +313,7 @@ export class Claim {
         this.responseDeadline = MomentFactory.parse(input.responseDeadline)
       }
       if (input.issuedOn) {
-        this.issuedOn = input.issuedOn
+        this.issuedOn = MomentFactory.parse(input.issuedOn)
       }
       this.claimData = new ClaimData().deserialize(input.claim)
       this.moreTimeRequested = input.moreTimeRequested

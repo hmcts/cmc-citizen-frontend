@@ -94,5 +94,9 @@ export const claimDraft = {
   },
   evidence: {
     rows: []
+  },
+  paymentMethod: {
+    helpWithFees: true,
+    helpWithFeesNumber: 'HWF01234'
   }
 }
