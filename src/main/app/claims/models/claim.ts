@@ -32,7 +32,7 @@ import { ReviewOrder } from 'claims/models/reviewOrder'
 import { MediationOutcome } from 'claims/models/mediationOutcome'
 import { YesNoOption } from 'models/yesNoOption'
 import { ClaimDocument } from 'claims/models/claimDocument'
-import { TransferContent } from 'claims/models/transferContent'
+import { TransferContents } from 'claims/models/transferContents'
 import * as _ from 'lodash'
 import { ClaimDocumentType } from 'common/claimDocumentType'
 import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
@@ -82,7 +82,7 @@ export class Claim {
   paperResponse: YesNoOption
   claimDocuments?: ClaimDocument[]
   proceedOfflineReason: string
-  transferContent?: TransferContent
+  transferContent?: TransferContents
 
   get defendantOffer (): Offer {
     if (!this.settlement) {
@@ -381,7 +381,7 @@ export class Claim {
       }
 
       if (input.transferContent) {
-        this.transferContent = new TransferContent().deserialize(input.transferContent)
+        this.transferContent = new TransferContents().deserialize(input.transferContent)
       }
 
       if (input.paperResponse) {

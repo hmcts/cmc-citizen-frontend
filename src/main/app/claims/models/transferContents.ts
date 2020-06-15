@@ -2,20 +2,16 @@ import { Moment } from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
 import { Address } from 'claims/models/address'
 
-export class TransferContent {
+export class TransferContents {
   dateOfTransfer: Moment
   reasonForTransfer: string
   hearingCourtName: string
   hearingCourtAddress: Address
 
-  constructor (dateOfTransfer?: Moment, reasonForTransfer?: string, hearingCourtName?: string, hearingCourtAddress?: Address) {
-    this.dateOfTransfer = dateOfTransfer
-    this.reasonForTransfer = reasonForTransfer
-    this.hearingCourtName = hearingCourtName
-    this.hearingCourtAddress = hearingCourtAddress
+  constructor () {
   }
 
-  deserialize (input: any): TransferContent {
+  deserialize (input: any): TransferContents {
     if (input) {
       this.dateOfTransfer = MomentFactory.parse(input.dateOfTransfer)
       this.reasonForTransfer = input.reasonForTransfer
