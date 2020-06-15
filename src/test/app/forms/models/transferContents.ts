@@ -4,7 +4,7 @@
 import { expect } from 'chai'
 
 import { TransferContents } from 'claims/models/transferContents'
-import {MomentFactory} from "shared/momentFactory";
+import { MomentFactory } from 'shared/momentFactory'
 
 describe('TransferContents', () => {
 
