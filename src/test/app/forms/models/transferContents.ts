@@ -2,7 +2,9 @@
 /* tslint:disable:no-unused-expression */
 
 import { expect } from 'chai'
+
 import { TransferContents } from 'claims/models/transferContents'
+import {MomentFactory} from "shared/momentFactory";
 
 describe('TransferContents', () => {
 
@@ -31,9 +33,7 @@ describe('TransferContents', () => {
       let result = new TransferContents().deserialize({
         dateOfTransfer: '2020-01-01'
       })
-      expect(result.dateOfTransfer.year()).to.be.equals(2020)
-      expect(result.dateOfTransfer.month()).to.be.equals(1)
-      expect(result.dateOfTransfer.day()).to.be.equals(1)
+      expect(result.dateOfTransfer.toISOString()).to.be.deep.equal(MomentFactory.parse('2020-01-01').toISOString())
     })
 
     it('should return a TransferContents instance with set field "reasonForTransfer" from given object', () => {
