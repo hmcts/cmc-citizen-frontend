@@ -59,6 +59,12 @@ export default express.Router()
             new HearingLocation(
               draft.document.hearingLocation.courtName, undefined, undefined, draft.document.hearingLocation.courtAccepted, draft.document.hearingLocation.alternativeOption, draft.document.hearingLocation.alternativeCourtName
             )), false)
+      } else if (draft.document.hearingLocation.alternativeOption !== undefined && draft.document.hearingLocation.alternativeOption === AlternativeCourtOption.BY_SEARCH) {
+        renderPage(res,
+          new Form<HearingLocation>(
+            new HearingLocation(
+              draft.document.hearingLocation.alternativeCourtName, undefined, undefined, undefined, draft.document.hearingLocation.alternativeOption, draft.document.hearingLocation.alternativeCourtName
+            )), false)
       } else {
         const postcode: string = getDefaultPostcode(res)
         const court: Court = await Court.getNearestCourt(postcode)
@@ -110,6 +116,8 @@ export default express.Router()
 
             await new DraftService().save(draft, user.bearerToken)
             res.redirect(Paths.expertPage.evaluateUri({ externalId: res.locals.claim.externalId }))
+          } else if (form.model.courtAccepted === YesNoOption.NO && form.model.alternativeOption === AlternativeCourtOption.BY_SEARCH) {
+            res.redirect(Paths.hearingLocationResultPage.evaluateUri({ externalId: res.locals.claim.externalId }) + `?name=${form.model.alternativeCourtName}`)
           } else {
             if (form.model.alternativeOption !== undefined && form.model.alternativeOption === AlternativeCourtOption.BY_NAME) {
               draft.document.hearingLocation.alternativeCourtName = ''
