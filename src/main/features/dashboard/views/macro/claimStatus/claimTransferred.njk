@@ -12,7 +12,10 @@
       {% if claim.transferContent.hearingCourtAddress.line3 is defined %}
         {{ claim.transferContent.hearingCourtAddress.line3 }} <br/>
       {% endif %}
-      {{ claim.transferContent.hearingCourtAddress.postcode }}
+      {% if claim.transferContent.hearingCourtAddress.postcode is defined %}
+        {{ claim.transferContent.hearingCourtAddress.postcode }}
+      {% endif %}
+
     </p>
     <p>{{  t('Contact the court if you have any questions about the claim.') }}</p>
     <p>
