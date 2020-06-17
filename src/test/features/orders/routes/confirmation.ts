@@ -47,7 +47,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
           })
 
           it('should render page when everything is fine', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId({ features: 'admissions,directionsQuestionnaire' })
+            claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId({ features: 'directionsQuestionnaire' })
             claimStoreServiceMock.mockNextWorkingDay(MomentFactory.parse('2019-07-01'))
 
             await request(app)
