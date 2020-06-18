@@ -125,7 +125,7 @@ function testData () {
       status: 'Full defence - defendant already paid - claimant rejects defendant response with mediation - mediation failed',
       claim: fullDefenceClaim(),
       claimOverride: {
-        features: ['admissions', 'directionsQuestionnaire'],
+        features: ['directionsQuestionnaire'],
         response: {
           ...defenceWithAmountClaimedAlreadyPaidData,
           freeMediation: 'yes',
@@ -372,7 +372,7 @@ function testData () {
       status: 'Full defence - defendant disputes all of the claim and accepts mediation with directions questionnaire enabled',
       claim: fullDefenceClaim(),
       claimOverride: {
-        features: ['admissions', 'directionsQuestionnaire'],
+        features: ['directionsQuestionnaire'],
         response: {
           ...baseResponseData,
           ...baseDefenceData,
@@ -583,7 +583,7 @@ function testData () {
       claim: fullDefenceClaim(),
       claimOverride: {
         ...directionsQuestionnaireDeadline(),
-        features: ['admissions', 'directionsQuestionnaire'],
+        features: ['directionsQuestionnaire'],
         response: {
           ...baseResponseData,
           ...baseDefenceData,

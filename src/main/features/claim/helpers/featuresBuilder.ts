@@ -47,12 +47,6 @@ type FeatureDefinition = {
 
 export const FEATURES: FeatureDefinition[] = [
   {
-    feature: 'admissions',
-    toggle: 'admissions',
-    setting: 'admissions',
-    validForAmount: () => true
-  },
-  {
     feature: 'mediationPilot',
     toggle: 'mediation_pilot',
     setting: 'mediationPilot',

@@ -3,7 +3,6 @@ import * as express from 'express'
 import { AbstractPaymentPlanPage } from 'shared/components/payment-intention/payment-plan'
 import { AbstractModelAccessor } from 'shared/components/model-accessor'
 import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
-import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 
 import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
@@ -40,7 +39,6 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<ResponseDraft> {
 /* tslint:disable:no-default-export */
 export default new PaymentPlanPage()
   .buildRouter(fullAdmissionPath,
-    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<ResponseDraft> = res.locals.draft
 

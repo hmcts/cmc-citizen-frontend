@@ -1,12 +1,24 @@
-{% macro claimTransferredClaimDetails() %}
+{% macro claimTransferredClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-medium"> {{ t('We\'ve sent this case to the court') }} </h2>
-    <p>{{  t('Your online account won\'t be updated - any further updates will be by post from Lincoln County Court.') }}</p>
+    <h2 class="heading-medium"> {{ t('We’ve sent this case to the court') }} </h2>
+    <p>{{  t('Your online account won’t be updated - any further updates will be by post from {{ courtName }}.', {courtName :claim.transferContent.hearingCourtName }) }}</p>
     <p>{{  t('If you need to send any forms, letters or documents about the claim, send them to this address:') }}</p>
-    <p{{  t('>Lincoln County Court') }}<br>
-      {{  t('360 High St') }}<br>
-      {{  t('Lincoln') }}<br>
-      {{  t('LN5 7PS') }}
+    <p>
+      {{ claim.transferContent.hearingCourtName  }}<br>
+      {{ claim.transferContent.hearingCourtAddress.line1 }} <br/>
+      {% if claim.transferContent.hearingCourtAddress.line2 is defined %}
+        {{ claim.transferContent.hearingCourtAddress.line2 }} <br/>
+      {% endif %}
+      {% if claim.transferContent.hearingCourtAddress.line3 is defined %}
+        {{ claim.transferContent.hearingCourtAddress.line3 }} <br/>
+      {% endif %}
+      {% if claim.transferContent.hearingCourtAddress.city is defined %}
+        {{ claim.transferContent.hearingCourtAddress.city }} <br/>
+      {% endif %}
+      {% if claim.transferContent.hearingCourtAddress.postcode is defined %}
+        {{ claim.transferContent.hearingCourtAddress.postcode }}
+      {% endif %}
+
     </p>
     <p>{{  t('Contact the court if you have any questions about the claim.') }}</p>
     <p>
@@ -16,12 +28,12 @@
   </div>
 {% endmacro %}
 
-{% macro claimTransferredDefendantClaimDetails() %}
-  {{ claimTransferredClaimDetails() }}
+{% macro claimTransferredDefendantClaimDetails(claim) %}
+  {{ claimTransferredClaimDetails(claim) }}
 {% endmacro %}
 
-{% macro claimTransferredClaimantClaimDetails() %}
-  {{ claimTransferredClaimDetails() }}
+{% macro claimTransferredClaimantClaimDetails(claim) %}
+  {{ claimTransferredClaimDetails(claim) }}
 {% endmacro %}
 
 {% macro claimTransferredClaimStatus() %}

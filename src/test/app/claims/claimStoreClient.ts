@@ -70,7 +70,7 @@ describe('ClaimStoreClient', () => {
       it('should retrieve a claim that was successfully saved on first attempt with feature toggles', async () => {
         mockSuccessOnFirstSaveAttempt()
 
-        const claim: Claim = await claimStoreClient.saveClaim(claimDraft, claimant, 'admissions')
+        const claim: Claim = await claimStoreClient.saveClaim(claimDraft, claimant, '')
 
         expect(claim.claimData).to.deep.equal(new ClaimData().deserialize(expectedClaimData))
       })
@@ -99,7 +99,7 @@ describe('ClaimStoreClient', () => {
         resolveLinkDefendant()
         mockTimeoutOnFirstSaveAttemptAndConflictOnSecondOne()
 
-        const claim: Claim = await claimStoreClient.saveClaim(claimDraft, claimant, 'admissions')
+        const claim: Claim = await claimStoreClient.saveClaim(claimDraft, claimant, '')
 
         expect(claim.claimData).to.deep.equal(new ClaimData().deserialize(expectedClaimData))
       })
@@ -121,7 +121,7 @@ describe('ClaimStoreClient', () => {
         mockInternalServerErrorOnAllAttempts()
 
         try {
-          await claimStoreClient.saveClaim(claimDraft, claimant, 'admissions')
+          await claimStoreClient.saveClaim(claimDraft, claimant, '')
         } catch (err) {
           expect(err.statusCode).to.equal(HttpStatus.INTERNAL_SERVER_ERROR)
           expect(err.error).to.equal('An unexpected error occurred')
@@ -246,7 +246,7 @@ describe('ClaimStoreClient', () => {
       }
       it('should return a claim that was successfully saved', async () => {
         mockCreateCitizenClaimCall()
-        const claim: Claim = await claimStoreClient.createCitizenClaim(claimDraft, claimant, 'admissions')
+        const claim: Claim = await claimStoreClient.createCitizenClaim(claimDraft, claimant, '')
         expect(claim.claimData).to.deep.equal(new ClaimData().deserialize(expectedClaimData))
       })
 
@@ -260,7 +260,7 @@ describe('ClaimStoreClient', () => {
       it('should propagate error responses', async () => {
         mockInternalServerErrorOnAllAttempts()
         try {
-          await claimStoreClient.createCitizenClaim(claimDraft, claimant, 'admissions')
+          await claimStoreClient.createCitizenClaim(claimDraft, claimant, '')
         } catch (err) {
           expect(err.statusCode).to.equal(HttpStatus.INTERNAL_SERVER_ERROR)
           expect(err.error).to.equal('An unexpected error occurred')
