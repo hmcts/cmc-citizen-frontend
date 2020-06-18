@@ -1063,6 +1063,19 @@ describe('Claim', () => {
     })
   })
 
+  describe('isTransferred', () => {
+    let claim
+
+    beforeEach(() => {
+      claim = new Claim()
+      claim.state = 'TRANSFERRED'
+      claim.responseDeadline = MomentFactory.currentDate()
+    })
+
+    it('should return ClaimStatus.TRANSFERRED ', () => {
+      expect(claim.status).to.be.equal(ClaimStatus.TRANSFERRED)
+    })
+  })
 })
 
 function prepareSettlement (paymentIntention: PaymentIntention, party: MadeBy): Settlement {

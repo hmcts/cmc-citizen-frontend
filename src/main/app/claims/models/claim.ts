@@ -32,6 +32,7 @@ import { ReviewOrder } from 'claims/models/reviewOrder'
 import { MediationOutcome } from 'claims/models/mediationOutcome'
 import { YesNoOption } from 'models/yesNoOption'
 import { ClaimDocument } from 'claims/models/claimDocument'
+import { TransferContents } from 'claims/models/transferContents'
 import * as _ from 'lodash'
 import { ClaimDocumentType } from 'common/claimDocumentType'
 import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
@@ -81,6 +82,7 @@ export class Claim {
   paperResponse: YesNoOption
   claimDocuments?: ClaimDocument[]
   proceedOfflineReason: string
+  transferContent?: TransferContents
 
   get defendantOffer (): Offer {
     if (!this.settlement) {
@@ -163,6 +165,8 @@ export class Claim {
   get status (): ClaimStatus {
     if (this.moneyReceivedOn && this.countyCourtJudgmentRequestedAt && this.isCCJPaidWithinMonth()) {
       return ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED
+    } else if (this.hasBeenTransferred()) {
+      return ClaimStatus.TRANSFERRED
     } else if (this.moneyReceivedOn && this.countyCourtJudgmentRequestedAt) {
       return ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
     } else if (this.hasOrderBeenDrawn()) {
@@ -376,6 +380,10 @@ export class Claim {
         this.pilotCourt = YesNoOption.fromObject(input.pilotCourt)
       }
 
+      if (input.transferContent) {
+        this.transferContent = new TransferContents().deserialize(input.transferContent)
+      }
+
       if (input.paperResponse) {
         this.paperResponse = YesNoOption.fromObject(input.paperResponse)
       }
@@ -497,6 +505,10 @@ export class Claim {
 
     if (this.hasClaimantRejectedDefendantDefenceWithoutDQs()) {
       return true
+    }
+
+    if (this.hasBeenTransferred()) {
+      return false
     }
 
     return (((this.response && (this.response as FullAdmissionResponse).paymentIntention
@@ -710,5 +722,9 @@ export class Claim {
 
   private checkProceedOfflineReason (): boolean {
     return (this.proceedOfflineReason && (this.proceedOfflineReason === ProceedOfflineReason.APPLICATION_BY_DEFENDANT || this.proceedOfflineReason === ProceedOfflineReason.APPLICATION_BY_CLAIMANT))
+  }
+
+  private hasBeenTransferred (): boolean {
+    return this.state === 'TRANSFERRED'
   }
 }
