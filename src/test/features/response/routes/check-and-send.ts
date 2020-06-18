@@ -39,7 +39,7 @@ const draftType = 'response'
 const pagePath = ResponsePaths.checkAndSendPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 const claimWithDQ = {
   ...claimStoreServiceMock.sampleClaimObj,
-  ...{ features: ['admissions','directionsQuestionnaire'] }
+  ...{ features: ['directionsQuestionnaire'] }
 }
 
 describe('Defendant response: check and send page', () => {
@@ -232,7 +232,7 @@ describe('Defendant response: check and send page', () => {
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
             const claimStoreOverride = {
-              features: ['admissions', 'directionsQuestionnaire'],
+              features: ['directionsQuestionnaire'],
               claim: {
                 claimants: [
                   {

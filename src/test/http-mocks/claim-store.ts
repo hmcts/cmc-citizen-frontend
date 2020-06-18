@@ -49,7 +49,7 @@ export const sampleClaimIssueCommonObj = {
   totalAmountTillDateOfIssue: 200,
   moreTimeRequested: false,
   responseDeadline: '2017-08-08',
-  features: ['admissions']
+  features: []
 }
 
 export const sampleClaimIssueOrgVOrgObj = {
@@ -167,7 +167,7 @@ export const sampleClaimIssueObj = {
   },
   responseDeadline: MomentFactory.currentDate().add(19, 'days'),
   intentionToProceedDeadline: MomentFactory.currentDateTime().add(33, 'days'),
-  features: ['admissions']
+  features: []
 }
 
 export const paymentResponse = {
@@ -252,7 +252,7 @@ export const sampleClaimObj = {
     ]
   },
   intentionToProceedDeadline: MomentFactory.currentDateTime().add(33, 'days'),
-  features: ['admissions']
+  features: []
 }
 
 export const settlementWithInstalmentsAndAcceptation = {
