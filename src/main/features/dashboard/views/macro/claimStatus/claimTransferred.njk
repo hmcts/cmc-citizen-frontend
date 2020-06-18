@@ -12,6 +12,9 @@
       {% if claim.transferContent.hearingCourtAddress.line3 is defined %}
         {{ claim.transferContent.hearingCourtAddress.line3 }} <br/>
       {% endif %}
+      {% if claim.transferContent.hearingCourtAddress.city is defined %}
+        {{ claim.transferContent.hearingCourtAddress.city }} <br/>
+      {% endif %}
       {% if claim.transferContent.hearingCourtAddress.postcode is defined %}
         {{ claim.transferContent.hearingCourtAddress.postcode }}
       {% endif %}
@@ -31,4 +34,16 @@
 
 {% macro claimTransferredClaimantClaimDetails(claim) %}
   {{ claimTransferredClaimDetails(claim) }}
+{% endmacro %}
+
+{% macro claimTransferredClaimStatus() %}
+      {{ t('Case sent to court') }}
+{% endmacro %}
+
+{% macro claimTransferredDefendantClaimStatus() %}
+  {{ claimTransferredClaimStatus() }}
+{% endmacro %}
+
+{% macro claimTransferredClaimantClaimStatus() %}
+  {{ claimTransferredClaimStatus() }}
 {% endmacro %}

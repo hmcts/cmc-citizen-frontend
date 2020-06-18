@@ -249,6 +249,8 @@ export class Claim {
       return ClaimStatus.CLAIMANT_RESPONSE_SUBMITTED
     } else if (this.moreTimeRequested) {
       return ClaimStatus.MORE_TIME_REQUESTED
+    } else if (this.state === 'TRANSFERRED') {
+      return ClaimStatus.TRANSFERRED
     } else if (!this.response) {
       return ClaimStatus.NO_RESPONSE
     } else {
