@@ -39,14 +39,6 @@ describe('FeaturesBuilder', () => {
     reset(mockLaunchDarklyClient)
   })
 
-  describe('Admissions Feature', () => {
-    it('should add admissions to features if flag is set', async () => {
-      enableFeatures('admissions')
-      const features = await featuresBuilder.features(1, user)
-      expect(features).to.equal('admissions')
-    })
-  })
-
   describe('Directions Questionnaire Feature', () => {
     it(`should add dq to features if flag is set and amount <= ${FeaturesBuilder.ONLINE_DQ_THRESHOLD}`, async () => {
       enableFeatures('directions_questionnaire')

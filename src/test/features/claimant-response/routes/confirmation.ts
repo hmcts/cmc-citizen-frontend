@@ -99,7 +99,7 @@ describe('Claimant response: confirmation page', () => {
           let claimantResponseData = {
             ...claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj,
             ...{ claimantResponse: rejectionClaimantResponseWithDQ },
-            features: ['admissions', 'directionsQuestionnaire']
+            features: ['directionsQuestionnaire']
           }
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimantResponseData)
           claimStoreServiceMock.mockNextWorkingDay(MomentFactory.parse('2019-07-01'))

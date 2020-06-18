@@ -113,9 +113,12 @@
   offlineResponseForClaimantDashboard,
   offlineResponseForDefendantDashboard %}
 
+{% from "./claimStatus/claimTransferred.njk" import
+  claimTransferredDefendantClaimStatus,
+  claimTransferredClaimantClaimStatus
+%}
 
 {% macro caseStatusForClaimant(status, claim) %}
-
   {% if status === ClaimStatus.PAID_IN_FULL or status === ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED or status === ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
     or status === ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID %}
     {{ claimSettledDashboard() }}
@@ -123,6 +126,8 @@
     {{ noResponseForClaimantDashboard() }}
   {% elif status === ClaimStatus.MORE_TIME_REQUESTED %}
     {{ moreTimeRequestedForClaimantDashboard(claim) }}
+  {% elif status === ClaimStatus.TRANSFERRED %}
+    {{ claimTransferredClaimantClaimStatus() }}
   {% elif status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
     {{ ccjEligibleForClaimantDashboard() }}
   {% elif status === ClaimStatus.CCJ_REQUESTED %}
@@ -237,6 +242,8 @@
     {{ noResponseForDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.MORE_TIME_REQUESTED %}
     {{ moreTimeRequestedForDefendantDashboard(claim) }}
+  {% elif status === ClaimStatus.TRANSFERRED %}
+    {{ claimTransferredDefendantClaimStatus() }}
   {% elif status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
     {{ ccjEligibleForDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.REDETERMINATION_BY_JUDGE %}

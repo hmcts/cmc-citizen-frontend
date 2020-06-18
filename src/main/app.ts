@@ -82,15 +82,11 @@ new OfferFeature().enableFor(app)
 new SettlementAgreementFeature().enableFor(app)
 new MediationFeature().enableFor(app)
 new PaidInFullFeature().enableFor(app)
+new ClaimantResponseFeature().enableFor(app)
 
 if (FeatureToggles.isEnabled('testingSupport')) {
   logger.info('FeatureToggles.testingSupport enabled')
   new TestingSupportFeature().enableFor(app)
-}
-
-if (FeatureToggles.isEnabled('admissions')) {
-  logger.info('FeatureToggles.admissions enabled')
-  new ClaimantResponseFeature().enableFor(app)
 }
 
 if (FeatureToggles.isEnabled('directionsQuestionnaire')) {

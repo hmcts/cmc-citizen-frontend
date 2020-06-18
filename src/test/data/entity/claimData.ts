@@ -116,7 +116,6 @@ export function defenceClaimData () {
     },
     defendantEmail: 'sudheer.chakka@hmcts.net',
     features: [
-      'admissions',
       'directionsQuestionnaire'
     ],
     claimantRespondedAt: moment(),
