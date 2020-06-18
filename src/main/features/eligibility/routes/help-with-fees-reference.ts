@@ -4,14 +4,22 @@ import { EligibilityPage } from 'eligibility/eligibilityPage'
 import { YesNoOption } from 'models/yesNoOption'
 import { EligibilityCheck, eligible, notEligible } from 'eligibility/model/eligibilityCheck'
 import { NotEligibleReason } from 'eligibility/notEligibleReason'
+import { RoutablePath } from 'shared/router/routablePath'
 
 class HelpWithFeesReferenceEligibilityPage extends EligibilityPage<YesNoOption> {
   constructor () {
-    super(Paths.helpWithFeesReferencePage, Paths.eligiblePage, 'helpWithFeesReference')
+    super(Paths.helpWithFeesReferencePage, 'helpWithFeesReference')
   }
 
-  checkEligibility (value: YesNoOption): EligibilityCheck {
-    return value === YesNoOption.YES ? eligible() : notEligible(NotEligibleReason.HELP_WITH_FEES_REFERENCE)
+  checkEligibility (value: YesNoOption): Promise<EligibilityCheck> {
+    return Promise.resolve(value === YesNoOption.YES
+      ? eligible()
+      : notEligible(NotEligibleReason.HELP_WITH_FEES_REFERENCE)
+    )
+  }
+
+  protected async nextPagePath (): Promise<RoutablePath> {
+    return Promise.resolve(Paths.eligiblePage)
   }
 }
 

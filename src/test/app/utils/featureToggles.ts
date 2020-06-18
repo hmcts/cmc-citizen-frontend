@@ -36,4 +36,14 @@ describe('FeatureToggles', () => {
       expect(result).to.equal(actual)
     })
   })
+
+  describe('isHelpWithFeesEnabled', () => {
+    it('should return toggle if help with fees toggle exists', async () => {
+      const mockLaunchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
+      const featureToggles = new FeatureToggles(mockLaunchDarklyClient)
+      let actual = toBoolean(mockLaunchDarklyClient.default('help-with-fees', false))
+      let result = await featureToggles.isHelpWithFeesEnabled()
+      expect(result).to.equal(actual)
+    })
+  })
 })

@@ -35,4 +35,8 @@ export class FeatureToggles {
   async isWarningBannerEnabled (): Promise<boolean> {
     return this.launchDarklyClient.default('warning_banner', false)
   }
+
+  async isHelpWithFeesEnabled (): Promise<boolean> {
+    return this.launchDarklyClient.default('help-with-fees', false)
+  }
 }
