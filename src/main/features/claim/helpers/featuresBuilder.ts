@@ -1,10 +1,7 @@
-import { FeatureToggles } from 'utils/featureToggles'
-import { FeatureTogglesClient } from 'shared/clients/featureTogglesClient'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { User } from 'idam/user'
-
-const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
-const featureTogglesClient: FeatureTogglesClient = new FeatureTogglesClient()
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
+import * as config from 'config'
 
 export class FeaturesBuilder {
   static readonly MEDIATION_PILOT_AMOUNT = 500
@@ -12,35 +9,65 @@ export class FeaturesBuilder {
   static readonly JUDGE_PILOT_THRESHOLD = 10000
   static readonly ONLINE_DQ_THRESHOLD = 10000
 
-  static async features (amount: number, user: User): Promise<string> {
-    const roles: string[] = await claimStoreClient.retrieveUserRoles(user)
+  readonly claimStoreClient: ClaimStoreClient
+  readonly launchDarklyClient: LaunchDarklyClient
 
-    let features = ''
-    if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_admissions')) {
-      features = 'admissions'
+  constructor (claimStoreClient: ClaimStoreClient, launchDarklyClient: LaunchDarklyClient) {
+    this.claimStoreClient = claimStoreClient
+    this.launchDarklyClient = launchDarklyClient
+  }
+
+  async features (amount: number, user: User): Promise<string> {
+    const roles: string[] = await this.claimStoreClient.retrieveUserRoles(user)
+    if (!roles.includes('cmc-new-features-consent-given')) {
+      // all features require consent
+      return undefined
     }
 
-    if (amount <= this.MEDIATION_PILOT_AMOUNT) {
-      if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_mediation_pilot')) {
-        features += features === '' ? 'mediationPilot' : ', mediationPilot'
+    let features = []
+    for (const feature of FEATURES) {
+      if (feature.validForAmount(amount)) {
+        const offlineDefault = config.get<boolean>(`featureToggles.${feature.setting}`) || false
+        const ldVariation = await this.launchDarklyClient.variation(user, roles, feature.toggle, offlineDefault)
+        if (ldVariation) {
+          features.push(feature.feature)
+        }
       }
     }
-
-    if (amount <= this.LA_PILOT_THRESHOLD) {
-      if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_legal_advisor')) {
-        features += features === '' ? 'LAPilotEligible' : ', LAPilotEligible'
-      }
-    } else if (amount <= this.JUDGE_PILOT_THRESHOLD) {
-      if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_judge_pilot')) {
-        features += features === '' ? 'judgePilotEligible' : ', judgePilotEligible'
-      }
-    }
-
-    if (amount <= this.ONLINE_DQ_THRESHOLD) {
-      if (FeatureToggles.isEnabled('directionsQuestionnaire') && await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_directions_questionnaire')) {
-        features += features === '' ? 'directionsQuestionnaire' : ', directionsQuestionnaire'
-      }
-    }
-    return (features === '') ? undefined : features
+    return (!features || features.length === 0) ? undefined : features.join(', ')
   }
 }
+
+type FeatureDefinition = {
+  feature: string
+  toggle: string
+  setting: string
+  validForAmount: (amount: number) => boolean
+}
+
+export const FEATURES: FeatureDefinition[] = [
+  {
+    feature: 'mediationPilot',
+    toggle: 'mediation_pilot',
+    setting: 'mediationPilot',
+    validForAmount: amount => amount <= FeaturesBuilder.MEDIATION_PILOT_AMOUNT
+  },
+  {
+    feature: 'LAPilotEligible',
+    toggle: 'legal_advisor_pilot',
+    setting: 'legalAdvisorPilot',
+    validForAmount: amount => amount <= FeaturesBuilder.LA_PILOT_THRESHOLD
+  },
+  {
+    feature: 'judgePilotEligible',
+    toggle: 'judge_pilot',
+    setting: 'judgePilot',
+    validForAmount: amount => amount > FeaturesBuilder.LA_PILOT_THRESHOLD && amount <= FeaturesBuilder.JUDGE_PILOT_THRESHOLD
+  },
+  {
+    feature: 'directionsQuestionnaire',
+    toggle: 'directions_questionnaire',
+    setting: 'directionsQuestionnaire',
+    validForAmount: amount => amount <= FeaturesBuilder.ONLINE_DQ_THRESHOLD
+  }
+]

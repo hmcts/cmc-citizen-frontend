@@ -11,7 +11,6 @@ import { DraftService } from 'services/draftService'
 import { FullAdmission, PartialAdmission, ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'claims/models/claim'
-import { FeatureToggles } from 'utils/featureToggles'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 
 function renderView (form: Form<Response>, res: express.Response) {
@@ -77,19 +76,11 @@ export default express.Router()
             break
 
           case ResponseType.PART_ADMISSION:
-            if (FeatureToggles.hasAnyAuthorisedFeature(claim.features, 'admissions')) {
-              res.redirect(PartAdmissionPaths.alreadyPaidPage.evaluateUri({ externalId: externalId }))
-            } else {
-              res.redirect(Paths.sendYourResponseByEmailPage.evaluateUri({ externalId: externalId }))
-            }
+            res.redirect(PartAdmissionPaths.alreadyPaidPage.evaluateUri({ externalId: externalId }))
             break
 
           case ResponseType.FULL_ADMISSION:
-            if (FeatureToggles.hasAnyAuthorisedFeature(claim.features, 'admissions')) {
-              res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
-            } else {
-              res.redirect(Paths.sendYourResponseByEmailPage.evaluateUri({ externalId: externalId }))
-            }
+            res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
             break
 
           default:

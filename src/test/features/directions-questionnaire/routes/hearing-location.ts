@@ -109,7 +109,7 @@ describe('Directions Questionnaire - hearing location', () => {
             await request(app)
               .get(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', `${courtFinderMock.searchResponse[0].name} is the nearest to the address you gave us.`))
+              .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', `${courtFinderMock.searchResponse[0].name}`, 'This is the closest court to the address you gave us'))
           })
         })
 
@@ -124,12 +124,14 @@ describe('Directions Questionnaire - hearing location', () => {
         alternativePostcode: 'a111aa',
         courtName: 'Test court'
       }
-      const validFormDataAcceptAlternateName = {
+
+      const validFormDataSearch = {
         courtAccepted: 'no',
-        alternativeOption: 'name',
-        alternativeCourtName: 'Test Court Name',
+        alternativeOption: 'search',
+        alternativeCourtName: 'SearchInput',
         courtName: 'Test court'
       }
+
       const invalidFormData = { courtAccepted: 'no' }
 
       const method = 'post'
@@ -200,17 +202,17 @@ describe('Directions Questionnaire - hearing location', () => {
           })
 
           context('When court is rejected', () => {
-            it('should redirect to expert page when an alternative court is suggested by name', async () => {
+            it('should redirect to search results page when search by name is selected', async () => {
               claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
               draftStoreServiceMock.resolveFind('directionsQuestionnaire')
               draftStoreServiceMock.resolveFind('response')
-              draftStoreServiceMock.resolveUpdate()
+              const resultsPage = Paths.hearingLocationResultPage.evaluateUri({ externalId: externalId }) + '?name=SearchInput'
 
               await request(app)
                 .post(pagePath)
                 .set('Cookie', `${cookieName}=ABC`)
-                .send(validFormDataAcceptAlternateName)
-                .expect(res => expect(res).to.be.redirect.toLocation(expertPath))
+                .send(validFormDataSearch)
+                .expect(res => expect(res).to.be.redirect.toLocation(resultsPage))
             })
 
             it('should render same page with new court when an alternative court is suggested by postcode', async () => {

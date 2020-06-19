@@ -6,16 +6,15 @@
   <div class="status-block">
     {% if claim.reDetermination.partyType === MadeBy.CLAIMANT
     or claim.isInterlocutoryJudgmentRequestedOnAdmissions() %}
-      <h2 class="heading-medium">{{ t('Awaiting judge’s review') }}</h2>
-      <p>{{ t('You’ve rejected the defendant’s repayment plan and an alternative plan suggested by the court.') }}</p>
-      <p>{{ t('A County Court Judgment has been issued against the defendant.') }}</p>
-      <p>{{ t('We’ll post a copy of the judgment to you and to {{ defendantName }}', { defendantName: claim.claimData.defendant.name }) }}</p>
-      <p>{{ t('A judge will decide what {{ defendantName }} can afford to pay, based on their financial details.', { defendantName: claim.claimData.defendant.name }) }}</p>
-      <p>{{ t('We’ll contact you to tell you what to do next.') }}</p>
+      <h2 class="heading-medium">{{ t('Wait for a judge to review the case') }}</h2>
+      <p>{{ t('You’ve rejected the defendant’s repayment plan and haven’t been able to agree to an alternative plan.') }}</p>
+      <p>{{ t('A judge will review the case. We’ll contact you by post to tell you what to do next.') }}</p>
+      <p>{{ t('Your online account won’t be updated - any further updates will be by post.') }}</p>
     {% elif claim.reDetermination.partyType === MadeBy.DEFENDANT %}
       <h2 class="heading-medium">{{ t('The defendant rejected the repayment plan') }}</h2>
       <p>{{ t('They said they can’t afford to pay based on the terms of the County Court Judgment.') }}</p>
-      <p>{{ t('A judge will review the case. We’ll contact you to tell you what to do next.') }}</p>
+      <p>{{ t('A judge will review the case. We’ll contact you by post to tell you what to do next.') }}</p>
+      <p>{{ t('Your online account won’t be updated - any further updates will be by post.') }}</p>
     {% endif %}
   </div>
 {% endmacro %}

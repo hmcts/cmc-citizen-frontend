@@ -46,6 +46,7 @@ import { Paths as MediationPaths } from 'mediation/paths'
 import { Paths as DirectionsQuestionnairePaths } from 'features/directions-questionnaire/paths'
 import { Paths as OrdersPaths } from 'features/orders/paths'
 import { Paths as TestingSupportPaths } from 'testing-support/paths'
+import { Paths as ClaimPaths } from 'features/claim/paths'
 import { FullRejectionPaths, PartAdmissionPaths, Paths as ResponsePaths } from 'features/response/paths'
 import { HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
@@ -71,6 +72,14 @@ import { FreeMediationOption } from 'main/app/forms/models/freeMediation'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { ResponseType as DomainResponseType } from 'claims/models/response/responseType'
 import { FeaturesBuilder } from 'claim/helpers/featuresBuilder'
+import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
+import { ClaimStoreClient } from 'claims/claimStoreClient'
+import { FeatureToggles } from 'utils/featureToggles'
+
+const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
+const launchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
+const featureToggles: FeatureToggles = new FeatureToggles(claimStoreClient, launchDarklyClient)
 
 const packageDotJson = require('../../../../package.json')
 
@@ -141,6 +150,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('featureToggles', this.convertPropertiesToBoolean(config.get('featureToggles')))
     nunjucksEnv.addGlobal('RejectAllOfClaimOption', RejectAllOfClaimOption)
     nunjucksEnv.addGlobal('AlreadyPaid', AlreadyPaid)
+    nunjucksEnv.addGlobal('ProceedOfflineReason', ProceedOfflineReason)
     nunjucksEnv.addGlobal('DefendantPaymentType', DefendantPaymentType)
     nunjucksEnv.addGlobal('DefendantPaymentOption', DefendantPaymentOption)
     nunjucksEnv.addGlobal('PaymentType', PaymentType)
@@ -167,6 +177,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('ClaimStatus', ClaimStatus)
 
     nunjucksEnv.addGlobal('AppPaths', AppPaths)
+    nunjucksEnv.addGlobal('ClaimPaths', ClaimPaths)
     nunjucksEnv.addGlobal('ClaimantResponsePaths', ClaimantResponsePaths)
     nunjucksEnv.addGlobal('DashboardPaths', DashboardPaths)
     nunjucksEnv.addGlobal('CCJPaths', CCJPaths)
@@ -205,6 +216,8 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('toDate', function (date) {
       return date ? new Date(date) : new Date()
     })
+    nunjucksEnv.addGlobal('warningBanner', (): boolean => toBoolean(featureToggles
+      .isWarningBannerEnabled()))
   }
 
   private convertPropertiesToBoolean (featureToggles: { [key: string]: any }): { [key: string]: boolean } {

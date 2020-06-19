@@ -4,3 +4,4 @@ nodejs:
   environment:
     FEATURE_TESTING_SUPPORT: true
     FEATURE_RETURN_ERROR_TO_USER: true
+    PAY_RETURN_URL: https://${SERVICE_FQDN}

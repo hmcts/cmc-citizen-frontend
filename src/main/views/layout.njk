@@ -3,10 +3,17 @@
 
 {% block head %}
   {% include "includes/head.njk" %}
+  {% block additional_head %}{% endblock %}
 {% endblock %}
 
 {% block cookie_message %}
   <p>{{ t(cookieText) | safe }}</p>
+{% endblock %}
+
+{% block warning_message %}
+  {% if warningBanner %}
+    {% include "includes/banner.njk" %}
+  {% endif %}
 {% endblock %}
 
 {% block proposition_header %}

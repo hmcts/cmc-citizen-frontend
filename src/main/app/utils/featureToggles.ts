@@ -1,7 +1,16 @@
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
+import { ClaimStoreClient } from 'claims/claimStoreClient'
 
 export class FeatureToggles {
+  readonly claimStoreClient: ClaimStoreClient
+  readonly launchDarklyClient: LaunchDarklyClient
+
+  constructor (claimStoreClient: ClaimStoreClient, launchDarklyClient: LaunchDarklyClient) {
+    this.claimStoreClient = claimStoreClient
+    this.launchDarklyClient = launchDarklyClient
+  }
   static isEnabled (featureName: string): boolean {
     return FeatureToggles.isAnyEnabled(featureName)
   }
@@ -23,5 +32,9 @@ export class FeatureToggles {
     }
     return featureNames
       .some((featureName) => toBoolean(config.get<boolean>(`featureToggles.${featureName}`)))
+  }
+
+  async isWarningBannerEnabled (): Promise<boolean> {
+    return this.launchDarklyClient.default('warning_banner', false)
   }
 }

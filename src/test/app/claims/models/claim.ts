@@ -44,6 +44,7 @@ import { FeatureToggles } from 'utils/featureToggles'
 import { MediationOutcome } from 'claims/models/mediationOutcome'
 import { defenceClaimData } from 'test/data/entity/claimData'
 import { YesNoOption } from 'models/yesNoOption'
+import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
 
 describe('Claim', () => {
   describe('eligibleForCCJ', () => {
@@ -176,6 +177,24 @@ describe('Claim', () => {
       claim.paperResponse = YesNoOption.YES
 
       expect(claim.status).to.be.equal(ClaimStatus.DEFENDANT_PAPER_RESPONSE)
+    })
+
+    it('should return PROCEED_OFFLINE when a proceed offline response received', () => {
+      claim.proceedOfflineReason = ProceedOfflineReason.APPLICATION_BY_DEFENDANT
+
+      expect(claim.status).to.be.equal(ClaimStatus.PROCEED_OFFLINE)
+    })
+
+    it('should return PROCEED_OFFLINE when a proceed offline response received', () => {
+      claim.proceedOfflineReason = ProceedOfflineReason.APPLICATION_BY_CLAIMANT
+
+      expect(claim.status).to.be.equal(ClaimStatus.PROCEED_OFFLINE)
+    })
+
+    it('should return PROCEED_OFFLINE when a proceed offline response received', () => {
+      claim.proceedOfflineReason = ProceedOfflineReason.OTHER
+
+      expect(claim.status).to.be.equal(ClaimStatus.NO_RESPONSE)
     });
 
     [true, false].forEach(isMoreTimeRequested => {
@@ -415,7 +434,7 @@ describe('Claim', () => {
       claim.response = {
         responseType: ResponseType.PART_ADMISSION
       }
-      claim.features = ['admissions', 'directionsQuestionnaire']
+      claim.features = ['directionsQuestionnaire']
       expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION_DQ)
     })
 
@@ -593,7 +612,7 @@ describe('Claim', () => {
     if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
       it('should contain the claim status DEFENDANT_REJECTS_WITH_DQS only when defendant reject with DQs', () => {
         claim.respondedAt = moment()
-        claim.features = ['admissions', 'directionsQuestionnaire']
+        claim.features = ['directionsQuestionnaire']
         claim.response = {
           paymentIntention: null,
           responseType: 'FULL_DEFENCE',
@@ -606,7 +625,7 @@ describe('Claim', () => {
 
       it('should contain the claim status ORDER_DRAWN only when the legal advisor has drawn the order', () => {
         claim.respondedAt = moment()
-        claim.features = ['admissions', 'directionsQuestionnaire']
+        claim.features = ['directionsQuestionnaire']
         claim.response = {
           paymentIntention: null,
           responseType: 'FULL_DEFENCE',
@@ -977,7 +996,7 @@ describe('Claim', () => {
     if (FeatureToggles.isEnabled('mediation')) {
       it('should contain CLAIMANT_REJECTED_DEFENDANT_DEFENCE status when claimant has reject defence and DQs is enabled', () => {
         claim.respondedAt = moment()
-        claim.features = ['admissions', 'directionsQuestionnaire']
+        claim.features = ['directionsQuestionnaire']
         claim.response = {
           responseType: ResponseType.FULL_DEFENCE,
           defenceType: DefenceType.DISPUTE
@@ -1044,6 +1063,19 @@ describe('Claim', () => {
     })
   })
 
+  describe('isTransferred', () => {
+    let claim
+
+    beforeEach(() => {
+      claim = new Claim()
+      claim.state = 'TRANSFERRED'
+      claim.responseDeadline = MomentFactory.currentDate()
+    })
+
+    it('should return ClaimStatus.TRANSFERRED ', () => {
+      expect(claim.status).to.be.equal(ClaimStatus.TRANSFERRED)
+    })
+  })
 })
 
 function prepareSettlement (paymentIntention: PaymentIntention, party: MadeBy): Settlement {

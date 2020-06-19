@@ -23,12 +23,12 @@
     "url": "http://localhost:18182"
   },
   "pay": {
-    "url": "http://localhost:14421"
+    "url": "http://localhost:14421",
+    "return-url": "https://localhost:3000"
   },
   "featureToggles": {
     "testingSupport": true,
     "newFeaturesConsent": true,
-    "admissions": true,
     "returnErrorToUser": true,
     "mediation": true,
     "mediationPilot": true,
@@ -41,5 +41,8 @@
   },
   "requestRetry": {
     "maxAttempts": 1
+  },
+  "launchDarkly": {
+    "offline": true
   }
 }
