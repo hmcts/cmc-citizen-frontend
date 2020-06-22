@@ -33,10 +33,14 @@ export class FeatureToggles {
   }
 
   async isWarningBannerEnabled (): Promise<boolean> {
-    return this.launchDarklyClient.default('warning_banner', false)
+    return this.launchDarklyClient.serviceVariation('warning_banner', config.get<boolean>(`featureToggles.warningBanner`))
+      .then(result => {
+        console.log(`WIBBLE! warning banner = ${result}`)
+        return result
+      })
   }
 
   async isHelpWithFeesEnabled (): Promise<boolean> {
-    return this.launchDarklyClient.default('help-with-fees', false)
+    return this.launchDarklyClient.serviceVariation('help-with-fees', config.get<boolean>(`featureToggles.helpWithFees`))
   }
 }

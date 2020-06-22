@@ -80,6 +80,7 @@
     "newDashboardStatus": "FEATURE_NEW_DASHBOARD_STATUS",
     "webChat": "FEATURE_WEB_CHAT",
     "inversionOfControl": "FEATURE_INVERSION_OF_CONTROL",
+    "warningBanner": "FEATURE_WARNING_BANNER",
     "helpWithFees": "FEATURE_HELP_WITH_FEES"
   },
 

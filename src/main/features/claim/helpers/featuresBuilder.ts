@@ -28,7 +28,7 @@ export class FeaturesBuilder {
     for (const feature of FEATURES) {
       if (feature.validForAmount(amount)) {
         const offlineDefault = config.get<boolean>(`featureToggles.${feature.setting}`) || false
-        const ldVariation = await this.launchDarklyClient.variation(user, roles, feature.toggle, offlineDefault)
+        const ldVariation = await this.launchDarklyClient.userVariation(user, roles, feature.toggle, offlineDefault)
         if (ldVariation) {
           features.push(feature.feature)
         }
