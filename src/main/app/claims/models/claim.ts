@@ -81,6 +81,7 @@ export class Claim {
   paperResponse: YesNoOption
   claimDocuments?: ClaimDocument[]
   proceedOfflineReason: string
+  handedOffToCcbcAt:Moment
 
   get defendantOffer (): Offer {
     if (!this.settlement) {
@@ -245,6 +246,8 @@ export class Claim {
       return ClaimStatus.CLAIMANT_RESPONSE_SUBMITTED
     } else if (this.moreTimeRequested) {
       return ClaimStatus.MORE_TIME_REQUESTED
+    } else if (this.state === 'BUSINESS_QUEUE') {
+      return ClaimStatus.BUSINESS_QUEUE
     } else if (!this.response) {
       return ClaimStatus.NO_RESPONSE
     } else {
@@ -389,6 +392,9 @@ export class Claim {
 
       if (input.proceedOfflineReason) {
         this.proceedOfflineReason = input.proceedOfflineReason
+      }
+      if (input.handedOffToCcbcAt) {
+        this.handedOffToCcbcAt = MomentFactory.parse(input.handedOffToCcbcAt)
       }
 
       return this
