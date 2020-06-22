@@ -85,7 +85,7 @@ function loginErrorHandler (req: express.Request,
 
 async function retrieveRedirectForLandingPage (req: express.Request, res: express.Response): Promise<string> {
   const eligibility: Eligibility = eligibilityStore.read(req, res)
-  if (await eligibility.eligible) {
+  if (eligibility.eligible) {
     return ClaimPaths.taskListPage.uri
   }
 

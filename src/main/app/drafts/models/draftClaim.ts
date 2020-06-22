@@ -69,7 +69,7 @@ export class DraftClaim extends DraftDocument {
           this.eligibility = toBoolean(input.eligibility)
           break
         case 'object':
-          this.eligibility = new Eligibility().deserialize(input.eligibility).eligible()
+          this.eligibility = new Eligibility().deserialize(input.eligibility).eligible
           break
       }
       this.timeline = new ClaimantTimeline().deserialize(input.timeline) as ClaimantTimeline
