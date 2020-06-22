@@ -484,6 +484,10 @@ export class Claim {
       return false
     }
 
+    if (this.hasBeenTransferred()) {
+      return false
+    }
+
     if (this.isResponseSubmitted() && this.response.responseType === ResponseType.PART_ADMISSION && (this.response && !this.response.paymentDeclaration)) {
       return true
     }
@@ -510,10 +514,6 @@ export class Claim {
 
     if (this.hasClaimantRejectedDefendantDefenceWithoutDQs()) {
       return true
-    }
-
-    if (this.hasBeenTransferred()) {
-      return false
     }
 
     return (((this.response && (this.response as FullAdmissionResponse).paymentIntention
