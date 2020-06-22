@@ -31,7 +31,7 @@ const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
 const cookieName: string = config.get<string>('session.cookieName')
 const expertPath = Paths.expertPage.evaluateUri({ externalId: externalId })
-const pagePath = Paths.hearingLocationPage.evaluateUri({ externalId: externalId })
+const pagePath = Paths.hearingLocationResultPage.evaluateUri({ externalId: externalId }) + '?name=court'
 
 function checkAccessGuard (app: any, method: string) {
   it(`should redirect to dashboard page when DQ is not enabled for claim`, async () => {
@@ -43,7 +43,7 @@ function checkAccessGuard (app: any, method: string) {
   })
 }
 
-describe('Directions Questionnaire - hearing location', () => {
+describe('Directions Questionnaire - court search', () => {
   if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
     attachDefaultHooks(app)
 
@@ -89,12 +89,12 @@ describe('Directions Questionnaire - hearing location', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
             draftStoreServiceMock.resolveFind('response')
-            courtFinderMock.rejectFind()
+            courtFinderMock.rejectName()
 
             await request(app)
               .get(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withoutText('is the nearest to your address you gave us.'))
+              .expect(res => expect(res).to.be.successful.withText('Tell us your preferred location for a hearing, in case the claim goes to one'))
           })
         })
 
@@ -103,13 +103,13 @@ describe('Directions Questionnaire - hearing location', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
             draftStoreServiceMock.resolveFind('response')
-            courtFinderMock.resolveFind()
+            courtFinderMock.resolveNameFind()
             courtFinderMock.resolveCourtDetails()
 
             await request(app)
               .get(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', `${courtFinderMock.searchResponse[0].name}`, 'This is the closest court to the address you gave us'))
+              .expect(res => expect(res).to.be.successful.withText('The following courts match'))
           })
         })
 
@@ -117,22 +117,13 @@ describe('Directions Questionnaire - hearing location', () => {
     })
 
     describe('on POST', () => {
-      const validFormDataAccept = { courtAccepted: 'yes', courtName: 'Test court' }
-      const validFormDataAcceptAlternatePostcode = {
-        courtAccepted: 'no',
-        alternativeOption: 'postcode',
-        alternativePostcode: 'a111aa',
-        courtName: 'Test court'
-      }
 
-      const validFormDataSearch = {
-        courtAccepted: 'no',
+      const validFormData = {
         alternativeOption: 'search',
-        alternativeCourtName: 'SearchInput',
-        courtName: 'Test court'
+        alternativeCourtName: 'Selected Court'
       }
 
-      const invalidFormData = { courtAccepted: 'no' }
+      const invalidFormData = { alternativeOption: 'search' }
 
       const method = 'post'
       checkAuthorizationGuards(app, method, pagePath)
@@ -157,7 +148,7 @@ describe('Directions Questionnaire - hearing location', () => {
           await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .send(validFormDataAccept)
+            .send(validFormData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -168,7 +159,7 @@ describe('Directions Questionnaire - hearing location', () => {
           await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .send(validFormDataAccept)
+            .send(validFormData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -182,11 +173,11 @@ describe('Directions Questionnaire - hearing location', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send(validFormDataAccept)
+              .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          context('When court is accepted', () => {
+          context('When court is selected', () => {
             it('should redirect to expert page', async () => {
               claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
               draftStoreServiceMock.resolveFind('directionsQuestionnaire')
@@ -196,38 +187,8 @@ describe('Directions Questionnaire - hearing location', () => {
               await request(app)
                 .post(pagePath)
                 .set('Cookie', `${cookieName}=ABC`)
-                .send(validFormDataAccept)
+                .send(validFormData)
                 .expect(res => expect(res).to.be.redirect.toLocation(expertPath))
-            })
-          })
-
-          context('When court is rejected', () => {
-            it('should redirect to search results page when search by name is selected', async () => {
-              claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
-              draftStoreServiceMock.resolveFind('directionsQuestionnaire')
-              draftStoreServiceMock.resolveFind('response')
-              const resultsPage = Paths.hearingLocationResultPage.evaluateUri({ externalId: externalId }) + '?name=SearchInput'
-
-              await request(app)
-                .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
-                .send(validFormDataSearch)
-                .expect(res => expect(res).to.be.redirect.toLocation(resultsPage))
-            })
-
-            it('should render same page with new court when an alternative court is suggested by postcode', async () => {
-              claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
-              draftStoreServiceMock.resolveFind('directionsQuestionnaire')
-              draftStoreServiceMock.resolveFind('response')
-              courtFinderMock.resolveFind()
-              courtFinderMock.resolveCourtDetails()
-              draftStoreServiceMock.resolveUpdate()
-
-              await request(app)
-                .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
-                .send(validFormDataAcceptAlternatePostcode)
-                .expect(res => expect(res).to.be.successful.withText('Choose a hearing location'))
             })
           })
         })
@@ -242,37 +203,7 @@ describe('Directions Questionnaire - hearing location', () => {
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send(invalidFormData)
-              .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', 'div class="error-summary"'))
-          })
-        })
-
-        context('when submit from fallback page', () => {
-          context('when form is valid', () => {
-            it('should redirect to expert page', async () => {
-              claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
-              draftStoreServiceMock.resolveFind('directionsQuestionnaire')
-              draftStoreServiceMock.resolveFind('response')
-              draftStoreServiceMock.resolveUpdate()
-
-              await request(app)
-                .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
-                .send({ alternativeCourtName: 'Test' })
-                .expect(res => expect(res).to.be.redirect.toLocation(expertPath))
-            })
-          })
-
-          context('when form is invalid', () => {
-            it('should render the page with errors', async () => {
-              claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
-              draftStoreServiceMock.resolveFind('directionsQuestionnaire')
-              draftStoreServiceMock.resolveFind('response')
-              await request(app)
-                .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
-                .send({ alternativeCourtName: undefined })
-                .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', 'div class="error-summary"'))
-            })
+              .expect(res => expect(res).to.be.successful.withText('The following courts match', 'div class="error-summary"'))
           })
         })
       })

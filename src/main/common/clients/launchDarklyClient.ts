@@ -29,4 +29,16 @@ export class LaunchDarklyClient {
     }
     return LaunchDarklyClient.client.variation(featureKey, ldUser, offlineDefault)
   }
+
+  async default (featureKey: string, offlineDefault): Promise<ld.LDFlagValue> {
+    const roles: string[] = []
+    const ldUser: ld.LDUser = {
+      key: 'citizen-frontend',
+      custom: {
+        roles
+      },
+      anonymous: true
+    }
+    return LaunchDarklyClient.client.variation(featureKey, ldUser, offlineDefault)
+  }
 }

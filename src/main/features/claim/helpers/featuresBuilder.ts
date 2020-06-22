@@ -26,7 +26,7 @@ export class FeaturesBuilder {
 
     let features = []
     for (const feature of FEATURES) {
-      if (amount <= feature.threshold) {
+      if (feature.validForAmount(amount)) {
         const offlineDefault = config.get<boolean>(`featureToggles.${feature.setting}`) || false
         const ldVariation = await this.launchDarklyClient.variation(user, roles, feature.toggle, offlineDefault)
         if (ldVariation) {
@@ -42,38 +42,32 @@ type FeatureDefinition = {
   feature: string
   toggle: string
   setting: string
-  threshold: number
+  validForAmount: (amount: number) => boolean
 }
 
 export const FEATURES: FeatureDefinition[] = [
   {
-    feature: 'admissions',
-    toggle: 'admissions',
-    setting: 'admissions',
-    threshold: Number.MAX_VALUE
-  },
-  {
     feature: 'mediationPilot',
     toggle: 'mediation_pilot',
     setting: 'mediationPilot',
-    threshold: FeaturesBuilder.MEDIATION_PILOT_AMOUNT
+    validForAmount: amount => amount <= FeaturesBuilder.MEDIATION_PILOT_AMOUNT
   },
   {
     feature: 'LAPilotEligible',
     toggle: 'legal_advisor_pilot',
     setting: 'legalAdvisorPilot',
-    threshold: FeaturesBuilder.LA_PILOT_THRESHOLD
+    validForAmount: amount => amount <= FeaturesBuilder.LA_PILOT_THRESHOLD
   },
   {
     feature: 'judgePilotEligible',
     toggle: 'judge_pilot',
     setting: 'judgePilot',
-    threshold: FeaturesBuilder.JUDGE_PILOT_THRESHOLD
+    validForAmount: amount => amount > FeaturesBuilder.LA_PILOT_THRESHOLD && amount <= FeaturesBuilder.JUDGE_PILOT_THRESHOLD
   },
   {
     feature: 'directionsQuestionnaire',
     toggle: 'directions_questionnaire',
     setting: 'directionsQuestionnaire',
-    threshold: FeaturesBuilder.ONLINE_DQ_THRESHOLD
+    validForAmount: amount => amount <= FeaturesBuilder.ONLINE_DQ_THRESHOLD
   }
 ]

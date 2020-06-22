@@ -39,14 +39,6 @@ describe('FeaturesBuilder', () => {
     reset(mockLaunchDarklyClient)
   })
 
-  describe('Admissions Feature', () => {
-    it('should add admissions to features if flag is set', async () => {
-      enableFeatures('admissions')
-      const features = await featuresBuilder.features(1, user)
-      expect(features).to.equal('admissions')
-    })
-  })
-
   describe('Directions Questionnaire Feature', () => {
     it(`should add dq to features if flag is set and amount <= ${FeaturesBuilder.ONLINE_DQ_THRESHOLD}`, async () => {
       enableFeatures('directions_questionnaire')
@@ -105,5 +97,11 @@ describe('FeaturesBuilder', () => {
     enableFeatures('legal_advisor_pilot', 'directions_questionnaire', 'mediation_pilot')
     const features = await featuresBuilder.features(MIN_THRESHOLD, user)
     expect(features).to.equal('mediationPilot, LAPilotEligible, directionsQuestionnaire')
+  })
+
+  it(`should not add judge pilot if legal advisor pilot is eligible`, async () => {
+    enableFeatures('legal_advisor_pilot', 'judge_pilot')
+    const features = await featuresBuilder.features(FeaturesBuilder.LA_PILOT_THRESHOLD, user)
+    expect(features).to.equal('LAPilotEligible')
   })
 })

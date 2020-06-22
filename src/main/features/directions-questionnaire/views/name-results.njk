@@ -1,0 +1,52 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, radioOption, saveAndContinueButton, errorSummary, numericInput, textInput, radioGroup %}
+
+{% if party === MadeBy.DEFENDANT and (claim.claimData.defendant.type === PartyType.ORGANISATION.value or claim.claimData.defendant.type === PartyType.COMPANY.value) %}
+  {% set heading = 'Request a hearing location' %}
+{% else %}
+  {% set heading = 'Choose a hearing location' %}
+{% endif %}
+
+{% block content %}
+  <form method="post" class="analytics-submit-event-trigger" data-event-action="DQ: Hearing Location Search"
+        data-event-label-from="courtSearchSelection" novalidate>
+    {{ csrfProtection(csrf) }}
+    <fieldset id="nameResults[label]" class="form-group {% if form.hasErrors() %} form-group-error {% endif %}">
+      <legend class="visually-hidden">{{ t(heading) }}</legend>
+      <div>
+        {% if fallbackPage %}
+          <p>{{ t('Tell us your preferred location for a hearing, in case the claim goes to one.') }}</p>
+          <p>{{ t('We’ll use the location you choose unless the claimant has an exceptional reason to object, for example accessibility needs.') }}</p>
+          <h1 class="heading-medium">{{ t('Enter a court name') }}</h1>
+          {{ textInput(form = form, name = 'alternativeCourtName', inputClass = 'form-control-1-100') }}
+          <input type="hidden" name="alternativeOption" value="search">
+        {% else %}
+          <p>{{ t('The following courts match') }} '{{ searchString }}'.</p>
+          <p>Select the court you want to request:</p>
+          <input type="hidden" name="alternativeOption" value="search">
+          {% for court in courts %}
+            {{ radioOption(form = form, label = court.name, name = 'alternativeCourtName', value = court.name, bold = true) }}
+            <details class="form-group analytics-click-event-trigger"
+                     data-event-label="Court-Facilities: Facilities of the chosen court.">
+              <summary>
+                <p><span class="link">{{ t('See this court’s facilities') }}</span></p>
+              </summary>
+
+              <div class="panel">
+                {% for facility in court.facilities %}
+                  <h3 class="heading-small form-group-related">{{ facility.name }}</h3>
+                  {{ facility.description | safe }}
+                {% endfor %}
+              </div>
+            </details>
+          {% endfor %}
+        {% endif %}
+      </div>
+    </fieldset>
+
+    <p>
+      {{ saveAndContinueButton() }}
+    </p>
+
+  </form>
+{% endblock %}

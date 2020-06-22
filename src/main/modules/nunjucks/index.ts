@@ -72,6 +72,7 @@ import { FreeMediationOption } from 'main/app/forms/models/freeMediation'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { ResponseType as DomainResponseType } from 'claims/models/response/responseType'
 import { FeaturesBuilder } from 'claim/helpers/featuresBuilder'
+import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -142,6 +143,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('featureToggles', this.convertPropertiesToBoolean(config.get('featureToggles')))
     nunjucksEnv.addGlobal('RejectAllOfClaimOption', RejectAllOfClaimOption)
     nunjucksEnv.addGlobal('AlreadyPaid', AlreadyPaid)
+    nunjucksEnv.addGlobal('ProceedOfflineReason', ProceedOfflineReason)
     nunjucksEnv.addGlobal('DefendantPaymentType', DefendantPaymentType)
     nunjucksEnv.addGlobal('DefendantPaymentOption', DefendantPaymentOption)
     nunjucksEnv.addGlobal('PaymentType', PaymentType)
