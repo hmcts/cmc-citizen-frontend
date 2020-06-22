@@ -732,7 +732,7 @@ export class Claim {
   private isOfflineResponse (): boolean {
     return this.response !== undefined && this.response.responseMethod === ResponseMethod.OFFLINE
   }
-  
+
   private checkProceedOfflineReason (): boolean {
     return (this.proceedOfflineReason && (this.proceedOfflineReason === ProceedOfflineReason.APPLICATION_BY_DEFENDANT || this.proceedOfflineReason === ProceedOfflineReason.APPLICATION_BY_CLAIMANT))
   }
