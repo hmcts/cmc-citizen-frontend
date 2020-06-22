@@ -81,7 +81,7 @@ export class Claim {
   paperResponse: YesNoOption
   claimDocuments?: ClaimDocument[]
   proceedOfflineReason: string
-  handedOffToCcbcAt:Moment
+  handedOffToCcbcAt: Moment
 
   get defendantOffer (): Offer {
     if (!this.settlement) {
