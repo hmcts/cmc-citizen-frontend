@@ -117,7 +117,8 @@
       "cmc-webchat-button-no-agents": "7732814745cac6f4603c4d1.53357933",
       "cmc-webchat-button-agents-busy": "2042157415cc19c95669039.65793052",
       "cmc-webchat-button-service-closed": "20199488815cc1a89e0861d5.73103009",
-      "launchDarkly-sdk-key": "LAUNCH_DARKLY_SDK_KEY"
+      "launchDarkly-sdk-key": "LAUNCH_DARKLY_SDK_KEY",
+      "pcq-token-key": "PCQ_TOKEN_KEY"
     }
   },
   "launchDarkly": {
