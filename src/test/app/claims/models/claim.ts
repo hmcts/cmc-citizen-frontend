@@ -1220,6 +1220,7 @@ describe('OconFormResponse', () => {
   beforeEach(() => {
     claim = new Claim()
     claim.responseDeadline = MomentFactory.currentDate()
+    claim.intentionToProceedDeadline = MomentFactory.currentDate()
     claim.respondedAt = moment()
     claim.response = {
       responseType: ResponseType.FULL_DEFENCE,
