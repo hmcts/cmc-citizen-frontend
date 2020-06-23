@@ -26,8 +26,8 @@ dependencies:
     condition: cmc-claim-store.enabled
 
   - name: postgresql
-    version: 8.6.4
-    repository: '@stable'
+    version: 8.9.8
+    repository: https://charts.bitnami.com/bitnami
     condition: postgresql.enabled
 
   - name: ccd
