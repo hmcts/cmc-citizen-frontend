@@ -35,6 +35,7 @@ nodejs:
     FEATURE_MEDIATION_PILOT: true
     FEATURE_DIRECTIONS_QUESTIONNAIRE: true
     FEATURE_INVERSION_OF_CONTROL: true
+    FEATURE_PCQ_INTEGRATION: false
   keyVaults:
     cmc:
       secrets:
@@ -53,6 +54,7 @@ nodejs:
         - cmc-webchat-button-service-closed
         - postcode-lookup-api-key
         - launchDarkly-sdk-key
+        - cmc_pcq_token
 
 idam-pr:
   enabled: false

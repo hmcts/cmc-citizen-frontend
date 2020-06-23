@@ -74,3 +74,8 @@ data "azurerm_key_vault_secret" "cmc_webchat_button_service_closed" {
   name = "cmc-webchat-button-service-closed"
   key_vault_id = "${data.azurerm_key_vault.cmc_key_vault.id}"
 }
+
+data "azurerm_key_vault_secret" "cmc_pcq_token" {
+  name = "cmc_pcq_token"
+  key_vault_id = "${data.azurerm_key_vault.cmc_key_vault.id}"
+}
