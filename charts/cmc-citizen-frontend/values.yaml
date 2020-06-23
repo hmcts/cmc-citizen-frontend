@@ -54,7 +54,7 @@ nodejs:
         - cmc-webchat-button-service-closed
         - postcode-lookup-api-key
         - launchDarkly-sdk-key
-        - cmc_pcq_token
+        - pcq-token-key
 
 idam-pr:
   enabled: false
