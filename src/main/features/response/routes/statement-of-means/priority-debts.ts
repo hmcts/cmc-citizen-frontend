@@ -13,7 +13,6 @@ import { Draft } from '@hmcts/draft-store-client'
 import { CalculateMonthlyIncomeExpense } from 'common/calculate-monthly-income-expense/calculateMonthlyIncomeExpense'
 import { IncomeExpenseSources } from 'common/calculate-monthly-income-expense/incomeExpenseSources'
 import { Validator } from '@hmcts/class-validator'
-import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 import { PriorityDebt } from 'response/form/models/statement-of-means/priorityDebt'
 import { ExpenseSource } from 'response/form/models/statement-of-means/expenseSource'
 
@@ -73,7 +72,6 @@ function actionHandler (req: express.Request, res: express.Response, next: expre
 export default express.Router()
   .get(
     page.uri,
-    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
@@ -81,7 +79,6 @@ export default express.Router()
     }))
   .post(
     page.uri,
-    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
     FormValidator.requestHandler(
       PriorityDebt, PriorityDebt.fromObject, undefined, ['resetDebt']),

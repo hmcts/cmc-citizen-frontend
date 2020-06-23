@@ -1,0 +1,49 @@
+{% macro claimTransferredClaimDetails(claim) %}
+  <div class="status-block">
+    <h2 class="heading-medium"> {{ t('We’ve sent this case to the court') }} </h2>
+    <p>{{  t('Your online account won’t be updated - any further updates will be by post from {{ courtName }}.', {courtName :claim.transferContent.hearingCourtName }) }}</p>
+    <p>{{  t('If you need to send any forms, letters or documents about the claim, send them to this address:') }}</p>
+    <p>
+      {{ claim.transferContent.hearingCourtName  }}<br>
+      {{ claim.transferContent.hearingCourtAddress.line1 }} <br/>
+      {% if claim.transferContent.hearingCourtAddress.line2 is defined %}
+        {{ claim.transferContent.hearingCourtAddress.line2 }} <br/>
+      {% endif %}
+      {% if claim.transferContent.hearingCourtAddress.line3 is defined %}
+        {{ claim.transferContent.hearingCourtAddress.line3 }} <br/>
+      {% endif %}
+      {% if claim.transferContent.hearingCourtAddress.city is defined %}
+        {{ claim.transferContent.hearingCourtAddress.city }} <br/>
+      {% endif %}
+      {% if claim.transferContent.hearingCourtAddress.postcode is defined %}
+        {{ claim.transferContent.hearingCourtAddress.postcode }}
+      {% endif %}
+
+    </p>
+    <p>{{  t('Contact the court if you have any questions about the claim.') }}</p>
+    <p>
+      <a target="_blank" href="https://www.gov.uk/find-court-tribunal">{{  t('Find County Court contact details') }}</a>
+      {{  t(' (opens in a new window).') }}
+    </p>
+  </div>
+{% endmacro %}
+
+{% macro claimTransferredDefendantClaimDetails(claim) %}
+  {{ claimTransferredClaimDetails(claim) }}
+{% endmacro %}
+
+{% macro claimTransferredClaimantClaimDetails(claim) %}
+  {{ claimTransferredClaimDetails(claim) }}
+{% endmacro %}
+
+{% macro claimTransferredClaimStatus() %}
+      {{ t('Case sent to court') }}
+{% endmacro %}
+
+{% macro claimTransferredDefendantClaimStatus() %}
+  {{ claimTransferredClaimStatus() }}
+{% endmacro %}
+
+{% macro claimTransferredClaimantClaimStatus() %}
+  {{ claimTransferredClaimStatus() }}
+{% endmacro %}
