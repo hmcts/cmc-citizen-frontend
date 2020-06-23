@@ -35,6 +35,7 @@
     "directionsQuestionnaire": true,
     "newDashboardStatus": false,
     "inversionOfControl": true,
+    "warningBanner": false,
     "helpWithFees": true
   },
   "appInsights": {

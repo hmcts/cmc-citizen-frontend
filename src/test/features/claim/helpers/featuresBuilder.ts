@@ -24,7 +24,7 @@ const MIN_THRESHOLD = Math.min(
 
 function enableFeatures (...features: string[]) {
   FEATURES.map(feature => feature.toggle)
-    .forEach(toggle => when(mockLaunchDarklyClient.variation(anything(), anything(), toggle, anything()))
+    .forEach(toggle => when(mockLaunchDarklyClient.userVariation(anything(), anything(), toggle, anything()))
       .thenResolve(Promise.resolve(features.indexOf(toggle) >= 0)))
 }
 

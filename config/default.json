@@ -92,6 +92,7 @@
     "newDashboardStatus": false,
     "webChat": true,
     "inversionOfControl": true,
+    "warningBanner": false,
     "helpWithFees": false
   },
   "oauth": {

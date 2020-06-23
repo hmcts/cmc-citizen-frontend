@@ -4,14 +4,22 @@ import { EligibilityPage } from 'eligibility/eligibilityPage'
 import { YesNoOption } from 'models/yesNoOption'
 import { EligibilityCheck, eligible, notEligible } from 'eligibility/model/eligibilityCheck'
 import { NotEligibleReason } from 'eligibility/notEligibleReason'
+import { RoutablePath } from 'shared/router/routablePath'
 
 class Over18EligibilityPage extends EligibilityPage<YesNoOption> {
   constructor () {
-    super(Paths.over18Page, Paths.helpWithFeesPage, 'eighteenOrOver')
+    super(Paths.over18Page, 'eighteenOrOver')
   }
 
-  checkEligibility (value: YesNoOption): EligibilityCheck {
-    return value === YesNoOption.YES ? eligible() : notEligible(NotEligibleReason.UNDER_18)
+  checkEligibility (value: YesNoOption): Promise<EligibilityCheck> {
+    return Promise.resolve(value === YesNoOption.YES
+      ? eligible()
+      : notEligible(NotEligibleReason.UNDER_18)
+    )
+  }
+
+  protected async nextPagePath (): Promise<RoutablePath> {
+    return Promise.resolve(Paths.helpWithFeesPage)
   }
 }
 
