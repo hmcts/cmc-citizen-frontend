@@ -23,6 +23,7 @@ export class Paths {
   static readonly interestDatePage = new RoutablePath('/claim/interest-date')
   static readonly interestStartDatePage = new RoutablePath('/claim/interest-start-date')
   static readonly interestEndDatePage = new RoutablePath('/claim/interest-end-date')
+  static readonly helpWithFeesPage = new RoutablePath('/claim/help-with-fees')
   static readonly interestTotalPage = new RoutablePath('/claim/interest-total')
   static readonly interestContinueClaimingPage = new RoutablePath('/claim/interest-continue-claiming')
   static readonly interestHowMuchPage = new RoutablePath('/claim/interest-how-much')

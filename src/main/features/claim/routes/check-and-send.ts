@@ -23,6 +23,11 @@ import { QualifiedStatementOfTruth } from 'forms/models/qualifiedStatementOfTrut
 import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { Draft } from '@hmcts/draft-store-client'
+import { FeatureToggles } from 'utils/featureToggles'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
+import { YesNoOption } from 'models/yesNoOption'
+
+const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
 
 async function getClaimAmountTotal (draft: DraftClaim): Promise<TotalAmount> {
   const interest: number = await draftInterestAmount(draft)
@@ -111,7 +116,8 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response, next: 
   const draft: Draft<DraftClaim> = res.locals.claimDraft
 
   getClaimAmountTotal(draft.document)
-    .then((interestTotal: TotalAmount) => {
+    .then(async (interestTotal: TotalAmount) => {
+      const helpWithFees: boolean = await featureToggles.isHelpWithFeesEnabled()
       res.render(Paths.checkAndSendPage.associatedView, {
         draftClaim: draft.document,
         claimAmountTotal: interestTotal,
@@ -123,7 +129,8 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response, next: 
         claimantPartyDetailsPageUri: getClaimantPartyDetailsPageUri(draft.document.claimant.partyDetails),
         defendantPartyDetailsPageUri: getDefendantPartyDetailsPageUri(draft.document.defendant.partyDetails),
         paths: Paths,
-        form: form
+        form,
+        helpWithFees
       })
     }).catch(next)
 }
@@ -144,16 +151,22 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res, next)
       } else {
+        const draft: Draft<DraftClaim> = res.locals.claimDraft
         if (form.model.type === SignatureType.QUALIFIED) {
-          const draft: Draft<DraftClaim> = res.locals.claimDraft
           const user: User = res.locals.user
           draft.document.qualifiedStatementOfTruth = form.model as QualifiedStatementOfTruth
           await new DraftService().save(draft, user.bearerToken)
         }
-        if (toBoolean(config.get('featureToggles.inversionOfControl'))) {
-          res.redirect(Paths.initiatePaymentController.uri)
+        if (await featureToggles.isHelpWithFeesEnabled()
+          && draft.document.helpWithFees && draft.document.helpWithFees.declared.option === YesNoOption.YES.option) {
+
+          res.redirect(Paths.taskListPage.uri)
         } else {
-          res.redirect(Paths.startPaymentReceiver.uri)
+          if (toBoolean(config.get('featureToggles.inversionOfControl'))) {
+            res.redirect(Paths.initiatePaymentController.uri)
+          } else {
+            res.redirect(Paths.startPaymentReceiver.uri)
+          }
         }
       }
     })

@@ -108,6 +108,11 @@ const commonClaimObject = {
   interestEndDate: {
     option: InterestEndDateOption.SETTLED_OR_JUDGMENT
   } as InterestEndDate,
+  helpWithFees: {
+    declared: {
+      option: 'no'
+    }
+  },
   reason: {
     reason: 'Valid reason'
   } as Reason,

@@ -16,14 +16,16 @@ export class TaskListBuilder {
     ])
   }
 
-  static buildPrepareYourClaimSection (draft: DraftClaim): TaskList {
-    return new TaskList('Prepare your claim', [
-      new TaskListItem('Completing your claim', Paths.completingClaimPage.uri, CompletingYourClaim.isCompleted(draft)),
-      new TaskListItem('Your details', Paths.claimantPartyTypeSelectionPage.uri, YourDetails.isCompleted(draft)),
-      new TaskListItem('Their details', Paths.defendantPartyTypeSelectionPage.uri, TheirDetails.isCompleted(draft)),
-      new TaskListItem('Claim amount', Paths.amountPage.uri, ClaimAmount.isCompleted(draft)),
-      new TaskListItem('Claim details', Paths.reasonPage.uri, ClaimDetails.isCompleted(draft))
-    ])
+  static async buildPrepareYourClaimSection (draft: DraftClaim): Promise<TaskList> {
+    return ClaimAmount.isCompleted(draft)
+      .then(claimAmountCompleted => new TaskList('Prepare your claim', [
+        new TaskListItem('Completing your claim', Paths.completingClaimPage.uri, CompletingYourClaim.isCompleted(draft)),
+        new TaskListItem('Your details', Paths.claimantPartyTypeSelectionPage.uri, YourDetails.isCompleted(draft)),
+        new TaskListItem('Their details', Paths.defendantPartyTypeSelectionPage.uri, TheirDetails.isCompleted(draft)),
+        new TaskListItem('Claim amount', Paths.amountPage.uri, claimAmountCompleted),
+        new TaskListItem('Claim details', Paths.reasonPage.uri, ClaimDetails.isCompleted(draft))
+      ])
+    )
   }
 
   static buildSubmitSection (): TaskList {
@@ -32,11 +34,10 @@ export class TaskListBuilder {
     ])
   }
 
-  static buildRemainingTasks (draft: DraftClaim): TaskListItem[] {
-    return [].concat(
-      TaskListBuilder.buildBeforeYouStartSection(draft).tasks,
-      TaskListBuilder.buildPrepareYourClaimSection(draft).tasks
-    )
-      .filter(item => !item.completed)
+  static async buildRemainingTasks (draft: DraftClaim): Promise<TaskListItem[]> {
+    return TaskListBuilder.buildPrepareYourClaimSection(draft)
+      .then(prepareYourClaimSection => []
+        .concat(TaskListBuilder.buildBeforeYouStartSection(draft).tasks, prepareYourClaimSection.tasks)
+        .filter(item => !item.completed))
   }
 }
