@@ -1,16 +1,14 @@
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
 import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
-import { ClaimStoreClient } from 'claims/claimStoreClient'
 
 export class FeatureToggles {
-  readonly claimStoreClient: ClaimStoreClient
   readonly launchDarklyClient: LaunchDarklyClient
 
-  constructor (claimStoreClient: ClaimStoreClient, launchDarklyClient: LaunchDarklyClient) {
-    this.claimStoreClient = claimStoreClient
+  constructor (launchDarklyClient: LaunchDarklyClient) {
     this.launchDarklyClient = launchDarklyClient
   }
+
   static isEnabled (featureName: string): boolean {
     return FeatureToggles.isAnyEnabled(featureName)
   }
