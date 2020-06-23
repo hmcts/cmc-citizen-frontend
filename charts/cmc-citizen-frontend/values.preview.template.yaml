@@ -76,7 +76,6 @@ cmc-claim-store:
           - rpa-email-response
           - rpa-email-ccj
           - rpa-email-paid-in-full
-          - cmc_pcq_token
     environment:
       LOG_LEVEL: DEBUG
       DOC_ASSEMBLY_URL: http://dg-docassembly-aat.service.core-compute-aat.internal
