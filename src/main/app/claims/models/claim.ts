@@ -81,7 +81,6 @@ export class Claim {
   paperResponse: YesNoOption
   claimDocuments?: ClaimDocument[]
   proceedOfflineReason: string
-  handedOffToCcbcAt: Moment
 
   get defendantOffer (): Offer {
     if (!this.settlement) {
@@ -392,9 +391,6 @@ export class Claim {
 
       if (input.proceedOfflineReason) {
         this.proceedOfflineReason = input.proceedOfflineReason
-      }
-      if (input.handedOffToCcbcAt) {
-        this.handedOffToCcbcAt = MomentFactory.parse(input.handedOffToCcbcAt)
       }
 
       return this
