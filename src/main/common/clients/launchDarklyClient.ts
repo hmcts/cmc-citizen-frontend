@@ -20,7 +20,7 @@ export class LaunchDarklyClient {
     }
   }
 
-  async variation (user: User, roles: string[], featureKey: string, offlineDefault): Promise<ld.LDFlagValue> {
+  async userVariation (user: User, roles: string[], featureKey: string, offlineDefault): Promise<ld.LDFlagValue> {
     const ldUser: ld.LDUser = {
       key: user.id,
       custom: {
@@ -30,14 +30,13 @@ export class LaunchDarklyClient {
     return LaunchDarklyClient.client.variation(featureKey, ldUser, offlineDefault)
   }
 
-  async default (featureKey: string, offlineDefault): Promise<ld.LDFlagValue> {
+  async serviceVariation (featureKey: string, offlineDefault): Promise<ld.LDFlagValue> {
     const roles: string[] = []
     const ldUser: ld.LDUser = {
       key: 'citizen-frontend',
       custom: {
         roles
-      },
-      anonymous: true
+      }
     }
     return LaunchDarklyClient.client.variation(featureKey, ldUser, offlineDefault)
   }

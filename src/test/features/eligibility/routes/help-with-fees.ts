@@ -9,13 +9,11 @@ import { Paths } from 'eligibility/paths'
 
 import { app } from 'main/app'
 
-import { NotEligibleReason } from 'eligibility/notEligibleReason'
 import { YesNoOption } from 'models/yesNoOption'
 
 const pagePath: string = Paths.helpWithFeesPage.uri
-const pageRedirect: string = Paths.singleDefendantPage.uri
+const pageRedirect: string = Paths.eligiblePage.uri
 const expectedTextOnPage: string = 'Do you need help paying your court fees?'
-const notEligibleReason: string = NotEligibleReason.HELP_WITH_FEES
 
 describe('Claim eligibility: help with fees page', () => {
   attachDefaultHooks(app)
@@ -54,7 +52,7 @@ describe('Claim eligibility: help with fees page', () => {
       await request(app)
         .post(pagePath)
         .send({ helpWithFees: YesNoOption.YES.option })
-        .expect(res => expect(res).to.be.redirect.toLocation(`${Paths.notEligiblePage.uri}?reason=${notEligibleReason}`))
+        .expect(res => expect(res).to.be.redirect.toLocation(Paths.helpWithFeesReferencePage.uri))
     })
   })
 })

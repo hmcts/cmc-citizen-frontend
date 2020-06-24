@@ -4,6 +4,7 @@ export class Paths {
   static readonly startPage = new RoutablePath('/eligibility/index')
   static readonly claimValuePage = new RoutablePath('/eligibility/claim-value')
   static readonly helpWithFeesPage = new RoutablePath('/eligibility/help-with-fees')
+  static readonly helpWithFeesReferencePage = new RoutablePath('/eligibility/help-with-fees-reference')
   static readonly singleDefendantPage = new RoutablePath('/eligibility/single-defendant')
   static readonly claimTypePage = new RoutablePath('/eligibility/claim-type')
   static readonly claimantAddressPage = new RoutablePath('/eligibility/claimant-address')

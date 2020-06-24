@@ -9,18 +9,18 @@ import { Paths } from 'eligibility/paths'
 
 import { app } from 'main/app'
 
+import { YesNoOption } from 'models/yesNoOption'
 import { NotEligibleReason } from 'eligibility/notEligibleReason'
-import { ClaimValue } from 'eligibility/model/claimValue'
 
-const pagePath: string = Paths.claimValuePage.uri
-const pageRedirect: string = Paths.singleDefendantPage.uri
-const expectedTextOnPage: string = 'Total amount you’re claiming'
-const notEligibleReason: string = NotEligibleReason.CLAIM_VALUE_NOT_KNOWN
+const pagePath: string = Paths.helpWithFeesReferencePage.uri
+const pageRedirect: string = Paths.eligiblePage.uri
+const expectedTextOnPage: string = 'Do you have a Help With Fees reference number?'
+const notEligibleReason: string = NotEligibleReason.HELP_WITH_FEES_REFERENCE
 
-describe('Claim eligibility: claim value page', () => {
+describe('Claim eligibility: help with fees reference page', () => {
   attachDefaultHooks(app)
 
-  describe('on GET', () => {
+  context('on GET', () => {
     checkAuthorizationMiddleware(app, 'get', pagePath)
 
     it('should render page when everything is fine', async () => {
@@ -31,7 +31,7 @@ describe('Claim eligibility: claim value page', () => {
     })
   })
 
-  describe('on POST', () => {
+  context('on POST', () => {
     checkAuthorizationMiddleware(app, 'post', pagePath)
 
     it('should render page when form is invalid and everything is fine', async () => {
@@ -41,11 +41,11 @@ describe('Claim eligibility: claim value page', () => {
         .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage, 'div class="error-summary"'))
     })
 
-    it('should redirect to help with fees page when form is valid and everything is fine', async () => {
+    it('should redirect to single defendant page when form is valid and everything is fine', async () => {
 
       await request(app)
         .post(pagePath)
-        .send({ claimValue: ClaimValue.UNDER_10000.option })
+        .send({ helpWithFeesReference: YesNoOption.YES.option })
         .expect(res => expect(res).to.be.redirect.toLocation(pageRedirect))
     })
 
@@ -53,7 +53,7 @@ describe('Claim eligibility: claim value page', () => {
 
       await request(app)
         .post(pagePath)
-        .send({ claimValue: ClaimValue.NOT_KNOWN.option })
+        .send({ helpWithFeesReference: YesNoOption.NO.option })
         .expect(res => expect(res).to.be.redirect.toLocation(`${Paths.notEligiblePage.uri}?reason=${notEligibleReason}`))
     })
   })

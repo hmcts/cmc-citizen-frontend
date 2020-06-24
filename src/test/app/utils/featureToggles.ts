@@ -31,8 +31,18 @@ describe('FeatureToggles', () => {
     it('should return toggle if warningBanner toggle exists', async () => {
       const mockLaunchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
       const featureToggles = new FeatureToggles(mockLaunchDarklyClient)
-      let actual = toBoolean(mockLaunchDarklyClient.default('warning_banner', false))
+      let actual = toBoolean(config.get<boolean>(`featureToggles.warningBanner`))
       let result = await featureToggles.isWarningBannerEnabled()
+      expect(result).to.equal(actual)
+    })
+  })
+
+  describe('isHelpWithFeesEnabled', () => {
+    it('should return toggle if help with fees toggle exists', async () => {
+      const mockLaunchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
+      const featureToggles = new FeatureToggles(mockLaunchDarklyClient)
+      let actual = toBoolean(config.get<boolean>(`featureToggles.helpWithFees`))
+      let result = await featureToggles.isHelpWithFeesEnabled()
       expect(result).to.equal(actual)
     })
   })
