@@ -134,6 +134,8 @@
     {{ ccjRequestedForClaimantDashboard(claim) }}
   {% elif status === ClaimStatus.REDETERMINATION_BY_JUDGE %}
     {{ redeterminationClaimantDashboard() }}
+  {% elif status === ClaimStatus.DEFENDANT_OCON_FORM_RESPONSE %}
+    {{ claimRejectedWithDQsForClaimantDashboard(claim) }}
   {% elif status === ClaimStatus.DEFENDANT_PAPER_RESPONSE %}
     {{ paperResponseForClaimantDashboard() }}
   {% elif status === ClaimStatus.PROCEED_OFFLINE %}
@@ -250,6 +252,8 @@
     {{ redeterminationDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.CCJ_REQUESTED %}
     {{ ccjRequestedForDefendantDashboard(claim) }}
+  {% elif status === ClaimStatus.DEFENDANT_OCON_FORM_RESPONSE%}
+    {{ claimRejectedWithDQsForDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.DEFENDANT_PAPER_RESPONSE %}
     {{ paperResponseForDefendantDashboard() }}
   {% elif status === ClaimStatus.PROCEED_OFFLINE %}
