@@ -156,29 +156,29 @@ export default express.Router()
   .get(
     Paths.checkAndSendPage.uri,
     AllResponseTasksCompletedGuard.requestHandler,
-    async (req: express.Request, res: express.Response) => {
-      const claim: Claim = res.locals.claim
-      const draft: Draft<ResponseDraft> = res.locals.responseDraft
-      const user: User = res.locals.user
-      let redirectUri = null
-      if (FeatureToggles.isEnabled('pcq')) {
-        const isEligible = await PcqClient.isEligibleRedirect(draft.document.pcqId,draft.document.defendantDetails.partyDetails.type)
-        if (draft.document.pcqId === undefined) {
-          let pcqID = uuid()
-          draft.document.pcqId = pcqID
-          await new DraftService().save(draft, user.bearerToken)
-          if (isEligible) {
-            redirectUri = PcqClient.generateRedirectUrl(req, 'DEFENDANT', pcqID, user.email, claim.ccdCaseId, Paths.checkAndSendPage, draft.document.externalId)
-          }
-        }
-      }
-      if (redirectUri === null) {
-        const StatementOfTruthClass = getStatementOfTruthClassFor(claim, draft)
-        renderView(new Form(new StatementOfTruthClass()), res)
-      } else {
-        res.redirect(redirectUri)
-      }
-    })
+     (req: express.Request, res: express.Response) => {
+       const claim: Claim = res.locals.claim
+       const draft: Draft<ResponseDraft> = res.locals.responseDraft
+       const user: User = res.locals.user
+       let redirectUri = null
+       if (FeatureToggles.isEnabled('pcq')) {
+         const isEligible = PcqClient.isEligibleRedirect(draft.document.pcqId,draft.document.defendantDetails.partyDetails.type)
+         if (draft.document.pcqId === undefined) {
+           let pcqID = uuid()
+           draft.document.pcqId = pcqID
+           new DraftService().save(draft, user.bearerToken)
+           if (isEligible) {
+             redirectUri = PcqClient.generateRedirectUrl(req, 'DEFENDANT', pcqID, user.email, claim.ccdCaseId, Paths.checkAndSendPage, draft.document.externalId)
+           }
+         }
+       }
+       if (redirectUri === null) {
+         const StatementOfTruthClass = getStatementOfTruthClassFor(claim, draft)
+         renderView(new Form(new StatementOfTruthClass()), res)
+       } else {
+         res.redirect(redirectUri)
+       }
+     })
   .post(
     Paths.checkAndSendPage.uri,
     AllResponseTasksCompletedGuard.requestHandler,
