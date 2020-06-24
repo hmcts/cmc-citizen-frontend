@@ -121,7 +121,7 @@
     "gulp-rename": "^2.0.0",
     "gulp-replace": "^1.0.0",
     "gulp-sass": "^4.0.2",
-    "html_codesniffer": "2.4.1",
+    "html_codesniffer": "2.5.1",
     "husky": "^4.2.2",
     "jsonwebtoken": "^8.5.1",
     "mocha": "^6.2.2",
