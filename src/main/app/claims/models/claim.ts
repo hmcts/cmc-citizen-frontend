@@ -31,6 +31,7 @@ import { DirectionOrder } from 'claims/models/directionOrder'
 import { ReviewOrder } from 'claims/models/reviewOrder'
 import { MediationOutcome } from 'claims/models/mediationOutcome'
 import { YesNoOption } from 'models/yesNoOption'
+import { ResponseMethod } from 'claims/models/response/responseMethod'
 import { ClaimDocument } from 'claims/models/claimDocument'
 import { TransferContents } from 'claims/models/transferContents'
 import * as _ from 'lodash'
@@ -175,7 +176,7 @@ export class Claim {
       } else {
         return ClaimStatus.ORDER_DRAWN
       }
-    } else if (this.paperResponse && this.paperResponse === YesNoOption.YES) {
+    } else if (this.isOfflineResponse()) {
       return ClaimStatus.DEFENDANT_PAPER_RESPONSE
     } else if (this.checkProceedOfflineReason()) {
       return ClaimStatus.PROCEED_OFFLINE
@@ -217,6 +218,8 @@ export class Claim {
       return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ
     } else if (this.hasIntentionToProceedDeadlinePassed()) {
       return ClaimStatus.INTENTION_TO_PROCEED_DEADLINE_PASSED
+    } else if (this.isOconFormResponse()) {
+      return ClaimStatus.DEFENDANT_OCON_FORM_RESPONSE
     } else if (this.hasDefendantRejectedClaimWithDQs()) {
       return ClaimStatus.DEFENDANT_REJECTS_WITH_DQS
     } else if (this.hasClaimantAcceptedStatesPaid()) {
@@ -481,6 +484,10 @@ export class Claim {
       return false
     }
 
+    if (this.hasBeenTransferred()) {
+      return false
+    }
+
     if (this.isResponseSubmitted() && this.response.responseType === ResponseType.PART_ADMISSION && (this.response && !this.response.paymentDeclaration)) {
       return true
     }
@@ -507,10 +514,6 @@ export class Claim {
 
     if (this.hasClaimantRejectedDefendantDefenceWithoutDQs()) {
       return true
-    }
-
-    if (this.hasBeenTransferred()) {
-      return false
     }
 
     return (((this.response && (this.response as FullAdmissionResponse).paymentIntention
@@ -720,6 +723,14 @@ export class Claim {
   private hasIntentionToProceedDeadlinePassed (): boolean {
     return !this.claimantResponse && this.response && this.response.responseType === ResponseType.FULL_DEFENCE && MomentFactory.currentDateTime().isAfter(this.intentionToProceedDeadline.clone().hour(16)) &&
       this.isIntentionToProceedEligible()
+  }
+
+  private isOconFormResponse (): boolean {
+    return this.response !== undefined && this.response.responseMethod === ResponseMethod.OCON_FORM
+  }
+
+  private isOfflineResponse (): boolean {
+    return this.response !== undefined && this.response.responseMethod === ResponseMethod.OFFLINE
   }
 
   private checkProceedOfflineReason (): boolean {

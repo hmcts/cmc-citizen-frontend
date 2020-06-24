@@ -37,6 +37,7 @@ import { MediationOutcome } from 'claims/models/mediationOutcome'
 import { DefenceType } from 'claims/models/response/defenceType'
 import { YesNoOption } from 'models/yesNoOption'
 import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
+import { ResponseMethod } from 'claims/models/response/responseMethod'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -684,7 +685,8 @@ function testData () {
         response: {
           ...baseResponseData,
           ...baseDefenceData,
-          freeMediation: FreeMediationOption.YES
+          freeMediation: FreeMediationOption.YES,
+          responseMethod: ResponseMethod.OFFLINE
         },
         paperResponse: YesNoOption.YES.option
       },
