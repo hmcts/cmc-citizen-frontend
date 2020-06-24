@@ -26,6 +26,8 @@ import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
 import { FeatureToggles } from 'utils/featureToggles'
 import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { DefendantEvidence } from 'response/form/models/defendantEvidence'
+import * as uuid from 'uuid'
+import { PcqClient } from 'utils/pcqClient'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
@@ -55,6 +57,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     draft: draft.document,
     signatureType: signatureTypeFor(claim, draft),
     statementOfMeansIsApplicable: StatementOfMeansFeature.isApplicableFor(claim, draft.document),
+    admissionsApplicable: ClaimFeatureToggles.isFeatureEnabledOnClaim(claim),
     dqsEnabled: dqsEnabled,
     mediationDraft: mediationDraft,
     contactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft.document, draft.document),
@@ -74,8 +77,7 @@ function rejectingFullAmount (draft: Draft<ResponseDraft>): boolean {
     || draft.document.response.type === ResponseType.PART_ADMISSION
 }
 
-function getDisagreementRoot (draft: Draft<ResponseDraft>):
-    { timeline?: DefendantTimeline, evidence?: DefendantEvidence } {
+function getDisagreementRoot (draft: Draft<ResponseDraft>): { timeline?: DefendantTimeline, evidence?: DefendantEvidence } {
   if (draft.document.isResponseRejected()) {
     return draft.document
   } else {
@@ -139,7 +141,7 @@ function deserializerFunction (value: any): StatementOfTruth | QualifiedStatemen
   }
 }
 
-function getStatementOfTruthClassFor (claim: Claim, draft: Draft<ResponseDraft>): { new (): StatementOfTruth | QualifiedStatementOfTruth } {
+function getStatementOfTruthClassFor (claim: Claim, draft: Draft<ResponseDraft>): { new(): StatementOfTruth | QualifiedStatementOfTruth } {
   if (signatureTypeFor(claim, draft) === SignatureType.QUALIFIED) {
     return QualifiedStatementOfTruth
   } else {
@@ -147,16 +149,36 @@ function getStatementOfTruthClassFor (claim: Claim, draft: Draft<ResponseDraft>)
   }
 }
 
+// async function isEligibleRedirect(pcqID: string): Promise<boolean> {
+//   return await pcqClient.isEligibleRedirect(pcqID)
+// }
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(
     Paths.checkAndSendPage.uri,
     AllResponseTasksCompletedGuard.requestHandler,
-    (req: express.Request, res: express.Response) => {
+    async (req: express.Request, res: express.Response) => {
       const claim: Claim = res.locals.claim
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
-      const StatementOfTruthClass = getStatementOfTruthClassFor(claim, draft)
-      renderView(new Form(new StatementOfTruthClass()), res)
+      const user: User = res.locals.user
+      let redirectUri = null
+      if (FeatureToggles.isEnabled('pcq')) {
+        const isEligible = await PcqClient.isEligibleRedirect(draft.document.pcqId,draft.document.defendantDetails.partyDetails.type)
+        if (draft.document.pcqId === undefined) {
+          let pcqID = uuid()
+          draft.document.pcqId = pcqID
+          await new DraftService().save(draft, user.bearerToken)
+          if (isEligible) {
+            redirectUri = PcqClient.generateRedirectUrl(req, 'DEFENDANT', pcqID, user.email, claim.ccdCaseId, Paths.taskListPage, draft.document.externalId)
+          }
+        }
+      }
+      if (redirectUri === null) {
+        const StatementOfTruthClass = getStatementOfTruthClassFor(claim, draft)
+        renderView(new Form(new StatementOfTruthClass()), res)
+      } else {
+        res.redirect(redirectUri)
+      }
     })
   .post(
     Paths.checkAndSendPage.uri,

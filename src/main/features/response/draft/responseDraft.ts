@@ -82,6 +82,7 @@ export class ResponseDraft extends DraftDocument {
 
   statementOfMeans?: StatementOfMeans
   companyDefendantResponseViewed: boolean
+  pcqId: string
 
   deserialize (input: any): ResponseDraft {
     if (input) {
@@ -118,6 +119,9 @@ export class ResponseDraft extends DraftDocument {
       }
       if (input.companyDefendantResponseViewed) {
         this.companyDefendantResponseViewed = input.companyDefendantResponseViewed
+      }
+      if (input.pcqId) {
+        this.pcqId = input.pcqId
       }
     }
 

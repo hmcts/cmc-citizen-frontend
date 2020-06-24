@@ -42,6 +42,7 @@ export class DraftClaim extends DraftDocument {
   qualifiedStatementOfTruth?: QualifiedStatementOfTruth
   timeline: ClaimantTimeline = new ClaimantTimeline()
   evidence: Evidence = new Evidence()
+  pcqID: string
 
   deserialize (input: any): DraftClaim {
     if (input) {
@@ -74,6 +75,7 @@ export class DraftClaim extends DraftDocument {
       }
       this.timeline = new ClaimantTimeline().deserialize(input.timeline) as ClaimantTimeline
       this.evidence = new Evidence().deserialize(input.evidence) as Evidence
+      this.pcqID = input.pcqID
     }
     return this
   }

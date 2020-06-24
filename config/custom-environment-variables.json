@@ -81,7 +81,8 @@
     "webChat": "FEATURE_WEB_CHAT",
     "inversionOfControl": "FEATURE_INVERSION_OF_CONTROL",
     "warningBanner": "FEATURE_WARNING_BANNER",
-    "helpWithFees": "FEATURE_HELP_WITH_FEES"
+    "helpWithFees": "FEATURE_HELP_WITH_FEES",
+    "pcq": "FEATURE_PCQ"
   },
 
   "oauth": {
@@ -107,10 +108,15 @@
       "cmc-webchat-tenant": "WEBCHAT_TENANT",
       "cmc-webchat-button-no-agents": "WEBCHAT_BUTTON_NO_AGENTS",
       "cmc-webchat-button-agents-busy": "WEBCHAT_BUTTON_AGENTS_BUSY",
-      "cmc-webchat-button-service-closed": "WEBCHAT_BUTTON_SERVICE_CLOSED"
+      "cmc-webchat-button-service-closed": "WEBCHAT_BUTTON_SERVICE_CLOSED",
+      "pcq-token-key": "PCQ_TOKEN_KEY"
     }
   },
   "launchDarkly": {
     "offline": "LAUNCH_DARKLY_OFFLINE_MODE"
+  },
+  "pcq":
+  {
+    "url":"PCQ_URL"
   }
 }
