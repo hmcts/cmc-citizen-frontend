@@ -469,6 +469,10 @@ export class Claim {
       return false
     }
 
+    if (this.state === 'BUSINESS_QUEUE') {
+      return false
+    }
+
     if (this.mediationOutcome !== undefined && this.mediationOutcome === MediationOutcome.SUCCEEDED) {
       return false
     }
