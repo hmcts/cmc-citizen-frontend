@@ -21,6 +21,7 @@ services:
         - SMOKE_TEST_CITIZEN_USERNAME
         - SMOKE_TEST_USER_PASSWORD
         - FEATURE_INVERSION_OF_CONTROL
+        - FEATURE_PCQ
       volumes:
         - ./functional-output:/usr/src/app/output
     remote-webdriver:
