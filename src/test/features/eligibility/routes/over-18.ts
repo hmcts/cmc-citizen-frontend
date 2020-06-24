@@ -13,7 +13,7 @@ import { app } from 'main/app'
 import { NotEligibleReason } from 'eligibility/notEligibleReason'
 
 const pagePath: string = Paths.over18Page.uri
-const pageRedirect: string = Paths.eligiblePage.uri
+const pageRedirect: string = Paths.helpWithFeesPage.uri
 const expectedTextOnPage: string = 'Are you 18 or over?'
 const notEligibleReason: string = NotEligibleReason.UNDER_18
 

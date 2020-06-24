@@ -1,6 +1,5 @@
 import * as express from 'express'
 
-import { Paths } from 'eligibility/paths'
 import { RoutablePath } from 'shared/router/routablePath'
 import { ErrorHandling } from 'shared/errorHandling'
 
@@ -15,7 +14,7 @@ import { CookieEligibilityStore } from 'eligibility/store'
 const eligibilityStore: CookieEligibilityStore = new CookieEligibilityStore()
 
 export abstract class EligibilityPage<T> {
-  constructor (private path: RoutablePath, private nextPagePath: RoutablePath, private property: string) {
+  protected constructor (private path: RoutablePath, private property: string) {
   }
 
   buildRouter (): express.Router {
@@ -39,27 +38,32 @@ export abstract class EligibilityPage<T> {
             eligibility[this.property] = form.model[this.property]
             eligibilityStore.write(eligibility, req, res)
 
-            this.handleAnswer(eligibility[this.property], res)
+            await this.handleAnswer(eligibility[this.property], res)
           }
         })
       )
   }
 
   private renderView (form: Form<Eligibility>, res: express.Response): void {
-    res.render(this.path.associatedView, {
-      form: form
-    })
+    res.render(this.path.associatedView, { form })
   }
 
-  protected handleAnswer (value: T, res: express.Response): void {
-    const result: EligibilityCheck = this.checkEligibility(value)
+  protected async handleAnswer (value: T, res: express.Response) {
+    const result: EligibilityCheck = await this.checkEligibility(value)
+      .catch(err => {
+        throw new Error(err)
+      })
 
     if (result.eligible) {
-      res.redirect(this.nextPagePath.uri)
+      res.redirect((await this.nextPagePath()).uri)
+    } else if (result.notEligibleReason) {
+      res.redirect(`${result.notEligiblePage.uri}?reason=${result.notEligibleReason}`)
     } else {
-      res.redirect(`${Paths.notEligiblePage.uri}?reason=${result.notEligibleReason}`)
+      res.redirect(result.notEligiblePage.uri)
     }
   }
 
-  protected abstract checkEligibility (value: T): EligibilityCheck
+  protected abstract async nextPagePath (): Promise<RoutablePath>
+
+  protected abstract checkEligibility (value: T): Promise<EligibilityCheck>
 }

@@ -34,7 +34,9 @@
     "mediationPilot": true,
     "directionsQuestionnaire": true,
     "newDashboardStatus": false,
-    "inversionOfControl": true
+    "inversionOfControl": true,
+    "warningBanner": false,
+    "helpWithFees": true
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"
