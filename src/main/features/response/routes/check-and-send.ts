@@ -57,7 +57,6 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     draft: draft.document,
     signatureType: signatureTypeFor(claim, draft),
     statementOfMeansIsApplicable: StatementOfMeansFeature.isApplicableFor(claim, draft.document),
-    admissionsApplicable: ClaimFeatureToggles.isFeatureEnabledOnClaim(claim),
     dqsEnabled: dqsEnabled,
     mediationDraft: mediationDraft,
     contactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft.document, draft.document),
@@ -141,7 +140,7 @@ function deserializerFunction (value: any): StatementOfTruth | QualifiedStatemen
   }
 }
 
-function getStatementOfTruthClassFor (claim: Claim, draft: Draft<ResponseDraft>): { new(): StatementOfTruth | QualifiedStatementOfTruth } {
+function getStatementOfTruthClassFor (claim: Claim, draft: Draft<ResponseDraft>): { new (): StatementOfTruth | QualifiedStatementOfTruth } {
   if (signatureTypeFor(claim, draft) === SignatureType.QUALIFIED) {
     return QualifiedStatementOfTruth
   } else {
@@ -169,7 +168,7 @@ export default express.Router()
           draft.document.pcqId = pcqID
           await new DraftService().save(draft, user.bearerToken)
           if (isEligible) {
-            redirectUri = PcqClient.generateRedirectUrl(req, 'DEFENDANT', pcqID, user.email, claim.ccdCaseId, Paths.taskListPage, draft.document.externalId)
+            redirectUri = PcqClient.generateRedirectUrl(req, 'DEFENDANT', pcqID, user.email, claim.ccdCaseId, Paths.checkAndSendPage, draft.document.externalId)
           }
         }
       }
