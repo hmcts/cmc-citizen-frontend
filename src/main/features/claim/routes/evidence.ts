@@ -55,10 +55,10 @@ export default express.Router()
         const user: User = res.locals.user
         let redirectUri = Paths.taskListPage.uri
         if (FeatureToggles.isEnabled('pcq') && draft.document.claimant.partyDetails !== undefined) {
-          const isEligible = await PcqClient.isEligibleRedirect(draft.document.pcqID, draft.document.claimant.partyDetails.type)
-          if (draft.document.pcqID === undefined) {
+          const isEligible = await PcqClient.isEligibleRedirect(draft.document.claimant.partyDetails.pcqId, draft.document.claimant.partyDetails.type)
+          if (draft.document.claimant.partyDetails.pcqId === undefined) {
             let pcqID = uuid()
-            draft.document.pcqID = pcqID
+            draft.document.claimant.partyDetails.pcqId = pcqID
             if (isEligible) {
               redirectUri = PcqClient.generateRedirectUrl(req, 'CLAIMANT',pcqID, user.email, null, Paths.taskListPage,draft.document.externalId)
             }

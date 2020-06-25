@@ -148,9 +148,6 @@ function getStatementOfTruthClassFor (claim: Claim, draft: Draft<ResponseDraft>)
   }
 }
 
-// async function isEligibleRedirect(pcqID: string): Promise<boolean> {
-//   return await pcqClient.isEligibleRedirect(pcqID)
-// }
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(
@@ -162,10 +159,10 @@ export default express.Router()
        const user: User = res.locals.user
        let redirectUri = null
        if (FeatureToggles.isEnabled('pcq')) {
-         const isEligible = PcqClient.isEligibleRedirect(draft.document.pcqId,draft.document.defendantDetails.partyDetails.type)
-         if (draft.document.pcqId === undefined) {
+         const isEligible = PcqClient.isEligibleRedirect(draft.document.defendantDetails.partyDetails.pcqId,draft.document.defendantDetails.partyDetails.type)
+         if (draft.document.defendantDetails.partyDetails.pcqId === undefined) {
            let pcqID = uuid()
-           draft.document.pcqId = pcqID
+           draft.document.defendantDetails.partyDetails.pcqId = pcqID
            new DraftService().save(draft, user.bearerToken)
            if (isEligible) {
              redirectUri = PcqClient.generateRedirectUrl(req, 'DEFENDANT', pcqID, user.email, claim.ccdCaseId, Paths.checkAndSendPage, draft.document.externalId)
