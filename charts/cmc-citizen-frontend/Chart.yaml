@@ -1,4 +1,4 @@
-apiVersion: v1
+apiVersion: v2
 name: cmc-citizen-frontend
 home: https://github.com/hmcts/cmc-citizen-frontend
 version: 3.3.8
