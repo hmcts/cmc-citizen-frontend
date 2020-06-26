@@ -323,6 +323,7 @@ export class DefenceSteps {
         this.askForMediation(defendantType)
         this.askForHearingRequirements(defendantType)
         defendantSteps.selectCheckAndSubmitYourDefence()
+        I.bypassPCQ()
         break
       case DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID:
         this.enterWhenDidYouPay(defence)
@@ -367,7 +368,8 @@ export class DefenceSteps {
     defendantType: PartyType,
     paymentOption: PaymentOption,
     claimantName: string,
-    statementOfMeansFullDataSet: boolean = true
+    statementOfMeansFullDataSet: boolean = true,
+    respondToPCQ?: boolean
   ): void {
     this.confirmYourDetails(defendantParty)
 
@@ -402,6 +404,13 @@ export class DefenceSteps {
     }
 
     defendantSteps.selectCheckAndSubmitYourDefence()
+
+    if (respondToPCQ) {
+      I.rejectAnsweringPCQ()
+    } else {
+      I.bypassPCQ()
+    }
+
     this.checkAndSendAndSubmit(defendantType, DefenceType.FULL_ADMISSION)
 
     I.see('You’ve submitted your response')
@@ -445,6 +454,7 @@ export class DefenceSteps {
     this.askForMediation(defendantType)
     this.askForHearingRequirements(defendantType)
     defendantSteps.selectCheckAndSubmitYourDefence()
+    I.bypassPCQ()
     this.checkAndSendAndSubmit(defendantType, DefenceType.PART_ADMISSION)
     I.see('You’ve submitted your response')
   }
