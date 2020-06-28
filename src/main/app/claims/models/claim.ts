@@ -469,7 +469,7 @@ export class Claim {
       return false
     }
 
-    if (this.state === 'BUSINESS_QUEUE') {
+    if (this.hasBeenMovedToCCBC()) {
       return false
     }
 
@@ -716,5 +716,9 @@ export class Claim {
 
   private checkProceedOfflineReason (): boolean {
     return (this.proceedOfflineReason && (this.proceedOfflineReason === ProceedOfflineReason.APPLICATION_BY_DEFENDANT || this.proceedOfflineReason === ProceedOfflineReason.APPLICATION_BY_CLAIMANT))
+  }
+
+  private hasBeenMovedToCCBC (): boolean {
+    return this.state === 'BUSINESS_QUEUE'
   }
 }
