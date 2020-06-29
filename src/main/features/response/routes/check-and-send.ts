@@ -153,13 +153,13 @@ export default express.Router()
   .get(
     Paths.checkAndSendPage.uri,
     AllResponseTasksCompletedGuard.requestHandler,
-     (req: express.Request, res: express.Response) => {
+     async (req: express.Request, res: express.Response) => {
        const claim: Claim = res.locals.claim
        const draft: Draft<ResponseDraft> = res.locals.responseDraft
        const user: User = res.locals.user
        let redirectUri = null
        if (FeatureToggles.isEnabled('pcq')) {
-         const isEligible = PcqClient.isEligibleRedirect(draft.document.defendantDetails.partyDetails.pcqId,draft.document.defendantDetails.partyDetails.type)
+         const isEligible = await PcqClient.isEligibleRedirect(draft.document.defendantDetails.partyDetails.pcqId,draft.document.defendantDetails.partyDetails.type)
          if (draft.document.defendantDetails.partyDetails.pcqId === undefined) {
            let pcqID = uuid()
            draft.document.defendantDetails.partyDetails.pcqId = pcqID
