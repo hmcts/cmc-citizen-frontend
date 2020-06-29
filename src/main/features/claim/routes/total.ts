@@ -24,7 +24,7 @@ export default express.Router()
       const hearingFee: number = await FeesClient.calculateHearingFee(claimAmount)
       const feeTableContent: FeeRangeMerge[] = await FeesTableViewHelper.feesTableContent()
 
-      const helpWithFees: boolean = draft.document.helpWithFees && draft.document.helpWithFees.declared
+      const helpWithFeesFeature: boolean = draft.document.helpWithFees && draft.document.helpWithFees.declared
         && draft.document.helpWithFees.declared.option === YesNoOption.YES.option
 
       res.render(Paths.totalPage.associatedView,
@@ -34,7 +34,7 @@ export default express.Router()
           issueFee,
           hearingFee,
           feeTableContent,
-          helpWithFees
+          helpWithFeesFeature
         })
     }))
   .post(Paths.totalPage.uri, (req: express.Request, res: express.Response) => {

@@ -105,7 +105,7 @@
     {% else %}
       {{ row('Interest rate', t('I don’t want to claim interest'), paths.interestPage.uri, bold = true) }}
     {% endif %}
-    {% if helpWithFees %}
+    {% if helpWithFeesFeature %}
       {{ row('Help With Fees reference number', draftClaim.helpWithFees.helpWithFeesNumber if (draftClaim.helpWithFees is defined and draftClaim.helpWithFees.helpWithFeesNumber is defined) else t('None'), paths.helpWithFeesPage.uri, bold = true) }}
     {% endif %}
     {{ tableEnd() }}
@@ -147,7 +147,7 @@
           )
         }}
 
-        {% if helpWithFees and draftClaim.helpWithFees.declared.option === YesNoOption.YES.option %}
+        {% if helpWithFeesFeature and draftClaim.helpWithFees.declared.option === YesNoOption.YES.option %}
           {% set submitButtonLabel = t('Submit claim') %}
         {% else %}
           {% set submitButtonLabel = t('Submit and continue to payment') + ' (' + (claimAmountTotal.feeAmount | numeral) + ')' %}

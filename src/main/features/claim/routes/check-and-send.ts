@@ -117,7 +117,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response, next: 
 
   getClaimAmountTotal(draft.document)
     .then(async (interestTotal: TotalAmount) => {
-      const helpWithFees: boolean = await featureToggles.isHelpWithFeesEnabled()
+      const helpWithFeesFeature: boolean = await featureToggles.isHelpWithFeesEnabled()
       res.render(Paths.checkAndSendPage.associatedView, {
         draftClaim: draft.document,
         claimAmountTotal: interestTotal,
@@ -130,7 +130,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response, next: 
         defendantPartyDetailsPageUri: getDefendantPartyDetailsPageUri(draft.document.defendant.partyDetails),
         paths: Paths,
         form,
-        helpWithFees
+        helpWithFeesFeature
       })
     }).catch(next)
 }
