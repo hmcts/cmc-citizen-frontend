@@ -11,8 +11,11 @@ import { prepareClaimDraft } from 'drafts/draft-data/claimDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
+import { FeatureToggles } from 'utils/featureToggles'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
+const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -29,7 +32,7 @@ export default express.Router()
       const draft: Draft<DraftClaim> = res.locals.claimDraft
       const user: User = res.locals.user
 
-      draft.document = new DraftClaim().deserialize(prepareClaimDraft(user.email))
+      draft.document = new DraftClaim().deserialize(prepareClaimDraft(user.email, await featureToggles.isHelpWithFeesEnabled()))
       await new DraftService().save(draft, user.bearerToken)
 
       const roles: string[] = await claimStoreClient.retrieveUserRoles(user)
