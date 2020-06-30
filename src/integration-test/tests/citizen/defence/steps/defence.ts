@@ -363,14 +363,14 @@ export class DefenceSteps {
     I.see('You’ve submitted your response')
   }
 
-  makeFullAdmission (
+  async makeFullAdmission (
     defendantParty: Party,
     defendantType: PartyType,
     paymentOption: PaymentOption,
     claimantName: string,
     statementOfMeansFullDataSet: boolean = true,
     respondToPCQ?: boolean
-  ): void {
+  ): Promise<void> {
     this.confirmYourDetails(defendantParty)
 
     this.requestMoreTimeToRespond()
@@ -404,7 +404,7 @@ export class DefenceSteps {
     }
 
     defendantSteps.selectCheckAndSubmitYourDefence()
-    const pcqHealth = I.checkPCQHealth()
+    const pcqHealth = await I.checkPCQHealth()
     if (respondToPCQ && pcqHealth) {
       I.rejectAnsweringPCQ()
     } else {
