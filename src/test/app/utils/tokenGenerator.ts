@@ -16,10 +16,9 @@ describe('TokenGenerator', () => {
         language: 'en'
       }
 
-      const expectedCiphertext = '9036d7faecda1698f1ce8dffa80ed9be08366e14268dc7a1cec2694f1b5597d51801ea0ea7100dc8f2d86be9c488a31ad02fe' +
-        '3a6537831b4c34181945d22ba9c0995ffd64007cd7a9fa9316648f119372f1d111071687b553090c4df36e658e808dc6e0c8ac8e984203e6f404e1955dd0cb3c' +
-        'eedaf7db450ae50a87a0b677a79'
-
+      const expectedCiphertext = '3b74573af3cf7403d07f8f9b58e8fbfae5b41a389469858da85f94caf089a4ddd5c3492a274ac2fc2a1f794194d1af7c7773384262' +
+        '487557d4f6a2b4fd6f1298b4f567afd63126d4d27e235cba3b9873d68a9b366b3b6e2a2c48dcef585ab233df00973aca82a3338bb0e6c0df128afa7146869861b60' +
+        'bb6fe0ea361c9989258'
       expect(TokenGenerator.gen(params)).to.eq(expectedCiphertext)
     })
   })
