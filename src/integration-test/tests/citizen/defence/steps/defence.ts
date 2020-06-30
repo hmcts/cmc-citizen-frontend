@@ -404,8 +404,8 @@ export class DefenceSteps {
     }
 
     defendantSteps.selectCheckAndSubmitYourDefence()
-
-    if (respondToPCQ) {
+    const pcqHealth = I.checkPCQHealth()
+    if (respondToPCQ && pcqHealth) {
       I.rejectAnsweringPCQ()
     } else {
       I.bypassPCQ()
