@@ -13,6 +13,7 @@ declare namespace CodeceptJS {
     selectOption: (select: string, option: string) => any
     rejectAnsweringPCQ: () => any
     bypassPCQ: () => Promise<any>
+    checkPCQHealth: () => Promise<boolean>
   }
 }
 

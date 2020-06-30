@@ -21,6 +21,17 @@ class PcqHelper extends codecept_helper {
       console.log('PCQ is disabled');
     }
   }
+  async checkPCQHealth () {
+    const helper = this.helpers['WebDriver'];
+    const heading = await helper.grabTextFrom('h1');
+    if (heading === 'Equality and diversity questions') {
+      //if it is up and running
+      return true
+    } else {
+      // silently move on.
+      return false
+    }
+  }
 }
 
 module.exports = PcqHelper

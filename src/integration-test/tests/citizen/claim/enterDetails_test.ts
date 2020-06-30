@@ -133,8 +133,12 @@ Scenario('I should be redirected to PCQ if "Your details" are filled in while ma
   // add claim details
   claimSteps.enterClaimDetails()
 
+  // check PCQ health before responding to the PCQ questionaire
+  const pcqHealth = await I.checkPCQHealth()
+  if (pcqHealth) {
   // I refuse to answer PCQ
-  I.rejectAnsweringPCQ()
+    I.rejectAnsweringPCQ()
+  }
 
   // Then i should be taken back to money claim
   I.see('Make a money claim')
