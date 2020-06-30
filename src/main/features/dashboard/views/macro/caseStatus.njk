@@ -118,10 +118,16 @@
   claimTransferredClaimantClaimStatus
 %}
 
+{% from "./claimStatus/helpWithFees.njk" import
+  helpWithFeesValidationDashboard
+%}
+
 {% macro caseStatusForClaimant(status, claim) %}
   {% if status === ClaimStatus.PAID_IN_FULL or status === ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED or status === ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
     or status === ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID %}
     {{ claimSettledDashboard() }}
+  {% elif status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber %}
+    {{ helpWithFeesValidationDashboard() }}
   {% elif status === ClaimStatus.NO_RESPONSE %}
     {{ noResponseForClaimantDashboard() }}
   {% elif status === ClaimStatus.MORE_TIME_REQUESTED %}

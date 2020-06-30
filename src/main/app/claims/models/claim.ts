@@ -84,6 +84,7 @@ export class Claim {
   claimDocuments?: ClaimDocument[]
   proceedOfflineReason: string
   transferContent?: TransferContents
+  helpWithFeesNumber?: boolean
 
   get defendantOffer (): Offer {
     if (!this.settlement) {

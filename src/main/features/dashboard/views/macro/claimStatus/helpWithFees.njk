@@ -1,0 +1,22 @@
+{% macro helpWithFeesValidationDashboard() %}
+  {{ t('We’re checking your Help With Fees application') }}
+{% endmacro %}
+
+
+{% macro helpWithFeesValidationClaimStatus(claim) %}
+<div class="status-block">
+  <h2 class="heading-medium">{{ t('We’re checking your Help With Fees application') }}</h2>
+  <p>{{ t('We’ll email you the result within 5 days.') }}</p>
+
+  <h3 class="heading-small">{{ t('If you qualify for the whole court fee to be paid') }}</h3>
+
+  <p>{{ t('We’ll issue your claim and send it to {{ defendantName }}.', { defendantName: claim.claimData.defendant.name }) }}</p>
+
+  <h3 class="heading-small">{{ t('If you qualify for part or no court fee to be paid') }}</h3>
+
+  <p>{{ t('We’ll tell you how much you need to pay to get the claim issued.') }}</p>
+
+  <h3 class="heading-small">{{ t('After a claim is issued') }}</h3>{{ t(' {{ defendantName }} will have 14 days to respond. They can ask for an extra 14 days if they need it.', { defendantName: claim.claimData.defendant.name }) }}<p></p>
+  <p>{{ t('You can request a County Court Judgment (CCJ) against them if they don’t respond.') }}</p>
+</div>
+{% endmacro %}

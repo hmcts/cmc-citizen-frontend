@@ -145,6 +145,10 @@
   claimTransferredClaimantClaimDetails
 %}
 
+{% from "./claimStatus/helpWithFees.njk" import
+  helpWithFeesValidationClaimStatus
+%}
+
 {% macro caseHistoryForClaimantClaimDetails(claim, csrf, mediationDeadline, reconsiderationDeadline, isReviewOrderEligible, respondToReviewOrderDeadline, judgePilot) %}
   {% for state in claim.stateHistory %}
     {% if state.status === ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE %}
@@ -155,7 +159,9 @@
       {{ paidInFullCCJCancelledClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED %}
       {{ paidInFullCCJSatisfiedClaimantClaimDetails(claim) }}
-      {% elif state.status === ClaimStatus.NO_RESPONSE %}
+    {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber %}
+      {{ helpWithFeesValidationClaimStatus(claim) }}
+    {% elif state.status === ClaimStatus.NO_RESPONSE %}
       {{ noResponseForClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.TRANSFERRED %}
       {{ claimTransferredClaimantClaimDetails(claim) }}
