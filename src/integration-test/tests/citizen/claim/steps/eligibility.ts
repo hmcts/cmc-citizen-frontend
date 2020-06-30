@@ -16,7 +16,6 @@ export class EligibilitySteps {
     I.click('Continue')
 
     completeEligibilityPage('input[id=claimValueUNDER_10000]')
-    completeEligibilityPage('input[id=helpWithFeesno]')
     completeEligibilityPage('input[id=singleDefendantno]')
     completeEligibilityPage('input[id=defendantAddressyes]')
     completeEligibilityPage('input[id=claimTypePERSONAL_CLAIM]')
@@ -25,6 +24,7 @@ export class EligibilitySteps {
     completeEligibilityPage('input[id=governmentDepartmentno]')
     completeEligibilityPage('input[id=defendantAgeyes] ')
     completeEligibilityPage('input[id=eighteenOrOveryes] ')
+    completeEligibilityPage('input[id=helpWithFeesno]')
 
     I.see('You can use this service')
     I.click('Continue')

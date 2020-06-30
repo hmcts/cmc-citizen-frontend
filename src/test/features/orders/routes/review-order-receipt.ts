@@ -27,7 +27,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
         context('when claimant or defendant click on review order pdf download', () => {
 
           it('should download review order pdf', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId({ features: 'admissions,directionsQuestionnaire' })
+            claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId({ features: 'directionsQuestionnaire' })
             claimStoreServiceMock.resolveRetrieveDocument()
 
             await request(app)

@@ -2,7 +2,6 @@
   "featureToggles": {
     "testingSupport": true,
     "newFeaturesConsent": true,
-    "admissions": true,
     "returnErrorToUser": true,
     "mediation": true,
     "mediationPilot": true,
@@ -10,7 +9,9 @@
     "judgePilot": true,
     "directionsQuestionnaire": true,
     "newDashboardStatus": true,
-    "inversionOfControl": true
+    "inversionOfControl": true,
+    "warningBanner": false,
+    "helpWithFees": true
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"

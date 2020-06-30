@@ -32,6 +32,7 @@ import { MediationFeature } from 'mediation/index'
 import { DirectionsQuestionnaireFeature } from 'features/directions-questionnaire'
 import { OrdersFeature } from 'orders/index'
 import { trackCustomEvent } from 'logging/customEventTracker'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
 export const app: express.Express = express()
 
@@ -48,6 +49,14 @@ new Nunjucks(developmentMode, i18next)
   .enableFor(app)
 new Helmet(config.get<HelmetConfig>('security'), developmentMode)
   .enableFor(app)
+
+// Before the page routers themselves, inject custom variables
+const launchDarklyClient = new LaunchDarklyClient()
+const featureToggles = new FeatureToggles(launchDarklyClient)
+app.use(/^\/(?!js|img|pdf|stylesheets).*$/, async (req, res, next) => {
+  app.settings.nunjucksEnv.globals.warningBanner = await featureToggles.isWarningBannerEnabled()
+  next()
+})
 
 app.enable('trust proxy')
 app.use(favicon(path.join(__dirname, '/public/img/lib/favicon.ico')))
@@ -82,15 +91,11 @@ new OfferFeature().enableFor(app)
 new SettlementAgreementFeature().enableFor(app)
 new MediationFeature().enableFor(app)
 new PaidInFullFeature().enableFor(app)
+new ClaimantResponseFeature().enableFor(app)
 
 if (FeatureToggles.isEnabled('testingSupport')) {
   logger.info('FeatureToggles.testingSupport enabled')
   new TestingSupportFeature().enableFor(app)
-}
-
-if (FeatureToggles.isEnabled('admissions')) {
-  logger.info('FeatureToggles.admissions enabled')
-  new ClaimantResponseFeature().enableFor(app)
 }
 
 if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
