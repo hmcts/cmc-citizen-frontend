@@ -1069,13 +1069,13 @@ describe('Claim', () => {
     beforeEach(() => {
       claim = new Claim()
       claim.state = 'BUSINESS_QUEUE'
+      claim.responseDeadline = MomentFactory.currentDate()
     })
 
     it('should return ClaimStatus.BUSINESS_QUEUE ', () => {
-      expect(claim.state).to.be.equal('BUSINESS_QUEUE')
+      expect(claim.status).to.be.equal(ClaimStatus.BUSINESS_QUEUE)
     })
   })
-
 })
 
 function prepareSettlement (paymentIntention: PaymentIntention, party: MadeBy): Settlement {
