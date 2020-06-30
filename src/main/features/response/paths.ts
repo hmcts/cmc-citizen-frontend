@@ -19,6 +19,7 @@ export class Paths {
   static readonly timelinePage = new RoutablePath(`${responsePath}/timeline`)
   static readonly evidencePage = new RoutablePath(`${responsePath}/evidence`)
   static readonly receiptReceiver = new RoutablePath(`${responsePath}/receipt`)
+  static readonly scannedResponseForm = new RoutablePath(`${responsePath}/scanned-response-form`)
   static readonly sendYourResponseByEmailPage = new RoutablePath(`${responsePath}/eligibility/send-your-response-by-email`)
   static readonly under18Page = new RoutablePath(`${responsePath}/eligibility/under-18`)
   static readonly whenDidYouPay = new RoutablePath(`${responsePath}/when-did-you-pay`)
