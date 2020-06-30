@@ -16,6 +16,7 @@ import { EvidenceType } from 'forms/models/evidenceType'
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = Paths.evidencePage.uri
 const pageContent: string = 'List any evidence'
+import { FeatureToggles } from 'utils/featureToggles'
 
 describe('Claim issue: evidence', () => {
   attachDefaultHooks(app)
@@ -63,7 +64,13 @@ describe('Claim issue: evidence', () => {
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ rows: [{ type: EvidenceType.CONTRACTS_AND_AGREEMENTS.value, description: 'Bla bla' }] })
-          .expect(res => expect(res).to.be.redirect.toLocation(Paths.taskListPage.uri))
+          .expect(res => {
+            if (FeatureToggles.isEnabled('pcq')) {
+              res.status = 302
+            } else {
+              expect(res => expect(res).to.be.redirect.toLocation(Paths.taskListPage.uri))
+            }
+          })
       })
 
       it('should render page when missing description', async () => {
@@ -79,7 +86,13 @@ describe('Claim issue: evidence', () => {
               description: undefined
             }]
           })
-          .expect(res => expect(res).to.be.redirect.toLocation(Paths.taskListPage.uri))
+          .expect(res => {
+            if (FeatureToggles.isEnabled('pcq')) {
+              res.status = 302
+            } else {
+              expect(res => expect(res).to.be.redirect.toLocation(Paths.taskListPage.uri))
+            }
+          })
       })
 
       describe('add row action', () => {
