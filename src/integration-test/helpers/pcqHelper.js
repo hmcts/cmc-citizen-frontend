@@ -14,7 +14,7 @@ class PcqHelper extends codecept_helper {
     const helper = this.helpers['WebDriver'];
     const heading = await helper.grabTextFrom('h1');
     if (heading === 'Equality and diversity questions') {
-      // reject answering PCW
+      // reject answering PCQ
       return this.rejectAnsweringPCQ()
     } else {
       // silently move on.
@@ -26,9 +26,11 @@ class PcqHelper extends codecept_helper {
     const heading = await helper.grabTextFrom('h1');
     if (heading === 'Equality and diversity questions') {
       //if it is up and running
+      console.log('Harshetha else: ' + heading);
       return true
     } else {
       // silently move on.
+      console.log('Harshetha else: ' + heading);
       return false
     }
   }
