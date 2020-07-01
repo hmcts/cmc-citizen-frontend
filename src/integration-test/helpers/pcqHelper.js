@@ -26,11 +26,9 @@ class PcqHelper extends codecept_helper {
     const heading = await helper.grabTextFrom('h1');
     if (heading === 'Equality and diversity questions') {
       //if it is up and running
-      console.log('Harshetha else: ' + heading);
       return true
     } else {
       // silently move on.
-      console.log('Harshetha else: ' + heading);
       return false
     }
   }
