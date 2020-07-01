@@ -793,6 +793,12 @@ export function rejectSaveClaimForUser (reason: string = 'HTTP error', status: n
     .reply(status, reason)
 }
 
+export function resolveSaveHelpWithFeesClaimForUser () {
+  mock(`${serviceBaseURL}/claims`)
+    .post(new RegExp('/[0-9]+/hwf'))
+    .reply(HttpStatus.OK, { ...sampleClaimObj })
+}
+
 export function resolveSaveCcjForExternalId () {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp('/' + externalIdPattern +

@@ -16,6 +16,8 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as feesServiceMock from 'test/http-mocks/fees'
 import { SignatureType } from 'common/signatureType'
+import { YesNoOption } from 'models/yesNoOption'
+import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import {
   claimantSoleTraderDetails,
   companyDetails,
@@ -473,6 +475,24 @@ describe('Claim issue: check and send page', () => {
         if (toBoolean(config.get('featureToggles.inversionOfControl'))) {
           nextPage = ClaimPaths.initiatePaymentController.uri
         }
+        await request(app)
+          .post(ClaimPaths.checkAndSendPage.uri)
+          .send({ type: SignatureType.BASIC })
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({ signed: 'true' })
+          .expect(res => expect(res).to.be.redirect.toLocation(nextPage))
+      })
+
+      it('should redirect to confirmation page when form is valid and help with fee is submitted', async () => {
+        draftStoreServiceMock.resolveFind('claim', { helpWithFees: {
+          declared: YesNoOption.YES,
+          helpWithFeesNumber: '123456'
+        } })
+        claimStoreServiceMock.resolveSaveHelpWithFeesClaimForUser()
+        claimStoreServiceMock.resolveRetrieveUserRoles()
+        draftStoreServiceMock.resolveDelete()
+
+        const nextPage = ClaimPaths.confirmationPage.uri.replace(':externalId', 'fe6e9413-e804-48d5-bbfd-645917fc46e5')
         await request(app)
           .post(ClaimPaths.checkAndSendPage.uri)
           .send({ type: SignatureType.BASIC })

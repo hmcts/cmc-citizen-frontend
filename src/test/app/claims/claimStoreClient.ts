@@ -132,6 +132,51 @@ describe('ClaimStoreClient', () => {
       })
     })
 
+    describe('saveHelpWithFeesClaim', () => {
+      function mockSuccessOnFirstSaveAttempt () {
+        mock(`${claimStoreApiUrl}`)
+          .post(`/${claimant.id}/hwf`)
+          .reply(HttpStatus.OK, returnedClaim)
+      }
+
+      it('should retrieve a claim that was successfully saved on first attempt with feature toggles', async () => {
+        mockSuccessOnFirstSaveAttempt()
+
+        const claim: Claim = await claimStoreClient.saveHelpWithFeesClaim(claimDraft, claimant, 'admissions')
+
+        expect(claim.claimData).to.deep.equal(new ClaimData().deserialize(expectedClaimData))
+      })
+
+      it('should retrieve a claim that was successfully saved on first attempt without feature toggles', async () => {
+        mockSuccessOnFirstSaveAttempt()
+
+        const claim: Claim = await claimStoreClient.saveHelpWithFeesClaim(claimDraft, claimant)
+
+        expect(claim.claimData).to.deep.equal(new ClaimData().deserialize(expectedClaimData))
+      })
+
+      function mockInternalServerErrorOnAllAttempts () {
+        mock(`${claimStoreApiUrl}`)
+          .post(`/${claimant.id}/hwf`)
+          .times(retryAttempts)
+          .reply(HttpStatus.INTERNAL_SERVER_ERROR, 'An unexpected error occurred')
+      }
+
+      it('should propagate error responses other than 409', async () => {
+        mockInternalServerErrorOnAllAttempts()
+
+        try {
+          await claimStoreClient.saveHelpWithFeesClaim(claimDraft, claimant, 'admissions')
+        } catch (err) {
+          expect(err.statusCode).to.equal(HttpStatus.INTERNAL_SERVER_ERROR)
+          expect(err.error).to.equal('An unexpected error occurred')
+          return
+        }
+
+        expect.fail() // Exception should have been thrown due to 500 response code
+      })
+    })
+
     describe('saveOrder', () => {
       const expectedData = {
         reason: 'some reason',

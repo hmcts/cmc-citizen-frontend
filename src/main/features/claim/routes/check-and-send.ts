@@ -26,8 +26,14 @@ import { Draft } from '@hmcts/draft-store-client'
 import { FeatureToggles } from 'utils/featureToggles'
 import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 import { YesNoOption } from 'models/yesNoOption'
+import { FeaturesBuilder } from 'claim/helpers/featuresBuilder'
+import { ClaimStoreClient } from 'claims/claimStoreClient'
+import { noRetryRequest } from 'client/request'
 
 const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
+const claimStoreClient: ClaimStoreClient = new ClaimStoreClient(noRetryRequest)
+const launchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
+const featuresBuilder: FeaturesBuilder = new FeaturesBuilder(claimStoreClient, launchDarklyClient)
 
 async function getClaimAmountTotal (draft: DraftClaim): Promise<TotalAmount> {
   const interest: number = await draftInterestAmount(draft)
@@ -160,7 +166,15 @@ export default express.Router()
         if (await featureToggles.isHelpWithFeesEnabled()
           && draft.document.helpWithFees && draft.document.helpWithFees.declared.option === YesNoOption.YES.option) {
 
-          res.redirect(Paths.taskListPage.uri)
+          const draft: Draft<DraftClaim> = res.locals.claimDraft
+          const user: User = res.locals.user
+          const features = await featuresBuilder.features(draft.document.amount.totalAmount(), user)
+          // save help with fees claim
+          await claimStoreClient.saveHelpWithFeesClaim(draft, user, features)
+          await new DraftService().delete(draft.id, user.bearerToken)
+          // redirect to confirmation page
+          res.redirect(Paths.confirmationPage.evaluateUri({ externalId: draft.document.externalId }))
+
         } else {
           if (toBoolean(config.get('featureToggles.inversionOfControl'))) {
             res.redirect(Paths.initiatePaymentController.uri)
