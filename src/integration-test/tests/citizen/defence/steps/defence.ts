@@ -370,7 +370,7 @@ export class DefenceSteps {
     claimantName: string,
     statementOfMeansFullDataSet: boolean = true,
     respondToPCQ?: boolean
-  ): Promise<void> {
+  ) {
     this.confirmYourDetails(defendantParty)
 
     this.requestMoreTimeToRespond()
