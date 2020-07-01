@@ -45,10 +45,10 @@ export class PcqClient {
     const redirectUri = this.getServiceEndpoint(ccdId, partyEmailId,pcqID,returnUri,serviceId,claimtype)
     return redirectUri
   }
-  static getServiceEndpoint (ccdCaseId: string, partyId: string, pcqId: string, returnUri: string,serviceId: string, claimtype: string): string {
+  static getServiceEndpoint (ccdCaseId: string, partyId: string, pcqId: string, returnUri: string, actorCmc: string, claimtype: string): string {
     const baseParameters: BaseParameters = {
       pcqId: pcqId,
-      serviceId: serviceId,
+      serviceId: actorCmc,
       actor: claimtype,
       ccdCaseId: ccdCaseId,
       partyId: partyId,
