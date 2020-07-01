@@ -89,13 +89,16 @@ describe('Defendant response: check and send page', () => {
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
+          const pcqBaseUrl: string = `${config.get<string>('pcq.url')}`
+          const expectedUrl = pcqBaseUrl + '/service-endpoint'
 
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => {
               if (FeatureToggles.isEnabled('pcq')) {
-                res.status = 302
+                expect(res.status).to.be.equal(302)
+                expect(res.text).to.be.contain('Found. Redirecting to ' + expectedUrl)
               } else {
                 expect(res).to.be.successful.withText('Check your answers')
                 expect(res.status).to.be.equal(302)
