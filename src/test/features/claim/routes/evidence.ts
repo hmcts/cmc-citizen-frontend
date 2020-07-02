@@ -66,7 +66,7 @@ describe('Claim issue: evidence', () => {
           .send({ rows: [{ type: EvidenceType.CONTRACTS_AND_AGREEMENTS.value, description: 'Bla bla' }] })
           .expect(res => {
             if (FeatureToggles.isEnabled('pcq')) {
-              res.status = 302
+              expect(res.status).to.be.equal(302)
             } else {
               expect(res => expect(res).to.be.redirect.toLocation(Paths.taskListPage.uri))
             }
@@ -88,7 +88,7 @@ describe('Claim issue: evidence', () => {
           })
           .expect(res => {
             if (FeatureToggles.isEnabled('pcq')) {
-              res.status = 302
+              expect(res.status).to.be.equal(302)
             } else {
               expect(res => expect(res).to.be.redirect.toLocation(Paths.taskListPage.uri))
             }

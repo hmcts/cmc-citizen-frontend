@@ -95,7 +95,7 @@ describe('Defendant response: check and send page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => {
               if (FeatureToggles.isEnabled('pcq')) {
-                res.status = 302
+                expect(res.status).to.be.equal(302)
               } else {
                 expect(res).to.be.successful.withText('Check your answers')
                 expect(res.status).to.be.equal(302)
