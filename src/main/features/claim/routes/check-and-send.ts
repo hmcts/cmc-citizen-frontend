@@ -158,6 +158,7 @@ export default express.Router()
         renderView(form, res, next)
       } else {
         const draft: Draft<DraftClaim> = res.locals.claimDraft
+        const user: User = res.locals.user
         if (form.model.type === SignatureType.QUALIFIED) {
           const user: User = res.locals.user
           draft.document.qualifiedStatementOfTruth = form.model as QualifiedStatementOfTruth
@@ -166,8 +167,6 @@ export default express.Router()
         if (await featureToggles.isHelpWithFeesEnabled()
           && draft.document.helpWithFees && draft.document.helpWithFees.declared.option === YesNoOption.YES.option) {
 
-          const draft: Draft<DraftClaim> = res.locals.claimDraft
-          const user: User = res.locals.user
           const features = await featuresBuilder.features(draft.document.amount.totalAmount(), user)
           // save help with fees claim
           await claimStoreClient.saveHelpWithFeesClaim(draft, user, features)
