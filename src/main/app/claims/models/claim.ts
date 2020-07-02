@@ -124,7 +124,7 @@ export class Claim {
       return undefined
     }
     const reconsiderationDeadlineChangeDate: Moment = MomentFactory.parse(config.get<any>('reviewOrderDeadLine.changeDate'))
-    if (this.directionOrder.createdOn.isAfter(reconsiderationDeadlineChangeDate)) {
+    if (reconsiderationDeadlineChangeDate && this.directionOrder.createdOn.isAfter(reconsiderationDeadlineChangeDate)) {
       return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, config.get<number>('reviewOrderDeadLine.numberOfDays'))
     }
     return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, 19)
