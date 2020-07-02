@@ -12,7 +12,7 @@
     "inversionOfControl": true,
     "warningBanner": false,
     "helpWithFees": true,
-    "autoEnrolIntoNewFeature": false
+    "autoEnrolIntoNewFeature": true
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"

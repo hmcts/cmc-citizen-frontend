@@ -11,6 +11,7 @@ import { prepareClaimDraft } from 'drafts/draft-data/claimDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
+import { FeatureToggles } from 'utils/featureToggles'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
@@ -34,7 +35,7 @@ export default express.Router()
 
       const roles: string[] = await claimStoreClient.retrieveUserRoles(user)
 
-      if (roles && !roles.some(role => role.includes('cmc-new-features-consent'))) {
+      if (FeatureToggles.isEnabled('autoEnrolIntoNewFeature') && roles && !roles.some(role => role.includes('cmc-new-features-consent'))) {
         await claimStoreClient.addRoleToUser(user, 'cmc-new-features-consent-given')
       }
 

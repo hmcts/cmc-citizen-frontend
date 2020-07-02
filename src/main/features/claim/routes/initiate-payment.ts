@@ -11,6 +11,7 @@ import { Logger } from '@hmcts/nodejs-logging'
 import * as HttpStatus from 'http-status-codes'
 import { ErrorHandling } from 'shared/errorHandling'
 import { noRetryRequest } from 'client/request'
+import { FeatureToggles } from 'utils/featureToggles'
 
 const logger = Logger.getLogger('router/initiate-payment')
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient(noRetryRequest)
@@ -20,6 +21,11 @@ export default express.Router()
   .get(Paths.initiatePaymentController.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
     const draft: Draft<DraftClaim> = res.locals.claimDraft
     const user: User = res.locals.user
+    const roles: string[] = await claimStoreClient.retrieveUserRoles(user)
+
+    if (FeatureToggles.isEnabled('autoEnrolIntoNewFeature') && roles && !roles.some(role => role.includes('cmc-new-features-consent'))) {
+      await claimStoreClient.addRoleToUser(user, 'cmc-new-features-consent-given')
+    }
     const externalId: string = draft.document.externalId
     if (!externalId) {
       throw new Error(`externalId is missing from the draft claim. User Id : ${user.id}`)

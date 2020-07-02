@@ -93,7 +93,8 @@
     "webChat": true,
     "inversionOfControl": true,
     "warningBanner": false,
-    "helpWithFees": false
+    "helpWithFees": false,
+    "autoEnrolIntoNewFeature": true
   },
   "oauth": {
     "clientId": "cmc_citizen"
