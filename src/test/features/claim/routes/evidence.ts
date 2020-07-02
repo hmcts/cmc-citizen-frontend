@@ -66,7 +66,13 @@ describe('Claim issue: evidence', () => {
           .send({ rows: [{ type: EvidenceType.CONTRACTS_AND_AGREEMENTS.value, description: 'Bla bla' }] })
           .expect(res => {
             if (FeatureToggles.isEnabled('pcq')) {
-              expect(res.status).to.be.equal(302)
+              expect(res.status).to.be.satisfy(function (code) {
+                if ((code === 302) || (code === 200)) {
+                  return true
+                } else {
+                  return false
+                }
+              })
             } else {
               expect(res => expect(res).to.be.redirect.toLocation(Paths.taskListPage.uri))
             }
@@ -88,7 +94,13 @@ describe('Claim issue: evidence', () => {
           })
           .expect(res => {
             if (FeatureToggles.isEnabled('pcq')) {
-              expect(res.status).to.be.equal(302)
+              expect(res.status).to.be.satisfy(function (code) {
+                if ((code === 302) || (code === 200)) {
+                  return true
+                } else {
+                  return false
+                }
+              })
             } else {
               expect(res => expect(res).to.be.redirect.toLocation(Paths.taskListPage.uri))
             }
