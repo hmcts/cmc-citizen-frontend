@@ -160,7 +160,6 @@ export default express.Router()
         const draft: Draft<DraftClaim> = res.locals.claimDraft
         const user: User = res.locals.user
         if (form.model.type === SignatureType.QUALIFIED) {
-          const user: User = res.locals.user
           draft.document.qualifiedStatementOfTruth = form.model as QualifiedStatementOfTruth
           await new DraftService().save(draft, user.bearerToken)
         }

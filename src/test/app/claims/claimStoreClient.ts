@@ -155,6 +155,24 @@ describe('ClaimStoreClient', () => {
         expect(claim.claimData).to.deep.equal(new ClaimData().deserialize(expectedClaimData))
       })
 
+      function mockTimeoutOnFirstSaveAttemptAndConflictOnSecondOne () {
+        mock(`${claimStoreApiUrl}`)
+          .post(`/${claimant.id}/hwf`)
+          .socketDelay(requestDelayInMillis + 10)
+        mock(`${claimStoreApiUrl}`)
+          .post(`/${claimant.id}/hwf`)
+          .reply(HttpStatus.CONFLICT, `Duplicate claim for external id ${claimDraftData.externalId}`)
+        mock(`${claimStoreApiUrl}`)
+          .get(`/${claimDraftData.externalId}`)
+          .reply(HttpStatus.OK, returnedClaim)
+      }
+      it('should retrieve claim saved on first attempt that timed out and caused a 409 on retry', async () => {
+        mockTimeoutOnFirstSaveAttemptAndConflictOnSecondOne()
+
+        const claim: Claim = await claimStoreClient.saveHelpWithFeesClaim(claimDraft, claimant, '')
+
+        expect(claim.claimData).to.deep.equal(new ClaimData().deserialize(expectedClaimData))
+      })
       function mockInternalServerErrorOnAllAttempts () {
         mock(`${claimStoreApiUrl}`)
           .post(`/${claimant.id}/hwf`)
