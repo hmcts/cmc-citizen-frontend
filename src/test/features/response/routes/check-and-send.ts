@@ -98,7 +98,6 @@ describe('Defendant response: check and send page', () => {
                 expect(res.status).to.be.equal(302)
               } else {
                 expect(res).to.be.successful.withText('Check your answers')
-                expect(res.status).to.be.equal(302)
               }
             })
         })
