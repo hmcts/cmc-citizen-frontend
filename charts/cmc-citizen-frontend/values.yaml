@@ -35,6 +35,7 @@ nodejs:
     FEATURE_MEDIATION_PILOT: true
     FEATURE_DIRECTIONS_QUESTIONNAIRE: true
     FEATURE_INVERSION_OF_CONTROL: true
+    AUTO_ENROLL_INTO_NEW_FEATURE: true
   keyVaults:
     cmc:
       secrets:
