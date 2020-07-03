@@ -159,7 +159,7 @@
       {{ paidInFullCCJCancelledClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED %}
       {{ paidInFullCCJSatisfiedClaimantClaimDetails(claim) }}
-    {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber != null %}
+    {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber %}
       {{ helpWithFeesValidationClaimStatus(claim) }}
     {% elif state.status === ClaimStatus.NO_RESPONSE %}
       {{ noResponseForClaimantClaimDetails(claim) }}

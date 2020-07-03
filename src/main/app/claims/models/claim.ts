@@ -49,9 +49,9 @@ export class Claim {
   state: string
   defendantId: string
   claimNumber: string
-  responseDeadline: Moment
+  responseDeadline?: Moment
   createdAt: Moment
-  issuedOn: Moment
+  issuedOn?: Moment
   claimData: ClaimData
   moreTimeRequested: boolean
   respondedAt: Moment
@@ -84,8 +84,7 @@ export class Claim {
   claimDocuments?: ClaimDocument[]
   proceedOfflineReason: string
   transferContent?: TransferContents
-  helpWithFeesNumber?: string
-  helpWithFeesType?: string
+  helpWithFeesNumber?: boolean
 
   get defendantOffer (): Offer {
     if (!this.settlement) {
@@ -320,10 +319,14 @@ export class Claim {
       this.state = input.state
       this.claimNumber = input.referenceNumber
       this.createdAt = MomentFactory.parse(input.createdAt)
-      this.responseDeadline = MomentFactory.parse(input.responseDeadline)
-      this.issuedOn = MomentFactory.parse(input.issuedOn)
       this.claimData = new ClaimData().deserialize(input.claim)
       this.moreTimeRequested = input.moreTimeRequested
+      if (input.issuedOn) {
+        this.issuedOn = MomentFactory.parse(input.issuedOn)
+      }
+      if (input.responseDeadline) {
+        this.responseDeadline = MomentFactory.parse(input.responseDeadline)
+      }
       if (input.respondedAt) {
         this.respondedAt = MomentFactory.parse(input.respondedAt)
       }
@@ -401,11 +404,14 @@ export class Claim {
           return o.createdDatetime
         }]).reverse()
       }
-
       if (input.proceedOfflineReason) {
         this.proceedOfflineReason = input.proceedOfflineReason
       }
-
+      if (input.helpWithFeesNumber) {
+        this.helpWithFeesNumber = true
+      } else {
+        this.helpWithFeesNumber = false
+      }
       return this
     }
   }
