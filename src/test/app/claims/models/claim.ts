@@ -806,6 +806,17 @@ describe('Claim', () => {
       )
     })
 
+    it('should return reconsideration deadline date', () => {
+      const claim = new Claim()
+      claim.directionOrder = {
+        createdOn: MomentFactory.currentDate().add(30, 'day')
+      }
+      claim.respondToReconsiderationDeadline().then(
+        res => expect(res.format('YYYY-MM-DDThh:mm'))
+          .to.equal(MomentFactory.parse('2020-08-30T09:40:00-00:00').format('YYYY-MM-DDThh:mm'))
+      )
+    })
+
     it('should return undefined if direction order is not created', async () => {
       const claim = new Claim()
       const directionOrderDeadline = await claim.respondToReconsiderationDeadline()
