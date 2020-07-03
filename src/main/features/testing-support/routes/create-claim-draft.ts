@@ -35,7 +35,7 @@ export default express.Router()
 
       const roles: string[] = await claimStoreClient.retrieveUserRoles(user)
 
-      if (FeatureToggles.isEnabled('autoEnrolIntoNewFeature') && roles && !roles.some(role => role.includes('cmc-new-features-consent'))) {
+      if (!FeatureToggles.isEnabled('autoEnrolIntoNewFeature') && roles && !roles.some(role => role.includes('cmc-new-features-consent'))) {
         await claimStoreClient.addRoleToUser(user, 'cmc-new-features-consent-given')
       }
 
