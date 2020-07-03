@@ -24,6 +24,6 @@ export default express.Router()
       const claim: Claim = res.locals.claim
       const documentURI = getDocumentPath(req.path)
       const document: ClaimDocument = _.find(claim.claimDocuments,{ uri : documentURI })
-      const pdf: Buffer = await documentsClient.getPDF(claim.externalId, document.documentType, res.locals.user.bearerToken)
+      const pdf: Buffer = await documentsClient.getPDF(claim.externalId, document.documentType, document.subtype, res.locals.user.bearerToken)
       DownloadUtils.downloadPDF(res, pdf, document.documentName)
     }))
