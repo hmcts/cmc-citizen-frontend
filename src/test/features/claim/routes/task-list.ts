@@ -15,6 +15,7 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { FeatureToggles } from 'utils/featureToggles'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -24,8 +25,10 @@ describe('Claim issue: task list page', () => {
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', ClaimPaths.incompleteSubmissionPage.uri)
     checkEligibilityGuards(app, 'get', ClaimPaths.incompleteSubmissionPage.uri)
+    const mockLaunchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
+    const featureToggles = new FeatureToggles(mockLaunchDarklyClient)
 
-    if (!FeatureToggles.isEnabled('autoEnrolIntoNewFeature')) {
+    if (!featureToggles.isAutoEnrollIntoNewFeatureEnabled()) {
       it('should render page when everything is fine when user role present', async () => {
         idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
         draftStoreServiceMock.resolveFind('claim')
@@ -57,9 +60,7 @@ describe('Claim issue: task list page', () => {
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.newFeaturesConsentPage.uri))
       })
-    }
-
-    if (FeatureToggles.isEnabled('autoEnrolIntoNewFeature')) {
+    } else {
       it('should render page when everything is fine when auto enroll feature is turned on', async () => {
         idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
         draftStoreServiceMock.resolveFind('claim')

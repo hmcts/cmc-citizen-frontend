@@ -82,7 +82,7 @@
     "inversionOfControl": "FEATURE_INVERSION_OF_CONTROL",
     "warningBanner": "FEATURE_WARNING_BANNER",
     "helpWithFees": "FEATURE_HELP_WITH_FEES",
-    "autoEnrolIntoNewFeature": "AUTO_ENROLL_INTO_NEW_FEATURE"
+    "autoEnrollIntoNewFeature": "AUTO_ENROLL_INTO_NEW_FEATURE"
   },
 
   "oauth": {

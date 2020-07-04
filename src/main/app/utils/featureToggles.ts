@@ -39,4 +39,8 @@ export class FeatureToggles {
   async isHelpWithFeesEnabled (): Promise<boolean> {
     return this.launchDarklyClient.serviceVariation('help-with-fees', toBoolean(config.get<boolean>(`featureToggles.helpWithFees`)))
   }
+
+  async isAutoEnrollIntoNewFeatureEnabled (): Promise<boolean> {
+    return this.launchDarklyClient.serviceVariation('auto-enroll-into-new-feature', toBoolean(config.get<boolean>(`featureToggles.autoEnrollIntoNewFeature`)))
+  }
 }

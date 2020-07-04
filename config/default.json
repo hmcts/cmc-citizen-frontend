@@ -94,7 +94,7 @@
     "inversionOfControl": true,
     "warningBanner": false,
     "helpWithFees": false,
-    "autoEnrolIntoNewFeature": true
+    "autoEnrollIntoNewFeature": false
   },
   "oauth": {
     "clientId": "cmc_citizen"

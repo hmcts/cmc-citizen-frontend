@@ -15,6 +15,7 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import { checkAuthorizationGuards } from 'test/routes/authorization-check'
 import { FeatureToggles } from 'utils/featureToggles'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = Paths.createClaimDraftPage.uri
@@ -43,6 +44,8 @@ describe('Testing Support: Create Claim Draft', () => {
 
   describe('on POST', () => {
     checkAuthorizationGuards(app, 'post', pagePath)
+    const mockLaunchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
+    const featureToggles = new FeatureToggles(mockLaunchDarklyClient)
 
     context('when user authorised', () => {
       beforeEach(() => {
@@ -68,7 +71,7 @@ describe('Testing Support: Create Claim Draft', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      if (!FeatureToggles.isEnabled('autoEnrolIntoNewFeature')) {
+      if (!featureToggles.isAutoEnrollIntoNewFeatureEnabled()) {
         it('should return 500 and render error page when cannot save user roles', async () => {
           draftStoreServiceMock.resolveFind('claim')
           draftStoreServiceMock.resolveUpdate()
