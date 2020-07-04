@@ -29,6 +29,8 @@ export class ClaimData {
   interest: Interest
   payment: Payment = new Payment()
   statementOfTruth?: StatementOfTruth
+  helpWithFeesNumber?: string
+  helpWithFeesType?: string
 
   get claimant (): Party {
     if (this.claimants.length === 1) {
@@ -77,6 +79,15 @@ export class ClaimData {
 
       if (input.statementOfTruth) {
         this.statementOfTruth = new StatementOfTruth().deserialize(input.statementOfTruth)
+      }
+
+      // help with fees
+      if (input.helpWithFeesNumber) {
+        this.helpWithFeesNumber = input.helpWithFeesNumber
+      }
+      // help with fees type
+      if (input.helpWithFeesType) {
+        this.helpWithFeesType = 'Claim Issue'
       }
     }
     return this

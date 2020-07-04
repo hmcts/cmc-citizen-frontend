@@ -63,6 +63,23 @@ describe('ClaimData', () => {
           interestDate: undefined
         })
       })
+
+      it('should return helpWithFeesNumber and helpWithFeesType if provided', () => {
+        const claimData = new ClaimData().deserialize({
+          helpWithFeesNumber: '259023',
+          helpWithFeesType: 'Claim Issue'
+        })
+
+        expect(claimData.helpWithFeesNumber).to.equal('259023')
+        expect(claimData.helpWithFeesType).to.equal('Claim Issue')
+      })
+      it('should return helpWithFeesNumber and helpWithFeesType if provided', () => {
+        const claimData = new ClaimData().deserialize({})
+
+        // using to.equal to resolve typescript error
+        expect(claimData.helpWithFeesNumber).to.equal(undefined)
+        expect(claimData.helpWithFeesType).to.equal(undefined)
+      })
     })
   })
 })

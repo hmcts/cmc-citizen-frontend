@@ -5,7 +5,7 @@ import { request } from 'client/request'
 import * as HttpStatus from 'http-status-codes'
 
 import { User } from 'idam/user'
-import { claimDraft as claimDraftData } from 'test/data/draft/claimDraft'
+import { claimDraft as claimDraftData, claimDraftHelpWithFees } from 'test/data/draft/claimDraft'
 import { claimData } from 'test/data/entity/claimData'
 import { RequestPromiseOptions } from 'request-promise-native'
 import { claimStoreApiUrl, ClaimStoreClient } from 'claims/claimStoreClient'
@@ -22,6 +22,7 @@ import { resolveSaveOrder, sampleClaimIssueObj } from 'test/http-mocks/claim-sto
 import { MadeBy } from 'claims/models/madeBy'
 
 const claimDraft = new Draft<DraftClaim>(123, 'claim', new DraftClaim().deserialize(claimDraftData), moment(), moment())
+const claimDraftHwf = new Draft<DraftClaim>(123, 'claim', new DraftClaim().deserialize(claimDraftHelpWithFees), moment(), moment())
 
 const claimantId = 123456
 
@@ -32,11 +33,25 @@ const returnedClaim = {
   issuedOn: moment().toISOString(),
   claim: { ...claimData, interest: { type: ClaimInterestType.NO_INTEREST, interestDate: undefined } }
 }
+const returnedClaimWithHelpWithFee = {
+  submitterId: claimantId,
+  createdAt: moment().toISOString(),
+  responseDeadline: moment().toISOString(),
+  issuedOn: moment().toISOString(),
+  claim: { ...claimData, interest: { type: ClaimInterestType.NO_INTEREST, interestDate: undefined }, helpWithFeesNumber: '987654', helpWithFeesType: 'Claim Issue' }
+}
 
 const expectedClaimData = {
   ...claimData,
   interest: { type: ClaimInterestType.NO_INTEREST },
   interestDate: undefined
+}
+const expectedClaimDataWithHwf = {
+  ...claimData,
+  interest: { type: ClaimInterestType.NO_INTEREST },
+  interestDate: undefined,
+  helpWithFeesNumber: '987654',
+  helpWithFeesType: 'Claim Issue'
 }
 
 const claimant = {
@@ -136,15 +151,14 @@ describe('ClaimStoreClient', () => {
       function mockSuccessOnFirstSaveAttempt () {
         mock(`${claimStoreApiUrl}`)
           .post(`/${claimant.id}/hwf`)
-          .reply(HttpStatus.OK, returnedClaim)
+          .reply(HttpStatus.OK, { ...returnedClaimWithHelpWithFee })
       }
 
       it('should retrieve a claim that was successfully saved on first attempt with feature toggles', async () => {
         mockSuccessOnFirstSaveAttempt()
 
-        const claim: Claim = await claimStoreClient.saveHelpWithFeesClaim(claimDraft, claimant, 'admissions')
-
-        expect(claim.claimData).to.deep.equal(new ClaimData().deserialize(expectedClaimData))
+        const claim: Claim = await claimStoreClient.saveHelpWithFeesClaim(claimDraftHwf, claimant, 'admissions')
+        expect(claim.claimData).to.deep.equal(new ClaimData().deserialize(expectedClaimDataWithHwf))
       })
 
       it('should retrieve a claim that was successfully saved on first attempt without feature toggles', async () => {
@@ -152,7 +166,7 @@ describe('ClaimStoreClient', () => {
 
         const claim: Claim = await claimStoreClient.saveHelpWithFeesClaim(claimDraft, claimant)
 
-        expect(claim.claimData).to.deep.equal(new ClaimData().deserialize(expectedClaimData))
+        expect(claim.claimData).to.deep.equal(new ClaimData().deserialize(expectedClaimDataWithHwf))
       })
 
       function mockTimeoutOnFirstSaveAttemptAndConflictOnSecondOne () {
