@@ -15,7 +15,7 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { FeatureToggles } from 'utils/featureToggles'
-import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
+import * as sinon from 'sinon'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -23,53 +23,62 @@ describe('Claim issue: task list page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
+    let isAutoEnrollIntoNewFeatureEnabledStub: sinon.SinonStub
     checkAuthorizationGuards(app, 'get', ClaimPaths.incompleteSubmissionPage.uri)
     checkEligibilityGuards(app, 'get', ClaimPaths.incompleteSubmissionPage.uri)
-    const mockLaunchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
-    const featureToggles = new FeatureToggles(mockLaunchDarklyClient)
 
-    if (!featureToggles.isAutoEnrollIntoNewFeatureEnabled()) {
-      it('should render page when everything is fine when user role present', async () => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-        draftStoreServiceMock.resolveFind('claim')
-        claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
+    beforeEach(() => {
+      isAutoEnrollIntoNewFeatureEnabledStub = sinon.stub(FeatureToggles.prototype, 'isAutoEnrollIntoNewFeatureEnabled')
+    })
 
-        await request(app)
-          .get(ClaimPaths.taskListPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Make a money claim'))
-      })
+    afterEach(() => {
+      isAutoEnrollIntoNewFeatureEnabledStub.restore()
+    })
 
-      it('should show error page when user role cannot be retrieved', async () => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-        draftStoreServiceMock.resolveFind('claim')
-        claimStoreServiceMock.rejectRetrieveUserRoles()
-        await request(app)
-          .get(ClaimPaths.taskListPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.serverError.withText('error'))
-      })
+    it('should render page when everything is fine when user role present', async () => {
+      isAutoEnrollIntoNewFeatureEnabledStub.returns(false)
+      idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+      draftStoreServiceMock.resolveFind('claim')
+      claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
 
-      it('should render page redirect to feature consent page when no role present', async () => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-        draftStoreServiceMock.resolveFind('claim')
-        claimStoreServiceMock.resolveRetrieveUserRoles()
+      await request(app)
+        .get(ClaimPaths.taskListPage.uri)
+        .set('Cookie', `${cookieName}=ABC`)
+        .expect(res => expect(res).to.be.successful.withText('Make a money claim'))
+    })
 
-        await request(app)
-          .get(ClaimPaths.taskListPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.newFeaturesConsentPage.uri))
-      })
-    } else {
-      it('should render page when everything is fine when auto enroll feature is turned on', async () => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-        draftStoreServiceMock.resolveFind('claim')
+    it('should show error page when user role cannot be retrieved', async () => {
+      isAutoEnrollIntoNewFeatureEnabledStub.returns(false)
+      idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+      draftStoreServiceMock.resolveFind('claim')
+      claimStoreServiceMock.rejectRetrieveUserRoles()
+      await request(app)
+        .get(ClaimPaths.taskListPage.uri)
+        .set('Cookie', `${cookieName}=ABC`)
+        .expect(res => expect(res).to.be.serverError.withText('error'))
+    })
 
-        await request(app)
-          .get(ClaimPaths.taskListPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Make a money claim'))
-      })
-    }
+    it('should render page redirect to feature consent page when no role present', async () => {
+      isAutoEnrollIntoNewFeatureEnabledStub.returns(false)
+      idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+      draftStoreServiceMock.resolveFind('claim')
+      claimStoreServiceMock.resolveRetrieveUserRoles()
+
+      await request(app)
+        .get(ClaimPaths.taskListPage.uri)
+        .set('Cookie', `${cookieName}=ABC`)
+        .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.newFeaturesConsentPage.uri))
+    })
+
+    it('should render page when everything is fine when auto enroll feature is turned on', async () => {
+      isAutoEnrollIntoNewFeatureEnabledStub.returns(true)
+      idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+      draftStoreServiceMock.resolveFind('claim')
+
+      await request(app)
+        .get(ClaimPaths.taskListPage.uri)
+        .set('Cookie', `${cookieName}=ABC`)
+        .expect(res => expect(res).to.be.successful.withText('Make a money claim'))
+    })
   })
 })
