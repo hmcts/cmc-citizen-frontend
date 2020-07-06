@@ -37,7 +37,7 @@
     "inversionOfControl": true,
     "warningBanner": false,
     "helpWithFees": true,
-    "autoEnrollIntoNewFeature": false
+    "autoEnrollIntoNewFeature": true
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"
