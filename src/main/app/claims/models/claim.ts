@@ -128,7 +128,11 @@ export class Claim {
   }
 
   get remainingDays (): number {
-    return this.responseDeadline.diff(MomentFactory.currentDate(), 'days')
+    if (!this.helpWithFeesNumber || (this.helpWithFeesNumber && (this.responseDeadline !== null) && this.responseDeadline !== undefined)) {
+      return this.responseDeadline.diff(MomentFactory.currentDate(), 'days')
+    } else {
+      return 14 // need to check this Prathap
+    }
   }
 
   get eligibleForCCJ (): boolean {
@@ -321,6 +325,11 @@ export class Claim {
       this.createdAt = MomentFactory.parse(input.createdAt)
       this.claimData = new ClaimData().deserialize(input.claim)
       this.moreTimeRequested = input.moreTimeRequested
+      if (input.helpWithFeesNumber) {
+        this.helpWithFeesNumber = true
+      } else {
+        this.helpWithFeesNumber = false
+      }
       if (input.issuedOn) {
         this.issuedOn = MomentFactory.parse(input.issuedOn)
       }
@@ -406,11 +415,6 @@ export class Claim {
       }
       if (input.proceedOfflineReason) {
         this.proceedOfflineReason = input.proceedOfflineReason
-      }
-      if (input.helpWithFeesNumber) {
-        this.helpWithFeesNumber = true
-      } else {
-        this.helpWithFeesNumber = false
       }
       return this
     }
