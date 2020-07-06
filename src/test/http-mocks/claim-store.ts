@@ -256,12 +256,13 @@ export const sampleClaimObj = {
 }
 
 export const sampleHwfClaimObj = {
-  id: 1,
-  ccdCaseId: 1,
+  id: 1594030137299050,
+  ccdCaseId: 1594030137299050,
   submitterId: '1',
   submitterEmail: 'claimant@example.com',
   externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc',
   defendantId: '123',
+  state: 'HWF_APPLICATION_PENDING',
   referenceNumber: '000MC000',
   createdAt: MomentFactory.currentDateTime(),
   issuedOn: '2019-09-25',

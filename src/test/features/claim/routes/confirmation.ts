@@ -45,13 +45,13 @@ describe('Claim issue: confirmation page', () => {
           .expect(res => expect(res).to.be.successful.withText('Claim submitted'))
       })
 
-      it('should render help with fees confirmatoin page when hwf reference is provided', async () => {
+      it('should render help with fees confirmatoin with 16 digit caseid if claim submitted with hwf reference', async () => {
         claimStoreServiceMock.resolveRetrieveHwfClaimByExternalId()
 
         await request(app)
           .get(ClaimPaths.confirmationPage.evaluateUri({ externalId: externalId }))
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Claim submitted with help with fees reference'))
+          .expect(res => expect(res).to.be.successful.withText('1594030137299050'))
       })
 
     })

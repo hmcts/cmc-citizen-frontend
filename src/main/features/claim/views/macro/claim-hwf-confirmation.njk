@@ -3,20 +3,21 @@
 {% macro claimHwfConfirmation(claim) %}
 {% set defendantName = claim.claimData.defendant.name %}
 <div class="govuk-box-highlight">
-    <h1 class="bold-large">{{ t('Claim submitted with help with fees reference') }}</h1>
+    <h1 class="bold-large">{{ t('Claim submitted') }}</h1>
     <div class="reference-number">
         <span>{{ t('Your claim number:') }}</span>
-        <h1 class="bold-large">{{ claim.claimNumber }}</h1>
+        <h1 class="bold-large">{{ claim.ccdCaseId }}</h1>
     </div>
     <p class="receipt-download-container">
         {{ internalLink(t('Download your claim form'), ClaimPaths.receiptReceiver.evaluateUri({ externalId: claim.externalId})) }}
     </p>
 </div>
 <h2 class="heading-medium">{{ t('What happens next') }}</h2>
-<p>{{ t('{{ defendantName }} has until 4pm on {{ responseDeadline }} to respond to your claim. They can request an extra 14 days if they need it.',
+<p>{{ t('Your claim will be issued once your Help With Fees application has been confirmed. We’ll email you within few days to confirm this.') }}</p>
+
+<p>{{ t('Once the claim is issued, {{ defendantName }} will have 14 days to respond to your claim. They can ask for an extra 14 days if they need it.',
     {
-    defendantName : defendantName,
-    responseDeadline: claim.responseDeadline | date
+    defendantName : defendantName
     }
 ) | safe }}
 </p>

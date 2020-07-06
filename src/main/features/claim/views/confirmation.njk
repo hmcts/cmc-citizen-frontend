@@ -12,7 +12,7 @@
   {% set defendantName = claim.claimData.defendant.name %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      {% if claim.claimData.helpWithFeesNumber %}
+      {% if claim.state === "HWF_APPLICATION_PENDING" %}
         {{ claimHwfConfirmation(claim) }}
       {% else %}
         {{ claimConfirmation(claim) }}
