@@ -38,7 +38,7 @@ const returnedClaimWithHelpWithFee = {
   createdAt: moment().toISOString(),
   responseDeadline: moment().toISOString(),
   issuedOn: moment().toISOString(),
-  claim: { ...claimData, interest: { type: ClaimInterestType.NO_INTEREST, interestDate: undefined }, helpWithFeesNumber: '987654', helpWithFeesType: 'Claim Issue' }
+  claim: { ...claimData, interest: { type: ClaimInterestType.NO_INTEREST, interestDate: undefined }, helpWithFeesNumber: '987654', helpWithFeesType: 'ClaimIssue' }
 }
 
 const expectedClaimData = {
@@ -51,7 +51,7 @@ const expectedClaimDataWithHwf = {
   interest: { type: ClaimInterestType.NO_INTEREST },
   interestDate: undefined,
   helpWithFeesNumber: '987654',
-  helpWithFeesType: 'Claim Issue'
+  helpWithFeesType: 'ClaimIssue'
 }
 
 const claimant = {
