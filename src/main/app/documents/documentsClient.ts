@@ -40,7 +40,7 @@ export class DocumentsClient {
     return this.getPDF(claimExternalId, 'MEDIATION_AGREEMENT', bearerToken)
   }
 
-  getPDF (claimExternalId: string, documentTemplate: string, documentSubtype: string, bearerToken: string): Promise<Buffer> {
+  getPDF (claimExternalId: string, documentTemplate: string, bearerToken: string): Promise<Buffer> {
     if (StringUtils.isBlank(claimExternalId)) {
       throw new Error('Claim external ID cannot be blank')
     }
@@ -49,13 +49,6 @@ export class DocumentsClient {
     }
     if (StringUtils.isBlank(bearerToken)) {
       throw new Error('User authorisation cannot be blank')
-    }
-
-    let downloadUri: string;
-    if(documentSubtype){
-      downloadUri = `${this.documentsUrl}/${documentTemplate}/${documentSubtype}/${claimExternalId}`
-    } else {
-      downloadUri = `${this.documentsUrl}/${documentTemplate}/${claimExternalId}`
     }
 
     const options = {

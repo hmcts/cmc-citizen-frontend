@@ -402,15 +402,15 @@ export class Claim {
 
       if (input.claimDocumentCollection && input.claimDocumentCollection.scannedDocuments) {
         const scannedDocuments: ClaimDocument[] = input.claimDocumentCollection.scannedDocuments
-          .filter(value => ScannedDocumentType[value.documentType + '_' + value.subtype] !== undefined)
+          .filter(value => ScannedDocumentType[(value.documentType + '_' + value.subtype).toUpperCase()] !== undefined)
           .map((value) => {
             return new ClaimDocument().deserializeScannedDocument(value)
           })
 
         if (this.claimDocuments) {
-          this.claimDocuments.push(...scannedDocuments);
+          this.claimDocuments.push(...scannedDocuments)
         } else {
-          this.claimDocuments = scannedDocuments;
+          this.claimDocuments = scannedDocuments
         }
       }
 

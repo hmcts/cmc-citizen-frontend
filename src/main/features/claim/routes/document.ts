@@ -10,8 +10,10 @@ import { ErrorHandling } from 'shared/errorHandling'
 import { DownloadUtils } from 'utils/downloadUtils'
 import * as _ from 'lodash'
 import { ClaimDocument } from 'claims/models/claimDocument'
+import { ScannedDocumentsClient } from 'documents/scannedDocumentsClient'
 
 const documentsClient: DocumentsClient = new DocumentsClient()
+const scannedDocumentsClient: ScannedDocumentsClient = new ScannedDocumentsClient()
 
 function getDocumentPath (path: string): string {
   return path.match(`[^\/]+$`)[0]
@@ -24,6 +26,17 @@ export default express.Router()
       const claim: Claim = res.locals.claim
       const documentURI = getDocumentPath(req.path)
       const document: ClaimDocument = _.find(claim.claimDocuments,{ uri : documentURI })
-      const pdf: Buffer = await documentsClient.getPDF(claim.externalId, document.documentType, document.subtype, res.locals.user.bearerToken)
+      const pdf: Buffer = await getPDF(claim.externalId, document, res.locals.user.bearerToken)
       DownloadUtils.downloadPDF(res, pdf, document.documentName)
     }))
+
+async function getPDF (claimExternalId: string, document: ClaimDocument, bearerToken: string): Promise<Buffer> {
+  if (document.documentType === 'GENERAL_LETTER') {
+    return documentsClient.getPDF(claimExternalId, document.uri, bearerToken)
+  } else if (document.subtype) {
+    return scannedDocumentsClient.getScannedPDF(claimExternalId, document.documentType, document.subtype, bearerToken)
+  } else {
+    return documentsClient.getPDF(claimExternalId, document.documentType, bearerToken)
+  }
+
+}
