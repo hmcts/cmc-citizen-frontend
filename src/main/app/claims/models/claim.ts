@@ -318,8 +318,12 @@ export class Claim {
       this.state = input.state
       this.claimNumber = input.referenceNumber
       this.createdAt = MomentFactory.parse(input.createdAt)
-      this.responseDeadline = MomentFactory.parse(input.responseDeadline)
-      this.issuedOn = MomentFactory.parse(input.issuedOn)
+      if (input.responseDeadline) {
+        this.responseDeadline = MomentFactory.parse(input.responseDeadline)
+      }
+      if (input.issuedOn) {
+        this.issuedOn = MomentFactory.parse(input.issuedOn)
+      }
       this.claimData = new ClaimData().deserialize(input.claim)
       this.moreTimeRequested = input.moreTimeRequested
       if (input.respondedAt) {
