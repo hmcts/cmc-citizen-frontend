@@ -128,11 +128,7 @@ export class Claim {
   }
 
   get remainingDays (): number {
-    if (!this.helpWithFeesNumber || (this.helpWithFeesNumber && (this.responseDeadline !== null) && this.responseDeadline !== undefined)) {
-      return this.responseDeadline.diff(MomentFactory.currentDate(), 'days')
-    } else {
-      return 14 // need to check this Prathap
-    }
+    return this.responseDeadline.diff(MomentFactory.currentDate(), 'days')
   }
 
   get eligibleForCCJ (): boolean {
@@ -321,20 +317,28 @@ export class Claim {
       this.externalId = input.externalId
       this.defendantId = input.defendantId
       this.state = input.state
-      this.claimNumber = input.referenceNumber
       this.createdAt = MomentFactory.parse(input.createdAt)
       this.claimData = new ClaimData().deserialize(input.claim)
       this.moreTimeRequested = input.moreTimeRequested
-      if (input.helpWithFeesNumber) {
+      if (input.state === 'HWF_APPLICATION_PENDING' && input.referenceNumber === undefined) {
+        this.claimNumber = input.id
+      } else {
+        this.claimNumber = input.referenceNumber
+      }
+      if (input.state === 'HWF_APPLICATION_PENDING' && input.claim.helpWithFeesNumber !== undefined) {
         this.helpWithFeesNumber = true
       } else {
         this.helpWithFeesNumber = false
       }
       if (input.issuedOn) {
         this.issuedOn = MomentFactory.parse(input.issuedOn)
+      } else if (input.state === 'HWF_APPLICATION_PENDING' && input.issuedOn === undefined && input.claim.helpWithFeesNumber !== undefined) {
+        this.issuedOn = MomentFactory.currentDate()
       }
       if (input.responseDeadline) {
         this.responseDeadline = MomentFactory.parse(input.responseDeadline)
+      } else if (input.state === 'HWF_APPLICATION_PENDING' && input.responseDeadline === undefined && input.claim.helpWithFeesNumber !== undefined) {
+        this.responseDeadline = MomentFactory.currentDate().add(20, 'day')
       }
       if (input.respondedAt) {
         this.respondedAt = MomentFactory.parse(input.respondedAt)
@@ -365,8 +369,12 @@ export class Claim {
       if (input.claimantRespondedAt) {
         this.claimantRespondedAt = MomentFactory.parse(input.claimantRespondedAt)
       }
+      if (input.state === 'HWF_APPLICATION_PENDING' && input.responseDeadline === undefined && input.claim.helpWithFeesNumber !== undefined && input.totalAmountTillDateOfIssue === undefined) {
+        this.totalAmountTillDateOfIssue = input.totalAmountTillToday
+      } else {
+        this.totalAmountTillDateOfIssue = input.totalAmountTillDateOfIssue
+      }
       this.totalAmountTillToday = input.totalAmountTillToday
-      this.totalAmountTillDateOfIssue = input.totalAmountTillDateOfIssue
       this.totalInterest = input.totalInterest
       this.features = input.features
       if (input.directionsQuestionnaireDeadline) {

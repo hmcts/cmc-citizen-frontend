@@ -21,6 +21,11 @@ export function initialTransitions (claim: Claim): StateMachine {
         to: InitialStates.NO_RESPONSE
       },
       {
+        name: 'checkHwf',
+        from: [InitialStates.INIT, InitialStates.NO_RESPONSE],
+        to: InitialStates.HWF_APPLICATION_PENDING
+      },
+      {
         name: 'checkMoreTimeRequested',
         from: [InitialStates.INIT, InitialStates.NO_RESPONSE],
         to: InitialStates.MORE_TIME_REQUESTED
@@ -49,6 +54,10 @@ export function initialTransitions (claim: Claim): StateMachine {
 
       onBeforeCheckNoResponse () {
         return !claim.response
+      },
+
+      onBeforeCheckHwf () {
+        return !claim.response && claim.helpWithFeesNumber
       },
 
       onBeforeCheckMoreTimeRequested () {
