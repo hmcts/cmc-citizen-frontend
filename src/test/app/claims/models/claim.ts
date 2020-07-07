@@ -795,26 +795,30 @@ describe('Claim', () => {
   })
 
   describe('respondToReconsiderationDeadline', () => {
-    it('should return reconsideration deadline date', () => {
+    it('should return pre reconsideration deadline date', () => {
       const claim = new Claim()
       claim.directionOrder = {
-        createdOn: MomentFactory.currentDate()
+        createdOn: MomentFactory.parse('2019-06-07')
       }
+      claimStoreMock.mockNextWorkingDay(MomentFactory.parse('2019-06-07'))
       claim.respondToReconsiderationDeadline().then(
-        res => expect(res.format('YYYY-MM-DDThh:mm'))
-          .to.equal(MomentFactory.parse('2020-06-30T09:40:00-00:00').format('YYYY-MM-DDThh:mm'))
-      )
+        res => {
+          expect(res.format('YYYY-MM-DD'))
+        .to.equal(MomentFactory.parse('2019-06-07').format('YYYY-MM-DD'))
+        })
     })
 
-    it('should return reconsideration deadline date', () => {
+    it('should return post reconsideration deadline date ', () => {
       const claim = new Claim()
       claim.directionOrder = {
-        createdOn: MomentFactory.currentDate().add(30, 'day')
+        createdOn: MomentFactory.currentDate().add(20,'days')
       }
+      claimStoreMock.mockNextWorkingDay(MomentFactory.parse('2020-08-27'))
       claim.respondToReconsiderationDeadline().then(
-        res => expect(res.format('YYYY-MM-DDThh:mm'))
-          .to.equal(MomentFactory.parse('2020-08-30T09:40:00-00:00').format('YYYY-MM-DDThh:mm'))
-      )
+        res => {
+          expect(res.format('YYYY-MM-DD'))
+          .to.equal(MomentFactory.parse('2020-08-27').format('YYYY-MM-DD'))
+        })
     })
 
     it('should return undefined if direction order is not created', async () => {
