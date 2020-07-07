@@ -70,7 +70,11 @@
           <h2 class="heading-medium no-bottom-margin">{{ claim.claimData.claimant.name }}
             v {{ claim.claimData.defendant.name }}</h2>
         {% endif %}
-        <span class="font-xsmall">{{ t('Claim number:') }} {{ claim.claimNumber if claim else 'Draft' }}</span>
+        {% if claim.helpWithFeesNumber %}
+                <span class="font-xsmall">{{ t('Claim number:') }} {{ claim.ccdCaseId }}</span>
+                {% else %}
+                  <span class="font-xsmall">{{ t('Claim number:') }} {{ claim.claimNumber if claim else 'Draft' }}</span>
+                {% endif %}
       </div>
       {{ govukTabs({
         classes: 'tab-section',
