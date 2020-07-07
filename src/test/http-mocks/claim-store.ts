@@ -113,7 +113,7 @@ export const sampleHwfClaimIssueObj = {
   defendantId: '123',
   referenceNumber: '',
   createdAt: MomentFactory.currentDateTime(),
-  issuedOn: '2017-07-25',
+  issuedOn: undefined,
   totalAmountTillToday: 200,
   totalAmountTillDateOfIssue: 200,
   moreTimeRequested: false,
