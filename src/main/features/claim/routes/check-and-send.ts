@@ -29,7 +29,9 @@ import { YesNoOption } from 'models/yesNoOption'
 import { FeaturesBuilder } from 'claim/helpers/featuresBuilder'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { noRetryRequest } from 'client/request'
+import { Logger } from '@hmcts/nodejs-logging'
 
+const logger = Logger.getLogger('claims/claimStoreClient')
 const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient(noRetryRequest)
 const launchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
@@ -168,10 +170,16 @@ export default express.Router()
 
           const features = await featuresBuilder.features(draft.document.amount.totalAmount(), user)
           // save help with fees claim
+          // adding catch block to ensure error is handled.
           await claimStoreClient.saveHelpWithFeesClaim(draft, user, features)
-          await new DraftService().delete(draft.id, user.bearerToken)
-          // redirect to confirmation page
-          res.redirect(Paths.confirmationPage.evaluateUri({ externalId: draft.document.externalId }))
+          .then(async (x) => {
+            await new DraftService().delete(draft.id, user.bearerToken)
+            // redirect to confirmation page
+            res.redirect(Paths.confirmationPage.evaluateUri({ externalId: draft.document.externalId }))
+          }).catch((e) => {
+            logger.warn(`Claim ${draft.document.externalId} appears to have not been saved. ${e}`)
+            res.redirect(Paths.taskListPage.uri)
+          })
 
         } else {
           if (toBoolean(config.get('featureToggles.inversionOfControl'))) {
