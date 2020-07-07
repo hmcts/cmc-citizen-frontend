@@ -115,7 +115,7 @@ export const sampleHwfClaimIssueObj = {
   createdAt: MomentFactory.currentDateTime(),
   issuedOn: undefined,
   totalAmountTillToday: 200,
-  totalAmountTillDateOfIssue: 200,
+  totalAmountTillDateOfIssue: undefined,
   moreTimeRequested: false,
   state: 'HWF_APPLICATION_PENDING',
   claim: {
@@ -167,7 +167,7 @@ export const sampleHwfClaimIssueObj = {
     feeAmountInPennies: 2500,
     timeline: { rows: [{ date: 'a', description: 'b' }] }
   },
-  responseDeadline: MomentFactory.currentDate().add(19, 'days'),
+  responseDeadline: undefined,
   intentionToProceedDeadline: MomentFactory.currentDateTime().add(33, 'days'),
   features: []
 }

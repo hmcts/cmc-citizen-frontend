@@ -333,7 +333,7 @@ export class Claim {
       if (input.responseDeadline) {
         this.responseDeadline = MomentFactory.parse(input.responseDeadline)
       } else if (input.state === 'HWF_APPLICATION_PENDING' && input.responseDeadline === undefined && input.claim.helpWithFeesNumber !== undefined) {
-        this.responseDeadline = MomentFactory.currentDate().add(20, 'day')
+        this.responseDeadline = MomentFactory.currentDate().add(19, 'day')
       }
       if (input.respondedAt) {
         this.respondedAt = MomentFactory.parse(input.respondedAt)
