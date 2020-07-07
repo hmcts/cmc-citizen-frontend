@@ -811,7 +811,7 @@ describe('Claim', () => {
     it('should return post reconsideration deadline date ', () => {
       const claim = new Claim()
       claim.directionOrder = {
-        createdOn: MomentFactory.currentDate().add(20,'days')
+        createdOn: MomentFactory.currentDate().add(30,'days')
       }
       claimStoreMock.mockNextWorkingDay(MomentFactory.parse('2020-08-27'))
       claim.respondToReconsiderationDeadline().then(
