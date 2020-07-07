@@ -12,7 +12,7 @@
     "inversionOfControl": true,
     "warningBanner": false,
     "helpWithFees": true,
-    "pcq":true
+    "pcq":false
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"

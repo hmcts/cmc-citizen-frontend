@@ -28,6 +28,7 @@ import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 import * as uuid from 'uuid'
 import { PcqClient } from 'utils/pcqClient'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
@@ -158,7 +159,9 @@ export default express.Router()
        const draft: Draft<ResponseDraft> = res.locals.responseDraft
        const user: User = res.locals.user
        let redirectUri = null
-       if (FeatureToggles.isEnabled('pcq')) {
+       const launchDarklyClient = new LaunchDarklyClient()
+       const featureToggles = new FeatureToggles(launchDarklyClient)
+       if (await featureToggles.isPcqEnabled()) {
          const isEligible = await PcqClient.isEligibleRedirect(draft.document.defendantDetails.partyDetails.pcqId,draft.document.defendantDetails.partyDetails.type)
          if (draft.document.defendantDetails.partyDetails.pcqId === undefined) {
            let pcqID = uuid()

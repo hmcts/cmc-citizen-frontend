@@ -39,4 +39,8 @@ export class FeatureToggles {
   async isHelpWithFeesEnabled (): Promise<boolean> {
     return this.launchDarklyClient.serviceVariation('help-with-fees', toBoolean(config.get<boolean>(`featureToggles.helpWithFees`)))
   }
+
+  async isPcqEnabled (): Promise<boolean> {
+    return this.launchDarklyClient.serviceVariation('pcq', toBoolean(config.get<boolean>(`featureToggles.pcq`)))
+  }
 }
