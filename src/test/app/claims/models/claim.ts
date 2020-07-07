@@ -758,6 +758,19 @@ describe('Claim', () => {
     })
   })
 
+  describe('HWF', () => {
+    let claim
+
+    beforeEach(() => {
+      claim = new Claim()
+      claim.helpWithFeesNumber = true
+      claim.state = 'HWF_APPLICATION_PENDING'
+    })
+    it('should return HWF as true', () => {
+      expect(claim.helpWithFeesNumber).to.be.true
+    })
+  })
+
   describe('respondToResponseDeadline', () => {
 
     it('should add 33 days to the response deadline', () => {

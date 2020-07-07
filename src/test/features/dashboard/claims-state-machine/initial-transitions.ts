@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { Claim } from 'claims/models/claim'
-import { sampleClaimIssueObj } from 'test/http-mocks/claim-store'
+import { sampleClaimIssueObj, sampleHwfClaimIssueObj } from 'test/http-mocks/claim-store'
 
 import { initialTransitions } from 'dashboard/claims-state-machine/initial-transitions'
 import { MomentFactory } from 'shared/momentFactory'
@@ -13,6 +13,15 @@ describe('State Machine for the dashboard status before response', () => {
       let claimState = initialTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('no-response')
+    })
+  })
+
+  describe('given the HWF claim which is under review', () => {
+    it('should extract the correct state for the claim issued', () => {
+      const claim: Claim = new Claim().deserialize(sampleHwfClaimIssueObj)
+      let claimState = initialTransitions(claim)
+      claimState.findState(claimState)
+      expect(claimState.state).to.equal('help-with-fees')
     })
   })
 
