@@ -320,11 +320,6 @@ export class Claim {
       this.createdAt = MomentFactory.parse(input.createdAt)
       this.claimData = new ClaimData().deserialize(input.claim)
       this.moreTimeRequested = input.moreTimeRequested
-      if (input.state === 'HWF_APPLICATION_PENDING' && input.referenceNumber === undefined) {
-        this.claimNumber = input.id
-      } else {
-        this.claimNumber = input.referenceNumber
-      }
       if (input.state === 'HWF_APPLICATION_PENDING' && input.claim.helpWithFeesNumber !== undefined) {
         this.helpWithFeesNumber = true
       } else {
@@ -342,6 +337,9 @@ export class Claim {
       }
       if (input.respondedAt) {
         this.respondedAt = MomentFactory.parse(input.respondedAt)
+      }
+      if (input.referenceNumber) {
+        this.claimNumber = input.referenceNumber
       }
       if (input.defendantEmail) {
         this.defendantEmail = input.defendantEmail
