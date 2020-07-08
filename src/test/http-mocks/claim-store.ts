@@ -112,7 +112,7 @@ export const sampleHwfClaimIssueObj = {
   submitterEmail: 'claimant@example.com',
   externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc',
   defendantId: '123',
-  referenceNumber: '',
+  referenceNumber: '000MC050',
   createdAt: MomentFactory.currentDateTime(),
   issuedOn: undefined,
   totalAmountTillToday: 200,
