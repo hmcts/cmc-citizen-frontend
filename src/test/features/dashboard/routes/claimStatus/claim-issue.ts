@@ -41,14 +41,14 @@ const testData = [
       helpWithFeesNumber: true
     },
     claimantAssertions: ['1594112140470504',
-    'We’re checking your Help With Fees application',
-    'We’ll email you the result within 5 days.',
-    'If you qualify for the whole court fee to be paid'
+      'We’re checking your Help With Fees application',
+      'We’ll email you the result within 5 days.',
+      'If you qualify for the whole court fee to be paid'
     ],
     defendantAssertions: ['000MC050', 'You haven’t responded to this claim',
-        'You need to respond before 4pm on ',
-        'Respond to claim'
-      ]
+      'You need to respond before 4pm on ',
+      'Respond to claim'
+    ]
   },
   {
     status: 'Requested more time',
