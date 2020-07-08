@@ -1,4 +1,4 @@
-{% macro businessQueueClaimDetails(claim) %}
+{% macro businessQueueClaimDetails() %}
   <div class="status-block">
     <h2 class="heading-medium"> {{ t('We’ve sent this case to the County Court Business Centre') }} </h2>
     <p>{{  t('Your online account won’t be updated - any further updates will be by post.') }}</p>
@@ -20,12 +20,12 @@
   </div>
 {% endmacro %}
 
-{% macro businessQueueDefendantClaimDetails(claim) %}
-  {{ businessQueueClaimDetails(claim) }}
+{% macro businessQueueDefendantClaimDetails() %}
+  {{ businessQueueClaimDetails() }}
 {% endmacro %}
 
-{% macro businessQueueClaimantClaimDetails(claim) %}
-  {{ businessQueueClaimDetails(claim) }}
+{% macro businessQueueClaimantClaimDetails() %}
+  {{ businessQueueClaimDetails() }}
 {% endmacro %}
 
 {% macro businessQueueClaimStatus() %}

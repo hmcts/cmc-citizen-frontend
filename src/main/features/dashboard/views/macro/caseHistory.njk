@@ -168,7 +168,7 @@
     {% elif state.status === ClaimStatus.PROCEED_OFFLINE %}
       {{ offlineResponseForClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.BUSINESS_QUEUE %}
-    {{ businessQueueClaimantClaimDetails() }}
+    {{ businessQueueClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE %}
       {{ claimFullAdmissionPayImmediatelyPastDeadlineForClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_PART_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE %}
@@ -293,7 +293,7 @@
       {{ paperResponseForDefendantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.PROCEED_OFFLINE %}
       {{ offlineResponseForDefendantClaimDetails(claim) }}
-    {% elif status === ClaimStatus.BUSINESS_QUEUE %}
+    {% elif state.status === ClaimStatus.BUSINESS_QUEUE %}
       {{ businessQueueDefendantClaimDetails() }}
     {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ %}
       {{ admissionByCCJDefendantClaimDetails(claim) }}
