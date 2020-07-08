@@ -67,11 +67,11 @@ describe('ClaimData', () => {
       it('should return helpWithFeesNumber and helpWithFeesType if provided', () => {
         const claimData = new ClaimData().deserialize({
           helpWithFeesNumber: '259023',
-          helpWithFeesType: 'ClaimIssue'
+          helpWithFeesType: 'Claim Issue'
         })
 
         expect(claimData.helpWithFeesNumber).to.equal('259023')
-        expect(claimData.helpWithFeesType).to.equal('ClaimIssue')
+        expect(claimData.helpWithFeesType).to.equal('Claim Issue')
       })
       it('should return helpWithFeesNumber and helpWithFeesType if provided', () => {
         const claimData = new ClaimData().deserialize({})

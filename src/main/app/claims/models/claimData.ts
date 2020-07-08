@@ -87,7 +87,7 @@ export class ClaimData {
       }
       // help with fees type
       if (input.helpWithFeesType) {
-        this.helpWithFeesType = 'ClaimIssue'
+        this.helpWithFeesType = input.helpWithFeesType
       }
     }
     return this
