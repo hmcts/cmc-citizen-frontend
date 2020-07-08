@@ -51,9 +51,9 @@
             <tr class="claims default mobile-table">
               <td>
               {% if claim.helpWithFeesNumber %}
-                  {{ internalLink(claim.ccdCaseId, '/dashboard/' + claim.externalId + '/claimant')}}
+                  {{ claim.ccdCaseId }}
                 {% else %}
-                  {{ internalLink(claim.claimNumber, '/dashboard/' + claim.externalId + '/claimant')}}
+                  {{ claim.claimNumber }}
                 {% endif %}
               </td>
               <td>{{ claim.claimData.defendant.name }}</td>
