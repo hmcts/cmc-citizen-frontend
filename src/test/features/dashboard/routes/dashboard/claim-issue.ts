@@ -27,16 +27,15 @@ const testData = [
     claimantAssertions: ['000MC050', 'Wait for the defendant to respond'],
     defendantAssertions: ['000MC050', 'Respond to claim.']
   },
-  // todo uncomment and add condition based dashboard once the backend implementation is finished
-  // {
-  //   status: 'Claim issued with HWF reference',
-  //   claim: claimStoreServiceMock.sampleClaimIssueObj,
-  //   claimOverride: {
-  //     responseDeadline: MomentFactory.currentDate().add(1, 'days')
-  //   },
-  //   claimantAssertions: ['000MC050', 'We’re checking your Help With Fees application'],
-  //   defendantAssertions: ['000MC050', 'Respond to claim.']
-  // },
+  {
+    status: 'Claim issued with HWF reference',
+    claim: claimStoreServiceMock.sampleClaimIssueObj,
+    claimOverride: {
+      responseDeadline: MomentFactory.currentDate().add(1, 'days')
+    },
+    claimantAssertions: ['000MC050', 'We’re checking your Help With Fees application'],
+    defendantAssertions: ['000MC050', 'Respond to claim.']
+  },
   {
     status: 'Requested more time',
     claim: claimStoreServiceMock.sampleClaimIssueObj,
