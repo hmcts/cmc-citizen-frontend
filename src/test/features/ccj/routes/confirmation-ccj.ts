@@ -41,7 +41,7 @@ describe('CCJ: confirmation page', () => {
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
-        it('should render page when everything is fine', async () => {
+        it('should render page with 10 working days when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(
             { countyCourtJudgmentRequestedAt: '2017-10-10T22:45:51.785' }
           )
@@ -52,7 +52,7 @@ describe('CCJ: confirmation page', () => {
             .expect(res => expect(res).to.be.successful.withText('County Court Judgment requested'))
         })
 
-        it('should render page when everything is fine', async () => {
+        it('should render page with is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(
             { countyCourtJudgmentRequestedAt: '2020-07-08T22:45:51.785' }
           )
