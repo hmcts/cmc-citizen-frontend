@@ -50,9 +50,9 @@
             {% set claimantDashboardStatus = claim | dashboardStatusForClaimant %}
             <tr class="claims default mobile-table">
               <td>
-              {{ internalLink(claim.ccdCaseId, '/dashboard/' + claim.externalId + '/claimant')}}
+              {{ internalLink(claim.ccdCaseId, '/dashboard/' + claim.ccdCaseId + '/claimant')}}
                 {% else %}
-                  {{ internalLink(claim.claimNumber, '/dashboard/' + claim.externalId + '/claimant')}}
+                  {{ internalLink(claim.claimNumber, '/dashboard/' + claim.claimNumber + '/claimant')}}
                 {% endif %}
               </td>
               <td>{{ claim.claimData.defendant.name }}</td>
