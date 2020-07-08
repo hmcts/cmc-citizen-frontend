@@ -107,6 +107,7 @@ export const sampleClaimIssueOrgVOrgPhone = {
 
 export const sampleHwfClaimIssueObj = {
   id: 1,
+  ccdCaseId: 123,
   submitterId: '1',
   submitterEmail: 'claimant@example.com',
   externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc',
