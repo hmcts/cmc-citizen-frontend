@@ -165,6 +165,8 @@ export class Claim {
       return ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED
     } else if (this.moneyReceivedOn && this.countyCourtJudgmentRequestedAt) {
       return ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
+    } else if (this.hasBeenMovedToCCBC()) {
+      return ClaimStatus.BUSINESS_QUEUE
     } else if (this.hasOrderBeenDrawn()) {
       if (this.reviewOrder) {
         return ClaimStatus.REVIEW_ORDER_REQUESTED
