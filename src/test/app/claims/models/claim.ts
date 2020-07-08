@@ -758,6 +758,29 @@ describe('Claim', () => {
     })
   })
 
+  describe('Help With fees', () => {
+
+    it('should return true when the claim is submited with HWF', () => {
+      const claimWithHwf = new Claim().deserialize(claimStoreMock.sampleHwfClaimIssueObj)
+      expect(claimWithHwf.helpWithFeesNumber).to.be.true
+    })
+
+    it('should return todays data for issued-on', () => {
+      const claimWithHwf = new Claim().deserialize(claimStoreMock.sampleHwfClaimIssueObj)
+      expect(claimWithHwf.issuedOn.toISOString()).to.be.eq(MomentFactory.currentDate().toISOString())
+    })
+
+    it('should return response dead line', () => {
+      const claimWithHwf = new Claim().deserialize(claimStoreMock.sampleHwfClaimIssueObj)
+      expect(claimWithHwf.responseDeadline).to.be.not.null
+    })
+
+    it('should return total Amount Till Date Of Issue', () => {
+      const claimWithHwf = new Claim().deserialize(claimStoreMock.sampleHwfClaimIssueObj)
+      expect(claimWithHwf.totalAmountTillDateOfIssue).to.be.eq(claimWithHwf.totalAmountTillToday)
+    })
+  })
+
   describe('respondToResponseDeadline', () => {
 
     it('should add 33 days to the response deadline', () => {
@@ -1221,6 +1244,7 @@ describe('OconFormResponse', () => {
     claim = new Claim()
     claim.responseDeadline = MomentFactory.currentDate()
     claim.intentionToProceedDeadline = MomentFactory.currentDate()
+    claim.createdAt = MomentFactory.parse('2019-09-09').hour(15).minute(12)
     claim.respondedAt = moment()
     claim.response = {
       responseType: ResponseType.FULL_DEFENCE,
