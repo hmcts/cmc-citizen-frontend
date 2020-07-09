@@ -14,7 +14,7 @@ const testingSupport: TestingSupportSteps = new TestingSupportSteps()
 
 Feature('Claimant Enter details of claim')
 
-Scenario('I can prepare a claim with no interest @citizen', { retries: 3 }, async (I: I) => {
+Scenario('I can prepare a claim with no interest @citizen', { retries: 0 }, async (I: I) => {
   userSteps.login(userSteps.getClaimantEmail())
   if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
     testingSupport.deleteClaimDraft()
@@ -35,7 +35,9 @@ Scenario('I can prepare a claim with no interest @citizen', { retries: 3 }, asyn
   interestSteps.skipClaimantInterestTotalPage()
   I.see('Prepare your claim')
   claimSteps.enterClaimDetails()
-  await I.bypassPCQ().catch(e => { return false })
+
+  await I.bypassPCQ()
+
   userSteps.selectCheckAndSubmitYourClaim()
   I.see('£80.50')
   I.see('I don’t want to claim interest')
