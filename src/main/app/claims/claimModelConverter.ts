@@ -69,7 +69,7 @@ export class ClaimModelConverter {
     if (draftClaim.helpWithFees && draftClaim.helpWithFees.declared
       && draftClaim.helpWithFees.declared.option === YesNoOption.YES.option) {
       claimData.helpWithFeesNumber = draftClaim.helpWithFees.helpWithFeesNumber
-      claimData.helpWithFeesType = 'ClaimIssue'
+      claimData.helpWithFeesType = 'Claim Issue'
     }
     return claimData
   }
