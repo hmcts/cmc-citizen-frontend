@@ -318,7 +318,7 @@ export const sampleHwfClaimObj = {
     feeAmountInPennies: 2500,
     timeline: { rows: [{ date: 'a', description: 'b' }] },
     helpWithFeesNumber: 'HWF1234',
-    helpWithFeesType: 'Claim Issue'
+    helpWithFeesType: 'ClaimIssue'
   },
   responseDeadline: '2017-08-08',
   countyCourtJudgment: {
