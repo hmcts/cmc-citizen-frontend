@@ -19,6 +19,7 @@ class PcqHelper extends codecept_helper {
     } else {
       // silently move on.
       console.log('PCQ is disabled');
+      Promise.reject(false)
     }
   }
   async checkPCQHealth () {

@@ -295,7 +295,7 @@ export class DefenceSteps {
     isRequestMoreTimeToRespond: boolean = true,
     isClaimAlreadyPaid: boolean = true,
     expectPhonePage: boolean = false
-  ): void {
+): void {
     I.see('Confirm your details')
     I.see('Decide if you need more time to respond')
     I.see('Choose a response')
@@ -323,7 +323,7 @@ export class DefenceSteps {
         this.askForMediation(defendantType)
         this.askForHearingRequirements(defendantType)
         defendantSteps.selectCheckAndSubmitYourDefence()
-        I.bypassPCQ()
+        I.bypassPCQ().then(() => { return true }).catch(e => { return false })
         break
       case DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID:
         this.enterWhenDidYouPay(defence)
@@ -404,24 +404,25 @@ export class DefenceSteps {
     }
 
     defendantSteps.selectCheckAndSubmitYourDefence()
-    I.bypassPCQ()
-    this.checkAndSendAndSubmit(defendantType, DefenceType.FULL_ADMISSION)
+    I.bypassPCQ().then(() => {
+      this.checkAndSendAndSubmit(defendantType, DefenceType.FULL_ADMISSION)
 
-    I.see('You’ve submitted your response')
+      I.see('You’ve submitted your response')
 
-    switch (paymentOption) {
-      case PaymentOption.IMMEDIATELY:
-        I.see(`We’ve emailed ${claimantName} to tell them you’ll pay immediately.`)
-        break
-      case PaymentOption.BY_SET_DATE:
-        I.see(`We’ve emailed ${claimantName} your offer to pay by 1 January 2025 and your explanation of why you can’t pay before then.`)
-        break
-      case PaymentOption.INSTALMENTS:
-        I.see(`We’ve emailed ${claimantName} to tell them you’ve suggested paying by instalments.`)
-        break
-      default:
-        throw new Error(`Unknown payment option: ${paymentOption}`)
-    }
+      switch (paymentOption) {
+        case PaymentOption.IMMEDIATELY:
+          I.see(`We’ve emailed ${claimantName} to tell them you’ll pay immediately.`)
+          break
+        case PaymentOption.BY_SET_DATE:
+          I.see(`We’ve emailed ${claimantName} your offer to pay by 1 January 2025 and your explanation of why you can’t pay before then.`)
+          break
+        case PaymentOption.INSTALMENTS:
+          I.see(`We’ve emailed ${claimantName} to tell them you’ve suggested paying by instalments.`)
+          break
+        default:
+          throw new Error(`Unknown payment option: ${paymentOption}`)
+      }
+    }).catch(e => { return false })
   }
 
   makePartialAdmission (defendantParty: Party): void {
@@ -448,9 +449,10 @@ export class DefenceSteps {
     this.askForMediation(defendantType)
     this.askForHearingRequirements(defendantType)
     defendantSteps.selectCheckAndSubmitYourDefence()
-    I.bypassPCQ()
-    this.checkAndSendAndSubmit(defendantType, DefenceType.PART_ADMISSION)
-    I.see('You’ve submitted your response')
+    I.bypassPCQ().then(() => {
+      this.checkAndSendAndSubmit(defendantType, DefenceType.PART_ADMISSION)
+      I.see('You’ve submitted your response')
+    }).catch(e => { return false })
   }
 
   partialPaymentNotMade (defendantType: PartyType, paymentOption: PaymentOption): void {
