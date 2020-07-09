@@ -50,6 +50,7 @@
             {% set claimantDashboardStatus = claim | dashboardStatusForClaimant %}
             <tr class="claims default mobile-table">
               <td>
+              {% if claim.helpWithFeesNumber %}
               {{ internalLink(claim.ccdCaseId, '/dashboard/' + claim.ccdCaseId + '/claimant')}}
                 {% else %}
                   {{ internalLink(claim.claimNumber, '/dashboard/' + claim.claimNumber + '/claimant')}}
@@ -68,7 +69,7 @@
                {% if claim.helpWithFeesNumber %}
                   -
                 {% else %}
-                  {{ claim.responseDeadline | date("D MMM") }}
+                  {{ claim.responseDeadline | date }}
                 {% endif %}
               </td>
               <td>{{ internalLink('View', '/dashboard/' + claim.externalId + '/claimant') }}</td>
