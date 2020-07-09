@@ -51,6 +51,16 @@ describe('CCJ: confirmation page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('County Court Judgment requested'))
         })
+
+        it('should render page with 10 working days when everything is fine', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(
+            { countyCourtJudgmentRequestedAt: '2020-07-08T22:45:51.785' }
+          )
+          await request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('We’ll contact you to tell you whether the judgment has been entered. We aim to do this within 10 working days'))
+        })
       })
     })
   })
