@@ -113,6 +113,7 @@ ccd:
     postgresUsername: hmcts
     postgresPassword: hmcts
     devMode: true
+    PCQ_URL: https://pcq.aat.platform.hmcts.net
 
   ccd-admin-web:
     nodejs:
