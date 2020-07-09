@@ -13,7 +13,7 @@ const buttons = {
 export class DefendantEnterClaimReferencePage {
 
   async open () {
-    await I.amOnCitizenAppPage('/first-contact/claim-reference')
+    I.amOnCitizenAppPage('/first-contact/claim-reference')
     return Promise.resolve()
   }
 
