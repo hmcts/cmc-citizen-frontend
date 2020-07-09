@@ -129,6 +129,6 @@
   },
   "pcq":
   {
-    "url":"https://pcq.aat.platform.hmcts.net"
+    "url":"http://localhost:4000"
   }
 }
