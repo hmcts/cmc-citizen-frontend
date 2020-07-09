@@ -31,7 +31,9 @@ import { DirectionOrder } from 'claims/models/directionOrder'
 import { ReviewOrder } from 'claims/models/reviewOrder'
 import { MediationOutcome } from 'claims/models/mediationOutcome'
 import { YesNoOption } from 'models/yesNoOption'
+import { ResponseMethod } from 'claims/models/response/responseMethod'
 import { ClaimDocument } from 'claims/models/claimDocument'
+import { TransferContents } from 'claims/models/transferContents'
 import * as _ from 'lodash'
 import { ClaimDocumentType } from 'common/claimDocumentType'
 import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
@@ -81,6 +83,7 @@ export class Claim {
   paperResponse: YesNoOption
   claimDocuments?: ClaimDocument[]
   proceedOfflineReason: string
+  transferContent?: TransferContents
 
   get defendantOffer (): Offer {
     if (!this.settlement) {
@@ -163,6 +166,8 @@ export class Claim {
   get status (): ClaimStatus {
     if (this.moneyReceivedOn && this.countyCourtJudgmentRequestedAt && this.isCCJPaidWithinMonth()) {
       return ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED
+    } else if (this.hasBeenTransferred()) {
+      return ClaimStatus.TRANSFERRED
     } else if (this.moneyReceivedOn && this.countyCourtJudgmentRequestedAt) {
       return ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
     } else if (this.hasOrderBeenDrawn()) {
@@ -171,7 +176,7 @@ export class Claim {
       } else {
         return ClaimStatus.ORDER_DRAWN
       }
-    } else if (this.paperResponse && this.paperResponse === YesNoOption.YES) {
+    } else if (this.isOfflineResponse()) {
       return ClaimStatus.DEFENDANT_PAPER_RESPONSE
     } else if (this.checkProceedOfflineReason()) {
       return ClaimStatus.PROCEED_OFFLINE
@@ -213,6 +218,8 @@ export class Claim {
       return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ
     } else if (this.hasIntentionToProceedDeadlinePassed()) {
       return ClaimStatus.INTENTION_TO_PROCEED_DEADLINE_PASSED
+    } else if (this.isOconFormResponse()) {
+      return ClaimStatus.DEFENDANT_OCON_FORM_RESPONSE
     } else if (this.hasDefendantRejectedClaimWithDQs()) {
       return ClaimStatus.DEFENDANT_REJECTS_WITH_DQS
     } else if (this.hasClaimantAcceptedStatesPaid()) {
@@ -245,6 +252,8 @@ export class Claim {
       return ClaimStatus.CLAIMANT_RESPONSE_SUBMITTED
     } else if (this.moreTimeRequested) {
       return ClaimStatus.MORE_TIME_REQUESTED
+    } else if (this.state === 'TRANSFERRED') {
+      return ClaimStatus.TRANSFERRED
     } else if (!this.response) {
       return ClaimStatus.NO_RESPONSE
     } else {
@@ -376,6 +385,10 @@ export class Claim {
         this.pilotCourt = YesNoOption.fromObject(input.pilotCourt)
       }
 
+      if (input.transferContent) {
+        this.transferContent = new TransferContents().deserialize(input.transferContent)
+      }
+
       if (input.paperResponse) {
         this.paperResponse = YesNoOption.fromObject(input.paperResponse)
       }
@@ -468,6 +481,10 @@ export class Claim {
     }
 
     if (this.mediationOutcome !== undefined && this.mediationOutcome === MediationOutcome.SUCCEEDED) {
+      return false
+    }
+
+    if (this.hasBeenTransferred()) {
       return false
     }
 
@@ -708,7 +725,19 @@ export class Claim {
       this.isIntentionToProceedEligible()
   }
 
+  private isOconFormResponse (): boolean {
+    return this.response !== undefined && this.response.responseMethod === ResponseMethod.OCON_FORM
+  }
+
+  private isOfflineResponse (): boolean {
+    return this.response !== undefined && this.response.responseMethod === ResponseMethod.OFFLINE
+  }
+
   private checkProceedOfflineReason (): boolean {
     return (this.proceedOfflineReason && (this.proceedOfflineReason === ProceedOfflineReason.APPLICATION_BY_DEFENDANT || this.proceedOfflineReason === ProceedOfflineReason.APPLICATION_BY_CLAIMANT))
+  }
+
+  private hasBeenTransferred (): boolean {
+    return this.state === 'TRANSFERRED'
   }
 }

@@ -14,7 +14,7 @@ import { StatementOfMeansFeature } from 'response/helpers/statementOfMeansFeatur
 import { Claim } from 'claims/models/claim'
 
 const claim: Claim = new Claim()
-claim.features = ['admissions']
+claim.features = []
 
 describe('StatementOfMeansFeature', () => {
 

@@ -15,7 +15,6 @@ import { RoutablePath } from 'shared/router/routablePath'
 import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 import { FullRejectionGuard } from 'response/guards/fullRejectionGuard'
 import { Claim } from 'claims/models/claim'
-import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 
 const page: RoutablePath = FullRejectionPaths.howMuchHaveYouPaidPage
 
@@ -52,7 +51,6 @@ export default express.Router()
         const { externalId } = req.params
 
         const paidLessThanClaimed = form.model.amount < claim.totalAmountTillToday
-        const admissionsEnabled = ClaimFeatureToggles.isFeatureEnabledOnClaim(claim)
 
         if (!paidLessThanClaimed) {
           delete draft.document.rejectAllOfClaim.whyDoYouDisagree
@@ -64,15 +62,9 @@ export default express.Router()
         await new DraftService().save(draft, user.bearerToken)
 
         if (paidLessThanClaimed) {
-          if (admissionsEnabled) {
-            res.redirect(FullRejectionPaths.youHavePaidLessPage.evaluateUri({ externalId: externalId }))
-          } else {
-            res.redirect(Paths.sendYourResponseByEmailPage.evaluateUri({ externalId: externalId }))
-          }
-        } else if (admissionsEnabled) {
-          res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
+          res.redirect(FullRejectionPaths.youHavePaidLessPage.evaluateUri({ externalId: externalId }))
         } else {
-          res.redirect(Paths.sendYourResponseByEmailPage.evaluateUri({ externalId: externalId }))
+          res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
         }
       }
     }))

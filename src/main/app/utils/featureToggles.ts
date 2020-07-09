@@ -1,7 +1,14 @@
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
 export class FeatureToggles {
+  readonly launchDarklyClient: LaunchDarklyClient
+
+  constructor (launchDarklyClient: LaunchDarklyClient) {
+    this.launchDarklyClient = launchDarklyClient
+  }
+
   static isEnabled (featureName: string): boolean {
     return FeatureToggles.isAnyEnabled(featureName)
   }
@@ -23,5 +30,13 @@ export class FeatureToggles {
     }
     return featureNames
       .some((featureName) => toBoolean(config.get<boolean>(`featureToggles.${featureName}`)))
+  }
+
+  async isWarningBannerEnabled (): Promise<boolean> {
+    return this.launchDarklyClient.serviceVariation('warning_banner', toBoolean(config.get<boolean>(`featureToggles.warningBanner`)))
+  }
+
+  async isHelpWithFeesEnabled (): Promise<boolean> {
+    return this.launchDarklyClient.serviceVariation('help-with-fees', toBoolean(config.get<boolean>(`featureToggles.helpWithFees`)))
   }
 }

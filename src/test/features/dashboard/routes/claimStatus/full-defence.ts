@@ -37,6 +37,7 @@ import { MediationOutcome } from 'claims/models/mediationOutcome'
 import { DefenceType } from 'claims/models/response/defenceType'
 import { YesNoOption } from 'models/yesNoOption'
 import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
+import { ResponseMethod } from 'claims/models/response/responseMethod'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -125,7 +126,7 @@ function testData () {
       status: 'Full defence - defendant already paid - claimant rejects defendant response with mediation - mediation failed',
       claim: fullDefenceClaim(),
       claimOverride: {
-        features: ['admissions', 'directionsQuestionnaire'],
+        features: ['directionsQuestionnaire'],
         response: {
           ...defenceWithAmountClaimedAlreadyPaidData,
           freeMediation: 'yes',
@@ -372,7 +373,7 @@ function testData () {
       status: 'Full defence - defendant disputes all of the claim and accepts mediation with directions questionnaire enabled',
       claim: fullDefenceClaim(),
       claimOverride: {
-        features: ['admissions', 'directionsQuestionnaire'],
+        features: ['directionsQuestionnaire'],
         response: {
           ...baseResponseData,
           ...baseDefenceData,
@@ -583,7 +584,7 @@ function testData () {
       claim: fullDefenceClaim(),
       claimOverride: {
         ...directionsQuestionnaireDeadline(),
-        features: ['admissions', 'directionsQuestionnaire'],
+        features: ['directionsQuestionnaire'],
         response: {
           ...baseResponseData,
           ...baseDefenceData,
@@ -684,7 +685,8 @@ function testData () {
         response: {
           ...baseResponseData,
           ...baseDefenceData,
-          freeMediation: FreeMediationOption.YES
+          freeMediation: FreeMediationOption.YES,
+          responseMethod: ResponseMethod.OFFLINE
         },
         paperResponse: YesNoOption.YES.option
       },
