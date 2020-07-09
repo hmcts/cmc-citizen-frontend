@@ -94,7 +94,7 @@
     "inversionOfControl": true,
     "warningBanner": false,
     "helpWithFees": false,
-    "pcq":false
+    "pcq":true
   },
   "oauth": {
     "clientId": "cmc_citizen"
