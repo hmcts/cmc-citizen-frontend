@@ -1067,7 +1067,7 @@ describe('Claim', () => {
     })
   })
 
-describe('handoffToCCBC', () => {
+  describe('handoffToCCBC', () => {
     let claim
 
     beforeEach(() => {
@@ -1080,7 +1080,7 @@ describe('handoffToCCBC', () => {
       expect(claim.status).to.be.equal(ClaimStatus.BUSINESS_QUEUE)
     })
   })
-  
+
   describe('isTransferred', () => {
     let claim
 
@@ -1093,7 +1093,7 @@ describe('handoffToCCBC', () => {
     it('should return ClaimStatus.TRANSFERRED ', () => {
       expect(claim.status).to.be.equal(ClaimStatus.TRANSFERRED)
     })
-  })    
+  })
 })
 
 function prepareSettlement (paymentIntention: PaymentIntention, party: MadeBy): Settlement {

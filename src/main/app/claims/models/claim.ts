@@ -748,7 +748,8 @@ export class Claim {
   private hasBeenMovedToCCBC (): boolean {
     return this.state === 'BUSINESS_QUEUE'
   }
-    private hasBeenTransferred (): boolean {
+
+  private hasBeenTransferred (): boolean {
     return this.state === 'TRANSFERRED'
   }
 }
