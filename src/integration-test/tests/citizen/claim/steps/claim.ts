@@ -219,10 +219,9 @@ export class ClaimSteps {
     I.see(AmountHelper.formatMoney(claimAmount.getTotal()), 'table.table-form > tfoot > tr > td.numeric.last > span')
     interestSteps.skipClaimantInterestTotalPage()
     this.enterClaimDetails()
-    I.bypassPCQ().then(() => {
-      userSteps.selectCheckAndSubmitYourClaim()
-      this.checkClaimFactsAreTrueAndSubmit(claimantType, defendantType, enterDefendantEmail)
-    }).catch(e => { return false })
+    I.bypassPCQ()
+    userSteps.selectCheckAndSubmitYourClaim()
+    this.checkClaimFactsAreTrueAndSubmit(claimantType, defendantType, enterDefendantEmail)
   }
 
   makeAClaimAndSubmit (email: string, claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true): Promise<string> {
@@ -285,23 +284,21 @@ export class ClaimSteps {
     I.see(AmountHelper.formatMoney(claimAmount.getTotal()), 'table.table-form > tfoot > tr > td.numeric.last > span')
     interestSteps.skipClaimantInterestTotalPage()
     this.enterClaimDetails()
-    I.bypassPCQ().then(() => {
-      userSteps.selectCheckAndSubmitYourClaim()
-      I.see('John Smith')
-      I.see('10, DALBERG')
-      I.see('LONDON')
-      I.see('SW2 1AN')
-      I.see('07700000001')
-      I.see(claimReason)
-      claimantCheckAndSendPage.verifyDefendantCheckAndSendAnswers(PartyType.INDIVIDUAL, true)
-      claimantCheckAndSendPage.verifyClaimAmount()
+    I.bypassPCQ()
+    userSteps.selectCheckAndSubmitYourClaim()
+    I.see('John Smith')
+    I.see('10, DALBERG')
+    I.see('LONDON')
+    I.see('SW2 1AN')
+    I.see('07700000001')
+    I.see(claimReason)
+    claimantCheckAndSendPage.verifyDefendantCheckAndSendAnswers(PartyType.INDIVIDUAL, true)
+    claimantCheckAndSendPage.verifyClaimAmount()
 
-      if (!process.env.CITIZEN_APP_URL.includes('sprod')) {
-        claimantCheckAndSendPage.checkFactsTrueAndSubmit()
-        I.waitForText('Enter card details')
-      }
-    }).catch(e => { return false })
-
+    if (!process.env.CITIZEN_APP_URL.includes('sprod')) {
+      claimantCheckAndSendPage.checkFactsTrueAndSubmit()
+      I.waitForText('Enter card details')
+    }
   }
 
   completeStartOfClaimJourney (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true) {

@@ -323,7 +323,7 @@ export class DefenceSteps {
         this.askForMediation(defendantType)
         this.askForHearingRequirements(defendantType)
         defendantSteps.selectCheckAndSubmitYourDefence()
-        I.bypassPCQ().then(() => { return true }).catch(e => { return false })
+        I.bypassPCQ()
         break
       case DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID:
         this.enterWhenDidYouPay(defence)
@@ -404,25 +404,24 @@ export class DefenceSteps {
     }
 
     defendantSteps.selectCheckAndSubmitYourDefence()
-    I.bypassPCQ().then(() => {
-      this.checkAndSendAndSubmit(defendantType, DefenceType.FULL_ADMISSION)
+    I.bypassPCQ()
+    this.checkAndSendAndSubmit(defendantType, DefenceType.FULL_ADMISSION)
 
-      I.see('You’ve submitted your response')
+    I.see('You’ve submitted your response')
 
-      switch (paymentOption) {
-        case PaymentOption.IMMEDIATELY:
-          I.see(`We’ve emailed ${claimantName} to tell them you’ll pay immediately.`)
-          break
-        case PaymentOption.BY_SET_DATE:
-          I.see(`We’ve emailed ${claimantName} your offer to pay by 1 January 2025 and your explanation of why you can’t pay before then.`)
-          break
-        case PaymentOption.INSTALMENTS:
-          I.see(`We’ve emailed ${claimantName} to tell them you’ve suggested paying by instalments.`)
-          break
-        default:
-          throw new Error(`Unknown payment option: ${paymentOption}`)
-      }
-    }).catch(e => { return false })
+    switch (paymentOption) {
+      case PaymentOption.IMMEDIATELY:
+        I.see(`We’ve emailed ${claimantName} to tell them you’ll pay immediately.`)
+        break
+      case PaymentOption.BY_SET_DATE:
+        I.see(`We’ve emailed ${claimantName} your offer to pay by 1 January 2025 and your explanation of why you can’t pay before then.`)
+        break
+      case PaymentOption.INSTALMENTS:
+        I.see(`We’ve emailed ${claimantName} to tell them you’ve suggested paying by instalments.`)
+        break
+      default:
+        throw new Error(`Unknown payment option: ${paymentOption}`)
+    }
   }
 
   makePartialAdmission (defendantParty: Party): void {
@@ -449,10 +448,9 @@ export class DefenceSteps {
     this.askForMediation(defendantType)
     this.askForHearingRequirements(defendantType)
     defendantSteps.selectCheckAndSubmitYourDefence()
-    I.bypassPCQ().then(() => {
-      this.checkAndSendAndSubmit(defendantType, DefenceType.PART_ADMISSION)
-      I.see('You’ve submitted your response')
-    }).catch(e => { return false })
+    I.bypassPCQ()
+    this.checkAndSendAndSubmit(defendantType, DefenceType.PART_ADMISSION)
+    I.see('You’ve submitted your response')
   }
 
   partialPaymentNotMade (defendantType: PartyType, paymentOption: PaymentOption): void {
