@@ -82,7 +82,6 @@
     "clusterMode": false,
     "testingSupport": false,
     "newFeaturesConsent": false,
-    "admissions": false,
     "returnErrorToUser": false,
     "mockPay": false,
     "mediation": false,
@@ -92,7 +91,9 @@
     "judgePilot": false,
     "newDashboardStatus": false,
     "webChat": true,
-    "inversionOfControl": true
+    "inversionOfControl": true,
+    "warningBanner": false,
+    "helpWithFees": false
   },
   "oauth": {
     "clientId": "cmc_citizen"

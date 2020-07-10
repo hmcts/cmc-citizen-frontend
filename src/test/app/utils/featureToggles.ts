@@ -3,6 +3,7 @@ import * as config from 'config'
 import * as toBoolean from 'to-boolean'
 
 import { FeatureToggles } from 'utils/featureToggles'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
 describe('FeatureToggles', () => {
   describe('isAnyEnabled', () => {
@@ -23,6 +24,26 @@ describe('FeatureToggles', () => {
 
     it('should throw an error if toggle does not exist', () => {
       expect(() => FeatureToggles.isEnabled('I am not a valid toggle name')).to.throw(Error)
+    })
+  })
+
+  describe('isWarningBannerEnabled', () => {
+    it('should return toggle if warningBanner toggle exists', async () => {
+      const mockLaunchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
+      const featureToggles = new FeatureToggles(mockLaunchDarklyClient)
+      let actual = toBoolean(config.get<boolean>(`featureToggles.warningBanner`))
+      let result = await featureToggles.isWarningBannerEnabled()
+      expect(result).to.equal(actual)
+    })
+  })
+
+  describe('isHelpWithFeesEnabled', () => {
+    it('should return toggle if help with fees toggle exists', async () => {
+      const mockLaunchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
+      const featureToggles = new FeatureToggles(mockLaunchDarklyClient)
+      let actual = toBoolean(config.get<boolean>(`featureToggles.helpWithFees`))
+      let result = await featureToggles.isHelpWithFeesEnabled()
+      expect(result).to.equal(actual)
     })
   })
 })

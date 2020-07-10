@@ -25,7 +25,7 @@ function ordersClaim () {
   return {
     ...claimStoreServiceMock.sampleClaimObj,
     responseDeadline: MomentFactory.currentDate().add(1, 'days'),
-    features: ['admissions', 'directionsQuestionnaire'],
+    features: ['directionsQuestionnaire'],
     response: {
       ...baseResponseData,
       ...defenceWithDisputeData

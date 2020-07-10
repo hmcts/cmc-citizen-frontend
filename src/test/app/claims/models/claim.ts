@@ -43,7 +43,6 @@ import * as data from 'test/data/entity/settlement'
 import { FeatureToggles } from 'utils/featureToggles'
 import { MediationOutcome } from 'claims/models/mediationOutcome'
 import { defenceClaimData } from 'test/data/entity/claimData'
-import { YesNoOption } from 'models/yesNoOption'
 import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
 
 describe('Claim', () => {
@@ -174,7 +173,12 @@ describe('Claim', () => {
     })
 
     it('should return DEFENDANT_PAPER_RESPONSE when a paper response received', () => {
-      claim.paperResponse = YesNoOption.YES
+      claim.respondedAt = moment()
+      claim.response = {
+        responseType: ResponseType.FULL_DEFENCE,
+        defenceType: DefenceType.DISPUTE,
+        responseMethod: 'OFFLINE'
+      }
 
       expect(claim.status).to.be.equal(ClaimStatus.DEFENDANT_PAPER_RESPONSE)
     })
@@ -434,7 +438,7 @@ describe('Claim', () => {
       claim.response = {
         responseType: ResponseType.PART_ADMISSION
       }
-      claim.features = ['admissions', 'directionsQuestionnaire']
+      claim.features = ['directionsQuestionnaire']
       expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION_DQ)
     })
 
@@ -612,7 +616,7 @@ describe('Claim', () => {
     if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
       it('should contain the claim status DEFENDANT_REJECTS_WITH_DQS only when defendant reject with DQs', () => {
         claim.respondedAt = moment()
-        claim.features = ['admissions', 'directionsQuestionnaire']
+        claim.features = ['directionsQuestionnaire']
         claim.response = {
           paymentIntention: null,
           responseType: 'FULL_DEFENCE',
@@ -625,7 +629,7 @@ describe('Claim', () => {
 
       it('should contain the claim status ORDER_DRAWN only when the legal advisor has drawn the order', () => {
         claim.respondedAt = moment()
-        claim.features = ['admissions', 'directionsQuestionnaire']
+        claim.features = ['directionsQuestionnaire']
         claim.response = {
           paymentIntention: null,
           responseType: 'FULL_DEFENCE',
@@ -996,7 +1000,7 @@ describe('Claim', () => {
     if (FeatureToggles.isEnabled('mediation')) {
       it('should contain CLAIMANT_REJECTED_DEFENDANT_DEFENCE status when claimant has reject defence and DQs is enabled', () => {
         claim.respondedAt = moment()
-        claim.features = ['admissions', 'directionsQuestionnaire']
+        claim.features = ['directionsQuestionnaire']
         claim.response = {
           responseType: ResponseType.FULL_DEFENCE,
           defenceType: DefenceType.DISPUTE
@@ -1063,7 +1067,7 @@ describe('Claim', () => {
     })
   })
 
-  describe('handoffToCCBC', () => {
+describe('handoffToCCBC', () => {
     let claim
 
     beforeEach(() => {
@@ -1076,6 +1080,20 @@ describe('Claim', () => {
       expect(claim.status).to.be.equal(ClaimStatus.BUSINESS_QUEUE)
     })
   })
+  
+  describe('isTransferred', () => {
+    let claim
+
+    beforeEach(() => {
+      claim = new Claim()
+      claim.state = 'TRANSFERRED'
+      claim.responseDeadline = MomentFactory.currentDate()
+    })
+
+    it('should return ClaimStatus.TRANSFERRED ', () => {
+      expect(claim.status).to.be.equal(ClaimStatus.TRANSFERRED)
+    })
+  })    
 })
 
 function prepareSettlement (paymentIntention: PaymentIntention, party: MadeBy): Settlement {
@@ -1209,3 +1227,24 @@ function prepareSettlementWithCounterSignatureWithDatePassed (paymentIntention: 
   }
   return new Settlement().deserialize(settlement)
 }
+
+describe('OconFormResponse', () => {
+  let claim
+
+  beforeEach(() => {
+    claim = new Claim()
+    claim.responseDeadline = MomentFactory.currentDate()
+    claim.intentionToProceedDeadline = MomentFactory.currentDate()
+    claim.createdAt = MomentFactory.parse('2019-09-09').hour(15).minute(12)
+    claim.respondedAt = moment()
+    claim.response = {
+      responseType: ResponseType.FULL_DEFENCE,
+      defenceType: DefenceType.DISPUTE,
+      responseMethod: 'OCON_FORM'
+    }
+  })
+
+  it('should return ClaimStatus.DEFENDANT_OCON_FORM_RESPONSE ', () => {
+    expect(claim.status).to.be.equal(ClaimStatus.DEFENDANT_OCON_FORM_RESPONSE)
+  })
+})

@@ -115,7 +115,11 @@
 
 {% from "./claimStatus/businessQueue.njk" import
   businessQueueDefendantClaimStatus,
-  businessQueueClaimantClaimStatus
+  businessQueueClaimantClaimStatus %}
+
+{% from "./claimStatus/claimTransferred.njk" import
+  claimTransferredDefendantClaimStatus,
+  claimTransferredClaimantClaimStatus
 %}
 
 {% macro caseStatusForClaimant(status, claim) %}
@@ -126,12 +130,16 @@
     {{ noResponseForClaimantDashboard() }}
   {% elif status === ClaimStatus.MORE_TIME_REQUESTED %}
     {{ moreTimeRequestedForClaimantDashboard(claim) }}
+  {% elif status === ClaimStatus.TRANSFERRED %}
+    {{ claimTransferredClaimantClaimStatus() }}
   {% elif status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
     {{ ccjEligibleForClaimantDashboard() }}
   {% elif status === ClaimStatus.CCJ_REQUESTED %}
     {{ ccjRequestedForClaimantDashboard(claim) }}
   {% elif status === ClaimStatus.REDETERMINATION_BY_JUDGE %}
     {{ redeterminationClaimantDashboard() }}
+  {% elif status === ClaimStatus.DEFENDANT_OCON_FORM_RESPONSE %}
+    {{ claimRejectedWithDQsForClaimantDashboard(claim) }}
   {% elif status === ClaimStatus.DEFENDANT_PAPER_RESPONSE %}
     {{ paperResponseForClaimantDashboard() }}
   {% elif status === ClaimStatus.PROCEED_OFFLINE %}
@@ -242,12 +250,16 @@
     {{ noResponseForDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.MORE_TIME_REQUESTED %}
     {{ moreTimeRequestedForDefendantDashboard(claim) }}
+  {% elif status === ClaimStatus.TRANSFERRED %}
+    {{ claimTransferredDefendantClaimStatus() }}
   {% elif status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
     {{ ccjEligibleForDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.REDETERMINATION_BY_JUDGE %}
     {{ redeterminationDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.CCJ_REQUESTED %}
     {{ ccjRequestedForDefendantDashboard(claim) }}
+  {% elif status === ClaimStatus.DEFENDANT_OCON_FORM_RESPONSE%}
+    {{ claimRejectedWithDQsForDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.DEFENDANT_PAPER_RESPONSE %}
     {{ paperResponseForDefendantDashboard() }}
   {% elif status === ClaimStatus.PROCEED_OFFLINE %}

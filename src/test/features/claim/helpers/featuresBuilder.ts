@@ -24,7 +24,7 @@ const MIN_THRESHOLD = Math.min(
 
 function enableFeatures (...features: string[]) {
   FEATURES.map(feature => feature.toggle)
-    .forEach(toggle => when(mockLaunchDarklyClient.variation(anything(), anything(), toggle, anything()))
+    .forEach(toggle => when(mockLaunchDarklyClient.userVariation(anything(), anything(), toggle, anything()))
       .thenResolve(Promise.resolve(features.indexOf(toggle) >= 0)))
 }
 
@@ -37,14 +37,6 @@ describe('FeaturesBuilder', () => {
 
   afterEach(() => {
     reset(mockLaunchDarklyClient)
-  })
-
-  describe('Admissions Feature', () => {
-    it('should add admissions to features if flag is set', async () => {
-      enableFeatures('admissions')
-      const features = await featuresBuilder.features(1, user)
-      expect(features).to.equal('admissions')
-    })
   })
 
   describe('Directions Questionnaire Feature', () => {

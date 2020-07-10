@@ -21,7 +21,6 @@ import { CountyCourtJudgmentRequestedGuard } from 'response/guards/countyCourtJu
 import { OnlyClaimantLinkedToClaimCanDoIt } from 'guards/onlyClaimantLinkedToClaimCanDoIt'
 import { OnlyDefendantLinkedToClaimCanDoIt } from 'guards/onlyDefendantLinkedToClaimCanDoIt'
 import { OAuthHelper } from 'idam/oAuthHelper'
-import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 import { PartyType } from 'common/partyType'
@@ -30,6 +29,7 @@ import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
 import { CompanyDetails } from 'forms/models/companyDetails'
 import { OrganisationDetails } from 'forms/models/organisationDetails'
 import { AlreadyPaidInFullGuard } from 'guards/alreadyPaidInFullGuard'
+import { ResponseMethod } from 'claims/models/response/responseMethod'
 
 function defendantResponseRequestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -77,6 +77,7 @@ export class Feature {
       app.settings.nunjucksEnv.globals.FreeMediationOption = FreeMediationOption
       app.settings.nunjucksEnv.globals.domain = {
         ResponseType: ResponseType,
+        ResponseMethod: ResponseMethod,
         PaymentOption: PaymentOption,
         PaymentSchedule: PaymentSchedule
       }
@@ -86,15 +87,14 @@ export class Feature {
 
     app.all(allResponseRoutes, defendantResponseRequestHandler())
     app.all(allResponseRoutes, ClaimMiddleware.retrieveByExternalId)
-    app.all(/^\/case\/.+\/response\/(?!receipt|summary|claim-details).*$/, OnlyDefendantLinkedToClaimCanDoIt.check())
+    app.all(/^\/case\/.+\/response\/(?!receipt|summary|claim-details|scanned-response-form).*$/, OnlyDefendantLinkedToClaimCanDoIt.check())
     app.all(allResponseRoutes, AlreadyPaidInFullGuard.requestHandler)
     app.all(
-      /^\/case\/.+\/response\/(?!confirmation|counter-claim|receipt|summary|claim-details).*$/,
+      /^\/case\/.+\/response\/(?!confirmation|counter-claim|receipt|summary|claim-details|scanned-response-form).*$/,
       ResponseGuard.checkResponseDoesNotExist()
     )
     app.all('/case/*/response/summary', OnlyClaimantLinkedToClaimCanDoIt.check(), ResponseGuard.checkResponseExists())
     app.all(/^\/case\/.*\/response\/(?!claim-details|receipt).*$/, CountyCourtJudgmentRequestedGuard.requestHandler)
-    app.all(/^\/case\/.*\/response\/statement-of-means\/.*/, OptInFeatureToggleGuard.featureEnabledGuard('admissions'))
     app.all(/^\/case\/.+\/response\/(?!confirmation|receipt|summary).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'response', 100, (value: any): ResponseDraft => {
         return new ResponseDraft().deserialize(value)
