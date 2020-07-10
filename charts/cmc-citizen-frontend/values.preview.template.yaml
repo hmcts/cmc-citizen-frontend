@@ -38,7 +38,7 @@ nodejs:
     FEATURE_FINE_PRINT: true
     FEATURE_NEW_DASHBOARD_STATUS: false
     FEATURE_WEB_CHAT: true
-    PCQ_URL: http://localhost:4000
+    PCQ_URL: https://pcq.aat.platform.hmcts.net
   
 # sub-charts configuration
 
