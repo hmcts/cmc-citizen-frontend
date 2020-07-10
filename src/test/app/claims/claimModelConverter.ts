@@ -101,6 +101,6 @@ describe('ClaimModelConverter', () => {
     const converted: ClaimData = ClaimModelConverter.convert(claimDraft)
     // console.log(converted)
     expect(converted.helpWithFeesNumber).to.equal('098765')
-    expect(converted.helpWithFeesType).to.equal('ClaimIssue')
+    expect(converted.helpWithFeesType).to.equal('Claim Issue')
   })
 })
