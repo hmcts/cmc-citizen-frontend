@@ -106,7 +106,7 @@ function testData () {
       },
       claimantAssertions: ['000MC000',
         'Wait for the judgment to be confirmed',
-        'We’ll send you a letter within 10 working days to tell you whether the judgment has been entered.',
+        'We’ll contact you to tell you whether the judgment has been entered. We aim to do this within 10 working days',
         'Your online account won’t be updated with the progress of this claim - any further updates will be by post.',
         'John Doe can no longer respond to your claim using this service - they may have responded by post.',
         'It’s possible we received a postal response before the deadline but hadn’t processed it when you requested judgment.',
