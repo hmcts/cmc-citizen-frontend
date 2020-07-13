@@ -1,7 +1,6 @@
 import I = CodeceptJS.I
 import { PartyType } from 'integration-test/data/party-type'
 import { DefenceType } from 'integration-test/data/defence-type'
-import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
 import { ClaimantResponseSteps } from 'integration-test/tests/citizen/claimantResponse/steps/claimant-reponse'
 import { Helper } from 'integration-test/tests/citizen/endToEnd/steps/helper'
 import { PaymentOption } from 'integration-test/data/payment-option'
@@ -11,7 +10,6 @@ import { EndToEndTestData } from 'integration-test/tests/citizen/endToEnd/data/E
 import { ClaimantResponseTestData } from './data/ClaimantResponseTestData'
 
 const helperSteps: Helper = new Helper()
-const userSteps: UserSteps = new UserSteps()
 const claimantResponseSteps: ClaimantResponseSteps = new ClaimantResponseSteps()
 const checkAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage()
 const confirmationPage: ClaimantConfirmation = new ClaimantConfirmation()
@@ -20,7 +18,7 @@ Feature('EMPTY')
 if (process.env.FEATURE_ADMISSIONS === 'true') {
   Feature('Claimant Response: Part Admit')
 
-  Scenario('I can as a claimant reject the defendants part admission by immediately @nightly @admissions', { retries: 3 }, async (I: I) => {
+  Scenario('I can as a claimant reject the defendants part admission by immediately @nightly @admissions', { retries: 3 }, async (I: I, login) => {
 
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.IMMEDIATELY
@@ -32,7 +30,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     helperSteps.finishResponse(testData, false)
     I.click('Sign out')
     // as claimant
-    userSteps.login(testData.claimantEmail)
+    await login('claimant')
     claimantResponseSteps.viewClaimFromDashboard(testData.claimRef)
     claimantResponseSteps.respondToOffer('View and respond')
     claimantResponseSteps.reject(testData, claimantResponseTestData)
@@ -44,7 +42,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.see('We’ll contact you to try to arrange a mediation appointment')
   })
 
-  Scenario('I can as a claimant accept the defendants part admission by immediately with settlement agreement and accepting defendants payment method @nightly @admissions', { retries: 3 }, async (I: I) => {
+  Scenario('I can as a claimant accept the defendants part admission by immediately with settlement agreement and accepting defendants payment method @nightly @admissions', { retries: 3 }, async (I: I, login) => {
 
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.IMMEDIATELY
@@ -56,7 +54,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     helperSteps.finishResponse(testData)
     I.click('Sign out')
     // as claimant
-    userSteps.login(testData.claimantEmail)
+    await login('claimant')
     claimantResponseSteps.acceptSettlementFromDashboardWhenAcceptPaymentMethod(testData, claimantResponseTestData, 'View and respond')
     checkAndSendPage.verifyFactsForSettlement()
     checkAndSendPage.submitNoDq()
@@ -66,7 +64,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.see('You’ve signed a settlement agreement.')
   })
 
-  Scenario('I can as a claimant accept the defendants part admission by instalments with settlement agreement and rejecting defendants payment method in favour of immediate payment @citizen @admissions', { retries: 3 }, async (I: I) => {
+  Scenario('I can as a claimant accept the defendants part admission by instalments with settlement agreement and rejecting defendants payment method in favour of immediate payment @citizen @admissions', { retries: 3 }, async (I: I, login) => {
 
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.INSTALMENTS
@@ -79,7 +77,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     helperSteps.finishResponse(testData)
     I.click('Sign out')
     // as claimant
-    userSteps.login(testData.claimantEmail)
+    await login('claimant')
     claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData, 'View and respond')
     checkAndSendPage.verifyFactsForSettlement()
     I.click('input[type=submit]')
@@ -89,7 +87,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.see('You’ve signed a settlement agreement.')
   })
 
-  Scenario('I can as a claimant accept the defendants part admission by instalments with settlement agreement and rejecting defendants payment method in favour of set date @nightly @admissions', { retries: 3 }, async (I: I) => {
+  Scenario('I can as a claimant accept the defendants part admission by instalments with settlement agreement and rejecting defendants payment method in favour of set date @nightly @admissions', { retries: 3 }, async (I: I, login) => {
 
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.INSTALMENTS
@@ -103,7 +101,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     helperSteps.finishResponse(testData)
     I.click('Sign out')
     // as claimant
-    userSteps.login(testData.claimantEmail)
+    await login('claimant')
     claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData, 'View and respond')
     checkAndSendPage.verifyFactsForSettlement()
     checkAndSendPage.submitNoDq()
@@ -113,7 +111,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.see('You’ve signed a settlement agreement.')
   })
 
-  Scenario('I can as a claimant accept the defendants part admission by instalments with settlement agreement and rejecting defendants payment method in favour of instalments @nightly @admissions', { retries: 3 }, async (I: I) => {
+  Scenario('I can as a claimant accept the defendants part admission by instalments with settlement agreement and rejecting defendants payment method in favour of instalments @nightly @admissions', { retries: 3 }, async (I: I, login) => {
 
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.BY_SET_DATE
@@ -126,7 +124,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     helperSteps.finishResponse(testData)
     I.click('Sign out')
     // as claimant
-    userSteps.login(testData.claimantEmail)
+    await login('claimant')
     claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData, 'View and respond')
     checkAndSendPage.verifyFactsForSettlement()
     checkAndSendPage.submitNoDq()

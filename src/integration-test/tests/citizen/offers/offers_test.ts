@@ -9,7 +9,7 @@ const offerSteps: OfferSteps = new OfferSteps()
 
 Feature('Offers')
 
-Scenario('I can as a defendant make an offer, accept offer and counter sign the agreement @citizen', { retries: 3 }, async (I: I) => {
+Scenario('I can as a defendant make an offer, accept offer and counter sign the agreement @citizen', { retries: 3 }, async (I: I, login) => {
   const claimantEmail: string = userSteps.getClaimantEmail()
   const defendantEmail: string = userSteps.getDefendantEmail()
 
@@ -17,22 +17,22 @@ Scenario('I can as a defendant make an offer, accept offer and counter sign the 
 
   I.respondToClaim(claimRef, claimantEmail, createResponseData(PartyType.INDIVIDUAL), defendantEmail)
 
-  userSteps.login(defendantEmail)
+  await login('defendant')
   offerSteps.makeOfferFromDashboard(claimRef)
   I.see('We’ve sent your offer to ' + createClaimant(PartyType.INDIVIDUAL).name)
   I.click('Sign out')
 
-  userSteps.login(claimantEmail)
+  await login('claimant')
   offerSteps.acceptOfferFromDashboard(claimRef)
   I.click('Sign out')
 
-  userSteps.login(defendantEmail)
+  await login('defendant')
   offerSteps.countersignOfferFromDashboard(claimRef)
   offerSteps.viewClaimFromDashboard(claimRef)
   I.see('You’ve both signed a legal agreement. The claim is now settled.')
 })
 
-Scenario('I can make an offer as a defendant to a claimant and have the claimant reject it @nightly', { retries: 3 }, async (I: I) => {
+Scenario('I can make an offer as a defendant to a claimant and have the claimant reject it @nightly', { retries: 3 }, async (I: I, login) => {
   const claimantEmail: string = userSteps.getClaimantEmail()
   const defendantEmail: string = userSteps.getDefendantEmail()
 
@@ -40,16 +40,16 @@ Scenario('I can make an offer as a defendant to a claimant and have the claimant
 
   I.respondToClaim(claimRef, claimantEmail, createResponseData(PartyType.INDIVIDUAL), defendantEmail)
 
-  userSteps.login(defendantEmail)
+  await login('defendant')
   offerSteps.makeOfferFromDashboard(claimRef)
   I.see('We’ve sent your offer to ' + createClaimant(PartyType.INDIVIDUAL).name)
   I.click('Sign out')
 
-  userSteps.login(claimantEmail)
+  await login('claimant')
   offerSteps.rejectOfferFromDashboard(claimRef)
   I.click('Sign out')
 
-  userSteps.login(defendantEmail)
+  await login('defendant')
   offerSteps.viewClaimFromDashboard(claimRef)
   I.see('The claimant has rejected your offer to settle the claim.')
 })
