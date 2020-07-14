@@ -58,7 +58,7 @@ export default express.Router()
         const featureToggles = new FeatureToggles(launchDarklyClient)
         let redirectUri = Paths.taskListPage.uri
         if (await featureToggles.isPcqEnabled() && draft.document.claimant.partyDetails !== undefined) {
-          const isEligible = await PcqClient.isEligibleRedirect(draft.document.claimant.partyDetails.pcqId, draft.document.claimant.partyDetails.type)
+          const isEligible = true
           if (draft.document.claimant.partyDetails.pcqId === undefined) {
             let pcqID = uuid()
             draft.document.claimant.partyDetails.pcqId = pcqID

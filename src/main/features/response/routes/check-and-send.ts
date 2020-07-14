@@ -162,7 +162,7 @@ export default express.Router()
        const launchDarklyClient = new LaunchDarklyClient()
        const featureToggles = new FeatureToggles(launchDarklyClient)
        if (await featureToggles.isPcqEnabled()) {
-         const isEligible = await PcqClient.isEligibleRedirect(draft.document.defendantDetails.partyDetails.pcqId,draft.document.defendantDetails.partyDetails.type)
+         const isEligible = true
          if (draft.document.defendantDetails.partyDetails.pcqId === undefined) {
            let pcqID = uuid()
            draft.document.defendantDetails.partyDetails.pcqId = pcqID
