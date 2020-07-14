@@ -87,7 +87,11 @@
 
         <h2 class="heading-small" style="margin-bottom:5px; margin-top: 10px;">Email</h2>
         <p>
-          <a href="mailto:contactocmc@justice.gov.uk">Send us a message</a><br>
+          {% if sign-posting-ctsc %}
+              <a href="mailto:moneyclaims@justice.gov.uk">Send us a message</a><br>
+          {% else %}
+              <a href="mailto:contactocmc@justice.gov.uk">Send us a message</a><br>
+          {% endif %}
           We’ll get back to you within 10 days.
         </p>
 

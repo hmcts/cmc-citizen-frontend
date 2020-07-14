@@ -36,7 +36,8 @@
     "newDashboardStatus": false,
     "inversionOfControl": true,
     "warningBanner": false,
-    "helpWithFees": true
+    "helpWithFees": true,
+    "sign-posting-ctsc": false
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"
