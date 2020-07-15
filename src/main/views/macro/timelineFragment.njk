@@ -22,15 +22,19 @@
     </span>
     {% endif %}
 
-    <label class="form-label-bold mobile-show" for="{{ dateKey }}">{{ index + 1 }}{{ t('. Date') }}</label>
-    <span class="form-hint mobile-show">{{ t('For example, {{ oneMonthAgo }}', { oneMonthAgo: 'now' | addDays(-30) | date }) }}</span>
+    <label class="form-label-bold visually-hidden mobile-show" for="{{ dateKey }}">
+      {{ index + 1 }}{{ t('. Date') }}
+      <span class="form-hint">{{ t('For example, {{ oneMonthAgo }}', { oneMonthAgo: 'now' | addDays(-30) | date }) }}</span>
+    </label>
+
     <input id="{{ dateKey }}" name="{{ dateKey }}" value="{{ dateValue if dateValue }}"
            class="form-control multiline-column-1 {% if dateError %}form-control-error{% endif %}" type="text">
 
-    <label for="{{ descriptionKey }}" class="form-label-bold mobile-show">
+    <label for="{{ descriptionKey }}" class="form-label-bold visually-hidden mobile-show">
       {{ t('What happened') }}
+      <span class="form-hint">{{ t('For example, you might have signed a contract') }}</span>
     </label>
-    <span class="form-hint mobile-show">{{ t('For example, you might have signed a contract') }}</span>
+
     <textarea id="{{ descriptionKey }}" name="{{ descriptionKey }}"
               class="form-control multiline-column-text {% if descriptionError %}form-control-error{% endif %}"
               rows="2">{{ descriptionValue if descriptionValue }}</textarea>
@@ -42,14 +46,18 @@
   {% set noRowsError = form.errorFor('rows') %}
   <div class="multiline {% if noRowsError %} form-group-error {% endif %}">
     {% if noRowsError %}<span class="error-message" id="rows[label]">{{ t(noRowsError) }}</span>{% endif %}
-    <div class="multiline-headings">
+    <div class="multiline-headings mobile-hide">
       <div class="multiline-column-1">
-        <label class="form-label-bold">{{ t('Date') }}</label>
-        <span class="form-hint">{{ t('For example, {{ sixMonthAgo }}', { sixMonthAgo: 'now' | addDays(-180) | date }) }}</span>
+        <label class="form-label-bold">
+          {{ t('Date') }}
+          <span class="form-hint">{{ t('For example, {{ sixMonthAgo }}', { sixMonthAgo: 'now' | addDays(-180) | date }) }}</span>
+        </label>
       </div>
       <div class="multiline-column-2">
-        <label class="form-label-bold">{{ t('What happened') }}</label>
-        <span class="form-hint">{{ t('For example, you might have signed a contract') }}</span>
+        <label class="form-label-bold">
+          {{ t('What happened') }}
+          <span class="form-hint">{{ t('For example, you might have signed a contract') }}</span>
+        </label>
       </div>
     </div>
 
