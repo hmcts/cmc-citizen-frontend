@@ -120,7 +120,7 @@ export const sampleHwfClaimIssueObj = {
   moreTimeRequested: false,
   state: 'HWF_APPLICATION_PENDING',
   claim: {
-    helpWithFeesNumber: true,
+    helpWithFeesNumber: 'hwf123',
     claimants: [
       {
         type: 'individual',
