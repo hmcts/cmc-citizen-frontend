@@ -12,7 +12,7 @@
     "inversionOfControl": true,
     "warningBanner": false,
     "helpWithFees": true,
-    "sign-posting-ctsc": true
+    "signPostingCTSC": false
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"

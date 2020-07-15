@@ -82,7 +82,7 @@
     "inversionOfControl": "FEATURE_INVERSION_OF_CONTROL",
     "warningBanner": "FEATURE_WARNING_BANNER",
     "helpWithFees": "FEATURE_HELP_WITH_FEES",
-    "sign-posting-ctsc": "FEATURE_SIGN_POSTING_CTSC"
+    "signPostingCTSC": "FEATURE_SIGN_POSTING_CTSC"
   },
 
   "oauth": {

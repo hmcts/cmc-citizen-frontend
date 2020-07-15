@@ -94,7 +94,7 @@
     "inversionOfControl": true,
     "warningBanner": false,
     "helpWithFees": false,
-    "sign-posting-ctsc": false
+    "signPostingCTSC": false
   },
   "oauth": {
     "clientId": "cmc_citizen"

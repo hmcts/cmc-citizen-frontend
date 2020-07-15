@@ -8,8 +8,7 @@
     "directionsQuestionnaire": true,
     "newDashboardStatus": false,
     "warningBanner": false,
-    "inversionOfControl": true,
-    "sign-posting-ctsc": false
+    "inversionOfControl": true
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"
