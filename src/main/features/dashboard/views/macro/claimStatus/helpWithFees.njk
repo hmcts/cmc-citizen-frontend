@@ -20,3 +20,26 @@
   <p>{{ t('You can request a County Court Judgment (CCJ) against them if they don’t respond.') }}</p>
 </div>
 {% endmacro %}
+
+{% macro invalidHelpWithFeesValidationClaimStatus(claim) %}
+<div class="status-block">
+  <h2 class="heading-medium">{{ t('You gave us an invalid Help With Fees number') }}</h2>
+  <p>{{ t('The number you gave was {{ helpWithFeesNumber }}.', { helpWithFeesNumber: claim.helpWithFeesNumber }) }}</p>
+
+  <p>{{ t('You can either:') }}</p>
+
+  <h3 class="heading-small">{{ t('If you qualify for part or no court fee to be paid') }}</h3>
+
+  <p>
+    <ul class="list list-bullet">
+      <li>{{ t('contact us with the correct Help With Fees number (call 0300 123 7050 or email ')}} {{ t('<a href="mailto:{{ emailSubject }}">{{ email }}</a>)', { ccdId: claim.ccdCaseId ,email: 'moneyclaims@justice.gov.uk', emailSubject: 'moneyclaims@justice.gov.uk?subject={{ ccdId }}' }) | safe }}</li>
+      <li>call us to pay the full claim fee by card (if you don't have a valid Help With Fees number)</li>
+    </ul>
+  </p>
+  
+  <p>{{ t('Mention your reference number in any calls or emails: {{ ccdId }}.', { ccdId: claim.ccdCaseId }) }}</p>
+
+  <p>{{ t("If you don't contact us within 90 days, we'll end the claim.") }}</p>
+
+</div>
+{% endmacro %}

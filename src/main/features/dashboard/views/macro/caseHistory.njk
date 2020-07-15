@@ -146,7 +146,7 @@
 %}
 
 {% from "./claimStatus/helpWithFees.njk" import
-  helpWithFeesValidationClaimStatus
+  helpWithFeesValidationClaimStatus, invalidHelpWithFeesValidationClaimStatus
 %}
 
 {% macro caseHistoryForClaimantClaimDetails(claim, csrf, mediationDeadline, reconsiderationDeadline, isReviewOrderEligible, respondToReviewOrderDeadline, judgePilot) %}
@@ -159,6 +159,8 @@
       {{ paidInFullCCJCancelledClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED %}
       {{ paidInFullCCJSatisfiedClaimantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.state === 'HWF_INVALID_REFERENCE' %}
+      {{ invalidHelpWithFeesValidationClaimStatus(claim) }}
     {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber %}
       {{ helpWithFeesValidationClaimStatus(claim) }}
     {% elif state.status === ClaimStatus.NO_RESPONSE %}
