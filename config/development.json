@@ -12,7 +12,8 @@
     "inversionOfControl": true,
     "warningBanner": false,
     "helpWithFees": true,
-    "pcq":true
+    "pcq":true,
+    "signPostingCTSC": false
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"

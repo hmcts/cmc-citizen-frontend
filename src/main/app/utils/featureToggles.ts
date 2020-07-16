@@ -42,5 +42,8 @@ export class FeatureToggles {
 
   async isPcqEnabled (): Promise<boolean> {
     return this.launchDarklyClient.serviceVariation('pcq', toBoolean(config.get<boolean>(`featureToggles.pcq`)))
+
+  async isSignPostingEnabled (): Promise<boolean> {
+    return this.launchDarklyClient.serviceVariation('sign-posting-ctsc', toBoolean(config.get<boolean>(`featureToggles.signPostingCTSC`)))
   }
 }
