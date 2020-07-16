@@ -83,7 +83,7 @@
     "warningBanner": "FEATURE_WARNING_BANNER",
     "helpWithFees": "FEATURE_HELP_WITH_FEES",
     "pcq": "FEATURE_PCQ"
-
+    "signPostingCTSC": "FEATURE_SIGN_POSTING_CTSC"
   },
 
   "oauth": {
