@@ -62,6 +62,7 @@ async function waitTillHealthy (appURL: string) {
       console.log(`FEATURE_MEDIATION=${process.env.FEATURE_MEDIATION}`)
       console.log(`FEATURE_DIRECTIONS_QUESTIONNAIRE=${process.env.FEATURE_DIRECTIONS_QUESTIONNAIRE}`)
       console.log(`FEATURE_INVERSION_OF_CONTROL=${process.env.FEATURE_INVERSION_OF_CONTROL}`)
+      console.log(`FEATURE_PCQ=${process.env.FEATURE_PCQ}`)
       return Promise.resolve()
     } else {
       logStartupProblem(response)
