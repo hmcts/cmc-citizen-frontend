@@ -113,6 +113,10 @@
   offlineResponseForClaimantDashboard,
   offlineResponseForDefendantDashboard %}
 
+{% from "./claimStatus/businessQueue.njk" import
+  businessQueueDefendantClaimStatus,
+  businessQueueClaimantClaimStatus %}
+
 {% from "./claimStatus/claimTransferred.njk" import
   claimTransferredDefendantClaimStatus,
   claimTransferredClaimantClaimStatus
@@ -140,6 +144,8 @@
     {{ paperResponseForClaimantDashboard() }}
   {% elif status === ClaimStatus.PROCEED_OFFLINE %}
     {{ offlineResponseForClaimantDashboard(claim) }}
+  {% elif status === ClaimStatus.BUSINESS_QUEUE %}
+    {{ businessQueueClaimantClaimStatus() }}
   {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ or
     status === ClaimStatus.CLAIMANT_ALTERNATIVE_PLAN_WITH_CCJ or
     status === ClaimStatus.CCJ_AFTER_SETTLEMENT_BREACHED or
@@ -258,6 +264,8 @@
     {{ paperResponseForDefendantDashboard() }}
   {% elif status === ClaimStatus.PROCEED_OFFLINE %}
     {{ offlineResponseForDefendantDashboard(claim) }}
+  {% elif status === ClaimStatus.BUSINESS_QUEUE %}
+    {{ businessQueueDefendantClaimStatus() }}
   {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ or
     status === ClaimStatus.CLAIMANT_ALTERNATIVE_PLAN_WITH_CCJ or
     status === ClaimStatus.CCJ_AFTER_SETTLEMENT_BREACHED or

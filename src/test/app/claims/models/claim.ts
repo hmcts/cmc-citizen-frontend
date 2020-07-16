@@ -1027,6 +1027,13 @@ describe('Claim', () => {
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ)
       expect(claim.stateHistory[1].status).to.equal(ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE)
     })
+
+    it('should contain CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ status when claimant has reject defence and DQs is not enabled', () => {
+      claim.respondedAt = moment()
+      claim.state = 'BUSINESS_QUEUE'
+      expect(claim.stateHistory).to.have.lengthOf(1)
+      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.BUSINESS_QUEUE)
+    })
   })
 
   describe('paidInFullCCJPaidWithinMonth', () => {
@@ -1064,6 +1071,20 @@ describe('Claim', () => {
     it('should return false when createdAt is before 09/09/19 3:12', () => {
       claim.createdAt = MomentFactory.parse('2019-09-08')
       expect(claim.isIntentionToProceedEligible()).to.be.false
+    })
+  })
+
+  describe('handoffToCCBC', () => {
+    let claim
+
+    beforeEach(() => {
+      claim = new Claim()
+      claim.state = 'BUSINESS_QUEUE'
+      claim.responseDeadline = MomentFactory.currentDate()
+    })
+
+    it('should return ClaimStatus.BUSINESS_QUEUE ', () => {
+      expect(claim.status).to.be.equal(ClaimStatus.BUSINESS_QUEUE)
     })
   })
 
