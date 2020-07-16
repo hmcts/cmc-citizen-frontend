@@ -35,6 +35,9 @@ nodejs:
     FEATURE_MEDIATION_PILOT: true
     FEATURE_DIRECTIONS_QUESTIONNAIRE: true
     FEATURE_INVERSION_OF_CONTROL: true
+    FEATURE_SIGN_POSTING_CTSC: false
+
+
   keyVaults:
     cmc:
       secrets:
