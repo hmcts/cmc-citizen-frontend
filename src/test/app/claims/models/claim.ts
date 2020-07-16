@@ -760,9 +760,9 @@ describe('Claim', () => {
 
   describe('Help With fees', () => {
 
-    it('should return true when the claim is submited with HWF', () => {
+    it('should return HWF number when the claim is submited with HWF', () => {
       const claimWithHwf = new Claim().deserialize(claimStoreMock.sampleHwfClaimIssueObj)
-      expect(claimWithHwf.helpWithFeesNumber).to.be.true
+      expect(claimWithHwf.helpWithFeesNumber).to.be.eq('hwf123')
     })
 
     it('should return todays data for issued-on', () => {
