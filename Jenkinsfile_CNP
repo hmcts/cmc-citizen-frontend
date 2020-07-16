@@ -50,6 +50,7 @@ env.FEATURE_MEDIATION = 'true'
 env.FEATURE_DIRECTIONS_QUESTIONNAIRE = 'true'
 env.FEATURE_TESTING_SUPPORT = 'true'
 env.FEATURE_INVERSION_OF_CONTROL = 'true'
+env.FEATURE_PCQ = 'true'
 // add any others needed to selective testing...
 
 String notificationsChannel = '#cmc-tech-notification'
@@ -82,7 +83,7 @@ withPipeline("nodejs", product, component) {
 
   enableAksStagingDeployment()
   disableLegacyDeployment()
-  
+
   loadVaultSecrets(secrets)
   enableSlackNotifications(notificationsChannel)
 }
