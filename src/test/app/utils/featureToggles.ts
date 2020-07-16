@@ -56,7 +56,7 @@ describe('FeatureToggles', () => {
       expect(result).to.equal(actual)
     })
   })
-  
+
   describe('isSignPostingEnabled', () => {
     it('should return toggle if singPosting toggle exists', async () => {
       const mockLaunchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
