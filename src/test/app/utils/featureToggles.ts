@@ -47,6 +47,16 @@ describe('FeatureToggles', () => {
     })
   })
 
+  describe('isPcqEnabled', () => {
+    it('should return toggle if help with fees toggle exists', async () => {
+      const mockLaunchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
+      const featureToggles = new FeatureToggles(mockLaunchDarklyClient)
+      let actual = toBoolean(config.get<boolean>(`featureToggles.pcq`))
+      let result = await featureToggles.isPcqEnabled()
+      expect(result).to.equal(actual)
+    })
+  })
+
   describe('isSignPostingEnabled', () => {
     it('should return toggle if singPosting toggle exists', async () => {
       const mockLaunchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()

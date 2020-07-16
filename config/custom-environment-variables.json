@@ -109,10 +109,15 @@
       "cmc-webchat-tenant": "WEBCHAT_TENANT",
       "cmc-webchat-button-no-agents": "WEBCHAT_BUTTON_NO_AGENTS",
       "cmc-webchat-button-agents-busy": "WEBCHAT_BUTTON_AGENTS_BUSY",
-      "cmc-webchat-button-service-closed": "WEBCHAT_BUTTON_SERVICE_CLOSED"
+      "cmc-webchat-button-service-closed": "WEBCHAT_BUTTON_SERVICE_CLOSED",
+      "pcq-token-key": "FEATURE_PCQ"
     }
   },
   "launchDarkly": {
     "offline": "LAUNCH_DARKLY_OFFLINE_MODE"
+  },
+  "pcq":
+  {
+    "url":"PCQ_URL"
   }
 }
