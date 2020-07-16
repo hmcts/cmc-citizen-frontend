@@ -170,6 +170,8 @@ export class Claim {
       return ClaimStatus.TRANSFERRED
     } else if (this.moneyReceivedOn && this.countyCourtJudgmentRequestedAt) {
       return ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
+    } else if (this.hasBeenMovedToCCBC()) {
+      return ClaimStatus.BUSINESS_QUEUE
     } else if (this.hasOrderBeenDrawn()) {
       if (this.reviewOrder) {
         return ClaimStatus.REVIEW_ORDER_REQUESTED
@@ -252,6 +254,8 @@ export class Claim {
       return ClaimStatus.CLAIMANT_RESPONSE_SUBMITTED
     } else if (this.moreTimeRequested) {
       return ClaimStatus.MORE_TIME_REQUESTED
+    } else if (this.state === 'BUSINESS_QUEUE') {
+      return ClaimStatus.BUSINESS_QUEUE
     } else if (this.state === 'TRANSFERRED') {
       return ClaimStatus.TRANSFERRED
     } else if (!this.response) {
@@ -477,6 +481,10 @@ export class Claim {
     }
 
     if (this.isSettlementReached()) {
+      return false
+    }
+
+    if (this.hasBeenMovedToCCBC()) {
       return false
     }
 
@@ -735,6 +743,10 @@ export class Claim {
 
   private checkProceedOfflineReason (): boolean {
     return (this.proceedOfflineReason && (this.proceedOfflineReason === ProceedOfflineReason.APPLICATION_BY_DEFENDANT || this.proceedOfflineReason === ProceedOfflineReason.APPLICATION_BY_CLAIMANT))
+  }
+
+  private hasBeenMovedToCCBC (): boolean {
+    return this.state === 'BUSINESS_QUEUE'
   }
 
   private hasBeenTransferred (): boolean {

@@ -22,6 +22,7 @@ services:
         - FEATURE_DIRECTIONS_QUESTIONNAIRE
         - FEATURE_TESTING_SUPPORT
         - FEATURE_INVERSION_OF_CONTROL
+        - FEATURE_PCQ
       volumes:
         - ./smoke-output:/usr/src/app/output
     remote-webdriver:

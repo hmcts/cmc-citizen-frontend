@@ -38,7 +38,8 @@ nodejs:
     FEATURE_FINE_PRINT: true
     FEATURE_NEW_DASHBOARD_STATUS: false
     FEATURE_WEB_CHAT: true
-
+    PCQ_URL: http://localhost:4000
+    
 # sub-charts configuration
 
 idam-pr:
@@ -161,7 +162,7 @@ ccd:
       - civilmoneyclaims+la@gmail.com|CMC|MoneyClaimCase|readyForDirections
 
   ccd-definition-importer:
-    image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.6.4
+    image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.6.5
     environment:
       CCD_DEF_CLAIM_STORE_BASE_URL: http://${SERVICE_NAME}-claim-store
     definitionFilename: cmc-ccd.xlsx

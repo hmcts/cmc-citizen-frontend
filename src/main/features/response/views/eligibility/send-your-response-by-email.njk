@@ -55,12 +55,20 @@
         <li>{{ t('Post the forms to:') }}</li>
       </ul>
 
-      <div class="keep-formatting panel">{{ t('Civil Money Claims') }}
-        {{ t('St. Katharine`s House') }}
-        {{ t('21-27 St. Katharine`s Street') }}
-        {{ t('Northampton') }}
-        {{ t('NN1 2LH') }}
-      </div>
+      {% if signPosting %}
+        <div class="keep-formatting panel">{{ t('HMCTS CMC') }}
+          {{ t('PO Box 12747') }}
+          {{ t('Harlow') }}
+          {{ t('CM20 9RA') }}
+        </div>
+      {% else %}
+        <div class="keep-formatting panel">{{ t('Civil Money Claims') }}
+          {{ t('St. Katharine`s House') }}
+          {{ t('21-27 St. Katharine`s Street') }}
+          {{ t('Northampton') }}
+          {{ t('NN1 2LH') }}
+         </div>
+      {% endif %}
 
       <p>{{ t('You can also email completed forms to {{ supportEmailAddress }}', { supportEmailAddress: supportEmailAddress }) }}</p>
 
