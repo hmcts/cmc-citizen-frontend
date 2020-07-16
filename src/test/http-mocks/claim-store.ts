@@ -888,6 +888,24 @@ export function resolveSaveHelpWithFeesClaimForUser () {
     .reply(HttpStatus.OK, { ...sampleClaimObj })
 }
 
+export function resolveSaveHelpWithFeesClaimWithError (reason: string = 'HTTP error') {
+  mock(`${serviceBaseURL}/claims`)
+    .post(new RegExp('/[0-9]+/hwf'))
+    .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
+}
+
+export function resolveUpdateHelpWithFeesClaimForUser () {
+  mock(`${serviceBaseURL}/claims`)
+    .put('/resume-hwf')
+    .reply(HttpStatus.OK, { ...sampleClaimObj })
+}
+
+export function resolveUpdateHelpWithFeesClaimWithError (reason: string = 'HTTP error') {
+  mock(`${serviceBaseURL}/claims`)
+    .put('/resume-hwf')
+    .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
+}
+
 export function resolveSaveCcjForExternalId () {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp('/' + externalIdPattern +

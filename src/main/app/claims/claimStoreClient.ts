@@ -96,6 +96,24 @@ export class ClaimStoreClient {
       })
   }
 
+  updateHelpWithFeesClaim (draft: Draft<DraftClaim>, claimant: User, ...features: string[]): Promise<Claim> {
+    const convertedDraftClaim = ClaimModelConverter.convert(draft.document)
+
+    return this.request
+      .put(`${claimStoreApiUrl}/resume-hwf`, {
+        body: convertedDraftClaim,
+        headers: buildCaseSubmissionHeaders(claimant, features)
+      })
+      .then(claim => new Claim().deserialize(claim))
+      .catch(err => {
+        if (err.statusCode === HttpStatus.CONFLICT) {
+          logger.warn(`Claim ${draft.document.externalId} appears to have been saved successfully on initial timed out attempt, retrieving the saved instance`)
+          return this.retrieveByExternalId(draft.document.externalId, claimant)
+        }
+        throw err
+      })
+  }
+
   createCitizenClaim (draft: Draft<DraftClaim>, claimant: User, ...features: string[]): Promise<Claim> {
     const convertedDraftClaim = ClaimModelConverter.convert(draft.document)
 

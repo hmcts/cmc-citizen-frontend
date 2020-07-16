@@ -4,6 +4,8 @@ import * as toBoolean from 'to-boolean'
 
 import { Paths } from 'claim/paths'
 import { Form } from 'forms/form'
+import { Claim } from 'claims/models/claim'
+import { ClaimState } from 'claims/models/claimState'
 import { FormValidator } from 'forms/validation/formValidator'
 import { StatementOfTruth } from 'forms/models/statementOfTruth'
 import { FeesClient } from 'fees/feesClient'
@@ -143,6 +145,35 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response, next: 
     }).catch(next)
 }
 
+async function handleHelpwWithFees (draft: Draft<DraftClaim>, user: User): Promise<boolean> {
+  const features = await featuresBuilder.features(draft.document.amount.totalAmount(), user)
+
+  // retrieve claim to check if the claimant initiated payment
+  const existingClaim: void | Claim = await claimStoreClient.retrieveByExternalId(draft.document.externalId, user)
+  .catch((e) => {
+    logger.warn(`Unable to decide if payment has been initiated. ${e}`)
+  })
+
+  let helpWithFeesClaim: void | Claim
+  // if payment was initiated then use 'updateHelpWithFeesClaim'(put request) else use 'saveHelpWithFeesClaim' (post request)
+  if (existingClaim && ClaimState[existingClaim.state] === ClaimState.AWAITING_CITIZEN_PAYMENT) {
+    helpWithFeesClaim = await claimStoreClient.updateHelpWithFeesClaim(draft, user, features)
+    .catch((e) => {
+      logger.warn(`Help With Fees Claim ${draft.document.externalId} update was unsuccessful. ${e}`)
+    })
+  } else {
+    helpWithFeesClaim = await claimStoreClient.saveHelpWithFeesClaim(draft, user, features)
+    .catch((e) => {
+      logger.warn(`Help With Fees Claim ${draft.document.externalId} appears to have not been saved. ${e}`)
+    })
+  }
+  // finally if helpwWithFeesClaim is successfully updated/saved then consider it as successful
+  if (helpWithFeesClaim) {
+    return true
+  }
+  // else unsuccessful
+  return false
+}
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.checkAndSendPage.uri, AllClaimTasksCompletedGuard.requestHandler, (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -165,21 +196,23 @@ export default express.Router()
           draft.document.qualifiedStatementOfTruth = form.model as QualifiedStatementOfTruth
           await new DraftService().save(draft, user.bearerToken)
         }
+
+        // help with fees
         if (await featureToggles.isHelpWithFeesEnabled()
           && draft.document.helpWithFees && draft.document.helpWithFees.declared.option === YesNoOption.YES.option) {
 
-          const features = await featuresBuilder.features(draft.document.amount.totalAmount(), user)
-          // save help with fees claim
-          // adding catch block to ensure error is handled.
-          await claimStoreClient.saveHelpWithFeesClaim(draft, user, features)
-          .then(async (x) => {
+          // handle helpWithFees
+          const helpWithFeesSuccessful = await handleHelpwWithFees(draft, user)
+
+          // if successful delete draft else redirect to tasklist page
+          if (helpWithFeesSuccessful) {
             await new DraftService().delete(draft.id, user.bearerToken)
             // redirect to confirmation page
             res.redirect(Paths.confirmationPage.evaluateUri({ externalId: draft.document.externalId }))
-          }).catch((e) => {
-            logger.warn(`Claim ${draft.document.externalId} appears to have not been saved. ${e}`)
+          } else {
+            logger.warn(`Helpw With Fees Claim ${draft.document.externalId} update/save was unsuccessful so redirecting to tasklist page`)
             res.redirect(Paths.taskListPage.uri)
-          })
+          }
 
         } else {
           if (toBoolean(config.get('featureToggles.inversionOfControl'))) {
