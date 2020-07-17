@@ -44,6 +44,7 @@ import { FeatureToggles } from 'utils/featureToggles'
 import { MediationOutcome } from 'claims/models/mediationOutcome'
 import { defenceClaimData } from 'test/data/entity/claimData'
 import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
+import { ClaimDocument } from 'claims/models/claimDocument'
 
 describe('Claim', () => {
   describe('eligibleForCCJ', () => {
@@ -1244,6 +1245,7 @@ describe('OconFormResponse', () => {
     claim.intentionToProceedDeadline = MomentFactory.currentDate()
     claim.createdAt = MomentFactory.parse('2019-09-09').hour(15).minute(12)
     claim.respondedAt = moment()
+    claim.createdAt = MomentFactory.parse('2018-09-09').hour(15).minute(12)
     claim.response = {
       responseType: ResponseType.FULL_DEFENCE,
       defenceType: DefenceType.DISPUTE,
@@ -1253,5 +1255,19 @@ describe('OconFormResponse', () => {
 
   it('should return ClaimStatus.DEFENDANT_OCON_FORM_RESPONSE ', () => {
     expect(claim.status).to.be.equal(ClaimStatus.DEFENDANT_OCON_FORM_RESPONSE)
+  })
+})
+
+describe('ScannedDocument', () => {
+  it('should return Claim Documents including Scanned Document', () => {
+    const claimWithResponse = new Claim().deserialize({ ...claimStoreMock.sampleClaimIssueObj, ...claimStoreMock.sampleClaimDocuments })
+    const claimDocs: ClaimDocument[] = claimWithResponse.claimDocuments
+    expect(2).to.be.eq(claimDocs.length)
+  })
+  it('should return Claim Documents including Scanned Document', () => {
+    claimStoreMock.sampleClaimDocuments.claimDocumentCollection.claimDocuments = undefined
+    const claimWithResponse = new Claim().deserialize({ ...claimStoreMock.sampleClaimIssueObj, ...claimStoreMock.sampleClaimDocuments })
+    const claimDocs: ClaimDocument[] = claimWithResponse.claimDocuments
+    expect(1).to.be.eq(claimDocs.length)
   })
 })

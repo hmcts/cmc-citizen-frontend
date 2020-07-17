@@ -37,6 +37,7 @@ import { TransferContents } from 'claims/models/transferContents'
 import * as _ from 'lodash'
 import { ClaimDocumentType } from 'common/claimDocumentType'
 import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
+import { ScannedDocumentType } from 'common/scannedDocumentType'
 
 interface State {
   status: ClaimStatus
@@ -396,10 +397,29 @@ export class Claim {
       if (input.paperResponse) {
         this.paperResponse = YesNoOption.fromObject(input.paperResponse)
       }
+
       if (input.claimDocumentCollection && input.claimDocumentCollection.claimDocuments) {
-        this.claimDocuments = _.sortBy(input.claimDocumentCollection.claimDocuments.filter(value => ClaimDocumentType[value.documentType] !== undefined).map((value) => {
+        this.claimDocuments = input.claimDocumentCollection.claimDocuments.filter(value => ClaimDocumentType[value.documentType] !== undefined).map((value) => {
           return new ClaimDocument().deserialize(value)
-        }), [function (o) {
+        })
+      }
+
+      if (input.claimDocumentCollection && input.claimDocumentCollection.scannedDocuments) {
+        const scannedDocuments: ClaimDocument[] = input.claimDocumentCollection.scannedDocuments
+          .filter(value => ScannedDocumentType[(value.documentType + '_' + value.subtype).toUpperCase()] !== undefined)
+          .map((value) => {
+            return new ClaimDocument().deserializeScannedDocument(value)
+          })
+
+        if (this.claimDocuments) {
+          this.claimDocuments.push(...scannedDocuments)
+        } else {
+          this.claimDocuments = scannedDocuments
+        }
+      }
+
+      if (this.claimDocuments) {
+        this.claimDocuments = _.sortBy(this.claimDocuments, [function (o) {
           return o.createdDatetime
         }]).reverse()
       }
