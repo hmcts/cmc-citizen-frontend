@@ -14,7 +14,7 @@ const testingSupport: TestingSupportSteps = new TestingSupportSteps()
 
 Feature('Claimant Enter details of claim')
 
-Scenario('I can prepare a claim with no interest @citizen', { retries: 3 }, async (I: I) => {
+Scenario('I can prepare a claim with no interest @citizen', { retries: 0 }, async (I: I) => {
   userSteps.login(userSteps.getClaimantEmail())
   if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
     testingSupport.deleteClaimDraft()
@@ -35,6 +35,9 @@ Scenario('I can prepare a claim with no interest @citizen', { retries: 3 }, asyn
   interestSteps.skipClaimantInterestTotalPage()
   I.see('Prepare your claim')
   claimSteps.enterClaimDetails()
+
+  await I.bypassPCQ()
+
   userSteps.selectCheckAndSubmitYourClaim()
   I.see('£80.50')
   I.see('I don’t want to claim interest')
@@ -66,6 +69,7 @@ Scenario('I can prepare a claim with different interest rate and date @citizen',
   interestSteps.skipClaimantInterestTotalPage()
   I.see('Prepare your claim')
   claimSteps.enterClaimDetails()
+  await I.bypassPCQ().catch(e => { return false })
   userSteps.selectCheckAndSubmitYourClaim()
   I.see('£80.50')
   if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
@@ -85,6 +89,7 @@ Scenario('I can prepare a claim with a manually entered interest amount and a da
   interestSteps.skipClaimantInterestTotalPage()
   I.see('Prepare your claim')
   claimSteps.enterClaimDetails()
+  await I.bypassPCQ().catch(e => { return false })
   userSteps.selectCheckAndSubmitYourClaim()
   I.see('£80.50')
   I.see('Break down interest for different time periods or items')
@@ -92,6 +97,54 @@ Scenario('I can prepare a claim with a manually entered interest amount and a da
   if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
     testingSupport.deleteClaimDraft()
   }
+})
+
+// PCQ related tests
+Scenario('I should not see PCQ if "Your deails" are missing while making a claim @citizen', { retries: 3 }, async (I: I) => {
+  userSteps.login(userSteps.getClaimantEmail())
+
+  if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
+    testingSupport.deleteClaimDraft()
+  }
+  claimSteps.completeEligibility()
+  // enters only claimDetails and continue
+  claimSteps.enterClaimDetails()
+
+  // I shouldn't be navigated to PCQ instead I should be taken back to "Make a money claim" page
+  I.see('Make a money claim')
+  I.see('COMPLETE')
+  if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
+    testingSupport.deleteClaimDraft()
+  }
+})
+Scenario('I should be redirected to PCQ if "Your details" are filled in while making a claim @citizen', { retries: 3 }, async (I: I) => {
+  userSteps.login(userSteps.getClaimantEmail())
+
+  if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
+    testingSupport.deleteClaimDraft()
+  }
+  claimSteps.completeEligibility()
+
+  // add your details
+  userSteps.selectYourDetails()
+  claimSteps.enterMyDetails(PartyType.INDIVIDUAL)
+
+  // I should be taken back to 'Make a money claim'
+  I.see('Make a money claim')
+  I.see('COMPLETE')
+  // add claim details
+  claimSteps.enterClaimDetails()
+
+  // check PCQ health before responding to the PCQ questionaire
+  const pcqHealth = await I.checkPCQHealth()
+  if (pcqHealth) {
+  // I refuse to answer PCQ
+    I.rejectAnsweringPCQ()
+  }
+
+  // Then i should be taken back to money claim
+  I.see('Make a money claim')
+
 })
 
 // The @citizen-smoke-test tag used for running smoke tests with pre-registered user
