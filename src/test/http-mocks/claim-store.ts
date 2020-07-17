@@ -105,6 +105,98 @@ export const sampleClaimIssueOrgVOrgPhone = {
   }
 }
 
+export const sampleHwfClaimIssueObj = {
+  id: 1,
+  ccdCaseId: 123,
+  submitterId: '1',
+  submitterEmail: 'claimant@example.com',
+  externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc',
+  defendantId: '123',
+  referenceNumber: '000MC050',
+  createdAt: MomentFactory.currentDateTime(),
+  issuedOn: undefined,
+  totalAmountTillToday: 200,
+  totalAmountTillDateOfIssue: undefined,
+  moreTimeRequested: false,
+  state: 'HWF_APPLICATION_PENDING',
+  claim: {
+    helpWithFeesNumber: 'hwf123',
+    claimants: [
+      {
+        type: 'individual',
+        name: 'John Smith',
+        address: {
+          line1: 'line1',
+          line2: 'line2',
+          city: 'city',
+          postcode: 'bb127nq'
+        },
+        dateOfBirth: '1990-02-17'
+      }
+    ],
+    defendants: [
+      {
+        type: 'individual',
+        name: 'John Doe',
+        address: {
+          line1: 'line1',
+          line2: 'line2',
+          city: 'city',
+          postcode: 'bb127nq'
+        }
+      }
+    ],
+    payment: {
+      id: '12',
+      amount: 2500,
+      state: { status: 'failed' }
+    },
+    amount: {
+      type: 'breakdown',
+      rows: [{ reason: 'Reason', amount: 200 }]
+    },
+    interest: {
+      type: ClaimInterestType.STANDARD,
+      rate: 10,
+      reason: 'Special case',
+      interestDate: {
+        type: InterestDateType.SUBMISSION,
+        endDateType: InterestEndDateOption.SETTLED_OR_JUDGMENT
+      } as InterestDate
+    } as Interest,
+    reason: 'Because I can',
+    feeAmountInPennies: 2500,
+    timeline: { rows: [{ date: 'a', description: 'b' }] }
+  },
+  responseDeadline: undefined,
+  intentionToProceedDeadline: MomentFactory.currentDateTime().add(33, 'days'),
+  features: []
+}
+
+export const sampleClaimDocuments = {
+  claimDocumentCollection: {
+    claimDocuments: [
+      {
+        id: '3f1813ee-5b60-43fd-9160-fa92605dfd6e',
+        documentName: '000MC258-claim-form.pdf',
+        documentType: 'SEALED_CLAIM',
+        createdDatetime: '2020-02-26T14:56:49.264',
+        createdBy: 'OCMC',
+        size: 79777
+      }
+    ],
+    scannedDocuments: [
+      {
+        id: '08c030fb-f260-446e-8633-8bbc75cd03f8',
+        fileName: '000MC258-ocon-form.pdf',
+        documentType: 'FORM',
+        subtype: 'OCON9x',
+        deliveryDate: '2020-02-26T15:10:13.601'
+      }
+    ]
+  }
+}
+
 export const sampleClaimIssueObj = {
   id: 1,
   submitterId: '1',

@@ -113,15 +113,25 @@
   offlineResponseForClaimantDashboard,
   offlineResponseForDefendantDashboard %}
 
+{% from "./claimStatus/businessQueue.njk" import
+  businessQueueDefendantClaimStatus,
+  businessQueueClaimantClaimStatus %}
+
 {% from "./claimStatus/claimTransferred.njk" import
   claimTransferredDefendantClaimStatus,
   claimTransferredClaimantClaimStatus
+%}
+
+{% from "./claimStatus/helpWithFees.njk" import
+  helpWithFeesValidationDashboard
 %}
 
 {% macro caseStatusForClaimant(status, claim) %}
   {% if status === ClaimStatus.PAID_IN_FULL or status === ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED or status === ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
     or status === ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID %}
     {{ claimSettledDashboard() }}
+  {% elif status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber %}
+    {{ helpWithFeesValidationDashboard() }}
   {% elif status === ClaimStatus.NO_RESPONSE %}
     {{ noResponseForClaimantDashboard() }}
   {% elif status === ClaimStatus.MORE_TIME_REQUESTED %}
@@ -140,6 +150,8 @@
     {{ paperResponseForClaimantDashboard() }}
   {% elif status === ClaimStatus.PROCEED_OFFLINE %}
     {{ offlineResponseForClaimantDashboard(claim) }}
+  {% elif status === ClaimStatus.BUSINESS_QUEUE %}
+    {{ businessQueueClaimantClaimStatus() }}
   {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ or
     status === ClaimStatus.CLAIMANT_ALTERNATIVE_PLAN_WITH_CCJ or
     status === ClaimStatus.CCJ_AFTER_SETTLEMENT_BREACHED or
@@ -258,6 +270,8 @@
     {{ paperResponseForDefendantDashboard() }}
   {% elif status === ClaimStatus.PROCEED_OFFLINE %}
     {{ offlineResponseForDefendantDashboard(claim) }}
+  {% elif status === ClaimStatus.BUSINESS_QUEUE %}
+    {{ businessQueueDefendantClaimStatus() }}
   {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ or
     status === ClaimStatus.CLAIMANT_ALTERNATIVE_PLAN_WITH_CCJ or
     status === ClaimStatus.CCJ_AFTER_SETTLEMENT_BREACHED or

@@ -22,8 +22,9 @@
             <th scope="col">{{ t('Claim number') }}</th>
             <th scope="col">{{ t('Defendant name') }}</th>
             <th scope="col">{{ t('Claim amount') }}</th>
-
-            <th scope="col" class="mobile-hide">{{ t('Status') }}</th>
+            <th scope="col" class="mobile-hide">{{ t('Next steps') }}</th>
+            <th scope="col" class="mobile-hide">{{ t('Deadline') }}</th>
+            <th scope="col" class="mobile-hide">{{ t('Actions') }}</th>
           </tr>
           </thead>
           <tbody>
@@ -36,6 +37,8 @@
               <td class="mobile-hide">
                 {{ internalLink(t('Continue with claim'), ClaimPaths.taskListPage.uri) }}
               </td>
+              <td>-</td>
+              <td>{{ internalLink(t('View'), DashboardPaths.claimantPage.evaluateUri({ externalId: 'draft' })) }}</td>
             </tr>
             <tr>
               <td colspan="3" class="mobile-table-status">
@@ -46,7 +49,13 @@
           {% for claim in claimsAsClaimant %}
             {% set claimantDashboardStatus = claim | dashboardStatusForClaimant %}
             <tr class="claims default mobile-table">
-              <td>{{ internalLink(claim.claimNumber, '/dashboard/' + claim.externalId + '/claimant') }}</td>
+              <td>
+              {% if claim.helpWithFeesNumber %}
+              {{ internalLink(claim.ccdCaseId, '/dashboard/' + claim.externalId + '/claimant')}}
+                {% else %}
+                  {{ internalLink(claim.claimNumber, '/dashboard/' + claim.externalId + '/claimant')}}
+                {% endif %}
+              </td>
               <td>{{ claim.claimData.defendant.name }}</td>
               <td>{{ claim.totalAmountTillToday | numeral }}</td>
               <td class="mobile-hide">
@@ -56,6 +65,14 @@
                 {{ caseStatusForClaimant(claim.status, claim) }}
               {% endif %}
               </td>
+              <td>
+               {% if claim.helpWithFeesNumber %}
+                  -
+                {% else %}
+                  {{ claim.responseDeadline | date }}
+                {% endif %}
+              </td>
+              <td>{{ internalLink('View', '/dashboard/' + claim.externalId + '/claimant') }}</td>
             </tr>
             <tr>
               <td colspan="3" class="mobile-table-status">

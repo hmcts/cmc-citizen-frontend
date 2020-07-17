@@ -145,6 +145,15 @@
   claimTransferredClaimantClaimDetails
 %}
 
+{% from "./claimStatus/helpWithFees.njk" import
+  helpWithFeesValidationClaimStatus, invalidHelpWithFeesValidationClaimStatus
+%}
+
+{% from "./claimStatus/businessQueue.njk" import
+  businessQueueDefendantClaimDetails,
+  businessQueueClaimantClaimDetails
+%}
+
 {% macro caseHistoryForClaimantClaimDetails(claim, csrf, mediationDeadline, reconsiderationDeadline, isReviewOrderEligible, respondToReviewOrderDeadline, judgePilot) %}
   {% for state in claim.stateHistory %}
     {% if state.status === ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE %}
@@ -155,7 +164,11 @@
       {{ paidInFullCCJCancelledClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED %}
       {{ paidInFullCCJSatisfiedClaimantClaimDetails(claim) }}
-      {% elif state.status === ClaimStatus.NO_RESPONSE %}
+    {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.state === 'AWAITING_RESPONSE_HWF' %}
+      {{ invalidHelpWithFeesValidationClaimStatus(claim) }}
+    {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber %}
+      {{ helpWithFeesValidationClaimStatus(claim) }}
+    {% elif state.status === ClaimStatus.NO_RESPONSE %}
       {{ noResponseForClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.TRANSFERRED %}
       {{ claimTransferredClaimantClaimDetails(claim) }}
@@ -169,6 +182,8 @@
       {{ paperResponseForClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.PROCEED_OFFLINE %}
       {{ offlineResponseForClaimantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.BUSINESS_QUEUE %}
+    {{ businessQueueClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE %}
       {{ claimFullAdmissionPayImmediatelyPastDeadlineForClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_PART_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE %}
@@ -295,6 +310,8 @@
       {{ paperResponseForDefendantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.PROCEED_OFFLINE %}
       {{ offlineResponseForDefendantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.BUSINESS_QUEUE %}
+      {{ businessQueueDefendantClaimDetails() }}
     {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ %}
       {{ admissionByCCJDefendantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.CCJ_AFTER_SETTLEMENT_BREACHED or
