@@ -37,6 +37,7 @@ import { TransferContents } from 'claims/models/transferContents'
 import * as _ from 'lodash'
 import { ClaimDocumentType } from 'common/claimDocumentType'
 import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
+import { ScannedDocumentType } from 'common/scannedDocumentType'
 
 interface State {
   status: ClaimStatus
@@ -170,6 +171,8 @@ export class Claim {
       return ClaimStatus.TRANSFERRED
     } else if (this.moneyReceivedOn && this.countyCourtJudgmentRequestedAt) {
       return ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
+    } else if (this.hasBeenMovedToCCBC()) {
+      return ClaimStatus.BUSINESS_QUEUE
     } else if (this.hasOrderBeenDrawn()) {
       if (this.reviewOrder) {
         return ClaimStatus.REVIEW_ORDER_REQUESTED
@@ -252,6 +255,8 @@ export class Claim {
       return ClaimStatus.CLAIMANT_RESPONSE_SUBMITTED
     } else if (this.moreTimeRequested) {
       return ClaimStatus.MORE_TIME_REQUESTED
+    } else if (this.state === 'BUSINESS_QUEUE') {
+      return ClaimStatus.BUSINESS_QUEUE
     } else if (this.state === 'TRANSFERRED') {
       return ClaimStatus.TRANSFERRED
     } else if (!this.response) {
@@ -396,10 +401,29 @@ export class Claim {
       if (input.paperResponse) {
         this.paperResponse = YesNoOption.fromObject(input.paperResponse)
       }
+
       if (input.claimDocumentCollection && input.claimDocumentCollection.claimDocuments) {
-        this.claimDocuments = _.sortBy(input.claimDocumentCollection.claimDocuments.filter(value => ClaimDocumentType[value.documentType] !== undefined).map((value) => {
+        this.claimDocuments = input.claimDocumentCollection.claimDocuments.filter(value => ClaimDocumentType[value.documentType] !== undefined).map((value) => {
           return new ClaimDocument().deserialize(value)
-        }), [function (o) {
+        })
+      }
+
+      if (input.claimDocumentCollection && input.claimDocumentCollection.scannedDocuments) {
+        const scannedDocuments: ClaimDocument[] = input.claimDocumentCollection.scannedDocuments
+          .filter(value => ScannedDocumentType[(value.documentType + '_' + value.subtype).toUpperCase()] !== undefined)
+          .map((value) => {
+            return new ClaimDocument().deserializeScannedDocument(value)
+          })
+
+        if (this.claimDocuments) {
+          this.claimDocuments.push(...scannedDocuments)
+        } else {
+          this.claimDocuments = scannedDocuments
+        }
+      }
+
+      if (this.claimDocuments) {
+        this.claimDocuments = _.sortBy(this.claimDocuments, [function (o) {
           return o.createdDatetime
         }]).reverse()
       }
@@ -481,6 +505,10 @@ export class Claim {
     }
 
     if (this.isSettlementReached()) {
+      return false
+    }
+
+    if (this.hasBeenMovedToCCBC()) {
       return false
     }
 
@@ -739,6 +767,10 @@ export class Claim {
 
   private checkProceedOfflineReason (): boolean {
     return (this.proceedOfflineReason && (this.proceedOfflineReason === ProceedOfflineReason.APPLICATION_BY_DEFENDANT || this.proceedOfflineReason === ProceedOfflineReason.APPLICATION_BY_CLAIMANT))
+  }
+
+  private hasBeenMovedToCCBC (): boolean {
+    return this.state === 'BUSINESS_QUEUE'
   }
 
   private hasBeenTransferred (): boolean {

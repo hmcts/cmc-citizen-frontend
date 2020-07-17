@@ -55,6 +55,7 @@ const launchDarklyClient = new LaunchDarklyClient()
 const featureToggles = new FeatureToggles(launchDarklyClient)
 app.use(/^\/(?!js|img|pdf|stylesheets).*$/, async (req, res, next) => {
   app.settings.nunjucksEnv.globals.warningBanner = await featureToggles.isWarningBannerEnabled()
+  app.settings.nunjucksEnv.globals.signPosting = await featureToggles.isSignPostingEnabled()
   next()
 })
 
