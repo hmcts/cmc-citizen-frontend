@@ -10,7 +10,7 @@
         <h1 class="bold-large">
             {% set dash = joiner("-") %}
             {% for batch in claim.ccdCaseId | string | batch(4) -%}
-                {{ dash() }} {% for items in batch -%}{{ items }}
+                {{ dash() }}{% for items in batch -%}{{ items }}
                 {%- endfor %}
             {%- endfor %}
         </h1>
