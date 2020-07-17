@@ -9,7 +9,7 @@
         <h1 class="bold-large">{{ claim.ccdCaseId }}</h1>
     </div>
     <p class="receipt-download-container">
-        {{ internalLink(t('Download your claim form'), ClaimPaths.receiptReceiver.evaluateUri({ externalId: claim.externalId})) }}
+        {{ internalLink(t('Download your claim form'), ClaimPaths.draftReceiptReceiver.evaluateUri({ externalId: claim.externalId})) }}
     </p>
 </div>
 <h2 class="heading-medium">{{ t('What happens next') }}</h2>

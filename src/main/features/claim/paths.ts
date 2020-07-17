@@ -44,7 +44,7 @@ export class Paths {
   static readonly initiatePaymentController = new RoutablePath('/claim/initiate-payment')
   static readonly finishPaymentController = new RoutablePath('/claim/:externalId/finish-payment')
   static readonly documentPage = new RoutablePath('/claim/:externalId/document/:documentURI')
-
+  static readonly draftReceiptReceiver = new RoutablePath('/claim/:externalId/draftReceipt')
 }
 
 export class ErrorPaths {
