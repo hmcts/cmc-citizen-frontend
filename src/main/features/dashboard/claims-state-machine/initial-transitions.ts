@@ -66,7 +66,7 @@ export function initialTransitions (claim: Claim): StateMachine {
       },
 
       onBeforeCheckHwfInvalid () {
-        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'HWF_INVALID_REFERENCE'
+        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF'
       },
 
       onBeforeCheckMoreTimeRequested () {
