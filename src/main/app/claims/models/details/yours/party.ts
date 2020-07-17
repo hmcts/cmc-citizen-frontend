@@ -7,6 +7,7 @@ export class Party {
   firstName?: string
   lastName?: string
   name: string
+  pcqId?: string
   address: Address
   correspondenceAddress?: Address
   phone?: string
@@ -15,6 +16,7 @@ export class Party {
   constructor (
     type?: string,
     name?: string,
+    pcqId?: string,
     address?: Address,
     correspondenceAddress?: Address,
     phone?: string,
@@ -22,6 +24,7 @@ export class Party {
   ) {
     this.type = type
     this.name = name
+    this.pcqId = pcqId
     this.address = address
     this.correspondenceAddress = correspondenceAddress
     this.phone = phone
@@ -35,6 +38,7 @@ export class Party {
   deserialize (input: any): Party {
     if (input) {
       this.name = input.name
+      this.pcqId = input.pcqId
       this.type = input.type
       this.email = input.email
       this.phone = input.phone || input.mobilePhone
