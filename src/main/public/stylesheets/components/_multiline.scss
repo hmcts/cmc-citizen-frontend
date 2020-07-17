@@ -45,7 +45,6 @@
 }
 
 .multiline-rows {
-  padding-bottom: 15px;
 
   div {
     :not(:first-child) {
@@ -61,6 +60,10 @@
     &:last-of-type {
       margin-bottom: .78947em;
     }
+  }
+
+  .triple-column {
+    padding-bottom: 15px;
   }
 }
 
