@@ -27,7 +27,7 @@ describe('State Machine for the dashboard status before response', () => {
 
   describe('HWF reference is invalid', () => {
     it('should extract the correct state for the invalid HWF reference', () => {
-      const claim: Claim = new Claim().deserialize({ ...sampleHwfClaimIssueObj, state: 'HWF_INVALID_REFERENCE' })
+      const claim: Claim = new Claim().deserialize({ ...sampleHwfClaimIssueObj, state: 'AWAITING_RESPONSE_HWF' })
       let claimState = initialTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('help-with-fees-invalid')
