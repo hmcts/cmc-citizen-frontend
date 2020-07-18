@@ -12,6 +12,8 @@
     "inversionOfControl": true,
     "warningBanner": false,
     "helpWithFees": true,
+    "pcq":true,
+    "signPostingCTSC": false,
     "autoEnrollIntoNewFeature": true
   },
   "appInsights": {

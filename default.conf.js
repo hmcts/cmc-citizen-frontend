@@ -37,6 +37,9 @@ exports.config = {
     },
     PageHelper: {
       require: './src/integration-test/helpers/pageHelper'
+    },
+    PcqHelper: {
+      require: './src/integration-test/helpers/pcqHelper'
     }
   },
   mocha: {

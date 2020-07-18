@@ -40,6 +40,14 @@ export class FeatureToggles {
     return this.launchDarklyClient.serviceVariation('help-with-fees', toBoolean(config.get<boolean>(`featureToggles.helpWithFees`)))
   }
 
+  async isPcqEnabled (): Promise<boolean> {
+    return this.launchDarklyClient.serviceVariation('pcq', toBoolean(config.get<boolean>(`featureToggles.pcq`)))
+  }
+  
+  async isSignPostingEnabled (): Promise<boolean> {
+    return this.launchDarklyClient.serviceVariation('sign-posting-ctsc', toBoolean(config.get<boolean>(`featureToggles.signPostingCTSC`)))
+  }
+
   async isAutoEnrollIntoNewFeatureEnabled (): Promise<boolean> {
     return this.launchDarklyClient.serviceVariation('auto-enroll-into-new-feature', toBoolean(config.get<boolean>(`featureToggles.autoEnrollIntoNewFeature`)))
   }

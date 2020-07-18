@@ -13,20 +13,25 @@ describe('ScannedDocumentsClient', () => {
   const client: ScannedDocumentsClient = new ScannedDocumentsClient(mockClient)
   const bearerToken = 'IUgiYGOFUHSODFIUGHPASIYYUGLIYFGKUTF&TF'
   const externalId = 'b17af4d2-273f-4999-9895-bce382fa24c8'
+  const documentType = 'FORM'
+  const documentSubtype = 'OCON9X'
+
+  const expectedPayload = {
+    url: 'http://localhost/scanneddoc'
+  }
+
+  nock(mockClient)
+  .get(/\/scanned-documents\/.+/)
+  .reply(200, expectedPayload)
 
   chai.use(chaiAsPromised)
 
-  it('should should retrieve the scanned response form for a case', () => {
-
-    const expectedPayload = {
-      url: 'http://localhost/scanneddoc'
-    }
-
-    nock(mockClient)
-      .get(/\/scanned-documents\/.+/)
-      .reply(200, expectedPayload)
-
+  it('should should retrieve the Ocon9x scanned response form for a case', () => {
     chai.expect(client.getScannedResponseFormPDF(externalId, bearerToken)).to.not.be.undefined
+  })
+
+  it('should should retrieve the scanned response form for a case', () => {
+    chai.expect(client.getScannedPDF(externalId, documentType, documentSubtype, bearerToken)).to.not.be.undefined
   })
 
   it('should throw error when given undefined ExternalId', () => {
@@ -50,4 +55,23 @@ describe('ScannedDocumentsClient', () => {
       .to.throw(Error, 'User authorisation cannot be blank')
   })
 
+  it('should throw error when given undefined documentType', () => {
+    chai.expect(() => client.getScannedPDF(externalId, undefined, documentSubtype, bearerToken))
+      .to.throw(Error, 'Document type cannot be blank')
+  })
+
+  it('should throw error when not given an empty documentType', () => {
+    chai.expect(() => client.getScannedPDF(externalId, '', documentSubtype, bearerToken))
+      .to.throw(Error, 'Document type cannot be blank')
+  })
+
+  it('should throw error when not given undefined documentSubtype', () => {
+    chai.expect(() => client.getScannedPDF(externalId, documentType, undefined, bearerToken))
+      .to.throw(Error, 'Document subtype cannot be blank')
+  })
+
+  it('should throw error when not given an empty documentSubtype', () => {
+    chai.expect(() => client.getScannedPDF(externalId, documentType, '', bearerToken))
+      .to.throw(Error, 'Document subtype cannot be blank')
+  })
 })

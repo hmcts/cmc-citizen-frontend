@@ -37,6 +37,7 @@
     "inversionOfControl": true,
     "warningBanner": false,
     "helpWithFees": true,
+    "pcq": true,
     "autoEnrollIntoNewFeature": true
   },
   "appInsights": {
