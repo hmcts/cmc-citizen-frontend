@@ -9,11 +9,11 @@
   {% set party = 'claimant' %}
   {% set otherParty = 'defendant' %}
   {% set otherPartyName = claim.claimData.defendant.name %}
-  {% set phone = claim.response.defendant.phone %}
-  {% set email = claim.defendantEmail %}
+  {% set phone = claim.claimData.defendant.phone %}
+  {% set email = claim.claimData.defendant.email %}
   {% set contactPerson = claim.response.defendant.name %}
-  {% set address = claim.response.defendant.address if claim.response.defendant.address else claim.claimData.defendant.address %}
-  {% set correspondenceAddress = claim.response.defendant.correspondenceAddress if claim.response.defendant.correspondenceAddress else claim.claimData.defendant.correspondenceAddress %}
+  {% set address = claim.claimData.defendant.address %}
+  {% set correspondenceAddress = claim.claimData.defendant.correspondenceAddress %}
   {% set contactPerson = claim.response.defendant.contactPerson %}
 
 {% elif user.id === claim.defendantId %}
