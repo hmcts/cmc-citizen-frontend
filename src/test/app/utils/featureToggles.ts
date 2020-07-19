@@ -65,7 +65,8 @@ describe('FeatureToggles', () => {
       let result = await featureToggles.isSignPostingEnabled()
       expect(result).to.equal(actual)
     })
-   
+  })
+
   describe('isAutoEnrollIntoNewFeatureEnabled', () => {
     it('should return toggle if autoEnrollIntoNewFeature toggle exists', async () => {
       const mockLaunchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
