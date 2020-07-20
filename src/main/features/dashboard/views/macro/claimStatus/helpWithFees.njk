@@ -37,7 +37,14 @@
     </ul>
   </p>
   
-  <p>{{ t('Mention your reference number in any calls or emails: {{ ccdId }}.', { ccdId: claim.ccdCaseId }) }}</p>
+  {% set dash = joiner("-") %}
+  {% set hyphenatedCcdCaseId %}
+  {% for batch in claim.ccdCaseId | string | batch(4) -%}
+      {{ dash() }}{% for items in batch -%}{{ items }}
+      {%- endfor %}
+  {%- endfor %}
+  {% endset %}
+  <p>{{ t('Mention your reference number in any calls or emails: {{ ccdId }}', { ccdId: hyphenatedCcdCaseId }) }}</p>
 
   <p>{{ t("If you don't contact us within 90 days, we'll end the claim.") }}</p>
 
