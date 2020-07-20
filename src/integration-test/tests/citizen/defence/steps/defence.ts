@@ -330,6 +330,7 @@ export class DefenceSteps {
         this.askForMediation(defendantType)
         this.askForHearingRequirements(defendantType)
         defendantSteps.selectCheckAndSubmitYourDefence()
+        I.bypassPCQ()
         I.see('When did you pay this amount?')
         I.see('How did you pay this amount?')
         break
@@ -343,6 +344,7 @@ export class DefenceSteps {
         }
 
         defendantSteps.selectCheckAndSubmitYourDefence()
+        I.bypassPCQ()
         I.see('How much money do you admit you owe?')
         break
       case DefenceType.PART_ADMISSION:
@@ -350,6 +352,7 @@ export class DefenceSteps {
         this.askForMediation(defendantType)
         this.askForHearingRequirements(defendantType)
         defendantSteps.selectCheckAndSubmitYourDefence()
+        I.bypassPCQ()
         if (isClaimAlreadyPaid) {
           I.see('How much money have you paid?')
         } else {
