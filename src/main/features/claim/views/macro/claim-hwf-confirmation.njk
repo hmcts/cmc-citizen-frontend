@@ -6,7 +6,14 @@
     <h1 class="bold-large">{{ t('Claim submitted') }}</h1>
     <div class="reference-number">
         <span>{{ t('Your claim number:') }}</span>
-        <h1 class="bold-large">{{ claim.ccdCaseId }}</h1>
+        
+        <h1 class="bold-large">
+            {% set dash = joiner("-") %}
+            {% for batch in claim.ccdCaseId | string | batch(4) -%}
+                {{ dash() }}{% for items in batch -%}{{ items }}
+                {%- endfor %}
+            {%- endfor %}
+        </h1>
     </div>
     <p class="receipt-download-container">
         {{ internalLink(t('Download your claim form'), ClaimPaths.receiptReceiver.evaluateUri({ externalId: claim.externalId})) }}

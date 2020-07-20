@@ -51,7 +51,7 @@ describe('Claim issue: confirmation page', () => {
         await request(app)
           .get(ClaimPaths.confirmationPage.evaluateUri({ externalId: externalId }))
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('1594030137299050'))
+          .expect(res => expect(res).to.be.successful.withText('1594-0301-3729-9050'))
       })
 
     })
