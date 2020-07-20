@@ -31,7 +31,6 @@ const testData = [
       'Respond to claim'
     ]
   },
-  // todo uncomment and add condition based dashboard once the backend implementation is finished
   {
     status: 'Claim issued with HWF reference',
     claim: claimStoreServiceMock.sampleHwfClaimIssueObj,
@@ -40,7 +39,7 @@ const testData = [
       ccdCaseId: '1594112140470504',
       helpWithFeesNumber: true
     },
-    claimantAssertions: ['1594112140470504',
+    claimantAssertions: ['1594-1121-4047-0504',
       'We’re checking your Help With Fees application',
       'We’ll email you the result within 5 days.',
       'If you qualify for the whole court fee to be paid'
