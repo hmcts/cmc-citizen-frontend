@@ -43,9 +43,19 @@ describe('DocumentsClient', () => {
       .to.throw(Error, 'Claim external ID cannot be blank')
   })
 
-  it('should throw error when given undefined bearerToken', () => {
+  it('should throw error when given undefined ExternalId', () => {
+    expect(() => client.getDraftClaimReceiptPDF(undefined, bearerToken))
+      .to.throw(Error, 'Claim external ID cannot be blank')
+  })
+
+  it('should throw error when given empty bearerToken', () => {
     expect(() => client.getDraftClaimReceiptPDF(externalId, ''))
       .to.throw(Error, 'User authorisation cannot be blank')
+  })
+
+  it('should throw error when given undefined bearerToken', () => {
+    expect(() => client.getDraftClaimReceiptPDF(externalId, undefined))
+    .to.throw(Error, 'User authorisation cannot be blank')
   })
 
 })
