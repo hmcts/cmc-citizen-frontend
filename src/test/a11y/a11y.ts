@@ -101,6 +101,7 @@ const excludedPaths: Paths[] = [
   ClaimIssuePaths.initiatePaymentController,
   ClaimIssuePaths.receiptReceiver,
   ClaimIssuePaths.sealedClaimPdfReceiver,
+  ClaimIssuePaths.draftReceiptReceiver,
   DefendantResponsePaths.receiptReceiver,
   DefendantResponsePaths.scannedResponseForm,
   DefendantResponsePaths.legacyDashboardRedirect,
