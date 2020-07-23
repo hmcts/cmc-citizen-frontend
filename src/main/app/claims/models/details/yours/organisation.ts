@@ -7,12 +7,13 @@ export class Organisation extends Party {
 
   constructor (
               name?: string,
+              pcqId?: string,
               address?: Address,
               correspondenceAddress?: Address,
               phone?: string,
               email?: string,
               contactPerson?: string) {
-    super(PartyType.ORGANISATION.value, name, address, correspondenceAddress, phone, email)
+    super(PartyType.ORGANISATION.value, name, pcqId, address, correspondenceAddress, phone, email)
     this.contactPerson = contactPerson
   }
 

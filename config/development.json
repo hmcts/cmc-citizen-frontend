@@ -11,7 +11,9 @@
     "newDashboardStatus": true,
     "inversionOfControl": true,
     "warningBanner": false,
-    "helpWithFees": true
+    "helpWithFees": true,
+    "pcq":true,
+    "signPostingCTSC": false
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"
