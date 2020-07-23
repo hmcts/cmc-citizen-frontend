@@ -37,6 +37,7 @@ nodejs:
     FEATURE_INVERSION_OF_CONTROL: true
     FEATURE_PCQ: false
     FEATURE_SIGN_POSTING_CTSC: false
+    FEATURE_HELP_WITH_FEES: false
 
   keyVaults:
     cmc:
