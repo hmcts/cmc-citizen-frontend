@@ -10,6 +10,10 @@ import { RoutablePath } from 'shared/router/routablePath'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { Evidence } from 'forms/models/evidence'
+import * as uuid from 'uuid'
+import { FeatureToggles } from 'utils/featureToggles'
+import { PcqClient } from 'utils/pcqClient'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
 const page: RoutablePath = Paths.evidencePage
 
@@ -50,12 +54,23 @@ export default express.Router()
       } else {
         const draft: Draft<DraftClaim> = res.locals.claimDraft
         const user: User = res.locals.user
-
+        const launchDarklyClient = new LaunchDarklyClient()
+        const featureToggles = new FeatureToggles(launchDarklyClient)
+        let redirectUri = Paths.taskListPage.uri
+        if (await featureToggles.isPcqEnabled() && draft.document.claimant.partyDetails !== undefined) {
+          const isEligible = await PcqClient.isEligibleRedirect(draft.document.claimant.partyDetails.pcqId, draft.document.claimant.partyDetails.type)
+          if (draft.document.claimant.partyDetails.pcqId === undefined) {
+            let pcqID = uuid()
+            draft.document.claimant.partyDetails.pcqId = pcqID
+            if (isEligible) {
+              redirectUri = PcqClient.generateRedirectUrl(req, 'CLAIMANT',pcqID, user.email, null, Paths.taskListPage,draft.document.externalId)
+            }
+          }
+        }
         form.model.removeExcessRows()
         draft.document.evidence = form.model
         await new DraftService().save(draft, user.bearerToken)
-
-        res.redirect(Paths.taskListPage.uri)
+        res.redirect(redirectUri)
       }
     })
-  )
+)

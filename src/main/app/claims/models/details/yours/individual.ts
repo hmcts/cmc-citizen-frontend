@@ -7,13 +7,14 @@ export class Individual extends Party {
 
   constructor (
     name?: string,
+    pcqId?: string,
     address?: Address,
     correspondenceAddress?: Address,
     phone?: string,
     email?: string,
     dateOfBirth?: string
   ) {
-    super(PartyType.INDIVIDUAL.value, name, address, correspondenceAddress, phone, email)
+    super(PartyType.INDIVIDUAL.value, name, pcqId, address, correspondenceAddress, phone, email)
     this.dateOfBirth = dateOfBirth
   }
 
