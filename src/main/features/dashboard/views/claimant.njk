@@ -69,8 +69,7 @@
         {% if claim.claimNumber %}
           <h2 class="heading-medium no-bottom-margin">{{ claim.claimData.claimant.name }}
             v {{ claim.claimData.defendant.name }}</h2>
-        {% endif %}
-                {% if claim.ccdCaseId %}
+        {% elseif claim.ccdCaseId %}
           <h2 class="heading-medium no-bottom-margin">{{ claim.claimData.claimant.name }}
             v {{ claim.claimData.defendant.name }}</h2>
         {% endif %}
