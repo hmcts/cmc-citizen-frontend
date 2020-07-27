@@ -157,5 +157,5 @@ Scenario('I can enter a claim details and navigate up to payment page @smoke-tes
   /* tslint:disable:no-console */
   const helpWithFees = await featureToggles.isHelpWithFeesEnabled()
   console.log('helpwWithFees is ', helpWithFees)
-  // claimSteps.makeAClaimAndNavigateUpToPayment()
+  claimSteps.makeAClaimAndNavigateUpToPayment()
 })
