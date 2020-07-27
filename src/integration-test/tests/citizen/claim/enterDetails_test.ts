@@ -5,15 +5,12 @@ import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
 import { PartyType } from 'integration-test/data/party-type'
 import { PaymentSteps } from 'integration-test/tests/citizen/claim/steps/payment'
 import { TestingSupportSteps } from 'integration-test/tests/citizen/testingSupport/steps/testingSupport'
-import { FeatureToggles } from '../../../../main/app/utils/featureToggles'
-import { LaunchDarklyClient } from '../../../../main/common/clients/launchDarklyClient'
 
 const userSteps: UserSteps = new UserSteps()
 const claimSteps: ClaimSteps = new ClaimSteps()
 const interestSteps: InterestSteps = new InterestSteps()
 const paymentSteps: PaymentSteps = new PaymentSteps()
 const testingSupport: TestingSupportSteps = new TestingSupportSteps()
-const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
 
 Feature('Claimant Enter details of claim')
 
@@ -152,10 +149,6 @@ Scenario('I should be redirected to PCQ if "Your details" are filled in while ma
 
 // The @citizen-smoke-test tag used for running smoke tests with pre-registered user
 
-Scenario('I can enter a claim details and navigate up to payment page @smoke-test', { retries: 3 }, async (I: I) => {
-  // TODO remove below code and console once testing is done.
-  /* tslint:disable:no-console */
-  const helpWithFees = await featureToggles.isHelpWithFeesEnabled()
-  console.log('helpwWithFees is ', helpWithFees)
+Scenario('I can enter a claim details and navigate up to payment page @smoke-test', { retries: 3 }, (I: I) => {
   claimSteps.makeAClaimAndNavigateUpToPayment()
 })
