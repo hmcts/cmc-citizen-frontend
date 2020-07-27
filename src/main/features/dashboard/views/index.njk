@@ -37,12 +37,10 @@
               <td class="mobile-hide">
                 {{ internalLink(t('Continue with claim'), ClaimPaths.taskListPage.uri) }}
               </td>
-              <td>-</td>
-              <td>{{ internalLink(t('View'), DashboardPaths.claimantPage.evaluateUri({ externalId: 'draft' })) }}</td>
             </tr>
             <tr>
               <td colspan="3" class="mobile-table-status">
-                {{ t('Status:') }} {{ internalLink(t('Continue with claim'), ClaimPaths.taskListPage.uri) }}
+                {{ t('Next steps:') }} {{ internalLink(t('Continue with claim'), ClaimPaths.taskListPage.uri) }}
               </td>
             </tr>
           {% endif %}
@@ -65,23 +63,32 @@
                 {{ caseStatusForClaimant(claim.status, claim) }}
               {% endif %}
               </td>
-              <td>
+              <td class="mobile-hide">
                {% if claim.helpWithFeesNumber %}
                   -
                 {% else %}
                   {{ claim.responseDeadline | date }}
                 {% endif %}
               </td>
-              <td>{{ internalLink('View', '/dashboard/' + claim.externalId + '/claimant') }}</td>
+              <td class="mobile-hide">{{ internalLink('View', '/dashboard/' + claim.externalId + '/claimant') }}</td>
             </tr>
             <tr>
               <td colspan="3" class="mobile-table-status">
-                {{ t('Status:') }}
+                {{ t('Next Step:') }}
                 {% if featureToggles.newDashboardStatus and claim.template.dashboard %}
                   {% include claim.template.dashboard ignore missing %}
                 {% else %}
                   {{ caseStatusForClaimant(claim.status, claim) }}
                 {% endif %}
+                <br>
+                {{ t('Deadline:') }}
+                {% if claim.helpWithFeesNumber %}
+                  -
+                {% else %}
+                  {{ claim.responseDeadline | date }}
+                {% endif %}
+                <br>
+                {{ t('Actions:')}} {{ internalLink('View', '/dashboard/' + claim.externalId + '/claimant') }}
               </td>
             </tr>
           {% endfor %}
