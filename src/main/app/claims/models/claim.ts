@@ -37,6 +37,7 @@ import { TransferContents } from 'claims/models/transferContents'
 import * as _ from 'lodash'
 import { ClaimDocumentType } from 'common/claimDocumentType'
 import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
+import * as config from 'config'
 import { ScannedDocumentType } from 'common/scannedDocumentType'
 
 interface State {
@@ -123,7 +124,10 @@ export class Claim {
     if (!this.directionOrder) {
       return undefined
     }
-
+    const reconsiderationDeadlineChangeDate: Moment = MomentFactory.parse(config.get<any>('reviewOrderDeadLine.changeDate'))
+    if (reconsiderationDeadlineChangeDate && this.directionOrder.createdOn.isAfter(reconsiderationDeadlineChangeDate)) {
+      return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, config.get<number>('reviewOrderDeadLine.numberOfDays'))
+    }
     return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, 19)
   }
 
