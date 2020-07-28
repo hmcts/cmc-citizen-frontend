@@ -14,8 +14,8 @@
 
 .button {
   &.button-secondary {
+    font-size: 87% !important;
     @include button($grey-3);
-    font-size: 87%;
   }
 }
 
