@@ -13,6 +13,8 @@
 }
 
 .button {
+  white-space: normal;
+
   &.button-secondary {
     @include button($grey-3);
   }
