@@ -112,7 +112,7 @@ For more details on the dockerized environment please refer to integration-tests
 
 There is currently an open issue : https://github.com/yarnpkg/yarn/issues/3751
 
-Example:
+Example
 
 ```
 warning The case-insensitive file ..\cmc-citizen-frontend\node_modules\nyc\node_modules shouldn't be copied twice in one bulk copy
