@@ -93,6 +93,7 @@ export class DefendantResponseSteps {
     defendantTaskListPage.selectTaskHearingRequirements()
     directionsQuestionnaireSteps.acceptDirectionsQuestionnaireYesJourney()
     defendantSteps.selectCheckAndSubmitYourDefence()
+    I.bypassPCQ()
     defenceSteps.checkAndSendAndSubmit(testData.defendantPartyType, testData.defenceType)
     I.see('You’ve submitted your response')
   }
