@@ -55,7 +55,7 @@
   <div class="grid-row">
     <div class="column-two-thirds">
       <div class="form-group-related">
-        <h2 class="heading-medium no-bottom-margin">{{ claim.claimData.claimant.name }} v {{ claim.claimData.defendant.name }}</h2>
+        <h1 class="heading-medium no-bottom-margin">{{ claim.claimData.claimant.name }} v {{ claim.claimData.defendant.name }}</h1>
         <span class="font-xsmall">{{ t('Claim number:') }} {{ claim.claimNumber if claim else 'Draft' }}</span>
       </div>
       {{ govukTabs({
