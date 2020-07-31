@@ -107,6 +107,10 @@
   "appInsights": {
     "roleName": "citizen-frontend"
   },
+  "reviewOrderDeadLine": {
+    "changeDate": "2020-07-27T11:00:00-00:00",
+    "numberOfDays": 7
+  },
   "secrets": {
     "cmc": {
       "cmc-s2s-secret": "AAAAAAAAAAAAAAAA",
