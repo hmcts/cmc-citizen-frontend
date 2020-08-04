@@ -183,7 +183,7 @@ describe('Claim issue: check and send page', () => {
           .expect(res => expect(res).to.be.successful.withText('Trading as Defendant SoleTrader Ltd.'))
       })
 
-      it.only('Should validate that a claim made by soleTrader against individual and their details', async () => {
+      it('Should validate that a claim made by soleTrader against individual and their details', async () => {
         draftStoreServiceMock.resolveFind('claim',
           {
             claimant: {
