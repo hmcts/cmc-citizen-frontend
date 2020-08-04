@@ -11,19 +11,33 @@
     {% if monthError %}<span class="error-message">{{ t(monthError) }}</span>{% endif %}
     {% if yearError %}<span class="error-message">{{ t(yearError) }}</span>{% endif %}
     {% if dateError %}<span class="error-message">{{ t(dateError) }}</span>{% endif %}
+    <fieldset id="dateofbirth[label]">
     <div class="form-date" id="{{ name }}[label]">
       <div class="form-group form-group-day">
+        <legend> 
+          <span class="visuallyhidden">
+          Enter Day of your date of birth</span>
+      </legend>
         <label class="form-label" id="{{ name }}[day][label]" for="{{ name }}[day]">{{ t('Day') }}</label>
         <input class="form-control {% if dayError or dateError %} form-control-error {% endif %}" id="{{ name }}[day]" name="{{ name }}[day]" value="{{ form.valueFor(name).day | default('') }}" type="number" aria-describedby="dob-hint">
       </div>
       <div class="form-group form-group-month">
+        <legend> 
+          <span class="visuallyhidden">
+          Enter month of your date of birth</span>
+      </legend>
         <label class="form-label" id="{{ name }}[month][label]" for="{{ name }}[month]">{{ t('Month') }}</label>
         <input class="form-control {% if monthError or dateError %} form-control-error {% endif %}" id="{{ name }}[month]" name="{{ name }}[month]" value="{{ form.valueFor(name).month | default('') }}" type="number">
       </div>
       <div class="form-group form-group-year">
+        <legend> 
+          <span class="visuallyhidden">
+          Enter year of your date of birth</span>
+      </legend>
         <label class="form-label" id="{{ name }}[year][label]" for="{{ name }}[year]">{{ t('Year') }}</label>
         <input class="form-control {% if yearError or dateError %} form-control-error {% endif %}" id="{{ name }}[year]" name="{{ name }}[year]" value="{{ form.valueFor(name).year | default('') }}" type="number">
       </div>
     </div>
   </div>
+  </fieldset>
 {% endmacro %}
