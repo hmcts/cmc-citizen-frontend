@@ -183,7 +183,7 @@ describe('Claim issue: check and send page', () => {
           .expect(res => expect(res).to.be.successful.withText('Trading as Defendant SoleTrader Ltd.'))
       })
 
-      it('Should validate that a claim made by soleTrader against individual and their details', async () => {
+      it.only('Should validate that a claim made by soleTrader against individual and their details', async () => {
         draftStoreServiceMock.resolveFind('claim',
           {
             claimant: {
@@ -282,7 +282,7 @@ describe('Claim issue: check and send page', () => {
         await request(app)
           .get(ClaimPaths.checkAndSendPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('<a href="/claim/claimant-company-details" class="bold">Change <span class="visuallyhidden">your full name, address and correspondence address/span></a>'))
+          .expect(res => expect(res).to.be.successful.withText('<a href="/claim/claimant-company-details" class="bold">Change <span class="visuallyhidden">your full name, address and correspondence address</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Company Ltd.'))
           .expect(res => expect(res).to.be.successful.withText('<input id="signerName" name="signerName"', '<input id="signerRole" name="signerRole"'))
           .expect(res => expect(res).to.be.successful.withText('Statement of truth', 'I believe that the facts stated in this claim are true.', 'I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.'))
@@ -418,7 +418,7 @@ describe('Claim issue: check and send page', () => {
           .expect(res => expect(res).to.be.successful.withText('<input id="signerName" name="signerName"', '<input id="signerRole" name="signerRole"'))
           .expect(res => expect(res).to.be.successful.withText('Statement of truth', 'I believe that the facts stated in this claim are true.', 'I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.'))
           .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
-          .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-company-details" class="bold">Change <span class="visuallyhidden">yarn tests:coverage</span></a>'))
+          .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-company-details" class="bold">Change <span class="visuallyhidden">your full name, address and correspondence address</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Company Ltd.'))
           .expect(res => expect(res).to.be.successful.withText('Types of senior position'))
           .expect(res => expect(res).to.be.successful.withoutText('Business name'))
