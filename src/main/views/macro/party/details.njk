@@ -47,7 +47,7 @@
 {% endmacro %}
 
 {% macro partyDetailsSummaryFragment(partyDetails, showCorrespondenceAddressSection = true, changeLinks = {}, claim) %}
-  {{ row('your full name, address and correspondence address', partyDetails.name, changeLinks.partyDetails or changeLinks.name or changeLinks.contactPerson, bold = true, bottomBorder = false ) }}
+  {{ row('Full name', partyDetails.name, changeLinks.partyDetails or changeLinks.name or changeLinks.contactPerson, bold = true, bottomBorder = false ) }}
 
   {% if (partyDetails.type === 'company' or partyDetails.type === 'organisation') %}
     {% if partyDetails.contactPerson %}
