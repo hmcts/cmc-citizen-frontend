@@ -20,8 +20,10 @@
   }
 }
 
-.form-group .button:focus {
-  outline: 3px solid #FFDD00;
+.form-group {
+  .button:focus { 
+    outline: 3px solid #ffdd00;
+  }
 }
 
 .form-control-select {
