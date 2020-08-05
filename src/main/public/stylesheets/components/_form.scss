@@ -22,9 +22,11 @@ $focuscolor: #fd0;;
 }
 
 .form-group {
-  .button:focus { 
+  .button {
+    &:focus {
     outline: 3px solid $focuscolor;
   }
+}
 }
 
 
