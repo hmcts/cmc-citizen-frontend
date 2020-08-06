@@ -9,12 +9,6 @@
     <div class="column-two-thirds">
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
-
-        <fieldset>
-          <legend class="visuallyhidden">
-            {{ t('Total amount you’re claiming') }}
-          </legend>
-
           <table class="table-form form-group">
             <caption class="visuallyhidden"></caption>
             <tbody>
@@ -73,8 +67,6 @@
           <p>{{ t('You don’t have to pay a hearing fee unless the claim goes to a hearing.') }}</p>
 
           {{ feesTable('How these fees are calculated', feeTableContent , showHearingFee = true) }}
-
-        </fieldset>
 
         {{ saveAndContinueButton() }}
       </form>
