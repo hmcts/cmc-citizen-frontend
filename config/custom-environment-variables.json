@@ -110,7 +110,7 @@
       "cmc-webchat-button-no-agents": "WEBCHAT_BUTTON_NO_AGENTS",
       "cmc-webchat-button-agents-busy": "WEBCHAT_BUTTON_AGENTS_BUSY",
       "cmc-webchat-button-service-closed": "WEBCHAT_BUTTON_SERVICE_CLOSED",
-      "pcq-token-key": "FEATURE_PCQ"
+      "pcq-token-key": "FEATURE_PCQ_1"
     }
   },
   "launchDarkly": {
