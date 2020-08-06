@@ -79,6 +79,7 @@ cmc-claim-store:
           - rpa-email-paid-in-full
           - launchDarkly-sdk-key
           - sendgrid-api-key
+          - staff-email-legal-rep
     environment:
       LOG_LEVEL: DEBUG
       DOC_ASSEMBLY_URL: http://dg-docassembly-aat.service.core-compute-aat.internal
