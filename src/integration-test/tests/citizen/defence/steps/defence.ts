@@ -493,6 +493,7 @@ export class DefenceSteps {
     mediationSteps.rejectMediation()
     this.askForHearingRequirements(defendantType)
     defendantTaskListPage.selectTaskCheckAndSendYourResponse()
+    I.bypassPCQ()
     this.checkAndSendAndSubmit(defendantType, DefenceType.PART_ADMISSION_NONE_PAID)
     I.see('You’ve submitted your response')
   }
