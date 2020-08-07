@@ -295,7 +295,7 @@ export class DefenceSteps {
     isRequestMoreTimeToRespond: boolean = true,
     isClaimAlreadyPaid: boolean = true,
     expectPhonePage: boolean = false
-  ): void {
+): void {
     I.see('Confirm your details')
     I.see('Decide if you need more time to respond')
     I.see('Choose a response')
@@ -323,12 +323,14 @@ export class DefenceSteps {
         this.askForMediation(defendantType)
         this.askForHearingRequirements(defendantType)
         defendantSteps.selectCheckAndSubmitYourDefence()
+        I.bypassPCQ()
         break
       case DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID:
         this.enterWhenDidYouPay(defence)
         this.askForMediation(defendantType)
         this.askForHearingRequirements(defendantType)
         defendantSteps.selectCheckAndSubmitYourDefence()
+        I.bypassPCQ()
         I.see('When did you pay this amount?')
         I.see('How did you pay this amount?')
         break
@@ -342,6 +344,7 @@ export class DefenceSteps {
         }
 
         defendantSteps.selectCheckAndSubmitYourDefence()
+        I.bypassPCQ()
         I.see('How much money do you admit you owe?')
         break
       case DefenceType.PART_ADMISSION:
@@ -349,6 +352,7 @@ export class DefenceSteps {
         this.askForMediation(defendantType)
         this.askForHearingRequirements(defendantType)
         defendantSteps.selectCheckAndSubmitYourDefence()
+        I.bypassPCQ()
         if (isClaimAlreadyPaid) {
           I.see('How much money have you paid?')
         } else {
@@ -367,7 +371,8 @@ export class DefenceSteps {
     defendantType: PartyType,
     paymentOption: PaymentOption,
     claimantName: string,
-    statementOfMeansFullDataSet: boolean = true
+    statementOfMeansFullDataSet: boolean = true,
+    respondToPCQ?: boolean
   ): void {
     this.confirmYourDetails(defendantParty)
 
@@ -402,6 +407,7 @@ export class DefenceSteps {
     }
 
     defendantSteps.selectCheckAndSubmitYourDefence()
+    I.bypassPCQ()
     this.checkAndSendAndSubmit(defendantType, DefenceType.FULL_ADMISSION)
 
     I.see('You’ve submitted your response')
@@ -445,6 +451,7 @@ export class DefenceSteps {
     this.askForMediation(defendantType)
     this.askForHearingRequirements(defendantType)
     defendantSteps.selectCheckAndSubmitYourDefence()
+    I.bypassPCQ()
     this.checkAndSendAndSubmit(defendantType, DefenceType.PART_ADMISSION)
     I.see('You’ve submitted your response')
   }
@@ -486,6 +493,7 @@ export class DefenceSteps {
     mediationSteps.rejectMediation()
     this.askForHearingRequirements(defendantType)
     defendantTaskListPage.selectTaskCheckAndSendYourResponse()
+    I.bypassPCQ()
     this.checkAndSendAndSubmit(defendantType, DefenceType.PART_ADMISSION_NONE_PAID)
     I.see('You’ve submitted your response')
   }
@@ -506,20 +514,20 @@ export class DefenceSteps {
       case DefenceType.FULL_REJECTION_WITH_COUNTER_CLAIM:
         this.admitAllOfClaimAndMakeCounterClaim()
         I.see('Download the defence and counterclaim form.')
+        I.see('Post your response')
+        I.see(claimRef)
+        I.see(claimant.name)
+        I.see(defendant.title)
+        I.see(defendant.firstName)
+        I.see(defendant.lastName)
         break
       case DefenceType.FULL_REJECTION_BECAUSE_ALREADY_PAID_LESS_THAN_CLAIMED_AMOUNT:
         this.chooseLessThenAmountClaimedOption()
-        I.see('Download the admission form and the defence form')
+        I.see('You’ve paid less than the total claim amount')
+        I.click('Continue')
         break
       default:
         throw new Error('Unknown DefenceType')
     }
-
-    I.see('Post your response')
-    I.see(claimRef)
-    I.see(claimant.name)
-    I.see(defendant.title)
-    I.see(defendant.firstName)
-    I.see(defendant.lastName)
   }
 }

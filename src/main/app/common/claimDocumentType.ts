@@ -31,4 +31,8 @@ export class ClaimDocumentType {
     text: 'Download the request to review the order',
     uri: 'review-order'
   }
+  static readonly GENERAL_LETTER = {
+    text: 'Download the general letter',
+    uri: 'GENERAL_LETTER'
+  }
 }

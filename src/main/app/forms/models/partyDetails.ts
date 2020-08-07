@@ -22,6 +22,8 @@ export class PartyDetails {
   @MaxLength(255, { message: ValidationErrors.NAME_TOO_LONG, groups: ['claimant', 'defendant'] })
   name?: string
 
+  pcqId?: string
+
   @IsDefined({ message: ValidationErrors.ADDRESS_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @ValidateNested({ groups: ['claimant', 'defendant', 'response'] })
   address?: Address
@@ -39,6 +41,7 @@ export class PartyDetails {
   correspondenceAddress?: CorrespondenceAddress
 
   constructor (name?: string,
+               pcqId?: string,
                address: Address = new Address(),
                hasCorrespondenceAddress: boolean = false,
                correspondenceAddress: Address = new CorrespondenceAddress(),
@@ -48,6 +51,7 @@ export class PartyDetails {
     this.correspondenceAddress = correspondenceAddress
     this.name = name
     this.phone = phone
+    this.pcqId = pcqId
   }
 
   static fromObject (input?: any): PartyDetails {
@@ -56,6 +60,7 @@ export class PartyDetails {
     }
     const deserialized: PartyDetails = new PartyDetails(
       input.name,
+      input.pcqId,
       new Address().deserialize(input.address),
       input.hasCorrespondenceAddress === 'true',
       new CorrespondenceAddress().deserialize(input.correspondenceAddress)
@@ -76,6 +81,7 @@ export class PartyDetails {
       this.address = new Address().deserialize(input.address)
       this.type = input.type
       this.name = input.name
+      this.pcqId = input.pcqId
       this.address = new Address().deserialize(input.address)
       this.hasCorrespondenceAddress = input.hasCorrespondenceAddress
       this.correspondenceAddress = new CorrespondenceAddress().deserialize(input.correspondenceAddress)

@@ -76,6 +76,7 @@ export class ClaimModelConverter {
 
         return new ClaimantAsIndividual(
           individualDetails.name,
+          individualDetails.pcqId,
           this.convertAddress(individualDetails.address),
           individualDetails.hasCorrespondenceAddress ? this.convertAddress(individualDetails.correspondenceAddress) : undefined,
           draftClaim.claimant.phone.number,
@@ -88,6 +89,7 @@ export class ClaimModelConverter {
 
         return new ClaimantAsSoleTrader(
           soleTraderDetails.name,
+          soleTraderDetails.pcqId,
           this.convertAddress(soleTraderDetails.address),
           soleTraderDetails.hasCorrespondenceAddress ? this.convertAddress(soleTraderDetails.correspondenceAddress) : undefined,
           draftClaim.claimant.phone.number,
@@ -100,6 +102,7 @@ export class ClaimModelConverter {
 
         return new ClaimantAsCompany(
           companyDetails.name,
+          companyDetails.pcqId,
           this.convertAddress(companyDetails.address),
           companyDetails.hasCorrespondenceAddress ? this.convertAddress(companyDetails.correspondenceAddress) : undefined,
           draftClaim.claimant.phone.number,
@@ -112,6 +115,7 @@ export class ClaimModelConverter {
 
         return new ClaimantAsOrganisation(
           organisationDetails.name,
+          organisationDetails.pcqId,
           this.convertAddress(organisationDetails.address),
           organisationDetails.hasCorrespondenceAddress ? this.convertAddress(organisationDetails.correspondenceAddress) : undefined,
           draftClaim.claimant.phone.number,
