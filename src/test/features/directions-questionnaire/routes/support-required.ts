@@ -99,7 +99,7 @@ describe('Directions Questionnaire - support required page', () => {
 
     describe('on POST', () => {
       const validFormData = {}
-      const invalidFormData = { languageSelected: true, languageInterpreted: undefined }
+      const invalidFormData = { languageSelected: true, languageInterpreted: '' }
 
       const method = 'post'
       checkAuthorizationGuards(app, method, pagePath)

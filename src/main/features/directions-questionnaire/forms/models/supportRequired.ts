@@ -63,29 +63,42 @@ export class SupportRequired {
     }
 
     return new SupportRequired(
-      input.languageSelected ? input.languageSelected : false,
-      input.languageInterpreted ? input.languageInterpreted : 'None',
-      input.signLanguageSelected ? input.signLanguageSelected : false,
-      input.signLanguageInterpreted ? input.signLanguageInterpreted : 'None',
+      input.languageSelected,
+      input.languageInterpreted,
+      input.signLanguageSelected,
+      input.signLanguageInterpreted,
       input.hearingLoopSelected,
       input.disabledAccessSelected,
-      input.otherSupportSelected ? input.otherSupportSelected : false,
-      input.otherSupport ? input.otherSupport : 'None'
+      input.otherSupportSelected,
+      input.otherSupport
     )
   }
 
   deserialize (input?: any): SupportRequired {
     if (input) {
+
       this.languageSelected = input.languageSelected
-      this.languageInterpreted = input.languageInterpreted
+      if (!this.languageSelected) {
+        this.languageInterpreted = 'None'
+      } else {
+        this.languageInterpreted = input.languageInterpreted
+      }
       this.signLanguageSelected = input.signLanguageSelected
-      this.signLanguageInterpreted = input.signLanguageInterpreted
+      if (!this.signLanguageSelected) {
+        this.signLanguageInterpreted = 'None'
+      } else {
+        this.signLanguageInterpreted = input.signLanguageInterpreted
+      }
       this.hearingLoopSelected = input.hearingLoopSelected
       this.disabledAccessSelected = input.disabledAccessSelected
       this.otherSupportSelected = input.otherSupportSelected
       this.otherSupport = input.otherSupport
+      if (!this.otherSupportSelected) {
+        this.otherSupport = 'None'
+      } else {
+        this.otherSupport = input.otherSupport
+      }
     }
-
     return this
   }
 }
