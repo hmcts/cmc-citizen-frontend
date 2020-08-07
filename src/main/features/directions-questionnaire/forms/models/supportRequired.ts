@@ -63,14 +63,14 @@ export class SupportRequired {
     }
 
     return new SupportRequired(
-      input.languageSelected,
-      input.languageInterpreted,
-      input.signLanguageSelected,
-      input.signLanguageInterpreted,
+      input.languageSelected ? input.languageSelected : false,
+      input.languageInterpreted ? input.languageInterpreted : 'None',
+      input.signLanguageSelected ? input.signLanguageSelected : false,
+      input.signLanguageInterpreted ? input.signLanguageInterpreted : 'None',
       input.hearingLoopSelected,
       input.disabledAccessSelected,
-      input.otherSupportSelected,
-      input.otherSupport
+      input.otherSupportSelected ? input.otherSupportSelected : false,
+      input.otherSupport ? input.otherSupport : 'None'
     )
   }
 

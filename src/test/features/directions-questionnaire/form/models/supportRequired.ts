@@ -113,6 +113,42 @@ describe('SupportRequired', () => {
     })
   })
 
+  describe('fromObject should return', () => {
+
+    it('should return None when languageSelected is false', () => {
+      const model = SupportRequired.fromObject({ languageSelected: false })
+      expect(model.languageInterpreted).to.be.eq('None')
+    })
+
+    it(`should return None when signLanguageSelected is false`, () => {
+      const model = SupportRequired.fromObject({ signLanguageSelected: false })
+      expect(model.signLanguageInterpreted).to.be.eq('None')
+    })
+
+    it(`should return None when otherSupportSelected is false`, () => {
+      const model = SupportRequired.fromObject({ otherSupportSelected: false })
+      expect(model.otherSupport).to.be.eq('None')
+    })
+  })
+
+  describe('fromObject should return', () => {
+
+    it('should return language when languageSelected is true', () => {
+      const model = SupportRequired.fromObject({ languageSelected: true, languageInterpreted: 'English' })
+      expect(model.languageInterpreted).to.be.eq('English')
+    })
+
+    it(`should return sign language when signLanguageSelected is true`, () => {
+      const model = SupportRequired.fromObject({ signLanguageSelected: true, signLanguageInterpreted: 'someSign' })
+      expect(model.signLanguageInterpreted).to.be.eq('someSign')
+    })
+
+    it(`should return other support when otherSupportSelected is true`, () => {
+      const model = SupportRequired.fromObject({ otherSupportSelected: true, otherSupport: 'extraSupport' })
+      expect(model.otherSupport).to.be.eq('extraSupport')
+    })
+  })
+
   describe('deserialize', () => {
 
     it('should return an instance initialised with defaults for undefined', () => {
