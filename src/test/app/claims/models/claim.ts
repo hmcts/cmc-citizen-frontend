@@ -44,6 +44,7 @@ import { FeatureToggles } from 'utils/featureToggles'
 import { MediationOutcome } from 'claims/models/mediationOutcome'
 import { defenceClaimData } from 'test/data/entity/claimData'
 import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
+import { ClaimDocument } from 'claims/models/claimDocument'
 
 describe('Claim', () => {
   describe('eligibleForCCJ', () => {
@@ -794,6 +795,40 @@ describe('Claim', () => {
     })
   })
 
+  describe('respondToReconsiderationDeadline', () => {
+    it('should return pre reconsideration deadline date', () => {
+      const claim = new Claim()
+      claim.directionOrder = {
+        createdOn: MomentFactory.parse('2019-06-07')
+      }
+      claimStoreMock.mockNextWorkingDay(MomentFactory.parse('2019-06-07'))
+      claim.respondToReconsiderationDeadline().then(
+        res => {
+          expect(res.format('YYYY-MM-DD'))
+        .to.equal(MomentFactory.parse('2019-06-07').format('YYYY-MM-DD'))
+        })
+    })
+
+    it('should return post reconsideration deadline date ', () => {
+      const claim = new Claim()
+      claim.directionOrder = {
+        createdOn: MomentFactory.currentDate().add(30,'days')
+      }
+      claimStoreMock.mockNextWorkingDay(MomentFactory.parse('2020-08-27'))
+      claim.respondToReconsiderationDeadline().then(
+        res => {
+          expect(res.format('YYYY-MM-DD'))
+          .to.equal(MomentFactory.parse('2020-08-27').format('YYYY-MM-DD'))
+        })
+    })
+
+    it('should return undefined if direction order is not created', async () => {
+      const claim = new Claim()
+      const directionOrderDeadline = await claim.respondToReconsiderationDeadline()
+      expect(directionOrderDeadline).to.be.undefined
+    })
+  })
+
   describe('isEligibleForReDetermination', () => {
 
     it('should be eligible', () => {
@@ -1027,6 +1062,13 @@ describe('Claim', () => {
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ)
       expect(claim.stateHistory[1].status).to.equal(ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE)
     })
+
+    it('should contain CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ status when claimant has reject defence and DQs is not enabled', () => {
+      claim.respondedAt = moment()
+      claim.state = 'BUSINESS_QUEUE'
+      expect(claim.stateHistory).to.have.lengthOf(1)
+      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.BUSINESS_QUEUE)
+    })
   })
 
   describe('paidInFullCCJPaidWithinMonth', () => {
@@ -1064,6 +1106,20 @@ describe('Claim', () => {
     it('should return false when createdAt is before 09/09/19 3:12', () => {
       claim.createdAt = MomentFactory.parse('2019-09-08')
       expect(claim.isIntentionToProceedEligible()).to.be.false
+    })
+  })
+
+  describe('handoffToCCBC', () => {
+    let claim
+
+    beforeEach(() => {
+      claim = new Claim()
+      claim.state = 'BUSINESS_QUEUE'
+      claim.responseDeadline = MomentFactory.currentDate()
+    })
+
+    it('should return ClaimStatus.BUSINESS_QUEUE ', () => {
+      expect(claim.status).to.be.equal(ClaimStatus.BUSINESS_QUEUE)
     })
   })
 
@@ -1223,6 +1279,7 @@ describe('OconFormResponse', () => {
     claim.intentionToProceedDeadline = MomentFactory.currentDate()
     claim.createdAt = MomentFactory.parse('2019-09-09').hour(15).minute(12)
     claim.respondedAt = moment()
+    claim.createdAt = MomentFactory.parse('2018-09-09').hour(15).minute(12)
     claim.response = {
       responseType: ResponseType.FULL_DEFENCE,
       defenceType: DefenceType.DISPUTE,
@@ -1232,5 +1289,19 @@ describe('OconFormResponse', () => {
 
   it('should return ClaimStatus.DEFENDANT_OCON_FORM_RESPONSE ', () => {
     expect(claim.status).to.be.equal(ClaimStatus.DEFENDANT_OCON_FORM_RESPONSE)
+  })
+})
+
+describe('ScannedDocument', () => {
+  it('should return Claim Documents including Scanned Document', () => {
+    const claimWithResponse = new Claim().deserialize({ ...claimStoreMock.sampleClaimIssueObj, ...claimStoreMock.sampleClaimDocuments })
+    const claimDocs: ClaimDocument[] = claimWithResponse.claimDocuments
+    expect(2).to.be.eq(claimDocs.length)
+  })
+  it('should return Claim Documents including Scanned Document', () => {
+    claimStoreMock.sampleClaimDocuments.claimDocumentCollection.claimDocuments = undefined
+    const claimWithResponse = new Claim().deserialize({ ...claimStoreMock.sampleClaimIssueObj, ...claimStoreMock.sampleClaimDocuments })
+    const claimDocs: ClaimDocument[] = claimWithResponse.claimDocuments
+    expect(1).to.be.eq(claimDocs.length)
   })
 })

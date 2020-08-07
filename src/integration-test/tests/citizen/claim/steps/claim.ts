@@ -219,6 +219,7 @@ export class ClaimSteps {
     I.see(AmountHelper.formatMoney(claimAmount.getTotal()), 'table.table-form > tfoot > tr > td.numeric.last > span')
     interestSteps.skipClaimantInterestTotalPage()
     this.enterClaimDetails()
+    I.bypassPCQ()
     userSteps.selectCheckAndSubmitYourClaim()
     this.checkClaimFactsAreTrueAndSubmit(claimantType, defendantType, enterDefendantEmail)
   }
@@ -283,6 +284,7 @@ export class ClaimSteps {
     I.see(AmountHelper.formatMoney(claimAmount.getTotal()), 'table.table-form > tfoot > tr > td.numeric.last > span')
     interestSteps.skipClaimantInterestTotalPage()
     this.enterClaimDetails()
+    I.bypassPCQ()
     userSteps.selectCheckAndSubmitYourClaim()
     I.see('John Smith')
     I.see('10, DALBERG')

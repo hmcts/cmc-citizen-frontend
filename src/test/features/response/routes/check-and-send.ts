@@ -93,7 +93,19 @@ describe('Defendant response: check and send page', () => {
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Check your answers'))
+            .expect(res => {
+              if (FeatureToggles.isEnabled('pcq')) {
+                expect(res.status).to.be.satisfy(function (code) {
+                  if ((code === 302) || (code === 200)) {
+                    return true
+                  } else {
+                    return false
+                  }
+                })
+              } else {
+                expect(res).to.be.successful.withText('Check your answers')
+              }
+            })
         })
 
         context('for individual and sole traders', () => {
@@ -103,14 +115,20 @@ describe('Defendant response: check and send page', () => {
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
-
-            await request(app)
+            if (FeatureToggles.isEnabled('pcq')) {
+              await request(app)
+              .get(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => res.status = 302)
+            } else {
+              await request(app)
               .get(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.successful.withText('Statement of truth'))
               .expect(res => expect(res).to.be.successful.withText('I believe that the facts stated in this response are true.'))
               .expect(res => expect(res).to.be.successful.withText('I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.'))
               .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
+            }
           })
 
           if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
@@ -120,8 +138,13 @@ describe('Defendant response: check and send page', () => {
               draftStoreServiceMock.resolveFind('directionsQuestionnaire')
               claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
               claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
-
-              await request(app)
+              if (FeatureToggles.isEnabled('pcq')) {
+                await request(app)
+                .get(pagePath)
+                .set('Cookie', `${cookieName}=ABC`)
+                .expect(res => res.status = 302)
+              } else {
+                await request(app)
                 .get(pagePath)
                 .set('Cookie', `${cookieName}=ABC`)
                 .expect(res => expect(res).to.be.successful.withText(
@@ -144,12 +167,12 @@ describe('Defendant response: check and send page', () => {
                   'Your timeline of what happened',
                   'Your evidence'
                 ))
+              }
             })
           }
         })
         context('for company and organisation', () => {
           it('should return statement of truth with a tick box', async () => {
-
             draftStoreServiceMock.resolveFind('response:company', {
               timeline: { rows: [{ date: 'timeline date', description: 'something awesome happened' }] }
             })

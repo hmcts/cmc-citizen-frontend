@@ -36,7 +36,8 @@
     "newDashboardStatus": false,
     "inversionOfControl": true,
     "warningBanner": false,
-    "helpWithFees": true
+    "helpWithFees": true,
+    "pcq": true
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"
