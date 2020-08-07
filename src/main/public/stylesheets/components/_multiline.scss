@@ -30,6 +30,7 @@
 
 .multiline-row {
   display: inline-block;
+  margin-bottom: 15px;
   width: 100%;
 
   .add-event-container {
@@ -44,6 +45,7 @@
 }
 
 .multiline-rows {
+
   div {
     :not(:first-child) {
       margin-top: 15px;
@@ -52,16 +54,16 @@
     .error-message {
       margin-top: 0;
     }
-
-    :last-child {
-      margin-bottom: 15px;
-    }
   }
 
   .multiline-row {
     &:last-of-type {
       margin-bottom: .78947em;
     }
+  }
+
+  .triple-column {
+    padding-bottom: 15px;
   }
 }
 

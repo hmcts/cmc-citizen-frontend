@@ -25,11 +25,15 @@
   {{ input(label, name, form, hint, 'number', inputClass, compound, autocomplete) }}
 {% endmacro %}
 
-{% macro poundInput(label, name, form, hint, bold = false) %}
+{% macro poundInput(label, name, form, hint, bold = false, labelHTML = '') %}
   {% set error = form.errorFor(name) %}
   <div class="form-group {% if error %} form-group-error {% endif %}">
     <label for="{{ name }}" id="{{ name }}[label]" class="form-label{% if bold %}-bold{% endif %}">
-      {{ t(label) }}
+      {% if labelHTML %}
+        {{ t(labelHTML) | safe }}
+      {% else %}
+        {{ t(label) }}
+      {% endif %}
 
       {% if hint %}
         <span class="form-hint">{{ t(hint) }}</span>
@@ -87,12 +91,12 @@
   </span>
 {% endmacro %}
 
-{% macro poundInputInline(name, label, form, inputClass = 'column-2', ariaLabelledBy='', ariaDescribedBy='') %}
+{% macro poundInputInline(name, label, form, inputClass = 'column-2', ariaLabelledBy='', ariaDescribedBy='', labelClass='') %}
 
   {% set error = form.errorFor(name) %}
   {% set value = (form.rawDataFor(name) if error else form.valueFor(name)) %}
 
-  <label class="form-label-bold mobile-show" for="{{ name }}">{{ t(label) }}</label>
+  <label class="form-label-bold mobile-show {{ labelClass }}" for="{{ name }}">{{ t(label) }}</label>
   <span class="input-symbol-pound">
     <input id="{{ name }}" name="{{ name }}"
            class="form-control {{ inputClass }} {% if error %} form-control-error {% endif %}"
@@ -108,11 +112,12 @@
   {{ input(label, name, form, hint, 'email', labelClass = labelClass) }}
 {% endmacro %}
 
-{% macro textArea(label, name, form, inputClass='form-control-3-4', rows=5, labelClass='', bold = false) %}
+{% macro textArea(label, name, form, inputClass='form-control-3-4', rows=5, labelClass='', bold = false, labelHTML = '') %}
   {% set error = form.errorFor(name) %}
   <div class="form-group {% if error %} form-group-error {% endif %}">
     <label for="{{ name }}" id="{{ name }}[label]" class="form-label{% if bold %}-bold{% endif %} {{ labelClass }}">
       {{ t(label) }}
+      {{t(labelHTML) | safe}}
     </label>
     {% if error %}
       <span class="error-message">{{ t(error) }}</span>
