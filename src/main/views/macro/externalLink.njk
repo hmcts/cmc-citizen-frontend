@@ -1,3 +1,4 @@
-{% macro externalLink(text, href, analyticsEventLabel, showSpan=true) %}
+{% macro externalLink(text, href, analyticsEventLabel, showSpan=true, addSpace=false) %}
   <a href="{{ href }}" rel="noreferrer noopener" target="_blank" {% if analyticsEventLabel %}class="analytics-click-event-trigger" data-event-label="{{ analyticsEventLabel }}"{% endif %}>{{ text }}{% if showSpan %}<span class="govuk-link govuk-link-no-white-space">{{ t(' (opens in a new window)') }}</span>{% endif %}</a>
-  {% endmacro %}
+  {% if addSpace %}<span class="govuk-link-add-white-space"></span>{% endif %}
+{% endmacro %}
