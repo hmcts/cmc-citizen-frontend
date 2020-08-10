@@ -46,6 +46,13 @@
 
 {% endmacro %}
 
+
+
+
+
+
+
+{# TODO DELTE below macro if not used anywhere (as of now being used in ccj) #}
 {% macro partyDetailsSummaryFragment(partyDetails, showCorrespondenceAddressSection = true, changeLinks = {}, claim) %}
   {{ row('Full name', partyDetails.name, changeLinks.partyDetails or changeLinks.name or changeLinks.contactPerson, bold = true, bottomBorder = false ) }}
 
@@ -86,6 +93,7 @@
     {% else %}
       {% set correspondenceAddressLines = [t('Same as address')] %}
     {% endif %}
+
     {{ rowWithMultipleValue(
     label = 'Correspondence address',
     values = correspondenceAddressLines,
@@ -95,6 +103,7 @@
   {% endif %}
 
   {% if claim and claim.claimData.defendant.phone %}
+
     {{ row(
       label = 'Contact number',
       value = partyDetails.phone,
@@ -106,3 +115,82 @@
     {{ row('Date of birth', partyDetails.dateOfBirth.date.toMoment() | date, changeLinks.dateOfBirth, bold = true) }}
   {% endif %}
 {% endmacro %}
+
+{% macro partyDetail(partyDetails, showCorrespondenceAddressSection = true, changeLinks = {}, claim) %}
+  
+  {{ partyDetailRow('Full name', partyDetails.name, changeLinks.partyDetails or changeLinks.name  or changeLinks.contactPerson) }}
+
+  {% if (partyDetails.type === 'company' or partyDetails.type === 'organisation') %}
+    {% if partyDetails.contactPerson %}
+      {{ partyDetailRow('Contact person', partyDetails.contactPerson) }}
+    {% endif %}
+  {% endif %}
+
+  {% if (partyDetails.type === 'soleTrader') %}
+    {% if partyDetails.businessName %}
+    {{ partyDetailRow('Business name', 'Trading as ' + partyDetails.businessName) }}
+    {% endif %}
+  {% endif %}
+
+  {{ partyDetailRow(
+    'Address',
+    [
+      partyDetails.address.line1,
+      partyDetails.address.line2 | default(''),
+      partyDetails.address.line3 | default(''),
+      partyDetails.address.city,
+      partyDetails.address.postcode
+    ],
+    multiLine = true
+  ) }}
+
+  {% if showCorrespondenceAddressSection %}
+    {% if partyDetails.hasCorrespondenceAddress %}
+      {% set correspondenceAddressLines = [
+      partyDetails.correspondenceAddress.line1,
+      partyDetails.correspondenceAddress.line2 | default(''),
+      partyDetails.correspondenceAddress.line3 | default(''),
+      partyDetails.correspondenceAddress.city,
+      partyDetails.correspondenceAddress.postcode
+      ] %}
+    {% else %}
+      {% set correspondenceAddressLines = [t('Same as address')] %}
+    {% endif %}
+
+    {{ partyDetailRow('Correspondence address', correspondenceAddressLines, changeLink = '', multiLine = true) }}
+
+  {% endif %}
+
+  {% if claim and claim.claimData.defendant.phone %}
+    {{ partyDetailRow('Contact number', partyDetails.phone) }}
+  {% endif %}
+  
+  {% if (partyDetails.type === 'individual' and partyDetails.dateOfBirth and partyDetails.dateOfBirth.date) %}
+    {{ partyDetailRow('Date of birth', partyDetails.dateOfBirth.date.toMoment() | date, changeLinks.dateOfBirth) }}
+  {% endif %}
+{% endmacro %}
+
+{% macro partyDetailRow(label, value, changeLink, bottomBorder = true, bold = false, topBorder = false, multiLine = false) %}
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      {{ t(label) }}
+    </dt>
+    <dd class="govuk-summary-list__value">
+      {% if multiLine %}
+        {% for line in value %}
+          <span class="block">{{ line }}</span>
+        {% endfor %}
+      {% else %}
+        {{ t(value) }}
+      {% endif %}
+      
+    </dd>
+    <dd class="govuk-summary-list__actions">
+      {% if changeLink %}
+        <a class="govuk-link" href="{{ changeLink}}">{{ t('Change') }} <span class="govuk-visually-hidden">{{ t(label | lower) }}</span></a>
+      {% endif %}
+    </dd>
+  </div>
+  
+{% endmacro %}
+

@@ -32,7 +32,7 @@
             </a>
           </span>
           <strong class="govuk-tag app-task-list__tag {{ 'govuk-tag--grey' if task.completed !== true}}" id="{{ describedBy }}">
-            {{ t('{{ status }}', { status: 'completed' if task.completed else 'incomplete' }) }}
+            {{ t('{{ status }}', { status: 'COMPLETE' if task.completed else 'INCOMPLETE' }) }}
           </strong>
         </li>
       {% endfor %}
