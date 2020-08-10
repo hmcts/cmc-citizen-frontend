@@ -97,7 +97,12 @@ describe('Directions Questionnaire - support required page', () => {
 
         it('should render page when everything is fine with None', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
-          draftStoreServiceMock.resolveFind('dqWithNoneSupport')
+          draftStoreServiceMock.resolveFind('directionsQuestionnaire',
+            { supportRequired: { languageSelected: true, languageInterpreted: 'None'
+            , signLanguageSelected: true,signLanguageInterpreted: 'None'
+            , hearingLoopSelected: true, disabledAccessSelected: true
+            ,otherSupportSelected: true, otherSupport: 'None' }
+            })
           draftStoreServiceMock.resolveFind('response')
 
           await request(app)

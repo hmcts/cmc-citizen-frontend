@@ -713,79 +713,6 @@ export const sampleDirectionsQuestionnaireDraftObj = {
   }
 }
 
-export const sampleDQwithNoneSupportRequiredDraftObj = {
-  selfWitness: {
-    option: {
-      option: 'yes'
-    }
-  },
-  otherWitnesses: {
-    otherWitnesses: {
-      option: 'yes'
-    },
-    howMany: 1
-  },
-  hearingLocation: {
-    courtName: 'Little Whinging, Surrey',
-    courtPostCode: undefined,
-    courtAccepted: { option: 'yes' },
-    alternateCourtName: 'some other court name'
-  },
-  exceptionalCircumstances: {
-    exceptionalCircumstances: { option: 'yes' },
-    reason: 'Poorly pet owl'
-  },
-  availability: {
-    hasUnavailableDates: true,
-    unavailableDates: [
-      { year: 2020, month: 1, day: 4 },
-      { year: 2020, month: 2, day: 8 }
-    ]
-  },
-  supportRequired: {
-    languageSelected: true,
-    languageInterpreted: 'None',
-    signLanguageSelected: true,
-    signLanguageInterpreted: 'None',
-    hearingLoopSelected: true,
-    disabledAccessSelected: true,
-    otherSupportSelected: true,
-    otherSupport: 'None'
-  },
-  expertRequired: {
-    option: {
-      option: 'yes'
-    }
-  },
-  expertReports: {
-    declared: true,
-    rows: [
-      {
-        expertName: 'Prof. McGonagall',
-        reportDate: { year: 2018, month: 1, day: 10 }
-      },
-      {
-        expertName: 'Mr Rubeus Hagrid',
-        reportDate: { year: 2019, month: 2, day: 27 }
-      }
-    ]
-  },
-  permissionForExpert: {
-    option: {
-      option: 'yes'
-    }
-  },
-  expertEvidence: {
-    expertEvidence: {
-      option: 'yes'
-    },
-    whatToExamine: 'Photographs'
-  },
-  whyExpertIsNeeded: {
-    explanation: 'for expert opinion'
-  }
-}
-
 export const sampleOrdersDraftObj = {
   externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
   disagreeReason: { reason: 'I want a judge to review it' }
@@ -830,9 +757,6 @@ export function resolveFind (draftType: string, draftOverride?: object): mock.Sc
       break
     case 'directionsQuestionnaire':
       documentDocument = { ...sampleDirectionsQuestionnaireDraftObj, ...draftOverride }
-      break
-    case 'dqWithNoneSupport':
-      documentDocument = { ...sampleDQwithNoneSupportRequiredDraftObj, ...draftOverride }
       break
     case 'orders':
       documentDocument = { ...sampleOrdersDraftObj, ...draftOverride }

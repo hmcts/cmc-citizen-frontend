@@ -19,7 +19,6 @@ function renderPage (res: express.Response, form: Form<SupportRequired>) {
 export default express.Router()
   .get(Paths.supportPage.uri, (req: express.Request, res: express.Response) => {
     const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
-
     if (draft.document.supportRequired.languageInterpreted === 'None') {
       draft.document.supportRequired.languageInterpreted = ''
     }
