@@ -744,13 +744,13 @@ export const sampleDQwithNoneSupportRequiredDraftObj = {
   },
   supportRequired: {
     languageSelected: false,
-    languageInterpreted: 'None',
+    languageInterpreted: '',
     signLanguageSelected: false,
-    signLanguageInterpreted: 'None',
+    signLanguageInterpreted: '',
     hearingLoopSelected: true,
     disabledAccessSelected: true,
     otherSupportSelected: false,
-    otherSupport: 'None'
+    otherSupport: ''
   },
   expertRequired: {
     option: {
