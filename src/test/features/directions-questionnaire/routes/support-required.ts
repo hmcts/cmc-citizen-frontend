@@ -94,6 +94,17 @@ describe('Directions Questionnaire - support required page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Select any support you’d require for a court hearing'))
         })
+
+        it('should render page when everything is fine with None', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
+          draftStoreServiceMock.resolveFind('dqWithNoneSupport')
+          draftStoreServiceMock.resolveFind('response')
+
+          await request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('Select any support you’d require for a court hearing'))
+        })
       })
     })
 
@@ -165,20 +176,6 @@ describe('Directions Questionnaire - support required page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send(invalidFormData)
               .expect(res => expect(res).to.be.successful.withText('Select any support you’d require for a court hearing', 'div class="error-summary"'))
-          })
-        })
-
-        context('when form is invalid', async () => {
-          it('should render page when everything is fine', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
-            draftStoreServiceMock.resolveFind('dqWithNoneSupport')
-            draftStoreServiceMock.resolveFind('response')
-
-            await request(app)
-            .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .send(invalidFormData)
-            .expect(res => expect(res).to.be.successful.withText('Select any support you’d require for a court hearing', 'div class="error-summary"'))
           })
         })
       })
