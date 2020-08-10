@@ -167,6 +167,20 @@ describe('Directions Questionnaire - support required page', () => {
               .expect(res => expect(res).to.be.successful.withText('Select any support you’d require for a court hearing', 'div class="error-summary"'))
           })
         })
+
+        context('when form is invalid', async () => {
+          it('should render page when everything is fine', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
+            draftStoreServiceMock.resolveFind('dqWithNoneSupport')
+            draftStoreServiceMock.resolveFind('response')
+
+            await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send(invalidFormData)
+            .expect(res => expect(res).to.be.successful.withText('Select any support you’d require for a court hearing', 'div class="error-summary"'))
+          })
+        })
       })
 
       context('when user is authorised claimant and form is valid', () => {
