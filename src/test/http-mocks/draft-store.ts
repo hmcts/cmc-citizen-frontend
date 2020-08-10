@@ -671,13 +671,13 @@ export const sampleDirectionsQuestionnaireDraftObj = {
   },
   supportRequired: {
     languageSelected: true,
-    languageInterpreted: 'Klingon',
+    languageInterpreted: 'None',
     signLanguageSelected: true,
-    signLanguageInterpreted: 'Makaton',
+    signLanguageInterpreted: 'None',
     hearingLoopSelected: true,
     disabledAccessSelected: true,
     otherSupportSelected: true,
-    otherSupport: 'Life advice'
+    otherSupport: 'None'
   },
   expertRequired: {
     option: {
@@ -744,13 +744,13 @@ export const sampleDQwithNoneSupportRequiredDraftObj = {
   },
   supportRequired: {
     languageSelected: false,
-    languageInterpreted: '',
+    languageInterpreted: 'None',
     signLanguageSelected: false,
-    signLanguageInterpreted: '',
+    signLanguageInterpreted: 'None',
     hearingLoopSelected: true,
     disabledAccessSelected: true,
     otherSupportSelected: false,
-    otherSupport: ''
+    otherSupport: 'None'
   },
   expertRequired: {
     option: {
