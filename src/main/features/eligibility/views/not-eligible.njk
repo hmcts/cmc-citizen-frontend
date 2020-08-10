@@ -28,8 +28,8 @@
         </p>
       {% elseif reason === NotEligibleReason.CLAIM_ON_BEHALF %}
         <p>{{ t('This service is currently for claimants representing themselves.') }}</p>
-        <p>{{ t('If you’re a legal representative ' + externalLink('use the Money Claim Online (MCOL) service', legacyServiceUrl) +
-            ' or ' + externalLink('download a paper form,', n1FormUrl, false, true, true) + ' complete and return it to make your claim.') | safe }}
+        <p>{{ t('If you’re a legal representative ' + externalLink('use the Money Claim Online (MCOL) service', legacyServiceUrl, false, true, true) +
+            ' or ' + externalLink('download a paper form', n1FormUrl, false, true, false) + ', complete and return it to make your claim.') | safe }}
         {{ paperFormAddress() }}
       {% elseif reason === NotEligibleReason.MULTIPLE_CLAIMANTS %}
         <p>{{ t('You can’t use this service if more than one person or organisation is making the claim.') }}</p>
