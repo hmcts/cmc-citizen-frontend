@@ -30,6 +30,7 @@
         <input class="form-control {% if yearError or dateError %} form-control-error {% endif %}" id="{{ name }}[year]" name="{{ name }}[year]" value="{{ form.valueFor(name).year | default('') }}" type="number">
       </div>
     </div>
+      </fieldset>
   </div>
-  </fieldset>
+
 {% endmacro %}
