@@ -14,8 +14,8 @@ const testingSupport: TestingSupportSteps = new TestingSupportSteps()
 
 Feature('Claimant Enter details of claim')
 
-Scenario('I can prepare a claim with no interest @citizen', { retries: 0 }, async (I: I) => {
-  userSteps.login(userSteps.getClaimantEmail())
+Scenario('I can prepare a claim with no interest @citizen', { retries: 3 }, async (I: I, login) => {
+  await login('claimant')
   if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
     testingSupport.deleteClaimDraft()
   }
@@ -57,8 +57,8 @@ Scenario('I can prepare a claim with no interest @citizen', { retries: 0 }, asyn
   I.waitForText('Claim submitted')
 })
 
-Scenario('I can prepare a claim with different interest rate and date @citizen', { retries: 3 }, async (I: I) => {
-  userSteps.login(userSteps.getClaimantEmail())
+Scenario('I can prepare a claim with different interest rate and date @citizen', { retries: 3 }, async (I: I, login) => {
+  await login('claimant')
   if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
     testingSupport.deleteClaimDraft()
   }
@@ -77,8 +77,8 @@ Scenario('I can prepare a claim with different interest rate and date @citizen',
   }
 })
 
-Scenario('I can prepare a claim with a manually entered interest amount and a daily amount added @citizen', { retries: 3 }, async (I: I) => {
-  userSteps.login(userSteps.getClaimantEmail())
+Scenario('I can prepare a claim with a manually entered interest amount and a daily amount added @citizen', { retries: 3 }, async (I: I, login) => {
+  await login('claimant')
   if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
     testingSupport.deleteClaimDraft()
   }
