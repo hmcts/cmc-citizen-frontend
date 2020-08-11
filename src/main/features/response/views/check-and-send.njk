@@ -192,6 +192,7 @@
           partyDetailRow(
             label = 'When did you pay this amount?',
             value = t(draft.rejectAllOfClaim.howMuchHaveYouPaid.date.toMoment() | date),
+            changeLink = FullRejectionPaths.howMuchHaveYouPaidPage.evaluateUri({ externalId: claim.externalId }),
             bottomBorder = false,
             bold = true
           )
@@ -201,6 +202,7 @@
           partyDetailRow(
             label = 'How did you pay this amount?',
             value = draft.rejectAllOfClaim.howMuchHaveYouPaid.text,
+            changeLink = FullRejectionPaths.howMuchHaveYouPaidPage.evaluateUri({ externalId: claim.externalId }),
             bold = true
           )
         }}
@@ -218,10 +220,10 @@
           }}
 
           {% for timelineRow in draft.timeline.getPopulatedRowsOnly() %}
-            {{ partyDetailRow(label = timelineRow.date, value = timelineRow.description, changeLink = '', bottomBorder = loop.last) }}
+            {{ partyDetailRow(label = timelineRow.date, value = timelineRow.description, changeLink = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }), bottomBorder = loop.last) }}
           {% endfor %}
           
-          {{ partyDetailRow(label = 'Comments about their timeline (optional)', value = draft.timeline.comment | default(''), bold = true) }}
+          {{ partyDetailRow(label = 'Comments about their timeline (optional)', value = draft.timeline.comment | default(''), changeLink = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
 
           {{
             partyDetailRow(
@@ -231,23 +233,22 @@
               bottomBorder = false
             )
           }}
-          {% for evidenceDetail in draft.partialAdmission.evidence.getPopulatedRowsOnly() %}
+          {% for evidenceDetail in draft.evidence.getPopulatedRowsOnly() %}
             {{ partyDetailRow(
               label = evidenceDetail.type.displayValue,
               value = evidenceDetail.description | default(''),
-              changeLing = '',
+              changeLink = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId }),
               bottomBorder = loop.last
               )
             }}
           {% endfor %}
 
-          {{ partyDetailRow(label = 'Comments about their evidence (optional)', value = draft.evidence.comment | default(''), bold = true) }}
+          {{ partyDetailRow(label = 'Comments about their evidence (optional)', value = draft.evidence.comment | default(''), changeLink = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
 
         {% endif %}
       </dl>
     {% endif %}
 
-    {#TODO yet to be tested#}
     {% if draft.isResponseRejectedFullyWithDispute() %}
       <h2 class="govuk-heading-m">{{ t("Response details") }}</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-9">
@@ -295,12 +296,10 @@
       </dl>
     {% endif %}
 
-    {#TODO yet to be tested#}
     {% if statementOfMeansIsApplicable and draft.statementOfMeans %}
       {% include "./statement-of-means/check-and-send.njk" %}
     {% endif %}
 
-    {#TODO yet to be tested#}
     {% if draft.isResponsePartiallyAdmitted() and not draft.isResponsePartiallyAdmittedAndAlreadyPaid() %}
       {% if draft.partialAdmission.paymentIntention.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
         <h2 class="govuk-heading-m">{{ t("When you’ll pay") }}</h2>
@@ -418,6 +417,7 @@
                 t('Expert’s name: {{  expertsName }}', { expertsName:  report.expertName }),
                 t('Date of report: {{  reportDate }}', { reportDate:  report.reportDate.toMoment() | date })
               ],
+              changeLink = DirectionsQuestionnairePaths.expertReportsPage.evaluateUri({ externalId: claim.externalId }),
               bottomBorder = false,
               bold = true,
               multiLine = true

@@ -118,7 +118,8 @@
 
 {% macro partyDetail(partyDetails, showCorrespondenceAddressSection = true, changeLinks = {}, claim) %}
   
-  {{ partyDetailRow('Full name', partyDetails.name, changeLinks.partyDetails or changeLinks.name  or changeLinks.contactPerson) }}
+  {% set linkHref = changeLinks.partyDetails or changeLinks.name  or changeLinks.contactPerson %}
+  {{ partyDetailRow('Full name', partyDetails.name, changeLink = linkHref) }}
 
   {% if (partyDetails.type === 'company' or partyDetails.type === 'organisation') %}
     {% if partyDetails.contactPerson %}
@@ -128,7 +129,7 @@
 
   {% if (partyDetails.type === 'soleTrader') %}
     {% if partyDetails.businessName %}
-    {{ partyDetailRow('Business name', 'Trading as ' + partyDetails.businessName) }}
+    {{ partyDetailRow('Business name', 'Trading as ' + partyDetails.businessName, changeLink = linkHref) }}
     {% endif %}
   {% endif %}
 
@@ -141,7 +142,8 @@
       partyDetails.address.city,
       partyDetails.address.postcode
     ],
-    multiLine = true
+    multiLine = true,
+    changeLink = linkHref
   ) }}
 
   {% if showCorrespondenceAddressSection %}
@@ -153,11 +155,10 @@
       partyDetails.correspondenceAddress.city,
       partyDetails.correspondenceAddress.postcode
       ] %}
+      {{ partyDetailRow('Correspondence address', correspondenceAddressLines, changeLink = linkHref, multiLine = true) }}
     {% else %}
-      {% set correspondenceAddressLines = [t('Same as address')] %}
+      {{ partyDetailRow('Correspondence address', 'Same as address', changeLink = linkHref) }}
     {% endif %}
-
-    {{ partyDetailRow('Correspondence address', correspondenceAddressLines, changeLink = '', multiLine = true) }}
 
   {% endif %}
 

@@ -14,8 +14,11 @@
       <h2 class="govuk-heading-s govuk-!-margin-bottom-2">
         {{ t("Application {{ status }}",{ status: 'complete' if (status.total === status.completed) else 'incomplete'} )}}
       </h2>
-      <p class="govuk-body govuk-!-margin-bottom-7">
+      <p class="govuk-body">
         {{ t('You have completed {{ status.completed }} of {{ status.total }} sections',{status: status}) }}
+      </p>
+      <p class="govuk-body govuk-!-margin-bottom-7">
+        {{ t('After you have completed all the actions you will be taken to a page where you can check your answers before submitting.') }}
       </p>
       {{ taskList(beforeYouStart, 1) }}
       {{ taskList(prepareYourClaim, 2) }}
