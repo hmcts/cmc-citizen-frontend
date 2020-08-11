@@ -9,7 +9,7 @@ import { MediationDraft } from 'mediation/draft/mediationDraft'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.incompleteSubmissionPage.uri, (req: express.Request, res: express.Response) => {
+  .get(Paths.incompleteSubmissionPage.uri, async (req: express.Request, res: express.Response) => {
     const claim: Claim = res.locals.claim
     const draft: Draft<ResponseDraft> = res.locals.responseDraft
     const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
@@ -18,7 +18,7 @@ export default express.Router()
     res.render(Paths.incompleteSubmissionPage.associatedView,
       {
         taskListUri: Paths.taskListPage.evaluateUri({ externalId: claim.externalId }),
-        tasks: TaskListBuilder.buildRemainingTasks(draft.document, claim, mediationDraft.document, directionQuestionnaireDraft.document)
+        tasks: await TaskListBuilder.buildRemainingTasks(draft.document, claim, mediationDraft.document, directionQuestionnaireDraft.document)
       }
     )
   })
