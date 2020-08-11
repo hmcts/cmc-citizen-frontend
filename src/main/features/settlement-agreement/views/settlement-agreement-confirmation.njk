@@ -17,7 +17,7 @@
       {% elseif claim.settlement.isSettled() %}
         <h1 class="bold-large">{{ t('You’ve both signed a settlement agreement') }}</h1>
         <p class="receipt-download-container">
-          {{ internalLink(t('Download settlement agreement'), OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId })) }} (PDF)
+          {{ internalLink(t('Download settlement agreement (PDF)'), OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId })) }}
         </p>
       {% endif %}
     </div>
