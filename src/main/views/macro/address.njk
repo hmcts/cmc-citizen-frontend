@@ -16,7 +16,7 @@
   <div class="form-group notice postcode-lookup">
     {% set enterAddressError = form.errorFor(internalName) %}
     <div class="form-group notice postcode-search-container hidden js-visible{% if enterAddressError %} form-group-error{% endif %}">
-      <label id="{{ internalName + '[label]' }}" for="{{ internalName }}" class="form-label">{{ t(postcodeLabel) }}</label>
+      <label id="{{ internalName + '[label]' }}" for="{{ internalName }}" class="form-label visually-hidden">{{ t(postcodeLabel) }}</label>
       <div class="postcode-search-error hidden">
         <span class="error-message">
           {{ t('We can’t find an address for that postcode. Try again or enter the address manually.') }}
@@ -154,7 +154,7 @@
   }}
 
   <div class="panel panel-border-narrow js-hidden" id="hasCorrespondenceAddress-true" aria-hidden="false">
-    <p>{{ t('All correspondence will be sent to this address. This is known as an ‘address for service’.') | safe }}</p>
-    {{ postcodeLookupAddressFragment(form, name = 'correspondenceAddress') }}
+    <p>{{ t('All correspondence will be sent to this address. This is known as an ‘address for service’.') }}</p>
+    {{ postcodeLookupAddressFragment(form, name = 'correspondenceAddress', postcodeLabel = 'Enter UK Postcode for Correspondence Address Lookup') }}
   </div>
 {% endmacro %}
