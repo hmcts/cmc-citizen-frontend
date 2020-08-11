@@ -35,8 +35,7 @@
       {% endif %}
 
       <p><span class="bold-small">{{ t('Download the claim') }}</span></p>
-      <p>{{ internalLink(t('Download claim'), pdfUrl.evaluateUri({ externalId: claim.externalId })) }}
-        {{ t('(PDF)') }}</p>
+      <p>{{ internalLink(t('Download claim (PDF)'), pdfUrl.evaluateUri({ externalId: claim.externalId })) }}</p>
     </div>
   </div>
 {% endblock %}
