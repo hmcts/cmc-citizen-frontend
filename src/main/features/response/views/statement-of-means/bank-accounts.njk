@@ -27,7 +27,7 @@
     {% if jointError %}<span id="{{ jointKey }}[label]" class="error-message">{{ t(jointError) }}</span>{% endif %}
     {% if balanceError %}<span id="{{ balanceKey }}[label]" class="error-message">{{ t(balanceError) }}</span>{% endif %}
 
-    <label class="form-label-bold mobile-show" for="{{ typeOfAccountKey }}">{{ index + 1 }} {{ t('. Type of account') }}</label>
+    <label class="form-label-bold mobile-show visually-hidden" for="{{ typeOfAccountKey }}">{{ index + 1 }} {{ t('. Type of account') }}</label>
     <select name="{{ typeOfAccountKey }}" id="{{ typeOfAccountKey }}" class="form-control column-1{% if typeOfAccountError %} form-control-error {% endif %}">
       <option value="">{{ t('Choose') }}</option>
       <option value="{{ BankAccountType.CURRENT_ACCOUNT.value }}" {% if typeOfAccountValue === BankAccountType.CURRENT_ACCOUNT %} selected{% endif %}>{{ t(BankAccountType.CURRENT_ACCOUNT.displayValue) }}</option>
@@ -36,14 +36,14 @@
       <option value="{{ BankAccountType.OTHER.value }}" {% if typeOfAccountValue === BankAccountType.OTHER %} selected{% endif %}>{{ t(BankAccountType.OTHER.displayValue) }}</option>
     </select>
 
-    <label class="form-label-bold mobile-show" for="{{ jointKey }}">{{ index + 1 }} {{ t('. Joint account') }}</label>
+    <label class="form-label-bold mobile-show visually-hidden" for="{{ jointKey }}">{{ index + 1 }} {{ t('. Joint account') }}</label>
     <select name="{{ jointKey }}" id="{{ jointKey }}" class="form-control column-3 {% if jointError %} form-control-error {% endif %}">
       <option value="">Choose</option>
       <option value="yes" {% if jointValue === true %} selected{% endif %}>{{ t('Yes') }}</option>
       <option value="no" {% if jointValue === false %} selected{% endif %}>{{ t('No') }}</option>
     </select>
 
-    {{ poundInputInline(name = balanceKey, label = ( index + 1 ) + '. Balance', form = form, ariaLabelledBy='account-balance-label') }}
+    {{ poundInputInline(name = balanceKey, label = ( index + 1 ) + '. Balance', form = form, ariaLabelledBy='account-balance-label', labelClass='visually-hidden') }}
   </div>
 
 {% endmacro %}
