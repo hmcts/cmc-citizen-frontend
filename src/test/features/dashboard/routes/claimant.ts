@@ -41,6 +41,14 @@ describe('Dashboard - claimant page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Claim number', 'Draft'))
         })
+
+        it('should not show defendant details', async () => {
+          await request(app)
+            .get('/dashboard/draft/claimant#defendantDetails')
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Defendants\' details will be updated when claim is submitted.'))
+            .expect(res => expect(res).to.be.successful.withoutText('Address'))
+        })
       })
 
       context('when claim is not in draft stage', () => {

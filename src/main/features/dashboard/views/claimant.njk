@@ -67,6 +67,9 @@
 {% set defendantDetails %}
   {% if claim %}
     {{ otherPartyDetails('Defendant', claim.claimData.defendant) }}
+  {% else %}
+      <h2 class="heading-medium no-top-margin">This claim has not been submitted</h2>
+      <p>Defendants' details will be updated when claim is submitted.</p>
   {% endif %}
 {% endset %}
 
