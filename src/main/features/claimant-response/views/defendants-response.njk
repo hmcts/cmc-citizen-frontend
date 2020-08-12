@@ -51,15 +51,14 @@
 
 {% macro fullResponseFragment() %}
   {% if dqsEnabled %}
-    {% set label = 'Download their full response and hearing requirements' %}
+    {% set label = 'Download their full response and hearing requirements (PDF)' %}
   {% else %}
-    {% set label = 'Download their full response' %}
+    {% set label = 'Download their full response (PDF)' %}
   {% endif %}
 
   <div class="form-group">
     <h3 class="heading-small">{{ t('Full response') }}</h3>
-    <p>{{ internalLink(t(label), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId })) }}
-    {{ t('(PDF)') }}</p>
+    <p>{{ internalLink(t(label), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId })) }}</p>
   </div>
 {% endmacro %}
 
@@ -68,9 +67,9 @@
     <div class="column-two-thirds">
       {% if claim.response.responseMethod == domain.ResponseMethod.OCON_FORM %}
         <p>{{ t('{{ defendantName }} has rejected the claim. They responded on paper.', { defendantName: defendantName }) }}</p>
-        <p>{{ t('To see what they said, ') }}{{ internalLink(t('download their response and hearing requirements'),
+        <p>{{ t('To see what they said, ') }}{{ internalLink(t('download their response and hearing requirements (PDF)'),
             ResponsePaths.scannedResponseForm.evaluateUri({ externalId: claim.externalId })) }}
-          {{ t('(PDF)') }}</p>
+        </p>
       {% elif claim.response.responseType === domain.ResponseType.FULL_DEFENCE and not alreadyPaid %}
         <p>{{ t('{{ defendantName }} has rejected the claim.', { defendantName: defendantName }) }}</p>
 
