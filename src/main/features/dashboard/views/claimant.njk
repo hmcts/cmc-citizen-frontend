@@ -65,7 +65,9 @@
 {% endset %}
 
 {% set defendantDetails %}
-  {{ otherPartyDetails('Defendant', claim.claimData.defendant) }}
+  {% if claim %}
+    {{ otherPartyDetails('Defendant', claim.claimData.defendant) }}
+  {% endif %}
 {% endset %}
 
 {% block content %}
