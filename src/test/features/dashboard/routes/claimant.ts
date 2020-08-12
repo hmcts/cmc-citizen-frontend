@@ -21,6 +21,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 
 const draftPagePath = Paths.claimantPage.evaluateUri({ externalId: 'draft' })
 const claimPagePath = Paths.claimantPage.evaluateUri({ externalId: sampleClaimDraftObj.externalId })
+const defendantDetailsPagePath = Paths.defendantDetailsPage.evaluateUri({ externalId: sampleClaimDraftObj.externalId })
 
 describe('Dashboard - claimant page', () => {
   attachDefaultHooks(app)
@@ -59,6 +60,20 @@ describe('Dashboard - claimant page', () => {
             .get(claimPagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Claim number', claimStoreServiceMock.sampleClaimObj.referenceNumber))
+        })
+
+        it('should render defendant details', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+
+          await request(app)
+            .get(defendantDetailsPagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Defendant\'s details',
+                                                                  'Name', 'John Doe',
+                                                                  'Address', 'line1<br>line2<br>city<br>bb127nq',
+                                                                  'Correspondence Address', 'Not available',
+                                                                  'Email', 'johndoe@example.com',
+                                                                  'Telephone', 'Not available'))
         })
 
         context('when accessor is not the claimant', () => {

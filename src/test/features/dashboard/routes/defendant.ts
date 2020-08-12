@@ -14,7 +14,7 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkAuthorizationGuards } from 'test/features/dashboard/routes/checks/authorization-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
-
+const claimantDetailsPagePath = Paths.claimantDetailsPage.evaluateUri({ externalId: 'b17af4d2-273f-4999-9895-bce382fa24c8' })
 const defendantPage = Paths.defendantPage.evaluateUri({ externalId: 'b17af4d2-273f-4999-9895-bce382fa24c8' })
 
 describe('Dashboard - defendant page', () => {
@@ -44,6 +44,20 @@ describe('Dashboard - defendant page', () => {
             .get(defendantPage)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Claim number', claimStoreServiceMock.sampleClaimObj.referenceNumber))
+        })
+
+        it('should render claimant details', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+
+          await request(app)
+            .get(claimantDetailsPagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Claimant\'s details',
+                                                                  'Name', 'John Smith',
+                                                                  'Address', 'line1<br>line2<br>city<br>bb127nq',
+                                                                  'Correspondence Address', 'Not available',
+                                                                  'Email', 'Not available',
+                                                                  'Telephone', 'Not available'))
         })
 
         it('should return forbidden when accessor is not the defendant', async () => {
