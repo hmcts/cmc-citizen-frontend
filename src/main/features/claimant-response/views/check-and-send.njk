@@ -364,7 +364,7 @@
           ) }}
         </dl>
         {% if draft.formaliseRepaymentPlan.option.value === FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value %}
-          <h2 class="govuk-heading-m">{{ t("How you wish to proceed") }}</h2>
+          <h2 class="govuk-heading-m">{{ t("Settlement agreement") }}</h2>
           <dl class="govuk-summary-list govuk-!-margin-bottom-9">
             {% if paymentIntention.paymentOption === PaymentType.IMMEDIATELY.value %}
               {{ partyDetailRow(label = 'The agreement',
@@ -417,7 +417,7 @@
         {% endif %}
 
         {% if draft.formaliseRepaymentPlan.option.value === FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT.value %}
-          <h2 class="govuk-heading-m">{{ t("How you wish to proceed") }}</h2>
+          <h2 class="govuk-heading-m">{{ t("Judgment request") }}</h2>
           <dl class="govuk-summary-list govuk-!-margin-bottom-9">
             {{ partyDetailRow('Has the defendant paid some of the amount owed?',
               draft.paidAmount.option.value | capitalize, changeLink = ClaimantResponseCCJPath.paidAmountPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = not draft.paidAmount.amount, bold = true) }}
