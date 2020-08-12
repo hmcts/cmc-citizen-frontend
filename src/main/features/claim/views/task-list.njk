@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "task-list.njk" import task, taskListHeading, taskList, disabledTask %}
+{% from "task-list.njk" import taskList, taskStatus %}
 {% from "internalLink.njk" import internalLink %}
 {% block additional_head %}
   <link rel="stylesheet" href="{{ asset_paths['style'] }}/govuk-frontend/task-list.css"/>
@@ -11,15 +11,7 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h2 class="govuk-heading-s govuk-!-margin-bottom-2">
-        {{ t("Application {{ status }}",{ status: 'complete' if (status.total === status.completed) else 'incomplete'} )}}
-      </h2>
-      <p class="govuk-body">
-        {{ t('You have completed {{ status.completed }} of {{ status.total }} sections',{status: status}) }}
-      </p>
-      <p class="govuk-body govuk-!-margin-bottom-7">
-        {{ t('After you have completed all the actions you will be taken to a page where you can check your answers before submitting.') }}
-      </p>
+      {{ taskStatus(status) }}
       {{ taskList(beforeYouStart, 1) }}
       {{ taskList(prepareYourClaim, 2) }}
       {{ taskList(submit, 3) }}

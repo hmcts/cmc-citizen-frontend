@@ -4,9 +4,6 @@
   margin-bottom: 0;
   margin-top: 0;
   padding-left: 0;
-  @include govuk-media-query($from: tablet) {
-    min-width: 550px;
-  }
 }
 
 .app-task-list__section {

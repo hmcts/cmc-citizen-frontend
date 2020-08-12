@@ -32,7 +32,7 @@ describe('Claimant response: task list page', () => {
       await request(app)
         .get(taskListPagePath)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.successful.withText('Your response'))
+        .expect(res => expect(res).to.be.successful.withText('Your response', 'Application incomplete', 'You have completed 5 of 6 sections'))
     })
   })
 })

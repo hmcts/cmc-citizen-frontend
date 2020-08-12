@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "task-list.njk" import task, taskListHeading, taskList, disabledTask %}
+{% from "task-list.njk" import taskList, taskStatus %}
 {% from "timeRemaining.njk" import timeRemaining %}
 {% from "internalLink.njk" import internalLink %}
 {% block additional_head %}
@@ -8,30 +8,24 @@
 
 {% set heading = 'Respond to a money claim' %}
 {% set headingSize = 'xlarge' %}
-{% set taskNumber = 2 %}
+{% set taskNumber = 0 %}
 
 {% block content %}
 
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h2 class="govuk-heading-s govuk-!-margin-bottom-2">
-        {{ t("Application {{ status }}",{ status: 'complete' if (status.total === status.completed) else 'incomplete'} )}}
-      </h2>
-      <p class="govuk-body">
-        {{ t('You have completed {{ status.completed }} of {{ status.total }} sections',{status: status}) }}
-      </p>
-      <p class="govuk-body govuk-!-margin-bottom-7">
-        {{ t('After you have completed all the actions you will be taken to a page where you can check your answers before submitting.') }}
-      </p>
-      
-      {{ taskList(beforeYouStartSection, 1) }}
-      {{ taskList(respondToClaimSection, 2) }}
+      {{ taskStatus(status) }}
+
+      {% set taskNumber = taskNumber + 1 %}
+      {{ taskList(beforeYouStartSection, taskNumber) }}
+
+      {% set taskNumber = taskNumber + 1 %}
+      {{ taskList(respondToClaimSection, taskNumber) }}
 
       {% if resolvingClaimSection %}
         {% set taskNumber = taskNumber + 1 %}
         {{ taskList(resolvingClaimSection, taskNumber) }}
       {% endif %}
-
 
       {% if directionsQuestionnaireSection %}
         {% set taskNumber = taskNumber + 1 %}
