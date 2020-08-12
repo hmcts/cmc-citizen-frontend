@@ -356,7 +356,7 @@
       {% if draft.formaliseRepaymentPlan %}
         <h2 class="govuk-heading-m">{{ t("How you wish to proceed") }}</h2>
         <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-          {{ partyDetail(
+          {{ partyDetailRow(
             label = 'How do you want to formalise the repayment plan?',
             bold = true,
             value = draft.formaliseRepaymentPlan.option | renderFormaliseRepaymentPlanOption,
@@ -367,7 +367,7 @@
           <h2 class="govuk-heading-m">{{ t("How you wish to proceed") }}</h2>
           <dl class="govuk-summary-list govuk-!-margin-bottom-9">
             {% if paymentIntention.paymentOption === PaymentType.IMMEDIATELY.value %}
-              {{ partyDetail(label = 'The agreement',
+              {{ partyDetailRow(label = 'The agreement',
                 value = t('{{ defendantFullName }} will pay {{ totalAmount }} immediately.
               {{ claimantName }} will receive the money no later than {{ paymentDate }}.
               Any cheques or transfers will be clear in {{ defendantFullName }}’s account by this date.',
@@ -378,11 +378,11 @@
                 bottomBorder = true, bold = true,
                 changeLink = ClaimantResponsePaths.signSettlementAgreementPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true
               ) }}
-              {{ partyDetail(label = 'Completion date',
+              {{ partyDetailRow(label = 'Completion date',
                 value = paymentIntention.paymentDate | date,
                 bottomBorder = true, bold = true) }}
             {% elseif paymentIntention.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
-              {{ partyDetail(label = 'The agreement',
+              {{ partyDetailRow(label = 'The agreement',
                 value = t('{{ defendantFullName }} will pay {{ totalAmount }}, no later than {{ paymentDate }}',
                   {
                     defendantFullName: claim.response.defendant.name,
@@ -392,12 +392,12 @@
                 bottomBorder = true, bold = true,
                 changeLink = ClaimantResponsePaths.signSettlementAgreementPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true
               ) }}
-              {{ partyDetail(label = 'Completion date',
+              {{ partyDetailRow(label = 'Completion date',
                 value = paymentIntention.paymentDate | date,
                 bottomBorder = true, bold = true
               ) }}
             {% elseif paymentIntention.paymentOption === PaymentType.INSTALMENTS.value %}
-              {{ partyDetail(label = 'The agreement',
+              {{ partyDetailRow(label = 'The agreement',
                 value = t('{{ defendantFullName }} will repay {{ totalAmount }} in instalments of {{ instalmentAmount }} {{ paymentSchedule }}. The first instalment will be paid by {{ firstPaymentDate }}.',
                   { defendantFullName: claim.response.defendant.name,
                     totalAmount: totalAmount | numeral,
@@ -408,7 +408,7 @@
                 bottomBorder = true, bold = true,
                 changeLink = ClaimantResponsePaths.signSettlementAgreementPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true
               ) }}
-              {{ partyDetail(label = 'Completion date',
+              {{ partyDetailRow(label = 'Completion date',
                 value = paymentIntention.repaymentPlan.completionDate | date,
                 bottomBorder = true, bold = true
               ) }}
@@ -419,14 +419,14 @@
         {% if draft.formaliseRepaymentPlan.option.value === FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT.value %}
           <h2 class="govuk-heading-m">{{ t("How you wish to proceed") }}</h2>
           <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-            {{ partyDetail('Has the defendant paid some of the amount owed?',
+            {{ partyDetailRow('Has the defendant paid some of the amount owed?',
               draft.paidAmount.option.value | capitalize, changeLink = ClaimantResponseCCJPath.paidAmountPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = not draft.paidAmount.amount, bold = true) }}
 
             {% if draft.paidAmount.amount %}
-              {{ partyDetail('Amount already paid', draft.paidAmount.amount | numeral, bottomBorder = true, bold = true) }}
+              {{ partyDetailRow('Amount already paid', draft.paidAmount.amount | numeral, bottomBorder = true, bold = true) }}
             {% endif %}
 
-            {{ partyDetail('Total to be paid by defendant', (totalAmount - (draft.paidAmount.amount or 0)) | numeral,bold = true) }}
+            {{ partyDetailRow('Total to be paid by defendant', (totalAmount - (draft.paidAmount.amount or 0)) | numeral,bold = true) }}
           </dl>
         {% endif %}
 

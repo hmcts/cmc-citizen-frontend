@@ -27,7 +27,8 @@
     "test:integration-verbose": "TS_NODE_TRANSPILE_ONLY=true codeceptjs run-multiple parallel --verbose --config default.conf.js",
     "test:crossbrowser": "TS_NODE_TRANSPILE_ONLY=true codeceptjs run-multiple parallel --verbose --config saucelabs.conf.js --reporter mocha-multi",
     "list-supported-browsers": "node -e 'Object.keys(require(\"@hmcts/cmc-supported-browsers\").supportedBrowsers).forEach(key => console.log(key))'",
-    "sonar-scan": "sonar-scanner -Dsonar.projectName='CMC :: Citizen Frontend' -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.exclusions=src/main/routes/webchat.ts,src/main/public/**,src/main/app/mocks/mockPayClient.ts,src/main/features/claim/routes/pay.ts -Dsonar.javascript.lcov.reportPaths=coverage-report/lcov.info"
+    "sonar-scan": "sonar-scanner -Dsonar.projectName='CMC :: Citizen Frontend' -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.exclusions=src/main/routes/webchat.ts,src/main/public/**,src/main/app/mocks/mockPayClient.ts,src/main/features/claim/routes/pay.ts -Dsonar.javascript.lcov.reportPaths=coverage-report/lcov.info",
+    "test:file": "TS_NODE_TRANSPILE_ONLY=true NODE_ENV=mocha LOG_LEVEL=OFF mocha --opts mocha.opts --watch --watch-extensions ts"
   },
   "dependencies": {
     "@hmcts/class-validator": "^0.9.1-e",
