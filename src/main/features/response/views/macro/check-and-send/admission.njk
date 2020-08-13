@@ -34,6 +34,7 @@
           label = 'Frequency of payments',
           value = t(paymentPlan.paymentSchedule.displayValue),
           bold = true,
+          changeLink = Paths.paymentPlanPage.evaluateUri({ externalId: externalId }),
           bottomBorder = false
         )
       }}
@@ -41,6 +42,7 @@
         partyDetailRow(
           label = 'Make the first payment on',
           value = paymentPlan.firstPaymentDate.toMoment() | date,
+          changeLink = Paths.paymentPlanPage.evaluateUri({ externalId: externalId }),
           bold = true
         )
       }}

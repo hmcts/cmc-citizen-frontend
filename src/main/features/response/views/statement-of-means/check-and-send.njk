@@ -48,12 +48,12 @@
 
   {% for account in draft.statementOfMeans.bankAccounts.getPopulatedRowsOnly() %}
     {% if numberOfBankAccounts === 1 %}
-      {{ partyDetailRow('Type of account', account.typeOfAccount.displayValue, '', false, bold = true ) }}
+      {{ partyDetailRow('Type of account', account.typeOfAccount.displayValue, StatementOfMeansPaths.bankAccountsPage.evaluateUri({ externalId: claim.externalId }), false, bold = true ) }}
     {% else %}
-      {{ partyDetailRow(loop.index0 + 1 + '. Type of account', account.typeOfAccount.displayValue, '', false, bold = true ) }}
+      {{ partyDetailRow(loop.index0 + 1 + '. Type of account', account.typeOfAccount.displayValue, StatementOfMeansPaths.bankAccountsPage.evaluateUri({ externalId: claim.externalId }), false, bold = true ) }}
     {% endif %}
-    {{ partyDetailRow('Balance', account.balance | numeral, '', false, bold = true) }}
-    {{ partyDetailRow('Joint account', 'Yes' if account.joint else 'No', '', loop.index0 === indexOfLastRow, bold = true ) }}
+    {{ partyDetailRow('Balance', account.balance | numeral, StatementOfMeansPaths.bankAccountsPage.evaluateUri({ externalId: claim.externalId }), false, bold = true) }}
+    {{ partyDetailRow('Joint account', 'Yes' if account.joint else 'No', StatementOfMeansPaths.bankAccountsPage.evaluateUri({ externalId: claim.externalId }), loop.index0 === indexOfLastRow, bold = true ) }}
   {% endfor %}
 
   {% set defendantDisabled = false %}
@@ -88,7 +88,7 @@
   {% endif %}
 
   {{ partyDetailRow('Children', '', StatementOfMeansPaths.dependantsPage.evaluateUri({ externalId: claim.externalId }), false, bold = true) }}
-  {{ partyDetailRow('Do any children live with you?', 'Yes' if draft.statementOfMeans.dependants.declared else 'No', '', not draft.statementOfMeans.dependants.declared, bold = true) }}
+  {{ partyDetailRow('Do any children live with you?', 'Yes' if draft.statementOfMeans.dependants.declared else 'No', StatementOfMeansPaths.bankAccountsPage.evaluateUri({ externalId: claim.externalId }), not draft.statementOfMeans.dependants.declared, bold = true) }}
 
   {% if draft.statementOfMeans.dependants.declared %}
     {% set noOfKids = draft.statementOfMeans.dependants.numberOfChildren %}
@@ -127,7 +127,7 @@
   {% endif %}
 
   {{ partyDetailRow('Employment details', '', StatementOfMeansPaths.employmentPage.evaluateUri({ externalId: claim.externalId }), false, bold = true) }}
-  {{ partyDetailRow('Do you have a job?', 'Yes' if draft.statementOfMeans.employment.employed else 'No', '', false, bold = true) }}
+  {{ partyDetailRow('Do you have a job?', 'Yes' if draft.statementOfMeans.employment.employed else 'No', StatementOfMeansPaths.employmentPage.evaluateUri({ externalId: claim.externalId }), false, bold = true) }}
   {{ employmentStatus(draft.statementOfMeans) }}
 
   {% if draft.statementOfMeans.employment.employed %}
@@ -164,38 +164,38 @@
   {% set priorityDebtCount = 1 %}
   {{ partyDetailRow('Debts you are behind on', '', StatementOfMeansPaths.priorityDebtsPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true, topBorder = true) }}
   {% if priorityDebt.mortgage.populated %}
-    {{ partyDetailRow(priorityDebtCount + '. Debt type', PriorityDebtType.MORTGAGE.displayValue | capitalize, '', bottomBorder = false, bold = true) }}
-    {{ partyDetailRow('Arrears repayment', priorityDebt.mortgage.amount | numeral, '', bottomBorder = false, bold = true) }}
+    {{ partyDetailRow(priorityDebtCount + '. Debt type', PriorityDebtType.MORTGAGE.displayValue | capitalize, StatementOfMeansPaths.priorityDebtsPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true) }}
+    {{ partyDetailRow('Arrears repayment', priorityDebt.mortgage.amount | numeral, StatementOfMeansPaths.priorityDebtsPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true) }}
     {% set priorityDebtCount = priorityDebtCount + 1 %}
   {% endif %}
   {% if priorityDebt.rent.populated %}
-    {{ partyDetailRow(priorityDebtCount + '. Debt type', PriorityDebtType.RENT.displayValue | capitalize, '', bottomBorder = false, bold = true) }}
-    {{ partyDetailRow('Arrears repayment', priorityDebt.rent.amount | numeral, '', bottomBorder = false, bold = true) }}
+    {{ partyDetailRow(priorityDebtCount + '. Debt type', PriorityDebtType.RENT.displayValue | capitalize, StatementOfMeansPaths.priorityDebtsPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true) }}
+    {{ partyDetailRow('Arrears repayment', priorityDebt.rent.amount | numeral, StatementOfMeansPaths.priorityDebtsPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true) }}
     {% set priorityDebtCount = priorityDebtCount + 1 %}
   {% endif %}
   {% if priorityDebt.councilTax.populated %}
-    {{ partyDetailRow(priorityDebtCount + '. Debt type', PriorityDebtType.COUNCIL_TAX_COMMUNITY_CHARGE.displayValue | capitalize, '', bottomBorder = false, bold = true) }}
-    {{ partyDetailRow('Arrears repayment', priorityDebt.councilTax.amount | numeral, '', bottomBorder = false, bold = true) }}
+    {{ partyDetailRow(priorityDebtCount + '. Debt type', PriorityDebtType.COUNCIL_TAX_COMMUNITY_CHARGE.displayValue | capitalize, StatementOfMeansPaths.priorityDebtsPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true) }}
+    {{ partyDetailRow('Arrears repayment', priorityDebt.councilTax.amount | numeral, StatementOfMeansPaths.priorityDebtsPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true) }}
     {% set priorityDebtCount = priorityDebtCount + 1 %}
   {% endif %}
   {% if priorityDebt.gas.populated %}
-    {{ partyDetailRow(priorityDebtCount + '. Debt type', PriorityDebtType.GAS.displayValue | capitalize, '', bottomBorder = false, bold = true) }}
-    {{ partyDetailRow('Arrears repayment', priorityDebt.gas.amount | numeral, '', bottomBorder = false, bold = true) }}
+    {{ partyDetailRow(priorityDebtCount + '. Debt type', PriorityDebtType.GAS.displayValue | capitalize, StatementOfMeansPaths.priorityDebtsPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true) }}
+    {{ partyDetailRow('Arrears repayment', priorityDebt.gas.amount | numeral, StatementOfMeansPaths.priorityDebtsPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true) }}
     {% set priorityDebtCount = priorityDebtCount + 1 %}
   {% endif %}
   {% if priorityDebt.electricity.populated %}
-    {{ partyDetailRow(priorityDebtCount + '. Debt type', PriorityDebtType.ELECTRICITY.displayValue | capitalize, '', bottomBorder = false, bold = true) }}
-    {{ partyDetailRow('Arrears repayment', priorityDebt.electricity.amount | numeral, '', bottomBorder = false, bold = true) }}
+    {{ partyDetailRow(priorityDebtCount + '. Debt type', PriorityDebtType.ELECTRICITY.displayValue | capitalize, StatementOfMeansPaths.priorityDebtsPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true) }}
+    {{ partyDetailRow('Arrears repayment', priorityDebt.electricity.amount | numeral, StatementOfMeansPaths.priorityDebtsPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true) }}
     {% set priorityDebtCount = priorityDebtCount + 1 %}
   {% endif %}
   {% if priorityDebt.water.populated %}
-    {{ partyDetailRow(priorityDebtCount + '. Debt type', PriorityDebtType.WATER.displayValue | capitalize, '', bottomBorder = false, bold = true) }}
-    {{ partyDetailRow('Arrears repayment', priorityDebt.water.amount | numeral, '', bottomBorder = false, bold = true) }}
+    {{ partyDetailRow(priorityDebtCount + '. Debt type', PriorityDebtType.WATER.displayValue | capitalize, StatementOfMeansPaths.priorityDebtsPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true) }}
+    {{ partyDetailRow('Arrears repayment', priorityDebt.water.amount | numeral, StatementOfMeansPaths.priorityDebtsPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true) }}
     {% set priorityDebtCount = priorityDebtCount + 1 %}
   {% endif %}
   {% if priorityDebt.maintenance.populated %}
-    {{ partyDetailRow(priorityDebtCount + '. Debt type', PriorityDebtType.MAINTENANCE_PAYMENTS.displayValue | capitalize, '', bottomBorder = false, bold = true) }}
-    {{ partyDetailRow('Arrears repayment', priorityDebt.maintenance.amount | numeral, '', bottomBorder = false, bold = true) }}
+    {{ partyDetailRow(priorityDebtCount + '. Debt type', PriorityDebtType.MAINTENANCE_PAYMENTS.displayValue | capitalize, StatementOfMeansPaths.priorityDebtsPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true) }}
+    {{ partyDetailRow('Arrears repayment', priorityDebt.maintenance.amount | numeral, StatementOfMeansPaths.priorityDebtsPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true) }}
   {% endif %}
 
   {{ partyDetailRow('Do you have loans or credit card debts?', 'Yes' if draft.statementOfMeans.debts.declared else 'No', StatementOfMeansPaths.debtsPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true, topBorder = true) }}
@@ -216,87 +216,87 @@
   {% set expenses = draft.statementOfMeans.monthlyExpenses %}
   {{ partyDetailRow('Regular expenses', '', StatementOfMeansPaths.monthlyExpensesPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true, topBorder = true) }}
   {% if expenses.mortgage.populated %}
-  {{ partyDetailRow(MonthlyExpenseType.MORTGAGE.displayValue | capitalize, expenses.mortgage.amount | numeral, '', bottomBorder = false, bold = true) }}
+  {{ partyDetailRow(MonthlyExpenseType.MORTGAGE.displayValue | capitalize, expenses.mortgage.amount | numeral, StatementOfMeansPaths.monthlyExpensesPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true) }}
   {% endif %}
   {% if expenses.rent.populated %}
-  {{ partyDetailRow(MonthlyExpenseType.RENT.displayValue | capitalize, expenses.rent.amount | numeral, '', bottomBorder = false, bold = true) }}
+  {{ partyDetailRow(MonthlyExpenseType.RENT.displayValue | capitalize, expenses.rent.amount | numeral, StatementOfMeansPaths.monthlyExpensesPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true) }}
   {% endif %}
   {% if expenses.councilTax.populated %}
-  {{ partyDetailRow(MonthlyExpenseType.COUNCIL_TAX.displayValue, expenses.councilTax.amount | numeral, '', bottomBorder = false, bold = true) }}
+  {{ partyDetailRow(MonthlyExpenseType.COUNCIL_TAX.displayValue, expenses.councilTax.amount | numeral, StatementOfMeansPaths.monthlyExpensesPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true) }}
   {% endif %}
   {% if expenses.gas.populated %}
-  {{ partyDetailRow(MonthlyExpenseType.GAS.displayValue | capitalize, expenses.gas.amount | numeral, '', bottomBorder = false, bold = true) }}
+  {{ partyDetailRow(MonthlyExpenseType.GAS.displayValue | capitalize, expenses.gas.amount | numeral, StatementOfMeansPaths.monthlyExpensesPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true) }}
   {% endif %}
   {% if expenses.electricity.populated %}
-  {{ partyDetailRow(MonthlyExpenseType.ELECTRICITY.displayValue | capitalize, expenses.electricity.amount | numeral, '', bottomBorder = false, bold = true) }}
+  {{ partyDetailRow(MonthlyExpenseType.ELECTRICITY.displayValue | capitalize, expenses.electricity.amount | numeral, StatementOfMeansPaths.monthlyExpensesPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true) }}
   {% endif %}
   {% if expenses.water.populated %}
-  {{ partyDetailRow(MonthlyExpenseType.WATER.displayValue | capitalize, expenses.water.amount | numeral, '', bottomBorder = false, bold = true) }}
+  {{ partyDetailRow(MonthlyExpenseType.WATER.displayValue | capitalize, expenses.water.amount | numeral, StatementOfMeansPaths.monthlyExpensesPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true) }}
   {% endif %}
   {% if expenses.travel.populated %}
-  {{ partyDetailRow(MonthlyExpenseType.TRAVEL.displayValue | capitalize, expenses.travel.amount | numeral, '', bottomBorder = false, bold = true) }}
+  {{ partyDetailRow(MonthlyExpenseType.TRAVEL.displayValue | capitalize, expenses.travel.amount | numeral, StatementOfMeansPaths.monthlyExpensesPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true) }}
   {% endif %}
   {% if expenses.schoolCosts.populated %}
-  {{ partyDetailRow(MonthlyExpenseType.SCHOOL_COSTS.displayValue | capitalize, expenses.schoolCosts.amount | numeral, '', bottomBorder = false, bold = true) }}
+  {{ partyDetailRow(MonthlyExpenseType.SCHOOL_COSTS.displayValue | capitalize, expenses.schoolCosts.amount | numeral, StatementOfMeansPaths.monthlyExpensesPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true) }}
   {% endif %}
   {% if expenses.foodAndHousekeeping.populated %}
-  {{ partyDetailRow(MonthlyExpenseType.FOOD_HOUSEKEEPING.displayValue | capitalize, expenses.foodAndHousekeeping.amount | numeral, '', bottomBorder = false, bold = true) }}
+  {{ partyDetailRow(MonthlyExpenseType.FOOD_HOUSEKEEPING.displayValue | capitalize, expenses.foodAndHousekeeping.amount | numeral, StatementOfMeansPaths.monthlyExpensesPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true) }}
   {% endif %}
   {% if expenses.tvAndBroadband.populated %}
-  {{ partyDetailRow(MonthlyExpenseType.TV_AND_BROADBAND.displayValue, expenses.tvAndBroadband.amount | numeral, '', bottomBorder = false, bold = true) }}
+  {{ partyDetailRow(MonthlyExpenseType.TV_AND_BROADBAND.displayValue, expenses.tvAndBroadband.amount | numeral, StatementOfMeansPaths.monthlyExpensesPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true) }}
   {% endif %}
   {% if expenses.hirePurchase.populated %}
-  {{ partyDetailRow(MonthlyExpenseType.HIRE_PURCHASES.displayValue | capitalize, expenses.hirePurchase.amount | numeral, '', bottomBorder = false, bold = true) }}
+  {{ partyDetailRow(MonthlyExpenseType.HIRE_PURCHASES.displayValue | capitalize, expenses.hirePurchase.amount | numeral, StatementOfMeansPaths.monthlyExpensesPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true) }}
   {% endif %}
   {% if expenses.mobilePhone.populated %}
-  {{ partyDetailRow(MonthlyExpenseType.MOBILE_PHONE.displayValue | capitalize, expenses.mobilePhone.amount | numeral, '', bottomBorder = false, bold = true) }}
+  {{ partyDetailRow(MonthlyExpenseType.MOBILE_PHONE.displayValue | capitalize, expenses.mobilePhone.amount | numeral, StatementOfMeansPaths.monthlyExpensesPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true) }}
   {% endif %}
   {% if expenses.maintenance.populated %}
-  {{ partyDetailRow(MonthlyExpenseType.MAINTENANCE_PAYMENTS.displayValue | capitalize, expenses.maintenance.amount | numeral, '', bottomBorder = false, bold = true) }}
+  {{ partyDetailRow(MonthlyExpenseType.MAINTENANCE_PAYMENTS.displayValue | capitalize, expenses.maintenance.amount | numeral, StatementOfMeansPaths.monthlyExpensesPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true) }}
   {% endif %}
 
   {% if expenses.anyOtherPopulated %}
     {% for expense in expenses.other %}
-      {{ partyDetailRow(expense.name, expense.amount | numeral, '', bottomBorder = false, bold = true ) }}
+      {{ partyDetailRow(expense.name, expense.amount | numeral, StatementOfMeansPaths.monthlyExpensesPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true ) }}
     {% endfor %}
   {% endif %}
 
   {% set income = draft.statementOfMeans.monthlyIncome %}
   {{ partyDetailRow('Regular income', '', StatementOfMeansPaths.monthlyIncomePage.evaluateUri({ externalId: claim.externalId }), topBorder = true, bold = true) }}
   {% if income.salarySource.populated %}
-    {{ partyDetailRow(MonthlyIncomeType.JOB.displayValue | capitalize, income.salarySource.amount | numeral, '', false, bold = true) }}
+    {{ partyDetailRow(MonthlyIncomeType.JOB.displayValue | capitalize, income.salarySource.amount | numeral, StatementOfMeansPaths.monthlyIncomePage.evaluateUri({ externalId: claim.externalId }), false, bold = true) }}
   {% endif %}
   {% if income.universalCreditSource.populated %}
-    {{ partyDetailRow(MonthlyIncomeType.UNIVERSAL_CREDIT.displayValue, income.universalCreditSource.amount | numeral, '', false, bold = true) }}
+    {{ partyDetailRow(MonthlyIncomeType.UNIVERSAL_CREDIT.displayValue, income.universalCreditSource.amount | numeral, StatementOfMeansPaths.monthlyIncomePage.evaluateUri({ externalId: claim.externalId }), false, bold = true) }}
   {% endif %}
   {% if income.jobseekerAllowanceIncomeSource.populated %}
-    {{ partyDetailRow(MonthlyIncomeType.JOB_SEEKERS_ALLOWANCE_INCOME_BASES.displayValue, income.jobseekerAllowanceIncomeSource.amount | numeral, '', false, bold = true) }}
+    {{ partyDetailRow(MonthlyIncomeType.JOB_SEEKERS_ALLOWANCE_INCOME_BASES.displayValue, income.jobseekerAllowanceIncomeSource.amount | numeral, StatementOfMeansPaths.monthlyIncomePage.evaluateUri({ externalId: claim.externalId }), false, bold = true) }}
   {% endif %}
   {% if income.jobseekerAllowanceContributionSource.populated %}
-    {{ partyDetailRow(MonthlyIncomeType.JOB_SEEKERS_ALLOWANCE_CONTRIBUTION_BASED.displayValue, income.jobseekerAllowanceContributionSource.amount | numeral, '', false, bold = true) }}
+    {{ partyDetailRow(MonthlyIncomeType.JOB_SEEKERS_ALLOWANCE_CONTRIBUTION_BASED.displayValue, income.jobseekerAllowanceContributionSource.amount | numeral, StatementOfMeansPaths.monthlyIncomePage.evaluateUri({ externalId: claim.externalId }), false, bold = true) }}
   {% endif %}
   {% if income.incomeSupportSource.populated %}
-    {{ partyDetailRow(MonthlyIncomeType.INCOME_SUPPORT.displayValue, income.incomeSupportSource.amount | numeral, '', false, bold = true) }}
+    {{ partyDetailRow(MonthlyIncomeType.INCOME_SUPPORT.displayValue, income.incomeSupportSource.amount | numeral, StatementOfMeansPaths.monthlyIncomePage.evaluateUri({ externalId: claim.externalId }), false, bold = true) }}
   {% endif %}
   {% if income.workingTaxCreditSource.populated %}
-    {{ partyDetailRow(MonthlyIncomeType.WORKING_TAX_CREDIT.displayValue, income.workingTaxCreditSource.amount | numeral, '', false, bold = true) }}
+    {{ partyDetailRow(MonthlyIncomeType.WORKING_TAX_CREDIT.displayValue, income.workingTaxCreditSource.amount | numeral, StatementOfMeansPaths.monthlyIncomePage.evaluateUri({ externalId: claim.externalId }), false, bold = true) }}
   {% endif %}
   {% if income.childTaxCreditSource.populated %}
-    {{ partyDetailRow(MonthlyIncomeType.CHILD_TAX_CREDIT.displayValue, income.childTaxCreditSource.amount | numeral, '', false, bold = true) }}
+    {{ partyDetailRow(MonthlyIncomeType.CHILD_TAX_CREDIT.displayValue, income.childTaxCreditSource.amount | numeral, StatementOfMeansPaths.monthlyIncomePage.evaluateUri({ externalId: claim.externalId }), false, bold = true) }}
   {% endif %}
   {% if income.childBenefitSource.populated %}
-    {{ partyDetailRow(MonthlyIncomeType.CHILD_BENEFIT.displayValue, income.childBenefitSource.amount | numeral, '', false, bold = true) }}
+    {{ partyDetailRow(MonthlyIncomeType.CHILD_BENEFIT.displayValue, income.childBenefitSource.amount | numeral, StatementOfMeansPaths.monthlyIncomePage.evaluateUri({ externalId: claim.externalId }), false, bold = true) }}
   {% endif %}
   {% if income.councilTaxSupportSource.populated %}
-    {{ partyDetailRow(MonthlyIncomeType.COUNCIL_TAX_SUPPORT.displayValue, income.councilTaxSupportSource.amount | numeral, '', false, bold = true) }}
+    {{ partyDetailRow(MonthlyIncomeType.COUNCIL_TAX_SUPPORT.displayValue, income.councilTaxSupportSource.amount | numeral, StatementOfMeansPaths.monthlyIncomePage.evaluateUri({ externalId: claim.externalId }), false, bold = true) }}
   {% endif %}
   {% if income.pensionSource.populated %}
-    {{ partyDetailRow(MonthlyIncomeType.PENSION.displayValue, income.pensionSource.amount | numeral, '', false, bold = true) }}
+    {{ partyDetailRow(MonthlyIncomeType.PENSION.displayValue, income.pensionSource.amount | numeral, StatementOfMeansPaths.monthlyIncomePage.evaluateUri({ externalId: claim.externalId }), false, bold = true) }}
   {% endif %}
 
   {% if income.anyOtherIncomePopulated %}
     {% for source in income.otherSources %}
-      {{ partyDetailRow(source.name, source.amount | numeral, '', bottomBorder = false, bold = true ) }}
+      {{ partyDetailRow(source.name, source.amount | numeral, StatementOfMeansPaths.monthlyIncomePage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true ) }}
     {% endfor %}
   {% endif %}
 </dl>

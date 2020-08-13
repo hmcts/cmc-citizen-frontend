@@ -6,7 +6,7 @@
 {% from "statementOfTruth.njk" import statementOfTruth %}
 {% from "party/details.njk" import partyDetail, partyDetailRow %}
 {% from "./macro/check-and-send/admission.njk" import notImmediatePayment %}
-{% from "components/free-mediation/freeMediationCheckAndSendBlock.njk" import freeMediationBlockGDS %}
+{% from "components/free-mediation/freeMediationCheckAndSendBlock.njk" import freeMediationBlock %}
 
 {% set heading = 'Check your answers' %}
 
@@ -147,7 +147,7 @@
             )
           }}
           {% for timelineRow in draft.partialAdmission.timeline.getPopulatedRowsOnly() %}
-            {{ partyDetailRow(label = timelineRow.date, value = timelineRow.description, changeLink = '', bottomBorder = loop.last) }}
+            {{ partyDetailRow(label = timelineRow.date, value = timelineRow.description, changeLink = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }), bottomBorder = loop.last) }}
           {% endfor %}
 
           {{ partyDetailRow(label = 'Comments about their timeline (optional)', value = draft.partialAdmission.timeline.comment | default(''), bold = true) }}
@@ -164,13 +164,13 @@
             {{ partyDetailRow(
               label = evidenceDetail.type.displayValue,
               value = evidenceDetail.description | default(''),
-              changeLink = '',
+              changeLink = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId }),
               bottomBorder = loop.last
               )
             }}
           {% endfor %}
           
-          {{ partyDetailRow(label = 'Comments about their evidence (optional)', value = draft.partialAdmission.evidence.comment | default(''), bold = true) }}
+          {{ partyDetailRow(label = 'Comments about their evidence (optional)', value = draft.partialAdmission.evidence.comment | default(''), changeLink = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
         {% endif %}
       </dl>
     {% endif %}
@@ -270,7 +270,7 @@
           )
         }}
         {% for timelineRow in draft.timeline.getPopulatedRowsOnly() %}
-          {{ partyDetailRow(label = timelineRow.date, value = timelineRow.description, changeLink = '', bottomBorder = loop.last) }}
+          {{ partyDetailRow(label = timelineRow.date, value = timelineRow.description, changeLink = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }), bottomBorder = loop.last) }}
         {% endfor %}
 
         {{ partyDetailRow(label = 'Comments about their timeline (optional)', value = draft.timeline.comment | default(''), bold = true) }}
@@ -342,7 +342,7 @@
     {% endif %}
 
     {% if mediationDraft.id !== 0 %}
-      {{ freeMediationBlockGDS(claim, mediationDraft.document, contactPerson, contactNumber, mediationPilot, mediationEnabled) }}
+      {{ freeMediationBlock(claim, mediationDraft.document, contactPerson, contactNumber, mediationPilot, mediationEnabled) }}
     {% endif %}
 
     {% if dqsEnabled %}

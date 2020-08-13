@@ -123,7 +123,7 @@
 
   {% if (partyDetails.type === 'company' or partyDetails.type === 'organisation') %}
     {% if partyDetails.contactPerson %}
-      {{ partyDetailRow('Contact person', partyDetails.contactPerson) }}
+      {{ partyDetailRow('Contact person', partyDetails.contactPerson, changeLink = linkHref) }}
     {% endif %}
   {% endif %}
 
@@ -163,7 +163,7 @@
   {% endif %}
 
   {% if claim and claim.claimData.defendant.phone %}
-    {{ partyDetailRow('Contact number', partyDetails.phone) }}
+    {{ partyDetailRow('Contact number', partyDetails.phone, changeLink = linkHref) }}
   {% endif %}
   
   {% if (partyDetails.type === 'individual' and partyDetails.dateOfBirth and partyDetails.dateOfBirth.date) %}
