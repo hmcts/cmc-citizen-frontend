@@ -8,7 +8,8 @@
     "directionsQuestionnaire": true,
     "newDashboardStatus": false,
     "warningBanner": false,
-    "inversionOfControl": true
+    "inversionOfControl": true,
+    "autoEnrollIntoNewFeature": true
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"
