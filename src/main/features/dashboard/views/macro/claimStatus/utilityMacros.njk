@@ -1,11 +1,11 @@
 {% from "externalLink.njk" import externalLink %}
 {% from "internalLink.njk" import internalLink %}
 
-{% macro downloadResponseLink(claim, title='Download your response') %}
-  {{ internalLink(t(title), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId })) }}{{ t(' (PDF)') }}{% endmacro %}
+{% macro downloadResponseLink(claim, title='Download your response  (PDF)') %}
+  {{ internalLink(t(title), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId })) }}{% endmacro %}
 
 {% macro downloadTheirResponseLink(claim) %}
-  {{ internalLink(t('Download their response'), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId })) }}{{ t(' (PDF)') }}
+  {{ internalLink(t('Download their response (PDF)'), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId })) }}
 {% endmacro %}
 
 {% macro viewAndRespondOffer(claim, text = 'View and respond to the offer') %}
@@ -21,7 +21,7 @@
 {% endmacro %}
 
 {% macro downloadAgreementLink(claim) %}
-  {{ internalLink(t('Download the settlement agreement'), OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId })) }}{{ t(' (PDF)') }}
+  {{ internalLink(t('Download the settlement agreement (PDF)'), OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId })) }}
 {% endmacro %}
 
 {% macro admissionByCCJCommonInfoClaimDetails(claim) %}
@@ -36,6 +36,6 @@
 {% macro downloadClaimantDQs(claim) %}
   {% if claim.response.directionsQuestionnaire %}
     <p>{{ t('They’ve also sent us their hearing requirements.') }}</p>
-    {{ internalLink(t('Download their hearing requirements '), DirectionsQuestionnairePaths.claimantHearingRequirementsReceiver.evaluateUri({ externalId: claim.externalId }) )}}{{ t('(PDF)') }}
+    {{ internalLink(t('Download their hearing requirements  (PDF)'), DirectionsQuestionnairePaths.claimantHearingRequirementsReceiver.evaluateUri({ externalId: claim.externalId }) )}}
   {% endif %}
 {% endmacro %}
