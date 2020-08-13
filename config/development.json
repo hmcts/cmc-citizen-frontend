@@ -13,7 +13,8 @@
     "warningBanner": false,
     "helpWithFees": true,
     "pcq":true,
-    "signPostingCTSC": false
+    "signPostingCTSC": false,
+    "autoEnrollIntoNewFeature": true
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"
