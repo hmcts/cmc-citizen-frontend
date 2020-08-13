@@ -4,8 +4,12 @@
     <p>{{  t('Your online account won’t be updated - any further updates will be by post from {{ courtName }}.', {courtName :claim.transferContent.hearingCourtName }) }}</p>
     <p>{{  t('If you need to send any forms, letters or documents about the claim, send them to this address:') }}</p>
     <p>
-      {{ claim.transferContent.hearingCourtName  }}<br>
-      {{ claim.transferContent.hearingCourtAddress.line1 }} <br/>
+      {% if claim.transferContent.hearingCourtName is defined %}
+        {{ claim.transferContent.hearingCourtName  }}<br>
+      {% endif %}
+      {% if claim.transferContent.hearingCourtAddress.line1 is defined %}
+        {{ claim.transferContent.hearingCourtAddress.line1 }} <br/>
+      {% endif %}
       {% if claim.transferContent.hearingCourtAddress.line2 is defined %}
         {{ claim.transferContent.hearingCourtAddress.line2 }} <br/>
       {% endif %}
