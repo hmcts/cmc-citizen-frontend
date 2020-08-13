@@ -11,8 +11,11 @@ import { prepareClaimDraft } from 'drafts/draft-data/claimDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
+import { FeatureToggles } from 'utils/featureToggles'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
+const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -33,8 +36,9 @@ export default express.Router()
       await new DraftService().save(draft, user.bearerToken)
 
       const roles: string[] = await claimStoreClient.retrieveUserRoles(user)
+      const autoEnrollFeatureEnabled: boolean = await featureToggles.isAutoEnrollIntoNewFeatureEnabled()
 
-      if (roles && !roles.some(role => role.includes('cmc-new-features-consent'))) {
+      if (!autoEnrollFeatureEnabled && roles && !roles.some(role => role.includes('cmc-new-features-consent'))) {
         await claimStoreClient.addRoleToUser(user, 'cmc-new-features-consent-given')
       }
 

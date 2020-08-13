@@ -30,13 +30,13 @@
     <p>{{ t('Continue doing everything the current order tells you to do unless we tell you a judge has made a new one.') }}</p>
 
     {% if claim.reviewOrder.requestedBy === MadeBy.CLAIMANT.value %}
-      {{ internalLink(t('Download {{ claimantName }}’s request to see what they asked ', { claimantName: claim.claimData.claimant.name }), OrdersPaths.reviewOrderReceiver.evaluateUri({ externalId: claim.externalId })) }}
-      {{ t('(PDF).') }}
+      {{ internalLink(t('Download {{ claimantName }}’s request to see what they asked (PDF)', { claimantName: claim.claimData.claimant.name }), OrdersPaths.reviewOrderReceiver.evaluateUri({ externalId: claim.externalId })) }}
+      {{ t('.') }}
       <h2 class="heading-small">{{ t('Comment on {{ claimantName }}’s request', { claimantName: claim.claimData.claimant.name }) }}</h2>
       <p>{{ t('If you want to comment on the request, email your comments to the court and to {{ claimantName }} before 4pm on {{ deadline }}.', { claimantName: claim.claimData.claimant.name, deadline: respondToReviewOrderDeadline | date }) }}</p>
     {% else %}
-      {{ internalLink(t('Download {{ defendantName }}’s request to see what they asked ', { defendantName: claim.claimData.defendant.name }), OrdersPaths.reviewOrderReceiver.evaluateUri({ externalId: claim.externalId })) }}
-      {{ t('(PDF).') }}
+      {{ internalLink(t('Download {{ defendantName }}’s request to see what they asked (PDF)', { defendantName: claim.claimData.defendant.name }), OrdersPaths.reviewOrderReceiver.evaluateUri({ externalId: claim.externalId })) }}
+      {{ t('.') }}
       <h2 class="heading-small">{{ t('Comment on {{ defendantName }}’s request', { defendantName: claim.claimData.defendant.name }) }}</h2>
       <p>{{ t('If you want to comment on the request, email your comments to the court and to {{ defendantName }} before 4pm on {{ deadline }}.',
           { defendantName: claim.claimData.defendant.name, deadline: respondToReviewOrderDeadline | date }) }}</p>
@@ -79,8 +79,8 @@
   <div class="status-block">
     <h2 class="heading-medium">{{ t('Send us more details before the hearing') }}</h2>
     <p>{{ t('The court has ordered you to send us more details.') }}</p>
-    <p>{{ internalLink(t('Download the court’s order '), OrdersPaths.directionsOrderDocument.evaluateUri({ externalId: claim.externalId })) }}
-      {{ t('(PDF) to find out the details you need to send.') }}</p>
+    <p>{{ internalLink(t('Download the court’s order (PDF) '), OrdersPaths.directionsOrderDocument.evaluateUri({ externalId: claim.externalId })) }}
+      {{ t('to find out the details you need to send.') }}</p>
     <p>{{ t('Make sure you include the claim number ({{ claimNumber }}) in the letter.', { claimNumber: claim.claimNumber }) }}</p>
 
     <h2 class="heading-small">{{ t('Deadline for posting the details') }}</h2>
