@@ -2,6 +2,9 @@ import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { User } from 'idam/user'
 import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 import * as config from 'config'
+import { FeatureToggles } from 'utils/featureToggles'
+
+const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
 
 export class FeaturesBuilder {
   static readonly MEDIATION_PILOT_AMOUNT = 500
@@ -19,7 +22,9 @@ export class FeaturesBuilder {
 
   async features (amount: number, user: User): Promise<string> {
     const roles: string[] = await this.claimStoreClient.retrieveUserRoles(user)
-    if (!roles.includes('cmc-new-features-consent-given')) {
+    const autoEnrollFeatureEnabled: boolean = await featureToggles.isAutoEnrollIntoNewFeatureEnabled()
+
+    if (!autoEnrollFeatureEnabled && !roles.includes('cmc-new-features-consent-given')) {
       // all features require consent
       return undefined
     }

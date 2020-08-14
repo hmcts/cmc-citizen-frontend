@@ -66,4 +66,14 @@ describe('FeatureToggles', () => {
       expect(result).to.equal(actual)
     })
   })
+
+  describe('isAutoEnrollIntoNewFeatureEnabled', () => {
+    it('should return toggle if autoEnrollIntoNewFeature toggle exists', async () => {
+      const mockLaunchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
+      const featureToggles = new FeatureToggles(mockLaunchDarklyClient)
+      let actual = toBoolean(config.get<boolean>(`featureToggles.autoEnrollIntoNewFeature`))
+      let result = await featureToggles.isAutoEnrollIntoNewFeatureEnabled()
+      expect(result).to.equal(actual)
+    })
+  })
 })
