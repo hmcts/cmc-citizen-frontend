@@ -395,9 +395,9 @@
 {% macro errorSummary(form) %}
   {% if form.hasErrors() %}
     <div class="error-summary" role="group" aria-labelledby="error-summary-heading" tabindex="-1">
-      <h1 class="heading-medium error-summary-heading" id="error-summary-heading">
+      <h2 class="heading-medium error-summary-heading" id="error-summary-heading">
         {{ t('There was a problem') }}
-      </h1>
+      </h2>
       <ul class="error-summary-list">
         {% for error in form.errors %}
           <li><a href="#{{ error.fieldName }}[label]">{{ t(error.message) }}</a></li>
