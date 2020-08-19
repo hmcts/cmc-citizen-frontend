@@ -19,7 +19,7 @@ import { Paths as PaidInFullPaths } from 'paid-in-full/paths'
 import { Paths as MediationPaths } from 'mediation/paths'
 import { Paths as DirectionQuestionnairePaths } from 'directions-questionnaire/paths'
 import { Paths as OrdersPaths } from 'orders/paths'
-import { customAccessibilityChecks, checkInputLabels } from './customChecks'
+import { customAccessibilityChecks, checkInputLabels, checkTaskList } from './customChecks'
 
 import 'test/a11y/mocks'
 import { app } from 'main/app'
@@ -85,19 +85,6 @@ async function extractPageContent (url: string): Promise<string> {
   return res.text
 }
 
-/*
-function ensureHeadingIsIncludedInPageTitle (text: string): void {
-  const title: string = text.match(/<title>(.*)<\/title>/)[1]
-  const heading: RegExpMatchArray = text.match(/<h1 class="heading-large">\s*(.*)\s*<\/h1>/)
-
-  if (heading) { // Some pages does not have heading section e.g. confirmation pages
-    expect(title).to.be.equal(`${heading[1]} - Money Claims`)
-  } else {
-    expect(title).to.be.not.equal(' - Money Claims')
-    console.log(`NOTE: No heading found on page titled '${title}' exists`)
-  }
-}
-*/
 function ensureNoAccessibilityErrors (issues: Issue[]): void {
   const errors: Issue[] = issues.filter((issue: Issue) => issue.type === 'error')
   expect(errors, `\n${JSON.stringify(errors, null, 2)}\n`).to.be.empty
@@ -142,6 +129,10 @@ const checksOnSpecificRoutes = [
   {
     route: DefendantResponsePaths.defendantYourDetailsPage,
     tests: [checkInputLabels]
+  },
+  {
+    route: ClaimIssuePaths.taskListPage,
+    tests: [checkTaskList]
   }
 ]
 
@@ -153,7 +144,7 @@ describe('Accessibility', () => {
         return check.route === path
       })
       let uri = path.uri
-      if (!excluded && (path.uri.indexOf('earing-location') >= 0 || path.uri.indexOf('your-details') >= 0)) {
+      if (!excluded) {
         if (path.uri.includes(':madeBy')) {
           uri = path.evaluateUri({ externalId: '91e1c70f-7d2c-4c1e-a88f-cbb02c0e64d6', madeBy: MadeBy.CLAIMANT.value })
         } else if (path.uri.includes(':externalId')) {

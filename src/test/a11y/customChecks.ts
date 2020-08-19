@@ -2,6 +2,18 @@
 import { JSDOM } from 'jsdom'
 import { expect } from 'chai'
 
+function ensureHeadingIsIncludedInPageTitle (text: string): void {
+  const title: string = text.match(/<title>(.*)<\/title>/)[1]
+  const heading: RegExpMatchArray = text.match(/<h1 class="heading-large">\s*(.*)\s*<\/h1>/)
+
+  if (heading) { // Some pages does not have heading section e.g. confirmation pages
+    expect(title).to.be.equal(`${heading[1]} - Money Claims`)
+  } else {
+    expect(title).to.be.not.equal(' - Money Claims')
+    console.log(`NOTE: No heading found on page titled '${title}' exists`)
+  }
+}
+
 // ensure page title matches with page's h1 content
 const checkPageTitleAndHeading = (window, document) => {
   // get page title
@@ -43,22 +55,30 @@ export const checkInputLabels = (window, document) => {
 
 // validate task-list page as per the recommended structure @ https://design-system.service.gov.uk/patterns/task-list-pages/
 export const checkTaskList = (window, document) => {
-  console.log('checkTaskList')
+  const orderedList = document.getElementsByTagName('ol')
+  expect(orderedList.length).to.be.above(0)
+  for (let i = 0; i < orderedList.length; i++) {
+    const tasks = orderedList[i].querySelectorAll('a[aria-describedby]')
+    // looop through each anchor and get anchor text and aria-describedby attribute
+    for (let n = 0; n < tasks.length; n++) {
+      // expect each anchor(task) has it corresponding status
+      expect(document.getElementById(`${tasks[n].getAttribute('aria-describedby')}`), `Task "${tasks[n].textContent.trim()}" does not contain corresponding status`).to.not.equal(null)
+    }
+  }
 }
 // custom accessibility tests that are to execute on all pages/routes
-const globalChecks = (window, document) => {
+const globalChecks = (window, document, stringHtml) => {
   // generic functions that run on each page go here
-  // replaced below method with more eligant one to ensures page title matches with page's h1 content
-  // ensureHeadingIsIncludedInPageTitle(stringHtml)
-  checkPageTitleAndHeading(window, document)
+  ensureHeadingIsIncludedInPageTitle(stringHtml)
 }
 
 export const customAccessibilityChecks = (stringHtml: string, customTests: any[]) => {
+  // console.log(stringHtml)
   // convert the string content to html for further parsing
   const win = new JSDOM(stringHtml).window
 
   // tests to run on all pages/routes/uri
-  globalChecks(win, win.document)
+  globalChecks(win, win.document, stringHtml)
 
   // tests that run on specific page/route/uri if provided
   customTests.forEach((functionName) => {
