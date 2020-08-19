@@ -42,12 +42,7 @@ export const checkInputLabels = (window, document) => {
       const tagName = elements[i].tagName
       if (tagName !== 'BUTTON' && tagName !== 'FIELDSET' && typeAttribute !== 'hidden' && typeAttribute !== 'submit' && typeAttribute !== 'button') {
         const elementId = elements[i].getAttribute('id')
-
-        // expect(document.querySelector(`label[for="${elementId}"]`), `<label> for form elemnt with id "${elementId}" is missing`).to.not.equal(null)
-        // TODO once all the label tags are added, make sure to uncomment above line and remove below condition if required.
-        if (!document.querySelector(`label[for="${elementId}"]`)) {
-          console.error('WARNING: MISSING LABEL FOR ELEMENT WITH ID', elementId)
-        }
+        expect(document.querySelector(`label[for="${elementId}"]`), `<label> for form elemnt with id "${elementId}" is missing`).to.not.equal(null)
       }
     }
   }
