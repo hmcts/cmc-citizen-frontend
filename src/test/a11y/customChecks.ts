@@ -15,23 +15,23 @@ function ensureHeadingIsIncludedInPageTitle (text: string): void {
 }
 
 // ensure page title matches with page's h1 content
-const checkPageTitleAndHeading = (window, document) => {
-  // get page title
-  const title = document.title
-  // get h1 tags
-  const headings = document.getElementsByTagName('h1')
-  // ensure only one h1 is present per page
-  if (headings.length) {
-    // expect(headings.length, `Only one <h1> tag is expected, instead noticed ${headings.length} in ${title}`).to.be.eq(1)
-    if (headings.length > 1) {
-      console.log(`WARNING: ONLY 1 <H1> tag IS EXPECTED BUT FOUND ${headings.length} in ${title}`)
-    }
-    const heading = headings[0].innerHTML.trim()
-    expect(title).to.be.equal(`${heading} - Money Claims`)
-  } else {
-    console.log(`NOTE: No heading found on page titled '${title}'`)
-  }
-}
+// const checkPageTitleAndHeading = (window, document) => {
+//   // get page title
+//   const title = document.title
+//   // get h1 tags
+//   const headings = document.getElementsByTagName('h1')
+//   // ensure only one h1 is present per page
+//   if (headings.length) {
+//     // expect(headings.length, `Only one <h1> tag is expected, instead noticed ${headings.length} in ${title}`).to.be.eq(1)
+//     if (headings.length > 1) {
+//       console.log(`WARNING: ONLY 1 <H1> tag IS EXPECTED BUT FOUND ${headings.length} in ${title}`)
+//     }
+//     const heading = headings[0].innerHTML.trim()
+//     expect(title).to.be.equal(`${heading} - Money Claims`)
+//   } else {
+//     console.log(`NOTE: No heading found on page titled '${title}'`)
+//   }
+// }
 
 // ensure every input/select/radio/checkbox/textarea has it own corresponding label
 export const checkInputLabels = (window, document) => {
