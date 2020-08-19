@@ -123,6 +123,7 @@
     "gulp-sass": "^4.0.2",
     "html_codesniffer": "2.4.1",
     "husky": "^4.2.2",
+    "jsdom": "^16.4.0",
     "jsonwebtoken": "^8.5.1",
     "mocha": "^6.2.2",
     "mocha-junit-reporter": "^1.23.3",
