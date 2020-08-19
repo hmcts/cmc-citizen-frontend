@@ -34,6 +34,9 @@
             {% set totalError = form.errorFor('rows').length > 0 %}
             <div class="claim-amount-rows">
               {% for row in form.model.rows %}
+                {% set reasonJoinKey = 'rows['+loop.index0+'][reason]' %}
+                {% set amountJoinKey = 'rows['+loop.index0+'][amount]' %}
+                {% set possition = loop.index0 + 1 %}
                 {% set error1 = form.errorFor('rows['+loop.index0+'][reason]').length > 0 %}
                 {% set error2 = form.errorFor('rows['+loop.index0+'][amount]').length > 0 %}
                 {% set displayTotalError = totalError and loop.index0 == 0 %}
@@ -63,17 +66,17 @@
                   {% endif %}
                   {{
                     textInputInline(
-                      'rows['+loop.index0+'][reason]', form, 'claim-amount-column-1' + (' form-control-error' if displayTotalError else ''),
-                      ariaLabelledBy = "claim-reason-label",
+                      reasonJoinKey, form, 'claim-amount-column-1' + (' form-control-error' if displayTotalError else ''),
+                      arialabelledby = "claim-reason-label",
                       ariaDescribedBy = "claim-reason-hint"
                     )
                   }}
-
+                  <label class="form-label-bold mobile-show visually-hidden" for="{{ reasonJoinKey }}">{{ possition }} {{ t('. What you’re claiming for') }}</label>
                   <span class="form-label-bold mobile-show">{{ t('Amount') }}</span>
+                  <label class="form-label-bold mobile-show visually-hidden" for="{{ amountJoinKey }}">{{ possition }} {{ t('. Amount') }}</label>
                   {{
                     textInputInline(
-                      'rows['+loop.index0+'][amount]', form, 'claim-amount-column-2' + (' form-control-error' if displayTotalError else ''), ' input-symbol-pound',
-                      ariaLabelledBy = "claim-amount-label"
+                      amountJoinKey, form, 'claim-amount-column-2' + (' form-control-error' if displayTotalError else ''), ' input-symbol-pound'
                     )
                   }}
                 </div>
