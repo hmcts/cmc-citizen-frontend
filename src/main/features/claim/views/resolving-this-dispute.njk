@@ -2,7 +2,7 @@
 
 {% set heading = 'Try to resolve the dispute' %}
 
-{% from "form.njk" import csrfProtection, submitButton, errorSummary, submitButtonWithAria %}
+{% from "form.njk" import csrfProtection, submitButton, errorSummary %}
 {% from "externalLink.njk" import externalLink %}
 
 {% block content %}
@@ -45,7 +45,7 @@
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
 
-        {{ submitButtonWithAria('I confirm I’ve read this', '', 'I confirm I’ve read this information about resolving disputes') }}
+        {{ submitButton('I confirm I’ve read this', '', 'I confirm I’ve read this information about resolving disputes') }}
       </form>
     </div>
   </div>
