@@ -1,4 +1,4 @@
-{% macro input(label, name, form, hint, type='text', inputClass='', compound=false, autocomplete='on', labelClass='', maxLength='') %}
+{% macro input(label, name, form, hint, type='text', inputClass='', compound=false, autocomplete='on', labelClass='', maxLength='', ariaText='') %}
   {% set error = form.errorFor(name) %}
   {% set formGroupClass = 'form-group-compound' if compound else 'form-group' %}
   <div class="{{ formGroupClass }} {% if error %}form-group-error{% endif %}">
@@ -12,13 +12,13 @@
     {% endif %}
     <input id="{{ name }}" name="{{ name }}" type="{{ type }}" autocomplete="{{ autocomplete | default('on') }}"
            class="form-control {{ inputClass }} {% if error %}form-control-error{% endif %}"
-           {% if maxLength %}maxlength="{{ maxLength }}"{% endif %}
+           {% if maxLength %}maxlength="{{ maxLength }}"{% endif %} {% if ariaText %}aria-label="{{ ariaText }}"{% endif %}
              value="{{ (form.rawDataFor(name) if error else form.valueFor(name)) | default('') }}">
   </div>
 {% endmacro %}
 
-{% macro textInput(label, name, form, hint, inputClass='', compound=false, autocomplete='on', maxLength) %}
-  {{ input(label, name, form, hint, 'text', inputClass, compound, autocomplete, maxLength=maxLength) }}
+{% macro textInput(label, name, form, hint, inputClass='', compound=false, autocomplete='on', maxLength, ariaText='') %}
+  {{ input(label, name, form, hint, 'text', inputClass, compound, autocomplete, maxLength=maxLength, ariaText=ariaText) }}
 {% endmacro %}
 
 {% macro numericInput(label, name, form, hint, inputClass='', compound=false, autocomplete='on') %}
