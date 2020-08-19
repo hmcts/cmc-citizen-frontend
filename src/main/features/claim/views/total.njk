@@ -9,20 +9,8 @@
     <div class="column-two-thirds">
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
-
-        <fieldset>
-          <legend class="visuallyhidden">
-            {{ t('Total amount you’re claiming') }}
-          </legend>
-
           <table class="table-form form-group">
             <caption class="visuallyhidden"></caption>
-            <tfoot>
-            <tr>
-              <th scope="col"><span class="bold-small">{{ t('Total claim amount') }}</span></th>
-              <td class="numeric last"><span class="bold-medium">{{ interestTotal.totalAmountTillToday | numeral }}</span></td>
-            </tr>
-            </tfoot>
             <tbody>
             <tr>
               <th scope="row">{{ t('Claim amount') }}</th>
@@ -48,6 +36,12 @@
               </td>
             </tr>
             </tbody>
+            <tfoot>
+            <tr>
+              <th scope="col"><span class="bold-small">{{ t('Total claim amount') }}</span></th>
+              <td class="numeric last"><span class="bold-medium">{{ interestTotal.totalAmountTillToday | numeral }}</span></td>
+            </tr>
+          </tfoot>
           </table>
 
           <p>{{ t('If you settle out of court we won’t refund your claim fee. You can ask the defendant to pay back your claim fee as part of the settlement.') }}</p>
@@ -73,8 +67,6 @@
           <p>{{ t('You don’t have to pay a hearing fee unless the claim goes to a hearing.') }}</p>
 
           {{ feesTable('How these fees are calculated', feeTableContent , showHearingFee = true) }}
-
-        </fieldset>
 
         {{ saveAndContinueButton() }}
       </form>
