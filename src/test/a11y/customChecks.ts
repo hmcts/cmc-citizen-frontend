@@ -34,7 +34,7 @@ function ensureHeadingIsIncludedInPageTitle (text: string): void {
 // }
 
 // ensure every input/select/radio/checkbox/textarea has it own corresponding label
-export const checkInputLabels = (window, document) => {
+export const checkInputLabels = (window: Window, document: Document) => {
   if (document.forms.length) {
     const elements = document.forms[0].elements
     for (let i = 0; i < elements.length; i++) {
@@ -49,9 +49,9 @@ export const checkInputLabels = (window, document) => {
 }
 
 // validate task-list page as per the recommended structure @ https://design-system.service.gov.uk/patterns/task-list-pages/
-export const checkTaskList = (window, document) => {
+export const checkTaskList = (window: Window, document: Document) => {
   const orderedList = document.getElementsByTagName('ol')
-  expect(orderedList.length).to.be.above(0)
+  expect(orderedList.length, 'Task-list page should contain atleast one <ol> with list of tasks').to.be.above(0)
   for (let i = 0; i < orderedList.length; i++) {
     const tasks = orderedList[i].querySelectorAll('a[aria-describedby]')
     // looop through each anchor and get anchor text and aria-describedby attribute
@@ -61,6 +61,37 @@ export const checkTaskList = (window, document) => {
     }
   }
 }
+
+// validate checkAnswers page as per the recommended structure @ https://design-system.service.gov.uk/patterns/check-answers/
+export const checkAnswers = (window: Window, document: Document) => {
+  // this expects and validates a html structrue like below
+  /**
+   * <dl>
+   *  <div>
+   *    <dt>Full name</dt>
+   *    <dd>Jonatha</dd>
+   *    <dd> <a href="/path/to/edit/full-name">Change <span class="visually-hidden">full name</span></a></dd>
+   *  </div>
+   * </dl>
+   */
+  const definitionList = document.getElementsByTagName('dl')
+  expect(definitionList.length, 'Task-list page should contain atleast one <dl> tag with list of answers provided').to.be.greaterThan(0)
+
+  for (let i = 0; i < definitionList.length; i++) {
+    const childElements = definitionList[i].children
+    for (let c = 0; c < childElements.length; c++) {
+      // compare first child text with last child's link text
+      const dt = childElements[c].children[0].textContent.trim().toLocaleLowerCase() // content of <dt>...</dt>
+      const link = childElements[c].children[2].querySelector('a') // <a href="/path...">...</a> or null
+      if (link) {
+        expect('Change ' + dt).to.equal(link.textContent.trim())
+      } else {
+        console.log('INFO: no change link available for "' + dt + '"')
+      }
+    }
+  }
+}
+
 // custom accessibility tests that are to execute on all pages/routes
 const globalChecks = (window, document, stringHtml) => {
   // generic functions that run on each page go here

@@ -19,7 +19,7 @@ import { Paths as PaidInFullPaths } from 'paid-in-full/paths'
 import { Paths as MediationPaths } from 'mediation/paths'
 import { Paths as DirectionQuestionnairePaths } from 'directions-questionnaire/paths'
 import { Paths as OrdersPaths } from 'orders/paths'
-import { customAccessibilityChecks, checkInputLabels, checkTaskList } from './customChecks'
+import { customAccessibilityChecks, checkInputLabels, checkTaskList, checkAnswers } from './customChecks'
 
 import 'test/a11y/mocks'
 import { app } from 'main/app'
@@ -34,6 +34,10 @@ const agent = supertest(app)
 interface Issue {
   type,
   code
+}
+interface TestsOnSpecificPages {
+  routes: Paths[],
+  tests: { (window: Window, document: Document): void; }[]
 }
 
 async function runPa11y (url: string): Promise<Issue[]> {
@@ -125,14 +129,22 @@ const excludedPaths: Paths[] = [
  * The 'checksIncluded' should be removed once all other defects(that are not reported in DAC) are fixed.
 */
 
-const checksOnSpecificRoutes = [
+const testsOnSpecificPages: TestsOnSpecificPages[] = [
   {
-    route: DefendantResponsePaths.defendantYourDetailsPage,
+    routes: [DefendantResponsePaths.defendantYourDetailsPage],
     tests: [checkInputLabels]
   },
   {
-    route: ClaimIssuePaths.taskListPage,
+    routes: [
+      DefendantResponsePaths.taskListPage,
+      ClaimantResponsePaths.taskListPage,
+      ClaimIssuePaths.taskListPage
+    ], // testing checklist page
     tests: [checkTaskList]
+  },
+  {
+    routes: [ClaimIssuePaths.checkAndSendPage, DefendantResponsePaths.checkAndSendPage],
+    tests: [checkAnswers]
   }
 ]
 
@@ -140,8 +152,12 @@ describe('Accessibility', () => {
   function checkPaths (pathsRegistry: object): void {
     Object.values(pathsRegistry).forEach((path: RoutablePath) => {
       const excluded = excludedPaths.some(_ => _ === path)
-      const specificChecks = checksOnSpecificRoutes.filter(check => {
-        return check.route === path
+
+      const specificChecks = testsOnSpecificPages.filter(checkList => {
+        const pathAvailability = checkList.routes.filter(pathToAddChecks => {
+          return path === pathToAddChecks
+        })
+        return pathAvailability.length > 0
       })
       let uri = path.uri
       if (!excluded) {
