@@ -40,6 +40,13 @@ describe('Dashboard - claimant page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Claim number', 'Draft'))
         })
+        it('should inform claimant that documents will appear on claim submission', async () => {
+          await request(app)
+          .get('/dashboard/draft/claimant#documents')
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('Any documents will appear here after you submit a claim.'))
+          .expect(res => expect(res).to.be.successful.withoutText('Download'))
+        })
       })
 
       context('when claim is not in draft stage', () => {

@@ -60,6 +60,8 @@
       Created: {{ claim.createdAt.format('LL') }}
     </span>
     </p>
+  {% else %}
+    <p>Any documents will appear here after you submit a claim.</p>
   {% endif %}
 {% endset %}
 
