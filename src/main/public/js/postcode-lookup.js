@@ -232,7 +232,7 @@
 
   function lookupPostcode (postcode, postcodeLookupWidget) {
     var xhr = new XMLHttpRequest()
-    xhr.open('GET', '/postcode-lookup?postcode=' + encodeURIComponent(postcode))
+    xhr.open('GET', '/postcode-lookup?postcode=' + encodeURIComponent(postcode.trim()))
     xhr.onload = function () {
       if (xhr.status !== 200) {
         handlePostcodeError(false, postcodeLookupWidget)
