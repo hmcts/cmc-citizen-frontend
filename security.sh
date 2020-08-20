@@ -15,8 +15,10 @@ while !(curl -s http://0.0.0.0:1001) > /dev/null
   zap-cli --zap-url http://0.0.0.0 -p 1001 spider ${TEST_URL}
   zap-cli --zap-url http://0.0.0.0 -p 1001 active-scan --scanners all --recursive "${TEST_URL}"
   zap-cli --zap-url http://0.0.0.0 -p 1001 report -o activescan.html -f html
+  zap-cli --zap-url http://0.0.0.0 -p 1001 report -o activescanReport.xml -f xml
   echo 'Changing owner from $(id -u):$(id -g) to $(id -u):$(id -u)'
   chown -R $(id -u):$(id -u) activescan.html
+  chown -R $(id -u):$(id -u) activescanReport.xml
   curl --fail http://0.0.0.0:1001/OTHER/core/other/jsonreport/?formMethod=GET --output report.json
   cp *.* functional-output/
 #  zap-cli --zap-url http://0.0.0.0 -p 1001 alerts -l Medium --exit-code False //TODO: Re-enable this line once finished testing!!!
