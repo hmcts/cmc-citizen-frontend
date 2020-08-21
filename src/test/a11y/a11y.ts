@@ -19,7 +19,7 @@ import { Paths as PaidInFullPaths } from 'paid-in-full/paths'
 import { Paths as MediationPaths } from 'mediation/paths'
 import { Paths as DirectionQuestionnairePaths } from 'directions-questionnaire/paths'
 import { Paths as OrdersPaths } from 'orders/paths'
-import { customAccessibilityChecks, checkInputLabels, checkTaskList, checkAnswers } from './customChecks'
+import { customAccessibilityChecks, checkInputLabels, checkTaskList, checkAnswers, checkError, CustomChecks } from './customChecks'
 
 import 'test/a11y/mocks'
 import { app } from 'main/app'
@@ -35,9 +35,14 @@ interface Issue {
   type,
   code
 }
+interface RequestDetails {
+  method: 'get' | 'post',
+  send?: any
+}
 interface TestsOnSpecificPages {
   routes: Paths[],
-  tests: { (window: Window, document: Document): void; }[]
+  tests: CustomChecks,
+  requestDetails?: RequestDetails
 }
 
 async function runPa11y (url: string): Promise<Issue[]> {
@@ -54,12 +59,12 @@ async function runPa11y (url: string): Promise<Issue[]> {
     .filter((issue: Issue) => issue.code !== 'WCAG2AA.Principle4.Guideline4_1.4_1_2.H91.A.NoContent')
 }
 
-function check (uri: string, customTests: any[] = []): void {
+function check (uri: string, customTests: CustomChecks = [], requestDetails: RequestDetails = { method: 'get' }): void {
   describe(`Page ${uri}`, () => {
 
     describe(`custom-accessibility tests for ${uri}`, () => {
       it('should not have errors in custom accessibility checks', async () => {
-        const content = await extractPageContent(uri)
+        const content = await extractPageContent(uri, requestDetails)
         customAccessibilityChecks(content, customTests)
       })
     })
@@ -74,9 +79,15 @@ function check (uri: string, customTests: any[] = []): void {
 }
 
 // returns html as string from the respective url / route provided
-async function extractPageContent (url: string): Promise<string> {
-  const res: supertest.Response = await agent.get(url)
+async function extractPageContent (url: string, requestDetails: RequestDetails = { method: 'post' }): Promise<string> {
+  let res: supertest.Response
+  if (requestDetails.method === 'post') {
+    res = await agent.post(url)
+      .send(requestDetails.send ? requestDetails.send : null)
+  } else {
+    res = await agent.get(url)
     .set('Cookie', `${cookieName}=ABC;state=000MC000`)
+  }
 
   if (res.redirect) {
     throw new Error(`Call to ${url} resulted in a redirect to ${res.get('Location')}`)
@@ -145,6 +156,13 @@ const testsOnSpecificPages: TestsOnSpecificPages[] = [
   {
     routes: [ClaimIssuePaths.checkAndSendPage, DefendantResponsePaths.checkAndSendPage],
     tests: [checkAnswers]
+  },
+  {
+    routes: [EligibilityPaths.claimValuePage],
+    tests: [checkError],
+    requestDetails: {
+      method: 'post'
+    }
   }
 ]
 
@@ -166,7 +184,7 @@ describe('Accessibility', () => {
         } else if (path.uri.includes(':externalId')) {
           uri = path.evaluateUri({ externalId: '91e1c70f-7d2c-4c1e-a88f-cbb02c0e64d6' })
         }
-        check(uri, specificChecks.length ? specificChecks[0].tests : [])
+        check(uri, specificChecks.length ? specificChecks[0].tests : [], specificChecks.length ? specificChecks[0].requestDetails : undefined)
       }
     })
   }

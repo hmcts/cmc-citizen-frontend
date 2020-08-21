@@ -2,6 +2,8 @@
 import { JSDOM } from 'jsdom'
 import { expect } from 'chai'
 
+export type CustomChecks = { (window: Window, document: Document): void; }[]
+
 function ensureHeadingIsIncludedInPageTitle (text: string): void {
   const title: string = text.match(/<title>(.*)<\/title>/)[1]
   const heading: RegExpMatchArray = text.match(/<h1 class="heading-large">\s*(.*)\s*<\/h1>/)
@@ -15,23 +17,24 @@ function ensureHeadingIsIncludedInPageTitle (text: string): void {
 }
 
 // ensure page title matches with page's h1 content
-// const checkPageTitleAndHeading = (window, document) => {
-//   // get page title
-//   const title = document.title
-//   // get h1 tags
-//   const headings = document.getElementsByTagName('h1')
-//   // ensure only one h1 is present per page
-//   if (headings.length) {
-//     // expect(headings.length, `Only one <h1> tag is expected, instead noticed ${headings.length} in ${title}`).to.be.eq(1)
-//     if (headings.length > 1) {
-//       console.log(`WARNING: ONLY 1 <H1> tag IS EXPECTED BUT FOUND ${headings.length} in ${title}`)
-//     }
-//     const heading = headings[0].innerHTML.trim()
-//     expect(title).to.be.equal(`${heading} - Money Claims`)
-//   } else {
-//     console.log(`NOTE: No heading found on page titled '${title}'`)
-//   }
-// }
+export const checkPageTitleAndHeading = (window, document) => {
+  // get page title
+  const title = document.title
+  // get h1 tags
+  const headings = document.getElementsByTagName('h1')
+  console.log('.......', headings.length, '.....', headings[0].textContent)
+  // ensure only one h1 is present per page
+  if (headings.length) {
+    // expect(headings.length, `Only one <h1> tag is expected, instead noticed ${headings.length} in ${title}`).to.be.eq(1)
+    if (headings.length > 1) {
+      console.log(`WARNING: ONLY 1 <H1> tag IS EXPECTED BUT FOUND ${headings.length} in ${title}`)
+    }
+    const heading = headings[0].innerHTML.trim()
+    expect(title).to.be.equal(`${heading} - Money Claims`)
+  } else {
+    console.log(`NOTE: No heading found on page titled '${title}'`)
+  }
+}
 
 // ensure every input/select/radio/checkbox/textarea has it own corresponding label
 export const checkInputLabels = (window: Window, document: Document) => {
@@ -92,14 +95,47 @@ export const checkAnswers = (window: Window, document: Document) => {
   }
 }
 
-// custom accessibility tests that are to execute on all pages/routes
-const globalChecks = (window, document, stringHtml) => {
-  // generic functions that run on each page go here
-  ensureHeadingIsIncludedInPageTitle(stringHtml)
+/**
+ *
+ * @param window
+ * @param document
+ * expect error container with class 'error-summary' is present
+ * expect h2 tag for error messages
+ * expect 'There was a problem' text in h2
+ * only one h1 tag per page
+ */
+export const checkError = (window: Window, document: Document) => {
+  const className = 'error-summary'
+  const errorContainer = document.getElementsByClassName(className)
+  // should contain only one error-summary
+  expect(errorContainer.length, `div element with '${className}' must be present`).to.be.equal(1)
+  // error-summary div should contain <h2>There was a problem</h2>
+  const heading = errorContainer[0].getElementsByTagName('h2')
+  expect(heading.length, 'Error heading should use h2 tag').to.be.eq(1)
+  expect(heading[0].textContent.trim()).to.be.eq('There was a problem')
 }
 
+/**
+ *
+ * @param window window object
+ * @param document document object
+ * @param stringHtml html as string returned by the supertest
+ */
+// custom accessibility tests that are to execute on all pages/routes
+const globalChecks = (window: Window, document: Document, stringHtml: string) => {
+
+  // generic functions that run on each page go here
+  ensureHeadingIsIncludedInPageTitle(stringHtml)
+
+  // checkPageTitleAndHeading(window, document)
+}
+
+/**
+ *
+ * @param stringHtml html as string(response.text) returned by the supertest request
+ * @param customTests array of methods that contain chai 'expect' statements
+ */
 export const customAccessibilityChecks = (stringHtml: string, customTests: any[]) => {
-  // console.log(stringHtml)
   // convert the string content to html for further parsing
   const win = new JSDOM(stringHtml).window
 
