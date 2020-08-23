@@ -165,6 +165,7 @@
   "10054_Cookie Without SameSite Attribute_https://moneyclaims.aat.platform.hmcts.net_GET": "ignore",
   "10011_Cookie Without Secure Flag_https://moneyclaims.aat.platform.hmcts.net/_GET": "ignore",
   "10011_Cookie Without Secure Flag_https://moneyclaims.aat.platform.hmcts.net/sitemap.xml_GET": "ignore",
+  "10011_Cookie Without Secure Flag_https://moneyclaims.aat.platform.hmcts.net/robots.txt_GET": "ignore",
   "10098_Cross-Domain Misconfiguration_https://moneyclaims.aat.platform.hmcts.net/ruxitagentjs_ICA2QSVfqru_10193200616095656.js_GET": "ignore",
   "10015_Incomplete or No Cache-control and Pragma HTTP Header Set_https://idam-web-public.aat.platform.hmcts.net/login?response_type=code&state=f869bd5d-d7bf-4e72-a652-657aa70cb30b&client_id=cmc_citizen&redirect_uri=https://moneyclaims.aat.platform.hmcts.net/receiver_GET": "ignore",
   "10015_Incomplete or No Cache-control and Pragma HTTP Header Set_https://moneyclaims.aat.platform.hmcts.net/img/lib/gov.uk_logotype_crown.svg?0.26.0_GET": "ignore",
@@ -185,6 +186,7 @@
   "10027_Information Disclosure - Suspicious Comments_https://moneyclaims.aat.platform.hmcts.net/webchat/javascript/webchart-init.js_GET": "ignore",
   "90033_Loosely Scoped Cookie_https://moneyclaims.aat.platform.hmcts.net/_GET": "ignore",
   "90033_Loosely Scoped Cookie_https://moneyclaims.aat.platform.hmcts.net/sitemap.xml_GET": "ignore",
+  "90033_Loosely Scoped Cookie_https://moneyclaims.aat.platform.hmcts.net/robots.txt_GET": "ignore",
   "10109_Modern Web Application_https://moneyclaims.aat.platform.hmcts.net/accessibility-statement_GET": "ignore",
   "10109_Modern Web Application_https://moneyclaims.aat.platform.hmcts.net/contact-us_GET": "ignore",
   "10109_Modern Web Application_https://moneyclaims.aat.platform.hmcts.net/cookies_GET": "ignore",
@@ -300,6 +302,7 @@
   "10104_User Agent Fuzzer_https://moneyclaims.aat.platform.hmcts.net/webchat/javascript/webchart-init.js_GET": "ignore",
   "10104_User Agent Fuzzer_https://moneyclaims.aat.platform.hmcts.net/webchat/javascript_GET": "ignore",
   "10104_User Agent Fuzzer_https://moneyclaims.aat.platform.hmcts.net/webchat_GET": "ignore",
+  "10104_User Agent Fuzzer_https://moneyclaims.aat.platform.hmcts.net/ruxitagentjs_ICA2QSVfqru_10193200616095656.js_GET": "ignore",
   "10104_User Agent Fuzzer_https://moneyclaims.aat.platform.hmcts.net_GET": "ignore",
   "10021_X-Content-Type-Options Header Missing_https://moneyclaims.aat.platform.hmcts.net/ruxitagentjs_ICA2QSVfqru_10193200616095656.js_GET": "ignore"
 }
