@@ -129,7 +129,7 @@
 
 {% macro submitButton(label = 'Continue', id = '', ariaLabel = '') %}
   <div class="form-group">
-    <input type="submit" class="button" {% if ariaLabel %}aria-label="{{ t(aria) }}"{% endif %} value="{{ t(label) }}"{% if id %}name="{{ id }}"{% endif %} {% if id %}id="{{ id }}"{% endif %}>
+    <input type="submit" class="button" {% if ariaLabel %}aria-label="{{ t(ariaLabel) }}"{% endif %} value="{{ t(label) }}"{% if id %}name="{{ id }}"{% endif %} {% if id %}id="{{ id }}"{% endif %}>
   </div>
 {% endmacro %}
 
