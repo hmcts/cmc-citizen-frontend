@@ -127,7 +127,7 @@ export const checkRole = (window: Window, document: Document) => {
 
   for (let i = 0; i < definitionList.length; i++) {
     const attributesName = definitionList[i].getAttributeNames()
-    expect(attributesName.length,'Total Income / Expence "p" tag must have "role" & "aria-live" attributes').to.be.greaterThan(2)  
+    expect(attributesName.length,'Total Income / Expence "p" tag must have "role" & "aria-live" attributes').to.be.greaterThan(2)
     if (expect(attributesName).to.contains('role') && expect(attributesName).to.contains('aria-label')) {
       expect(definitionList[0].getAttribute('role')).to.equal('status')
       expect(definitionList[0].getAttribute('aria-live')).to.equal('polite')
