@@ -127,13 +127,28 @@ export const checkRole = (window: Window, document: Document) => {
 
   for (let i = 0; i < definitionList.length; i++) {
     const attributesName = definitionList[i].getAttributeNames()
-    expect(attributesName.length,'Total Income / Expence "p" tag must have "role" & "aria-live" attributes').to.be.greaterThan(2)
-    if (attributesName.length >= 3) {
+    expect(attributesName.length,'Total Income / Expence "p" tag must have "role" & "aria-live" attributes').to.be.greaterThan(2)  
+    if (expect(attributesName).to.contains('role') && expect(attributesName).to.contains('aria-label')) {
       expect(definitionList[0].getAttribute('role')).to.equal('status')
       expect(definitionList[0].getAttribute('aria-live')).to.equal('polite')
     } else {
       console.log('INFO: no change role and aria-live attributes present in the "p" tag')
     }
+  }
+}
+
+export const checkButton = (window: Window, document: Document) => {
+  // this expects and validates 'aria-label' attribute is present in the submit button"
+  /**
+   * <input type="submit" class="button" aria-label="I confirm I’ve read this information about resolving disputes" value="I confirm I’ve read this">
+   */
+  const definitionList = document.getElementsByClassName('button')
+  expect(definitionList.length, 'resolving-this-dispute page must have submite button').to.be.greaterThan(0)
+
+  for (let i = 0; i < definitionList.length; i++) {
+    const attributesName = definitionList[i].getAttributeNames()
+    expect(attributesName.length).to.be.greaterThan(1)
+    expect(attributesName).to.contains('aria-label')
   }
 }
 
