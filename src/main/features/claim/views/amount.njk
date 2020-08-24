@@ -68,15 +68,15 @@
                     textInputInline(
                       reasonJoinKey, form, 'claim-amount-column-1' + (' form-control-error' if displayTotalError else ''),
                       arialabelledby = "claim-reason-label",
-                      ariaDescribedBy = "claim-reason-hint"
+                      ariaDescribedBy = "claim-reason-hint",
+                      visuallyHiddenLabelValue = possition + '. What you’re claiming for'
                     )
                   }}
-                  <label class="form-label-bold mobile-show visually-hidden" for="{{ reasonJoinKey }}">{{ possition }} {{ t('. What you’re claiming for') }}</label>
                   <span class="form-label-bold mobile-show">{{ t('Amount') }}</span>
-                  <label class="form-label-bold mobile-show visually-hidden" for="{{ amountJoinKey }}">{{ possition }} {{ t('. Amount') }}</label>
                   {{
                     textInputInline(
-                      amountJoinKey, form, 'claim-amount-column-2' + (' form-control-error' if displayTotalError else ''), ' input-symbol-pound'
+                      amountJoinKey, form, 'claim-amount-column-2' + (' form-control-error' if displayTotalError else ''), ' input-symbol-pound',
+                      visuallyHiddenLabelValue = possition + '. Amount'
                     )
                   }}
                 </div>

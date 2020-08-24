@@ -73,9 +73,13 @@
   </div>
 {% endmacro %}
 
-{% macro textInputInline( name, form, inputClass='', prefixClass='', ariaLabelledBy='', ariaDescribedBy='') %}
+{% macro textInputInline( name, form, inputClass='', prefixClass='', ariaLabelledBy='', ariaDescribedBy='', visuallyHiddenLabelValue='') %}
   {% set error = form.errorFor(name) %}
-  <label for="{{ name }}"></label>
+  {% if visuallyHiddenLabelValue %}
+    <label for="{{ name }}"><span class="visually-hidden"> {{ visuallyHiddenLabelValue }} </span></label>
+  {% else %}
+    <label for="{{ name }}"></label>
+  {% endif %}
   <span class="{{ prefixClass }}">
     <input
       id="{{ name }}" name="{{ name }}"
