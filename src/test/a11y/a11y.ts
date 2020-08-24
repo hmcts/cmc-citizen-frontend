@@ -165,7 +165,7 @@ const testsOnSpecificPages: TestsOnSpecificPages[] = [
     }
   },
   {
-    routes: [StatementOfMeansPaths.monthlyIncomePage, StatementOfMeansPaths.monthlyExpensesPage, ClaimIssuePaths.resolvingThisDisputerPage],
+    routes: [StatementOfMeansPaths.monthlyIncomePage, StatementOfMeansPaths.monthlyExpensesPage],
     tests: [checkRole]
   }
 ]
