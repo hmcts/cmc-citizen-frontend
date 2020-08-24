@@ -3,7 +3,7 @@
 {% from "table.njk" import tableStart,tableEnd, row, rowWithMultipleValue %}
 
 {% macro partyDetailsFragment(form, fields, addressSection, showCorrespondenceAddressSection = false,
-  postcodeLabel = 'Enter a UK postcode', phone, ariaText = '' ) %}
+  postcodeLabel = 'Enter a UK postcode', phone ) %}
   {% for field in fields %}
     {% if field.readOnly %}
       {% if field.value %}
@@ -20,10 +20,6 @@
   {% endfor %}
 
   {% if addressSection %}
-  <fieldset id=“yourAddress[label]” class="form-group">
-  <legend>
-    <span class="visually-hidden">{{ t( addressSection.heading ) }}</span>
-  </legend>
     <h2 class="heading-medium">{{ t(addressSection.heading) }}</h2>
     {% if addressSection.hint %}
       <p>{{ t(addressSection.hint) }}</p>
@@ -32,21 +28,14 @@
       <p>{{ t(addressSection.secondHint) }}</p>
     {% endif %}
     {% if addressSection.postcodeLookup %}
-      {% if ariaText %}
-        {% set ariaText = 'Your' %}
-      {% endif %}
-      {{ postcodeLookupAddressFragment(form = form, name = addressSection.name, postcodeLabel = postcodeLabel, ariaText = ariaText ) }}
+      {{ postcodeLookupAddressFragment(form = form, name = addressSection.name, postcodeLabel = postcodeLabel ) }}
     {% else %}
       {{ addressFragment(form = form, name = addressSection.name) }}
     {% endif %}
-  </fieldset>
   {% endif %}
 
   {% if showCorrespondenceAddressSection == true %}
-    {% if ariaText %}
-      {% set ariaText = 'Correspondence' %}
-    {% endif %}
-    {{ correspondenceAddressFragment(form, ariaText) }}
+    {{ correspondenceAddressFragment(form) }}
   {% endif %}
 
   {% if phone is defined %}

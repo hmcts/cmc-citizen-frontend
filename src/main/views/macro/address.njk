@@ -9,7 +9,7 @@
     </form>
 {% endmacro %}
 
-{% macro postcodeLookupAddressFragment(form, name, postcodeLabel, ariaText ='') %}
+{% macro postcodeLookupAddressFragment(form, name, postcodeLabel) %}
   {% set internalName = name + '[postcodeLookup]' if name else 'postcodeLookup' %}
   {% set addressSelectName = name + '[addressList]' if name else 'addressList' %}
 
@@ -63,7 +63,7 @@
 
     <div class="address js-hidden">
 
-      {{ addressFragment(form, name, ariaText ) }}
+      {{ addressFragment(form, name) }}
 
       {% set addressSelectorVisibleName = name + '[addressSelectorVisible]' if name else 'addressSelectorVisible' %}
       {% set enterManuallyName = name + '[enterManually]' if name else 'enterManually' %}
@@ -85,7 +85,7 @@
   </div>
 {% endmacro %}
 
-{% macro addressFragment(form, name, ariaText = '') %}
+{% macro addressFragment(form, name) %}
   {% set line1Name = name + '[line1]' if name else 'line1' %}
   {% set line2Name = name + '[line2]' if name else 'line2' %}
   {% set line3Name = name + '[line3]' if name else 'line3' %}
@@ -130,25 +130,13 @@
            title="{{ t('Street line 3') }}"
     />
   </div>
-  {% if not ariaText %}
-    {{ textInput('Town or city', name + '[city]' if name else 'city', form, inputClass='address-town-or-city',
+  {{ textInput('Town or city', name + '[city]' if name else 'city', form, inputClass='address-town-or-city',
     compound=true, autocomplete = 'address-level2', maxLength=35) }}
-    {{ textInput('Postcode', name + '[postcode]' if name else 'postcode', form, inputClass='postcode form-control-1-4',
+  {{ textInput('Postcode', name + '[postcode]' if name else 'postcode', form, inputClass='postcode form-control-1-4',
     autocomplete = 'postal-code') }}
-  {% elseif ariaText === 'Your' %}
-    {{ textInput('Town or city', name + '[city]' if name else 'city', form, inputClass='address-town-or-city',
-    compound=true, autocomplete = 'address-level2', maxLength=35, ariaText = 'Your Town or city') }}
-    {{ textInput('Postcode', name + '[postcode]' if name else 'postcode', form, inputClass='postcode form-control-1-4',
-    autocomplete = 'postal-code', ariaText = 'Your Postcode') }}
-  {% elseif ariaText === 'Correspondence' %}
-    {{ textInput('Town or city', name + '[city]' if name else 'city', form, inputClass='address-town-or-city',
-    compound=true, autocomplete = 'address-level2', maxLength=35, ariaText = 'Correspondence Town or city') }}
-    {{ textInput('Postcode', name + '[postcode]' if name else 'postcode', form, inputClass='postcode form-control-1-4',
-    autocomplete = 'postal-code', ariaText = 'Correspondence Postcode') }}
-  {% endif %}
 {% endmacro %}
 
-{% macro correspondenceAddressFragment(form, ariaText = '') %}
+{% macro correspondenceAddressFragment(form) %}
   <h2 class="heading-medium">{{ t('Correspondence address') }}</h2>
 
   {{
@@ -164,13 +152,9 @@
   labelBold = false
   )
   }}
-  <fieldset id=“correspondenceAddress[label]” class="form-group">
-  <legend>
-    <span class="visually-hidden">{{ t( 'Correspondence address' ) }}</span>
-  </legend>
+
   <div class="panel panel-border-narrow js-hidden" id="hasCorrespondenceAddress-true" aria-hidden="false">
     <p>{{ t('All correspondence will be sent to this address. This is known as an ‘address for service’.') }}</p>
-    {{ postcodeLookupAddressFragment(form, name = 'correspondenceAddress', postcodeLabel = 'Enter UK Postcode for Correspondence Address Lookup', ariaText = ariaText ) }}
+    {{ postcodeLookupAddressFragment(form, name = 'correspondenceAddress', postcodeLabel = 'Enter UK Postcode for Correspondence Address Lookup') }}
   </div>
-  </fieldset>
 {% endmacro %}
