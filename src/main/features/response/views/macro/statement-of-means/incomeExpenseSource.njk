@@ -1,12 +1,17 @@
 {% from "form.njk" import textInput, poundInput, radioGroup %}
 
-{% macro incomeExpenseSource(form, name, sourceLabel, amountLabel, amountHint, scheduleLabel, nameEditable) %}
+{% macro incomeExpenseSource(form, name, sourceLabel, amountLabel, amountHint, scheduleLabel, nameEditable, page='') %}
   <div class="income-expense-source">
     {% if nameEditable %}
       {{ textInput(form = form, name = name + '[name]', label = sourceLabel) }}
     {% endif %}
     {{ poundInput(form = form, name = name + '[amount]', label = amountLabel, hint = amountHint) }}
-    {{ scheduleSource(form, name, label = scheduleLabel) }}
+    {% if page %}
+      {{ scheduleSourceWithCustomLable(form, name, label = scheduleLabel, page) }}
+      {% else %}
+      {{ scheduleSource(form, name, label = scheduleLabel) }}
+    {% endif %}
+    
   </div>
 {% endmacro %}
 
@@ -37,6 +42,41 @@
       },
       {
         label: 'Month',
+        value: 'MONTH',
+        checked: form.valueFor(name).value === 'MONTH'
+      }
+    ]
+  ) }}
+{% endmacro %}
+
+{% macro scheduleSourceWithCustomLable(form, name, label, page) %}
+  {% set lableName = '<span class="visually-hidden"> '+ label +' ' + label + '</span>' %}
+  {% set name = name + '[schedule]' %}
+  {% set error = form.errorFor(name) %}
+
+  {{ radioGroup(
+    form = form,
+    label = label,
+    name = name,
+    labelBold = false,
+    options = [
+      {
+        label: lableName +' Week',
+        value: 'WEEK',
+        checked: form.valueFor(name).value === 'WEEK'
+      },
+      {
+        label: lableName +' 2 weeks',
+        value: 'TWO_WEEKS',
+        checked: form.valueFor(name).value === 'TWO_WEEKS'
+      },
+      {
+        label: lableName +' 4 weeks',
+        value: 'FOUR_WEEKS',
+        checked: form.valueFor(name).value === 'FOUR_WEEKS'
+      },
+      {
+        label: lableName +' Month',
         value: 'MONTH',
         checked: form.valueFor(name).value === 'MONTH'
       }

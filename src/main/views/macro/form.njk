@@ -73,9 +73,13 @@
   </div>
 {% endmacro %}
 
-{% macro textInputInline( name, form, inputClass='', prefixClass='', ariaLabelledBy='', ariaDescribedBy='') %}
+{% macro textInputInline( name, form, inputClass='', prefixClass='', ariaLabelledBy='', ariaDescribedBy='', visuallyHiddenLabelValue='') %}
   {% set error = form.errorFor(name) %}
-  <label for="{{ name }}"></label>
+  {% if visuallyHiddenLabelValue %}
+    <label for="{{ name }}"><span class="visually-hidden"> {{ visuallyHiddenLabelValue }} </span></label>
+  {% else %}
+    <label for="{{ name }}"></label>
+  {% endif %}
   <span class="{{ prefixClass }}">
     <input
       id="{{ name }}" name="{{ name }}"
@@ -127,9 +131,9 @@
   </div>
 {% endmacro %}
 
-{% macro submitButton(label = 'Continue', id = '') %}
+{% macro submitButton(label = 'Continue', id = '', ariaLabel = '') %}
   <div class="form-group">
-    <input type="submit" class="button" value="{{ t(label) }}"{% if id %}name="{{ id }}"{% endif %} {% if id %}id="{{ id }}"{% endif %}>
+    <input type="submit" class="button" {% if ariaLabel %}aria-label="{{ t(ariaLabel) }}"{% endif %} value="{{ t(label) }}"{% if id %}name="{{ id }}"{% endif %} {% if id %}id="{{ id }}"{% endif %}>
   </div>
 {% endmacro %}
 
