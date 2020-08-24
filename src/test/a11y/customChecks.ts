@@ -118,21 +118,20 @@ export const checkError = (window: Window, document: Document) => {
 export const checkRole = (window: Window, document: Document) => {
   // this expects and validates 'Total monthly income' 'p' tag has role="status" and aria-live="polite"
   /**
-  * <p class="heading-small calculation-outcome-container" role="status" aria-live="polite">
-  *  {{ t('Total monthly income:') }} £<span class="total-monthly-income-expense"> {{ totalMonthlyIncomeExpense | default('0.00') }} </span>
-  * </p>
+   * <p class="heading-small calculation-outcome-container" role="status" aria-live="polite">
+   *  {{ t('Total monthly income:') }} £<span class="total-monthly-income-expense"> {{ totalMonthlyIncomeExpense | default('0.00') }} </span>
+   * </p>
    */
   const definitionList = document.getElementsByClassName('calculation-outcome-container')
   expect(definitionList.length, 'Income / Expence page must have role="status" and aria-live="polite" for the "p" tag').to.be.greaterThan(0)
 
-  for (let i = 0; i < definitionList.length; i++) { 
+  for (let i = 0; i < definitionList.length; i++) {
     const attributesName = definitionList[i].getAttributeNames()
     expect(attributesName.length,'Total Income / Expence "p" tag must have "role" & "aria-live" attributes').to.be.greaterThan(2)
     if (attributesName.length >= 3) {
       expect(definitionList[0].getAttribute('role')).to.equal('status')
       expect(definitionList[0].getAttribute('aria-live')).to.equal('polite')
-    }
-    else {
+    } else {
       console.log('INFO: no change role and aria-live attributes present in the "p" tag')
     }
   }
