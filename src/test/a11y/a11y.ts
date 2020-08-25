@@ -19,7 +19,7 @@ import { Paths as PaidInFullPaths } from 'paid-in-full/paths'
 import { Paths as MediationPaths } from 'mediation/paths'
 import { Paths as DirectionQuestionnairePaths } from 'directions-questionnaire/paths'
 import { Paths as OrdersPaths } from 'orders/paths'
-import { customAccessibilityChecks, checkInputLabels, checkTaskList, checkAnswers, checkError, CustomChecks } from './customChecks'
+import { customAccessibilityChecks, checkInputLabels, checkTaskList, checkAnswers, checkError, CustomChecks, checkHeadingLevels } from './customChecks'
 
 import 'test/a11y/mocks'
 import { app } from 'main/app'
@@ -164,6 +164,10 @@ const testsOnSpecificPages: TestsOnSpecificPages[] = [
     requestDetails: {
       method: 'post'
     }
+  },
+  {
+    routes: [DefendantResponsePaths.timelinePage, DefendantResponsePaths.evidencePage, DirectionQuestionnairePaths.hearingLocationPage],
+    tests: [checkHeadingLevels]
   }
 ]
 
