@@ -19,7 +19,7 @@ import { Paths as PaidInFullPaths } from 'paid-in-full/paths'
 import { Paths as MediationPaths } from 'mediation/paths'
 import { Paths as DirectionQuestionnairePaths } from 'directions-questionnaire/paths'
 import { Paths as OrdersPaths } from 'orders/paths'
-import { customAccessibilityChecks, checkInputLabels, checkTaskList, checkAnswers, checkError, CustomChecks, checkRole, checkButton } from './customChecks'
+import { customAccessibilityChecks, checkInputLabels, checkTaskList, checkAnswers, checkError, CustomChecks, checkRole, checkButton, checkEligibilityLinks } from './customChecks'
 
 import 'test/a11y/mocks'
 import { app } from 'main/app'
@@ -171,6 +171,10 @@ const testsOnSpecificPages: TestsOnSpecificPages[] = [
   {
     routes: [ClaimIssuePaths.resolvingThisDisputerPage],
     tests: [checkButton]
+  },
+  {
+    routes: [EligibilityPaths.notEligiblePage, EligibilityPaths.mcolEligibilityPage, DefendantFirstContactPaths.startPage],
+    tests: [checkEligibilityLinks]
   }
 ]
 

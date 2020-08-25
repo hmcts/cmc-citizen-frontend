@@ -149,6 +149,25 @@ export const checkButton = (window: Window, document: Document) => {
   expect(attributesName).to.contains('aria-label')
 }
 
+export const checkEligibilityLinks = (window: Window, document: Document) => {
+  // this expects and validates Links that open in a new window must include the "(opens in a new window)" text as part of the link"
+  /**
+   * <a href="https://www.gov.uk/call-charges" rel="noreferrer noopener" target="_blank">Find out about call charges<span class="govuk-link govuk-link-no-white-space"> (opens in a new window)</span></a>
+   */
+  const linkList = document.getElementsByTagName('a')
+  expect(linkList.length, 'not-eligible page must have hyperlink').to.be.greaterThan(0)
+  for (let i = 0; i < linkList.length; i++) {
+    const attributesName = linkList[i].getAttributeNames()
+    if (expect(attributesName).to.contains('href') && linkList[i].getAttribute('href').search('https://') && linkList[i].getAttribute('target') === '_blank') {
+      const linkContent = linkList[i].text.search('(opens in a new window)')
+      expect(linkContent).to.be.greaterThan(1)
+      expect(linkList[i].getAttribute('rel')).to.equal('noreferrer noopener')
+    } else {
+      console.log('INFO: It is not the open in new window "a" tag')
+    }
+  }
+}
+
 /**
  *
  * @param window window object
