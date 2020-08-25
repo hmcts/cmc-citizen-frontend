@@ -232,7 +232,8 @@
 
   function lookupPostcode (postcode, postcodeLookupWidget) {
     var xhr = new XMLHttpRequest()
-    xhr.open('GET', '/postcode-lookup?postcode=' + encodeURIComponent(postcode.trim()))
+    postcode = postcode.trim().replace(/[\u202F\u00A0\u2000\u2001\u2003]/g, ' ')
+    xhr.open('GET', '/postcode-lookup?postcode=' + encodeURIComponent(postcode))
     xhr.onload = function () {
       if (xhr.status !== 200) {
         handlePostcodeError(false, postcodeLookupWidget)

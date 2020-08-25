@@ -47,13 +47,13 @@ function removeIllegalCharacters (value) {
   if (value !== undefined
     && value.address !== undefined
     && value.address.postcode !== undefined) {
-    value.address.postcode = value.address.postcode.trim()
+    value.address.postcode = value.address.postcode.trim().replace(/[\u202F\u00A0\u2000\u2001\u2003]/g, ' ')
   }
 
   if (value !== undefined
     && value.correspondenceAddress !== undefined
     && value.correspondenceAddress.postcode !== undefined) {
-    value.correspondenceAddress.postcode = value.correspondenceAddress.postcode.trim()
+    value.correspondenceAddress.postcode = value.correspondenceAddress.postcode.trim().replace(/[\u202F\u00A0\u2000\u2001\u2003]/g, ' ')
   }
 
   if (typeof value === 'string') {
