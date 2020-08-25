@@ -128,7 +128,6 @@ export const checkRole = (window: Window, document: Document) => {
   for (let i = 0; i < definitionList.length; i++) {
     const attributesName = definitionList[i].getAttributeNames()
     expect(attributesName.length,'Total Income / Expence "p" tag must have "role" & "aria-live" attributes').to.be.greaterThan(2)
-    
     if (expect(attributesName).to.contains('aria-live') && expect(attributesName).to.contains('role')) {
       expect(definitionList[0].getAttribute('role')).to.equal('status')
       expect(definitionList[0].getAttribute('aria-live')).to.equal('polite')
@@ -145,12 +144,9 @@ export const checkButton = (window: Window, document: Document) => {
    */
   const definitionList = document.getElementsByClassName('button')
   expect(definitionList.length, 'resolving-this-dispute page must have submite button').to.be.greaterThan(0)
-
-  for (let i = 0; i < definitionList.length; i++) {
-    const attributesName = definitionList[i].getAttributeNames()
-    expect(attributesName.length).to.be.greaterThan(1)
-    expect(attributesName).to.contains('aria-label')
-  }
+  const attributesName = definitionList[0].getAttributeNames()
+  expect(attributesName.length).to.be.greaterThan(1)
+  expect(attributesName).to.contains('aria-label')
 }
 
 /**
