@@ -143,7 +143,7 @@ export const checkButton = (window: Window, document: Document) => {
    * <input type="submit" class="button" aria-label="I confirm I’ve read this information about resolving disputes" value="I confirm I’ve read this">
    */
   const buttonList = document.getElementsByClassName('button')
-  expect(buttonList.length, 'resolving-this-dispute page must have submite button').to.be.equal(1)
+  expect(buttonList.length, 'resolving-this-dispute page must have submit button').to.be.equal(1)
   const attributesName = buttonList[0].getAttributeNames()
   expect(attributesName.length).to.be.greaterThan(1)
   expect(attributesName).to.contains('aria-label')
