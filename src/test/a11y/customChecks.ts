@@ -128,11 +128,12 @@ export const checkRole = (window: Window, document: Document) => {
   for (let i = 0; i < definitionList.length; i++) {
     const attributesName = definitionList[i].getAttributeNames()
     expect(attributesName.length,'Total Income / Expence "p" tag must have "role" & "aria-live" attributes').to.be.greaterThan(2)
-    if (attributesName.length >= 3) {
+    
+    if (expect(attributesName).to.contains('aria-live') && expect(attributesName).to.contains('role')) {
       expect(definitionList[0].getAttribute('role')).to.equal('status')
       expect(definitionList[0].getAttribute('aria-live')).to.equal('polite')
     } else {
-      console.log('INFO: no change role and aria-live attributes present in the "p" tag')
+      console.log('INFO: no role and aria-live attributes present in the "p" tag')
     }
   }
 }
