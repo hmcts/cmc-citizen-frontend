@@ -44,6 +44,18 @@ export class FormValidator {
 }
 
 function removeIllegalCharacters (value) {
+  if (value !== undefined
+    && value.address !== undefined
+    && value.address.postcode !== undefined) {
+    value.address.postcode = value.address.postcode.trim()
+  }
+
+  if (value !== undefined
+    && value.correspondenceAddress !== undefined
+    && value.correspondenceAddress.postcode !== undefined) {
+    value.correspondenceAddress.postcode = value.correspondenceAddress.postcode.trim()
+  }
+
   if (typeof value === 'string') {
     // Used the same criteria for excluding characters as in pdf service:
     // https://github.com/hmcts/cmc-pdf-service/commit/0d329cdf316c4170505cea0b1d55fc9e955ef9ed#diff-33006e1cd375862451ac613046341e82R34
