@@ -168,6 +168,36 @@ export const checkEligibilityLinks = (window: Window, document: Document) => {
   }
 }
 
+// validate Total page as per the recommended structure @ https://design-system.service.gov.uk/components/table/
+export const checkTable = (window: Window, document: Document) => {
+  // this expects and validates a html structrue like below
+  /**
+   *     <table class="table-form form-group">
+   *        <caption class="visuallyhidden"></caption>
+   *         <tbody>
+   *         </tbody>
+   *         <tfoot>
+   *           <tr>
+   *             <th scope="col"><span class="bold-small">Total claim amount</span></th>
+   *             <td class="numeric last"><span class="bold-medium">£100</span></td>
+   *           </tr>
+   *         </tfoot>
+   *       </table>
+   */
+  const tableList = document.getElementsByTagName('table')
+  expect(tableList.length, 'Total amount you’re claiming page should contain atleast one <table> tag with body and footer').to.be.greaterThan(0)
+
+  for (let i = 0; i < tableList.length; i++) {
+    const childElements = tableList[i].children
+    if (childElements.length === 3 && tableList[i].textContent.search('Total claim amount') > 0) {
+      expect(childElements.length,'Table must have 3 child nodes').to.be.eql(3)
+      expect(childElements[0].nodeName,'Table first child must be CAPTION').to.be.eql('CAPTION')
+      expect(childElements[1].nodeName,'TBODY must come after CAPTION').to.be.eql('TBODY')
+      expect(childElements[2].nodeName,'TFOOT must come after TBODY').to.be.eql('TFOOT')
+    }
+  }
+}
+
 /**
  *
  * @param window window object
