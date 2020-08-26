@@ -17,7 +17,7 @@
         {% if fallbackPage %}
           <p>{{ t('Tell us your preferred location for a hearing, in case the claim goes to one.') }}</p>
           <p>{{ t('We’ll use the location you choose unless the claimant has an exceptional reason to object, for example accessibility needs.') }}</p>
-          <h1 class="heading-medium">{{ t('Enter a court name') }}</h1>
+          <h2 class="heading-medium">{{ t('Enter a court name') }}</h2>
           {{ textInput(form = form, name = 'alternativeCourtName', inputClass = 'form-control-1-100') }}
           <input type="hidden" name="alternativeOption" value="search">
         {% else %}
