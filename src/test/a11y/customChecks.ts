@@ -198,6 +198,47 @@ export const checkTable = (window: Window, document: Document) => {
   }
 }
 
+export const checkMultipleChoice = (window: Window, document: Document) => {
+  // this expects and validates the radio button text
+  /**
+   * <Checkbox label> <priority-debts> <Radio button option>
+   * e.g :  mortgage priority-debts Week
+   */
+  const checkBoxList = document.getElementsByClassName('expandable-checkbox-option')
+  expect(checkBoxList.length, 'priority-debts page must have 7 check-boxs ').to.be.equal(7)
+  for (let i = 0; i < checkBoxList.length; i++) {
+    const checkbox = checkBoxList[i].getElementsByClassName('multiple-choice expandable')
+    let checkboxText = checkbox[0].firstElementChild.nextElementSibling.innerHTML.trim().toLocaleLowerCase()
+    if (checkboxText.search('council') === 0) {
+      checkboxText = 'councilTax'
+    } else if (checkboxText.search('maintenance') === 0) {
+      checkboxText = 'maintenance'
+    }
+    const fieldsetList = checkBoxList[i].getElementsByTagName('fieldset')
+    const legendText = fieldsetList[0].firstElementChild.firstElementChild.innerHTML.trim()
+    const labelText = '<span class="visually-hidden">'+ checkboxText +' ' + legendText + '</span>'
+    const radioButtons = fieldsetList[0].getElementsByClassName('multiple-choice')
+    for (let p = 0; p < radioButtons.length; p++) {
+      const labelTextToValidate = radioButtons[p].firstElementChild.nextElementSibling.firstElementChild.outerHTML
+      expect(labelText, 'Radio button label must have visually hidden text').to.be.eql(labelTextToValidate)
+    }
+  }
+}
+
+export const checkClaimAmountRows = (window: Window, document: Document) => {
+  // this expects and validates the claim amount rows
+  const claimAmountRowsList = document.getElementsByClassName('claim-amount-rows')
+  const rows = claimAmountRowsList[0].getElementsByClassName('claim-amount-row')
+  expect(rows.length, 'Claim amount table must have minimum of 4 rows').to.be.greaterThan(3)
+  for (let p = 0; p < rows.length; p++) {
+    const hiddenTextList = rows[p].getElementsByClassName('visually-hidden')
+    const reasonText = hiddenTextList[0].innerHTML.trim()
+    const amountText = hiddenTextList[1].innerHTML.trim()
+    expect(reasonText, 'Visually Hiddent text for Reason Textbox').to.be.eql((p+1) +'. What you’re claiming for')
+    expect(amountText, 'Visually Hiddent text for Amount Textbox').to.be.eql((p+1) +'. Amount')
+  }
+}
+
 /**
  *
  * @param window window object

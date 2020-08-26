@@ -19,7 +19,7 @@ import { Paths as PaidInFullPaths } from 'paid-in-full/paths'
 import { Paths as MediationPaths } from 'mediation/paths'
 import { Paths as DirectionQuestionnairePaths } from 'directions-questionnaire/paths'
 import { Paths as OrdersPaths } from 'orders/paths'
-import { customAccessibilityChecks, checkInputLabels, checkTaskList, checkAnswers, checkError, CustomChecks, checkRole, checkButton, checkEligibilityLinks, checkTable } from './customChecks'
+import { customAccessibilityChecks, checkInputLabels, checkTaskList, checkAnswers, checkError, CustomChecks, checkRole, checkButton, checkEligibilityLinks, checkTable, checkMultipleChoice, checkClaimAmountRows } from './customChecks'
 
 import 'test/a11y/mocks'
 import { app } from 'main/app'
@@ -179,6 +179,14 @@ const testsOnSpecificPages: TestsOnSpecificPages[] = [
   {
     routes: [ClaimIssuePaths.totalPage],
     tests: [checkTable]
+  },
+  {
+    routes: [StatementOfMeansPaths.priorityDebtsPage],
+    tests: [checkMultipleChoice]
+  },
+  {
+    routes: [ClaimIssuePaths.amountPage],
+    tests: [checkClaimAmountRows]
   }
 ]
 
@@ -194,7 +202,7 @@ describe('Accessibility', () => {
         return pathAvailability.length > 0
       })
       let uri = path.uri
-      if (!excluded) {
+      if (!excluded && path.uri.indexOf('amount') >=0) {
         if (path.uri.includes(':madeBy')) {
           uri = path.evaluateUri({ externalId: '91e1c70f-7d2c-4c1e-a88f-cbb02c0e64d6', madeBy: MadeBy.CLAIMANT.value })
         } else if (path.uri.includes(':externalId')) {

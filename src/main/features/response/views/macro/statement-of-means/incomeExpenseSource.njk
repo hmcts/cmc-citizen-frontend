@@ -50,7 +50,7 @@
 {% endmacro %}
 
 {% macro scheduleSourceWithCustomLable(form, name, label, page) %}
-  {% set lableName = '<span class="visually-hidden"> '+ name +' ' + label + '</span>' %}
+  {% set lableName = '<span class="visually-hidden">'+ name +' ' + label + '</span>' %}
   {% set name = name + '[schedule]' %}
   {% set error = form.errorFor(name) %}
 
