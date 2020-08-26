@@ -202,7 +202,7 @@ describe('Accessibility', () => {
         return pathAvailability.length > 0
       })
       let uri = path.uri
-      if (!excluded && path.uri.indexOf('amount') >=0) {
+      if (!excluded) {
         if (path.uri.includes(':madeBy')) {
           uri = path.evaluateUri({ externalId: '91e1c70f-7d2c-4c1e-a88f-cbb02c0e64d6', madeBy: MadeBy.CLAIMANT.value })
         } else if (path.uri.includes(':externalId')) {

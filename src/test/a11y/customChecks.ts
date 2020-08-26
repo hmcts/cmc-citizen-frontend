@@ -216,7 +216,7 @@ export const checkMultipleChoice = (window: Window, document: Document) => {
     }
     const fieldsetList = checkBoxList[i].getElementsByTagName('fieldset')
     const legendText = fieldsetList[0].firstElementChild.firstElementChild.innerHTML.trim()
-    const labelText = '<span class="visually-hidden">'+ checkboxText +' ' + legendText + '</span>'
+    const labelText = '<span class="visually-hidden">' + checkboxText + ' ' + legendText + '</span>'
     const radioButtons = fieldsetList[0].getElementsByClassName('multiple-choice')
     for (let p = 0; p < radioButtons.length; p++) {
       const labelTextToValidate = radioButtons[p].firstElementChild.nextElementSibling.firstElementChild.outerHTML
@@ -234,8 +234,8 @@ export const checkClaimAmountRows = (window: Window, document: Document) => {
     const hiddenTextList = rows[p].getElementsByClassName('visually-hidden')
     const reasonText = hiddenTextList[0].innerHTML.trim()
     const amountText = hiddenTextList[1].innerHTML.trim()
-    expect(reasonText, 'Visually Hiddent text for Reason Textbox').to.be.eql((p+1) +'. What you’re claiming for')
-    expect(amountText, 'Visually Hiddent text for Amount Textbox').to.be.eql((p+1) +'. Amount')
+    expect(reasonText, 'Visually Hiddent text for Reason Textbox').to.be.eql((p + 1) + '. What you’re claiming for')
+    expect(amountText, 'Visually Hiddent text for Amount Textbox').to.be.eql((p + 1) + '. Amount')
   }
 }
 
