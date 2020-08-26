@@ -27,7 +27,7 @@ import { test1 } from './customChecks'
 const testsOnSpecificPages = [
   {
     routes: ['specific/path/to/page', 'another/path/to/run/otherpage'],
-    tests: [test1]
+    tests: [customAccessibilityChecks]
   }
 ]
     

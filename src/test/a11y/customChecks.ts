@@ -200,25 +200,6 @@ export const checkTable = (window: Window, document: Document) => {
 
 /**
  *
- * @param window
- * @param document
- * expect h1, h2 are all present but not h3
- */
-export const checkHeadingLevels = (window: Window, document: Document) => {
-  const headingOne = document.getElementsByTagName('h1')
-  const headingTwo = document.getElementsByTagName('h2')
-  const headingThree = document.getElementsByTagName('h3')
-
-  // should contain only one h1
-  expect(headingOne.length, `Page should contain only one <h1> tag`).to.be.equal(1)
-  // should contain more than one h2
-  expect(headingTwo.length).to.be.above(0)
-  // no h3 tags as of now.
-  expect(headingThree.length, 'This page did not have any h3 tags by default. Please update this test case accordingly if required').to.be.equal(0)
-}
-
-/**
- *
  * @param window window object
  * @param document document object
  * @param stringHtml html as string returned by the supertest

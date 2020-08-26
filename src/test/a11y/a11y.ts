@@ -19,7 +19,7 @@ import { Paths as PaidInFullPaths } from 'paid-in-full/paths'
 import { Paths as MediationPaths } from 'mediation/paths'
 import { Paths as DirectionQuestionnairePaths } from 'directions-questionnaire/paths'
 import { Paths as OrdersPaths } from 'orders/paths'
-import { customAccessibilityChecks, checkInputLabels, checkTaskList, checkAnswers, checkError, CustomChecks, checkRole, checkButton, checkEligibilityLinks, checkTable, checkHeadingLevels } from './customChecks'
+import { customAccessibilityChecks, checkInputLabels, checkTaskList, checkAnswers, checkError, CustomChecks, checkRole, checkButton, checkEligibilityLinks, checkTable } from './customChecks'
 
 import 'test/a11y/mocks'
 import { app } from 'main/app'
@@ -131,14 +131,13 @@ const excludedPaths: Paths[] = [
 ]
 
 // checks to be done for specific pages
-// TODO these ideally need to be run globally on every page.
+// TODO these need to run on every page.
 /*
  * As part of DAC report we were instructed to ensure test cases(most of the test cases are generalized) are in place for new fixes we added.
- * If there are any other existant defects then we are ignoring them FOR NOW
+ * If then are any other existant defects then we are ignoring them for now
  * These ignored defects will be fixed/updated/generalized at some point when time permits with proper approval from the leads
- * Below 'testsOnSpecificPages' is used to map generic tests applied only for specific paths (to test DAC fixes)
- * Below tests that are run on individual pages/routes should ideally be moved to global tests so that all pages are covered.
- * However for now were are going ahead with specific page tests for now as suggested by the leads.
+ * Below 'checksIncluded' is used to map generic tests applied only for specific paths (to test DAC fixes)
+ * The 'checksIncluded' should be removed once all other defects(that are not reported in DAC) are fixed.
 */
 
 const testsOnSpecificPages: TestsOnSpecificPages[] = [
@@ -180,10 +179,6 @@ const testsOnSpecificPages: TestsOnSpecificPages[] = [
   {
     routes: [ClaimIssuePaths.totalPage],
     tests: [checkTable]
-  },
-  {
-    routes: [DefendantResponsePaths.timelinePage, DefendantResponsePaths.evidencePage, DirectionQuestionnairePaths.hearingLocationPage],
-    tests: [checkHeadingLevels]
   }
 ]
 
@@ -199,8 +194,6 @@ describe('Accessibility', () => {
         return pathAvailability.length > 0
       })
       let uri = path.uri
-      // run only spedific paths using below commented 'if' condition. Changed hard coded 'claim-value' with path you want to test
-      // if (!excluded && path.uri.indexOf('claim-value') >= 0) {
       if (!excluded) {
         if (path.uri.includes(':madeBy')) {
           uri = path.evaluateUri({ externalId: '91e1c70f-7d2c-4c1e-a88f-cbb02c0e64d6', madeBy: MadeBy.CLAIMANT.value })
