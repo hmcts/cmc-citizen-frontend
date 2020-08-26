@@ -11,127 +11,127 @@
 {% set heading = 'Check your answers' %}
 
 {% block content %}
-  <form novalidate method="post">
-    {{ csrfProtection(csrf) }}
+<div class="grid-row">
+  <div class="column-two-thirds">
+    <form novalidate method="post">
+      {{ csrfProtection(csrf) }}
 
-    <h2 class="govuk-heading-m">{{ t("Your details (claimant)") }}</h2>
-    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-      {{ partyDetail(
-        partyDetails = draftClaim.claimant.partyDetails,
-        changeLinks = {
-          name: claimantPartyDetailsPageUri,
-          address: claimantPartyDetailsPageUri,
-          contactPerson: claimantPartyDetailsPageUri,
-          dateOfBirth: paths.claimantDateOfBirthPage.uri
-        }
-      ) }}
-      {{ partyDetailRow('Contact number (optional)', draftClaim.claimant.phone.number, paths.claimantPhonePage.uri) }}
-    </dl>
-    
-    <h2 class="govuk-heading-m">{{ t("Their details (defendant)") }}</h2>
-    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-      {{ partyDetail(
-        partyDetails = draftClaim.defendant.partyDetails,
-        showCorrespondenceAddressSection = false,
-        changeLinks = {
-          name: defendantPartyDetailsPageUri,
-          contactPerson: defendantPartyDetailsPageUri,
-          address: defendantPartyDetailsPageUri
-        }
-      ) }}
-      {{ partyDetailRow('Email', draftClaim.defendant.email.address, paths.defendantEmailPage.uri) }}
-      {% if draftClaim.defendant.phone %}
-        {% set defendantPhone = draftClaim.defendant.phone.number %}
-      {% else %}
-        {% set defendantPhone = '' %}
-      {% endif %}
-      {{ partyDetailRow('Contact number (optional)', defendantPhone, paths.defendantPhonePage.uri) }}
-    </dl>
-
-    <h2 class="govuk-heading-m">{{ t("Claim amount") }}</h2>
-    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-      {{ partyDetailRow(label = 'Claim amount breakdown', value = '', changeLink = paths.amountPage.uri) }}
-      {% for each in draftClaim.amount.rows %}
-        {% if each.reason %}
-          {{ partyDetailRow(label = each.reason, value = each.amount | numeral, changeLink = paths.amountPage.uri) }}
-        {% endif %}
-      {% endfor %}
-      {{ partyDetailRow(label = 'Total', value = claimAmountTotal.claimAmount | numeral, changeLink = paths.amountPage.uri) }}
-
-      {% if (draftClaim.interest.option === YesNoOption.YES) %}
-
-        {{ partyDetailRow('Claim Interest', 'Yes' , paths.interestPage.uri) }}
-        {% if (draftClaim.interestType.option === InterestTypeOption.SAME_RATE) %}
-          {{ partyDetailRow('How do you want to claim interest?', 'Same rate for the whole period' , paths.interestRatePage.uri) }}
-
-          {% if (draftClaim.interestRate.type) %}
-            {{ partyDetailRow(label = 'What rate of interest do you want to claim?', value = draftClaim.interestRate.rate | numeral('0,0.00') + '\%', changeLink = paths.interestRatePage.uri) }}
-          {% endif %}
-          {% if (draftClaim.interestRate.reason) %}
-            {{ partyDetailRow(label = 'Why you’re claiming this rate', value = draftClaim.interestRate.reason, changeLink = paths.interestRatePage.uri) }}
-          {% endif %}
-          {% if draftClaim.interestDate.type === InterestDateType.SUBMISSION %}
-            {{ partyDetailRow('When are you claiming interest from?', t('The date you submit the claim'), paths.interestDatePage.uri) }}
-          {% else %}
-            {{ partyDetailRow('When are you claiming interest from?', t('A particular date'), paths.interestDatePage.uri) }}
-            {{ partyDetailRow('Date interest applied from', draftClaim.interestStartDate.date.asString() | date, paths.interestStartDatePage.uri) }}
-            {{ partyDetailRow('Explain why you’re claiming from this date', draftClaim.interestStartDate.reason) }}
-            {% if (draftClaim.interestEndDate.option === InterestEndDateOption.SUBMISSION) %}
-              {{ partyDetailRow('When do you want to stop claiming interest?', t('When you submit the claim '), paths.interestEndDatePage.uri) }}
-            {% else %}
-              {{ partyDetailRow('When do you want to stop claiming interest?', t('Continue until the claim is settled or judgment made'), paths.interestEndDatePage.uri) }}
-            {% endif %}
-          {% endif %}
-        {% else %}
-          {{ partyDetailRow('How do you want to claim interest?', 'Break down interest for different time periods or items', paths.interestTypePage.uri) }}
-          {{ partyDetailRow('Total interest amount', draftClaim.interestTotal.amount | numeral, paths.interestTotalPage.uri) }}
-          {{ partyDetailRow('Show how you calculated the amount', draftClaim.interestTotal.reason) }}
-          {% if (draftClaim.interestContinueClaiming.option === YesNoOption.YES) %}
-            {{ partyDetailRow('Continue to claim interest after you submit your claim?', 'Yes', paths.interestContinueClaimingPage.uri) }}
-            {% if (draftClaim.interestHowMuch.type === InterestRateOption.STANDARD) %}
-              {{ partyDetailRow('What rate of interest do you want to claim?', '8% daily interest amount', paths.interestHowMuchPage.uri) }}
-            {% else %}
-              {{ partyDetailRow('What rate of interest do you want to claim?', draftClaim.interestHowMuch.dailyAmount | numeral + ', daily interest amount', paths.interestHowMuchPage.uri) }}
-            {% endif %}
-          {% else %}
-            {{ partyDetailRow('Continue to claim interest after you submit your claim?', 'No', paths.interestContinueClaimingPage.uri) }}
-          {% endif %}
-        {% endif %}
-
-
-      {% else %}
-        {{ partyDetailRow('Interest rate', t('I don’t want to claim interest'), paths.interestPage.uri) }}
-      {% endif %}
-    </dl>
-
-    <h2 class="govuk-heading-m">{{ t("Total amount") }}</h2>
-    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-      {{ partyDetailRow('Claim amount', claimAmountTotal.claimAmount | numeral) }}
-      {% if (claimAmountTotal.interestAmount) %}
-        {{ partyDetailRow('Interest to date', claimAmountTotal.interestAmount | numeral) }}
-      {% endif %}
-      {{ partyDetailRow('Claim fee', claimAmountTotal.feeAmount | numeral) }}
-      {{ partyDetailRow('Total',  claimAmountTotal.totalAmountTillToday | numeral) }}
-    </dl>
-
-    <h2 class="govuk-heading-m">{{ t("Claim details") }}</h2>
-    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-      {{ partyDetailRow(label = 'Why you believe you’re owed the money:', value = draftClaim.reason.reason, changeLink = paths.reasonPage.uri) }}
-      {{ partyDetailRow(label = 'Timeline of what happened', value = '', changeLink = paths.timelinePage.uri) }}
-
-      {% for details in draftClaim.timeline.getPopulatedRowsOnly() %}
-        {{ partyDetailRow(label = details.date, value = details.description, changeLink = paths.timelinePage.uri) }}
-      {% endfor %}
+      <h2 class="govuk-heading-m">{{ t("Your details (claimant)") }}</h2>
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+        {{ partyDetail(
+          partyDetails = draftClaim.claimant.partyDetails,
+          changeLinks = {
+            name: claimantPartyDetailsPageUri,
+            address: claimantPartyDetailsPageUri,
+            contactPerson: claimantPartyDetailsPageUri,
+            dateOfBirth: paths.claimantDateOfBirthPage.uri
+          }
+        ) }}
+        {{ partyDetailRow('Contact number (optional)', draftClaim.claimant.phone.number, paths.claimantPhonePage.uri) }}
+      </dl>
       
-      {{ partyDetailRow(label = 'Your evidence (optional)', value = '', changeLink = paths.evidencePage.uri) }}
+      <h2 class="govuk-heading-m">{{ t("Their details (defendant)") }}</h2>
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+        {{ partyDetail(
+          partyDetails = draftClaim.defendant.partyDetails,
+          showCorrespondenceAddressSection = false,
+          changeLinks = {
+            name: defendantPartyDetailsPageUri,
+            contactPerson: defendantPartyDetailsPageUri,
+            address: defendantPartyDetailsPageUri
+          }
+        ) }}
+        {{ partyDetailRow('Email', draftClaim.defendant.email.address, paths.defendantEmailPage.uri) }}
+        {% if draftClaim.defendant.phone %}
+          {% set defendantPhone = draftClaim.defendant.phone.number %}
+        {% else %}
+          {% set defendantPhone = '' %}
+        {% endif %}
+        {{ partyDetailRow('Contact number (optional)', defendantPhone, paths.defendantPhonePage.uri) }}
+      </dl>
 
-      {% for details in draftClaim.evidence.getPopulatedRowsOnly() %}
-        {{ partyDetailRow(label = details.type.displayValue, value = details.description | default(''), changeLink = paths.evidencePage.uri) }}
-      {% endfor %}
+      <h2 class="govuk-heading-m">{{ t("Claim amount") }}</h2>
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+        {{ partyDetailRow(label = 'Claim amount breakdown', value = '', changeLink = paths.amountPage.uri) }}
+        {% for each in draftClaim.amount.rows %}
+          {% if each.reason %}
+            {{ partyDetailRow(label = each.reason, value = each.amount | numeral, changeLink = paths.amountPage.uri) }}
+          {% endif %}
+        {% endfor %}
+        {{ partyDetailRow(label = 'Total', value = claimAmountTotal.claimAmount | numeral, changeLink = paths.amountPage.uri) }}
 
-    </dl>
+        {% if (draftClaim.interest.option === YesNoOption.YES) %}
 
-    <div class="column-two-thirds">
+          {{ partyDetailRow('Claim Interest', 'Yes' , paths.interestPage.uri) }}
+          {% if (draftClaim.interestType.option === InterestTypeOption.SAME_RATE) %}
+            {{ partyDetailRow('How do you want to claim interest?', 'Same rate for the whole period' , paths.interestRatePage.uri) }}
+
+            {% if (draftClaim.interestRate.type) %}
+              {{ partyDetailRow(label = 'What rate of interest do you want to claim?', value = draftClaim.interestRate.rate | numeral('0,0.00') + '\%', changeLink = paths.interestRatePage.uri) }}
+            {% endif %}
+            {% if (draftClaim.interestRate.reason) %}
+              {{ partyDetailRow(label = 'Why you’re claiming this rate', value = draftClaim.interestRate.reason, changeLink = paths.interestRatePage.uri) }}
+            {% endif %}
+            {% if draftClaim.interestDate.type === InterestDateType.SUBMISSION %}
+              {{ partyDetailRow('When are you claiming interest from?', t('The date you submit the claim'), paths.interestDatePage.uri) }}
+            {% else %}
+              {{ partyDetailRow('When are you claiming interest from?', t('A particular date'), paths.interestDatePage.uri) }}
+              {{ partyDetailRow('Date interest applied from', draftClaim.interestStartDate.date.asString() | date, paths.interestStartDatePage.uri) }}
+              {{ partyDetailRow('Explain why you’re claiming from this date', draftClaim.interestStartDate.reason) }}
+              {% if (draftClaim.interestEndDate.option === InterestEndDateOption.SUBMISSION) %}
+                {{ partyDetailRow('When do you want to stop claiming interest?', t('When you submit the claim '), paths.interestEndDatePage.uri) }}
+              {% else %}
+                {{ partyDetailRow('When do you want to stop claiming interest?', t('Continue until the claim is settled or judgment made'), paths.interestEndDatePage.uri) }}
+              {% endif %}
+            {% endif %}
+          {% else %}
+            {{ partyDetailRow('How do you want to claim interest?', 'Break down interest for different time periods or items', paths.interestTypePage.uri) }}
+            {{ partyDetailRow('Total interest amount', draftClaim.interestTotal.amount | numeral, paths.interestTotalPage.uri) }}
+            {{ partyDetailRow('Show how you calculated the amount', draftClaim.interestTotal.reason) }}
+            {% if (draftClaim.interestContinueClaiming.option === YesNoOption.YES) %}
+              {{ partyDetailRow('Continue to claim interest after you submit your claim?', 'Yes', paths.interestContinueClaimingPage.uri) }}
+              {% if (draftClaim.interestHowMuch.type === InterestRateOption.STANDARD) %}
+                {{ partyDetailRow('What rate of interest do you want to claim?', '8% daily interest amount', paths.interestHowMuchPage.uri) }}
+              {% else %}
+                {{ partyDetailRow('What rate of interest do you want to claim?', draftClaim.interestHowMuch.dailyAmount | numeral + ', daily interest amount', paths.interestHowMuchPage.uri) }}
+              {% endif %}
+            {% else %}
+              {{ partyDetailRow('Continue to claim interest after you submit your claim?', 'No', paths.interestContinueClaimingPage.uri) }}
+            {% endif %}
+          {% endif %}
+
+
+        {% else %}
+          {{ partyDetailRow('Interest rate', t('I don’t want to claim interest'), paths.interestPage.uri) }}
+        {% endif %}
+      </dl>
+
+      <h2 class="govuk-heading-m">{{ t("Total amount") }}</h2>
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+        {{ partyDetailRow('Claim amount', claimAmountTotal.claimAmount | numeral) }}
+        {% if (claimAmountTotal.interestAmount) %}
+          {{ partyDetailRow('Interest to date', claimAmountTotal.interestAmount | numeral) }}
+        {% endif %}
+        {{ partyDetailRow('Claim fee', claimAmountTotal.feeAmount | numeral) }}
+        {{ partyDetailRow('Total',  claimAmountTotal.totalAmountTillToday | numeral) }}
+      </dl>
+
+      <h2 class="govuk-heading-m">{{ t("Claim details") }}</h2>
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+        {{ partyDetailRow(label = 'Why you believe you’re owed the money:', value = draftClaim.reason.reason, changeLink = paths.reasonPage.uri) }}
+        {{ partyDetailRow(label = 'Timeline of what happened', value = '', changeLink = paths.timelinePage.uri) }}
+
+        {% for details in draftClaim.timeline.getPopulatedRowsOnly() %}
+          {{ partyDetailRow(label = details.date, value = details.description, changeLink = paths.timelinePage.uri) }}
+        {% endfor %}
+        
+        {{ partyDetailRow(label = 'Your evidence (optional)', value = '', changeLink = paths.evidencePage.uri) }}
+
+        {% for details in draftClaim.evidence.getPopulatedRowsOnly() %}
+          {{ partyDetailRow(label = details.type.displayValue, value = details.description | default(''), changeLink = paths.evidencePage.uri) }}
+        {% endfor %}
+
+      </dl>
       <div class="form-group">
         {{ statementOfTruth(
             form,
@@ -145,6 +145,7 @@
         {{ submitButton(submitButtonLabel + '(' + (claimAmountTotal.feeAmount | numeral) + ')') }}
         <input type="hidden" name="type" value="{{ form.model.type }}">
       </div>
-    </div>
-  </form>
+    </form>
+  </div>
+</div>
 {% endblock %}
