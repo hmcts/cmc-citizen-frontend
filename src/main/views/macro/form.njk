@@ -161,7 +161,7 @@
 {% endmacro %}
 
 {% macro checkboxOption(label, name, form, value, hint = '', checked = false, bold = false) %}
-  {{ option(label, name, form, value, 'checkbox', hint, checked, bold) }}
+  {{ option(label, name, form, value, 'checkbox', hint, checked = checked, bold) }}
 {% endmacro %}
 
 {% macro option(label, name, form, value, type, hint = '', checked = false, bold = false, hidden, className, dataTarget, greyHint = true) %}

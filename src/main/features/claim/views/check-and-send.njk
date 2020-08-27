@@ -5,7 +5,7 @@
 
 {% from "table.njk" import tableStart, tableEnd, row %}
 {% from "form.njk" import csrfProtection, submitButton, errorSummary %}
-{% from "statementOfTruth.njk" import statementOfTruth %}
+{% from "statementOfTruth.njk" import statementOfTruthUpdated %}
 {% from "party/details.njk" import partyDetailsSummaryFragment, partyDetail, partyDetailRow %}
 
 {% set heading = 'Check your answers' %}
@@ -133,7 +133,7 @@
 
       </dl>
       <div class="form-group">
-        {{ statementOfTruth(
+        {{ statementOfTruthUpdated(
             form,
             statementOfTruthType = SignatureType.CLAIM,
             label = 'I believe that the facts stated in this claim are true.<p>I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.</p>',
