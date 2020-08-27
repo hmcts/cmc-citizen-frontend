@@ -158,7 +158,7 @@ export const checkEligibilityLinks = (window: Window, document: Document) => {
   expect(linkList.length, 'not-eligible page must have hyperlink').to.be.greaterThan(0)
   for (let i = 0; i < linkList.length; i++) {
     const attributesName = linkList[i].getAttributeNames()
-    if (expect(attributesName).to.contains('href') && linkList[i].getAttribute('href').search('https://') && linkList[i].getAttribute('target') === '_blank') {
+    if (expect(attributesName).to.contains('href') && (linkList[i].getAttribute('href').search('https://') || (linkList[i].getAttribute('href').search('http://'))) && linkList[i].getAttribute('target') === '_blank') {
       const linkContent = linkList[i].text.search('(opens in a new window)')
       expect(linkContent).to.be.greaterThan(1)
       expect(linkList[i].getAttribute('rel')).to.equal('noreferrer noopener')
