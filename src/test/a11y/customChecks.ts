@@ -57,6 +57,7 @@ export const checkTaskList = (window: Window, document: Document) => {
   expect(orderedList.length, 'Task-list page should contain atleast one <ol> with list of tasks').to.be.above(0)
   for (let i = 0; i < orderedList.length; i++) {
     const tasks = orderedList[i].querySelectorAll('a[aria-describedby]')
+    expect(tasks.length).to.be.greaterThan(0)
     // looop through each anchor and get anchor text and aria-describedby attribute
     for (let n = 0; n < tasks.length; n++) {
       // expect each anchor(task) has it corresponding status
