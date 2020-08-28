@@ -48,6 +48,8 @@ interface TestsOnSpecificPages {
 async function runPa11y (url: string): Promise<Issue[]> {
   const result = await pa11y(url, {
     includeWarnings: true,
+    // Ignore GovUK template elements that are outside the team's control from a11y tests
+    hideElements: '#logo, .logo, .copyright, link[rel=mask-icon]',
     headers: {
       Cookie: `${cookieName}=ABC`
     },
