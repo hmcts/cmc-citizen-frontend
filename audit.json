@@ -107,6 +107,7 @@
   "90027_Cookie Slack Detector_https://moneyclaims.aat.platform.hmcts.net/receiver_GET": "ignore",
   "90027_Cookie Slack Detector_https://moneyclaims.aat.platform.hmcts.net/robots.txt_GET": "ignore",
   "90027_Cookie Slack Detector_https://moneyclaims.aat.platform.hmcts.net/ruxitagentjs_ICA2QSVfqru_10193200616095656.js_GET": "ignore",
+  "90027_Cookie Slack Detector_https://moneyclaims.aat.platform.hmcts.net/sitemap.xml_GET": "ignore",
   "90027_Cookie Slack Detector_https://moneyclaims.aat.platform.hmcts.net/stylesheets/application.css_GET": "ignore",
   "90027_Cookie Slack Detector_https://moneyclaims.aat.platform.hmcts.net/stylesheets/lib/fonts.css?0.26.0_GET": "ignore",
   "90027_Cookie Slack Detector_https://moneyclaims.aat.platform.hmcts.net/stylesheets/lib/govuk-template-ie6.css?0.26.0_GET": "ignore",
