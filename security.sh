@@ -21,5 +21,4 @@ while !(curl -s http://0.0.0.0:1001) > /dev/null
   chown -R $(id -u):$(id -u) activescanReport.xml
   curl --fail http://0.0.0.0:1001/OTHER/core/other/jsonreport/?formMethod=GET --output report.json
   cp *.* functional-output/
-#  zap-cli --zap-url http://0.0.0.0 -p 1001 alerts -l Medium --exit-code False //TODO: Re-enable this line once finished testing!!!
-  zap-cli --zap-url http://0.0.0.0 -p 1001 alerts -l High --exit-code False
+  zap-cli --zap-url http://0.0.0.0 -p 1001 alerts -l Medium --exit-code False

@@ -50,9 +50,9 @@ env.CHUNKS = 3
 
 withNightlyPipeline("nodejs", product, component) {
   loadVaultSecrets(secrets)
-//  enableCrossBrowserTest()  //TODO: DO NOT MERGE!!! Re-enable once security scan proven to work!!!
+  enableCrossBrowserTest()
   enableSecurityScan()
-//  enableFullFunctionalTest(200) //TODO: DO NOT MERGE!!! Re-enable once security scan proven to work!!!
+  enableFullFunctionalTest(200)
 
   after('crossBrowserTest') {
     steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'functional-output/**/*'
