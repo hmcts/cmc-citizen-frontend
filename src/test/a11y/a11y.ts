@@ -50,6 +50,10 @@ async function runPa11y (url: string): Promise<Issue[]> {
     includeWarnings: true,
     // Ignore GovUK template elements that are outside the team's control from a11y tests
     hideElements: '#logo, .logo, .copyright, link[rel=mask-icon]',
+    ignore: [
+      'WCAG2AA.Principle1.Guideline1_4.1_4_3.G18.Abs',  // Visual warning on invisible elements, so not relevant
+      'WCAG2AA.Principle1.Guideline1_3.1_3_1_A.G141'  // DAC have rated Semantically Incorrect Headings as AAA, not AA
+    ],
     headers: {
       Cookie: `${cookieName}=ABC`
     },
