@@ -74,7 +74,6 @@ cmc-claim-store:
           - staff-email
           - live-support-email
           - rpa-email-sealed-claim
-          - rpa-email-legal-sealed-claim
           - rpa-email-more-time-requested
           - rpa-email-response
           - rpa-email-ccj
