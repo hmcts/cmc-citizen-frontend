@@ -39,7 +39,7 @@ nodejs:
     FEATURE_NEW_DASHBOARD_STATUS: false
     FEATURE_WEB_CHAT: true
     PCQ_URL: http://localhost:4000
-    RPA_NOTIFICATIONS_LEGALSEALEDCLAIMRECIPIENT: civilmoneyclaims+rpa-legal-sealed-claim-issued@gmail.com 
+    RPA_NOTIFICATIONS_LEGALSEALEDCLAIMRECIPIENT: civilmoneyclaims+rpa-legal-sealedclaim-issued@gmail.com 
 
 # sub-charts configuration
 
