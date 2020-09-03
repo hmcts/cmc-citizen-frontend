@@ -114,10 +114,10 @@ const datePicker = {
   },
 
   setDiasbleattribute: function() {
-    $(".datepicker-days .disabled-date").find("span").each(function(index){ 
-      if( $(".datepicker-days .disabled-date").find("span").eq(index).attr("aria-label").indexOf("is disabled") === -1) {
-        var dateDisabled  =  $(".datepicker-days .disabled-date").find("span").eq(index).attr("aria-label");
-        $(".datepicker-days .disabled-date").find("span").eq(index).attr("aria-label", dateDisabled + " is disabled")
+    $(".datepicker-days .disabled").find("span").each(function(index){ 
+      if( $(".datepicker-days .disabled").find("span").eq(index).attr("aria-label").indexOf("is disabled") === -1) {
+        var dateDisabled  =  $(".datepicker-days .disabled").find("span").eq(index).attr("aria-label");
+        $(".datepicker-days .disabled").find("span").eq(index).attr("aria-label", dateDisabled + " is disabled")
       }
     });
   },
