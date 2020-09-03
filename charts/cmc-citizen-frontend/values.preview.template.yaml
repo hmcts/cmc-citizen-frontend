@@ -92,6 +92,7 @@ cmc-claim-store:
       CMC_DB_CONNECTION_OPTIONS: ''
       CORE_CASE_DATA_API_URL: http://${SERVICE_NAME}-ccd-data-store-api
       STAFF_NOTIFICATIONS_LEGAL_RECIPIENT: moneyclaims@justice.gov.uk
+      RPA_NOTIFICATIONS_LEGALSEALEDCLAIMRECIPIENT: civilmoneyclaims+rpa-legal-sealedclaim-issued@gmail.com 
 
 ccd:
   enabled: true
