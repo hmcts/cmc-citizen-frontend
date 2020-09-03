@@ -64,6 +64,7 @@ async function runPa11y (url: string): Promise<Issue[]> {
   return result.issues
     .filter((issue: Issue) => issue.code !== 'WCAG2AA.Principle2.Guideline2_4.2_4_1.H64.1')
     .filter((issue: Issue) => issue.code !== 'WCAG2AA.Principle4.Guideline4_1.4_1_2.H91.A.NoContent')
+    .filter((issue: Issue) => issue.code !== 'WCAG2AA.Principle1.Guideline1_3.1_3_1.H85.2')
 }
 
 function check (uri: string, customTests: CustomChecks = [], requestDetails: RequestDetails = { method: 'get' }): void {

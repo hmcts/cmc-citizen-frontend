@@ -54,9 +54,10 @@
           <span class="error-message">{{ t(addressSelectError) }}</span>
         {% endif %}
         <select id="{{ addressSelectName }}"
-                class="form-control postcode-select {% if addressSelectError %} form-control-error{% endif %}"
-                name="{{ addressSelectName }}"
-                title="{{ t('Pick an address') }}">
+          class="form-control postcode-select {% if addressSelectError %} form-control-error{% endif %}"
+          name="{{ addressSelectName }}"
+          title="{{ t('Pick an address') }}">
+          <option selected="selected" value="">No address found</option>
         </select>
       </div>
     </div>
