@@ -59,6 +59,18 @@ describe('defendant as organisation details page', () => {
           .send(nameMissingInput)
           .expect(res => expect(res).to.be.successful.withText('Enter organisation details', 'div class="error-summary"', 'Enter name'))
       })
+
+      it('should render page with error when defendant contact person name is longer than 30 characters', async () => {
+        draftStoreServiceMock.resolveFind('claim:companyAsDefendant')
+        const contactPersonNameLongerThanExpected = { ...input, ...{ contactPerson: 'Anthony George Gomez Farnandeze Therees' } }
+        await request(app)
+          .post(ClaimPaths.defendantOrganisationDetailsPage.uri)
+          .set('Cookie', `${cookieName}=ABC`)
+          .send(contactPersonNameLongerThanExpected)
+          .expect(res => expect(res).to.be.successful.withText('Contact Person name must be no longer than 30 characters',
+                                'div class="error-summary"', 'Contact Person name must be no longer than 30 characters'))
+      })
+
       describe('should render page with error when address is invalid', () => {
         beforeEach(() => {
           draftStoreServiceMock.resolveFind('claim')
