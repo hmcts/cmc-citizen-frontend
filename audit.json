@@ -255,6 +255,7 @@
   "10096_Timestamp Disclosure - Unix_https://moneyclaims.aat.platform.hmcts.net/contact-us_GET": "ignore",
   "10096_Timestamp Disclosure - Unix_https://moneyclaims.aat.platform.hmcts.net/cookies_GET": "ignore",
   "10096_Timestamp Disclosure - Unix_https://moneyclaims.aat.platform.hmcts.net/js/lib/govuk/shim-links-with-button-role.js_GET": "ignore",
+  "10096_Timestamp Disclosure - Unix_https://moneyclaims.aat.platform.hmcts.net/receiver_GET": "ignore",
   "10096_Timestamp Disclosure - Unix_https://moneyclaims.aat.platform.hmcts.net/ruxitagentjs_ICA2QSVfqru_10193200616095656.js_GET": "ignore",
   "10096_Timestamp Disclosure - Unix_https://moneyclaims.aat.platform.hmcts.net/webchat/javascript/hmcts-webchat.js_GET": "ignore",
   "10096_Timestamp Disclosure - Unix_https://moneyclaims.aat.platform.hmcts.net/sitemap.xml_GET": "ignore",
