@@ -29,7 +29,7 @@
 
     <label class="form-label-bold mobile-show visually-hidden" for="{{ typeOfAccountKey }}">{{ index + 1 }} {{ t('. Type of account') }}</label>
     <select name="{{ typeOfAccountKey }}" id="{{ typeOfAccountKey }}" class="form-control column-1{% if typeOfAccountError %} form-control-error {% endif %}">
-      <option value="">{{ t('Choose') }}</option>
+      <option value="" selected="selected">{{ t('Choose') }}</option>
       <option value="{{ BankAccountType.CURRENT_ACCOUNT.value }}" {% if typeOfAccountValue === BankAccountType.CURRENT_ACCOUNT %} selected{% endif %}>{{ t(BankAccountType.CURRENT_ACCOUNT.displayValue) }}</option>
       <option value="{{ BankAccountType.SAVING_ACCOUNT.value }}" {% if typeOfAccountValue === BankAccountType.SAVING_ACCOUNT  %} selected{% endif %}>{{ t(BankAccountType.SAVING_ACCOUNT.displayValue) }}</option>
       <option value="{{ BankAccountType.ISA.value }}" {% if typeOfAccountValue === BankAccountType.ISA %} selected{% endif %}>{{ t(BankAccountType.ISA.displayValue) }}</option>
@@ -38,7 +38,7 @@
 
     <label class="form-label-bold mobile-show visually-hidden" for="{{ jointKey }}">{{ index + 1 }} {{ t('. Joint account') }}</label>
     <select name="{{ jointKey }}" id="{{ jointKey }}" class="form-control column-3 {% if jointError %} form-control-error {% endif %}">
-      <option value="">Choose</option>
+      <option value="" selected="selected">Choose</option>
       <option value="yes" {% if jointValue === true %} selected{% endif %}>{{ t('Yes') }}</option>
       <option value="no" {% if jointValue === false %} selected{% endif %}>{{ t('No') }}</option>
     </select>

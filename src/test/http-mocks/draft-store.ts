@@ -220,6 +220,26 @@ const commonCompanyClaimant = {
   }
 }
 
+const commonCompanyDefendant = {
+  defendant: {
+    partyDetails: {
+      type: 'company',
+      name: 'Monsters Inc.',
+      contactPerson: 'Sully',
+      address: {
+        line1: 'Apartment 99',
+        line2: '',
+        line3: '',
+        city: 'London',
+        postcode: 'SE28 0JE'
+      } as Address,
+      hasCorrespondenceAddress: false
+    } as CompanyDetails,
+    email: { address: 'example@example.com' },
+    phone: { number: '07799889988' }
+  } as Defendant
+}
+
 export const aboveAllowedAmountWithInterest = {
   amount: {
     rows: [
@@ -292,6 +312,12 @@ export const sampleCompanyClaimDraftObj = {
   ...commonClaimObject,
   ...commonCompanyClaimant,
   ...commonIndividualDefendant
+} as DraftClaim
+
+export const sampleCompanyAsDefendantClaimDraftObj = {
+  ...commonClaimObject,
+  ...commonCompanyClaimant,
+  ...commonCompanyDefendant
 } as DraftClaim
 
 const commonIndividualResponsePartial = {
@@ -730,6 +756,9 @@ export function resolveFind (draftType: string, draftOverride?: object): mock.Sc
       break
     case 'claim:company':
       documentDocument = { ...sampleCompanyClaimDraftObj, ...draftOverride }
+      break
+    case 'claim:companyAsDefendant':
+      documentDocument = { ...sampleCompanyAsDefendantClaimDraftObj, ...draftOverride }
       break
     case 'response':
       documentDocument = { ...sampleResponseDraftObj, ...draftOverride }

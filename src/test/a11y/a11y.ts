@@ -47,6 +47,13 @@ interface TestsOnSpecificPages {
 
 async function runPa11y (url: string): Promise<Issue[]> {
   const result = await pa11y(url, {
+    includeWarnings: true,
+    // Ignore GovUK template elements that are outside the team's control from a11y tests
+    hideElements: '#logo, .logo, .copyright, link[rel=mask-icon]',
+    ignore: [
+      'WCAG2AA.Principle1.Guideline1_4.1_4_3.G18.Abs',  // Visual warning on invisible elements, so not relevant
+      'WCAG2AA.Principle1.Guideline1_3.1_3_1_A.G141'  // DAC have rated Semantically Incorrect Headings as AAA, not AA
+    ],
     headers: {
       Cookie: `${cookieName}=ABC`
     },
@@ -57,6 +64,7 @@ async function runPa11y (url: string): Promise<Issue[]> {
   return result.issues
     .filter((issue: Issue) => issue.code !== 'WCAG2AA.Principle2.Guideline2_4.2_4_1.H64.1')
     .filter((issue: Issue) => issue.code !== 'WCAG2AA.Principle4.Guideline4_1.4_1_2.H91.A.NoContent')
+    .filter((issue: Issue) => issue.code !== 'WCAG2AA.Principle1.Guideline1_3.1_3_1.H85.2')
 }
 
 function check (uri: string, customTests: CustomChecks = [], requestDetails: RequestDetails = { method: 'get' }): void {
@@ -70,9 +78,17 @@ function check (uri: string, customTests: CustomChecks = [], requestDetails: Req
     })
 
     describe(`Pa11y tests for ${uri}`, () => {
-      it('should have no accessibility errors', async () => {
-        const issues: Issue[] = await runPa11y(agent.get(uri).url)
-        ensureNoAccessibilityErrors(issues)
+      let issues: Issue[]
+      before(async () => {
+        issues = await runPa11y(agent.get(uri).url)
+      })
+
+      it('should have no accessibility errors', () => {
+        ensureNoAccessibilityAlerts('error', issues)
+      })
+
+      it('should have no accessibility warnings', () => {
+        ensureNoAccessibilityAlerts('warning', issues)
       })
     })
   })
@@ -100,9 +116,9 @@ async function extractPageContent (url: string, requestDetails: RequestDetails =
   return res.text
 }
 
-function ensureNoAccessibilityErrors (issues: Issue[]): void {
-  const errors: Issue[] = issues.filter((issue: Issue) => issue.type === 'error')
-  expect(errors, `\n${JSON.stringify(errors, null, 2)}\n`).to.be.empty
+function ensureNoAccessibilityAlerts (issueType: string, issues: Issue[]): void {
+  const alerts: Issue[] = issues.filter((issue: Issue) => issue.type === issueType)
+  expect(alerts, `\n${JSON.stringify(alerts, null, 2)}\n`).to.be.empty
 }
 
 const excludedPaths: Paths[] = [
