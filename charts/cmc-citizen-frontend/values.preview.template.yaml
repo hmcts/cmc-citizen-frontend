@@ -164,7 +164,7 @@ ccd:
       - civilmoneyclaims+la@gmail.com|CMC|MoneyClaimCase|readyForDirections
 
   ccd-definition-importer:
-    image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.6.6
+    image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.6.10
     environment:
       CCD_DEF_CLAIM_STORE_BASE_URL: http://${SERVICE_NAME}-claim-store
     definitionFilename: cmc-ccd.xlsx
@@ -178,3 +178,4 @@ ccd:
       - caseworker-cmc-anonymouscitizen
       - caseworker-cmc-judge
       - caseworker-cmc-legaladvisor
+      - caseworker-cmc-pcqextractor
