@@ -95,6 +95,57 @@ describe('SupportRequired', () => {
           expectValidationError(errors, ValidationErrors.NO_OTHER_SUPPORT)
         })
       })
+
+      context('When LanguageInterpreted is not selected ', () => {
+        it('When LanguageInterpreted is undefined', () => {
+          const actual: SupportRequired = new SupportRequired().deserialize({
+            languageSelected: undefined,
+            languageInterpreted: undefined
+          })
+          expect(actual.languageInterpreted).to.be.eql('None')
+        })
+
+        it('When LanguageInterpreted is not selected', () => {
+          const actual: SupportRequired = new SupportRequired().deserialize({
+            languageSelected: false
+          })
+          expect(actual.languageInterpreted).to.be.eql('None')
+        })
+      })
+
+      context('When SignLanguageInterpreted is not selected ', () => {
+        it('When SignLanguageInterpreted is undefined', () => {
+          const actual: SupportRequired = new SupportRequired().deserialize({
+            signLanguageSelected: undefined,
+            signLanguageInterpreted: undefined
+          })
+          expect(actual.signLanguageInterpreted).to.be.eql('None')
+        })
+
+        it('When SignLanguageInterpreted is not selected', () => {
+          const actual: SupportRequired = new SupportRequired().deserialize({
+            signLanguageSelected: false
+          })
+          expect(actual.signLanguageInterpreted).to.be.eql('None')
+        })
+      })
+
+      context('When OtherSupport is not selected ', () => {
+        it('When OtherSupport is undefined', () => {
+          const actual: SupportRequired = new SupportRequired().deserialize({
+            otherSupportSelected: undefined,
+            otherSupport : undefined
+          })
+          expect(actual.otherSupport).to.be.eql('None')
+        })
+
+        it('When OtherSupport is not selected', () => {
+          const actual: SupportRequired = new SupportRequired().deserialize({
+            otherSupportSelected: false
+          })
+          expect(actual.otherSupport).to.be.eql('None')
+        })
+      })
     })
   })
 
@@ -119,9 +170,16 @@ describe('SupportRequired', () => {
       expect(new SupportRequired().deserialize(undefined)).to.be.eql(new SupportRequired())
     })
 
-    it('should return an instance from given object', () => {
-      const actual: SupportRequired = new SupportRequired().deserialize({ languageSelected: true })
-      expect(actual).to.be.eql(new SupportRequired(true))
+    it('should return an instance with set values', () => {
+      const actual: SupportRequired = new SupportRequired().deserialize({ languageSelected: true,
+        languageInterpreted: 'English' , otherSupportSelected: true, otherSupport: 'extraSupport'})
+      expect(actual.languageInterpreted).to.be.eql('English')
+      expect(actual.otherSupport).to.be.eql('extraSupport')
+    })
+
+    it('should return an instance with set values', () => {
+      const actual: SupportRequired = new SupportRequired().deserialize(undefined)
+      expect(actual).to.be.eql(new SupportRequired())
     })
   })
 })
