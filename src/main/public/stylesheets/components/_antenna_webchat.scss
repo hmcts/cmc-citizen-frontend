@@ -1,8 +1,7 @@
 web-chat {
+  bottom: 10px;
+  height: 550px !important; // sass-lint:disable-line no-important
   position: fixed;
   right: 10px;
-  bottom: 10px;
-  width: 320px !important;
-  height: 550px !important;
+  width: 320px !important; // sass-lint:disable-line no-important
 }
-
