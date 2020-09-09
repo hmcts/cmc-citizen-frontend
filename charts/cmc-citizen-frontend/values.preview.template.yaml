@@ -179,3 +179,4 @@ ccd:
       - caseworker-cmc-judge
       - caseworker-cmc-legaladvisor
       - caseworker-cmc-pcqextractor
+      - payments
