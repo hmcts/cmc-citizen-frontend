@@ -7,6 +7,14 @@
     {% endif %}
 {% endmacro%}
 
+{% macro _antennawebChatWidget() %}
+    {% if featureToggles.AntennawebChat %}
+        <script src="https://avaya-web-chat-client.s3.eu-west-2.amazonaws.com/app-es2015.js" type="module"></script>
+        <script src="https://avaya-web-chat-client.s3.eu-west-2.amazonaws.com/app-es5.js" nomodule defer></script>
+        <web-chat class title="HMCTS Web Chat" url="api-gw.avayalb.net" api-version="1.0" auth-token="tkn3214" route-point-identifier="Default" work-flow-type lease-time="24" priority="5" secure-connections="true"></web-chat>
+    {% endif %}
+{% endmacro%}
+
 {% macro _emailWidget(email = supportEmailAddress) %}
     <h2 class="heading-medium contact-mail">{{ t('Email') }}</h2>
     <p><a href="mailto:{{t(email)}}">{{ t(email)}}</a>
@@ -32,6 +40,7 @@
 {% macro supportWidget(label = 'Help and support') %}
     <h2 class="heading-medium">{{ t(label) }}</h2>
     {{ _webChatWidget() }}
+    {{ _antennawebChatWidget() }}
     {{ _emailWidget() }}
     {{ _phoneWidget() }}
     {{ _holidayWidget() }}
@@ -40,6 +49,7 @@
 {% macro mcolSupportWidget(label = 'Help and advice') %}
   <h2 class="heading-medium">{{ t(label) }}</h2>
   {{ _webChatWidget() }}
+  {{ _antennawebChatWidget() }}
   {{ _emailWidget('ccbc@hmcts.gsi.gov.uk') }}
   {{ _phoneWidget('0300 123 1057') }}
   {{ _holidayWidget() }}
@@ -63,6 +73,7 @@
   <summary><span class="summary">{{ t('Contact us for help') }}</span></summary>
   <div class="panel">
     {{ _webChatWidget() }}
+    {{ _antennawebChatWidget() }}
     {{ _emailWidget() }}
     {{ _phoneWidget() }}
     {{ _holidayWidget() }}
