@@ -31,7 +31,7 @@
   "10055_CSP: X-WebKit-CSP_https://moneyclaims.aat.platform.hmcts.net/ruxitagentjs_ICA2QSVfjqru_10193200616095656.js_GET": "ignore",
   "10055_CSP: style-src unsafe-inline_https://moneyclaims.aat.platform.hmcts.net/accessibility-statement_GET": "ignore",
   "10055_CSP: style-src unsafe-inline_https://moneyclaims.aat.platform.hmcts.net/contact-us_GET": "ignore",
-  
+  "10055_CSP: style-src unsafe-inline_https://moneyclaims.aat.platform.hmcts.net/cookies_GET": "ignore",
   "10055_CSP: style-src unsafe-inline_https://moneyclaims.aat.platform.hmcts.net/privacy-policy_GET": "ignore",
   "10055_CSP: style-src unsafe-inline_https://moneyclaims.aat.platform.hmcts.net/sitemap.xml_GET": "ignore",
   "10055_CSP: style-src unsafe-inline_https://moneyclaims.aat.platform.hmcts.net/terms-and-conditions_GET": "ignore",
