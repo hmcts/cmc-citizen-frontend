@@ -36,9 +36,9 @@
             {% endif %}
 
             {% if party === MadeBy.DEFENDANT and (claim.claimData.defendant.type === PartyType.ORGANISATION.value or claim.claimData.defendant.type === PartyType.COMPANY.value) %}
-              <h2 class="heading-medium">{{ t('Do you want to request {{ courtName }}?', { courtName: form.valueFor('courtName') }) }}</h2>
+              <h1 class="heading-medium">{{ t('Do you want to request {{ courtName }}?', { courtName: form.valueFor('courtName') }) }}</h1>
             {% else %}
-              <h2 class="heading-medium">{{ t('Do you want to choose {{ courtName }}?', { courtName: form.valueFor('courtName') }) }}</h2>
+              <h1 class="heading-medium">{{ t('Do you want to choose {{ courtName }}?', { courtName: form.valueFor('courtName') }) }}</h1>
               <p>{{ t('This is the closest court to the address you gave us.')}}</p>
             {% endif %}
             <details class="form-group analytics-click-event-trigger" data-event-label="Court-Facilities: Facilities of the chosen court.">
@@ -74,7 +74,7 @@
               ]
             ) }}
             <div class="js-hidden" id="courtAccepted-no">
-              <h2 class="heading-medium">{{ t('Choose another court') }}</h2>
+              <h1 class="heading-medium">{{ t('Choose another court') }}</h1>
               {{ radioOption(form = form, label = 'Search by postcode', name = 'alternativeOption', value = 'postcode', checked = form.valueFor('alternativeOption') === 'postcode', bold = true) }}
               <div class="form-group panel panel-border-narrow js-hidden " id="alternativeOption-postcode" aria-hidden="false">
                 {{ textInput(label = 'Postcode', form = form, name = 'alternativePostcode', inputClass = 'form-control-1-3') }}
@@ -86,7 +86,7 @@
             </div>
           {% else %}
             {{ commonContent() }}
-            <h2 class="heading-medium">{{ t('Enter a court name') }}</h2>
+            <h1 class="heading-medium">{{ t('Enter a court name') }}</h1>
             {{ textInput(form = form, name = 'alternativeCourtName', inputClass = 'form-control-1-100') }}
           {% endif %}
           {% if courtName %}

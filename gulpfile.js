@@ -11,13 +11,12 @@ const fs = require('fs')
 const repoRoot = path.join(__dirname, '/')
 const govUkFrontendToolkitRoot = path.join(repoRoot, 'node_modules/govuk_frontend_toolkit/stylesheets')
 const govUkElementRoot = path.join(repoRoot, 'node_modules/govuk-elements-sass/public/sass')
-const govUkFrontendRoot = path.join(repoRoot, 'node_modules/govuk-frontend/govuk')
+const govUkFrontendRoot = path.join(repoRoot, 'node_modules/govuk-frontend/govuk/')
 const appDirectory = `./src/main/common/components/imported`
 
 const assetsDirectory = './src/main/public'
 const stylesheetsDirectory = `${assetsDirectory}/stylesheets`
 const webChatDirectory = `${assetsDirectory}/webchat`
-const govUkFronendStylesheets = `${stylesheetsDirectory}/govuk-frontend/`
 
 gulp.task('sass', (done) => {
   gulp.src(stylesheetsDirectory + '/*.scss')
@@ -31,7 +30,16 @@ gulp.task('sass', (done) => {
     .pipe(sass())
     .pipe(gulp.dest(stylesheetsDirectory))
     .pipe(livereload())
-    done()
+
+  gulp.src(govUkFrontendRoot + '/*.scss')
+    .pipe(plumber())
+    .pipe(sass({
+      includePaths: [
+        `${govUkFrontendRoot}/**/*.scss`
+      ]
+    }))
+    .pipe(gulp.dest(`${stylesheetsDirectory}/govuk-frontend/`))
+  done()
 })
 
 gulp.task('copy-files', (done) => {
@@ -49,14 +57,12 @@ gulp.task('copy-files', (done) => {
 gulp.task('sass-govuk-frontend', (done) => {
   gulp.src(govUkFrontendRoot + '/*.scss')
     .pipe(plumber())
-    .pipe(sass())
+    .pipe(sass({
+      includePaths: [
+        `${govUkFrontendRoot}/**/*.scss`
+      ]
+    }))
     .pipe(gulp.dest(`${stylesheetsDirectory}/govuk-frontend/`))
-
-  gulp.src(govUkFronendStylesheets + '*.scss')
-    .pipe(plumber())
-    .pipe(sass())
-    .pipe(gulp.dest(govUkFronendStylesheets))
-    .pipe(livereload())
   done()
 })
 
@@ -210,7 +216,6 @@ gulp.task('default',
   gulp.series(
     gulp.parallel(
       'sass',
-      'sass-govuk-frontend',
       'copy-files',
     ),
     gulp.parallel(
