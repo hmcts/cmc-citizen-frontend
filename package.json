@@ -79,7 +79,7 @@
     "js-base64": "^2.5.1",
     "launchdarkly-node-server-sdk": "^5.11.3",
     "ldclient-node": "^5.7.4",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.20",
     "mime": "^2.4.4",
     "moment": "^2.24.0",
     "moment-precise-range-plugin": "^1.3.0",
