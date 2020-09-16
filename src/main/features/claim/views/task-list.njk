@@ -1,20 +1,34 @@
 {% extends "layout.njk" %}
-{% from "task-list.njk" import taskList, taskStatus %}
+{% from "task-list.njk" import task, taskListHeading, disabledTask %}
 {% from "internalLink.njk" import internalLink %}
-{% block additional_head %}
-  <link rel="stylesheet" href="{{ asset_paths['style'] }}/govuk-frontend/task-list.css"/>
-{% endblock %}
-
 {% set heading = 'Make a money claim' %}
 {% set headingSize = 'xlarge' %}
 
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      {{ taskStatus(status) }}
-      {{ taskList(beforeYouStart, 1) }}
-      {{ taskList(prepareYourClaim, 2) }}
-      {{ taskList(submit, 3) }}
+      <div class="task-group">
+        {{ taskListHeading(beforeYouStart.name) }}
+
+        {% for item in beforeYouStart.tasks %}
+          {{ task(item.startPageUrl, t(item.name), item.completed) }}
+        {% endfor %}
+      </div>
+
+      <div class="task-group">
+        {{ taskListHeading(prepareYourClaim.name) }}
+
+        {% for item in prepareYourClaim.tasks %}
+          {{ task(item.startPageUrl, t(item.name), item.completed) }}
+        {% endfor %}
+      </div>
+
+      <div class="task-group">
+        {{ taskListHeading(submit.name) }}
+        <div class="check-submit-response">
+          {{ internalLink(t('Check and submit your claim'), ClaimPaths.checkAndSendPage.uri, 'button button-primary') }}
+        </div>
+      </div>
     </div>
   </div>
 {% endblock %}

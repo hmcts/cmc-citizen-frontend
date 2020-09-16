@@ -24,20 +24,14 @@ export default express.Router()
         .buildSubmitSection(draft.document, claim.externalId)
       const directionsQuestionnaireSection = TaskListBuilder
         .buildDirectionsQuestionnaireSection(draft.document, claim, directionsQuestionnaireDraft.document)
-      const status = TaskListBuilder.getTaskStatus([
-        beforeYouStartSection,
-        howYouWantToRespondSection,
-        submitSection,
-        directionsQuestionnaireSection
-      ])
+
       res.render(Paths.taskListPage.associatedView,
         {
           beforeYouStartSection: beforeYouStartSection,
           howYouWantToRespondSection: howYouWantToRespondSection,
           submitSection: submitSection,
           directionsQuestionnaireSection: directionsQuestionnaireSection,
-          claim,
-          status
+          claim: claim
         })
     })
   )

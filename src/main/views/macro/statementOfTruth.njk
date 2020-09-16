@@ -1,4 +1,4 @@
-{% from "form.njk" import textInput, checkboxSingle, checkboxOption, submitButton %}
+{% from "form.njk" import textInput, checkboxSingle, submitButton %}
 
 {%
 macro statementOfTruth(
@@ -61,88 +61,4 @@ macro statementOfTruth(
       legendHidden = true
     ) }}
   {% endif %}
-{% endmacro %}
-
-{%
-macro statementOfTruthUpdated(
-  form,
-  statementOfTruthType,
-  title = 'Statement of truth',
-  label = 'I confirm that I believe the details I have provided are correct.',
-  isQualified = false,
-  typeOfStatement = 'statement of truth'
-) %}
-  <fieldset>
-    <legend><h2 class="govuk-heading-m">{{ t(title) }}</h2></legend>
-    
-
-    {% if statementOfTruthType == SignatureType.CLAIM or statementOfTruthType == SignatureType.RESPONSE %}
-      <p>{{ t('The information on this page forms your {{ type }}. You can see it on the {{ type }} form after you submit.', { type: statementOfTruthType }) }}</p>
-      <p>{{ t('When you’re satisfied that your answers are accurate, you should tick to “sign” this statement of truth on the form.') }}</p>
-    {% endif %}
-
-    {% if isQualified %}
-      <p>{{ t('You must hold a senior position in your organisation to sign the {{ typeOfStatement }}.', { typeOfStatement: typeOfStatement }) }}</p>
-
-      <details class='form-group'>
-        <summary>
-          <span class="summary">{{ t('Types of senior position') }}</span>
-        </summary>
-
-        <div class="panel">
-          <p>{{ t('A senior position could be a:') }}</p>
-          <ul class="list-bullet list">
-            <li>{{ t('director') }}</li>
-            <li>{{ t('treasurer') }} </li>
-            <li>{{ t('chief executive') }} </li>
-            <li>{{ t('manager or other officer of the company or corporation') }}</li>
-          </ul>
-          <p>{{ t("If your corporation isn't registered, a senior position could be:") }}</p>
-          <ul class="list-bullet list">
-            <li>{{ t('the chairperson or president') }}</li>
-            <li>{{ t('another officer of the corporation') }}</li>
-          </ul>
-        </div>
-      </details>
-
-      {{ textInput(t('Full name'), 'signerName', form, inputClass = 'form-control-1-2') }}
-      {{ textInput(t('Job title'), 'signerRole', form, inputClass = 'form-control-1-2') }}
-    {% endif %}
-
-    {% set signed = 'signed' %}
-    {% set signedError = form.errorFor(signed) %}
-    {% set signedSelection = form.valueFor(signed) %}
-    {% set dqSigned = 'directionsQuestionnaireSigned' %}
-    {% set dqSignedError = form.errorFor(dqSigned) %}
-    {% set dqSelection = form.valueFor(dqSigned) %}
-    <div class="form-group{% if signedError %} form-group-error{% endif %}" id="{{ signed }}[label]">
-      <span class="error-message">{{ t(signedError) }}</span>
-      {{ checkboxOption(
-        label = label,
-        name = signed,
-        form = form,
-        value = true,
-        hint = null,
-        checked = (signedSelection === true),
-        bold = bold
-      )
-      }}
-    </div>
-
-    {% if form.model.type == SignatureType.DIRECTION_QUESTIONNAIRE or form.model.type == SignatureType.DIRECTION_QUESTIONNAIRE_QUALIFIED %}
-      <div class="form-group{% if dqSignedError %} form-group-error{% endif %}" id="{{ dqSigned }}[label]">
-        <span class="error-message">{{ t(dqSignedError) }}</span>
-        {{ checkboxOption(
-          label = 'The hearing requirement details on this page are true to the best of my knowledge.',
-          name = dqSigned,
-          form = form,
-          value = true,
-          hint = null,
-          checked = (dqSelection === true),
-          bold = bold
-        )
-        }}
-      </div>
-    {% endif %}
-  </fieldset>
 {% endmacro %}

@@ -14,7 +14,7 @@
   <div class="column-two-thirds">
     {% if evidence and evidence.rows and evidence.rows.length > 0 %}
       <div class="description-block">
-        <h2 class="heading-small">Their evidence</h2>
+        <h3 class="heading-small">Their evidence</h3>
         <div class="form-fields">
           <table>
             <thead>
@@ -38,7 +38,7 @@
 
     <form method="post" novalidate>
       {{ csrfProtection(csrf) }}
-      <h2 class="heading-small">{{ t('List your evidence (optional)') }}</h2>
+      <h3 class="heading-small">{{ t('List your evidence (optional)') }}</h3>
       <p>
         {{
           t('You only need to list your evidence for now. You provide the actual evidence if the claim goes to court.')
@@ -49,7 +49,7 @@
 
       <div class="form-group">
         <label class="form-label-bold" for="comment">
-          <h2 class="heading-small">{{ t('List any parts of their evidence you disagree with (optional)') }}</h2>
+          <h3 class="heading-small">{{ t('List any parts of their evidence you disagree with (optional)') }}</h3>
         </label>
         <textarea id="comment" name="comment"
           class="form-control form-control-3-4 form-control-medium"

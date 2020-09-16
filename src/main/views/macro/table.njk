@@ -20,12 +20,7 @@
     </div>
     {% if changeLink %}
       <div class="column-one-quarter change-link-column">
-        {% if (label === 'Full name') %}
-          <a href="{{ changeLink | safe }}" class="bold">{{ t('Change') }} <span class="visuallyhidden">{{ 'your full name, address and correspondence address' | lower }}</span></a>
-        {% endif %}
-        {% if (label !== 'Full name') %}
-          <a href="{{ changeLink | safe }}" class="bold">{{ t('Change') }} <span class="visuallyhidden">{{ label | lower }}</span></a>
-        {% endif %}  
+        <a href="{{ changeLink | safe }}" class="bold">{{ t('Change') }} <span class="visuallyhidden">{{ label | lower }}</span></a>
       </div>
     {% endif %}
   </div>

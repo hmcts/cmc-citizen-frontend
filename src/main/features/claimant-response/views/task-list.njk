@@ -1,31 +1,46 @@
 {% extends "layout.njk" %}
-{% from "task-list.njk" import taskList, taskStatus %}
+{% from "task-list.njk" import task, taskListHeading, disabledTask %}
 {% from "internalLink.njk" import internalLink %}
-{% block additional_head %}
-  <link rel="stylesheet" href="{{ asset_paths['style'] }}/govuk-frontend/task-list.css"/>
-{% endblock %}
-
 {% set heading = 'Your response' %}
 {% set headingSize = 'xlarge' %}
-{% set taskNumber = 0 %}
+
 {% block content %}
 
   <div class="grid-row">
     <div class="column-two-thirds">
-      {{ taskStatus(status) }}
-      {% set taskNumber = taskNumber + 1 %}
-      {{ taskList(beforeYouStartSection, taskNumber) }}
-      {% set taskNumber = taskNumber + 1 %}
-      {{ taskList(howYouWantToRespondSection, taskNumber) }}
+      <div class="task-group">
+        {{ taskListHeading(beforeYouStartSection.name) }}
+
+        {% for item in beforeYouStartSection.tasks %}
+          {{ task(item.startPageUrl, t(item.name), item.completed) }}
+        {% endfor %}
+      </div>
+
+      <div class="task-group">
+        {{ taskListHeading(howYouWantToRespondSection.name) }}
+
+        {% for item in howYouWantToRespondSection.tasks %}
+          {{ task(item.startPageUrl, t(item.name), item.completed) }}
+        {% endfor %}
+      </div>
 
       {% if directionsQuestionnaireSection %}
-        {% set taskNumber = taskNumber + 1 %}
-        {{ taskList(directionsQuestionnaireSection, taskNumber) }}
+        <div class="task-group">
+          {{ taskListHeading(directionsQuestionnaireSection.name) }}
+
+          {% for item in directionsQuestionnaireSection.tasks %}
+            {{ task(item.startPageUrl, t(item.name), item.completed, true) }}
+          {% endfor %}
+        </div>
       {% endif %}
 
       {% if submitSection %}
-        {% set taskNumber = taskNumber + 1 %}
-        {{ taskList(submitSection, taskNumber) }}
+        <div class="task-group">
+          {{ taskListHeading(submitSection.name) }}
+          <div class="check-submit-response">
+            {{ internalLink(t('Check and submit your response'), ClaimantResponsePaths.checkAndSendPage.evaluateUri({ externalId: claim.externalId }), 'button button-primary') }}
+          </div>
+        </div>
       {% endif %}
     </div>
   </div>
