@@ -221,7 +221,7 @@ export const checkMultipleChoice = (window: Window, document: Document) => {
     const radioButtons = fieldsetList[0].getElementsByClassName('multiple-choice')
     for (let p = 0; p < radioButtons.length; p++) {
       const labelTextToValidate = radioButtons[p].firstElementChild.nextElementSibling.firstElementChild.outerHTML
-      expect(labelText, 'Radio button label must have visually hidden text').to.be.eql(labelTextToValidate)
+      expect(labelTextToValidate, 'Radio button label must have visually hidden text').to.be.eql(labelText)
     }
   }
 }
