@@ -111,6 +111,7 @@ export class Nunjucks {
     })
 
     app.use((req, res, next) => {
+      res.setHeader('Server', 'N/A')
       res.locals.pagePath = req.path
       next()
     })
