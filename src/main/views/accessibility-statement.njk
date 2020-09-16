@@ -1,5 +1,6 @@
 {% extends "layout.njk" %}
 {% from "support.njk" import supportWidget %}
+{% from "support.njk" import supportWidget1 %}
 {% from "externalLink.njk" import externalLink %}
 {% from "internalLink.njk" import internalLink %}
 {% set heading = 'Accessibility statement for the Online Civil Money Claims service' %}
@@ -8,6 +9,7 @@
 {% set eass = 'https://www.equalityadvisoryservice.com/' %}
 {% set wcaStandards = 'https://www.w3.org/TR/WCAG21/' %}
 {% set wcaGuidline = 'https://www.w3.org/TR/WCAG21/' %}
+{% set access = 'https://hmcts-access.service.gov.uk/contact-us' %}
 
 {% block content %}
   <div class="grid-row">
@@ -27,7 +29,7 @@
       <p>{{ t('We’ve also made the website text as simple as possible to understand.') }}</p>
       <p>{{ t(externalLink('AbilityNet', abilityNet) +' has advice on making your device easier to use if you have a disability.') | safe }}</p>
 
-      <h2 class="heading-medium">{{ t('How accessible this website is') }}</h2>
+       <h2 class="heading-medium">{{ t('How accessible this website is') }}</h2>
       <p>
         {{ t('This service was audited by the Digital Accessibility Centre (DAC) in January 2020 for compliance with the Web Content Accessibility Guidelines V2.1 using a combination of technical auditing and feedback from users with accessibility needs.') }}
       </p>
@@ -43,29 +45,27 @@
         {{ t('If you need information on this website in a different format like accessible PDF, large print, easy read, audio recording or braille:') }}
       </p>
 
-      {{ _emailWidget('HMCTSforms@justice.gov.uk') }}
+      {{ supportWidget('Email') }}
 
-      {{ _phoneWidget('0300 123 1057') }}
+    
 
       <p>Alternatively, contact your service representative.</p>
 
 
-      <h2 class="heading-medium">{{ t('Reporting accessibility problemswith this website') }}</h2>
+      <h2 class="heading-medium">{{ t('Reporting accessibility problems with this website') }}</h2>
       <p>
         {{ t('We’re always looking to improve the accessibility of this website. If you find any problems not listed on this page or think we’re not meeting accessibility requirements, contact:') }}
       </p>
 
-      {{ _emailWidget('contactocmc@justice.gov.uk') }}
+       {{ supportWidget1('Email') }}
 
-      {{ _phoneWidget('0300 123 1057') }}
-
-      <h2 class="heading-medium">{{ t('Enforcement procedure') }}</h2>
+    <h2 class="heading-medium">{{ t('Enforcement procedure') }}</h2>
       <p>
         {{ t('The Equality and Human Rights Commission (EHRC) is responsible for enforcing the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018 (the ‘accessibility regulations’). If you’re not happy with how we respond to your complaint, '
         +  externalLink('contact the Equality Advisory and Support Service (EASS)', eass)) | safe}}
       </p>
 
-      <h2 class="heading-medium">{{ t('Contacting us by phone or visiting us in person') }}</h2>
+      <h2 class="heading-large">{{ t('Contacting us by phone or visiting us in person') }}</h2>
 
       <p>
         {{ t('We provide a text relay service for people who are D/deaf, hearing impaired or have a speech impediment') }}
@@ -76,17 +76,21 @@
        <p>
         {{ t('You can also request step-free access or a foreign language interpreter.') }}
       </p>
+      <p>
+      {{externalLink('Find out how to contact us', access) | safe}}
+      </p>
 
-      <h2 class="heading-medium">{{ t('Technical information about this website’s accessibility') }}</h2>
+      <h2 class="heading-large">{{ t('Technical information about this website’s accessibility') }}</h2>
       <p>
         {{ t('Online Civil Money Claims (OCMC) service is committed to making its website accessible, in accordance with the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018.') }}
       </p>
 
       <h2 class="heading-medium">{{ t('Compliance status') }}</h2>
 
-      <p> {{ t('This website is partially compliant with the' + externalLink('Web Content Accessibility Guidelines version 2.1 AA standard', wcaStandards)) | safe + ', due to the non-compliances listed below.') | safe }}</p>
+      <p> {{ t('This website is partially compliant with the'
+       + externalLink('Web Content Accessibility Guidelines version 2.1 AA standard', wcaStandards) + ', due to the non-compliances listed below.') | safe }}</p>
 
-      <h2 class="heading-medium">{{ t('Non-accessible content') }}</h2>
+      <h2 class="heading-large">{{ t('Non-accessible content') }}</h2>
       <p>
         {{ t('The content listed below is non-accessible for the following reasons.') }}
       </p>
@@ -128,7 +132,7 @@
     
       <p>{{ t('Some PDFs, documents and email attachments might not meet accessibility standards, such as being screen reader compatible.') }}</p>
 
-      <h2 class="heading-medium">{{ t('How we tested this website') }}</h2>
+      <h2 class="heading-large">{{ t('How we tested this website') }}</h2>
 
       <p>
         {{ t('This website was and is currently being internally tested for compliance with the Web Content Accessibility Guidelines V2.1 level A and level AA.') }}
@@ -152,14 +156,14 @@
         {{ t('The report combined technical auditing and feedback from users with accessibility needs.') }}
       </p>
 
-      <h2 class="heading-medium">{{ t('What we’re doing to improve accessibility') }}</h2>
+      <h2 class="heading-large">{{ t('What we’re doing to improve accessibility') }}</h2>
 
       <p>{{ t('We plan to fix identified issues according to the timescales shown for each area above.') }}</p>
       <p>{{ t('We will continue to test this website using accessibility software for any new features which are introduced.') }}</p>
-      <p>{{ t('We will continue to test this website using accessibility software for any new features which are introduced.) }}</p>
+      <p>{{ t('We will continue to test this website using accessibility software for any new features which are introduced.') }}</p>
   
-      <h2 class="heading-medium">{{ t('Preparation of this accessibility statement') }}</h2>
-      <p>{{ t('This statement was prepared on 23 September 2019. It was last updated on 18 September 2020.) }}</p>
+      <h2 class="heading-large">{{ t('Preparation of this accessibility statement') }}</h2>
+      <p>{{ t('This statement was prepared on 23 September 2019. It was last updated on 18 September 2020.') }}</p>
     </div>
   </div>
 {% endblock %}
