@@ -13,9 +13,19 @@
 }
 
 .button {
+  white-space: normal;
+
   &.button-secondary {
     @include button($grey-3);
   }
+}
+
+.form-group {
+  .button {
+    &:focus {
+      outline: 3px solid $focuscolor;
+  }
+}
 }
 
 .form-control-select {
