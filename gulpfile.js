@@ -17,7 +17,7 @@ const appDirectory = `./src/main/common/components/imported`
 const assetsDirectory = './src/main/public'
 const stylesheetsDirectory = `${assetsDirectory}/stylesheets`
 const webChatDirectory = `${assetsDirectory}/webchat`
-const govUkFronendStylesheets = `${stylesheetsDirectory}/govuk-frontend/`
+const govUkFronendStylesheets = `${stylesheetsDirectory}/govuk-frontend`
 
 gulp.task('sass', (done) => {
   gulp.src(stylesheetsDirectory + '/*.scss')
@@ -50,9 +50,9 @@ gulp.task('sass-govuk-frontend', (done) => {
   gulp.src(govUkFrontendRoot + '/*.scss')
     .pipe(plumber())
     .pipe(sass())
-    .pipe(gulp.dest(`${stylesheetsDirectory}/govuk-frontend/`))
+    .pipe(gulp.dest(`${stylesheetsDirectory}/govuk-frontend`))
 
-  gulp.src(govUkFronendStylesheets + '*.scss')
+  gulp.src(govUkFronendStylesheets + '/*.scss')
     .pipe(plumber())
     .pipe(sass())
     .pipe(gulp.dest(govUkFronendStylesheets))
