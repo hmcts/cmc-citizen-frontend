@@ -176,264 +176,267 @@
 
 
 {% block content %}
-  <form novalidate method="post">
-    {{ csrfProtection(csrf) }}
-    <h2 class="govuk-heading-m">{{ t("Your response") }}</h2>
-    {% if dispute and not alreadyPaid %}
-      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-        {{
-          partyDetailRow(
-            label = 'Do you want to proceed with the claim?',
-            value = draft.intentionToProceed.proceed.option | capitalize,
-            changeLink = PartAdmissionPaths.whyDoYouDisagreePage.evaluateUri({ externalId: claim.externalId }),
-            bold = true
-          )
-        }}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <form novalidate method="post">
+        {{ csrfProtection(csrf) }}
+        <h2 class="govuk-heading-m">{{ t("Your response") }}</h2>
+        {% if dispute and not alreadyPaid %}
+          <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+            {{
+              partyDetailRow(
+                label = 'Do you want to proceed with the claim?',
+                value = draft.intentionToProceed.proceed.option | capitalize,
+                changeLink = PartAdmissionPaths.whyDoYouDisagreePage.evaluateUri({ externalId: claim.externalId }),
+                bold = true
+              )
+            }}
 
-        {% if mediationEnabled %}
-          {% if draft.intentionToProceed.proceed.option === YesNoOption.YES.option and claim.response.freeMediation === YesNoOption.YES.option %}
+            {% if mediationEnabled %}
+              {% if draft.intentionToProceed.proceed.option === YesNoOption.YES.option and claim.response.freeMediation === YesNoOption.YES.option %}
+                {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot, mediationEnabled) }}
+              {% endif %}
+            {% endif %}
+          </dl>
+          {{ directionsQuestionnaire() }}
+          
+        {% elseif alreadyPaid %}
+          <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+            {% if draft.partPaymentReceived %}
+                {{ partyDetailRow(label = 'Do you agree the defendant has paid ' + amount | numeral + '?', bold = true,
+                  value = draft.partPaymentReceived.received | yesNo,
+                  changeLink = ClaimantResponsePaths.partPaymentReceivedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
+            {% endif %}
+
+            {% if draft.accepted %}
+              {% if draft.partPaymentReceived %}
+                {% set paymentAcceptedText = 'Do you want to settle the claim for the ' + amount | numeral + '?' %}
+              {% else %}
+                {% set paymentAcceptedText = 'Do you agree the defendant has paid ' + amount | numeral + '?'  %}
+              {% endif %}
+              {{ partyDetailRow(label = paymentAcceptedText, bold = true, value = draft.accepted.accepted | yesNo,
+                changeLink = ClaimantResponsePaths.settleClaimPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
+            {% endif %}
+
+            {% if draft.rejectionReason %}
+              {{ partyDetailRow(label = 'Reason for rejecting their response', bold = true, value = draft.rejectionReason.text,
+                changeLink = ClaimantResponsePaths.rejectionReasonPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
+            {% endif %}
+          </dl>
+          {% if claim.response.freeMediation === YesNoOption.YES.option and (draft.accepted.accepted.option === YesNoOption.NO.option
+            or draft.partPaymentReceived.received.option === YesNoOption.NO.option) %}
             {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot, mediationEnabled) }}
           {% endif %}
-        {% endif %}
-      </dl>
-      {{ directionsQuestionnaire() }}
-      
-    {% elseif alreadyPaid %}
-      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-        {% if draft.partPaymentReceived %}
-            {{ partyDetailRow(label = 'Do you agree the defendant has paid ' + amount | numeral + '?', bold = true,
-              value = draft.partPaymentReceived.received | yesNo,
-              changeLink = ClaimantResponsePaths.partPaymentReceivedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
-        {% endif %}
 
-        {% if draft.accepted %}
-          {% if draft.partPaymentReceived %}
-            {% set paymentAcceptedText = 'Do you want to settle the claim for the ' + amount | numeral + '?' %}
-          {% else %}
-            {% set paymentAcceptedText = 'Do you agree the defendant has paid ' + amount | numeral + '?'  %}
-          {% endif %}
-          {{ partyDetailRow(label = paymentAcceptedText, bold = true, value = draft.accepted.accepted | yesNo,
-            changeLink = ClaimantResponsePaths.settleClaimPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
-        {% endif %}
+          {{ directionsQuestionnaire() }}
 
-        {% if draft.rejectionReason %}
-          {{ partyDetailRow(label = 'Reason for rejecting their response', bold = true, value = draft.rejectionReason.text,
-            changeLink = ClaimantResponsePaths.rejectionReasonPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
-        {% endif %}
-      </dl>
-      {% if claim.response.freeMediation === YesNoOption.YES.option and (draft.accepted.accepted.option === YesNoOption.NO.option
-        or draft.partPaymentReceived.received.option === YesNoOption.NO.option) %}
-        {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot, mediationEnabled) }}
-      {% endif %}
-
-      {{ directionsQuestionnaire() }}
-
-    {% elseif draft.intentionToProceed %}
-      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-        {{ partyDetailRow(label = 'Do you want to proceed with the claim?', bold = true, value = draft.intentionToProceed.proceed | yesNo,
-          changeLink = ClaimantResponsePaths.intentionToProceedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
-        {% if draft.intentionToProceed.proceed === YesNoOption.YES and claim.response.freeMediation === YesNoOption.YES.option %}
-          {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot, mediationEnabled) }}
-        {% endif %}
-      </dl>
-    
-    {% else %}
-      {% if draft.settleAdmitted %}
-        {% if draft.settleAdmitted.admitted === YesNoOption.YES %}
-          {% set settleAdmittedResponse = 'I accept this amount' %}
+        {% elseif draft.intentionToProceed %}
+          <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+            {{ partyDetailRow(label = 'Do you want to proceed with the claim?', bold = true, value = draft.intentionToProceed.proceed | yesNo,
+              changeLink = ClaimantResponsePaths.intentionToProceedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
+            {% if draft.intentionToProceed.proceed === YesNoOption.YES and claim.response.freeMediation === YesNoOption.YES.option %}
+              {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot, mediationEnabled) }}
+            {% endif %}
+          </dl>
+        
         {% else %}
-          {% set settleAdmittedResponse = 'I reject this amount' %}
-          {% if draft.freeMediation === YesNoOption.YES %}
-            {% set freeMediationResponse =  'Yes' %}
-          {% else %}
-            {% set freeMediationResponse = 'No' %}
-          {% endif %}
-        {% endif %}
-        <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-          {{ partyDetailRow(label = 'Do you accept or reject the defendant’s admission?', bold = true, value = settleAdmittedResponse,
-            changeLink = ClaimantResponsePaths.settleAdmittedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
-          {% if draft.settleAdmitted.admitted === YesNoOption.NO and claim.response.freeMediation === YesNoOption.YES.option %}
-            {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot, mediationEnabled) }}
-          {% endif %}
-        </dl>
-        {{ directionsQuestionnaire() }}
-      {% endif %}
-
-      {% if draft.acceptPaymentMethod %}
-        <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-          {% if draft.acceptPaymentMethod.accept === YesNoOption.YES %}
-            {% set acceptPaymentMethodResponse = 'I accept this repayment plan' %}
-          {% else %}
-            {% set acceptPaymentMethodResponse = 'I reject this repayment plan' %}
-          {% endif %}
-
-          {{ partyDetailRow(label = 'Do you accept the defendant’s repayment plan?', bold = true, value = acceptPaymentMethodResponse,
-            changeLink = ClaimantResponsePaths.acceptPaymentMethodPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
-
-          {% if draft.acceptPaymentMethod.accept === YesNoOption.NO %}
-            {% if claimantPaymentPlan.paymentOption === PaymentType.IMMEDIATELY.value %}
-              {% set alternatePaymentMethodResponse = t('Immediately') %}
-            {% elseif claimantPaymentPlan.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
-              {% set alternatePaymentMethodResponse = t('In full by {{ deadline }}', { deadline: alternatePaymentMethodDate | date }) %}
-            {% elseif claimantPaymentPlan.paymentOption === PaymentType.INSTALMENTS.value %}
-              {% set alternatePaymentMethodResponse = t('By instalments') %}
+          {% if draft.settleAdmitted %}
+            {% if draft.settleAdmitted.admitted === YesNoOption.YES %}
+              {% set settleAdmittedResponse = 'I accept this amount' %}
+            {% else %}
+              {% set settleAdmittedResponse = 'I reject this amount' %}
+              {% if draft.freeMediation === YesNoOption.YES %}
+                {% set freeMediationResponse =  'Yes' %}
+              {% else %}
+                {% set freeMediationResponse = 'No' %}
+              {% endif %}
             {% endif %}
-
-            {{ partyDetailRow(label = 'How would you like the defendant to pay?', bold = true, value = alternatePaymentMethodResponse,
-              changeLink = ClaimantResponsePaths.alternateRepaymentPlanPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
-
-            {% if claimantPaymentPlan.paymentOption === PaymentType.INSTALMENTS.value %}
-              {{ partyDetailRow(label = 'Regular payments of', bold = true, value = claimantPaymentPlan.repaymentPlan.instalmentAmount | numeral,
-                changeLink = ClaimantResponsePaths.paymentPlanPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false) }}
-              {{ partyDetailRow(label = 'Frequency of payments', bold = true, value = claimantPaymentPlan.repaymentPlan.paymentSchedule | renderPaymentSchedule,
-                bottomBorder = false) }}
-              {{ partyDetailRow(label = 'Date for first instalment', bold = true, value = alternatePaymentMethodDate | date,
-                bottomBorder = true) }}
-            {% endif %}
+            <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+              {{ partyDetailRow(label = 'Do you accept or reject the defendant’s admission?', bold = true, value = settleAdmittedResponse,
+                changeLink = ClaimantResponsePaths.settleAdmittedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
+              {% if draft.settleAdmitted.admitted === YesNoOption.NO and claim.response.freeMediation === YesNoOption.YES.option %}
+                {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot, mediationEnabled) }}
+              {% endif %}
+            </dl>
+            {{ directionsQuestionnaire() }}
           {% endif %}
-        </dl>
-      {% endif %}
 
-      {% set courtDetermination = draft.courtDetermination %}
-      {% set courtDecisionPaymentIntention = courtDetermination.courtDecision %}
-      {% set courtDecisionType = courtDetermination.decisionType %}
+          {% if draft.acceptPaymentMethod %}
+            <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+              {% if draft.acceptPaymentMethod.accept === YesNoOption.YES %}
+                {% set acceptPaymentMethodResponse = 'I accept this repayment plan' %}
+              {% else %}
+                {% set acceptPaymentMethodResponse = 'I reject this repayment plan' %}
+              {% endif %}
 
-      {% if courtDetermination and courtDecisionPaymentIntention and
-        ( courtDecisionType !== DecisionType.CLAIMANT and courtDecisionType !== DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT ) %}
-        <h2 class="govuk-heading-m">{{ t("Court decision") }}</h2>
-        <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-          {{ partyDetailRow(
-          label = 'Court decision',
-          bold = true,
-          value = 'The court rejected your repayment plan and calculated a more affordable one.',
-          bottomBorder = false
-          ) }}
-          {% if courtDecisionPaymentIntention.paymentOption === PaymentType.IMMEDIATELY.value %}
-            {{ partyDetailRow(label = 'Court repayment plan',
-            value = t('{{ defendantFullName }} will pay {{ totalAmount }} immediately.
-            {{ claimantName }} will receive the money no later than {{ paymentDate }}.
-            Any cheques or transfers will be clear in {{ defendantFullName }}’s account by this date.',
-            { defendantFullName: claim.response.defendant.name,
-            claimantName: claim.claimData.claimant.name,
-            paymentDate: courtPaymentIntention.paymentDate | date ,
-            totalAmount: totalAmount | numeral}),
-            bottomBorder = false, bold = true
-            ) }}
-            {{ partyDetailRow(label = 'Completion date',
-            value = courtDecisionPaymentIntention.paymentDate | date,
-            bottomBorder = true, bold = true) }}
-          {% elseif courtDecisionPaymentIntention.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
-            {{ partyDetailRow(label = 'Court repayment plan',
-              value = t('Repayment in full by {{ paymentDate }}',
-              { paymentDate: courtDecisionPaymentIntention.paymentDate | date }),
-              bottomBorder = true,
+              {{ partyDetailRow(label = 'Do you accept the defendant’s repayment plan?', bold = true, value = acceptPaymentMethodResponse,
+                changeLink = ClaimantResponsePaths.acceptPaymentMethodPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
+
+              {% if draft.acceptPaymentMethod.accept === YesNoOption.NO %}
+                {% if claimantPaymentPlan.paymentOption === PaymentType.IMMEDIATELY.value %}
+                  {% set alternatePaymentMethodResponse = t('Immediately') %}
+                {% elseif claimantPaymentPlan.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
+                  {% set alternatePaymentMethodResponse = t('In full by {{ deadline }}', { deadline: alternatePaymentMethodDate | date }) %}
+                {% elseif claimantPaymentPlan.paymentOption === PaymentType.INSTALMENTS.value %}
+                  {% set alternatePaymentMethodResponse = t('By instalments') %}
+                {% endif %}
+
+                {{ partyDetailRow(label = 'How would you like the defendant to pay?', bold = true, value = alternatePaymentMethodResponse,
+                  changeLink = ClaimantResponsePaths.alternateRepaymentPlanPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
+
+                {% if claimantPaymentPlan.paymentOption === PaymentType.INSTALMENTS.value %}
+                  {{ partyDetailRow(label = 'Regular payments of', bold = true, value = claimantPaymentPlan.repaymentPlan.instalmentAmount | numeral,
+                    changeLink = ClaimantResponsePaths.paymentPlanPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false) }}
+                  {{ partyDetailRow(label = 'Frequency of payments', bold = true, value = claimantPaymentPlan.repaymentPlan.paymentSchedule | renderPaymentSchedule,
+                    bottomBorder = false) }}
+                  {{ partyDetailRow(label = 'Date for first instalment', bold = true, value = alternatePaymentMethodDate | date,
+                    bottomBorder = true) }}
+                {% endif %}
+              {% endif %}
+            </dl>
+          {% endif %}
+
+          {% set courtDetermination = draft.courtDetermination %}
+          {% set courtDecisionPaymentIntention = courtDetermination.courtDecision %}
+          {% set courtDecisionType = courtDetermination.decisionType %}
+
+          {% if courtDetermination and courtDecisionPaymentIntention and
+            ( courtDecisionType !== DecisionType.CLAIMANT and courtDecisionType !== DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT ) %}
+            <h2 class="govuk-heading-m">{{ t("Court decision") }}</h2>
+            <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+              {{ partyDetailRow(
+              label = 'Court decision',
               bold = true,
+              value = 'The court rejected your repayment plan and calculated a more affordable one.',
               bottomBorder = false
-            ) }}
-            {{ partyDetailRow(label = 'Completion date',
-              value = courtDecisionPaymentIntention.paymentDate | date,
-              bottomBorder = true, bold = true
-            ) }}
-          {% elseif courtDecisionPaymentIntention.paymentOption === PaymentType.INSTALMENTS.value %}
-            {{ partyDetailRow(label = 'Court repayment plan',
-              value = t('{{ defendantFullName }} will repay {{ totalAmount }} in instalments of {{ instalmentAmount }} {{ paymentSchedule }}. The first instalment will be paid by {{ firstPaymentDate }}.',
-              { defendantFullName: claim.response.defendant.name,
-              totalAmount: totalAmount | numeral,
-              instalmentAmount: courtDecisionPaymentIntention.repaymentPlan.instalmentAmount | numeral,
-              paymentSchedule: courtDecisionPaymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule | lower,
-              firstPaymentDate: courtDecisionPaymentIntention.repaymentPlan.firstPaymentDate | date
-              }),
-              bottomBorder = false, bold = true
-            ) }}
-            {{ partyDetailRow(label = 'Completion date',
-              value = courtDecisionPaymentIntention.repaymentPlan.completionDate | date,
-              bottomBorder = true, bold = true
-            ) }}
-          {% endif %}
-        </dl>
-      {% endif %}
-
-      {% if draft.formaliseRepaymentPlan %}
-        <h2 class="govuk-heading-m">{{ t("How you wish to proceed") }}</h2>
-        <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-          {{ partyDetailRow(
-            label = 'How do you want to formalise the repayment plan?',
-            bold = true,
-            value = draft.formaliseRepaymentPlan.option | renderFormaliseRepaymentPlanOption,
-            changeLink = ClaimantResponsePaths.chooseHowToProceedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true
-          ) }}
-        </dl>
-        {% if draft.formaliseRepaymentPlan.option.value === FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value %}
-          <h2 class="govuk-heading-m">{{ t("Settlement agreement") }}</h2>
-          <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-            {% if paymentIntention.paymentOption === PaymentType.IMMEDIATELY.value %}
-              {{ partyDetailRow(label = 'The agreement',
+              ) }}
+              {% if courtDecisionPaymentIntention.paymentOption === PaymentType.IMMEDIATELY.value %}
+                {{ partyDetailRow(label = 'Court repayment plan',
                 value = t('{{ defendantFullName }} will pay {{ totalAmount }} immediately.
-              {{ claimantName }} will receive the money no later than {{ paymentDate }}.
-              Any cheques or transfers will be clear in {{ defendantFullName }}’s account by this date.',
-                  { defendantFullName: claim.response.defendant.name,
-                    claimantName: claim.claimData.claimant.name,
-                    paymentDate: paymentIntention.paymentDate | date ,
-                    totalAmount: totalAmount | numeral}),
-                bottomBorder = true, bold = true,
-                changeLink = ClaimantResponsePaths.signSettlementAgreementPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true
-              ) }}
-              {{ partyDetailRow(label = 'Completion date',
-                value = paymentIntention.paymentDate | date,
+                {{ claimantName }} will receive the money no later than {{ paymentDate }}.
+                Any cheques or transfers will be clear in {{ defendantFullName }}’s account by this date.',
+                { defendantFullName: claim.response.defendant.name,
+                claimantName: claim.claimData.claimant.name,
+                paymentDate: courtPaymentIntention.paymentDate | date ,
+                totalAmount: totalAmount | numeral}),
+                bottomBorder = false, bold = true
+                ) }}
+                {{ partyDetailRow(label = 'Completion date',
+                value = courtDecisionPaymentIntention.paymentDate | date,
                 bottomBorder = true, bold = true) }}
-            {% elseif paymentIntention.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
-              {{ partyDetailRow(label = 'The agreement',
-                value = t('{{ defendantFullName }} will pay {{ totalAmount }}, no later than {{ paymentDate }}',
-                  {
-                    defendantFullName: claim.response.defendant.name,
-                    totalAmount: totalAmount | numeral,
-                    paymentDate: paymentIntention.paymentDate | date
-                  }),
-                bottomBorder = true, bold = true,
-                changeLink = ClaimantResponsePaths.signSettlementAgreementPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true
-              ) }}
-              {{ partyDetailRow(label = 'Completion date',
-                value = paymentIntention.paymentDate | date,
-                bottomBorder = true, bold = true
-              ) }}
-            {% elseif paymentIntention.paymentOption === PaymentType.INSTALMENTS.value %}
-              {{ partyDetailRow(label = 'The agreement',
-                value = t('{{ defendantFullName }} will repay {{ totalAmount }} in instalments of {{ instalmentAmount }} {{ paymentSchedule }}. The first instalment will be paid by {{ firstPaymentDate }}.',
+              {% elseif courtDecisionPaymentIntention.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
+                {{ partyDetailRow(label = 'Court repayment plan',
+                  value = t('Repayment in full by {{ paymentDate }}',
+                  { paymentDate: courtDecisionPaymentIntention.paymentDate | date }),
+                  bottomBorder = true,
+                  bold = true,
+                  bottomBorder = false
+                ) }}
+                {{ partyDetailRow(label = 'Completion date',
+                  value = courtDecisionPaymentIntention.paymentDate | date,
+                  bottomBorder = true, bold = true
+                ) }}
+              {% elseif courtDecisionPaymentIntention.paymentOption === PaymentType.INSTALMENTS.value %}
+                {{ partyDetailRow(label = 'Court repayment plan',
+                  value = t('{{ defendantFullName }} will repay {{ totalAmount }} in instalments of {{ instalmentAmount }} {{ paymentSchedule }}. The first instalment will be paid by {{ firstPaymentDate }}.',
                   { defendantFullName: claim.response.defendant.name,
-                    totalAmount: totalAmount | numeral,
-                    instalmentAmount: paymentIntention.repaymentPlan.instalmentAmount | numeral,
-                    paymentSchedule: paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule | lower,
-                    firstPaymentDate: paymentIntention.repaymentPlan.firstPaymentDate | date
+                  totalAmount: totalAmount | numeral,
+                  instalmentAmount: courtDecisionPaymentIntention.repaymentPlan.instalmentAmount | numeral,
+                  paymentSchedule: courtDecisionPaymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule | lower,
+                  firstPaymentDate: courtDecisionPaymentIntention.repaymentPlan.firstPaymentDate | date
                   }),
-                bottomBorder = true, bold = true,
-                changeLink = ClaimantResponsePaths.signSettlementAgreementPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true
+                  bottomBorder = false, bold = true
+                ) }}
+                {{ partyDetailRow(label = 'Completion date',
+                  value = courtDecisionPaymentIntention.repaymentPlan.completionDate | date,
+                  bottomBorder = true, bold = true
+                ) }}
+              {% endif %}
+            </dl>
+          {% endif %}
+
+          {% if draft.formaliseRepaymentPlan %}
+            <h2 class="govuk-heading-m">{{ t("How you wish to proceed") }}</h2>
+            <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+              {{ partyDetailRow(
+                label = 'How do you want to formalise the repayment plan?',
+                bold = true,
+                value = draft.formaliseRepaymentPlan.option | renderFormaliseRepaymentPlanOption,
+                changeLink = ClaimantResponsePaths.chooseHowToProceedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true
               ) }}
-              {{ partyDetailRow(label = 'Completion date',
-                value = paymentIntention.repaymentPlan.completionDate | date,
-                bottomBorder = true, bold = true
-              ) }}
+            </dl>
+            {% if draft.formaliseRepaymentPlan.option.value === FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value %}
+              <h2 class="govuk-heading-m">{{ t("Settlement agreement") }}</h2>
+              <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+                {% if paymentIntention.paymentOption === PaymentType.IMMEDIATELY.value %}
+                  {{ partyDetailRow(label = 'The agreement',
+                    value = t('{{ defendantFullName }} will pay {{ totalAmount }} immediately.
+                  {{ claimantName }} will receive the money no later than {{ paymentDate }}.
+                  Any cheques or transfers will be clear in {{ defendantFullName }}’s account by this date.',
+                      { defendantFullName: claim.response.defendant.name,
+                        claimantName: claim.claimData.claimant.name,
+                        paymentDate: paymentIntention.paymentDate | date ,
+                        totalAmount: totalAmount | numeral}),
+                    bottomBorder = true, bold = true,
+                    changeLink = ClaimantResponsePaths.signSettlementAgreementPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true
+                  ) }}
+                  {{ partyDetailRow(label = 'Completion date',
+                    value = paymentIntention.paymentDate | date,
+                    bottomBorder = true, bold = true) }}
+                {% elseif paymentIntention.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
+                  {{ partyDetailRow(label = 'The agreement',
+                    value = t('{{ defendantFullName }} will pay {{ totalAmount }}, no later than {{ paymentDate }}',
+                      {
+                        defendantFullName: claim.response.defendant.name,
+                        totalAmount: totalAmount | numeral,
+                        paymentDate: paymentIntention.paymentDate | date
+                      }),
+                    bottomBorder = true, bold = true,
+                    changeLink = ClaimantResponsePaths.signSettlementAgreementPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true
+                  ) }}
+                  {{ partyDetailRow(label = 'Completion date',
+                    value = paymentIntention.paymentDate | date,
+                    bottomBorder = true, bold = true
+                  ) }}
+                {% elseif paymentIntention.paymentOption === PaymentType.INSTALMENTS.value %}
+                  {{ partyDetailRow(label = 'The agreement',
+                    value = t('{{ defendantFullName }} will repay {{ totalAmount }} in instalments of {{ instalmentAmount }} {{ paymentSchedule }}. The first instalment will be paid by {{ firstPaymentDate }}.',
+                      { defendantFullName: claim.response.defendant.name,
+                        totalAmount: totalAmount | numeral,
+                        instalmentAmount: paymentIntention.repaymentPlan.instalmentAmount | numeral,
+                        paymentSchedule: paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule | lower,
+                        firstPaymentDate: paymentIntention.repaymentPlan.firstPaymentDate | date
+                      }),
+                    bottomBorder = true, bold = true,
+                    changeLink = ClaimantResponsePaths.signSettlementAgreementPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true
+                  ) }}
+                  {{ partyDetailRow(label = 'Completion date',
+                    value = paymentIntention.repaymentPlan.completionDate | date,
+                    bottomBorder = true, bold = true
+                  ) }}
+                {% endif %}
+              </dl>
             {% endif %}
-          </dl>
-        {% endif %}
 
-        {% if draft.formaliseRepaymentPlan.option.value === FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT.value %}
-          <h2 class="govuk-heading-m">{{ t("Judgment request") }}</h2>
-          <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-            {{ partyDetailRow('Has the defendant paid some of the amount owed?',
-              draft.paidAmount.option.value | capitalize, changeLink = ClaimantResponseCCJPath.paidAmountPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = not draft.paidAmount.amount, bold = true) }}
+            {% if draft.formaliseRepaymentPlan.option.value === FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT.value %}
+              <h2 class="govuk-heading-m">{{ t("Judgment request") }}</h2>
+              <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+                {{ partyDetailRow('Has the defendant paid some of the amount owed?',
+                  draft.paidAmount.option.value | capitalize, changeLink = ClaimantResponseCCJPath.paidAmountPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = not draft.paidAmount.amount, bold = true) }}
 
-            {% if draft.paidAmount.amount %}
-              {{ partyDetailRow('Amount already paid', draft.paidAmount.amount | numeral, bottomBorder = true, bold = true) }}
+                {% if draft.paidAmount.amount %}
+                  {{ partyDetailRow('Amount already paid', draft.paidAmount.amount | numeral, bottomBorder = true, bold = true) }}
+                {% endif %}
+
+                {{ partyDetailRow('Total to be paid by defendant', (totalAmount - (draft.paidAmount.amount or 0)) | numeral,bold = true) }}
+              </dl>
             {% endif %}
 
-            {{ partyDetailRow('Total to be paid by defendant', (totalAmount - (draft.paidAmount.amount or 0)) | numeral,bold = true) }}
-          </dl>
+          {% endif %}
         {% endif %}
-
-      {% endif %}
-    {% endif %}
-    
-    {{ submitButton('Submit response') }}
-
-  </form>
+        
+        {{ submitButton('Submit response') }}
+      </form>
+    </div>
+  </div>
 {% endblock %}

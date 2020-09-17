@@ -3,7 +3,7 @@
   <link rel="stylesheet" href="{{ asset_paths['style'] }}/govuk-frontend/all.css"/>
 {% endblock %}
 {% from "form.njk" import csrfProtection, submitButton, errorSummary %}
-{% from "statementOfTruth.njk" import statementOfTruth %}
+{% from "statementOfTruth.njk" import statementOfTruthUpdated %}
 {% from "party/details.njk" import partyDetail, partyDetailRow %}
 {% from "./macro/check-and-send/admission.njk" import notImmediatePayment %}
 {% from "components/free-mediation/freeMediationCheckAndSendBlock.njk" import freeMediationBlock %}
@@ -11,507 +11,508 @@
 {% set heading = 'Check your answers' %}
 
 {% block content %}
-  <form novalidate method="post">
-    {{ csrfProtection(csrf) }}
-    <h2 class="govuk-heading-m">{{ t("Your details") }}</h2>
-    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-      {{ partyDetail(
-        partyDetails = draft.defendantDetails.partyDetails,
-        changeLinks = {
-          contactPerson: ResponsePaths.defendantYourDetailsPage.evaluateUri({ externalId: claim.externalId }),
-          address: ResponsePaths.defendantYourDetailsPage.evaluateUri({ externalId: claim.externalId }),
-          dateOfBirth: ResponsePaths.defendantDateOfBirthPage.evaluateUri({ externalId: claim.externalId })
-        },
-        claim = claim
-      ) }}
-      {% if not claim.claimData.defendant.phone %}
-        {{ partyDetailRow(
-          label = 'Contact number (optional)',
-          value = draft.defendantDetails.phone.number,
-          changeLink = ResponsePaths.defendantPhonePage.evaluateUri({ externalId: claim.externalId }) ,
-          bold = true)
-        }}
-      {% endif %}
-    </dl>
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <form novalidate method="post">
+        {{ csrfProtection(csrf) }}
+        <h2 class="govuk-heading-m">{{ t("Your details") }}</h2>
+        <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+          {{ partyDetail(
+            partyDetails = draft.defendantDetails.partyDetails,
+            changeLinks = {
+              contactPerson: ResponsePaths.defendantYourDetailsPage.evaluateUri({ externalId: claim.externalId }),
+              address: ResponsePaths.defendantYourDetailsPage.evaluateUri({ externalId: claim.externalId }),
+              dateOfBirth: ResponsePaths.defendantDateOfBirthPage.evaluateUri({ externalId: claim.externalId })
+            },
+            claim = claim
+          ) }}
+          {% if not claim.claimData.defendant.phone %}
+            {{ partyDetailRow(
+              label = 'Contact number (optional)',
+              value = draft.defendantDetails.phone.number,
+              changeLink = ResponsePaths.defendantPhonePage.evaluateUri({ externalId: claim.externalId }) ,
+              bold = true)
+            }}
+          {% endif %}
+        </dl>
 
-    <h2 class="govuk-heading-m">{{ t("Your response to the claim") }}</h2>
-    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-      {{ partyDetailRow(
-        label = 'Do you owe the money claimed?',
-        value = t(draft.response.type.displayValue) | capitalize,
-        changeLink = ResponsePaths.responseTypePage.evaluateUri({ externalId: claim.externalId }),
-        bold = true
-       )
-      }}
-
-      {% if draft.isResponsePartiallyAdmitted() %}
-        {{ partyDetailRow(
-            label = 'Have you paid the claimant the amount you admit you owe?',
-            value = t(draft.partialAdmission.alreadyPaid.option.option) | capitalize,
-            changeLink = PartAdmissionPaths.alreadyPaidPage.evaluateUri({ externalId: claim.externalId }),
+        <h2 class="govuk-heading-m">{{ t("Your response to the claim") }}</h2>
+        <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+          {{ partyDetailRow(
+            label = 'Do you owe the money claimed?',
+            value = t(draft.response.type.displayValue) | capitalize,
+            changeLink = ResponsePaths.responseTypePage.evaluateUri({ externalId: claim.externalId }),
             bold = true
           )
-        }}
-      {% endif %}
+          }}
 
-      {% if draft.response.type === ResponseType.DEFENCE %}
-        {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID %}
-          {% set rejectAllOption = 'I’ve paid what I believe I owe' %}
-        {% endif %}
-
-        {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.DISPUTE %}
-          {% set rejectAllOption = 'I dispute all of the claim' %}
-        {% endif %}
-
-        {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM %}
-          {% set rejectAllOption = 'Defend now and also make a counterclaim' %}
-        {% endif %}
-
-        {{ partyDetailRow(label = 'Why do you reject all of this claim?', value = rejectAllOption, changeLink = ResponsePaths.defenceRejectAllOfClaimPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
-
-      {% endif %}
-
-      {% if draft.isResponseFullyAdmitted() and draft.fullAdmission.paymentIntention.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
-        {{
-        partyDetailRow(
-          label = 'When will you pay',
-          value = t(draft.fullAdmission.paymentIntention.paymentOption.option.displayValue) | capitalize,
-          changeLink = FullAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: claim.externalId })
-        )
-        }}
-      {% endif %}
-    </dl>
-
-    {% if draft.isResponsePartiallyAdmitted() %}
-      <h2 class="govuk-heading-m">{{ t("Response details") }}</h2>
-      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-        {% if draft.isResponsePartiallyAdmitted() %}
-
-          {% if draft.isResponsePartiallyAdmittedAndAlreadyPaid() %}
-
-            {{
-              partyDetailRow(
-                label = 'How much money have you paid?',
-                value = draft.partialAdmission.howMuchHaveYouPaid.amount | numeral,
-                changeLink = PartAdmissionPaths.howMuchHaveYouPaidPage.evaluateUri({ externalId: claim.externalId }),
-                bottomBorder = false,
+          {% if draft.isResponsePartiallyAdmitted() %}
+            {{ partyDetailRow(
+                label = 'Have you paid the claimant the amount you admit you owe?',
+                value = t(draft.partialAdmission.alreadyPaid.option.option) | capitalize,
+                changeLink = PartAdmissionPaths.alreadyPaidPage.evaluateUri({ externalId: claim.externalId }),
                 bold = true
               )
             }}
-            {{
-              partyDetailRow(
-                label = 'When did you pay this amount?',
-                value = draft.partialAdmission.howMuchHaveYouPaid.date.toMoment() | date,
-                bottomBorder = false,
-                bold = true
-              )
-            }}
+          {% endif %}
 
-            {{
-              partyDetailRow(
-                label = 'How did you pay the amount claimed?',
-                value = draft.partialAdmission.howMuchHaveYouPaid.text,
-                bottomBorder = true,
-                bold = true
-              )
-            }}
+          {% if draft.response.type === ResponseType.DEFENCE %}
+            {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID %}
+              {% set rejectAllOption = 'I’ve paid what I believe I owe' %}
+            {% endif %}
 
-          {% else %}
+            {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.DISPUTE %}
+              {% set rejectAllOption = 'I dispute all of the claim' %}
+            {% endif %}
 
-            {{
-              partyDetailRow(
-                label = 'How much money do you admit you owe?',
-                value = draft.partialAdmission.howMuchDoYouOwe.amount | numeral,
-                changeLink = PartAdmissionPaths.howMuchDoYouOwePage.evaluateUri({ externalId: claim.externalId }),
-                bottomBorder = false,
-                bold = true
-              )
-            }}
+            {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM %}
+              {% set rejectAllOption = 'Defend now and also make a counterclaim' %}
+            {% endif %}
+
+            {{ partyDetailRow(label = 'Why do you reject all of this claim?', value = rejectAllOption, changeLink = ResponsePaths.defenceRejectAllOfClaimPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
 
           {% endif %}
 
-          {{
-            partyDetailRow(
-              label = 'Why do you disagree with the amount claimed?',
-              value = draft.partialAdmission.whyDoYouDisagree.text,
-              changeLink = PartAdmissionPaths.whyDoYouDisagreePage.evaluateUri({ externalId: claim.externalId }),
-              bold = true
-            )
-          }}
-          
-          {{
-            partyDetailRow(
-              label = 'Your timeline of what happened (optional)',
-              value = '',
-              changeLink = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId })
-            )
-          }}
-          {% for timelineRow in draft.partialAdmission.timeline.getPopulatedRowsOnly() %}
-            {{ partyDetailRow(label = timelineRow.date, value = timelineRow.description, changeLink = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }), bottomBorder = loop.last) }}
-          {% endfor %}
-
-          {{ partyDetailRow(label = 'Comments about their timeline (optional)', value = draft.partialAdmission.timeline.comment | default(''), bold = true) }}
-          
-          {{
-            partyDetailRow(
-              label = 'Your evidence (optional)',
-              value = '',
-              changeLink = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId }),
-              bottomBorder = false
-            )
-          }}
-          {% for evidenceDetail in draft.partialAdmission.evidence.getPopulatedRowsOnly() %}
-            {{ partyDetailRow(
-              label = evidenceDetail.type.displayValue,
-              value = evidenceDetail.description | default(''),
-              changeLink = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId }),
-              bottomBorder = loop.last
-              )
-            }}
-          {% endfor %}
-          
-          {{ partyDetailRow(label = 'Comments about their evidence (optional)', value = draft.partialAdmission.evidence.comment | default(''), changeLink = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
-        {% endif %}
-      </dl>
-    {% endif %}
-
-    {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID %}
-      <h2 class="govuk-heading-m">{{ t("Response details") }}</h2>
-      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-        {{
-          partyDetailRow(
-            label = 'How much have you paid?',
-            value = draft.rejectAllOfClaim.howMuchHaveYouPaid.amount | numeral,
-            changeLink = FullRejectionPaths.howMuchHaveYouPaidPage.evaluateUri({ externalId: claim.externalId }),
-            bottomBorder = false,
-            bold = true
-          )
-        }}
-
-        {{
-          partyDetailRow(
-            label = 'When did you pay this amount?',
-            value = t(draft.rejectAllOfClaim.howMuchHaveYouPaid.date.toMoment() | date),
-            changeLink = FullRejectionPaths.howMuchHaveYouPaidPage.evaluateUri({ externalId: claim.externalId }),
-            bottomBorder = false,
-            bold = true
-          )
-        }}
-
-        {{
-          partyDetailRow(
-            label = 'How did you pay this amount?',
-            value = draft.rejectAllOfClaim.howMuchHaveYouPaid.text,
-            changeLink = FullRejectionPaths.howMuchHaveYouPaidPage.evaluateUri({ externalId: claim.externalId }),
-            bold = true
-          )
-        }}
-
-        {% if draft.rejectAllOfClaim.howMuchHaveYouPaid.amount < claim.totalAmountTillToday %}
-          {{ partyDetailRow(label = 'Why do you disagree with the amount claimed?', value = draft.rejectAllOfClaim.whyDoYouDisagree.text, changeLink = FullRejectionPaths.whyDoYouDisagreePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
-
-          {{
-            partyDetailRow(
-              label = 'Your timeline of what happened (optional)',
-              value = '',
-              changeLink = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }),
-              bottomBorder = false
-            )
-          }}
-
-          {% for timelineRow in draft.timeline.getPopulatedRowsOnly() %}
-            {{ partyDetailRow(label = timelineRow.date, value = timelineRow.description, changeLink = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }), bottomBorder = loop.last) }}
-          {% endfor %}
-          
-          {{ partyDetailRow(label = 'Comments about their timeline (optional)', value = draft.timeline.comment | default(''), changeLink = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
-
-          {{
-            partyDetailRow(
-              label = 'Your evidence (optional)',
-              value = '',
-              changeLink = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId }),
-              bottomBorder = false
-            )
-          }}
-          {% for evidenceDetail in draft.evidence.getPopulatedRowsOnly() %}
-            {{ partyDetailRow(
-              label = evidenceDetail.type.displayValue,
-              value = evidenceDetail.description | default(''),
-              changeLink = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId }),
-              bottomBorder = loop.last
-              )
-            }}
-          {% endfor %}
-
-          {{ partyDetailRow(label = 'Comments about their evidence (optional)', value = draft.evidence.comment | default(''), changeLink = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
-
-        {% endif %}
-      </dl>
-    {% endif %}
-
-    {% if draft.isResponseRejectedFullyWithDispute() %}
-      <h2 class="govuk-heading-m">{{ t("Response details") }}</h2>
-      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-        {{
-            partyDetailRow(
-              label = 'Why you disagree with the claim',
-              value = draft.defence.text,
-              changeLink = ResponsePaths.defencePage.evaluateUri({ externalId: claim.externalId }),
-              bold = true
-            )
-        }}
-
-        {{
-          partyDetailRow(
-            label = 'Your timeline of what happened (optional)',
-            value = '',
-            changeLink = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }),
-            bottomBorder = false
-          )
-        }}
-        {% for timelineRow in draft.timeline.getPopulatedRowsOnly() %}
-          {{ partyDetailRow(label = timelineRow.date, value = timelineRow.description, changeLink = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }), bottomBorder = loop.last) }}
-        {% endfor %}
-
-        {{ partyDetailRow(label = 'Comments about their timeline (optional)', value = draft.timeline.comment | default(''), bold = true) }}
-        
-        {{
-          partyDetailRow(
-            label = 'Your evidence (optional)',
-            value = '',
-            changeLink = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId }),
-            bottomBorder = false
-          )
-        }}
-        {% for evidenceDetail in draft.evidence.getPopulatedRowsOnly() %}
-          {{ partyDetailRow(
-            label = evidenceDetail.type.displayValue,
-            value = evidenceDetail.description | default(''),
-            bottomBorder = loop.last
-            )
-          }}
-        {% endfor %}
-        
-        {{ partyDetailRow(label = 'Comments about their evidence (optional)', value = draft.evidence.comment | default(''), bold = true) }}
-      </dl>
-    {% endif %}
-
-    {% if statementOfMeansIsApplicable and draft.statementOfMeans %}
-      {% include "./statement-of-means/check-and-send.njk" %}
-    {% endif %}
-
-    {% if draft.isResponsePartiallyAdmitted() and not draft.isResponsePartiallyAdmittedAndAlreadyPaid() %}
-      {% if draft.partialAdmission.paymentIntention.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
-        <h2 class="govuk-heading-m">{{ t("When you’ll pay") }}</h2>
-        <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-          {{
+          {% if draft.isResponseFullyAdmitted() and draft.fullAdmission.paymentIntention.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
+            {{
             partyDetailRow(
               label = 'When will you pay',
-              value = t(draft.partialAdmission.paymentIntention.paymentOption.option.displayValue) | capitalize,
-              changeLink = PartAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: claim.externalId })
+              value = t(draft.fullAdmission.paymentIntention.paymentOption.option.displayValue) | capitalize,
+              changeLink = FullAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: claim.externalId })
             )
-          }}
+            }}
+          {% endif %}
         </dl>
-      {% else %}
-        {{
-        notImmediatePayment(
-          type = draft.partialAdmission.paymentIntention.paymentOption,
-          paymentDate = draft.partialAdmission.paymentIntention.paymentDate,
-          paymentPlan = draft.partialAdmission.paymentIntention.paymentPlan,
-          explanation = draft.statementOfMeans.explanation.text,
-          Paths = PartAdmissionPaths,
-          externalId = claim.externalId,
-          statementOfMeansIsApplicable = statementOfMeansIsApplicable
-        )
-        }}
-      {% endif %}
-    {% endif %}
 
-    {% if draft.isResponseFullyAdmitted() and not draft.fullAdmission.paymentIntention.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
-      {{
-      notImmediatePayment(
-        type = draft.fullAdmission.paymentIntention.paymentOption,
-        paymentDate = draft.fullAdmission.paymentIntention.paymentDate,
-        paymentPlan = draft.fullAdmission.paymentIntention.paymentPlan,
-        explanation = draft.statementOfMeans.explanation.text,
-        Paths = FullAdmissionPaths,
-        externalId = claim.externalId,
-        statementOfMeansIsApplicable = statementOfMeansIsApplicable
-      )
-      }}
-    {% endif %}
+        {% if draft.isResponsePartiallyAdmitted() %}
+          <h2 class="govuk-heading-m">{{ t("Response details") }}</h2>
+          <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+            {% if draft.isResponsePartiallyAdmitted() %}
 
-    {% if mediationDraft.id !== 0 %}
-      {{ freeMediationBlock(claim, mediationDraft.document, contactPerson, contactNumber, mediationPilot, mediationEnabled) }}
-    {% endif %}
+              {% if draft.isResponsePartiallyAdmittedAndAlreadyPaid() %}
 
-    {% if dqsEnabled %}
-      <h2 class="govuk-heading-m">{{ t("Your hearing requirements") }}</h2>
-      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-        {% if directionsQuestionnaireDraft.supportRequired.languageSelected or directionsQuestionnaireDraft.supportRequired.signLanguageSelected or
-          directionsQuestionnaireDraft.supportRequired.disabledAccessSelected or directionsQuestionnaireDraft.supportRequired.hearingLoopSelected or
-          directionsQuestionnaireDraft.supportRequired.otherSupportSelected %}
-          {{ partyDetailRow(
-              label = 'Support required for a hearing',
-              value = [
-                directionsQuestionnaireDraft.supportRequired.languageInterpreted + ' interpreter' if directionsQuestionnaireDraft.supportRequired.languageSelected === 'true',
-                directionsQuestionnaireDraft.supportRequired.signLanguageInterpreted + ' interpreter' if directionsQuestionnaireDraft.supportRequired.signLanguageSelected === 'true',
-                t('Disabled access') if directionsQuestionnaireDraft.supportRequired.disabledAccessSelected === 'true',
-                t('Hearing loop') if directionsQuestionnaireDraft.supportRequired.hearingLoopSelected === 'true',
-                t('Other:') if directionsQuestionnaireDraft.supportRequired.otherSupportSelected === 'true',
-                directionsQuestionnaireDraft.supportRequired.otherSupport if directionsQuestionnaireDraft.supportRequired.otherSupportSelected === 'true'
-              ],
-              changeLink = DirectionsQuestionnairePaths.supportPage.evaluateUri({ externalId: claim.externalId }),
-              bold = true,
-              multiLine = true
-            ) }}
-        {% else %}
-          {{ partyDetailRow(
-            label = 'Support required for a hearing',
-            value = 'None',
-            changeLink = DirectionsQuestionnairePaths.supportPage.evaluateUri({ externalId: claim.externalId }),
-            bold = true
-          ) }}
+                {{
+                  partyDetailRow(
+                    label = 'How much money have you paid?',
+                    value = draft.partialAdmission.howMuchHaveYouPaid.amount | numeral,
+                    changeLink = PartAdmissionPaths.howMuchHaveYouPaidPage.evaluateUri({ externalId: claim.externalId }),
+                    bottomBorder = false,
+                    bold = true
+                  )
+                }}
+                {{
+                  partyDetailRow(
+                    label = 'When did you pay this amount?',
+                    value = draft.partialAdmission.howMuchHaveYouPaid.date.toMoment() | date,
+                    bottomBorder = false,
+                    bold = true
+                  )
+                }}
+
+                {{
+                  partyDetailRow(
+                    label = 'How did you pay the amount claimed?',
+                    value = draft.partialAdmission.howMuchHaveYouPaid.text,
+                    bottomBorder = true,
+                    bold = true
+                  )
+                }}
+
+              {% else %}
+
+                {{
+                  partyDetailRow(
+                    label = 'How much money do you admit you owe?',
+                    value = draft.partialAdmission.howMuchDoYouOwe.amount | numeral,
+                    changeLink = PartAdmissionPaths.howMuchDoYouOwePage.evaluateUri({ externalId: claim.externalId }),
+                    bottomBorder = false,
+                    bold = true
+                  )
+                }}
+
+              {% endif %}
+
+              {{
+                partyDetailRow(
+                  label = 'Why do you disagree with the amount claimed?',
+                  value = draft.partialAdmission.whyDoYouDisagree.text,
+                  changeLink = PartAdmissionPaths.whyDoYouDisagreePage.evaluateUri({ externalId: claim.externalId }),
+                  bold = true
+                )
+              }}
+              
+              {{
+                partyDetailRow(
+                  label = 'Your timeline of what happened (optional)',
+                  value = '',
+                  changeLink = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId })
+                )
+              }}
+              {% for timelineRow in draft.partialAdmission.timeline.getPopulatedRowsOnly() %}
+                {{ partyDetailRow(label = timelineRow.date, value = timelineRow.description, changeLink = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }), bottomBorder = loop.last) }}
+              {% endfor %}
+
+              {{ partyDetailRow(label = 'Comments about their timeline (optional)', value = draft.partialAdmission.timeline.comment | default(''), bold = true) }}
+              
+              {{
+                partyDetailRow(
+                  label = 'Your evidence (optional)',
+                  value = '',
+                  changeLink = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId }),
+                  bottomBorder = false
+                )
+              }}
+              {% for evidenceDetail in draft.partialAdmission.evidence.getPopulatedRowsOnly() %}
+                {{ partyDetailRow(
+                  label = evidenceDetail.type.displayValue,
+                  value = evidenceDetail.description | default(''),
+                  changeLink = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId }),
+                  bottomBorder = loop.last
+                  )
+                }}
+              {% endfor %}
+              
+              {{ partyDetailRow(label = 'Comments about their evidence (optional)', value = draft.partialAdmission.evidence.comment | default(''), changeLink = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
+            {% endif %}
+          </dl>
         {% endif %}
-        {% if directionsQuestionnaireDraft.hearingLocation.courtName %}
-          {{ partyDetailRow(
-            label = 'Preferred hearing centre',
-            value = directionsQuestionnaireDraft.hearingLocation.courtName,
-            changeLink = DirectionsQuestionnairePaths.hearingLocationPage.evaluateUri({ externalId: claim.externalId }),
-            bottomBorder = false,
-            bold = true
-          ) }}
-        {% elseif directionsQuestionnaireDraft.hearingLocation.alternativeCourtName %}
-          {{ partyDetailRow(
-            label = 'Preferred hearing centre',
-            value = directionsQuestionnaireDraft.hearingLocation.alternativeCourtName,
-            changeLink = DirectionsQuestionnairePaths.hearingLocationPage.evaluateUri({ externalId: claim.externalId }),
-            bottomBorder = false,
-            bold = true
-          ) }}
+
+        {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID %}
+          <h2 class="govuk-heading-m">{{ t("Response details") }}</h2>
+          <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+            {{
+              partyDetailRow(
+                label = 'How much have you paid?',
+                value = draft.rejectAllOfClaim.howMuchHaveYouPaid.amount | numeral,
+                changeLink = FullRejectionPaths.howMuchHaveYouPaidPage.evaluateUri({ externalId: claim.externalId }),
+                bottomBorder = false,
+                bold = true
+              )
+            }}
+
+            {{
+              partyDetailRow(
+                label = 'When did you pay this amount?',
+                value = t(draft.rejectAllOfClaim.howMuchHaveYouPaid.date.toMoment() | date),
+                changeLink = FullRejectionPaths.howMuchHaveYouPaidPage.evaluateUri({ externalId: claim.externalId }),
+                bottomBorder = false,
+                bold = true
+              )
+            }}
+
+            {{
+              partyDetailRow(
+                label = 'How did you pay this amount?',
+                value = draft.rejectAllOfClaim.howMuchHaveYouPaid.text,
+                changeLink = FullRejectionPaths.howMuchHaveYouPaidPage.evaluateUri({ externalId: claim.externalId }),
+                bold = true
+              )
+            }}
+
+            {% if draft.rejectAllOfClaim.howMuchHaveYouPaid.amount < claim.totalAmountTillToday %}
+              {{ partyDetailRow(label = 'Why do you disagree with the amount claimed?', value = draft.rejectAllOfClaim.whyDoYouDisagree.text, changeLink = FullRejectionPaths.whyDoYouDisagreePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
+
+              {{
+                partyDetailRow(
+                  label = 'Your timeline of what happened (optional)',
+                  value = '',
+                  changeLink = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }),
+                  bottomBorder = false
+                )
+              }}
+
+              {% for timelineRow in draft.timeline.getPopulatedRowsOnly() %}
+                {{ partyDetailRow(label = timelineRow.date, value = timelineRow.description, changeLink = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }), bottomBorder = loop.last) }}
+              {% endfor %}
+              
+              {{ partyDetailRow(label = 'Comments about their timeline (optional)', value = draft.timeline.comment | default(''), changeLink = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
+
+              {{
+                partyDetailRow(
+                  label = 'Your evidence (optional)',
+                  value = '',
+                  changeLink = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId }),
+                  bottomBorder = false
+                )
+              }}
+              {% for evidenceDetail in draft.evidence.getPopulatedRowsOnly() %}
+                {{ partyDetailRow(
+                  label = evidenceDetail.type.displayValue,
+                  value = evidenceDetail.description | default(''),
+                  changeLink = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId }),
+                  bottomBorder = loop.last
+                  )
+                }}
+              {% endfor %}
+
+              {{ partyDetailRow(label = 'Comments about their evidence (optional)', value = draft.evidence.comment | default(''), changeLink = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
+
+            {% endif %}
+          </dl>
         {% endif %}
-        {% if directionsQuestionnaireDraft.exceptionalCircumstances.exceptionalCircumstances.option === YesNoOption.YES.option %}
-          {{ partyDetailRow(
-            label = 'Briefly explain your reasons',
-            value = directionsQuestionnaireDraft.exceptionalCircumstances.reason,
-            changeLink = DirectionsQuestionnairePaths.hearingExceptionalCircumstancesPage.evaluateUri({ externalId: claim.externalId }),
-            bottomBorder = false,
-            bold = true
-          ) }}
+
+        {% if draft.isResponseRejectedFullyWithDispute() %}
+          <h2 class="govuk-heading-m">{{ t("Response details") }}</h2>
+          <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+            {{
+                partyDetailRow(
+                  label = 'Why you disagree with the claim',
+                  value = draft.defence.text,
+                  changeLink = ResponsePaths.defencePage.evaluateUri({ externalId: claim.externalId }),
+                  bold = true
+                )
+            }}
+
+            {{
+              partyDetailRow(
+                label = 'Your timeline of what happened (optional)',
+                value = '',
+                changeLink = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }),
+                bottomBorder = false
+              )
+            }}
+            {% for timelineRow in draft.timeline.getPopulatedRowsOnly() %}
+              {{ partyDetailRow(label = timelineRow.date, value = timelineRow.description, changeLink = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }), bottomBorder = loop.last) }}
+            {% endfor %}
+
+            {{ partyDetailRow(label = 'Comments about their timeline (optional)', value = draft.timeline.comment | default(''), bold = true) }}
+            
+            {{
+              partyDetailRow(
+                label = 'Your evidence (optional)',
+                value = '',
+                changeLink = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId }),
+                bottomBorder = false
+              )
+            }}
+            {% for evidenceDetail in draft.evidence.getPopulatedRowsOnly() %}
+              {{ partyDetailRow(
+                label = evidenceDetail.type.displayValue,
+                value = evidenceDetail.description | default(''),
+                bottomBorder = loop.last
+                )
+              }}
+            {% endfor %}
+            
+            {{ partyDetailRow(label = 'Comments about their evidence (optional)', value = draft.evidence.comment | default(''), bold = true) }}
+          </dl>
         {% endif %}
-        {% if directionsQuestionnaireDraft.expertRequired.option.option === YesNoOption.YES.option %}
-          {{ partyDetailRow(
-              label = 'Have you already got a report written by an expert?',
-              value = t(directionsQuestionnaireDraft.expertReports.declared.option) | capitalize,
-              changeLink = DirectionsQuestionnairePaths.expertReportsPage.evaluateUri({ externalId: claim.externalId }),
-              bottomBorder = false,
+
+        {% if statementOfMeansIsApplicable and draft.statementOfMeans %}
+          {% include "./statement-of-means/check-and-send.njk" %}
+        {% endif %}
+
+        {% if draft.isResponsePartiallyAdmitted() and not draft.isResponsePartiallyAdmittedAndAlreadyPaid() %}
+          {% if draft.partialAdmission.paymentIntention.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
+            <h2 class="govuk-heading-m">{{ t("When you’ll pay") }}</h2>
+            <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+              {{
+                partyDetailRow(
+                  label = 'When will you pay',
+                  value = t(draft.partialAdmission.paymentIntention.paymentOption.option.displayValue) | capitalize,
+                  changeLink = PartAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: claim.externalId })
+                )
+              }}
+            </dl>
+          {% else %}
+            {{
+            notImmediatePayment(
+              type = draft.partialAdmission.paymentIntention.paymentOption,
+              paymentDate = draft.partialAdmission.paymentIntention.paymentDate,
+              paymentPlan = draft.partialAdmission.paymentIntention.paymentPlan,
+              explanation = draft.statementOfMeans.explanation.text,
+              Paths = PartAdmissionPaths,
+              externalId = claim.externalId,
+              statementOfMeansIsApplicable = statementOfMeansIsApplicable
+            )
+            }}
+          {% endif %}
+        {% endif %}
+
+        {% if draft.isResponseFullyAdmitted() and not draft.fullAdmission.paymentIntention.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
+          {{
+          notImmediatePayment(
+            type = draft.fullAdmission.paymentIntention.paymentOption,
+            paymentDate = draft.fullAdmission.paymentIntention.paymentDate,
+            paymentPlan = draft.fullAdmission.paymentIntention.paymentPlan,
+            explanation = draft.statementOfMeans.explanation.text,
+            Paths = FullAdmissionPaths,
+            externalId = claim.externalId,
+            statementOfMeansIsApplicable = statementOfMeansIsApplicable
+          )
+          }}
+        {% endif %}
+
+        {% if mediationDraft.id !== 0 %}
+          {{ freeMediationBlock(claim, mediationDraft.document, contactPerson, contactNumber, mediationPilot, mediationEnabled) }}
+        {% endif %}
+
+        {% if dqsEnabled %}
+          <h2 class="govuk-heading-m">{{ t("Your hearing requirements") }}</h2>
+          <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+            {% if directionsQuestionnaireDraft.supportRequired.languageSelected or directionsQuestionnaireDraft.supportRequired.signLanguageSelected or
+              directionsQuestionnaireDraft.supportRequired.disabledAccessSelected or directionsQuestionnaireDraft.supportRequired.hearingLoopSelected or
+              directionsQuestionnaireDraft.supportRequired.otherSupportSelected %}
+              {{ partyDetailRow(
+                  label = 'Support required for a hearing',
+                  value = [
+                    directionsQuestionnaireDraft.supportRequired.languageInterpreted + ' interpreter' if directionsQuestionnaireDraft.supportRequired.languageSelected === 'true',
+                    directionsQuestionnaireDraft.supportRequired.signLanguageInterpreted + ' interpreter' if directionsQuestionnaireDraft.supportRequired.signLanguageSelected === 'true',
+                    t('Disabled access') if directionsQuestionnaireDraft.supportRequired.disabledAccessSelected === 'true',
+                    t('Hearing loop') if directionsQuestionnaireDraft.supportRequired.hearingLoopSelected === 'true',
+                    t('Other:') if directionsQuestionnaireDraft.supportRequired.otherSupportSelected === 'true',
+                    directionsQuestionnaireDraft.supportRequired.otherSupport if directionsQuestionnaireDraft.supportRequired.otherSupportSelected === 'true'
+                  ],
+                  changeLink = DirectionsQuestionnairePaths.supportPage.evaluateUri({ externalId: claim.externalId }),
+                  bold = true,
+                  multiLine = true
+                ) }}
+            {% else %}
+              {{ partyDetailRow(
+                label = 'Support required for a hearing',
+                value = 'None',
+                changeLink = DirectionsQuestionnairePaths.supportPage.evaluateUri({ externalId: claim.externalId }),
+                bold = true
+              ) }}
+            {% endif %}
+            {% if directionsQuestionnaireDraft.hearingLocation.courtName %}
+              {{ partyDetailRow(
+                label = 'Preferred hearing centre',
+                value = directionsQuestionnaireDraft.hearingLocation.courtName,
+                changeLink = DirectionsQuestionnairePaths.hearingLocationPage.evaluateUri({ externalId: claim.externalId }),
+                bottomBorder = false,
+                bold = true
+              ) }}
+            {% elseif directionsQuestionnaireDraft.hearingLocation.alternativeCourtName %}
+              {{ partyDetailRow(
+                label = 'Preferred hearing centre',
+                value = directionsQuestionnaireDraft.hearingLocation.alternativeCourtName,
+                changeLink = DirectionsQuestionnairePaths.hearingLocationPage.evaluateUri({ externalId: claim.externalId }),
+                bottomBorder = false,
+                bold = true
+              ) }}
+            {% endif %}
+            {% if directionsQuestionnaireDraft.exceptionalCircumstances.exceptionalCircumstances.option === YesNoOption.YES.option %}
+              {{ partyDetailRow(
+                label = 'Briefly explain your reasons',
+                value = directionsQuestionnaireDraft.exceptionalCircumstances.reason,
+                changeLink = DirectionsQuestionnairePaths.hearingExceptionalCircumstancesPage.evaluateUri({ externalId: claim.externalId }),
+                bottomBorder = false,
+                bold = true
+              ) }}
+            {% endif %}
+            {% if directionsQuestionnaireDraft.expertRequired.option.option === YesNoOption.YES.option %}
+              {{ partyDetailRow(
+                  label = 'Have you already got a report written by an expert?',
+                  value = t(directionsQuestionnaireDraft.expertReports.declared.option) | capitalize,
+                  changeLink = DirectionsQuestionnairePaths.expertReportsPage.evaluateUri({ externalId: claim.externalId }),
+                  bottomBorder = false,
+                  topBorder = true,
+                  bold = true
+                ) }}
+            {% endif %}
+            {% if directionsQuestionnaireDraft.expertReports.declared.option === YesNoOption.YES.option %}
+              {% for report in directionsQuestionnaireDraft.expertReports.rows %}
+                {{ partyDetailRow(
+                  label = 'Report ' + loop.index,
+                  value = [
+                    t('Expert’s name: {{  expertsName }}', { expertsName:  report.expertName }),
+                    t('Date of report: {{  reportDate }}', { reportDate:  report.reportDate.toMoment() | date })
+                  ],
+                  changeLink = DirectionsQuestionnairePaths.expertReportsPage.evaluateUri({ externalId: claim.externalId }),
+                  bottomBorder = false,
+                  bold = true,
+                  multiLine = true
+                ) }}
+              {% endfor %}
+            {% endif %}
+            {% if directionsQuestionnaireDraft.permissionForExpert.option %}
+              {{ partyDetailRow(
+                label = 'Do you want the court’s permission to use an expert?',
+                value = t(directionsQuestionnaireDraft.permissionForExpert.option.option) | capitalize,
+                changeLink = DirectionsQuestionnairePaths.permissionForExpertPage.evaluateUri({ externalId: claim.externalId }),
+                topBorder = true,
+                bold = true
+              ) }}
+            {% endif %}
+            {% if directionsQuestionnaireDraft.expertEvidence.expertEvidence %}
+              {{ partyDetailRow(
+                label = 'Does the claim involve something an expert can still examine?',
+                value = t(directionsQuestionnaireDraft.expertEvidence.expertEvidence.option) | capitalize,
+                changeLink = DirectionsQuestionnairePaths.expertEvidencePage.evaluateUri({ externalId: claim.externalId }),
+                bottomBorder = false,
+                bold = true
+              ) }}
+              {{ partyDetailRow(
+                label = 'What is there to examine?',
+                value = directionsQuestionnaireDraft.expertEvidence.whatToExamine,
+                bold = true
+              ) }}
+            {% endif %}
+            {% if directionsQuestionnaireDraft.whyExpertIsNeeded.explanation %}
+              {{ partyDetailRow(
+                label = 'Briefly explain why you believe an expert is needed',
+                value = directionsQuestionnaireDraft.whyExpertIsNeeded.explanation,
+                changeLink = DirectionsQuestionnairePaths.whyExpertIsNeededPage.evaluateUri({ externalId: claim.externalId }),
+                bottomBorder = false,
+                bold = true
+              ) }}
+            {% endif %}
+            {{ partyDetailRow(
+              label = 'Do you want to give evidence?',
+              value = t(directionsQuestionnaireDraft.selfWitness.option.option) | capitalize,
+              changeLink = DirectionsQuestionnairePaths.selfWitnessPage.evaluateUri({ externalId: claim.externalId }),
               topBorder = true,
               bold = true
             ) }}
+            {% if directionsQuestionnaireDraft.otherWitnesses.otherWitnesses.option === YesNoOption.YES.option %}
+              {{ partyDetailRow(
+                label = 'Other witnesses',
+                value = directionsQuestionnaireDraft.otherWitnesses.howMany,
+                changeLink = DirectionsQuestionnairePaths.selfWitnessPage.evaluateUri({ externalId: claim.externalId }),
+                bold = true
+              ) }}
+            {% else %}
+              {{ partyDetailRow(
+                label = 'Other witnesses',
+                value = directionsQuestionnaireDraft.otherWitnesses.otherWitnesses.option | capitalize,
+                changeLink = DirectionsQuestionnairePaths.selfWitnessPage.evaluateUri({ externalId: claim.externalId }),
+                bold = true
+              ) }}
+            {% endif %}
+            {% if directionsQuestionnaireDraft.availability.hasUnavailableDates %}
+              {{ partyDetailRow(
+                label = 'Dates unavailable',
+                value = datesUnavailable,
+                changeLink = DirectionsQuestionnairePaths.hearingDatesPage.evaluateUri({ externalId: claim.externalId }),
+                bold = true,
+                multiLine = true
+              ) }}
+            {% else %}
+              {{ partyDetailRow(
+                label = 'Dates unavailable',
+                value = 'None',
+                changeLink = DirectionsQuestionnairePaths.hearingDatesPage.evaluateUri({ externalId: claim.externalId }),
+                bold = true
+              ) }}
+            {% endif %}
+          </dl>
         {% endif %}
-        {% if directionsQuestionnaireDraft.expertReports.declared.option === YesNoOption.YES.option %}
-          {% for report in directionsQuestionnaireDraft.expertReports.rows %}
-            {{ partyDetailRow(
-              label = 'Report ' + loop.index,
-              value = [
-                t('Expert’s name: {{  expertsName }}', { expertsName:  report.expertName }),
-                t('Date of report: {{  reportDate }}', { reportDate:  report.reportDate.toMoment() | date })
-              ],
-              changeLink = DirectionsQuestionnairePaths.expertReportsPage.evaluateUri({ externalId: claim.externalId }),
-              bottomBorder = false,
-              bold = true,
-              multiLine = true
-            ) }}
-          {% endfor %}
-        {% endif %}
-        {% if directionsQuestionnaireDraft.permissionForExpert.option %}
-          {{ partyDetailRow(
-            label = 'Do you want the court’s permission to use an expert?',
-            value = t(directionsQuestionnaireDraft.permissionForExpert.option.option) | capitalize,
-            changeLink = DirectionsQuestionnairePaths.permissionForExpertPage.evaluateUri({ externalId: claim.externalId }),
-            topBorder = true,
-            bold = true
-          ) }}
-        {% endif %}
-        {% if directionsQuestionnaireDraft.expertEvidence.expertEvidence %}
-          {{ partyDetailRow(
-            label = 'Does the claim involve something an expert can still examine?',
-            value = t(directionsQuestionnaireDraft.expertEvidence.expertEvidence.option) | capitalize,
-            changeLink = DirectionsQuestionnairePaths.expertEvidencePage.evaluateUri({ externalId: claim.externalId }),
-            bottomBorder = false,
-            bold = true
-          ) }}
-          {{ partyDetailRow(
-            label = 'What is there to examine?',
-            value = directionsQuestionnaireDraft.expertEvidence.whatToExamine,
-            bold = true
-          ) }}
-        {% endif %}
-        {% if directionsQuestionnaireDraft.whyExpertIsNeeded.explanation %}
-          {{ partyDetailRow(
-            label = 'Briefly explain why you believe an expert is needed',
-            value = directionsQuestionnaireDraft.whyExpertIsNeeded.explanation,
-            changeLink = DirectionsQuestionnairePaths.whyExpertIsNeededPage.evaluateUri({ externalId: claim.externalId }),
-            bottomBorder = false,
-            bold = true
-          ) }}
-        {% endif %}
-        {{ partyDetailRow(
-          label = 'Do you want to give evidence?',
-          value = t(directionsQuestionnaireDraft.selfWitness.option.option) | capitalize,
-          changeLink = DirectionsQuestionnairePaths.selfWitnessPage.evaluateUri({ externalId: claim.externalId }),
-          topBorder = true,
-          bold = true
-        ) }}
-        {% if directionsQuestionnaireDraft.otherWitnesses.otherWitnesses.option === YesNoOption.YES.option %}
-          {{ partyDetailRow(
-            label = 'Other witnesses',
-            value = directionsQuestionnaireDraft.otherWitnesses.howMany,
-            changeLink = DirectionsQuestionnairePaths.selfWitnessPage.evaluateUri({ externalId: claim.externalId }),
-            bold = true
-          ) }}
-        {% else %}
-          {{ partyDetailRow(
-            label = 'Other witnesses',
-            value = directionsQuestionnaireDraft.otherWitnesses.otherWitnesses.option | capitalize,
-            changeLink = DirectionsQuestionnairePaths.selfWitnessPage.evaluateUri({ externalId: claim.externalId }),
-            bold = true
-          ) }}
-        {% endif %}
-        {% if directionsQuestionnaireDraft.availability.hasUnavailableDates %}
-          {{ partyDetailRow(
-            label = 'Dates unavailable',
-            value = datesUnavailable,
-            changeLink = DirectionsQuestionnairePaths.hearingDatesPage.evaluateUri({ externalId: claim.externalId }),
-            bold = true,
-            multiLine = true
-          ) }}
-        {% else %}
-          {{ partyDetailRow(
-            label = 'Dates unavailable',
-            value = 'None',
-            changeLink = DirectionsQuestionnairePaths.hearingDatesPage.evaluateUri({ externalId: claim.externalId }),
-            bold = true
-          ) }}
-        {% endif %}
-      </dl>
-    {% endif %}
+        <div class="form-group">
+          {{
+            statementOfTruthUpdated(
+              form,
+              statementOfTruthType = statementOfTruthType,
+              label = 'I believe that the facts stated in this response are true.<p>I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.</p>',
+              isQualified = (signatureType === SignatureType.QUALIFIED)
+            )
+          }}
 
-    <div class="column-two-thirds">
-      <div class="form-group">
-        {{
-          statementOfTruth(
-            form,
-            statementOfTruthType = statementOfTruthType,
-            label = 'I believe that the facts stated in this response are true.<p>I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.</p>',
-            isQualified = (signatureType === SignatureType.QUALIFIED)
-          )
-        }}
+          {{ submitButton('Submit response') }}
 
-        {{ submitButton('Submit response') }}
-
-        <input type="hidden" name="type" value="{{ form.model.type }}">
-      </div>
+          <input type="hidden" name="type" value="{{ form.model.type }}">
+        </div>
+      </form>
     </div>
-  </form>
+  </div>
 {% endblock %}
