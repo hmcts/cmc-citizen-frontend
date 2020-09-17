@@ -42,7 +42,8 @@ export class ContentSecurityPolicy {
           '\'unsafe-inline\''
         ],
         objectSrc: [self],
-        frameAncestors: ['\'self\'']
+        frameAncestors: ['\'self\''],
+        formaction: ['\'self\'']
       },
       browserSniff: true,
       setAllHeaders: true
