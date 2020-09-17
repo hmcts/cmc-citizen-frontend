@@ -43,7 +43,6 @@ export class ContentSecurityPolicy {
         ],
         objectSrc: [self],
         frameAncestors: ['\'self\''],
-        formaction: ['\'self\''],
         'form-action': ["'self'"]
       },
       browserSniff: true,
