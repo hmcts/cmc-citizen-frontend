@@ -32,7 +32,7 @@
 
       {{ linkButton('Recalculate total monthly income', 'action[calculateMonthlyIncome]', 'button button-secondary calculate-monthly-income-expense') }}
 
-      <p class="heading-small calculation-outcome-container">
+      <p class="heading-small calculation-outcome-container" role="status" aria-live="polite">
         {{ t('Total monthly income:') }} £<span class="total-monthly-income-expense"> {{ totalMonthlyIncomeExpense | default('0.00') }} </span>
       </p>
 
