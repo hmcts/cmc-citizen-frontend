@@ -38,7 +38,8 @@ export class ContentSecurityPolicy {
           'vcc-eu4b.8x8.com'
         ],
         styleSrc: [
-          '\'self\''
+          '\'self\'',
+          '\'unsafe-inline\''
         ],
         objectSrc: [self],
         frameAncestors: ['\'self\'']
