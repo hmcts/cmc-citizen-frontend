@@ -1,3 +1,4 @@
+// Task list pattern
 .app-task-list {
   list-style-type: none;
   margin-bottom: 0;
@@ -50,6 +51,9 @@
   }
 }
 
+// The `app-task-list__task-completed` class was previously used on the task
+// list for the completed tag (changed in 86c90ec) – it's still included here to
+// avoid breaking task lists in existing prototypes.
 .app-task-list__tag,
 .app-task-list__task-completed {
   margin-bottom: govuk-spacing(1);
