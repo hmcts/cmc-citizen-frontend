@@ -101,6 +101,13 @@ function testData () {
       },
       claimantAssertions: ['Read the defendant’s request for a judge to review the order.'],
       defendantAssertions: ['You’ve asked the court to review the order']
+    },
+    {
+      status: 'Orders - defendant fully defended - claimant rejected defence - bespoke order drawn',
+      claim: ordersClaim(),
+      claimOverride: {},
+      claimantAssertions: ['An Order has been issued by a Judge'],
+      defendantAssertions: ['An Order has been issued by a Judge']
     }
   ]
 }
