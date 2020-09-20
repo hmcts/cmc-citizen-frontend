@@ -99,6 +99,7 @@
   directionsOrderIssuedClaimantDashboard,
   directionsBespokeOrderIssuedClaimantDashboard,
   directionsOrderIssuedDefendantDashboard,
+  directionsBespokeOrderIssuedDefendantDashboard,
   directionsOrderReviewRequestedClaimantDashboard,
   directionsOrderReviewRequestedDefendantDashboard %}
 
@@ -362,7 +363,7 @@
   {% elif status === ClaimStatus.ORDER_DRAWN %}
     {{ directionsOrderIssuedDefendantDashboard() }}
   {% elif status === ClaimStatus.BESPOKE_ORDER_DRAWN %}
-    {{ directionsBespokeOrderIssuedClaimantDashboard() }}
+    {{ directionsBespokeOrderIssuedDefendantDashboard() }}
   {% elif status === ClaimStatus.REVIEW_ORDER_REQUESTED %}
     {{ directionsOrderReviewRequestedDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.INTENTION_TO_PROCEED_DEADLINE_PASSED %}

@@ -63,6 +63,10 @@
   {{ t('Send us more details before the hearing') }}
 {% endmacro %}
 
+{% macro directionsBespokeOrderIssuedDefendantDashboard() %}
+  {{ t('An Order has been issued by a Judge') }}
+{% endmacro %}
+
 {% macro directionsOrderReviewRequestedClaimantDashboard(claim) %}
   {% if claim.reviewOrder.requestedBy === MadeBy.CLAIMANT.value %}
     {{ t('You’ve asked the court to review the order') }}
