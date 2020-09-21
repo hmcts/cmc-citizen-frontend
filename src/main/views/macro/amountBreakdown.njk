@@ -5,6 +5,7 @@
     <summary>{{ t(label) }}</summary>
       <div class="panel panel-border-narrow">
         <table class="table-form">
+          <caption class="visuallyhidden" aira-hidden="true">{{ label }}</caption>
           <thead>
             <tr>
               <th scope="col">{{ t('Amount breakdown') }}</th>
@@ -16,14 +17,14 @@
           {% for row in claim.claimData.amount.rows %}
             {% if row.reason %}
               <tr>
-                <td scope="col">{{ row.reason }}</td>
+                <td>{{ row.reason }}</td>
                 <td class="numeric last">{{ row.amount | numeral }}</td>
               </tr>
             {% endif %}
           {% endfor %}
           {% if claim.claimData.interest.type !== InterestType.NO_INTEREST %}
             <tr>
-              <td scope="row">
+              <td>
                 {{ interestSnippet(label = 'Interest', interestData.rate, interestData.numberOfDays,
                   interestData.interestFromDate, interestData.interestToDate, interestData.specificDailyAmount) }}
               </td>
@@ -33,11 +34,11 @@
             </tr>
           {% endif %}
           <tr>
-            <td scope="col">{{ t('Claim fee') }}</td>
+            <td>{{ t('Claim fee') }}</td>
             <td class="numeric last">{{ claim.claimData.feeAmountInPennies | pennies2pounds | numeral }}</td>
           </tr>
           <tr>
-            <td class="bold-small" scope="row">{{ t('Claim Total') }}</td>
+            <td class="bold-small">{{ t('Claim Total') }}</td>
             <td class="bold-small numeric last">{{ claim.totalAmountTillToday | numeral }}</td>
           </tr>
           </tbody>

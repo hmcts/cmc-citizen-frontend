@@ -46,7 +46,7 @@
     <div id="{{ name + '[select-address]' if name else 'select-address' }}"
          class="form-group hidden postcode-address-picker{% if addressSelectError %} form-group-error{% endif %}">
       <div class="form-group">
-        <label id="{{ addressSelectName }}[label]" class="form-label">
+        <label id="{{ addressSelectName }}[label]" for="{{ addressSelectName }}" class="form-label">
           {{ t('Pick an address') }}
         </label>
 
@@ -54,9 +54,10 @@
           <span class="error-message">{{ t(addressSelectError) }}</span>
         {% endif %}
         <select id="{{ addressSelectName }}"
-                class="form-control postcode-select {% if addressSelectError %} form-control-error{% endif %}"
-                name="{{ addressSelectName }}"
-                title="{{ t('Pick an address') }}">
+          class="form-control postcode-select {% if addressSelectError %} form-control-error{% endif %}"
+          name="{{ addressSelectName }}"
+          title="{{ t('Pick an address') }}">
+          <option selected="selected" value="">No address found</option>
         </select>
       </div>
     </div>
