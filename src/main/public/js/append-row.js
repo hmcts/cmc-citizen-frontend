@@ -18,7 +18,6 @@ $(document).ready(function () {
         if (parseInt(capturedRowIndex) === 99) {
           removeEventButton()
         }
-
         newIndex = parseInt(capturedRowIndex) + 1
         newRowIndex = parseInt(capturedRowIndex) + 2
         return 'rows[' + (parseInt(capturedRowIndex) + 1) + ']'
