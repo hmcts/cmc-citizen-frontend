@@ -39,7 +39,7 @@
     "@hmcts/draft-store-client": "^1.2.1",
     "@hmcts/info-provider": "^1.0.0",
     "@hmcts/nodejs-healthcheck": "^1.5.1",
-    "@hmcts/nodejs-logging": "^3.0.1",
+    "@hmcts/nodejs-logging": "^3.0.2",
     "@hmcts/os-names-client": "^1.0.7",
     "@hmcts/os-places-client": "^1.0.6",
     "@hmcts/properties-volume": "0.0.9",
