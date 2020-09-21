@@ -11,6 +11,11 @@
     {% if monthError %}<span class="error-message">{{ t(monthError) }}</span>{% endif %}
     {% if yearError %}<span class="error-message">{{ t(yearError) }}</span>{% endif %}
     {% if dateError %}<span class="error-message">{{ t(dateError) }}</span>{% endif %}
+    <fieldset id="dateofbirth[label]">
+     <legend> 
+          <span class="visuallyhidden">
+          Enter your date of birth</span>
+      </legend>
     <div class="form-date" id="{{ name }}[label]">
       <div class="form-group form-group-day">
         <label class="form-label" id="{{ name }}[day][label]" for="{{ name }}[day]">{{ t('Day') }}</label>
@@ -25,5 +30,6 @@
         <input class="form-control {% if yearError or dateError %} form-control-error {% endif %}" id="{{ name }}[year]" name="{{ name }}[year]" value="{{ form.valueFor(name).year | default('') }}" type="number">
       </div>
     </div>
+    </fieldset>
   </div>
 {% endmacro %}

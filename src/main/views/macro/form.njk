@@ -73,9 +73,13 @@
   </div>
 {% endmacro %}
 
-{% macro textInputInline( name, form, inputClass='', prefixClass='', ariaLabelledBy='', ariaDescribedBy='') %}
+{% macro textInputInline( name, form, inputClass='', prefixClass='', ariaLabelledBy='', ariaDescribedBy='', visuallyHiddenLabelValue='') %}
   {% set error = form.errorFor(name) %}
-  <label for="{{ name }}"></label>
+  {% if visuallyHiddenLabelValue %}
+    <label for="{{ name }}"><span class="visually-hidden"> {{ visuallyHiddenLabelValue }} </span></label>
+  {% else %}
+    <label for="{{ name }}"></label>
+  {% endif %}
   <span class="{{ prefixClass }}">
     <input
       id="{{ name }}" name="{{ name }}"
@@ -127,9 +131,9 @@
   </div>
 {% endmacro %}
 
-{% macro submitButton(label = 'Continue', id = '') %}
+{% macro submitButton(label = 'Continue', id = '', ariaLabel = '') %}
   <div class="form-group">
-    <input type="submit" class="button" value="{{ t(label) }}"{% if id %}name="{{ id }}"{% endif %} {% if id %}id="{{ id }}"{% endif %}>
+    <input type="submit" class="button" {% if ariaLabel %}aria-label="{{ t(ariaLabel) }}"{% endif %} value="{{ t(label) }}"{% if id %}name="{{ id }}"{% endif %} {% if id %}id="{{ id }}"{% endif %}>
   </div>
 {% endmacro %}
 
@@ -161,7 +165,7 @@
 {% endmacro %}
 
 {% macro checkboxOption(label, name, form, value, hint = '', checked = false, bold = false) %}
-  {{ option(label, name, form, value, 'checkbox', hint, checked, bold) }}
+  {{ option(label, name, form, value, 'checkbox', hint, checked = checked, bold) }}
 {% endmacro %}
 
 {% macro option(label, name, form, value, type, hint = '', checked = false, bold = false, hidden, className, dataTarget, greyHint = true) %}
@@ -395,9 +399,9 @@
 {% macro errorSummary(form) %}
   {% if form.hasErrors() %}
     <div class="error-summary" role="group" aria-labelledby="error-summary-heading" tabindex="-1">
-      <h1 class="heading-medium error-summary-heading" id="error-summary-heading">
+      <h2 class="heading-medium error-summary-heading" id="error-summary-heading">
         {{ t('There was a problem') }}
-      </h1>
+      </h2>
       <ul class="error-summary-list">
         {% for error in form.errors %}
           <li><a href="#{{ error.fieldName }}[label]">{{ t(error.message) }}</a></li>
