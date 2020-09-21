@@ -46,7 +46,7 @@
     <div id="{{ name + '[select-address]' if name else 'select-address' }}"
          class="form-group hidden postcode-address-picker{% if addressSelectError %} form-group-error{% endif %}">
       <div class="form-group">
-        <label id="{{ addressSelectName }}[label]" class="form-label">
+        <label id="{{ addressSelectName }}[label]" for="{{ addressSelectName }}" class="form-label">
           {{ t('Pick an address') }}
         </label>
 
@@ -54,9 +54,10 @@
           <span class="error-message">{{ t(addressSelectError) }}</span>
         {% endif %}
         <select id="{{ addressSelectName }}"
-                class="form-control postcode-select {% if addressSelectError %} form-control-error{% endif %}"
-                name="{{ addressSelectName }}"
-                title="{{ t('Pick an address') }}">
+          class="form-control postcode-select {% if addressSelectError %} form-control-error{% endif %}"
+          name="{{ addressSelectName }}"
+          title="{{ t('Pick an address') }}">
+          <option selected="selected" value="">No address found</option>
         </select>
       </div>
     </div>
@@ -96,7 +97,10 @@
 
   <div class="form-group{{ ' form-group-error' if line1Error or line2Error or line3Error else '' }}">
 
-    <label id="{{ line1Name + '[label]' }}" class="form-label" for="{{ line1Name }}">{{ t('Address') }}</label>
+    <label id="{{ line1Name + '[label]' }}" class="form-label" for="{{ line1Name }}">
+      {{ t('Building and street') }}
+      <span class="visually-hidden"> {{ t('line 1 of 3') }} </span>
+    </label>
     {% if line1Error %}
       <span class="error-message">{{ t(line1Error) }}</span>
     {% endif %}
@@ -110,24 +114,26 @@
     {% if line2Error %}
       <span class="error-message">{{ t(line2Error) }}</span>
     {% endif %}
+    <label id="{{ line2Name + '[label]' }}" class="form-label visually-hidden" for="{{ line2Name }}">{{ t('Building and street line 2 of 3') }}</label>
     <input id="{{ line2Name }}"
            maxlength="35"
            class="form-control form-group-compound address-line2 {% if line2Error %} form-control-error{% endif %}"
            name="{{ line2Name }}"
            autocomplete="address-line2"
            value="{{ form.valueFor(line2Name) | default('') }}"
-           title="{{ t('Street line 2') }}"
+           title="{{ t('Building and street line 2 of 3') }}"
     />
     {% if line3Error %}
       <span class="error-message">{{ t(line3Error) }}</span>
     {% endif %}
+    <label id="{{ line3Name + '[label]' }}" class="form-label visually-hidden" for="{{ line3Name }}">{{ t('Building and street line 3 of 3') }}</label>
     <input id="{{ line3Name }}"
            maxlength="35"
            class="form-control address-line3 {% if line3Error %} form-control-error{% endif %}"
            name="{{ line3Name }}"
            autocomplete="address-line3"
            value="{{ form.valueFor(line3Name) | default('') }}"
-           title="{{ t('Street line 3') }}"
+           title="{{ t('Building and street line 3 of 3') }}"
     />
   </div>
   {{ textInput('Town or city', name + '[city]' if name else 'city', form, inputClass='address-town-or-city',

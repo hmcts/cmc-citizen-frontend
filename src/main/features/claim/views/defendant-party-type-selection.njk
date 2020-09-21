@@ -6,6 +6,7 @@
   <div class="grid-row">
     <div class="column-two-thirds">
      <p class="bold-medium"></p>
+     
 
       <form method="POST" novalidate>
         {{ csrfProtection(csrf) }}
@@ -13,7 +14,7 @@
         {{
           radioGroup(
             form = form,
-            label = 'Who are you making the claim against?',
+            label = 'I’m claiming against',
             labelForScreenReadersOnly = true,
             name = 'type',
             options = [
