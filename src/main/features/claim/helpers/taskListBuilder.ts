@@ -8,8 +8,9 @@ import { ClaimAmount } from 'drafts/tasks/claimAmount'
 import { ClaimDetails } from 'drafts/tasks/claimDetails'
 import { YourDetails } from 'drafts/tasks/yourDetails'
 import { TheirDetails } from 'drafts/tasks/theirDetails'
+import { TaskStatus } from 'utils/taskStatus'
 
-export class TaskListBuilder {
+export class TaskListBuilder extends TaskStatus {
   static buildBeforeYouStartSection (draft: DraftClaim): TaskList {
     return new TaskList('Consider other options', [
       new TaskListItem('Resolving this dispute', Paths.resolvingThisDisputerPage.uri, ResolveDispute.isCompleted(draft))

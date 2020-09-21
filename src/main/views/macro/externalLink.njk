@@ -1,3 +1,3 @@
 {% macro externalLink(text, href, analyticsEventLabel, showSpan=true) %}
   <a href="{{ href }}" rel="noreferrer noopener" target="_blank" {% if analyticsEventLabel %}class="analytics-click-event-trigger" data-event-label="{{ analyticsEventLabel }}"{% endif %}>{{ text  }} {% if showSpan %}<span >{{ t('(opens in a new window)') }}</span>{% endif %}</a>
- {% endmacro %}
+{% endmacro %}
