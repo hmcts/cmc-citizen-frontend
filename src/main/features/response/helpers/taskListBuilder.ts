@@ -35,8 +35,9 @@ import { DetailsInCaseOfHearingTask } from 'response/tasks/detailsInCaseOfHearin
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 import { FeatureToggles } from 'utils/featureToggles'
 import { DeadlineCalculatorClient } from 'claims/deadlineCalculatorClient'
+import { TaskStatus } from 'utils/taskStatus'
 
-export class TaskListBuilder {
+export class TaskListBuilder extends TaskStatus {
   static async buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim, now: moment.Moment): Promise<TaskList> {
     const tasks: TaskListItem[] = []
     const externalId: string = claim.externalId

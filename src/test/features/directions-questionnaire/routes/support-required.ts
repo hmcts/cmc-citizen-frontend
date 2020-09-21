@@ -94,6 +94,22 @@ describe('Directions Questionnaire - support required page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Select any support you’d require for a court hearing'))
         })
+
+        it('should render page when everything is fine with None', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
+          draftStoreServiceMock.resolveFind('directionsQuestionnaire',
+            { supportRequired: { languageSelected: true, languageInterpreted: 'None'
+            , signLanguageSelected: true,signLanguageInterpreted: 'None'
+            , hearingLoopSelected: true, disabledAccessSelected: true
+            ,otherSupportSelected: true, otherSupport: 'None' }
+            })
+          draftStoreServiceMock.resolveFind('response')
+
+          await request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('Select any support you’d require for a court hearing'))
+        })
       })
     })
 
