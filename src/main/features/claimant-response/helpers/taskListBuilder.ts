@@ -28,6 +28,7 @@ import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/dir
 import { Paths as DirectionsQuestionnairePaths } from 'directions-questionnaire/paths'
 import { DetailsInCaseOfHearingTask } from 'claimant-response/tasks/detailsInCaseOfHearingTask'
 import { IntentionToProceedTask } from 'claimant-response/tasks/intentionToProceedTask'
+import { TaskStatus } from 'utils/taskStatus'
 
 const validator: Validator = new Validator()
 
@@ -35,7 +36,7 @@ function isDefinedAndValid (value: any): boolean {
   return value && validator.validateSync(value).length === 0
 }
 
-export class TaskListBuilder {
+export class TaskListBuilder extends TaskStatus {
   static buildDefendantResponseSection (draft: DraftClaimantResponse, claim: Claim): TaskList {
     const tasks: TaskListItem[] = []
     const externalId: string = claim.externalId
