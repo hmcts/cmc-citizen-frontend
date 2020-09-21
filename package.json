@@ -58,7 +58,7 @@
     "applicationinsights": "^1.7.0",
     "body-parser": "^1.19.0",
     "bootstrap-datepicker": "1.9.0",
-    "build-url": "^2.0.0",
+    "build-url": "^6.0.1",
     "class-transformer": "^0.2.3",
     "classlist-polyfill": "^1.2.0",
     "config": "^3.2.5",
