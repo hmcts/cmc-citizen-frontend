@@ -8,10 +8,11 @@
 {% endmacro%}
 
 {% macro _antennawebChatWidget() %}
-    {% if featureToggles.AntennawebChat %}
+    {% if antennawebChat %}
+        <script> console.log({{ antennawebChat }})</script>
         <script src="https://avaya-web-chat-client.s3.eu-west-2.amazonaws.com/app-es2015.js" type="module"></script>
         <script src="https://avaya-web-chat-client.s3.eu-west-2.amazonaws.com/app-es5.js" nomodule defer></script>
-        <web-chat class title="HMCTS Web Chat" url="api-gw.avayalb.net" api-version="1.0" auth-token="tkn3214" route-point-identifier="Default" work-flow-type lease-time="24" priority="5" secure-connections="true"></web-chat>
+        <web-chat class chat-title="Money Claims Web Chat" url="api-gw.avayalb.net"  chat-icon-url="/assets/icon.png" api-version="1.0" auth-token="tkn3214" route-point-identifier="Default" work-flow-type lease-time="24" priority="5" secure-connections="true"></web-chat>
     {% endif %}
 {% endmacro%}
 
