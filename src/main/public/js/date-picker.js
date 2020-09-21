@@ -23,10 +23,14 @@ const datePickerUtils = {
   displayFirstOfMonth: function(date) {
     const mDate = moment(date);
     const day = mDate.format("D");
-    let displayMonth = { content: "<span>" + day + "</span>" };
+    const year = mDate.year();
+    const month = mDate.format("MMM");
+    let displayMonth = { content};
     if (day === "1") {
       const month = mDate.format("MMM");
-      displayMonth.content = "<span>" + day + "</span><p class=\"first-of-month\">" + month + "</p>";
+      displayMonth.content = "<span tabindex=\"1\" aria-label="+ day + '' + month + ''+ year +"\>"+ day +"</span><p class=\"first-of-month\">" + month + "</p>";
+    } else {
+       displayMonth.content = "<span  tabindex=\"1\" aria-label="+ day + '' + month + ''+ year +"\>"+ day + "</span>";
     }
     return displayMonth;
   }
@@ -56,6 +60,7 @@ const datePicker = {
       startDate: "+1d",
       weekStart: 1,
       maxViewMode: 0,
+      showOtherMonths: true,
       datesDisabled: datesDisabled,
       templates: {
         leftArrow: datePicker.toggleArrows("prev"),
@@ -65,12 +70,12 @@ const datePicker = {
     }).on("changeDate", function(event) { return datePicker.changeDateHandler(event)});
 
     datePicker.setUpDOWHeading();
-
     // Update the date-picker with dates that have already been added.
     const d = datePicker.getData().map(function(date) { return date.value });
     datePicker.selector().datepicker("setDates", d);
-  },
+    datePicker.setDiasbleattribute();
 
+  },
   selector: function() { return $("#date-picker")},
 
   setUpDOWHeading: function() {
@@ -79,15 +84,13 @@ const datePicker = {
     $.each(dow, function(index, node) { return node.textContent = days[index]});
   },
 
-  toggleArrows: function(nextOrPrevArrow) { return "<img alt=\"" + nextOrPrevArrow + "\" src=\"/img/date-picker/" + nextOrPrevArrow + "_arrow.png\" />" },
+  toggleArrows: function(nextOrPrevArrow) {  return "<img tabindex=0  alt=\"date picker" + nextOrPrevArrow + "\" src=\"/img/date-picker/" + nextOrPrevArrow + "_arrow.png\" />" },
 
   changeDateHandler: function(event) {
     const uuid = $("#externalId")[0].innerText;
     const csrf = $("input[name=\"_csrf\"]").val();
-
     let dates = event.dates.map(function(eventDate) { return datePickerUtils.formatDateForData(eventDate)});
     let hasUnavailableDates = $("input[name=hasUnavailableDates]:checked").val();
-
     if (hasUnavailableDates === "true") {
       $.post("/case/" + uuid + "/directions-questionnaire/hearing-dates/date-picker/replace", {
         _csrf: csrf,
@@ -107,8 +110,18 @@ const datePicker = {
         });
       });
     }
+    datePicker.setDiasbleattribute();
   },
 
+  setDiasbleattribute: function() {
+    $(".datepicker-days .disabled-date").find("span").each(function(index){ 
+      if( $(".datepicker-days .disabled-date").find("span").eq(index).attr("aria-label").indexOf("is disabled") === -1) {
+        var dateDisabled  =  $(".datepicker-days .disabled-date").find("span").eq(index).attr("aria-label");
+        $(".datepicker-days .disabled-date").find("span").eq(index).attr("aria-label", dateDisabled + " is disabled")
+      }
+    });
+  },
+  
   getData: function() {
     const list = $(".add-another-list .add-another-list-item > span").toArray();
     return list.map(function(item) { return datePickerUtils.buildDatesArray(

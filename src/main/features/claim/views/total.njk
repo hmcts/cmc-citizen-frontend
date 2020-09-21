@@ -10,7 +10,7 @@
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
           <table class="table-form form-group">
-            <caption class="visuallyhidden"></caption>
+            <caption class="visuallyhidden" aira-hidden="true">{{ heading }}</caption>
             <tbody>
             <tr>
               <th scope="row">{{ t('Claim amount') }}</th>
@@ -46,7 +46,7 @@
           <p>{{ t('If you settle out of court we won’t refund your claim fee. You can ask the defendant to pay back your claim fee as part of the settlement.') }}</p>
 
           <table class="table-form form-group">
-            <caption class="visuallyhidden"></caption>
+            <caption class="visuallyhidden" aira-hidden="true">Other fees</caption>
             <thead>
               <tr>
                 <th scope="col">{{ t('Other fees') }}</th>
