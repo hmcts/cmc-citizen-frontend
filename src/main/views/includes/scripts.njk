@@ -5,7 +5,6 @@
 <script src="{{ asset_paths['js_vendor'] }}/jquery.min.js"></script>
 <script src="{{ asset_paths['js_vendor'] }}/govuk/shim-links-with-button-role.js"></script>
 <script src="{{ asset_paths['js'] }}/show-hide-content-patched.js"></script>
-
 <script src="{{ asset_paths['js'] }}/application.js"></script>
 <script src="{{ asset_paths['js'] }}/detectJavascript.js"></script>
 <script src="{{ asset_paths['js'] }}/analytics.js"></script>
@@ -23,4 +22,8 @@
 {% if featureToggles.webChat %}
 <script src="{{ asset_paths['webchat'] }}/javascript/hmcts-webchat.js"></script>
 <script src="{{ asset_paths['webchat'] }}/javascript/webchart-init.js"></script>
+{% endif %}
+
+{% if antennawebChat %}
+<script src="{{ asset_paths['js'] }}/antenna-webchat-toggle.js"></script>
 {% endif %}
