@@ -78,17 +78,9 @@ function check (uri: string, customTests: CustomChecks = [], requestDetails: Req
     })
 
     describe(`Pa11y tests for ${uri}`, () => {
-      let issues: Issue[]
-      before(async () => {
-        issues = await runPa11y(agent.get(uri).url)
-      })
-
-      it('should have no accessibility errors', () => {
-        ensureNoAccessibilityAlerts('error', issues)
-      })
-
-      it('should have no accessibility warnings', () => {
-        ensureNoAccessibilityAlerts('warning', issues)
+      it('should have no accessibility errors', async () => {
+        const issues: Issue[] = await runPa11y(agent.get(uri).url)
+        ensureNoAccessibilityErrors(issues)
       })
     })
   })
@@ -116,9 +108,9 @@ async function extractPageContent (url: string, requestDetails: RequestDetails =
   return res.text
 }
 
-function ensureNoAccessibilityAlerts (issueType: string, issues: Issue[]): void {
-  const alerts: Issue[] = issues.filter((issue: Issue) => issue.type === issueType)
-  expect(alerts, `\n${JSON.stringify(alerts, null, 2)}\n`).to.be.empty
+function ensureNoAccessibilityErrors (issues: Issue[]): void {
+  const errors: Issue[] = issues.filter((issue: Issue) => issue.type === 'error')
+  expect(errors, `\n${JSON.stringify(errors, null, 2)}\n`).to.be.empty
 }
 
 const excludedPaths: Paths[] = [
