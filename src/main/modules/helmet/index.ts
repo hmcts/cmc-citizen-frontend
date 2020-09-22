@@ -20,6 +20,8 @@ export class Helmet {
   enableFor (app: express.Express) {
     app.use(helmet())
     app.use(helmet.hidePoweredBy())
+    app.disable('x-powered-by')
+    app.disabled('Server')
     app.use(/^\/(?!js|img|pdf|stylesheets).*$/, helmet.noCache())
 
     new ContentSecurityPolicy(this.developmentMode).enableFor(app)

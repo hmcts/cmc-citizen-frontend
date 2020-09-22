@@ -116,7 +116,7 @@ app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
 
 // Below will match all routes not covered by the router, which effectively translates to a 404 response
 app.use((req, res, next) => {
-  res.setHeader('Server', 'N/A')
+  res.removeHeader('Server')
   next(new NotFoundError(req.path))
 })
 
