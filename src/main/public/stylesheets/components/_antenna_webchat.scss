@@ -12,6 +12,20 @@ web-chat {
 }
 
 // sass-lint:disable-block no-qualifying-elements force-element-nesting
+button.chat-button {
+  background-color: $chat-button-colour;
+  border: 0;
+  bottom: 0;
+  color: $white;
+  cursor: pointer;
+  display: none;
+  outline: none;
+  padding: 12px;
+  position: fixed;
+  right: 20px;
+}
+
+// sass-lint:disable-block no-qualifying-elements force-element-nesting
 web-chat.hidden {
   transform: translateY(1000px);
 }
@@ -19,21 +33,4 @@ web-chat.hidden {
 // sass-lint:disable-block no-qualifying-elements force-element-nesting
 web-chat.hidden + button.chat-button {
   display: block;
-}
-
-// sass-lint:disable-block no-qualifying-elements force-element-nesting
-button.chat-button {
-  background-color: $darkgreen;
-  border: 0;
-  bottom: 0;
-  color: $white;
-  cursor: pointer;
-  display: none;
-  font-weight: 900;
-  height: 50px;
-  outline: none;
-  padding: 12px;
-  position: fixed;
-  right: 20px;
-  width: 150px !important; // sass-lint:disable-line no-important
 }
