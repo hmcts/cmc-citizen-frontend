@@ -6,7 +6,7 @@
     "node": ">=12.0.0"
   },
   "scripts": {
-    "setup": "gulp sass copy-files",
+    "setup": "gulp sass copy-files sass-govuk-frontend",
     "start": "node server.js",
     "lint": "tsc --noEmit && tslint --project tsconfig.json && sass-lint -v -q",
     "test": "echo 'unit tests are ran through GitHub actions as a mandatory step in order to save time on the main pipeline'",

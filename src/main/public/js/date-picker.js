@@ -28,9 +28,9 @@ const datePickerUtils = {
     let displayMonth = { content};
     if (day === "1") {
       const month = mDate.format("MMM");
-      displayMonth.content = "<span tabindex=\"1\" aria-label="+ day + '' + month + ''+ year +"\>"+ day +"</span><p class=\"first-of-month\">" + month + "</p>";
+      displayMonth.content = "<span  aria-label="+ day + '' + month + ''+ year +"\>"+ day +"</span><p class=\"first-of-month\">" + month + "</p>";
     } else {
-       displayMonth.content = "<span  tabindex=\"1\" aria-label="+ day + '' + month + ''+ year +"\>"+ day + "</span>";
+       displayMonth.content = "<span   aria-label="+ day + '' + month + ''+ year +"\>"+ day + "</span>";
     }
     return displayMonth;
   }
@@ -114,10 +114,10 @@ const datePicker = {
   },
 
   setDiasbleattribute: function() {
-    $(".datepicker-days .disabled-date").find("span").each(function(index){ 
-      if( $(".datepicker-days .disabled-date").find("span").eq(index).attr("aria-label").indexOf("is disabled") === -1) {
-        var dateDisabled  =  $(".datepicker-days .disabled-date").find("span").eq(index).attr("aria-label");
-        $(".datepicker-days .disabled-date").find("span").eq(index).attr("aria-label", dateDisabled + " is disabled")
+    $(".datepicker-days .disabled").find("span").each(function(index){ 
+      if( $(".datepicker-days .disabled").find("span").eq(index).attr("aria-label").indexOf("is unavailable") === -1) {
+        var dateDisabled  =  $(".datepicker-days .disabled").find("span").eq(index).attr("aria-label");
+        $(".datepicker-days .disabled").find("span").eq(index).attr("aria-label", dateDisabled + " is unavailable")
       }
     });
   },
