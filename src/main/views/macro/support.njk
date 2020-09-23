@@ -10,7 +10,8 @@
 {% macro _emailWidget(email = supportEmailAddress) %}
     <h2 class="heading-medium contact-mail">{{ t('Email') }}</h2>
     <p><a href="mailto:{{t(email)}}">{{ t(email)}}</a>
-      <span class="block">{{ t("We'll get back to you within 10 days.") }}</span>
+  
+  
     </p>
 {% endmacro%}
 
@@ -35,6 +36,18 @@
     {{ _emailWidget() }}
     {{ _phoneWidget() }}
     {{ _holidayWidget() }}
+{% endmacro %}
+
+{% macro supportWidget(label = 'Email') %}
+  
+    {{ _emailWidget('HMCTSforms@justice.gov.uk') }}
+    {{ _phoneWidget('0300 123 7050') }}
+{% endmacro %}
+
+{% macro supportWidget1(label = 'Email') %}
+  
+    {{ _emailWidget('contactocmc@justice.gov.uk') }}
+    {{ _phoneWidget('0300 123 7050') }}
 {% endmacro %}
 
 {% macro mcolSupportWidget(label = 'Help and advice') %}
