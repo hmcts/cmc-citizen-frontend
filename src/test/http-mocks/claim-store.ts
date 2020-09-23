@@ -679,6 +679,12 @@ export function resolveRetrieveClaimByExternalId (claimOverride?: object): mock.
     .reply(HttpStatus.OK, { ...sampleClaimObj, ...claimOverride })
 }
 
+export function healthy (healthy: Boolean): mock.Scope {
+  return mock(`${serviceBaseURL}`)
+    .get(new RegExp('healthy'))
+    .reply(HttpStatus.OK, healthy)
+}
+
 export function resolveRetrieveByExternalId (claim: object = sampleClaimObj, claimOverride?: object): mock.Scope {
   return mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/' + externalIdPattern))

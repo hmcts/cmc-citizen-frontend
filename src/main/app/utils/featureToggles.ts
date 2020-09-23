@@ -36,6 +36,10 @@ export class FeatureToggles {
     return this.launchDarklyClient.serviceVariation('warning_banner', toBoolean(config.get<boolean>(`featureToggles.warningBanner`)))
   }
 
+  async isOutageBannerEnabled (): Promise<boolean> {
+    return this.launchDarklyClient.serviceVariation('outage-banner', toBoolean(config.get<boolean>(`featureToggles.outageBanner`)))
+  }
+
   async isHelpWithFeesEnabled (): Promise<boolean> {
     return this.launchDarklyClient.serviceVariation('help-with-fees', toBoolean(config.get<boolean>(`featureToggles.helpWithFees`)))
   }

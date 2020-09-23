@@ -173,6 +173,8 @@ export class Claim {
       return ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED
     } else if (this.hasBeenTransferred()) {
       return ClaimStatus.TRANSFERRED
+    } else if (this.state === 'CREATE') {
+      return ClaimStatus.CREATE
     } else if (this.moneyReceivedOn && this.countyCourtJudgmentRequestedAt) {
       return ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
     } else if (this.hasBeenMovedToCCBC()) {

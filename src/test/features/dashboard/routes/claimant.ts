@@ -61,6 +61,33 @@ describe('Dashboard - claimant page', () => {
             .expect(res => expect(res).to.be.successful.withText('Claim number', claimStoreServiceMock.sampleClaimObj.referenceNumber))
         })
 
+        it('should render page with outage banner if backened services are down or unhealthy', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          claimStoreServiceMock.healthy(false)
+          await request(app)
+            .get(claimPagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('There is a technical issue.</br>Some services may not be available.'))
+        })
+
+        it('should render page without outage banner if backened services are up and running', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          claimStoreServiceMock.healthy(true)
+          await request(app)
+            .get(claimPagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withoutText('There is a technical issue.</br>Some services may not be available.'))
+        })
+
+        it('should render page with proper status message when claim is in Create state but not yet issued', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId({ state: 'CREATE' })
+
+          await request(app)
+            .get(claimPagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Not yet issued', 'There is a technical issue. The defendant’s response may be delayed. Keep checking for any updates. Do not contact the service centre.'))
+        })
+
         context('when accessor is not the claimant', () => {
           it('should return forbidden', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId({

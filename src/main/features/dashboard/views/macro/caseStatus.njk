@@ -1,6 +1,7 @@
 {% from "./claimStatus/noReponse.njk" import
   noResponseForClaimantDashboard,
-  noResponseForDefendantDashboard %}
+  noResponseForDefendantDashboard,
+  delayInResponseResponseForClaimantDashboard %}
 {% from "./claimStatus/moreTimeRequested.njk" import
   moreTimeRequestedForClaimantDashboard,
   moreTimeRequestedForDefendantDashboard %}
@@ -128,6 +129,8 @@
     {{ claimSettledDashboard() }}
   {% elif status === ClaimStatus.NO_RESPONSE %}
     {{ noResponseForClaimantDashboard() }}
+  {% elif status === ClaimStatus.CREATE %}
+    {{ delayInResponseResponseForClaimantDashboard() }}
   {% elif status === ClaimStatus.MORE_TIME_REQUESTED %}
     {{ moreTimeRequestedForClaimantDashboard(claim) }}
   {% elif status === ClaimStatus.TRANSFERRED %}

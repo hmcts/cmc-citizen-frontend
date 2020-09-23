@@ -5,7 +5,8 @@
 
 {% from "./claimStatus/noReponse.njk" import
   noResponseForClaimantClaimDetails,
-  noResponseForDefendantClaimDetails %}
+  noResponseForDefendantClaimDetails,
+  delayInResponseForClaimantClaimDetails %}
 {% from "./claimStatus/moreTimeRequested.njk" import
   moreTimeRequestedForClaimantClaimDetails,
   moreTimeRequestedForDefendantClaimDetails %}
@@ -160,8 +161,10 @@
       {{ paidInFullCCJCancelledClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED %}
       {{ paidInFullCCJSatisfiedClaimantClaimDetails(claim) }}
-      {% elif state.status === ClaimStatus.NO_RESPONSE %}
+    {% elif state.status === ClaimStatus.NO_RESPONSE %}
       {{ noResponseForClaimantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.CREATE %}
+      {{ delayInResponseForClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.TRANSFERRED %}
       {{ claimTransferredClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.MORE_TIME_REQUESTED %}

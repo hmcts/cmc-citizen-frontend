@@ -93,6 +93,7 @@
     "webChat": true,
     "inversionOfControl": true,
     "warningBanner": false,
+    "outageBanner": false,
     "helpWithFees": false,
     "pcq":true,
     "signPostingCTSC": false,

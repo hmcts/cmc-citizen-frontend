@@ -14,7 +14,8 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const { externalId } = req.params
       const user: User = res.locals.user
+      const showOutageMessageOnConfimation = ! await claimStoreClient.healthy()
       const claim: Claim = await claimStoreClient.retrieveByExternalId(externalId, user)
 
-      res.render(Paths.confirmationPage.associatedView, { claim: claim })
+      res.render(Paths.confirmationPage.associatedView, { claim: claim, showOutageMessageOnConfimation })
     }))

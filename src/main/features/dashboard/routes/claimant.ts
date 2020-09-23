@@ -20,7 +20,7 @@ export default express.Router()
   .get(Paths.claimantPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
       const { externalId } = req.params
-
+      const showOutageMessage = ! await claimStoreClient.healthy()
       const claim = externalId !== draftExternalId ? await claimStoreClient.retrieveByExternalId(externalId, res.locals.user as User) : undefined
       const mediationDeadline: Moment = claim ? await claim.respondToMediationDeadline() : undefined
       const reconsiderationDeadline: Moment = claim ? await claim.respondToReconsiderationDeadline() : undefined
@@ -38,7 +38,8 @@ export default express.Router()
         reconsiderationDeadline: reconsiderationDeadline,
         isReviewOrderEligible: isReviewOrderEligible,
         respondToReviewOrderDeadline: respondToReviewOrderDeadline,
-        judgePilot: judgePilot
+        judgePilot: judgePilot,
+        showOutageMessage
       })
     }))
   .post(Paths.claimantPage.uri,

@@ -8,6 +8,7 @@
     "directionsQuestionnaire": true,
     "newDashboardStatus": false,
     "warningBanner": false,
+    "outageBanner": false,
     "inversionOfControl": true,
     "autoEnrollIntoNewFeature": true
   },

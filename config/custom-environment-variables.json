@@ -81,6 +81,7 @@
     "webChat": "FEATURE_WEB_CHAT",
     "inversionOfControl": "FEATURE_INVERSION_OF_CONTROL",
     "warningBanner": "FEATURE_WARNING_BANNER",
+    "outageBanner": "FEATURE_OUTAGE_BANNER",
     "helpWithFees": "FEATURE_HELP_WITH_FEES",
     "pcq": "FEATURE_PCQ",
     "signPostingCTSC": "FEATURE_SIGN_POSTING_CTSC",

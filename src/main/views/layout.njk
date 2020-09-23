@@ -16,6 +16,12 @@
   {% endif %}
 {% endblock %}
 
+{% block outage_message %}
+  {% if outageBanner and showOutageMessage %}
+    {% include "includes/outage_banner.njk" %}
+  {% endif %}
+{% endblock %}
+
 {% block proposition_header %}
   {% include "includes/propositional_navigation.njk" %}
 {% endblock %}

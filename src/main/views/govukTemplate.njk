@@ -76,6 +76,10 @@
       {% block warning_message %}{% endblock %}
     </div>
 
+    <div>
+      {% block outage_message %}{% endblock %}
+    </div>
+
     {% if form %}
       {% from "form.njk" import errorSummary %}
       {{ errorSummary(form) }}

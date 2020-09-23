@@ -5,6 +5,7 @@ import { sampleClaimIssueObj } from 'test/http-mocks/claim-store'
 import { initialTransitions } from 'dashboard/claims-state-machine/initial-transitions'
 import { MomentFactory } from 'shared/momentFactory'
 import { ResponseType } from 'claims/models/response/responseType'
+import { ActorType } from 'claims/models/claim-states/actor-type'
 
 describe('State Machine for the dashboard status before response', () => {
   describe('given the claim with no response', () => {
@@ -13,6 +14,16 @@ describe('State Machine for the dashboard status before response', () => {
       let claimState = initialTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('no-response')
+    })
+  })
+
+  describe('given the claim with no response and in create state', () => {
+    it('should extract the correct state for the claim created', () => {
+      const claim: Claim = new Claim().deserialize({ ...sampleClaimIssueObj, state: 'CREATE' })
+      let claimState = initialTransitions(claim)
+      claimState.findState(claimState)
+      expect(claimState.state).to.equal('delay-in-response-due-to-outage')
+      expect(claimState.getTemplate(ActorType.CLAIMANT).state).to.equal('delay-in-response-due-to-outage')
     })
   })
 

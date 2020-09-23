@@ -19,6 +19,7 @@ export default express.Router()
     const claimDraft: Draft<DraftClaim> = res.locals.claimDraft
     const responseDraft: Draft<ResponseDraft> = res.locals.responseDraft
     const user: User = res.locals.user
+    const showOutageMessage: Boolean = ! await claimStoreClient.healthy()
     const claimsAsClaimant: Claim[] = await claimStoreClient.retrieveByClaimantId(user)
     const claimDraftSaved: boolean = claimDraft.document && claimDraft.id !== 0
     const responseDraftSaved = responseDraft && responseDraft.document && responseDraft.id !== 0
@@ -31,6 +32,7 @@ export default express.Router()
       claimsAsClaimant: claimsAsClaimant,
       claimDraftSaved: claimDraftSaved,
       claimsAsDefendant: claimsAsDefendant,
-      responseDraftSaved: responseDraftSaved
+      responseDraftSaved: responseDraftSaved,
+      showOutageMessage
     })
   }))

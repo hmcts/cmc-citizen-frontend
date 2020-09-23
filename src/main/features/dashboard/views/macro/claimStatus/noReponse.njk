@@ -5,6 +5,17 @@
   {{ t('Wait for the defendant to respond') }}
 {% endmacro %}
 
+{% macro delayInResponseResponseForClaimantDashboard() %}
+  {{ t("Not yet issued") }}
+{% endmacro %}
+
+{% macro delayInResponseForClaimantClaimDetails(claim) %}
+  <div class="status-block">
+    <h2 class="heading-medium">{{ t("Not yet issued") }}</h2>
+    <p>{{ t('There is a technical issue. The defendant’s response may be delayed. Keep checking for any updates. Do not contact the service centre.') }}</p>
+  </div>
+{% endmacro %}
+
 {% macro noResponseForClaimantClaimDetails(claim) %}
   <div class="status-block">
     <h2 class="heading-medium">{{ t('Wait for the defendant to respond') }}</h2>
