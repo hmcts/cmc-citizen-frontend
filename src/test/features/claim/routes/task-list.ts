@@ -70,6 +70,17 @@ describe('Claim issue: task list page', () => {
         .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.newFeaturesConsentPage.uri))
     })
 
+    it('should render page and display number of sections completed and number of secsions pending', async () => {
+      idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+      draftStoreServiceMock.resolveFind('claim')
+      claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
+
+      await request(app)
+        .get(ClaimPaths.taskListPage.uri)
+        .set('Cookie', `${cookieName}=ABC`)
+        .expect(res => expect(res).to.be.successful.withText('Make a money claim', 'Application incomplete', 'You have completed 6 of 7 sections'))
+    })
+
     it('should render page when everything is fine when auto enroll feature is turned on', async () => {
       isAutoEnrollIntoNewFeatureEnabledStub.returns(true)
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')

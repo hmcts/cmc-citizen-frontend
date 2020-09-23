@@ -19,11 +19,11 @@
         <table class="claim-dashboard">
           <thead>
           <tr>
-            <th scope="col">{{ t('Claim number') }}</th>
-            <th scope="col">{{ t('Defendant name') }}</th>
-            <th scope="col">{{ t('Claim amount') }}</th>
+            <th>{{ t('Claim number') }}</th>
+            <th>{{ t('Defendant name') }}</th>
+            <th>{{ t('Claim amount') }}</th>
 
-            <th scope="col" class="mobile-hide">{{ t('Status') }}</th>
+            <th class="mobile-hide">{{ t('Status') }}</th>
           </tr>
           </thead>
           <tbody>
@@ -46,7 +46,7 @@
           {% for claim in claimsAsClaimant %}
             {% set claimantDashboardStatus = claim | dashboardStatusForClaimant %}
             <tr class="claims default mobile-table">
-              <td>{{ internalLink(claim.claimNumber, '/dashboard/' + claim.externalId + '/claimant') }}</td>
+              <td>{{ internalLink(claim.claimNumber, '/dashboard/' + claim.externalId + '/claimant',ariaLabel= claim.claimNumber + ' (Claim number) Claims you’ve made')}}</td>
               <td>{{ claim.claimData.defendant.name }}</td>
               <td>{{ claim.totalAmountTillToday | numeral }}</td>
               <td class="mobile-hide">
@@ -100,7 +100,7 @@
           {% for claim in claimsAsDefendant %}
             {% set defendantDashboardStatus = claim | dashboardStatusForDefendant %}
             <tr class="mobile-table">
-              <td>{{ internalLink(claim.claimNumber, DashboardPaths.defendantPage.evaluateUri({ externalId: claim.externalId })) }}</td>
+              <td>{{ internalLink(claim.claimNumber, DashboardPaths.defendantPage.evaluateUri({ externalId: claim.externalId }),ariaLabel= claim.claimNumber + ' (Claim number) Claims made against you') }}</td>
               <td>{{ claim.claimData.claimant.name }}</td>
               <td>{{ claim.totalAmountTillToday | numeral }}</td>
               <td class="mobile-hide">
