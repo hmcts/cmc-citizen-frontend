@@ -5,8 +5,6 @@ import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { Claim } from 'claims/models/claim'
 import { User } from 'idam/user'
 import { ErrorHandling } from 'shared/errorHandling'
-
-
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
 /* tslint:disable:no-default-export */
@@ -17,5 +15,4 @@ export default express.Router()
       const user: User = res.locals.user
       const claim: Claim = await claimStoreClient.retrieveByExternalId(externalId, user)
       res.render(Paths.confirmationPage.associatedView, { claim: claim })
-     
     }))
