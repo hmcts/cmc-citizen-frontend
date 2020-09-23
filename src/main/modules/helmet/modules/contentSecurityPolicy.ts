@@ -42,8 +42,7 @@ export class ContentSecurityPolicy {
           '\'unsafe-inline\''
         ],
         objectSrc: [self],
-        frameAncestors: ['\'self\''],
-        'form-action': ["'self'"]
+        frameAncestors: ['\'self\'']
       },
       browserSniff: true,
       setAllHeaders: true
