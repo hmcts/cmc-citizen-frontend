@@ -57,7 +57,7 @@ function testData () {
         state: 'CREATE'
       },
       claimantAssertions: ['000MC050', 'Not yet issued'],
-      defendantAssertions: ['000MC050', 'Respond to claim.', '(1 day remaining)']
+      defendantAssertions: ''
     },
     {
       status: 'claim issued',
@@ -284,14 +284,16 @@ describe('Dashboard page', () => {
           })
 
           testData().forEach(data => {
-            it(`should render dashboard: ${data.status}`, async () => {
-              draftStoreServiceMock.resolveFindNoDraftFound()
-              claimStoreServiceMock.resolveRetrieveByDefendantId(data.claim.referenceNumber, '1', data.claim, data.claimOverride)
-              await request(app)
-                .get(Paths.dashboardPage.uri)
-                .set('Cookie', `${cookieName}=ABC`)
-                .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
-            })
+            if(data.defendantAssertions) {
+              it(`should render dashboard: ${data.status}`, async () => {
+                draftStoreServiceMock.resolveFindNoDraftFound()
+                claimStoreServiceMock.resolveRetrieveByDefendantId(data.claim.referenceNumber, '1', data.claim, data.claimOverride)
+                await request(app)
+                  .get(Paths.dashboardPage.uri)
+                  .set('Cookie', `${cookieName}=ABC`)
+                  .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
+              })
+            }
           })
         })
       })
