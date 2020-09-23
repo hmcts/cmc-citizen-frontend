@@ -11,6 +11,7 @@ import { app } from 'main/app'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
+import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -38,7 +39,8 @@ describe('Claim issue: confirmation page', () => {
 
       it('should render page when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-
+        draftStoreServiceMock.resolveFind('claim')
+        draftStoreServiceMock.resolveDelete()
         await request(app)
           .get(ClaimPaths.confirmationPage.evaluateUri({ externalId: externalId }))
           .set('Cookie', `${cookieName}=ABC`)
