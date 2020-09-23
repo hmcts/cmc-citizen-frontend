@@ -5,7 +5,7 @@ import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { Claim } from 'claims/models/claim'
 import { User } from 'idam/user'
 import { ErrorHandling } from 'shared/errorHandling'
-import { DraftService } from 'services/draftService'
+
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
@@ -17,9 +17,5 @@ export default express.Router()
       const user: User = res.locals.user
       const claim: Claim = await claimStoreClient.retrieveByExternalId(externalId, user)
       res.render(Paths.confirmationPage.associatedView, { claim: claim })
-      const drafts = await new DraftService().find('=094§', '100', user.bearerToken, (value) => value)
-      drafts.forEach(async draft => {
-        await new DraftService().delete(draft.id, user.bearerToken)
-      })
-
+     
     }))
