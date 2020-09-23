@@ -122,7 +122,6 @@ ccd:
   ccd-case-management-web:
       nodejs:
         image: hmctspublic.azurecr.io/ccd/case-management-web:latest
-        ingressClass: traefik-no-proxy
         ingressHost: case-management-web-${SERVICE_FQDN}
         environment:
           IDAM_LOGIN_URL: https://idam-web-public.aat.platform.hmcts.net/login
