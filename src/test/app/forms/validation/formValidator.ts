@@ -77,6 +77,66 @@ describe('FormValidator', () => {
     })
   })
 
+  it('should trim postcode values from Address', async () => {
+    req.body = {
+      someString: 'abc\f\ndef',
+      someArray: [
+        'as\vdf',
+        'ghjk\b'
+      ],
+      address: {
+        someProperty: 'z\x1Bxc\x1Av',
+        someOtherProperty: 'tyu\ri',
+        postcode: ' EC1N 2HT'
+      }
+    }
+
+    await FormValidator.requestHandler(Object)(req, res, next)
+
+    chai.expect(req.body.model).to.deep.equal({
+      someString: 'abc\ndef',
+      someArray: [
+        'asdf',
+        'ghjk'
+      ],
+      address: {
+        someProperty: 'zxcv',
+        someOtherProperty: 'tyu\ri',
+        postcode: 'EC1N 2HT'
+      }
+    })
+  })
+
+  it('should trim postcode values from correspondence Address', async () => {
+    req.body = {
+      someString: 'abc\f\ndef',
+      someArray: [
+        'as\vdf',
+        'ghjk\b'
+      ],
+      correspondenceAddress: {
+        someProperty: 'z\x1Bxc\x1Av',
+        someOtherProperty: 'tyu\ri',
+        postcode: ' EC1N 2HT'
+      }
+    }
+
+    await FormValidator.requestHandler(Object)(req, res, next)
+
+    chai.expect(req.body.model).to.deep.equal({
+      someString: 'abc\ndef',
+      someArray: [
+        'asdf',
+        'ghjk'
+      ],
+      correspondenceAddress: {
+        someProperty: 'zxcv',
+        someOtherProperty: 'tyu\ri',
+        postcode: 'EC1N 2HT'
+      }
+    })
+  })
+
   it('should validate deserialized object', async () => {
     req.body = {}
 

@@ -9,25 +9,12 @@
     <div class="column-two-thirds">
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
-
-        <fieldset>
-          <legend class="visuallyhidden">
-            {{ t('Total amount you’re claiming') }}
-          </legend>
-
           <table class="table-form form-group">
-            <caption class="visuallyhidden"></caption>
-            <tfoot>
-            <tr>
-              <th scope="col"><span class="bold-small">{{ t('Total claim amount') }}</span></th>
-              <td class="numeric last"><span class="bold-medium">{{ interestTotal.totalAmountTillToday | numeral }}</span></td>
-            </tr>
-            </tfoot>
+            <caption class="visuallyhidden" aira-hidden="true">{{ heading }}</caption>
             <tbody>
             <tr>
               <th scope="row">{{ t('Claim amount') }}</th>
               <td class="numeric last">
-                <label class="visuallyhidden" for="amount">{{ t('Claim amount') }}</label>
                 <span class="font-small">{{ interestTotal.claimAmount | numeral }}</span>
               </td>
             </tr>
@@ -35,7 +22,6 @@
               <tr>
                 <th scope="row">{{ t('Interest to date') }}</th>
                 <td class="numeric last">
-                  <label class="visuallyhidden" for="amount">{{ t('Interest') }}</label>
                   <span class="font-small">{{ interestTotal.interestAmount | numeral }}</span>
                 </td>
               </tr>
@@ -43,17 +29,24 @@
             <tr>
               <th scope="row">{{ t('Claim fee') }}</th>
               <td class="numeric last">
-                <label class="visuallyhidden" for="amount">{{ t('Claim fee') }}</label>
                 <span class="font-small">{{ interestTotal.feeAmount | numeral }}</span>
               </td>
             </tr>
             </tbody>
+            <tfoot>
+            <tr>
+              <th scope="col"><span class="bold-small">{{ t('Total claim amount') }}</span></th>
+              <td class="numeric last">
+                <span class="bold-medium">{{ interestTotal.totalAmountTillToday | numeral }}</span>
+              </td>
+            </tr>
+          </tfoot>
           </table>
 
           <p>{{ t('If you settle out of court we won’t refund your claim fee. You can ask the defendant to pay back your claim fee as part of the settlement.') }}</p>
 
           <table class="table-form form-group">
-            <caption class="visuallyhidden"></caption>
+            <caption class="visuallyhidden" aira-hidden="true">Other fees</caption>
             <thead>
               <tr>
                 <th scope="col">{{ t('Other fees') }}</th>
@@ -73,8 +66,6 @@
           <p>{{ t('You don’t have to pay a hearing fee unless the claim goes to a hearing.') }}</p>
 
           {{ feesTable('How these fees are calculated', feeTableContent , showHearingFee = true) }}
-
-        </fieldset>
 
         {{ saveAndContinueButton() }}
       </form>
