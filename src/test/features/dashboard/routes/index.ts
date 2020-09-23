@@ -284,7 +284,7 @@ describe('Dashboard page', () => {
           })
 
           testData().forEach(data => {
-            if(data.defendantAssertions) {
+            if (data.defendantAssertions) {
               it(`should render dashboard: ${data.status}`, async () => {
                 draftStoreServiceMock.resolveFindNoDraftFound()
                 claimStoreServiceMock.resolveRetrieveByDefendantId(data.claim.referenceNumber, '1', data.claim, data.claimOverride)
