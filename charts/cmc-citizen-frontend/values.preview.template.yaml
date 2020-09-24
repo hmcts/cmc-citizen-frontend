@@ -118,6 +118,36 @@ ccd:
     postgresPassword: hmcts
     devMode: true
 
+  ccd-case-management-web:
+    nodejs:
+      image: hmctspublic.azurecr.io/ccd/case-management-web:latest
+      ingressHost: case-management-web-${SERVICE_FQDN}
+      environment:
+        APPINSIGHTS_INSTRUMENTATIONKEY:          00000000-0000-0000-0000-000000000000
+        ANNOTATION_API_URL:                      https://gateway-ccd.aat.platform.hmcts.net/em-anno
+        CCD_ACTIVITY_BATCH_COLLECTION_DELAY_MS:  1
+        CCD_ACTIVITY_MAX_REQUEST_PER_BATCH:      25
+        CCD_ACTIVITY_NEXT_POLL_REQUEST_MS:       5000
+        CCD_ACTIVITY_RETRY:                      5
+        CCD_ACTIVITY_URL:                        https://gateway-ccd.aat.platform.hmcts.net/activity
+        CCD_API_URL:                             https://gateway-ccd.aat.platform.hmcts.net/aggregated
+        CCD_DATA_URL:                            https://gateway-ccd.aat.platform.hmcts.net/data
+        CCD_GW_LOGOUT_URL:                       https://gateway-ccd.aat.platform.hmcts.net/logout
+        CCD_GW_OAUTH2_CLIENT_ID:                 ccd_gateway
+        CCD_GW_OAUTH2_URL:                       https://gateway-ccd.aat.platform.hmcts.net/oauth2
+        CCD_PAGE_SIZE:                           25
+        DM_URL:                                  https://gateway-ccd.aat.platform.hmcts.net/documents
+        DM_URL_REMOTE:                           ^https?://(?:api-gateway\.preprod\.dm\.reform\.hmcts\.net|dm-store-aat\.service\.core-compute-aat\.internal(?::\d+)?)/documents
+        IDAM_LOGIN_URL:                          https://idam-web-public.aat.platform.hmcts.net
+        PAYMENTS_URL:                            https://gateway-ccd.aat.platform.hmcts.net/payments
+        PAY_BULKSCAN_URL:                        https://gateway-ccd.aat.platform.hmcts.net/pay-bulkscan
+        POSTCODE_LOOKUP_URL:                     https://gateway-ccd.aat.platform.hmcts.net/addresses?postcode=$${postcode}
+        PRINT_SERVICE_URL:                       https://gateway-ccd.aat.platform.hmcts.net/print
+        PRINT_SERVICE_URL_REMOTE:                https://return-case-doc-ccd.nonprod.platform.hmcts.net
+        SHUTTER_REDIRECT_URL:                    https://xui-webapp-aat.service.core-compute-aat.internal
+        SHUTTER_REDIRECT_WAIT:                   10
+        WEBSITE_NODE_DEFAULT_VERSION:            ~12
+
   ccd-admin-web:
     nodejs:
       image: hmctspublic.azurecr.io/ccd/admin-web:latest
