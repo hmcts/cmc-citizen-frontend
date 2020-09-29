@@ -8,7 +8,7 @@
         {{ internalLink(t(serviceName), AppPaths.homePage.uri, id='proposition-name') }}
       {% endif %}
       <ul id="proposition-links" class="pull-right">
-        {% if isLoggedIn && !isFirstContactPath %}
+        {% if isLoggedIn and !isFirstContactPath %}
           <li>{{ internalLink(t('My account'), DashboardPaths.dashboardPage.uri) }}</li>
           <li>{{ internalLink(t('Sign out'), AppPaths.logoutReceiver.uri) }}</li>
         {% endif %}
