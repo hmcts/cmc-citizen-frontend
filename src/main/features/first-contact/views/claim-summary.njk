@@ -12,6 +12,7 @@
 {% set timelineRows = claim.claimData.timeline.getPopulatedRowsOnly() if claim.claimData.timeline %}
 
 {% block content %}
+{{ isLoggedIn }} {{ isFirstContactPath }}
   <div class="grid-row">
     <div class="column-two-thirds">
       <p><span class="bold-small">{{ t('Claim number:') }}</span> {{ referenceNumber }}</p>
