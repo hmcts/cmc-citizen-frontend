@@ -121,6 +121,7 @@ export default express.Router()
         if (authenticationToken) {
           user = await IdamClient.retrieveUserFor(authenticationToken)
           res.locals.isLoggedIn = true
+          res.locals.isFirstContactPath = false
           res.locals.user = user
           setAuthCookie(cookies, authenticationToken)
         }
@@ -132,7 +133,7 @@ export default express.Router()
         if (isDefendantFirstContactPinLogin(req)) {
           // re-set state cookie as it was cleared above, we need it in this case
           cookies.set(stateCookieName, req.query.state)
-          // setting isLoggedIn = true to remove the signout and the My Account link in the 'first-contact/claim-summary' page
+          // setting isFirstContactPath = true to remove the signout and the My Account link in the 'first-contact/claim-summary' page
           res.locals.isFirstContactPath = true
           return res.redirect(FirstContactPaths.claimSummaryPage.uri)
         } else {
