@@ -48,6 +48,7 @@ export class AuthorizationMiddleware {
               return accessDeniedCallback(req, res)
             } else {
               res.locals.isLoggedIn = true
+              res.locals.isFirstContactPath = false
               res.locals.user = user
               logger.debug(`Protected path - valid JWT & role - access to ${req.path} granted`)
               return next()
