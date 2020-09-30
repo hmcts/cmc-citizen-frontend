@@ -142,7 +142,7 @@
     "sinon-express-mock": "^2.2.1",
     "sonarqube-scanner": "^2.7.0",
     "supertest": "^4.0.2",
-    "ts-mockito": "^2.3.1",
+    "ts-mockito": "^2.6.1",
     "tslint": "^5.20.1",
     "tslint-config-standard": "^9.0.0",
     "urlencode": "^1.1.0",
