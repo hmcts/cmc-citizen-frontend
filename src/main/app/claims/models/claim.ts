@@ -225,8 +225,6 @@ export class Claim {
       return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ
     } else if (this.hasIntentionToProceedDeadlinePassed()) {
       return ClaimStatus.INTENTION_TO_PROCEED_DEADLINE_PASSED
-    } else if (this.isOconFormResponse()) {
-      return ClaimStatus.DEFENDANT_OCON_FORM_RESPONSE
     } else if (this.hasDefendantRejectedClaimWithDQs()) {
       return ClaimStatus.DEFENDANT_REJECTS_WITH_DQS
     } else if (this.hasClaimantAcceptedStatesPaid()) {
@@ -755,10 +753,6 @@ export class Claim {
   private hasIntentionToProceedDeadlinePassed (): boolean {
     return !this.claimantResponse && this.response && this.response.responseType === ResponseType.FULL_DEFENCE && MomentFactory.currentDateTime().isAfter(this.intentionToProceedDeadline.clone().hour(16)) &&
       this.isIntentionToProceedEligible()
-  }
-
-  private isOconFormResponse (): boolean {
-    return this.response !== undefined && this.response.responseMethod === ResponseMethod.OCON_FORM
   }
 
   private isOfflineResponse (): boolean {
