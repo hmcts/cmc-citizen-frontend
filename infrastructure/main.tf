@@ -3,7 +3,7 @@ provider "azurerm" {
 }
 
 locals {
-  vaultName = var.raw_product}-${var.env
+  vaultName = var.raw_product-var.env
 }
 
 data "azurerm_key_vault" "cmc_key_vault" {
