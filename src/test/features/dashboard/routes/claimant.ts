@@ -16,6 +16,7 @@ import { checkAuthorizationGuards } from 'test/features/dashboard/routes/checks/
 
 import { sampleClaimDraftObj } from 'test/http-mocks/draft-store'
 import { company, individual, organisation, soleTrader } from 'test/data/entity/party'
+import { ResponseMethod } from 'claims/models/response/responseMethod'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -59,6 +60,32 @@ describe('Dashboard - claimant page', () => {
             .get(claimPagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Claim number', claimStoreServiceMock.sampleClaimObj.referenceNumber))
+        })
+
+        it('should render page when everything is fine and not show download defendant responds when response is via ocon9x', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId({
+            response: {
+              responseType: 'FULL_DEFENCE',
+              responseMethod: ResponseMethod.OCON_FORM
+            }
+          })
+          await request(app)
+            .get(claimPagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withoutText('Defendant response:', 'Download response'))
+        })
+
+        it('should render page when everything is fine and show download defendant responds if its online response', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId({
+            response: {
+              responseType: 'FULL_DEFENCE',
+              responseMethod: ResponseMethod.DIGITAL
+            }
+          })
+          await request(app)
+            .get(claimPagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Defendant response:', 'Download response'))
         })
 
         context('when accessor is not the claimant', () => {

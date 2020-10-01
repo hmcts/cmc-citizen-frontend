@@ -86,6 +86,7 @@ export class Claim {
   claimDocuments?: ClaimDocument[]
   proceedOfflineReason: string
   transferContent?: TransferContents
+  isOconResponse: boolean
 
   get defendantOffer (): Offer {
     if (!this.settlement) {
@@ -431,6 +432,8 @@ export class Claim {
       if (input.proceedOfflineReason) {
         this.proceedOfflineReason = input.proceedOfflineReason
       }
+
+      this.isOconResponse = this.isOconFormResponse()
 
       return this
     }
