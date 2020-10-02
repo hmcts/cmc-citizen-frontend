@@ -82,7 +82,7 @@
     "ldclient-node": "^5.7.4",
     "lodash": "^4.17.15",
     "mime": "^2.4.4",
-    "moment": "^2.24.0",
+    "moment": "^2.29.0",
     "moment-precise-range-plugin": "^1.3.0",
     "nodelist-foreach-polyfill": "^1.2.0",
     "nunjucks": "^3.2.0",
@@ -103,7 +103,7 @@
   },
   "devDependencies": {
     "@hmcts/cmc-supported-browsers": "^1.0.1",
-    "@types/chai": "^4.2.9",
+    "@types/chai": "^4.2.12",
     "@types/chai-as-promised": "^7.1.2",
     "@types/chai-spies": "^1.0.1",
     "@types/jsonwebtoken": "^8.3.7",
