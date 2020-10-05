@@ -115,7 +115,7 @@
     "codacy-coverage": "3.4.0",
     "codeceptjs": "2.4.3",
     "codecov": "^3.6.5",
-    "debug": "^4.1.1",
+    "debug": "^4.2.0",
     "gulp-livereload": "^4.0.2",
     "gulp-nodemon": "^2.5.0",
     "gulp-plumber": "^1.2.1",
