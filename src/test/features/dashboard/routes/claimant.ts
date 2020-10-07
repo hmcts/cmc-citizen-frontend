@@ -21,6 +21,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 
 const draftPagePath = Paths.claimantPage.evaluateUri({ externalId: 'draft' })
 const claimPagePath = Paths.claimantPage.evaluateUri({ externalId: sampleClaimDraftObj.externalId })
+const defendantDetailsPagePath = Paths.defendantDetailsPage.evaluateUri({ externalId: sampleClaimDraftObj.externalId })
 
 describe('Dashboard - claimant page', () => {
   attachDefaultHooks(app)
@@ -40,12 +41,22 @@ describe('Dashboard - claimant page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Claim number', 'Draft'))
         })
+
         it('should inform claimant that documents will appear on claim submission', async () => {
           await request(app)
           .get('/dashboard/draft/claimant#documents')
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('Any documents will appear here after you submit a claim.'))
           .expect(res => expect(res).to.be.successful.withoutText('Download'))
+
+
+        it('should not show defendant details', async () => {
+          await request(app)
+            .get('/dashboard/draft/claimant#defendantDetails')
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Defendants\' details will be updated when claim is submitted.'))
+            .expect(res => expect(res).to.be.successful.withoutText('Address'))
+
         })
       })
 
@@ -66,6 +77,20 @@ describe('Dashboard - claimant page', () => {
             .get(claimPagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Claim number', claimStoreServiceMock.sampleClaimObj.referenceNumber))
+        })
+
+        it('should render defendant details', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+
+          await request(app)
+            .get(defendantDetailsPagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Defendant\'s details',
+                                                                  'Name', 'John Doe',
+                                                                  'Address', 'line1<br>line2<br>city<br>bb127nq',
+                                                                  'Correspondence Address', 'Not available',
+                                                                  'Email', 'johndoe@example.com',
+                                                                  'Telephone', 'Not available'))
         })
 
         context('when accessor is not the claimant', () => {

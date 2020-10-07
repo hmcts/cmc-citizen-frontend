@@ -1,0 +1,29 @@
+{% macro otherPartyDetails(otherParty, partyClaimData) %}
+
+  <h2 class="heading-medium no-top-margin">{{ otherParty }}'s details</h2>
+  <table class="govuk-table">
+    <tbody class="govuk-table__body">
+      <tr class="govuk-table__row">
+        <td class="govuk-table__cell--left">Name</td>
+        <td class="govuk-table__cell--right">{{ partyClaimData.name }}</td>
+      </tr>
+      <tr class="govuk-table__row">
+        <td class="govuk-table__cell--left">Address</td>
+        <td class="govuk-table__cell--right">{{ partyClaimData.address | formatAddress | default('Not available') | safe }}</td>
+      </tr>
+      <tr class="govuk-table__row">
+        <td class="govuk-table__cell--left">Correspondence Address</td>
+        <td class="govuk-table__cell--right">{{ partyClaimData.correspondenceAddress | formatAddress | default('Not available') }}</td>
+      </tr>
+      <tr class="govuk-table__row">
+        <td class="govuk-table__cell--left">Telephone</td>
+        <td class="govuk-table__cell--right">{{ partyClaimData.phone | default('Not available') }}</td>
+      </tr>
+      <tr class="govuk-table__row">
+        <td class="govuk-table__cell--left no-border-bottom">Email</td>
+        <td class="govuk-table__cell--right no-border-bottom">{{ partyClaimData.email | default('Not available') }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+{% endmacro %}

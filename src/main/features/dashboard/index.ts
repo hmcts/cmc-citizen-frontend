@@ -11,6 +11,7 @@ import { OAuthHelper } from 'idam/oAuthHelper'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 import { Paths } from 'dashboard/paths'
 import { Claim } from 'claims/models/claim'
+import { Address } from 'claims/models/address'
 import { ClaimStatusFlow } from 'dashboard/helpers/claimStatusFlow'
 import { app } from 'main/app'
 
@@ -34,6 +35,28 @@ function render (claim: Claim, type: string): string {
   }
 }
 
+function formatAddress (address: Address): string {
+  let formattedAddress: string
+  if (address) {
+    formattedAddress = append(formattedAddress, address.line1)
+    formattedAddress = append(formattedAddress, address.line2)
+    formattedAddress = append(formattedAddress, address.line3)
+    formattedAddress = append(formattedAddress, address.city)
+    formattedAddress = append(formattedAddress, address.postcode)
+  }
+  return formattedAddress
+}
+
+function append (baseText: string, textToAppend: string): string {
+  if (baseText === undefined && textToAppend) {
+    baseText = textToAppend
+  } else if (textToAppend) {
+    baseText += '<br>'
+    baseText += textToAppend
+  }
+  return baseText
+}
+
 export class DashboardFeature {
   enableFor (app: express.Express) {
     if (app.settings.nunjucksEnv) {
@@ -50,6 +73,7 @@ export class DashboardFeature {
         }
         app.settings.nunjucksEnv.filters.dashboardStatusForClaimant = (claim: Claim) => render(claim, 'claimant')
         app.settings.nunjucksEnv.filters.dashboardStatusForDefendant = (claim: Claim) => render(claim, 'defendant')
+        app.settings.nunjucksEnv.filters.formatAddress = formatAddress
       }
 
       if (app.settings.nunjucksEnv.globals) {

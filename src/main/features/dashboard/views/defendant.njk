@@ -1,4 +1,5 @@
 {% extends "layout.njk" %}
+{% from "./macro/partyDetails.njk" import otherPartyDetails %}
 {% from "./macro/caseHistory.njk" import caseHistoryForDefendantClaimDetails %}
 {% from "../../claim/views/macro/about-claim-widget.njk" import aboutClaimWidget %}
 {% from "internalLink.njk" import internalLink %}
@@ -52,6 +53,10 @@
   {% endif %}
 {% endset %}
 
+{% set claimantDetails %}
+  {{ otherPartyDetails('Claimant', claim.claimData.claimant) }}
+{% endset %}
+
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
@@ -74,6 +79,13 @@
             id: "documents",
             panel: {
               html: documents
+            }
+          },
+          {
+            label: "Claimant's details",
+            id: "claimantDetails",
+            panel: {
+              html: claimantDetails
             }
           }
         ]

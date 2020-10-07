@@ -6,10 +6,12 @@
   {% set otherPartyLabel = 'Defendant name:' %}
   {% set otherPartyName = claim.claimData.defendant.name %}
   {% set responseLabel = 'Defendant response:' %}
+  {% set otherPartyDetails = DashboardPaths.defendantDetailsPage %}
 {% elseif otherParty === 'claimant' %}
   {% set otherPartyLabel = 'Claimant name:' %}
   {% set otherPartyName = claim.claimData.claimant.name %}
   {% set responseLabel = 'Your response:' %}
+  {% set otherPartyDetails = DashboardPaths.claimantDetailsPage %}
 {% endif %}
 
 <div class="about-claim-widget">
@@ -17,7 +19,7 @@
   <ul class="font-xsmall list">
     <li>
       <strong class="bold">{{ t(otherPartyLabel) }}</strong>
-      <div class="block"> {{ internalLink(otherPartyName, DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId })) }}</div>
+      <div class="block"> {{ internalLink(otherPartyName, otherPartyDetails.evaluateUri({ externalId: claim.externalId })) }}</div>
     </li>
     <li>
       <strong class="bold">{{ t('Claim amount:') }}</strong>
