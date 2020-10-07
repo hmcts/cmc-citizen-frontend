@@ -48,7 +48,7 @@ describe('Dashboard - claimant page', () => {
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('Any documents will appear here after you submit a claim.'))
           .expect(res => expect(res).to.be.successful.withoutText('Download'))
-
+        })
 
         it('should not show defendant details', async () => {
           await request(app)
