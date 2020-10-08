@@ -86,6 +86,7 @@ export class Claim {
   claimDocuments?: ClaimDocument[]
   proceedOfflineReason: string
   transferContent?: TransferContents
+  isOconResponse: boolean
 
   get defendantOffer (): Offer {
     if (!this.settlement) {
@@ -225,8 +226,6 @@ export class Claim {
       return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ
     } else if (this.hasIntentionToProceedDeadlinePassed()) {
       return ClaimStatus.INTENTION_TO_PROCEED_DEADLINE_PASSED
-    } else if (this.isOconFormResponse()) {
-      return ClaimStatus.DEFENDANT_OCON_FORM_RESPONSE
     } else if (this.hasDefendantRejectedClaimWithDQs()) {
       return ClaimStatus.DEFENDANT_REJECTS_WITH_DQS
     } else if (this.hasClaimantAcceptedStatesPaid()) {
@@ -431,6 +430,8 @@ export class Claim {
       if (input.proceedOfflineReason) {
         this.proceedOfflineReason = input.proceedOfflineReason
       }
+
+      this.isOconResponse = this.isOconFormResponse()
 
       return this
     }
