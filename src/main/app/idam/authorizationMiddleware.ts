@@ -48,6 +48,12 @@ export class AuthorizationMiddleware {
               return accessDeniedCallback(req, res)
             } else {
               res.locals.isLoggedIn = true
+              // setting isFirstContactPath = true to remove the signout and the My Account link in the 'first-contact/claim-summary' page
+              if (req.url === '/first-contact/claim-summary') {
+                res.locals.isFirstContactPath = true
+              } else {
+                res.locals.isFirstContactPath = false
+              }
               res.locals.user = user
               logger.debug(`Protected path - valid JWT & role - access to ${req.path} granted`)
               return next()
