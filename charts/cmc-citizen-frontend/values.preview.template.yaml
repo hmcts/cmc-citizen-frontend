@@ -57,7 +57,7 @@ cmc-claim-store:
     imagePullPolicy: Always
     readinessDelay: 250  # ccd-stack will start much slower
     livenessDelay:  250  # ccd-stack will start much slower
-    keyVaults:
+    keyVaults: []
       cmc:
         resourceGroup: cmc
         secrets:
