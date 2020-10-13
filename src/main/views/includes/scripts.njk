@@ -26,4 +26,6 @@
 
 {% if antennawebChat %}
 <script src="{{ asset_paths['js'] }}/antenna-webchat-toggle.js"></script>
+<script src="{{ webchat_url|default('https://webchat-client.ctsc.hmcts.net/chat-client/1/app-es2015.js') }}" type=“module”></script>
+<script src="{{ webchat_url|default('https://webchat-client.ctsc.hmcts.net/chat-client/1/app-es5.js') }}"></script>
 {% endif %}
