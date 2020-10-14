@@ -97,7 +97,7 @@ function copyWebChatTemplate () {
     .pipe(gulp.dest(`${webChatDirectory}/css/`))
 
     gulp.src([
-      'src/main/public/assets/locale/locale_en-GB.json'
+      'src/main/public/assets/locale/*.json'
     ])
       .pipe(gulp.dest(`${antennaWebChatDirectory}/locale/`))
 }
