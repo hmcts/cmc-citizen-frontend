@@ -1,0 +1,51 @@
+{
+  "iconAltText": "Web chat icon",
+  "hideChat": "Hide",
+  "noAvailableAgents": "No agents are currently available",
+  "contactCenterClosed": "The Contact Center is closed",
+  "connectionLost": "Connection lost",
+  "connected": "Connected",
+  "failedToSendRequest": "Something failed while sending the request",
+  "form": {
+    "title": "Before I transfer you to an adviser, complete the form below",
+    "nameField": {
+      "title": "Name",
+      "placeholder": "Your name..."
+    },
+    "emailField": {
+      "title": "Email",
+      "placeholder": "Your email...",
+      "validationError": "Please enter a valid email address"
+    },
+    "caseIdField": {
+      "title": "Case Id",
+      "placeholder": "Your case Id..."
+    },
+    "serviceField": {
+      "title": "Service",
+      "placeholder": "Select service..."
+    },
+    "reasonForContactField": {
+      "title": "Reason for contact",
+      "placeholder": "Briefly tell us how we can help you..."
+    },
+    "transcriptField": {
+      "title": "Email the transcript to me"
+    },
+    "startChat": "Start chat"
+  },
+  "chat": {
+    "waitingForParticipant": "Waiting for participant...",
+    "ewtUpdateStatus": "An agent will be with you in approximately {{time}}",
+    "ewtUpdateTimestamp": "Last updated: {{update}}",
+    "ewtAgentAvailableSoon": "An agent will be with you in less than one minute",
+    "ewtLongWait": "An agent will be with you in {{hours}} hours, {{minutes}} minutes and {{seconds}} seconds",
+    "ewtShortWait": "An agent will be with you in {{minutes}} minutes and {{seconds}} seconds",
+    "messageFieldPlaceholder": "Your message...",
+    "sendMessage": "Send message",
+    "agentIsTyping": "Agent is typing...",
+    "conversationEnded": "The chat session has ended but you can start a new one if you need more help",
+    "startNewSession": "Start new session",
+    "endChat": "End chat"
+  }
+}
