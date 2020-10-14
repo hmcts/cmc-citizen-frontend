@@ -17,6 +17,7 @@ const appDirectory = `./src/main/common/components/imported`
 const assetsDirectory = './src/main/public'
 const stylesheetsDirectory = `${assetsDirectory}/stylesheets`
 const webChatDirectory = `${assetsDirectory}/webchat`
+const antennaWebChatDirectory = `./src/main/public/assets`
 const govUkFronendStylesheets = `${stylesheetsDirectory}/govuk-frontend`
 
 gulp.task('sass', (done) => {
@@ -94,6 +95,11 @@ function copyWebChatTemplate () {
     './node_modules/@hmcts/ctsc-web-chat/assets/css/*.css'
   ])
     .pipe(gulp.dest(`${webChatDirectory}/css/`))
+
+    gulp.src([
+      'src/main/public/assets/locale/locale_en-GB.json'
+    ])
+      .pipe(gulp.dest(`${antennaWebChatDirectory}/locale/`))
 }
 
 function copyGovUkTemplate () {
