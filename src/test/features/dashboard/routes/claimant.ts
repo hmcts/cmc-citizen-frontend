@@ -85,7 +85,7 @@ describe('Dashboard - claimant page', () => {
           await request(app)
             .get(claimPagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Not yet issued', 'There is a technical issue. The defendant’s response may be delayed. Keep checking for any updates. Do not contact the service centre.'))
+            .expect(res => expect(res).to.be.successful.withText('Not yet issued', 'There is a technical issue. The defendant’s response may be delayed. Keep checking for any updates. You do not need to contact the service centre.'))
         })
 
         context('when accessor is not the claimant', () => {

@@ -51,7 +51,7 @@ describe('Claim issue: confirmation page', () => {
         await request(app)
           .get(ClaimPaths.confirmationPage.evaluateUri({ externalId: externalId }))
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('There is a technical issue. The defendant’s response may be delayed. Keep checking for any updates. Do not contact the service centre.'))
+          .expect(res => expect(res).to.be.successful.withText('There is a technical issue. The defendant’s response may be delayed. Keep checking for any updates. You do not need to contact the service centre.'))
       })
 
       it('should render page but with outage message when all the backend services are up and healthy', async () => {
@@ -60,7 +60,7 @@ describe('Claim issue: confirmation page', () => {
         await request(app)
           .get(ClaimPaths.confirmationPage.evaluateUri({ externalId: externalId }))
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withoutText('There is a technical issue. The defendant’s response may be delayed. Keep checking for any updates. Do not contact the service centre.'))
+          .expect(res => expect(res).to.be.successful.withoutText('There is a technical issue. The defendant’s response may be delayed. Keep checking for any updates. You do not need to contact the service centre.'))
       })
 
     })
