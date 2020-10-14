@@ -51,7 +51,7 @@ idam-pr:
 cmc-claim-store:
   enabled: true
   java:
-    image: hmctspublic.azurecr.io/cmc/claim-store:pr-1938
+    image: hmctspublic.azurecr.io/cmc/claim-store:latest
     releaseNameOverride: ${SERVICE_NAME}-claim-store
     ingressHost: claim-store-${SERVICE_FQDN}
     imagePullPolicy: Always
@@ -118,14 +118,6 @@ ccd:
     postgresUsername: hmcts
     postgresPassword: hmcts
     devMode: true
-
-  ccd-case-management-web:
-      nodejs:
-        image: hmctspublic.azurecr.io/ccd/case-management-web:latest
-        ingressHost: case-management-web-${SERVICE_FQDN}
-        environment:
-          IDAM_LOGIN_URL: https://idam-web-public.aat.platform.hmcts.net/login
-          CCD_GATEWAY_BASE_URL: http://${SERVICE_NAME}-ccd-data-store-api
 
   ccd-admin-web:
     nodejs:
