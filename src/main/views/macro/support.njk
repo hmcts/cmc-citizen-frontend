@@ -8,7 +8,7 @@
 {% endmacro%}
 
 {% macro _antennawebChatWidget() %}
-    {% if antennawebChat %}        
+   {#  {% if antennawebChat %}        
         <web-chat class="hidden"
           chat-title="Money Claims Web Chat"
           url="webchat.ctsc.hmcts.net"
@@ -19,7 +19,7 @@
           page-name="Money Claims"
           route-point-identifier="Default" work-flow-type lease-time="24" priority="5" secure-connections="true"></web-chat>
         <button class="chat-button">Talk to an Agent</button>
-    {% endif %}
+    {% endif %} #}
 {% endmacro%}
 
 {% macro _emailWidget(email = supportEmailAddress) %}
