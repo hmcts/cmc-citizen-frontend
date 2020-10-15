@@ -8,10 +8,7 @@
 {% endmacro%}
 
 {% macro _antennawebChatWidget() %}
-    {% if antennawebChat %}
-{#         <script href=“#” src=“https://webchat-client.ctsc.hmcts.net/chat-client/1/app-es2015.js” type=“module”></script>
-        <script href=“#” src=“https://webchat-client.ctsc.hmcts.net/chat-client/1/app-es5.js” nomodule defer></script> #}
-        
+    {% if antennawebChat %}        
         <web-chat class="hidden"
           chat-title="Money Claims Web Chat"
           url="webchat.ctsc.hmcts.net"
