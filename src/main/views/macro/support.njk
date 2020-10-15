@@ -18,8 +18,8 @@
 {% macro _phoneWidget(phoneNumber = '0300 123 7050') %}
     <h2 class="heading-medium contact-us">{{ t('Telephone') }}</h2>
     <p>{{ t(phoneNumber) }}
-      <span class="block">{{ t("Monday to Thursday: 8.30am to 5pm.") }}</span>
-      <span class="block">{{ t("Friday: 8.30am to 4pm.") }}</span>
+      <span class="block">{{ t("Monday to Thursday, 8.30am to 5pm.") }}</span>
+      <span class="block">{{ t("Friday, 8.30am to 4pm.") }}</span>
       <span class="block">{{ _callCharges()}}</span>
     </p>
 {% endmacro %}
