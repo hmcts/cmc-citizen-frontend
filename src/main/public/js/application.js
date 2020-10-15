@@ -8,14 +8,4 @@ $(document).ready(function () {
   // to toggle hidden content
   var showHideContent = new GOVUK.ShowHideContent()
   showHideContent.init()
-
-  var web_Chat = document.querySelectorAll('web-chat');
-  if (web_Chat[0].getElementsByClassName('agent-message message-bubble').length > 0 || web_Chat[0].getElementsByClassName('message-bubble waiting-for-agent').length > 0)
-    {
-      const webChat = document.querySelector('web-chat');
-      webChat.classList.remove('hidden');
-      document.getElementsByClassName("contact-us-for-help")[0].setAttribute('open',true);
-    }
- 
-
 })
