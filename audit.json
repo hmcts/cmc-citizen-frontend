@@ -327,5 +327,20 @@
   "10104_User Agent Fuzzer_https://moneyclaims.aat.platform.hmcts.net/ruxitagentjs_ICA2QSVfjqru_10193200616095656.js_GET": "ignore",
   "10104_User Agent Fuzzer_https://moneyclaims.aat.platform.hmcts.net_GET": "ignore",
   "10021_X-Content-Type-Options Header Missing_https://moneyclaims.aat.platform.hmcts.net/ruxitagentjs_ICA2QSVfqru_10193200616095656.js_GET": "ignore",
-  "10021_X-Content-Type-Options Header Missing_https://moneyclaims.aat.platform.hmcts.net/ruxitagentjs_ICA2QSVfjqru_10193200616095656.js_GET": "ignore"
+  "10021_X-Content-Type-Options Header Missing_https://moneyclaims.aat.platform.hmcts.net/ruxitagentjs_ICA2QSVfjqru_10193200616095656.js_GET": "ignore",
+  "40021_SQL Injection - Oracle - Time Based_https://moneyclaims.aat.platform.hmcts.net/img/lib/gov.uk_logotype_crown_invert_trans.png?0.26.0_GET": "ignore",
+  "40021_SQL Injection - Oracle - Time Based_https://moneyclaims.aat.platform.hmcts.net/js/lib/ie.js?0.26.0_GET": "ignore",
+  "10104_User Agent Fuzzer_https://moneyclaims.aat.platform.hmcts.net/_GET": "ignore",
+  "40025_Proxy Disclosure_https://moneyclaims.aat.platform.hmcts.net/ruxitagentjs_ICA2QSVfjqru_10201200909073022.js_GET":"ignore",
+  "10096_Timestamp Disclosure - Unix_https://moneyclaims.aat.platform.hmcts.net/ruxitagentjs_ICA2QSVfjqru_10201200909073022.js_GET":"ignore",
+  "10096_Timestamp Disclosure - Unix_https://moneyclaims.aat.platform.hmcts.net/ruxitagentjs_ICA2QSVfjqru_10201200909073022.js_GET":"ignore",
+  "10096_Timestamp Disclosure - Unix_https://moneyclaims.aat.platform.hmcts.net/ruxitagentjs_ICA2QSVfjqru_10201200909073022.js_GET":"ignore",
+  "10109_Modern Web Application_https://moneyclaims.aat.platform.hmcts.net/ruxitagentjs_ICA2QSVfjqru_10201200909073022.js_GET":"ignore",
+  "10027_Information Disclosure - Suspicious Comments_https://moneyclaims.aat.platform.hmcts.net/ruxitagentjs_ICA2QSVfjqru_10201200909073022.js_GET":"ignore",
+  "10095_Backup File Disclosure_https://moneyclaims.aat.platform.hmcts.net/Copy%20(2)%20of%20ruxitagentjs_ICA2QSVfjqru_10201200909073022.js_GET":"ignore",
+  "10095_Backup File Disclosure_https://moneyclaims.aat.platform.hmcts.net/Copy%20(3)%20of%20ruxitagentjs_ICA2QSVfjqru_10201200909073022.js_GET":"ignore",
+  "10095_Backup File Disclosure_https://moneyclaims.aat.platform.hmcts.net/Copy%20of%20ruxitagentjs_ICA2QSVfjqru_10201200909073022.js_GET":"ignore",
+  "10098_Cross-Domain Misconfiguration_https://moneyclaims.aat.platform.hmcts.net/ruxitagentjs_ICA2QSVfjqru_10201200909073022.js_GET":"ignore",
+  "10021_X-Content-Type-Options Header Missing_https://moneyclaims.aat.platform.hmcts.net/ruxitagentjs_ICA2QSVfjqru_10201200909073022.js_GET":"ignore",
+  "10035_Strict-Transport-Security Header Not Set_https://moneyclaims.aat.platform.hmcts.net/ruxitagentjs_ICA2QSVfjqru_10201200909073022.js_GET":"ignore"
 }
