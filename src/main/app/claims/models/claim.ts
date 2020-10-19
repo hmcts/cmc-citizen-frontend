@@ -433,13 +433,12 @@ export class Claim {
       if (input.proceedOfflineReason) {
         this.proceedOfflineReason = input.proceedOfflineReason
       }
-      
+
       this.isOconResponse = this.isOconFormResponse()
 
       if (input.directionOrderType) {
         this.directionOrderType = input.directionOrderType
       }
-
       return this
     }
   }
