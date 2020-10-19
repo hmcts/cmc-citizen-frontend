@@ -668,6 +668,20 @@ describe('Claim', () => {
         expect(claim.stateHistory).to.have.lengthOf(2)
         expect(claim.stateHistory[0].status).to.equal(ClaimStatus.ORDER_DRAWN)
       })
+
+      it('should contain the claim status  BESPOKE_ORDER_DRAWN when judge has drawn the bespoke order', () => {
+        claim.respondedAt = moment()
+        claim.features = ['directionsQuestionnaire']
+        claim.response = {
+          paymentIntention: null,
+          responseType: 'FULL_DEFENCE',
+          freeMediation: 'no'
+        }
+        claim.directionOrderType = 'BESPOKE'
+
+        expect(claim.stateHistory).to.have.lengthOf(2)
+        expect(claim.stateHistory[0].status).to.equal(ClaimStatus.BESPOKE_ORDER_DRAWN)
+      })
     }
 
     context('should return CLAIMANT_REJECTED_STATES_PAID', () => {
