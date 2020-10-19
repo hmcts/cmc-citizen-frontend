@@ -84,9 +84,11 @@
               </div>
             </div>
           {% else %}
+
             <p>{{ t('The following court matches: ') }} {{ searchString }}</p>
             <p>Select requested court</p>
             <input type="hidden" name="alternativeOption" value="name">
+
             {% for court in courts %}
               {{ radioOption(form = form, label = court.name, name = 'alternativeCourtName', value = court.name, bold = true, checked = (form.valueFor('courtAccepted').option === YesNoOption.YES.option)) }}
               <details class="form-group analytics-click-event-trigger"
