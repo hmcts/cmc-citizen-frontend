@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { Paths } from 'directions-questionnaire/paths'
 import { Form } from 'forms/form'
-import { AlternativeCourtOption, HearingLocation } from 'directions-questionnaire/forms/models/hearingLocation'
+import { AlternativeCourtOption, HearingLocation, ValidationErrors } from 'directions-questionnaire/forms/models/hearingLocation'
 import { Draft } from '@hmcts/draft-store-client'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 import { Court } from 'court-finder-client/court'
@@ -110,7 +110,7 @@ export default express.Router()
               courtDetails.push(await Court.getCourtDetails(court.slug))
               renderPage(res, new Form<HearingLocation>(new HearingLocation()), true, courtDetails, nearestCourtDetails, searchParam, apiError)
             } else {
-              apiError = 'Provide a valid postcode'
+              apiError = ValidationErrors.NO_ALTERNATIVE_POSTCODE
               renderPage(res, new Form<HearingLocation>(new HearingLocation(
                 draft.document.hearingLocation.courtName, undefined, undefined, undefined, draft.document.hearingLocation.alternativeOption, draft.document.hearingLocation.alternativeCourtName,
                 draft.document.hearingLocation.alternativePostcode)), false, [], nearestCourtDetails, searchParam, apiError)
@@ -131,7 +131,7 @@ export default express.Router()
               }
               renderPage(res, new Form<HearingLocation>(new HearingLocation()), true, courtDetails, nearestCourtDetails, searchParam, apiError)
             } else {
-              apiError = 'Provide a valid court name'
+              apiError = ValidationErrors.NO_ALTERNATIVE_COURT_NAME
               renderPage(res, new Form<HearingLocation>(
                 new HearingLocation(
                   draft.document.hearingLocation.courtName, undefined, undefined, undefined, draft.document.hearingLocation.alternativeOption, draft.document.hearingLocation.alternativeCourtName,

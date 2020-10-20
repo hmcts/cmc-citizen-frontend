@@ -15,7 +15,7 @@ export class AlternativeCourtOption {
 }
 
 export class ValidationErrors {
-  static readonly NO_ALTERNATIVE_COURT_NAME = 'Provide a court name'
+  static readonly NO_ALTERNATIVE_COURT_NAME = 'Provide a valid court name'
   static readonly SELECT_ALTERNATIVE_OPTION = 'Select an alternative court option'
   static readonly NO_ALTERNATIVE_POSTCODE = 'Provide a valid postcode'
 }
