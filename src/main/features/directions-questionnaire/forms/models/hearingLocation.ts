@@ -27,7 +27,6 @@ export class HearingLocation {
   @IsValidPostcode()
   courtPostcode?: string
 
-  @ValidateIf(o => !!o.courtName && o.alternativeOption === undefined)
   @IsDefined({ message: GlobalValidationErrors.YES_NO_REQUIRED })
   courtAccepted?: YesNoOption
 

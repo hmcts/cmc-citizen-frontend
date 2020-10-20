@@ -153,12 +153,11 @@
                 </details>
             </div>
           {% endif %}
-
-          {% if courtName %}
-            <input type="hidden" name="courtName" value="{{ courtName }}">
-          {% endif %}
           {% if courtPostcode %}
             <input type="hidden" name="courtPostcode" value="{{ courtPostcode }}">
+          {% endif %}
+          {% if courtName %}
+            <input type="hidden" name="courtName" value="{{ courtName }}">
           {% endif %}
         </fieldset>
         {{ saveAndContinueButton() }}
