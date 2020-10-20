@@ -27,7 +27,7 @@
       <strong class="bold">{{ t('Claim details:') }}</strong>
       {{ internalLink(t('View claim'), ResponsePaths.claimDetailsPage.evaluateUri({ externalId: claim.externalId }), 'block') }}
     </li>
-    {% if showResponse and claim.response %}
+    {% if showResponse and claim.response and not claim.proceedViaPaperResponse %}
       <li>
         <strong class="bold">{{ t(responseLabel) }}</strong>
         {{ internalLink(t('Download response'), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }), 'block') }}

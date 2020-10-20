@@ -20,12 +20,29 @@
   </div>
 {% endmacro %}
 
-{% macro businessQueueDefendantClaimDetails() %}
-  {{ businessQueueClaimDetails() }}
+{% macro businessQueueViaPaperResponseClaimDetails() %}
+  <div class="status-block">
+    <h2 class="heading-medium">Your response has been sent to the County Court Business Centre (CCBC)</h2>
+    <p>CCBC will contact you by post within 10 days to tell you what happens next. </p>
+    <p>You can see the response in the claim documents. You can only view the response.</p>
+    <p>The progression of your case will not be affected by any deadlines previously set. <p>
+  </div>
 {% endmacro %}
 
-{% macro businessQueueClaimantClaimDetails() %}
-  {{ businessQueueClaimDetails() }}
+{% macro businessQueueDefendantClaimDetails(claim) %}
+  {% if claim.proceedViaPaperResponse %}
+    {{ businessQueueViaPaperResponseClaimDetails() }}
+  {% else %}
+    {{ businessQueueClaimDetails() }}
+  {% endif %}
+{% endmacro %}
+
+{% macro businessQueueClaimantClaimDetails(claim) %}
+  {% if claim.proceedViaPaperResponse %}
+    {{ businessQueueViaPaperResponseClaimDetails() }}
+  {% else %}
+    {{ businessQueueClaimDetails() }}
+  {% endif %}
 {% endmacro %}
 
 {% macro businessQueueClaimStatus() %}

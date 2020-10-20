@@ -61,6 +61,24 @@ describe('Dashboard - claimant page', () => {
             .expect(res => expect(res).to.be.successful.withText('Claim number', claimStoreServiceMock.sampleClaimObj.referenceNumber))
         })
 
+        it('should render page with proper status message when claim is in Business Queue state and paper response is reviewed: N9 form', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId({ state: 'BUSINESS_QUEUE', claimDocumentCollection: claimStoreServiceMock.paperResponseForm })
+
+          await request(app)
+            .get(claimPagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Your response has been sent to the County Court Business Centre (CCBC)', 'Your response has been sent to the County Court Business Centre (CCBC)'))
+        })
+
+        it('should render page with proper status message when claim is in Business Queue and there is no paper response review', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId({ state: 'BUSINESS_QUEUE' })
+
+          await request(app)
+            .get(claimPagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('We’ve sent this case to the County Court Business Centre', 'We’ve sent this case to the County Court Business Centre'))
+        })
+
         context('when accessor is not the claimant', () => {
           it('should return forbidden', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId({

@@ -129,6 +129,18 @@ export const sampleClaimDocuments = {
   }
 }
 
+export const paperResponseForm = {
+  scannedDocuments: [
+    {
+      id: '08c030fb-f260-446e-8633-8bbc75cd03f8',
+      fileName: '000MC258-ocon-form.pdf',
+      documentType: 'FORM',
+      subtype: 'N9',
+      deliveryDate: '2020-02-26T15:10:13.601'
+    }
+  ]
+}
+
 export const sampleClaimIssueObj = {
   id: 1,
   submitterId: '1',

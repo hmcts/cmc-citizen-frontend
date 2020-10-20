@@ -85,6 +85,7 @@ export class Claim {
   paperResponse: YesNoOption
   claimDocuments?: ClaimDocument[]
   proceedOfflineReason: string
+  proceedViaPaperResponse: boolean
   transferContent?: TransferContents
   directionOrderType: string
 
@@ -415,6 +416,7 @@ export class Claim {
         const scannedDocuments: ClaimDocument[] = input.claimDocumentCollection.scannedDocuments
           .filter(value => ScannedDocumentType[(value.documentType + '_' + value.subtype).toUpperCase()] !== undefined)
           .map((value) => {
+            this.proceedViaPaperResponse = this.proceedViaPaperResponse || ScannedDocumentType.PAPER_RESPONSE_FORMS.includes(value.subtype)
             return new ClaimDocument().deserializeScannedDocument(value)
           })
 
