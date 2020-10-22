@@ -50,10 +50,11 @@ web-chat.hidden + button.chat-button {
   font-size: 19px;
   font-weight: 400;
   line-height: 1.25;
-  padding: 0!important;
+  padding: 0 !important;
   text-decoration: underline;
   text-transform: none;
-  &.webChat:hover {
+
+  &:hover {
     color: $hover;
   }
 }
