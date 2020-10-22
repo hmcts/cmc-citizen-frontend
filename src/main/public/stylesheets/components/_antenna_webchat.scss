@@ -42,19 +42,18 @@ web-chat.hidden + button.chat-button {
 }
 
 .webChat {
-  background: none!important;
-  border: none;
+  background: none !important;
+  border: 0;
   color: $literal;
   cursor: pointer;
-  font-family: "nta", Arial, sans-serif;
+  font-family: 'nta', Arial, sans-serif;
   font-size: 19px;
   font-weight: 400;
   line-height: 1.25;
   padding: 0!important;
   text-decoration: underline;
   text-transform: none;
-}
-
-.webChat:hover {
-  color: $hover;
+  :hover {
+    color: $hover;
+  }
 }
