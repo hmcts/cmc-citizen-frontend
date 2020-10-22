@@ -9,9 +9,9 @@
 
 {% macro _antennawebChatWidget() %}
    {% if antennawebChat %}        
-        <a rel="noreferrer noopener" class="chat-button chat-link">{{  t('Chat online with an agent') }}</a>
-        <p> Monday to Thrusday, 8.30am to 5pm.<br/> 
-            Friday, 8.30am to 4pm.
+        <button class="webChat">Chat online with an agent</button>
+          <p> Monday to Thrusday, 8.30am to 5pm.<br/> 
+              Friday, 8.30am to 4pm.
         </p>
     {% endif %}
 {% endmacro%}
