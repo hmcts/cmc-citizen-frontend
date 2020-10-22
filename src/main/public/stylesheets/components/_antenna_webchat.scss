@@ -53,7 +53,7 @@ web-chat.hidden + button.chat-button {
   padding: 0!important;
   text-decoration: underline;
   text-transform: none;
-  :hover {
+  &.webChat:hover {
     color: $hover;
   }
 }
