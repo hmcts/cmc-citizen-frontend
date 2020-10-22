@@ -41,6 +41,10 @@ web-chat.hidden + button.chat-button {
   display: block;
 }
 
+.hide-chat {
+  display: none;
+}
+
 .webChat {
   background: none !important;
   border: 0;
