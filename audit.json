@@ -342,5 +342,6 @@
   "10095_Backup File Disclosure_https://moneyclaims.aat.platform.hmcts.net/Copy%20of%20ruxitagentjs_ICA2QSVfjqru_10201200909073022.js_GET":"ignore",
   "10098_Cross-Domain Misconfiguration_https://moneyclaims.aat.platform.hmcts.net/ruxitagentjs_ICA2QSVfjqru_10201200909073022.js_GET":"ignore",
   "10021_X-Content-Type-Options Header Missing_https://moneyclaims.aat.platform.hmcts.net/ruxitagentjs_ICA2QSVfjqru_10201200909073022.js_GET":"ignore",
-  "10035_Strict-Transport-Security Header Not Set_https://moneyclaims.aat.platform.hmcts.net/ruxitagentjs_ICA2QSVfjqru_10201200909073022.js_GET":"ignore"
+  "10035_Strict-Transport-Security Header Not Set_https://moneyclaims.aat.platform.hmcts.net/ruxitagentjs_ICA2QSVfjqru_10201200909073022.js_GET":"ignore",
+  "40025_Proxy Disclosure_https://moneyclaims.aat.platform.hmcts.net/_GET": "ignore"
 }
