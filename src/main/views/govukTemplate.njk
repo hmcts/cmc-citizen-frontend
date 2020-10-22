@@ -97,7 +97,9 @@
     {% block content %}{% endblock %}
     {% block contactForHelp %}
        {% include "includes/contact-us-for-help.njk" %}
-       <button class="chat-button">Talk to an Agent</button>
+        {% if antennawebChat %}        
+          <button class="chat-button">Talk to an Agent</button>
+        {% endif %}
     {% endblock %}
 
   </main>
