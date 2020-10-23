@@ -135,7 +135,7 @@ export const paperResponseForm = {
       id: '08c030fb-f260-446e-8633-8bbc75cd03f8',
       fileName: '000MC258-ocon-form.pdf',
       documentType: 'FORM',
-      subtype: 'N9',
+      subtype: 'N9a',
       deliveryDate: '2020-02-26T15:10:13.601'
     }
   ]

@@ -67,7 +67,7 @@ describe('Dashboard - claimant page', () => {
           await request(app)
             .get(claimPagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Your response has been sent to the County Court Business Centre (CCBC)', 'Your response has been sent to the County Court Business Centre (CCBC)'))
+            .expect(res => expect(res).to.be.successful.withText('We have received forms relating to your claim', 'Your claim will now continue offline', 'CCBC will contact you by post within 10 days to tell you what happens next'))
         })
 
         it('should render page with proper status message when claim is in Business Queue and there is no paper response review', async () => {
@@ -76,7 +76,7 @@ describe('Dashboard - claimant page', () => {
           await request(app)
             .get(claimPagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('We’ve sent this case to the County Court Business Centre', 'We’ve sent this case to the County Court Business Centre'))
+            .expect(res => expect(res).to.be.successful.withText('We’ve sent this case to the County Court Business Centre', 'Your online account won’t be updated - any further updates will be by post.', 'If you need to send any forms, letters or documents about the claim, send them to this address'))
         })
 
         context('when accessor is not the claimant', () => {
