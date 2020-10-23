@@ -59,6 +59,7 @@ describe('Claim issue: confirmation page', () => {
 
       it('should render page but with outage message when all the backend services are up and healthy', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+        draftStoreServiceMock.resolveFind('claim')
         claimStoreServiceMock.healthy(true)
         await request(app)
           .get(ClaimPaths.confirmationPage.evaluateUri({ externalId: externalId }))
