@@ -51,6 +51,7 @@ describe('Claim issue: confirmation page', () => {
       it('should render page but with outage message when some of backend service is down or unhealthy', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         claimStoreServiceMock.healthy(false)
+        draftStoreServiceMock.resolveFind('claim')
         await request(app)
           .get(ClaimPaths.confirmationPage.evaluateUri({ externalId: externalId }))
           .set('Cookie', `${cookieName}=ABC`)
