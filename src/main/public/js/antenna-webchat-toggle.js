@@ -14,13 +14,13 @@
             const metricsDetail = metrics.detail;
             const ccState = metricsDetail.contactCenterState;
             const availableAgents = metricsDetail.availableAgents;
-            if (ccState != "Open") {
+            if (ccState == "Open") {
                 document.getElementById("metrics").textContent = 'Web chat is now closed. Come back Monday to Thursday 8.30am to 5pm and Friday 8.30am to 4pm, or contact us by phone or email.';
                 button.classList.add('hidden');
                 buttonChat.classList.add('hidden');
-            } else if (availableAgents != 0)
+            } else if (availableAgents == 0)
             {
-                document.getElementById("metrics").textContent = 'No Agents are avalable right now, Come back later.';
+                document.getElementById("metrics").textContent = 'No agents are currently available, Come back later.';
                 button.classList.remove('hidden');
                 buttonChat.classList.remove('hidden');
             } 
