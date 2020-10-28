@@ -14,7 +14,11 @@ export function initialTransitions (claim: Claim): StateMachine {
   return new StateMachine({
     init: 'init',
     transitions: [
-
+      {
+        name: 'checkDelayDueToOutage',
+        from: InitialStates.INIT,
+        to: InitialStates.DELAYED_RESPONSE_DUE_TO_OUTAGE
+      },
       {
         name: 'checkNoResponse',
         from: InitialStates.INIT,
@@ -49,6 +53,10 @@ export function initialTransitions (claim: Claim): StateMachine {
 
       onBeforeCheckNoResponse () {
         return !claim.response
+      },
+
+      onBeforeCheckDelayDueToOutage () {
+        return !claim.response && claim.state === 'CREATE'
       },
 
       onBeforeCheckMoreTimeRequested () {

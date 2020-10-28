@@ -51,6 +51,15 @@ const fullDefenceClaim = {
 function testData () {
   return [
     {
+      status: 'claim created',
+      claim: claimStoreServiceMock.sampleClaimIssueObj,
+      claimOverride: {
+        state: 'CREATE'
+      },
+      claimantAssertions: ['000MC050', 'Not yet issued'],
+      defendantAssertions: ''
+    },
+    {
       status: 'claim issued',
       claim: claimStoreServiceMock.sampleClaimIssueObj,
       claimOverride: {
@@ -203,6 +212,25 @@ describe('Dashboard page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Continue with claim'))
         })
+
+        it('should render page with outage banner if backened services are down or unhealthy', async () => {
+          draftStoreServiceMock.resolveFind('claim')
+          claimStoreServiceMock.healthy(false)
+          await request(app)
+            .get(Paths.dashboardPage.uri)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('There is a technical issue.</br>Some services may not be available.'))
+        })
+
+        it('should render page without outage banner if backened services are up and running', async () => {
+          draftStoreServiceMock.resolveFind('claim')
+          claimStoreServiceMock.healthy(true)
+          await request(app)
+            .get(Paths.dashboardPage.uri)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withoutText('There is a technical issue.</br>Some services may not be available.'))
+        })
+
       })
 
       context('Dashboard Status', () => {
@@ -256,14 +284,16 @@ describe('Dashboard page', () => {
           })
 
           testData().forEach(data => {
-            it(`should render dashboard: ${data.status}`, async () => {
-              draftStoreServiceMock.resolveFindNoDraftFound()
-              claimStoreServiceMock.resolveRetrieveByDefendantId(data.claim.referenceNumber, '1', data.claim, data.claimOverride)
-              await request(app)
-                .get(Paths.dashboardPage.uri)
-                .set('Cookie', `${cookieName}=ABC`)
-                .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
-            })
+            if (data.defendantAssertions) {
+              it(`should render dashboard: ${data.status}`, async () => {
+                draftStoreServiceMock.resolveFindNoDraftFound()
+                claimStoreServiceMock.resolveRetrieveByDefendantId(data.claim.referenceNumber, '1', data.claim, data.claimOverride)
+                await request(app)
+                  .get(Paths.dashboardPage.uri)
+                  .set('Cookie', `${cookieName}=ABC`)
+                  .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
+              })
+            }
           })
         })
       })

@@ -26,7 +26,7 @@ nodejs:
     FEEDBACK_SURVEY_URL: http://www.smartsurvey.co.uk/s/not-a-real-citizen-service-survey/
     REPORT_PROBLEM_SURVEY_URL: http://www.smartsurvey.co.uk/s/not-a-real-citizen-service-survey/
 
-    # feature toggles should be removed when they are no longer needed
+    # feature toggles should be removed when they are no longer needed 
     # add them here if they are to be enabled everywhere
     # there should be no more than 2 or 3 at a time
     FEATURE_NEW_FEATURES_CONSENT: true
@@ -37,6 +37,7 @@ nodejs:
     FEATURE_INVERSION_OF_CONTROL: true
     FEATURE_PCQ: false
     FEATURE_SIGN_POSTING_CTSC: false
+    FEATURE_OUTAGE_BANNER: false
     AUTO_ENROLL_INTO_NEW_FEATURE: true
   keyVaults:
     cmc:

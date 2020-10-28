@@ -42,6 +42,15 @@ export class ClaimStoreClient {
     // Nothing to do
   }
 
+  healthy (): Promise<Boolean> {
+    return this.request
+    .get(`${claimApiBaseUrl}/healthy`)
+    .then(healthy => healthy)
+    .catch(e => {
+      return false
+    })
+  }
+
   savePaidInFull (externalId: string, submitter: User, draft: DraftPaidInFull): Promise<Claim> {
     return this.request
       .put(`${claimStoreApiUrl}/${externalId}/paid-in-full`, {

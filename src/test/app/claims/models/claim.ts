@@ -222,6 +222,12 @@ describe('Claim', () => {
       expect(claim.status).to.be.equal(ClaimStatus.NO_RESPONSE)
     })
 
+    it('should return CREATE when claim is create but not yet issued', () => {
+      claim.response = undefined
+      claim.state = 'CREATE'
+      expect(claim.status).to.be.equal(ClaimStatus.CREATE)
+    })
+
     it('should return ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE when a defendant has not paid immediately', () => {
       claim.response = {
         responseType: ResponseType.FULL_ADMISSION,

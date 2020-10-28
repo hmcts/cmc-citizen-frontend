@@ -11,6 +11,7 @@
     "newDashboardStatus": true,
     "inversionOfControl": true,
     "warningBanner": false,
+    "outageBanner": true,
     "helpWithFees": true,
     "pcq":true,
     "signPostingCTSC": false,

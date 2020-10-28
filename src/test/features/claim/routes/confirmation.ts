@@ -48,6 +48,26 @@ describe('Claim issue: confirmation page', () => {
           .expect(res => expect(res).to.be.successful.withText('Claim submitted'))
       })
 
+      it('should render page but with outage message when some of backend service is down or unhealthy', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+        claimStoreServiceMock.healthy(false)
+        draftStoreServiceMock.resolveFind('claim')
+        await request(app)
+          .get(ClaimPaths.confirmationPage.evaluateUri({ externalId: externalId }))
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('There is a technical issue. The defendant’s response may be delayed. Keep checking for any updates. You do not need to contact the service centre.'))
+      })
+
+      it('should render page but with outage message when all the backend services are up and healthy', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+        draftStoreServiceMock.resolveFind('claim')
+        claimStoreServiceMock.healthy(true)
+        await request(app)
+          .get(ClaimPaths.confirmationPage.evaluateUri({ externalId: externalId }))
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withoutText('There is a technical issue. The defendant’s response may be delayed. Keep checking for any updates. You do not need to contact the service centre.'))
+      })
+
     })
   })
 })
