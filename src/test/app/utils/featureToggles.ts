@@ -67,6 +67,16 @@ describe('FeatureToggles', () => {
     })
   })
 
+  describe('isAntennaWebChatEnabled', () => {
+    it('should return toggle if Antenna web chat toggle exists', async () => {
+      const mockLaunchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
+      const featureToggles = new FeatureToggles(mockLaunchDarklyClient)
+      let actual = toBoolean(config.get<boolean>(`featureToggles.antennawebChat`))
+      let result = await featureToggles.isAntennaWebChatEnabled()
+      expect(result).to.equal(actual)
+    })
+  })
+
   describe('isAutoEnrollIntoNewFeatureEnabled', () => {
     it('should return toggle if autoEnrollIntoNewFeature toggle exists', async () => {
       const mockLaunchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()

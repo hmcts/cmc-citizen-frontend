@@ -37,6 +37,7 @@
     "inversionOfControl": true,
     "warningBanner": false,
     "outageBanner": true,
+    "antennawebChat": true,
     "helpWithFees": true,
     "pcq": true,
     "autoEnrollIntoNewFeature": true

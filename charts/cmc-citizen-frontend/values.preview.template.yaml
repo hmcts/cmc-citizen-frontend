@@ -37,7 +37,8 @@ nodejs:
     # features
     FEATURE_FINE_PRINT: true
     FEATURE_NEW_DASHBOARD_STATUS: false
-    FEATURE_WEB_CHAT: true
+    FEATURE_WEB_CHAT: false
+    FEATURE_ANTENNA_WEB_CHAT: true
     PCQ_URL: http://localhost:4000
 
 # sub-charts configuration
