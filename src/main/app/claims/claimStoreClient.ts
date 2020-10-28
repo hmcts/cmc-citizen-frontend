@@ -157,8 +157,8 @@ export class ClaimStoreClient {
     }
 
     return requestPromiseApi(options)
-      .then(claim => {
-        return new Claim().deserialize(claim)
+      .then(newClaim => {
+        return new Claim().deserialize(newClaim)
       })
   }
 
