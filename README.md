@@ -73,7 +73,7 @@ $ yarn tests:a11y
 For test coverage:
 
 ```bash
-$ yarn tests:coverage
+$ yarn test:coverage
 ```
 
 For unit test coverage only:
