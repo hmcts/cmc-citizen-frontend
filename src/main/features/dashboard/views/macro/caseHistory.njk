@@ -42,6 +42,7 @@
 
 {% from "./claimStatus/orders.njk" import
   directionsOrderIssued,
+  bespokeDirectionsOrderIssued,
   reviewRequester,
   reviewReceiver %}
 
@@ -140,7 +141,7 @@
 {% from "./claimStatus/offlineResponse.njk" import
   offlineResponseForDefendantClaimDetails,
   offlineResponseForClaimantClaimDetails %}
-  
+
 {% from "./claimStatus/claimTransferred.njk" import
   claimTransferredDefendantClaimDetails,
   claimTransferredClaimantClaimDetails
@@ -272,6 +273,8 @@
       {{ claimRejectedWithDQsForClaimantClaimDetails(claim, mediationDeadline) }}
     {% elif state.status === ClaimStatus.ORDER_DRAWN %}
       {{ directionsOrderIssued(claim, MadeBy.CLAIMANT.value, reconsiderationDeadline, isReviewOrderEligible, judgePilot) }}
+    {% elif state.status === ClaimStatus.BESPOKE_ORDER_DRAWN %}
+      {{ bespokeDirectionsOrderIssued(claim) }}
     {% elif state.status === ClaimStatus.REVIEW_ORDER_REQUESTED %}
       {% if claim.reviewOrder.requestedBy === MadeBy.CLAIMANT.value %}
         {{ reviewRequester(claim, respondToReviewOrderDeadline) }}
@@ -410,6 +413,8 @@
       {{ directionsOrderIssued(claim, MadeBy.DEFENDANT.value, reconsiderationDeadline, isReviewOrderEligible, judgePilot) }}
     {% elif state.status === ClaimStatus.ORDER_DRAWN %}
       {{ directionsOrderIssued(claim, MadeBy.DEFENDANT.value, reconsiderationDeadline, isReviewOrderEligible, judgePilot) }}
+    {% elif state.status === ClaimStatus.BESPOKE_ORDER_DRAWN %}
+      {{ bespokeDirectionsOrderIssued(claim) }}
     {% elif state.status === ClaimStatus.INTENTION_TO_PROCEED_DEADLINE_PASSED %}
       {{ intentionToProceedPastDeadlineForDefendantClaimDetails(claim) }}
     {% endif %}

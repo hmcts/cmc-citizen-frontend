@@ -98,7 +98,9 @@
 {% from "./claimStatus/breachOfPaymentDefendant.njk" import CCJAfterBreakingSettlementAgreementClaimDetails %}
 {% from "./claimStatus/orders.njk" import
   directionsOrderIssuedClaimantDashboard,
+  directionsBespokeOrderIssuedClaimantDashboard,
   directionsOrderIssuedDefendantDashboard,
+  directionsBespokeOrderIssuedDefendantDashboard,
   directionsOrderReviewRequestedClaimantDashboard,
   directionsOrderReviewRequestedDefendantDashboard %}
 
@@ -237,6 +239,8 @@
     {{ claimRejectedWithDQsForClaimantDashboard(claim) }}
   {% elif status === ClaimStatus.ORDER_DRAWN %}
     {{ directionsOrderIssuedClaimantDashboard() }}
+  {% elif status === ClaimStatus.BESPOKE_ORDER_DRAWN %}
+    {{ directionsBespokeOrderIssuedClaimantDashboard() }}
   {% elif status === ClaimStatus.REVIEW_ORDER_REQUESTED %}
     {{ directionsOrderReviewRequestedClaimantDashboard(claim) }}
   {% elif status === ClaimStatus.INTENTION_TO_PROCEED_DEADLINE_PASSED %}
@@ -361,6 +365,8 @@
     {{ claimRejectedWithDQsForDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.ORDER_DRAWN %}
     {{ directionsOrderIssuedDefendantDashboard() }}
+  {% elif status === ClaimStatus.BESPOKE_ORDER_DRAWN %}
+    {{ directionsBespokeOrderIssuedDefendantDashboard() }}
   {% elif status === ClaimStatus.REVIEW_ORDER_REQUESTED %}
     {{ directionsOrderReviewRequestedDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.INTENTION_TO_PROCEED_DEADLINE_PASSED %}

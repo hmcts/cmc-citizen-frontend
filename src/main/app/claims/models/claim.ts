@@ -86,6 +86,7 @@ export class Claim {
   claimDocuments?: ClaimDocument[]
   proceedOfflineReason: string
   transferContent?: TransferContents
+  directionOrderType: string
 
   get defendantOffer (): Offer {
     if (!this.settlement) {
@@ -185,6 +186,8 @@ export class Claim {
       } else {
         return ClaimStatus.ORDER_DRAWN
       }
+    } else if (this.hasBespokeOrderBeenDrawn()) {
+      return ClaimStatus.BESPOKE_ORDER_DRAWN
     } else if (this.isOfflineResponse()) {
       return ClaimStatus.DEFENDANT_PAPER_RESPONSE
     } else if (this.checkProceedOfflineReason()) {
@@ -432,6 +435,10 @@ export class Claim {
 
       if (input.proceedOfflineReason) {
         this.proceedOfflineReason = input.proceedOfflineReason
+      }
+
+      if (input.directionOrderType) {
+        this.directionOrderType = input.directionOrderType
       }
 
       return this
@@ -747,6 +754,10 @@ export class Claim {
 
   private hasOrderBeenDrawn (): boolean {
     return !!this.directionOrder
+  }
+
+  private hasBespokeOrderBeenDrawn (): boolean {
+    return this.directionOrderType === 'BESPOKE'
   }
 
   public isIntentionToProceedEligible (): boolean {
