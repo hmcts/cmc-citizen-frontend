@@ -67,7 +67,7 @@ describe('Dashboard - claimant page', () => {
           await request(app)
             .get(claimPagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('We have received forms relating to your claim', 'Your claim will now continue offline', 'CCBC will contact you by post within 10 days to tell you what happens next'))
+            .expect(res => expect(res).to.be.successful.withText('We have received forms relating to your claim', 'Your claim will now continue offline', 'County Court Business Centre will contact you by post within 10 days to tell you what happens next'))
         })
 
         it('should render page with proper status message when claim is in Business Queue and there is no paper response review', async () => {
