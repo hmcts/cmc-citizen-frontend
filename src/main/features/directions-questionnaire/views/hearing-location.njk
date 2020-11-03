@@ -90,10 +90,9 @@
 
             <p>{{ t('The following court matches: ') }} {{ searchString }}</p>
             <p>Select requested court</p>
-            <input type="hidden" name="alternativeOption" value="name">
 
             {% for court in courts %}
-              {{ radioOption(form = form, label = court.name, name = 'alternativeCourtName', value = court.name, bold = true, checked = (form.valueFor('courtAccepted').option === YesNoOption.YES.option)) }}
+              {{ radioOption(form = form, label = court.name, name = 'alternativeCourtSelected', value = court.name, bold = true) }}
               <details class="form-group analytics-click-event-trigger"
                        data-event-label="Court-Facilities: Facilities of the chosen court.">
                 <summary>
@@ -113,16 +112,15 @@
               form = form,
               label = heading,
               labelForScreenReadersOnly = true,
-              name = 'courtAccepted',
+              name = 'alternativeCourtSelected',
               options = [
                 {
                   label: 'No, I’ll choose another',
-                  value: YesNoOption.NO.option,
-                  checked: form.valueFor('courtAccepted').option === YesNoOption.NO.option
+                  value: 'no'
                 }
               ]
             ) }}
-            <div class="js-hidden" id="courtAccepted-no">
+            <div class="js-hidden" id="alternativeCourtSelected-no">
               <h2 class="heading-medium">{{ t('Choose another court') }}</h2>
               {{ radioOption(form = form, label = 'Search by postcode', name = 'alternativeOption', value = 'postcode',
               checked = form.valueFor('alternativeOption') === 'postcode', bold = true) }}
@@ -136,8 +134,8 @@
                {{ textInput(label = 'Enter a court name or the name of a place', form = form, name = 'alternativeCourtName', inputClass = 'full-width') }}
               </div>
 
-              {{ radioOption(form = form, label = nearestCourt.name, name = 'alternativeOption', value = 'nearestCourt',
-                 bold = true, checked = (form.valueFor('courtAccepted').option === YesNoOption.YES.option)) }}
+              {{ radioOption(form = form, label = nearestCourt.name, name = 'alternativeOption', value = 'nearestCourtSelected',
+                 bold = true, checked = (form.valueFor('alternativeOption') === 'nearestCourtSelected')) }}
                 <details class="form-group analytics-click-event-trigger"
                         data-event-label="Court-Facilities: Facilities of the chosen court.">
                  <summary>
