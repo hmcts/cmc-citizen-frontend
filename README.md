@@ -124,6 +124,6 @@ warning The case-insensitive file ..\cmc-citizen-frontend\node_modules\nyc\node_
 We get a fully functional environment in Azure Kubernetes (AKS) per pull request. For more
 info see: https://tools.hmcts.net/confluence/display/ROC/AKS+-+Azure+Managed+Kubernetes
 
-## License ##
+## License 
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) file for details
