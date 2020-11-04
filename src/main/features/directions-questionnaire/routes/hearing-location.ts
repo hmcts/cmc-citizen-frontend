@@ -107,7 +107,7 @@ export default express.Router()
             } else {
               apiError = ValidationErrors.NO_ALTERNATIVE_POSTCODE
               renderPage(res, new Form<HearingLocation>(new HearingLocation(
-                draft.document.hearingLocation.courtName, draft.document.hearingLocation.alternativePostcode, draft.document.hearingLocation.facilities, YesNoOption.NO, draft.document.hearingLocation.alternativeOption, draft.document.hearingLocation.alternativeCourtName,
+                draft.document.hearingLocation.courtName, undefined, draft.document.hearingLocation.facilities, YesNoOption.NO, draft.document.hearingLocation.alternativeOption, draft.document.hearingLocation.alternativeCourtName,
                 draft.document.hearingLocation.alternativePostcode, undefined)), false, [], undefined, searchParam, apiError)
             }
           } else if ((form.model.courtAccepted === YesNoOption.NO && form.model.alternativeOption === AlternativeCourtOption.BY_NAME)
@@ -131,7 +131,7 @@ export default express.Router()
               apiError = ValidationErrors.NO_ALTERNATIVE_COURT_NAME
               renderPage(res, new Form<HearingLocation>(
                 new HearingLocation(
-                draft.document.hearingLocation.courtName, draft.document.hearingLocation.alternativePostcode, draft.document.hearingLocation.facilities, YesNoOption.NO, draft.document.hearingLocation.alternativeOption, draft.document.hearingLocation.alternativeCourtName,
+                draft.document.hearingLocation.courtName, undefined, draft.document.hearingLocation.facilities, YesNoOption.NO, draft.document.hearingLocation.alternativeOption, draft.document.hearingLocation.alternativeCourtName,
                 draft.document.hearingLocation.alternativePostcode, undefined)), false, [], undefined, searchParam, apiError)
             }
           } else {
