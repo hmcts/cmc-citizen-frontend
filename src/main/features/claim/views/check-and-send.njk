@@ -104,6 +104,9 @@
         {% else %}
           {{ partyDetailRow('Interest rate', t('I don’t want to claim interest'), paths.interestPage.uri) }}
         {% endif %}
+        {% if helpWithFeesFeature %}
+          {{ partyDetailRow('Help With Fees reference number', draftClaim.helpWithFees.helpWithFeesNumber if (draftClaim.helpWithFees is defined and draftClaim.helpWithFees.helpWithFeesNumber is defined) else t('None'), paths.helpWithFeesPage.uri, bold = true) }}
+        {% endif %}
       </dl>
 
       <h2 class="govuk-heading-m">{{ t("Total amount") }}</h2>
@@ -132,43 +135,6 @@
         {% endfor %}
 
       </dl>
-      {% endif %}
-    {% else %}
-      {{ row('Interest rate', t('I don’t want to claim interest'), paths.interestPage.uri, bold = true) }}
-    {% endif %}
-    {% if helpWithFeesFeature %}
-      {{ row('Help With Fees reference number', draftClaim.helpWithFees.helpWithFeesNumber if (draftClaim.helpWithFees is defined and draftClaim.helpWithFees.helpWithFeesNumber is defined) else t('None'), paths.helpWithFeesPage.uri, bold = true) }}
-    {% endif %}
-    {{ tableEnd() }}
-
-    {{ tableStart('totalAmount', 'Total amount') }}
-    {{ row('Claim amount', claimAmountTotal.claimAmount | numeral, bold = true) }}
-    {% if (claimAmountTotal.interestAmount) %}
-      {{ row('Interest to date', claimAmountTotal.interestAmount | numeral, bold = true) }}
-    {% endif %}
-    {{ row('Claim fee', claimAmountTotal.feeAmount | numeral, bold = true) }}
-    {{ row('Total',  claimAmountTotal.totalAmountTillToday | numeral, bold = true) }}
-    {{ tableEnd() }}
-
-    {{ tableStart('claimDetails', 'Claim details') }}
-    {{ row('Why you believe you’re owed the money:', draftClaim.reason.reason, paths.reasonPage.uri, bold = true ) }}
-    {{
-      timelineCheckAndSend(
-        header = 'Timeline of what happened',
-        timeline = draftClaim.timeline.getPopulatedRowsOnly(),
-        url = paths.timelinePage.uri
-      )
-    }}
-    {{
-      evidenceCheckAndSend(
-        header = 'Your evidence (optional)',
-        evidence = draftClaim.evidence.getPopulatedRowsOnly(),
-        url = paths.evidencePage.uri
-      )
-    }}
-    {{ tableEnd() }}
-
-    <div class="column-two-thirds">
       <div class="form-group">
         {{ statementOfTruthUpdated(
             form,
