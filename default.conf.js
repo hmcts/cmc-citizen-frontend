@@ -11,7 +11,7 @@ exports.config = {
   teardownAll: tearDownFn,
   tests: './src/integration-test/tests/**/*_test.*',
   output: './output',
-  timeout: 10000,
+  timeout: 20000,
   multiple: {
     parallel: {
       chunks: parseInt(process.env.CHUNKS || '3')
