@@ -3,6 +3,7 @@ nodejs:
   applicationPort: 3000
   memoryRequests: 512Mi
   memoryLimits: 1024Mi
+  cpuRequests: "1000m"
   cpuLimits: 1
   aadIdentityName: money-claims
   environment:
