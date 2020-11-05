@@ -4,7 +4,7 @@ nodejs:
   memoryRequests: 512Mi
   memoryLimits: 1024Mi
   cpuRequests: "1000m"
-  cpuLimits: 1
+  cpuLimits: "2500m"
   aadIdentityName: money-claims
   environment:
     NODE_ENV: production
