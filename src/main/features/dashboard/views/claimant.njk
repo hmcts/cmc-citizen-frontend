@@ -70,8 +70,21 @@
         {% if claim.claimNumber %}
           <h2 class="heading-medium no-bottom-margin">{{ claim.claimData.claimant.name }}
             v {{ claim.claimData.defendant.name }}</h2>
+        {% elseif claim.ccdCaseId %}
+          <h2 class="heading-medium no-bottom-margin">{{ claim.claimData.claimant.name }}
+            v {{ claim.claimData.defendant.name }}</h2>
         {% endif %}
-        <span class="font-xsmall">{{ t('Claim number:') }} {{ claim.claimNumber if claim else 'Draft' }}</span>
+        {% if claim.helpWithFeesNumber %}
+                <span class="font-xsmall">{{ t('Claim number:') }}
+                  {% set dash = joiner("-") %}
+                  {% for batch in claim.ccdCaseId | string | batch(4) -%}
+                      {{ dash() }}{% for items in batch -%}{{ items }}
+                      {%- endfor %}
+                  {%- endfor %}
+                </span>
+                {% else %}
+                  <span class="font-xsmall">{{ t('Claim number:') }} {{ claim.claimNumber if claim else 'Draft' }}</span>
+                {% endif %}
       </div>
       {{ govukTabs({
         classes: 'tab-section',

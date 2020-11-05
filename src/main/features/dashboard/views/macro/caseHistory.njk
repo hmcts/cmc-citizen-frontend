@@ -146,6 +146,10 @@
   claimTransferredClaimantClaimDetails
 %}
 
+{% from "./claimStatus/helpWithFees.njk" import
+  helpWithFeesValidationClaimStatus, invalidHelpWithFeesValidationClaimStatus
+%}
+
 {% from "./claimStatus/businessQueue.njk" import
   businessQueueDefendantClaimDetails,
   businessQueueClaimantClaimDetails
@@ -161,7 +165,11 @@
       {{ paidInFullCCJCancelledClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED %}
       {{ paidInFullCCJSatisfiedClaimantClaimDetails(claim) }}
-      {% elif state.status === ClaimStatus.NO_RESPONSE %}
+    {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.state === 'AWAITING_RESPONSE_HWF' %}
+      {{ invalidHelpWithFeesValidationClaimStatus(claim) }}
+    {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber %}
+      {{ helpWithFeesValidationClaimStatus(claim) }}
+    {% elif state.status === ClaimStatus.NO_RESPONSE %}
       {{ noResponseForClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.TRANSFERRED %}
       {{ claimTransferredClaimantClaimDetails(claim) }}

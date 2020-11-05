@@ -2,7 +2,8 @@
 {% from "form.njk" import submitButton, errorSummary %}
 {% from "support.njk" import supportWidget %}
 {% from "internalLink.njk" import internalLink %}
-
+{% from "./macro/claim-confirmation.njk" import claimConfirmation %}}
+{% from "./macro/claim-hwf-confirmation.njk" import claimHwfConfirmation %}}
 {% set headingVisible = false %}
 {% set heading = 'Confirmation' %}
 
@@ -36,14 +37,16 @@
       <h2 class="heading-medium">{{ t('If the defendant pays you') }}</h2>
       <p>{{ t('You need to sign in to your account to tell us you’ve been paid.') }}</p>
 
+      {% if claim.state === "HWF_APPLICATION_PENDING" %}
+        {{ claimHwfConfirmation(claim) }}
+      {% else %}
+        {{ claimConfirmation(claim) }}
+      {% endif %}
+      
       {% include "includes/service-survey-link-claimant.njk" %}
-
       {{ internalLink(t('Go to your account'), DashboardPaths.dashboardPage.uri, 'button') }}
-
       {{ supportWidget() }}
-
     </div>
-
   </div>
 
 {% endblock %}
