@@ -87,7 +87,7 @@
     "nodelist-foreach-polyfill": "^1.2.0",
     "nunjucks": "^3.2.0",
     "nunjucks-numeral-filter": "0.0.2",
-    "otp": "^0.1.3",
+    "otp": "^1.0.1",
     "reflect-metadata": "^0.1.13",
     "request": "^2.88.2",
     "request-promise-native": "^1.0.8",
