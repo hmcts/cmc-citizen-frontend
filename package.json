@@ -93,7 +93,7 @@
     "request-promise-native": "^1.0.8",
     "require-directory": "^2.1.1",
     "serve-favicon": "^2.5.0",
-    "string.prototype.startswith": "^0.2.0",
+    "string.prototype.startswith": "^1.0.0",
     "to-boolean": "^1.0.0",
     "ts-node": "^8.6.2",
     "tsconfig-paths": "^3.9.0",
