@@ -26,6 +26,10 @@
           {% set courtName = form.valueFor('courtName') %}
           {% set courtPostcode = form.valueFor('courtPostcode') %}
           {% set courtFacilities = form.valueFor('facilities') %}
+          {% set courtDetails = form.valueFor('courtDetails') %}
+          {% set searchParam = form.valueFor('searchParam') %}
+          {% set nearestCourt = form.valueFor('nearestCourt') %}
+          {% set searchLoop = form.valueFor('searchLoop') %}
            {% if not resultPage %}
             {% if courtPostcode %}
               <p>{{ t('The nearest court to {{ courtPostcode }} is {{ courtName }}', { courtPostcode: courtPostcode, courtName: courtName }) }}</p>
@@ -88,7 +92,7 @@
             </div>
           {% else %}
 
-            <p>{{ t('The following court matches: ') }} {{ searchString }}</p>
+            <p>{{ t('The following court matches: ') }} {{ searchParam }}</p>
             <p>Select requested court</p>
 
             {% for court in courts %}
@@ -125,12 +129,14 @@
               {{ radioOption(form = form, label = 'Search by postcode', name = 'alternativeOption', value = 'postcode',
               checked = form.valueFor('alternativeOption') === 'postcode', bold = true) }}
               <div class="form-group panel panel-border-narrow js-hidden " id="alternativeOption-postcode" aria-hidden="false">
+               {{ apiErrorPostCodeField(error) }}
                {{ textInput(label = 'Postcode', form = form, name = 'alternativePostcode', inputClass = 'form-control-1-3') }}
               </div>
 
               {{ radioOption(form = form, label = 'Find and select a court', name = 'alternativeOption', value = 'name',
               checked = form.valueFor('alternativeOption') === 'name', bold = true) }}
               <div class="form-group panel panel-border-narrow js-hidden " id="alternativeOption-name" aria-hidden="false">
+              {{ apiErrorCourtNameField(error) }}
                {{ textInput(label = 'Enter a court name or the name of a place', form = form, name = 'alternativeCourtName', inputClass = 'full-width') }}
               </div>
 
@@ -156,6 +162,18 @@
           {% endif %}
           {% if courtName %}
             <input type="hidden" name="courtName" value="{{ courtName }}">
+          {% endif %}
+          {% if courtDetails %}
+            <input type="hidden" name="courtDetails" value="{{ courtDetails }}">
+          {% endif %}
+          {% if searchParam %}
+            <input type="hidden" name="searchParam" value="{{ searchParam }}">
+          {% endif %}
+          {% if nearestCourt %}
+            <input type="hidden" name="nearestCourt" value="{{ nearestCourt }}">
+          {% endif %}
+          {% if searchLoop %}
+            <input type="hidden" name="searchLoop" value="{{ searchLoop }}">
           {% endif %}
         </fieldset>
         {{ saveAndContinueButton() }}

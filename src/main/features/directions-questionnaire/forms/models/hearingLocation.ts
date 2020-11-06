@@ -2,6 +2,7 @@ import { IsDefined, IsIn, IsNotEmpty, ValidateIf } from '@hmcts/class-validator'
 import { YesNoOption } from 'models/yesNoOption'
 import { IsValidPostcode } from '@hmcts/cmc-validators'
 import { Facilities } from 'court-finder-client/facilities'
+import { CourtDetails } from 'court-finder-client/courtDetails'
 
 export class AlternativeCourtOption {
   static readonly BY_NAME: string = 'name'
@@ -22,7 +23,12 @@ export class ValidationErrors {
 
 export class HearingLocation {
   courtName?: string
+
   facilities?: Facilities[]
+
+  courtDetails?: CourtDetails[]
+
+  nearestCourt?: CourtDetails
 
   @IsValidPostcode()
   courtPostcode?: string
@@ -49,6 +55,10 @@ export class HearingLocation {
 
   alternativeCourtSelected?: string
 
+  searchParam?: string
+
+  searchLoop?: string
+
   constructor (courtName?: string,
                courtPostcode?: string,
                facilities?: Facilities[],
@@ -56,7 +66,11 @@ export class HearingLocation {
                alternativeOption?: string,
                alternativeCourtName?: string,
                alternativePostcode?: string,
-               alternativeCourtSelected?: string) {
+               alternativeCourtSelected?: string,
+               courtDetails?: CourtDetails[],
+               searchParam?: string,
+               nearestCourt?: CourtDetails,
+               searchLoop?: string) {
     this.courtAccepted = courtAccepted
     this.courtName = courtName
     this.courtPostcode = courtPostcode
@@ -65,6 +79,10 @@ export class HearingLocation {
     this.alternativeCourtName = alternativeCourtName
     this.alternativePostcode = alternativePostcode
     this.alternativeCourtSelected = alternativeCourtSelected
+    this.courtDetails = courtDetails
+    this.searchParam = searchParam
+    this.nearestCourt = nearestCourt
+    this.searchLoop = searchLoop
   }
 
   static fromObject (value?: any): HearingLocation {
@@ -80,7 +98,11 @@ export class HearingLocation {
       value.alternativeOption,
       value.alternativeCourtName,
       value.alternativePostcode,
-      value.alternativeCourtSelected
+      value.alternativeCourtSelected,
+      value.courtDetails,
+      value.searchParam,
+      value.nearestCourt,
+      value.searchLoop
       )
   }
 
@@ -94,6 +116,10 @@ export class HearingLocation {
       this.alternativeCourtName = input.alternativeCourtName
       this.alternativePostcode = input.alternativePostcode
       this.alternativeCourtSelected = input.alternativeCourtSelected
+      this.courtDetails = input.courtDetails
+      this.searchParam = input.searchParam
+      this.nearestCourt = input.nearestCourt
+      this.searchLoop = input.searchLoop
     }
     return this
   }
