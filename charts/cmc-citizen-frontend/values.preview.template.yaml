@@ -27,7 +27,7 @@ nodejs:
   memoryRequests: 512Mi
   memoryLimits: 1024Mi
   cpuRequests: "25m"
-  cpuLimits: "500m"
+  cpuLimits: "2500m"
   environment:
     LOG_LEVEL: DEBUG
     HTTP_TIMEOUT: 60000
