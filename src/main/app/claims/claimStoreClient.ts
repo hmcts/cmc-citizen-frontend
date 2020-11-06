@@ -247,7 +247,8 @@ export class ClaimStoreClient {
       uri: `${claimStoreApiUrl}/defendant/link`,
       headers: {
         Authorization: `Bearer ${user.bearerToken}`
-      }
+      },
+      timeout: 30000
     }
 
     return requestPromiseApi(options).then(function () {
