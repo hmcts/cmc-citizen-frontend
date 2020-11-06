@@ -24,6 +24,10 @@ nodejs:
   ingressHost: ${SERVICE_FQDN}
   readinessDelay: 90  # claim-store will start much slower
   livenessDelay: 90  # claim-store will start much slower
+  memoryRequests: 512Mi
+  memoryLimits: 1024Mi
+  cpuRequests: "25m"
+  cpuLimits: "500m"
   environment:
     LOG_LEVEL: DEBUG
     HTTP_TIMEOUT: 60000

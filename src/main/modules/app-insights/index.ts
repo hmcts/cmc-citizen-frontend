@@ -16,6 +16,7 @@ export class AppInsights {
   }
 
   enable () {
+    logger.info("Starting appInsights")
     this.setup()
     this.prepareClientContext(config.get<string>('appInsights.roleName'))
     this.prepareTelemetryProcessors()
@@ -48,6 +49,7 @@ export class AppInsights {
   }
 
   start () {
+    logger.info("AppInsights Started")
     appInsights.start()
   }
 }

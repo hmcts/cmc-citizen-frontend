@@ -51,15 +51,21 @@ new Helmet(config.get<HelmetConfig>('security'), developmentMode)
   .enableFor(app)
 
 // Before the page routers themselves, inject custom variables
+logger.info("Creating launchDarklyClient")
 const launchDarklyClient = new LaunchDarklyClient()
+logger.info("launchDarklyClient created")
 const featureToggles = new FeatureToggles(launchDarklyClient)
+logger.info("featureToggles loaded from launchDarklyClient")
+logger.info("loading static data")
 app.use(/^\/(?!js|img|pdf|stylesheets).*$/, async (req, res, next) => {
   app.settings.nunjucksEnv.globals.warningBanner = await featureToggles.isWarningBannerEnabled()
   app.settings.nunjucksEnv.globals.signPosting = await featureToggles.isSignPostingEnabled()
   next()
 })
-
+logger.info("loading static data completed")
+logger.info("enabling trust proxy")
 app.enable('trust proxy')
+logger.info("trust proxy enabled")
 app.use(favicon(path.join(__dirname, '/public/img/lib/favicon.ico')))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
