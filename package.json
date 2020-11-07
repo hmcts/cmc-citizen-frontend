@@ -11,10 +11,10 @@
     "lint": "tsc --noEmit && tslint --project tsconfig.json && sass-lint -v -q",
     "test": "echo 'unit tests are ran through GitHub actions as a mandatory step in order to save time on the main pipeline'",
     "tests": "echo 'skipped'",
-    "test:routes": "TS_NODE_TRANSPILE_ONLY=true NODE_ENV=mocha LOG_LEVEL=OFF mocha --opts mocha.opts $(find src/test \\( -name '*.ts' \\) -path '*/routes/*') --timeout 10000 --reporter-options reportFilename=routes,inlineAssets=true,reportTitle=citizen-frontend-routes",
-    "test:routes-parallel": "TS_NODE_TRANSPILE_ONLY=true NODE_ENV=mocha LOG_LEVEL=OFF mocha-parallel-tests --opts mocha.opts $(find src/test \\( -name '*.ts' \\) -path '*/routes/*') --timeout 10000 --reporter-options reportFilename=routes,inlineAssets=true,reportTitle=citizen-frontend-routes",
+    "test:routes": "echo 'skipped'",
+    "test:routes-parallel": "echo 'skipped'",
     "test:a11y": "echo 'a11y tests are ran through GitHub actions as a mandatory step in order to save time on the main pipeline'",
-    "tests:a11y": "TS_NODE_TRANSPILE_ONLY=true FEATURE_PCQ=false NODE_ENV=mocha LOG_LEVEL=OFF mocha --exit --opts mocha.opts src/test/a11y/a11y.ts --timeout 60000 --reporter-options reportFilename=a11y,inlineAssets=true,reportTitle=citizen-frontend-a11y",
+    "tests:a11y": "echo 'skipped'",
     "test:functional": "echo 'skipped'",
     "test:fullfunctional": "echo 'skipped'",
     "test:nsp": "echo \"Info: Nsp is deprecated. If you do intend to add, please proceed with latest available npm packages to do the same job\" && exit 0",
@@ -25,10 +25,10 @@
     "test:smoke": "echo 'skipped'",
     "test:integration": "echo 'skipped'",
     "test:integration-verbose": "TS_NODE_TRANSPILE_ONLY=true codeceptjs run-multiple parallel --verbose --config default.conf.js",
-    "test:crossbrowser": "TS_NODE_TRANSPILE_ONLY=true codeceptjs run-multiple parallel --verbose --config saucelabs.conf.js --reporter mocha-multi",
+    "test:crossbrowser": "echo 'Skipped'",
     "list-supported-browsers": "node -e 'Object.keys(require(\"@hmcts/cmc-supported-browsers\").supportedBrowsers).forEach(key => console.log(key))'",
-    "sonar-scan": "sonar-scanner -Dsonar.projectName='CMC :: Citizen Frontend' -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.exclusions=src/main/routes/webchat.ts,src/main/public/**,src/main/app/mocks/mockPayClient.ts,src/main/features/claim/routes/pay.ts -Dsonar.javascript.lcov.reportPaths=coverage-report/lcov.info",
-    "test:file": "TS_NODE_TRANSPILE_ONLY=true NODE_ENV=mocha LOG_LEVEL=OFF mocha --opts mocha.opts --watch --watch-extensions ts"
+    "sonar-scan": "echo 'skipped'",
+    "test:file": "echo 'skipped'"
   },
   "dependencies": {
     "@hmcts/class-validator": "^0.9.1-e",
