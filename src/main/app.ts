@@ -15,20 +15,20 @@ import { I18Next } from 'modules/i18n'
 import { Nunjucks } from 'modules/nunjucks'
 import * as moment from 'moment'
 
-import { Feature as EligibilityFeature } from 'eligibility/index'
-import { Feature as ClaimIssueFeature } from 'claim/index'
-import { Feature as DefendantFirstContactFeature } from 'first-contact/index'
-import { Feature as DefendantResponseFeature } from 'response/index'
-import { Feature as SettlementAgreementFeature } from 'settlement-agreement/index'
+// import { Feature as EligibilityFeature } from 'eligibility/index'
+// import { Feature as ClaimIssueFeature } from 'claim/index'
+// import { Feature as DefendantFirstContactFeature } from 'first-contact/index'
+// import { Feature as DefendantResponseFeature } from 'response/index'
+// import { Feature as SettlementAgreementFeature } from 'settlement-agreement/index'
 import { CsrfProtection } from 'modules/csrf'
-import { DashboardFeature } from 'dashboard/index'
-import { CCJFeature } from 'ccj/index'
-import { Feature as OfferFeature } from 'offer/index'
+// import { DashboardFeature } from 'dashboard/index'
+// import { CCJFeature } from 'ccj/index'
+// import { Feature as OfferFeature } from 'offer/index'
 import { TestingSupportFeature } from 'testing-support/index'
 import { FeatureToggles } from 'utils/featureToggles'
-import { ClaimantResponseFeature } from 'claimant-response/index'
-import { PaidInFullFeature } from 'paid-in-full/index'
-import { MediationFeature } from 'mediation/index'
+// import { ClaimantResponseFeature } from 'claimant-response/index'
+// import { PaidInFullFeature } from 'paid-in-full/index'
+// import { MediationFeature } from 'mediation/index'
 import { DirectionsQuestionnaireFeature } from 'features/directions-questionnaire'
 import { OrdersFeature } from 'orders/index'
 import { trackCustomEvent } from 'logging/customEventTracker'
@@ -87,18 +87,18 @@ if (env !== 'mocha') {
   new CsrfProtection().enableFor(app)
 }
 
-new EligibilityFeature().enableFor(app)
+// new EligibilityFeature().enableFor(app)
 
-new DashboardFeature().enableFor(app)
-new ClaimIssueFeature().enableFor(app)
-new DefendantFirstContactFeature().enableFor(app)
-new DefendantResponseFeature().enableFor(app)
-new CCJFeature().enableFor(app)
+// new DashboardFeature().enableFor(app)
+// new ClaimIssueFeature().enableFor(app)
+// new DefendantFirstContactFeature().enableFor(app)
+// new DefendantResponseFeature().enableFor(app)
+/* new CCJFeature().enableFor(app)
 new OfferFeature().enableFor(app)
 new SettlementAgreementFeature().enableFor(app)
 new MediationFeature().enableFor(app)
 new PaidInFullFeature().enableFor(app)
-new ClaimantResponseFeature().enableFor(app)
+new ClaimantResponseFeature().enableFor(app) */
 
 if (FeatureToggles.isEnabled('testingSupport')) {
   logger.info('FeatureToggles.testingSupport enabled')
