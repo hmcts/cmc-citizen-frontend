@@ -95,7 +95,7 @@
             <p>{{ t('The following court matches: ') }} {{ searchParam }}</p>
             <p>Select requested court</p>
 
-            {% for court in courts %}
+            {% for court in courtDetails %}
               {{ radioOption(form = form, label = court.name, name = 'alternativeCourtSelected', value = court.name, bold = true) }}
               <details class="form-group analytics-click-event-trigger"
                        data-event-label="Court-Facilities: Facilities of the chosen court.">

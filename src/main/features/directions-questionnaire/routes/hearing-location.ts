@@ -176,7 +176,7 @@ export default express.Router()
               )), true, apiError)
             } else {
               apiError = ValidationErrors.NO_ALTERNATIVE_COURT_NAME
-              renderPage(res, form, false, apiError)
+              renderPage(res, form, true, apiError)
             }
           } else {
             if (form.model.alternativeOption !== undefined && form.model.alternativeOption === AlternativeCourtOption.NEAREST_COURT_SELECTED) {
