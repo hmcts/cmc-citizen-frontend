@@ -96,7 +96,7 @@
             <p>Select requested court</p>
 
             {% for court in courtDetails %}
-              {{ radioOption(form = form, label = court.name, name = 'alternativeCourtSelected', value = court.name, bold = true) }}
+              {{ radioOption(form = form, label = court.name | replace("'", ""), name = 'alternativeCourtSelected', value = court.name | replace("'", ""), bold = true) }}
               <details class="form-group analytics-click-event-trigger"
                        data-event-label="Court-Facilities: Facilities of the chosen court.">
                 <summary>
