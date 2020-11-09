@@ -11,7 +11,7 @@ export class AlternativeCourtOption {
   static readonly NEAREST_COURT_SELECTED: string = 'nearestCourtSelected'
 
   static all (): string[] {
-    return [this.BY_NAME, this.BY_POSTCODE, this.BY_SEARCH]
+    return [this.BY_NAME, this.BY_POSTCODE, this.BY_SEARCH, this.NEAREST_COURT_SELECTED]
   }
 }
 
