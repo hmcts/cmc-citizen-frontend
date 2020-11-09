@@ -108,7 +108,7 @@ export default express.Router()
                     form.model.alternativePostcode, undefined, courtDetails, searchParam, nearestCourtDetails, 'second'
               )), true, apiError)
             } else {
-              apiError = ValidationErrors.NO_ALTERNATIVE_POSTCODE
+              apiError = ValidationErrors.NO_ALTERNATIVE_POSTCODE_SUMMARY
               renderPage(res, form, false, apiError)
             }
           } else if (form.model.alternativeCourtSelected === 'no' && form.model.alternativeOption === AlternativeCourtOption.BY_POSTCODE) {
@@ -129,7 +129,7 @@ export default express.Router()
                 form.model.alternativePostcode, undefined, courtDetails, searchParam, nearestCourtDetails, 'second'
               )), true, apiError)
             } else {
-              apiError = ValidationErrors.NO_ALTERNATIVE_POSTCODE
+              apiError = ValidationErrors.NO_ALTERNATIVE_POSTCODE_SUMMARY
               renderPage(res, form, true, apiError)
             }
           } else if (form.model.courtAccepted === YesNoOption.NO && form.model.alternativeOption === AlternativeCourtOption.BY_NAME) {
@@ -152,7 +152,7 @@ export default express.Router()
                 form.model.alternativePostcode, form.model.alternativeCourtSelected, courtDetails, searchParam, nearestCourtDetails, 'second'
               )), true, apiError)
             } else {
-              apiError = ValidationErrors.NO_ALTERNATIVE_COURT_NAME
+              apiError = ValidationErrors.NO_ALTERNATIVE_COURT_NAME_SUMMARY
               renderPage(res, form, false, apiError)
             }
           } else if (form.model.alternativeCourtSelected === 'no' && form.model.alternativeOption === AlternativeCourtOption.BY_NAME) {
@@ -175,7 +175,7 @@ export default express.Router()
                 form.model.alternativePostcode, form.model.alternativeCourtSelected, courtDetails, searchParam, nearestCourtDetails, 'second'
               )), true, apiError)
             } else {
-              apiError = ValidationErrors.NO_ALTERNATIVE_COURT_NAME
+              apiError = ValidationErrors.NO_ALTERNATIVE_COURT_NAME_SUMMARY
               renderPage(res, form, true, apiError)
             }
           } else {

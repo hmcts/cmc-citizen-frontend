@@ -425,7 +425,7 @@
 {% endmacro %}
 
 {% macro apiError(error) %}
-  {% if error == 'Provide a valid postcode' %}
+  {% if error == 'Enter a valid postcode. Try again using another postcode.' %}
     <div class="error-summary" role="group" aria-labelledby="error-summary-heading" tabindex="-1">
       <h2 class="heading-medium error-summary-heading" id="error-summary-heading">
         {{ t('There was a problem') }}
@@ -434,7 +434,7 @@
           <li><a href="#alternativePostcode[label]">{{ t(error) }}</a></li>
       </ul>
     </div>
-    {% elseif error == 'Provide a valid court name' %}
+    {% elseif error == 'Could not find a court name to match. Try searching by postcode instead.' %}
     <div class="error-summary" role="group" aria-labelledby="error-summary-heading" tabindex="-1">
       <h2 class="heading-medium error-summary-heading" id="error-summary-heading">
         {{ t('There was a problem') }}
@@ -447,7 +447,7 @@
 {% endmacro %}
 
 {% macro apiErrorPostCodeField(error) %}
-  {% if error == 'Provide a valid postcode' %}
+  {% if error == 'Enter a valid postcode. Try again using another postcode.' %}
     <div class="form-group form-group-error">
       <label for="formfield" id="formfield[label]" class="form-label">{{ t(label) }}
       <span class="error-message">{{ t(error) }}</span>
@@ -456,7 +456,7 @@
 {% endmacro %}
 
 {% macro apiErrorCourtNameField(error) %}
-  {% if error == 'Provide a valid court name' %}
+  {% if error == 'Could not find a court name to match. Try searching by postcode instead.' %}
     <div class="form-group form-group-error">
       <label for="formfield" id="formfield[label]" class="form-label">{{ t(label) }}
       <span class="error-message">{{ t(error) }}</span>
