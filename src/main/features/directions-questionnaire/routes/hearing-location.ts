@@ -179,7 +179,9 @@ export default express.Router()
               renderPage(res, form, true, apiError)
             }
           } else {
-            if (form.model.alternativeOption !== undefined && form.model.alternativeOption === AlternativeCourtOption.NEAREST_COURT_SELECTED) {
+            if (form.model.alternativeOption !== undefined
+                  && form.model.alternativeOption !== (AlternativeCourtOption.BY_POSTCODE
+                  || AlternativeCourtOption.BY_NAME)) {
               const courtNames = Array.isArray(form.model.alternativeCourtName) ? form.model.alternativeCourtName [0] : form.model.alternativeCourtName
               if (courtNames) {
                 const courtDetails: string[] = courtNames.split(':')
