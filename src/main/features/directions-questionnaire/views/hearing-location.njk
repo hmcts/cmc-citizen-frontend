@@ -92,7 +92,7 @@
             </div>
           {% else %}
 
-            <p>{{ t('The following court matches: ') }} {{ searchParam }}</p>
+            <p>{{ t('We have found a court nearest to ') }} {{ searchParam }}</p>
             <p>Select requested court</p>
 
             {% for court in courtDetails %}
@@ -141,8 +141,10 @@
                {{ textInput(label = 'Enter a court name or the name of a place', form = form, name = 'alternativeCourtName', inputClass = 'full-width') }}
               </div>
 
-              {{ radioOption(form = form, label = nearestCourt.name, name = 'alternativeOption', value = 'nearestCourtSelected',
+              {{ radioOption(form = form, label = nearestCourt.name, name = 'alternativeOption', value = nearestCourt.name,
                  bold = true, checked = (form.valueFor('alternativeOption') === 'nearestCourtSelected')) }}
+                 <div class="form-group panel panel-border-narrow"  id="alternativeOption-nearestCourtSelected" aria-hidden="false">
+                 <p>{{ t('This is the closest court to address you gave us.') }}</p>
                 <details class="form-group analytics-click-event-trigger"
                         data-event-label="Court-Facilities: Facilities of the chosen court.">
                  <summary>
@@ -156,6 +158,7 @@
                    {% endfor %}
                  </div>
                 </details>
+                </div>
             </div>
           {% endif %}
           {% if courtPostcode %}
