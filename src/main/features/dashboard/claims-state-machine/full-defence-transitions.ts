@@ -114,7 +114,6 @@ export function fullDefenceTransitions (claim: Claim): StateMachine {
       onBeforeCheckAlreadyPaidResponse (): boolean {
         return !!claim.claimantResponse
           && !!claim.claimantResponse.type
-          && !!(claim.response as FullDefenceResponse).paymentDeclaration
           && (claim.claimantResponse.type === ClaimantResponseType.REJECTION || claim.claimantResponse.type === ClaimantResponseType.ACCEPTATION)
       },
 
