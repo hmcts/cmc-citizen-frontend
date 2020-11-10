@@ -196,19 +196,29 @@ export default express.Router()
             } else if (form.model.alternativeCourtSelected !== undefined && form.model.alternativeCourtSelected !== 'no') {
               const courtNames = form.model.alternativeCourtSelected
               if (courtNames) {
-                const courtDetails: string[] = courtNames.split(':')
+                let courtDetail: CourtDetails = undefined
+                if (form.model.alternativePostcode !== undefined && form.model.alternativePostcode !== '') {
+                  const court: Court = await Court.getNearestCourt(form.model.alternativePostcode)
+                  if (court) {
+                    courtDetail = await Court.getCourtDetails(court.slug)
+                  }
+                } else if (form.model.alternativeCourtName !== undefined && form.model.alternativeCourtName !== '') {
+                  const court: Court[] = await Court.getCourtsByName(form.model.alternativeCourtSelected)
+                  if (court[0]) {
+                    courtDetail = await Court.getCourtDetails(court[0].slug)
+                  }
+                }
                 draft.document.hearingLocation = form.model
-                draft.document.hearingLocation.courtName = courtDetails[0]
-                draft.document.hearingLocation.alternativeCourtName = courtDetails[0]
+                draft.document.hearingLocation.courtName = courtDetail.name
+                draft.document.hearingLocation.alternativeCourtName = courtDetail.name
                 draft.document.hearingLocation.alternativeOption = AlternativeCourtOption.BY_SEARCH
                 draft.document.hearingLocation.courtAccepted = YesNoOption.YES
-                if (courtDetails.length === 2) {
-                  draft.document.hearingLocationSlug = courtDetails[1]
-                }
-
-                const user: User = res.locals.user
-                await new DraftService().save(draft, user.bearerToken)
+                draft.document.hearingLocationSlug = courtDetail.slug
+                draft.document.hearingLocation.facilities = courtDetail.facilities
               }
+
+              const user: User = res.locals.user
+              await new DraftService().save(draft, user.bearerToken)
             } else if (draft.document.hearingLocationSlug && !draft.document.hearingLocationSlug.length) {
               const postcode: string = getDefaultPostcode(res)
               const court: Court = await Court.getNearestCourt(postcode)
