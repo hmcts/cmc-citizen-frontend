@@ -357,7 +357,7 @@ export const sampleHwfClaimObj = {
   state: 'HWF_APPLICATION_PENDING',
   referenceNumber: '000MC000',
   createdAt: MomentFactory.currentDateTime(),
-  issuedOn: '2019-09-25',
+  issuedOn: '2020-11-10',
   totalAmountTillToday: 200,
   totalAmountTillDateOfIssue: 200,
   moreTimeRequested: false,
@@ -409,10 +409,10 @@ export const sampleHwfClaimObj = {
     reason: 'Because I can',
     feeAmountInPennies: 2500,
     timeline: { rows: [{ date: 'a', description: 'b' }] },
-    helpWithFeesNumber: 'HWF1234',
+    helpWithFeesNumber: 'HWF123456',
     helpWithFeesType: 'ClaimIssue'
   },
-  responseDeadline: '2017-08-08',
+  responseDeadline: '2020-11-10',
   countyCourtJudgment: {
     defendantDateOfBirth: '1990-11-01',
     paidAmount: 2,

@@ -48,15 +48,16 @@ describe('Claim issue: confirmation page', () => {
           .expect(res => expect(res).to.be.successful.withText('Claim submitted'))
       })
 
-      // This test needs to be re-visited once the HWF backend is ready
-      // it('should render help with fees confirmatoin with 16 digit caseid if claim submitted with hwf reference', async () => {
-      //   claimStoreServiceMock.resolveRetrieveHwfClaimByExternalId()
+      it.only('should render help with fees confirmatoin with 16 digit caseid if claim submitted with hwf reference', async () => {
+        claimStoreServiceMock.resolveRetrieveHwfClaimByExternalId()
+        draftStoreServiceMock.resolveFind('claim')
+        draftStoreServiceMock.resolveDelete()
 
-      //   await request(app)
-      //     .get(ClaimPaths.confirmationPage.evaluateUri({ externalId: externalId }))
-      //     .set('Cookie', `${cookieName}=ABC`)
-      //     .expect(res => expect(res).to.be.successful.withText('1594-0301-3729-9050'))
-      // })
+        await request(app)
+          .get(ClaimPaths.confirmationPage.evaluateUri({ externalId: externalId }))
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('1594-0301-3729-9050'))
+      })
 
     })
   })
