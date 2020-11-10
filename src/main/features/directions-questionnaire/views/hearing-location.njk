@@ -30,6 +30,7 @@
           {% set searchParam = form.valueFor('searchParam') %}
           {% set nearestCourt = form.valueFor('nearestCourt') %}
           {% set searchLoop = form.valueFor('searchLoop') %}
+          {% set searchType = form.valueFor('searchType') %}
            {% if not resultPage %}
             {% if courtPostcode %}
               <p>{{ t('The nearest court to {{ courtPostcode }} is {{ courtName }}', { courtPostcode: courtPostcode, courtName: courtName }) }}</p>
@@ -178,6 +179,9 @@
           {% endif %}
           {% if searchLoop %}
             <input type="hidden" name="searchLoop" value="{{ searchLoop }}">
+          {% endif %}
+          {% if searchType %}
+            <input type="hidden" name="searchType" value="{{ searchType }}">
           {% endif %}
         </fieldset>
         {{ saveAndContinueButton() }}
