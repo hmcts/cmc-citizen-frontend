@@ -48,7 +48,7 @@ describe('Claim issue: confirmation page', () => {
           .expect(res => expect(res).to.be.successful.withText('Claim submitted'))
       })
 
-      it.only('should render help with fees confirmatoin with 16 digit caseid if claim submitted with hwf reference', async () => {
+      it('should render help with fees confirmatoin with 16 digit caseid if claim submitted with hwf reference', async () => {
         claimStoreServiceMock.resolveRetrieveHwfClaimByExternalId()
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveDelete()
