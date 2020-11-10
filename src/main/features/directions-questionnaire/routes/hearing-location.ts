@@ -242,16 +242,19 @@ export default express.Router()
             if (form.model.alternativeOption !== undefined
                   && form.model.alternativeOption !== AlternativeCourtOption.BY_POSTCODE && form.model.alternativeOption !==
                   AlternativeCourtOption.BY_NAME) {
-              const courtNames = Array.isArray(form.model.alternativeCourtName) ? form.model.alternativeCourtName [0] : form.model.alternativeCourtName
-              if (courtNames) {
-                const courtDetails: string[] = courtNames.split(':')
-                draft.document.hearingLocation = form.model
-                draft.document.hearingLocation.courtName = courtDetails[0]
-                draft.document.hearingLocation.alternativeCourtName = courtDetails[0]
-                draft.document.hearingLocation.alternativeOption = AlternativeCourtOption.NEAREST_COURT_SELECTED
-                if (courtDetails.length === 2) {
-                  draft.document.hearingLocationSlug = courtDetails[1]
+              const courtNames = Array.isArray(form.model.alternativeCourtName) ? form.model.alternativeCourtName [0] : form.model.alternativeOption
+              let courtDetail: CourtDetails = undefined
+              if (courtNames && form.model.alternativeOption !== undefined && form.model.alternativeOption !== '') {
+                const court: Court[] = await Court.getCourtsByName(form.model.alternativeOption)
+                if (court[0]) {
+                  courtDetail = await Court.getCourtDetails(court[0].slug)
                 }
+                draft.document.hearingLocation = form.model
+                draft.document.hearingLocation.courtName = courtDetail.name
+                draft.document.hearingLocation.alternativeCourtName = courtDetail.name
+                draft.document.hearingLocation.alternativeOption = AlternativeCourtOption.NEAREST_COURT_SELECTED
+                draft.document.hearingLocationSlug = courtDetail.slug
+                draft.document.hearingLocation.facilities = courtDetail.facilities
 
                 const user: User = res.locals.user
                 await new DraftService().save(draft, user.bearerToken)

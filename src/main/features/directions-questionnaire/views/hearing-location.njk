@@ -98,7 +98,7 @@
 
             {% for court in courtDetails %}
             {% set regExp = r/[^\w\s]/i %}
-              {{ radioOption(form = form, label = court.name, name = 'alternativeCourtSelected', value = court.name | replace(regExp, ""), bold = true) }}
+              {{ radioOption(form = form, label = court.name, name = 'alternativeCourtSelected', value = court.name | replace(regExp, "") | replace(regExp, ""), bold = true) }}
               <details class="form-group analytics-click-event-trigger"
                        data-event-label="Court-Facilities: Facilities of the chosen court.">
                 <summary>
