@@ -84,18 +84,16 @@ describe('Directions Questionnaire - hearing location', () => {
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
-        context('when court finder client is not functioning', () => {
-          it('should render fallback page when everything is fine', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
-            draftStoreServiceMock.resolveFind('directionsQuestionnaire')
-            draftStoreServiceMock.resolveFind('response')
-            courtFinderMock.rejectFind()
+        it('should return 500 and render error page when court finder client is not functioning', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
+          draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+          draftStoreServiceMock.resolveFind('response')
+          courtFinderMock.rejectFind()
 
-            await request(app)
-              .get(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withoutText('is the nearest to your address you gave us.'))
-          })
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
         context('when court finder client is functioning', () => {
@@ -118,19 +116,6 @@ describe('Directions Questionnaire - hearing location', () => {
 
     describe('on POST', () => {
       const validFormDataAccept = { courtAccepted: 'yes', courtName: 'Test court' }
-      const validFormDataAcceptAlternatePostcode = {
-        courtAccepted: 'no',
-        alternativeOption: 'postcode',
-        alternativePostcode: 'a111aa',
-        courtName: 'Test court'
-      }
-
-      const validFormDataSearch = {
-        courtAccepted: 'no',
-        alternativeOption: 'search',
-        alternativeCourtName: 'SearchInput',
-        courtName: 'Test court'
-      }
 
       const invalidFormData = { courtAccepted: 'no' }
 
@@ -200,36 +185,6 @@ describe('Directions Questionnaire - hearing location', () => {
                 .expect(res => expect(res).to.be.redirect.toLocation(expertPath))
             })
           })
-
-          context('When court is rejected', () => {
-            it('should redirect to search results page when search by name is selected', async () => {
-              claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
-              draftStoreServiceMock.resolveFind('directionsQuestionnaire')
-              draftStoreServiceMock.resolveFind('response')
-              const resultsPage = Paths.hearingLocationResultPage.evaluateUri({ externalId: externalId }) + '?name=SearchInput'
-
-              await request(app)
-                .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
-                .send(validFormDataSearch)
-                .expect(res => expect(res).to.be.redirect.toLocation(resultsPage))
-            })
-
-            it('should render same page with new court when an alternative court is suggested by postcode', async () => {
-              claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
-              draftStoreServiceMock.resolveFind('directionsQuestionnaire')
-              draftStoreServiceMock.resolveFind('response')
-              courtFinderMock.resolveFind()
-              courtFinderMock.resolveCourtDetails()
-              draftStoreServiceMock.resolveUpdate()
-
-              await request(app)
-                .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
-                .send(validFormDataAcceptAlternatePostcode)
-                .expect(res => expect(res).to.be.successful.withText('Choose a hearing location'))
-            })
-          })
         })
 
         context('when form is invalid', async () => {
@@ -246,7 +201,7 @@ describe('Directions Questionnaire - hearing location', () => {
           })
         })
 
-        context('when submit from fallback page', () => {
+        context('when submit from to display the result page', () => {
           context('when form is valid', () => {
             it('should redirect to expert page', async () => {
               claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)

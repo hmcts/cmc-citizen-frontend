@@ -59,7 +59,9 @@ export class HearingLocation {
 
   searchParam?: string
 
-  searchLoop?: string
+  searchLoop?: boolean
+
+  searchType?: string
 
   constructor (courtName?: string,
                courtPostcode?: string,
@@ -72,7 +74,8 @@ export class HearingLocation {
                courtDetails?: CourtDetails[],
                searchParam?: string,
                nearestCourt?: CourtDetails,
-               searchLoop?: string) {
+               searchLoop?: boolean,
+               searchType?: string) {
     this.courtAccepted = courtAccepted
     this.courtName = courtName
     this.courtPostcode = courtPostcode
@@ -85,6 +88,7 @@ export class HearingLocation {
     this.searchParam = searchParam
     this.nearestCourt = nearestCourt
     this.searchLoop = searchLoop
+    this.searchType = searchType
   }
 
   static fromObject (value?: any): HearingLocation {
@@ -104,7 +108,8 @@ export class HearingLocation {
       value.courtDetails,
       value.searchParam,
       value.nearestCourt,
-      value.searchLoop
+      value.searchLoop,
+      value.searchType
       )
   }
 
@@ -122,6 +127,7 @@ export class HearingLocation {
       this.searchParam = input.searchParam
       this.nearestCourt = input.nearestCourt
       this.searchLoop = input.searchLoop
+      this.searchType = input.searchType
     }
     return this
   }
