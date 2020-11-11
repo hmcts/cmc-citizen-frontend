@@ -1306,6 +1306,37 @@ describe('OconFormResponse', () => {
   })
 })
 
+describe('OconFormResponseClaimantResponse', () => {
+  let claim
+
+  beforeEach(() => {
+    claim = new Claim()
+    claim.responseDeadline = MomentFactory.currentDate()
+    claim.intentionToProceedDeadline = MomentFactory.currentDate()
+    claim.createdAt = MomentFactory.parse('2019-09-09').hour(15).minute(12)
+    claim.respondedAt = moment()
+    claim.createdAt = MomentFactory.parse('2018-09-09').hour(15).minute(12)
+    claim.response = {
+      responseMethod: 'OCON_FORM',
+      responseType: 'FULL_DEFENCE',
+      defenceType: 'ALREADY_PAID',
+      paymentDeclaration: {
+        paidDate: '2010-12-31',
+        explanation: 'Paid by cash',
+        paidAmount: 100
+      }
+    }
+    claim.claimantResponse = {
+      type: 'REJECTION'
+    }
+  })
+
+  it('should return ClaimStatus.DEFENDANT_OCON_FORM_RESPONSE ', () => {
+    expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTED_STATES_PAID)
+  })
+
+})
+
 describe('ScannedDocument', () => {
   it('should return Claim Documents including Scanned Document', () => {
     const claimWithResponse = new Claim().deserialize({ ...claimStoreMock.sampleClaimIssueObj, ...claimStoreMock.sampleClaimDocuments })
