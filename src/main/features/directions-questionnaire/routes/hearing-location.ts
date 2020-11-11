@@ -126,7 +126,7 @@ async function locationSearch (res: express.Response, form: Form<HearingLocation
       renderPage(res, new Form<HearingLocation>(new HearingLocation(draft.document.hearingLocation.courtName,
         undefined, draft.document.hearingLocation.facilities, draft.document.hearingLocation.courtAccepted,
         draft.document.hearingLocation.alternativeOption, draft.document.hearingLocation.alternativeCourtName,
-        form.model.alternativePostcode, form.model.alternativeCourtSelected, courtDetails, searchParam, nearestCourtDetails, true, AlternativeCourtOption.BY_NAME
+        form.model.alternativePostcode, undefined, courtDetails, searchParam, nearestCourtDetails, true, AlternativeCourtOption.BY_NAME
       )), true, apiError)
     } else {
       handleLocationSearchError(res, form, draft, resultPage)
