@@ -142,7 +142,7 @@
               </div>
 
               {{ radioOption(form = form, label = nearestCourt.name, name = 'alternativeOption', value = 'nearestCourtSelected',
-                 bold = true, checked = (form.valueFor('alternativeOption') === 'nearestCourtSelected', replaceValue = 'yes')) }}
+                 bold = true, checked = (form.valueFor('alternativeOption') === 'nearestCourtSelected'), replaceValue = 'yes') }}
                  <div class="form-group panel panel-border-narrow"  id="alternativeOption-nearestCourtSelected" aria-hidden="false">
                  <p>{{ t('This is the closest court to address you gave us.') }}</p>
                 <details class="form-group analytics-click-event-trigger"
