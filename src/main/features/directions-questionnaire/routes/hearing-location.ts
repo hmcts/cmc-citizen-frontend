@@ -74,28 +74,37 @@ async function postCodeSearch (res: express.Response, form: Form<HearingLocation
 }
 
 async function handlePostCodeSearchError (res: express.Response, form: Form<HearingLocation>, draft: Draft<DirectionsQuestionnaireDraft>, resultPage: boolean) {
-  let apiError = ValidationErrors.NO_ALTERNATIVE_POSTCODE_SUMMARY
+  let apiError = ''
   try {
+    if ((form.model.courtAccepted === YesNoOption.NO || form.model.alternativeCourtSelected === 'no') && form.model.alternativeOption === AlternativeCourtOption.BY_POSTCODE) {
+      apiError = ValidationErrors.NO_ALTERNATIVE_POSTCODE_SUMMARY
+    } else if ((form.model.courtAccepted === YesNoOption.NO || form.model.alternativeCourtSelected === 'no') && form.model.alternativeOption === AlternativeCourtOption.BY_NAME) {
+      apiError = ValidationErrors.NO_ALTERNATIVE_COURT_NAME_SUMMARY
+    }
     if (resultPage) {
-      const searchParam = form.model.searchParam
-      const court: Court = await Court.getNearestCourt(searchParam)
-      if (court !== undefined) {
-        let courtDetails: CourtDetails[] = []
-        courtDetails.push(await Court.getCourtDetails(court.slug))
-        const postcode: string = getDefaultPostcode(res)
-        const nearestCourt: Court = await Court.getNearestCourt(postcode)
-        let nearestCourtDetails: CourtDetails = undefined
-        if (nearestCourt) {
-          nearestCourtDetails = await Court.getCourtDetails(nearestCourt.slug)
-        }
-
-        renderPage(res, new Form<HearingLocation>(new HearingLocation(draft.document.hearingLocation.courtName,
-              undefined, draft.document.hearingLocation.facilities, draft.document.hearingLocation.courtAccepted,
-              draft.document.hearingLocation.alternativeOption, draft.document.hearingLocation.alternativeCourtName,
-              form.model.alternativePostcode, form.model.alternativeCourtSelected, courtDetails, searchParam, nearestCourtDetails, true, AlternativeCourtOption.BY_POSTCODE
-              )), resultPage, apiError)
+      if (form.model.searchType === AlternativeCourtOption.BY_NAME) {
+        handleLocationSearchError(res, form, draft, resultPage)
       } else {
-        renderPage(res, form, false, apiError)
+        const searchParam = form.model.searchParam
+        const court: Court = await Court.getNearestCourt(searchParam)
+        if (court !== undefined) {
+          let courtDetails: CourtDetails[] = []
+          courtDetails.push(await Court.getCourtDetails(court.slug))
+          const postcode: string = getDefaultPostcode(res)
+          const nearestCourt: Court = await Court.getNearestCourt(postcode)
+          let nearestCourtDetails: CourtDetails = undefined
+          if (nearestCourt) {
+            nearestCourtDetails = await Court.getCourtDetails(nearestCourt.slug)
+          }
+
+          renderPage(res, new Form<HearingLocation>(new HearingLocation(draft.document.hearingLocation.courtName,
+                undefined, draft.document.hearingLocation.facilities, draft.document.hearingLocation.courtAccepted,
+                draft.document.hearingLocation.alternativeOption, draft.document.hearingLocation.alternativeCourtName,
+                form.model.alternativePostcode, form.model.alternativeCourtSelected, courtDetails, searchParam, nearestCourtDetails, true, AlternativeCourtOption.BY_POSTCODE
+                )), resultPage, apiError)
+        } else {
+          renderPage(res, form, false, apiError)
+        }
       }
     } else {
       renderPage(res, form, resultPage, apiError)
@@ -138,29 +147,38 @@ async function locationSearch (res: express.Response, form: Form<HearingLocation
 }
 
 async function handleLocationSearchError (res: express.Response, form: Form<HearingLocation>, draft: Draft<DirectionsQuestionnaireDraft>, resultPage: boolean) {
-  let apiError = ValidationErrors.NO_ALTERNATIVE_COURT_NAME_SUMMARY
+  let apiError = ''
   try {
+    if ((form.model.courtAccepted === YesNoOption.NO || form.model.alternativeCourtSelected === 'no') && form.model.alternativeOption === AlternativeCourtOption.BY_POSTCODE) {
+      apiError = ValidationErrors.NO_ALTERNATIVE_POSTCODE_SUMMARY
+    } else if ((form.model.courtAccepted === YesNoOption.NO || form.model.alternativeCourtSelected === 'no') && form.model.alternativeOption === AlternativeCourtOption.BY_NAME) {
+      apiError = ValidationErrors.NO_ALTERNATIVE_COURT_NAME_SUMMARY
+    }
     if (resultPage) {
-      const searchParam = form.model.searchParam
-      const courts: Court[] = await Court.getCourtsByName(searchParam)
-      if (courts) {
-        let courtDetails: CourtDetails[] = []
-        for (let court of courts) {
-          courtDetails.push(await Court.getCourtDetails(court.slug))
-        }
-        const postcode: string = getDefaultPostcode(res)
-        const nearestCourt: Court = await Court.getNearestCourt(postcode)
-        let nearestCourtDetails: CourtDetails = undefined
-        if (nearestCourt) {
-          nearestCourtDetails = await Court.getCourtDetails(nearestCourt.slug)
-        }
-        renderPage(res, new Form<HearingLocation>(new HearingLocation(draft.document.hearingLocation.courtName,
-          undefined, draft.document.hearingLocation.facilities, draft.document.hearingLocation.courtAccepted,
-          draft.document.hearingLocation.alternativeOption, draft.document.hearingLocation.alternativeCourtName,
-          form.model.alternativePostcode, form.model.alternativeCourtSelected, courtDetails, searchParam, nearestCourtDetails, true, AlternativeCourtOption.BY_NAME
-        )), true, apiError)
+      if (form.model.searchType === AlternativeCourtOption.BY_POSTCODE) {
+        handlePostCodeSearchError(res, form, draft, resultPage)
       } else {
-        renderPage(res, form, false, apiError)
+        const searchParam = form.model.searchParam
+        const courts: Court[] = await Court.getCourtsByName(searchParam)
+        if (courts) {
+          let courtDetails: CourtDetails[] = []
+          for (let court of courts) {
+            courtDetails.push(await Court.getCourtDetails(court.slug))
+          }
+          const postcode: string = getDefaultPostcode(res)
+          const nearestCourt: Court = await Court.getNearestCourt(postcode)
+          let nearestCourtDetails: CourtDetails = undefined
+          if (nearestCourt) {
+            nearestCourtDetails = await Court.getCourtDetails(nearestCourt.slug)
+          }
+          renderPage(res, new Form<HearingLocation>(new HearingLocation(draft.document.hearingLocation.courtName,
+            undefined, draft.document.hearingLocation.facilities, draft.document.hearingLocation.courtAccepted,
+            draft.document.hearingLocation.alternativeOption, draft.document.hearingLocation.alternativeCourtName,
+            form.model.alternativePostcode, form.model.alternativeCourtSelected, courtDetails, searchParam, nearestCourtDetails, true, AlternativeCourtOption.BY_NAME
+          )), true, apiError)
+        } else {
+          renderPage(res, form, false, apiError)
+        }
       }
     } else {
       renderPage(res, form, resultPage, apiError)
@@ -258,6 +276,7 @@ export default express.Router()
               draft.document.hearingLocation.alternativeOption = AlternativeCourtOption.NEAREST_COURT_SELECTED
               draft.document.hearingLocationSlug = nearestCourtDetails.slug
               draft.document.hearingLocation.facilities = nearestCourtDetails.facilities
+              draft.document.hearingLocation.courtAccepted = form.model.courtAccepted
 
               const user: User = res.locals.user
               await new DraftService().save(draft, user.bearerToken)
@@ -265,12 +284,7 @@ export default express.Router()
               const courtNames = form.model.alternativeCourtSelected
               if (courtNames) {
                 let courtDetail: CourtDetails = undefined
-                if (form.model.alternativePostcode !== undefined && form.model.alternativePostcode !== '') {
-                  const court: Court = await Court.getNearestCourt(form.model.alternativePostcode)
-                  if (court) {
-                    courtDetail = await Court.getCourtDetails(court.slug)
-                  }
-                } else if (form.model.alternativeCourtName !== undefined && form.model.alternativeCourtName !== '') {
+                if (form.model.alternativeCourtName !== undefined && form.model.alternativeCourtName !== '') {
                   const court: Court[] = await Court.getCourtsByName(form.model.alternativeCourtSelected)
                   if (court[0]) {
                     courtDetail = await Court.getCourtDetails(court[0].slug)
@@ -287,17 +301,11 @@ export default express.Router()
 
               const user: User = res.locals.user
               await new DraftService().save(draft, user.bearerToken)
-            } else if (draft.document.hearingLocationSlug && !draft.document.hearingLocationSlug.length) {
-              const postcode: string = getDefaultPostcode(res)
-              const court: Court = await Court.getNearestCourt(postcode)
-              if (court !== undefined) {
-                draft.document.hearingLocationSlug = court.slug
-              } else {
-                draft.document.hearingLocationSlug = ''
-              }
             } else {
+              draft.document.hearingLocation = form.model
               draft.document.hearingLocation.courtName = form.model.courtName
               draft.document.hearingLocation.courtAccepted = form.model.courtAccepted
+              draft.document.hearingLocation.facilities = form.model.facilities
 
               await new DraftService().save(draft, user.bearerToken)
             }

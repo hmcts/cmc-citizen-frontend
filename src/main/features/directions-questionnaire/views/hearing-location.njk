@@ -32,15 +32,7 @@
           {% set searchLoop = form.valueFor('searchLoop') %}
           {% set searchType = form.valueFor('searchType') %}
            {% if not resultPage %}
-            {% if courtPostcode %}
-              <p>{{ t('The nearest court to {{ courtPostcode }} is {{ courtName }}', { courtPostcode: courtPostcode, courtName: courtName }) }}</p>
-            {% elseif party === MadeBy.DEFENDANT and (claim.claimData.defendant.type === PartyType.ORGANISATION.value or claim.claimData.defendant.type === PartyType.COMPANY.value) %}
-              <p>{{ t('You can request any location - {{ courtName }} is the nearest to the address you gave us.', { courtName: courtName }) }}</p>
-            {% else %}
-              {{ commonContent() }}
-
-            {% endif %}
-
+            {{ commonContent() }}
             {% if party === MadeBy.DEFENDANT and (claim.claimData.defendant.type === PartyType.ORGANISATION.value or claim.claimData.defendant.type === PartyType.COMPANY.value) %}
               <h2 class="heading-medium">{{ t('Do you want to request {{ courtName }}?', { courtName: form.valueFor('courtName') }) }}</h2>
             {% else %}
