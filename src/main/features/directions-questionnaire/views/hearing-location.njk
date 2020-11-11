@@ -97,7 +97,7 @@
             <p>Select requested court</p>
 
             {% for court in courtDetails %}
-              {{ radioOption(form = form, label = court.name, name = 'alternativeCourtSelected', value = court.name, bold = true, updatedValue = 'true') }}
+              {{ radioOption(form = form, label = court.name, name = 'alternativeCourtSelected', value = court.name, bold = true, replaceValue = 'yes') }}
               <details class="form-group analytics-click-event-trigger"
                        data-event-label="Court-Facilities: Facilities of the chosen court.">
                 <summary>
@@ -142,7 +142,7 @@
               </div>
 
               {{ radioOption(form = form, label = nearestCourt.name, name = 'alternativeOption', value = 'nearestCourtSelected',
-                 bold = true, checked = (form.valueFor('alternativeOption') === 'nearestCourtSelected')) }}
+                 bold = true, checked = (form.valueFor('alternativeOption') === 'nearestCourtSelected', replaceValue = 'yes')) }}
                  <div class="form-group panel panel-border-narrow"  id="alternativeOption-nearestCourtSelected" aria-hidden="false">
                  <p>{{ t('This is the closest court to address you gave us.') }}</p>
                 <details class="form-group analytics-click-event-trigger"

@@ -160,21 +160,21 @@
   }}
 {% endmacro %}
 
-{% macro radioOption(label, name, form, value, hint = '', checked = form.valueFor(name) == value, bold = false, greyHint = true, className = '') %}
-  {{ option(label = label, name = name, form = form, value = value, type = 'radio', hint = hint, checked = checked, bold = bold, greyHint = greyHint, className = className) }}
+{% macro radioOption(label, name, form, value, hint = '', checked = form.valueFor(name) == value, bold = false, greyHint = true, className = '', replaceValue = '') %}
+  {{ option(label = label, name = name, form = form, value = value, type = 'radio', hint = hint, checked = checked, bold = bold, greyHint = greyHint, className = className, replaceValue = replaceValue) }}
 {% endmacro %}
 
 {% macro checkboxOption(label, name, form, value, hint = '', checked = false, bold = false) %}
   {{ option(label, name, form, value, 'checkbox', hint, checked = checked, bold) }}
 {% endmacro %}
 
-{% macro option(label, name, form, value, type, hint = '', checked = false, bold = false, hidden, className, dataTarget, greyHint = true, updatedValue = '') %}
+{% macro option(label, name, form, value, type, hint = '', checked = false, bold = false, hidden, className, dataTarget, greyHint = true, replaceValue = '') %}
   {% set regExp = r/[^\w\s]/i %}
-  {% if updatedValue == '' %}
+  {% if replaceValue == '' %}
     <div class="multiple-choice {{ className | default('') }}" data-target="{{ dataTarget | default(name + '-' + value ) }}">
   {% else %}
-    {% set newValue = value | replace(regExp, '') %}
-      <div class="multiple-choice {{ className | default('') }}" data-target="{{ dataTarget | default(name + '-' + newValue ) }}">
+    {% set updatedValue = value | replace(regExp, '') %}
+      <div class="multiple-choice {{ className | default('') }}" data-target="{{ dataTarget | default(name + '-' + updatedValue ) }}">
   {% endif %}
     {% set idValue = name + value | replace(' ', '') %}
     <input id="{{ idValue }}" type="{{ type }}" name="{{ name }}" value="{{ value }}"
