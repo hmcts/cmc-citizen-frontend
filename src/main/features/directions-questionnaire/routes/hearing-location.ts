@@ -178,12 +178,18 @@ export default express.Router()
       const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
 
       if (draft.document.hearingLocation.alternativeOption !== undefined
-          && (draft.document.hearingLocation.alternativeOption === AlternativeCourtOption.BY_SEARCH
-          || draft.document.hearingLocation.alternativeOption === AlternativeCourtOption.NEAREST_COURT_SELECTED)) {
+          && draft.document.hearingLocation.alternativeOption === AlternativeCourtOption.BY_SEARCH) {
         renderPage(res,
           new Form<HearingLocation>(
             new HearingLocation(
               draft.document.hearingLocation.alternativeCourtName, draft.document.hearingLocation.alternativePostcode, draft.document.hearingLocation.facilities, YesNoOption.YES, draft.document.hearingLocation.alternativeOption, draft.document.hearingLocation.alternativeCourtName, undefined
+            )), false, apiError)
+      } else if (draft.document.hearingLocation.alternativeOption !== undefined
+          && draft.document.hearingLocation.alternativeOption === AlternativeCourtOption.NEAREST_COURT_SELECTED) {
+        renderPage(res,
+          new Form<HearingLocation>(
+            new HearingLocation(
+              draft.document.hearingLocation.courtName, undefined, draft.document.hearingLocation.facilities, YesNoOption.YES, undefined, undefined, undefined, undefined, undefined, undefined
             )), false, apiError)
       } else {
         const postcode: string = getDefaultPostcode(res)
@@ -240,25 +246,21 @@ export default express.Router()
             locationSearch(res, form, draft, true)
           } else {
             if (form.model.alternativeOption !== undefined
-                  && form.model.alternativeOption !== AlternativeCourtOption.BY_POSTCODE && form.model.alternativeOption !==
-                  AlternativeCourtOption.BY_NAME) {
-              const courtNames = Array.isArray(form.model.alternativeCourtName) ? form.model.alternativeCourtName [0] : form.model.alternativeOption
-              let courtDetail: CourtDetails = undefined
-              if (courtNames && form.model.alternativeOption !== undefined && form.model.alternativeOption !== '') {
-                const court: Court[] = await Court.getCourtsByName(form.model.alternativeOption)
-                if (court[0]) {
-                  courtDetail = await Court.getCourtDetails(court[0].slug)
-                }
-                draft.document.hearingLocation = form.model
-                draft.document.hearingLocation.courtName = courtDetail.name
-                draft.document.hearingLocation.alternativeCourtName = courtDetail.name
-                draft.document.hearingLocation.alternativeOption = AlternativeCourtOption.NEAREST_COURT_SELECTED
-                draft.document.hearingLocationSlug = courtDetail.slug
-                draft.document.hearingLocation.facilities = courtDetail.facilities
-
-                const user: User = res.locals.user
-                await new DraftService().save(draft, user.bearerToken)
+                  && form.model.alternativeOption === AlternativeCourtOption.NEAREST_COURT_SELECTED) {
+              const postcode: string = getDefaultPostcode(res)
+              const nearestCourt: Court = await Court.getNearestCourt(postcode)
+              let nearestCourtDetails: CourtDetails = undefined
+              if (nearestCourt) {
+                nearestCourtDetails = await Court.getCourtDetails(nearestCourt.slug)
               }
+              draft.document.hearingLocation = form.model
+              draft.document.hearingLocation.courtName = nearestCourtDetails.name
+              draft.document.hearingLocation.alternativeOption = AlternativeCourtOption.NEAREST_COURT_SELECTED
+              draft.document.hearingLocationSlug = nearestCourtDetails.slug
+              draft.document.hearingLocation.facilities = nearestCourtDetails.facilities
+
+              const user: User = res.locals.user
+              await new DraftService().save(draft, user.bearerToken)
             } else if (form.model.alternativeCourtSelected !== undefined && form.model.alternativeCourtSelected !== 'no') {
               const courtNames = form.model.alternativeCourtSelected
               if (courtNames) {

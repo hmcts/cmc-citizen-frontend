@@ -168,8 +168,14 @@
   {{ option(label, name, form, value, 'checkbox', hint, checked = checked, bold) }}
 {% endmacro %}
 
-{% macro option(label, name, form, value, type, hint = '', checked = false, bold = false, hidden, className, dataTarget, greyHint = true) %}
-  <div class="multiple-choice {{ className | default('') }}" data-target="{{ dataTarget | default(name + '-' + value ) }}">
+{% macro option(label, name, form, value, type, hint = '', checked = false, bold = false, hidden, className, dataTarget, greyHint = true, updatedValue = '') %}
+  {% set regExp = r/[^\w\s]/i %}
+  {% if updatedValue == '' %}
+    <div class="multiple-choice {{ className | default('') }}" data-target="{{ dataTarget | default(name + '-' + value ) }}">
+  {% else %}
+    {% set newValue = value | replace(regExp, '') %}
+      <div class="multiple-choice {{ className | default('') }}" data-target="{{ dataTarget | default(name + '-' + newValue ) }}">
+  {% endif %}
     {% set idValue = name + value | replace(' ', '') %}
     <input id="{{ idValue }}" type="{{ type }}" name="{{ name }}" value="{{ value }}"
            {% if checked %}checked{% endif %}>
