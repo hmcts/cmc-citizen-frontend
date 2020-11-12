@@ -10,7 +10,7 @@ This is the frontend application for CMC. Service provides web UI for citizens, 
 
 Service delegates most of the non UI responsibilities to underlying services e.g. claim-store or pdf-service.  
 
-## Getting Started ###
+## Getting Started ##
 
 ### Prerequisites
 
