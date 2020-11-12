@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { Claim } from 'claims/models/claim'
-import { sampleClaimIssueObj, sampleHwfClaimIssueObj } from 'test/http-mocks/claim-store'
+import { sampleClaimIssueObj, sampleHwfClaimIssueObj, sampleHwfClaimIssueRejectObj } from 'test/http-mocks/claim-store'
 
 import { initialTransitions } from 'dashboard/claims-state-machine/initial-transitions'
 import { MomentFactory } from 'shared/momentFactory'
@@ -31,6 +31,15 @@ describe('State Machine for the dashboard status before response', () => {
       let claimState = initialTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('help-with-fees-invalid')
+    })
+  })
+
+  describe('HWF no-remission entitled / Full remission rejected', () => {
+    it('should extract the correct state for the HWF no-remission entitled / Full remission rejected', () => {
+      const claim: Claim = new Claim().deserialize({ ...sampleHwfClaimIssueRejectObj, state: 'AWAITING_RESPONSE_HWF' })
+      let claimState = initialTransitions(claim)
+      claimState.findState(claimState)
+      expect(claimState.state).to.equal('help-with-fees-rejected')
     })
   })
 

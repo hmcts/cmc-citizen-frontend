@@ -105,6 +105,77 @@ export const sampleClaimIssueOrgVOrgPhone = {
   }
 }
 
+export const sampleHwfClaimIssueRejectObj = {
+  id: 1,
+  ccdCaseId: 123,
+  submitterId: '1',
+  submitterEmail: 'claimant@example.com',
+  externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc',
+  defendantId: '123',
+  referenceNumber: '000MC050',
+  createdAt: MomentFactory.currentDateTime(),
+  issuedOn: undefined,
+  totalAmountTillToday: 200,
+  totalAmountTillDateOfIssue: undefined,
+  moreTimeRequested: false,
+  state: 'HWF_APPLICATION_PENDING',
+  claim: {
+    helpWithFeesNumber: 'hwf1234567',
+    helpWithFeesType: 'Claim Issue',
+    hwfFeeDetailsSummary: 'FEES_REQUIREMENT_NOT_MET', 
+    hwfMandatoryDetails: 'You have stated that you earn more than £1,085 a month.',
+    claimants: [
+      {
+        type: 'individual',
+        name: 'John Smith',
+        address: {
+          line1: 'line1',
+          line2: 'line2',
+          city: 'city',
+          postcode: 'bb127nq'
+        },
+        dateOfBirth: '1990-02-17'
+      }
+    ],
+    defendants: [
+      {
+        type: 'individual',
+        name: 'John Doe',
+        address: {
+          line1: 'line1',
+          line2: 'line2',
+          city: 'city',
+          postcode: 'bb127nq'
+        }
+      }
+    ],
+    payment: {
+      id: '12',
+      amount: 2500,
+      state: { status: 'failed' }
+    },
+    amount: {
+      type: 'breakdown',
+      rows: [{ reason: 'Reason', amount: 200 }]
+    },
+    interest: {
+      type: ClaimInterestType.STANDARD,
+      rate: 10,
+      reason: 'Special case',
+      interestDate: {
+        type: InterestDateType.SUBMISSION,
+        endDateType: InterestEndDateOption.SETTLED_OR_JUDGMENT
+      } as InterestDate
+    } as Interest,
+    reason: 'Because I can',
+    feeAmountInPennies: 2500,
+    timeline: { rows: [{ date: 'a', description: 'b' }] }
+  },
+  responseDeadline: undefined,
+  intentionToProceedDeadline: MomentFactory.currentDateTime().add(33, 'days'),
+  features: []
+}
+
 export const sampleHwfClaimIssueObj = {
   id: 1,
   ccdCaseId: 123,
