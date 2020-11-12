@@ -235,8 +235,6 @@ export class Claim {
       return ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID
     } else if (this.hasClaimantRejectedStatesPaid()) {
       return ClaimStatus.CLAIMANT_REJECTED_STATES_PAID
-    } else if (this.hasClaimantRejectedStatesPaidOCONPaperResponse() && this.isOconResponse) {
-      return ClaimStatus.CLAIMANT_REJECTED_STATES_PAID
     } else if (this.hasClaimantRejectedPartAdmission()) {
       return ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION
     } else if (this.hasClaimantRejectedPartAdmissionDQs()) {
@@ -717,14 +715,7 @@ export class Claim {
       && this.claimantResponse.type === ClaimantResponseType.REJECTION
       && ((this.response.responseType === ResponseType.FULL_DEFENCE && this.response.defenceType === DefenceType.ALREADY_PAID)
         || this.response.responseType === ResponseType.PART_ADMISSION)
-      && this.response.paymentDeclaration !== undefined
-  }
-
-  private hasClaimantRejectedStatesPaidOCONPaperResponse (): boolean {
-    return this.claimantResponse
-      && this.claimantResponse.type === ClaimantResponseType.REJECTION
-      && ((this.response.responseType === ResponseType.FULL_DEFENCE && this.response.defenceType === DefenceType.ALREADY_PAID)
-        || this.response.responseType === ResponseType.PART_ADMISSION)
+      && (this.response.paymentDeclaration !== undefined || this.isOconFormResponse())
   }
 
   private hasClaimantRejectedDefendantDefence (): boolean {
