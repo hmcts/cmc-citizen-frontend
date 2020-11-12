@@ -26,6 +26,11 @@ export function initialTransitions (claim: Claim): StateMachine {
         to: InitialStates.HWF_APPLICATION_PENDING
       },
       {
+        name: 'checkHwfFeesReject',
+        from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.HWF_AWAITING_RESPONSE_HWF],
+        to: InitialStates.HWF_Rejected
+      },
+      {
         name: 'checkHwfInvalid',
         from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.HWF_APPLICATION_PENDING],
         to: InitialStates.HWF_INVALID_REFERENCE
@@ -63,6 +68,10 @@ export function initialTransitions (claim: Claim): StateMachine {
 
       onBeforeCheckHwf () {
         return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'HWF_APPLICATION_PENDING'
+      },
+
+      onBeforeCheckHwfFeesReject () {
+        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF' && claim.claimData.hwfFeeDetailsSummary !== null
       },
 
       onBeforeCheckHwfInvalid () {

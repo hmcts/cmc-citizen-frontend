@@ -31,6 +31,8 @@ export class ClaimData {
   statementOfTruth?: StatementOfTruth
   helpWithFeesNumber?: string
   helpWithFeesType?: string
+  hwfFeeDetailsSummary?: string
+  hwfMandatoryDetails?: string
 
   get claimant (): Party {
     if (this.claimants.length === 1) {
@@ -88,6 +90,12 @@ export class ClaimData {
       // help with fees type
       if (input.helpWithFeesType) {
         this.helpWithFeesType = 'ClaimIssue'
+      }
+      if (input.hwfFeeDetailsSummary) {
+        this.hwfFeeDetailsSummary = input.hwfFeeDetailsSummary
+      }
+      if (input.hwfMandatoryDetails) {
+        this.hwfMandatoryDetails = input.hwfMandatoryDetails
       }
     }
     return this
