@@ -232,16 +232,16 @@ export class ClaimStoreClient {
       .then((claims: object[]) => claims.map(claim => new Claim().deserialize(claim)))
   }
 
-  linkDefendant (user: User): Promise<void> {
+  linkDefendant (user: User, letterHolderId: string): Promise<void> {
     const options = {
       method: 'PUT',
       uri: `${claimStoreApiUrl}/defendant/link`,
       headers: {
-        Authorization: `Bearer ${user.bearerToken}`
+        Authorization: `Bearer ${user.bearerToken}`,
+        LetterHolderID: letterHolderId
       },
       timeout: 30000
     }
-
     return requestPromiseApi(options).then(function () {
       return Promise.resolve()
     })

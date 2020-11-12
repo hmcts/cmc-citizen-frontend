@@ -88,18 +88,21 @@ async function retrieveRedirectForLandingPage (req: express.Request, res: expres
   if (eligibility.eligible) {
     return ClaimPaths.taskListPage.uri
   }
-
   const user: User = res.locals.user
-  const noClaimIssued: boolean = (await claimStoreClient.retrieveByClaimantId(user)).length === 0
-  const noClaimReceived: boolean = (await claimStoreClient.retrieveByDefendantId(user)).length === 0
+  let noClaimIssued: boolean = true
+  user.roles.forEach(role => noClaimIssued = !(isLetterHolderRole(role)))
   const noDraftClaims: boolean = (await draftService.find('claim', '100', user.bearerToken, value => value)).length === 0
   const noDraftResponses: boolean = (await draftService.find('response', '100', user.bearerToken, value => value)).length === 0
 
-  if (noClaimIssued && noClaimReceived && noDraftClaims && noDraftResponses) {
+  if (noClaimIssued && noDraftClaims && noDraftResponses) {
     return EligibilityPaths.startPage.uri
   } else {
     return DashboardPaths.dashboardPage.uri
   }
+}
+
+function isLetterHolderRole (role: string): boolean {
+  return role.startsWith('letter-') && role !== 'letter-holder' && !role.endsWith('loa1')
 }
 
 function setAuthCookie (cookies: Cookies, authenticationToken: string): void {
@@ -134,7 +137,10 @@ export default express.Router()
           cookies.set(stateCookieName, req.query.state)
           return res.redirect(FirstContactPaths.claimSummaryPage.uri)
         } else {
-          await claimStoreClient.linkDefendant(user)
+          if (cookies.get('lid') && cookies.get('lid') !== undefined && cookies.get('lid') !== '') {
+            await claimStoreClient.linkDefendant(user, cookies.get('lid'))
+          }
+          cookies.set('lid', '')
           res.redirect(await retrieveRedirectForLandingPage(req, res))
         }
       } else {
