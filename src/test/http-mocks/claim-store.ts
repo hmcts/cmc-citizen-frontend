@@ -122,7 +122,7 @@ export const sampleHwfClaimIssueRejectObj = {
   claim: {
     helpWithFeesNumber: 'hwf1234567',
     helpWithFeesType: 'Claim Issue',
-    hwfFeeDetailsSummary: 'FEES_REQUIREMENT_NOT_MET', 
+    hwfFeeDetailsSummary: 'FEES_REQUIREMENT_NOT_MET',
     hwfMandatoryDetails: 'You have stated that you earn more than £1,085 a month.',
     claimants: [
       {
