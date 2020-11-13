@@ -54,8 +54,8 @@ describe('Login receiver', async () => {
       it('should return 500 and render error page when cannot retrieve claimant claims', async () => {
         const token = 'I am dummy access token'
         idamServiceMock.resolveExchangeCode(token)
-        claimStoreServiceMock.resolveLinkDefendant()
-        claimStoreServiceMock.rejectRetrieveByClaimantId('HTTP error')
+        // claimStoreServiceMock.resolveLinkDefendant()
+        // claimStoreServiceMock.rejectRetrieveByClaimantId('HTTP error')
 
         await request(app)
           .get(`${AppPaths.receiver.uri}?code=ABC&state=123`)
