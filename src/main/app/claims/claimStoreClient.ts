@@ -239,8 +239,7 @@ export class ClaimStoreClient {
       headers: {
         Authorization: `Bearer ${user.bearerToken}`,
         LetterHolderID: letterHolderId
-      },
-      timeout: 30000
+      }
     }
     return requestPromiseApi(options).then(function () {
       return Promise.resolve()
