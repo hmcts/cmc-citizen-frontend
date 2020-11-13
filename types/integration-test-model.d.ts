@@ -1,7 +1,7 @@
 declare type User = {
   id?: string
   bearerToken: string
-  roles: string[]
+  roles?: string[]
 }
 
 declare type ClaimData = {
