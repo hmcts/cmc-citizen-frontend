@@ -70,10 +70,9 @@ export class ClaimStoreClient {
    * Links defendant to claim in the claim store
    *
    * @param {string} defendant - defendant ID
-   * @param {string} letterHolderId - letterholder ID
    * @returns {Promise<Claim>}
    */
-  static linkDefendant (defendant: User, claim: Claim): Promise<Claim> {
+  static linkDefendant (defendant: User): Promise<Claim> {
     if (!defendant) {
       return Promise.reject('Defendant is required')
     }
@@ -82,8 +81,7 @@ export class ClaimStoreClient {
       method: 'PUT',
       uri: `${baseURL}/claims/defendant/link`,
       headers: {
-        Authorization: `Bearer ${defendant.bearerToken}`,
-        LetterHolderID: claim.letterHolderId
+        Authorization: `Bearer ${defendant.bearerToken}`
       }
     }
 
