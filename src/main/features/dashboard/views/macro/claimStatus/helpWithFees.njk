@@ -28,8 +28,6 @@
 
   <p>{{ t('You can either:') }}</p>
 
-  <h3 class="heading-small">{{ t('If you qualify for part or no court fee to be paid') }}</h3>
-
   <p>
     <ul class="list list-bullet">
       <li>{{ t('contact us with the correct Help With Fees number (call 0300 123 7050 or email ')}} {{ t('<a href="mailto:{{ emailSubject }}">{{ email }}</a>)', { ccdId: claim.ccdCaseId ,email: 'moneyclaims@justice.gov.uk', emailSubject: 'moneyclaims@justice.gov.uk?subject={{ ccdId }}' }) | safe }}</li>
