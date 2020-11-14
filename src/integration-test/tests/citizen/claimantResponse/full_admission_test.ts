@@ -29,7 +29,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
-    userSteps.prepareAuthenticatedUser(testData.claimantEmail)
+    await userSteps.prepareAuthenticatedUser(testData.claimantEmail)
     claimantResponseSteps.viewClaimFromDashboard(testData.claimRef)
     I.see(testData.claimRef)
     I.see('The defendant said they’ll pay you immediately')
@@ -47,7 +47,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
-    userSteps.prepareAuthenticatedUser(testData.claimantEmail)
+    await userSteps.prepareAuthenticatedUser(testData.claimantEmail)
     claimantResponseSteps.acceptSettlementFromDashboardWhenAcceptPaymentMethod(testData, claimantResponseTestData, 'View and respond to the offer')
     checkAndSendPage.verifyFactsForSettlement()
     I.click('input[type=submit]')
@@ -67,7 +67,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
-    userSteps.prepareAuthenticatedUser(testData.claimantEmail)
+    await userSteps.prepareAuthenticatedUser(testData.claimantEmail)
     claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData, 'View and respond to the offer')
     checkAndSendPage.verifyFactsForSettlement()
     checkAndSendPage.submitNoDq()
@@ -86,7 +86,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
-    userSteps.prepareAuthenticatedUser(testData.claimantEmail)
+    await userSteps.prepareAuthenticatedUser(testData.claimantEmail)
     claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData, 'View and respond to the offer')
     checkAndSendPage.verifyFactsForSettlement()
     checkAndSendPage.submitNoDq()
@@ -106,7 +106,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
-    userSteps.prepareAuthenticatedUser(testData.claimantEmail)
+    await userSteps.prepareAuthenticatedUser(testData.claimantEmail)
     claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData, 'View and respond to the offer')
     checkAndSendPage.verifyFactsForSettlement()
     checkAndSendPage.submitNoDq()
@@ -126,7 +126,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
-    userSteps.prepareAuthenticatedUser(testData.claimantEmail)
+    await userSteps.prepareAuthenticatedUser(testData.claimantEmail)
     claimantResponseSteps.acceptCourtOfferedRepaymentPlan(testData, unreasonableClaimantResponseTestDate, 'View and respond to the offer')
     checkAndSendPage.verifyFactsForSettlement()
     I.see('The court rejected your repayment plan and calculated a more affordable one')
@@ -144,7 +144,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
-    userSteps.prepareAuthenticatedUser(testData.claimantEmail)
+    await userSteps.prepareAuthenticatedUser(testData.claimantEmail)
     claimantResponseSteps.acceptCcjFromDashboardWhenDefendantHasPaidNoneAndAcceptPaymentMethod(testData, 'View and respond to the offer')
     I.see('County Court Judgment requested')
     confirmationPage.clickGoToYourAccount()
@@ -160,7 +160,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
-    userSteps.prepareAuthenticatedUser(testData.claimantEmail)
+    await userSteps.prepareAuthenticatedUser(testData.claimantEmail)
     claimantResponseSteps.acceptCcjFromDashboardWhenDefendantHasPaidSomeAndAcceptPaymentMethod(testData, 'View and respond to the offer')
     I.see('County Court Judgment requested')
     confirmationPage.clickGoToYourAccount()
@@ -180,7 +180,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
-    userSteps.prepareAuthenticatedUser(testData.claimantEmail)
+    await userSteps.prepareAuthenticatedUser(testData.claimantEmail)
     claimantResponseSteps.acceptCcjFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData, 'View and respond to the offer')
     I.see('County Court Judgment requested')
     confirmationPage.clickGoToYourAccount()

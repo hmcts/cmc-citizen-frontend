@@ -41,7 +41,7 @@ Scenario('I can as an Individual make a claim against an Individual who then ful
 
   // as claimant
   userSteps.login(testData.claimantEmail)
-  userSteps.prepareAuthenticatedUser(testData.claimantEmail)
+  await userSteps.prepareAuthenticatedUser(testData.claimantEmail)
   claimantResponseSteps.viewClaimFromDashboard(testData.claimRef)
   I.see(testData.claimRef)
   I.see('Decide whether to proceed')
@@ -93,7 +93,7 @@ Scenario('I can as an Individual make a claim against an Individual who then ful
 
   // as claimant
   userSteps.login(testData.claimantEmail)
-  userSteps.prepareAuthenticatedUser(testData.claimantEmail)
+  await userSteps.prepareAuthenticatedUser(testData.claimantEmail)
   claimantResponseSteps.viewClaimFromDashboard(testData.claimRef)
   I.see(testData.claimRef)
   I.see('Decide whether to proceed')
@@ -193,7 +193,7 @@ Scenario('I can as an Individual make a claim against an Individual who then rej
   // as claimant
   userSteps.login(testData.claimantEmail)
   I.see(`Respond to the defendant.`)
-  userSteps.prepareAuthenticatedUser(testData.claimantEmail)
+  await userSteps.prepareAuthenticatedUser(testData.claimantEmail)
   claimantResponseSteps.viewClaimFromDashboard(testData.claimRef)
   I.see(testData.claimRef)
   I.see('Respond to the defendant')
