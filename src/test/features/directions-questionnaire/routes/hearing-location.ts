@@ -260,6 +260,136 @@ describe('Directions Questionnaire - hearing location', () => {
             })
           })
         })
+
+        context('when court is rejected and searched via postcode from first loop', () => {
+          context('when form is valid', () => {
+            it('should display the search result', async () => {
+              const searchWithPostCodeFirstLoopFormData = { courtAccepted: 'no', courtName: 'Test court', alternativeOption: 'postcode', alternativePostcode: 'AB1 2CD' }
+
+              claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
+              draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+              draftStoreServiceMock.resolveFind('response')
+              courtFinderMock.resolveFind()
+              courtFinderMock.resolveCourtDetails()
+              courtFinderMock.resolveFind()
+              courtFinderMock.resolveCourtDetails()
+
+              await request(app)
+                .post(pagePath)
+                .set('Cookie', `${cookieName}=ABC`)
+                .send(searchWithPostCodeFirstLoopFormData)
+                .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to '))
+            })
+          })
+        })
+
+        context('when alternative court is rejected and searched via postcode from second loop', () => {
+          context('when form is valid', () => {
+            it('should display the search result', async () => {
+              const searchWithPostCodeSecondLoopFormData = { courtAccepted: undefined, courtName: 'Test court', alternativeCourtSelected: 'no', alternativeOption: 'postcode', alternativePostcode: 'AB1 2CD' }
+
+              claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
+              draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+              draftStoreServiceMock.resolveFind('response')
+              courtFinderMock.resolveFind()
+              courtFinderMock.resolveCourtDetails()
+              courtFinderMock.resolveFind()
+              courtFinderMock.resolveCourtDetails()
+
+              await request(app)
+                .post(pagePath)
+                .set('Cookie', `${cookieName}=ABC`)
+                .send(searchWithPostCodeSecondLoopFormData)
+                .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to '))
+            })
+          })
+        })
+
+        context('when court is rejected and searched via location from first loop', () => {
+          context('when form is valid', () => {
+            it('should display the search result', async () => {
+              const searchWithLocationFirstLoopFormData = { courtAccepted: 'no', courtName: 'Test court', alternativeOption: 'name', alternativeCourtName: 'Brimingham' }
+
+              claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
+              draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+              draftStoreServiceMock.resolveFind('response')
+              courtFinderMock.resolveNameFind()
+              courtFinderMock.resolveCourtDetails()
+              courtFinderMock.resolveFind()
+              courtFinderMock.resolveCourtDetails()
+
+              await request(app)
+                .post(pagePath)
+                .set('Cookie', `${cookieName}=ABC`)
+                .send(searchWithLocationFirstLoopFormData)
+                .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to '))
+            })
+          })
+        })
+
+        context('when court is rejected and searched via location from second loop', () => {
+          context('when form is valid', () => {
+            it('should display the search result', async () => {
+              const searchWithPostCodeSecondLoopFormData = { courtAccepted: undefined, courtName: 'Test court', alternativeCourtSelected: 'no', alternativeOption: 'name', alternativeCourtName: 'AB1 2CD' }
+
+              claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
+              draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+              draftStoreServiceMock.resolveFind('response')
+              courtFinderMock.resolveNameFind()
+              courtFinderMock.resolveCourtDetails()
+              courtFinderMock.resolveFind()
+              courtFinderMock.resolveCourtDetails()
+
+              await request(app)
+                .post(pagePath)
+                .set('Cookie', `${cookieName}=ABC`)
+                .send(searchWithPostCodeSecondLoopFormData)
+                .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to '))
+            })
+          })
+        })
+
+        context('when suggested court is rejected and user selected nearest court from second loop', () => {
+          context('when form is valid', () => {
+            it('should redirect to expert page', async () => {
+              const nearestCourtSelectedFormData = { courtAccepted: undefined, courtName: 'Test Court', alternativeCourtSelected: 'no', alternativeOption: 'nearestCourtSelected' }
+
+              claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
+              draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+              draftStoreServiceMock.resolveFind('response')
+              draftStoreServiceMock.resolveUpdate()
+              courtFinderMock.resolveFind()
+              courtFinderMock.resolveCourtDetails()
+
+              await request(app)
+                .post(pagePath)
+                .set('Cookie', `${cookieName}=ABC`)
+                .send(nearestCourtSelectedFormData)
+                .expect(res => expect(res).to.be.redirect.toLocation(expertPath))
+            })
+          })
+        })
+
+        context('when alternative court is selected from second loop', () => {
+          context('when form is valid', () => {
+            it('should redirect to expert page', async () => {
+              const alternativeCourtSelectedFormData = { courtAccepted: undefined, courtName: 'Test Court', alternativeCourtSelected: 'Birmingham District Probate Registry', alternativeOption: undefined, alternativeCourtName: 'Birmingham District Probate Registry' }
+
+              claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
+              draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+              draftStoreServiceMock.resolveFind('response')
+              draftStoreServiceMock.resolveUpdate()
+              courtFinderMock.resolveNameFind()
+              courtFinderMock.resolveCourtDetails()
+
+              await request(app)
+                .post(pagePath)
+                .set('Cookie', `${cookieName}=ABC`)
+                .send(alternativeCourtSelectedFormData)
+                .expect(res => expect(res).to.be.redirect.toLocation(expertPath))
+            })
+          })
+        })
       })
     })
   }
