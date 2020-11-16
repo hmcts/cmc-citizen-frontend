@@ -262,46 +262,74 @@ describe('Directions Questionnaire - hearing location', () => {
         })
 
         context('when court is rejected and searched via postcode from first loop', () => {
-          context('when form is valid', () => {
-            it('should display the search result', async () => {
-              const searchWithPostCodeFirstLoopFormData = { courtAccepted: 'no', courtName: 'Test court', alternativeOption: 'postcode', alternativePostcode: 'AB1 2CD' }
+          it('should display the search result', async () => {
+            const searchWithPostCodeFirstLoopFormData = { courtAccepted: 'no', courtName: 'Test court', alternativeOption: 'postcode', alternativePostcode: 'AB1 2CD' }
 
-              claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
-              draftStoreServiceMock.resolveFind('directionsQuestionnaire')
-              draftStoreServiceMock.resolveFind('response')
-              courtFinderMock.resolveFind()
-              courtFinderMock.resolveCourtDetails()
-              courtFinderMock.resolveFind()
-              courtFinderMock.resolveCourtDetails()
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
+            draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+            draftStoreServiceMock.resolveFind('response')
+            courtFinderMock.resolveFind()
+            courtFinderMock.resolveCourtDetails()
+            courtFinderMock.resolveFind()
+            courtFinderMock.resolveCourtDetails()
 
-              await request(app)
-                .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
-                .send(searchWithPostCodeFirstLoopFormData)
-                .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to '))
-            })
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send(searchWithPostCodeFirstLoopFormData)
+              .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to '))
+          })
+
+          it('should render error when post code is undefined', async () => {
+            const searchWithPostCodeFirstLoopFormData = { courtAccepted: 'no', courtName: 'Test court', alternativeOption: 'postcode', alternativePostcode: '' }
+
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
+            draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+            draftStoreServiceMock.resolveFind('response')
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send(searchWithPostCodeFirstLoopFormData)
+              .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', 'div class="error-summary"'))
           })
         })
 
         context('when alternative court is rejected and searched via postcode from second loop', () => {
-          context('when form is valid', () => {
-            it('should display the search result', async () => {
-              const searchWithPostCodeSecondLoopFormData = { courtAccepted: undefined, courtName: 'Test court', alternativeCourtSelected: 'no', alternativeOption: 'postcode', alternativePostcode: 'AB1 2CD' }
+          it('should display the search result for valid search', async () => {
+            const searchWithPostCodeSecondLoopFormData = { courtAccepted: undefined, courtName: 'Test court', alternativeCourtSelected: 'no', alternativeOption: 'postcode', alternativePostcode: 'AB1 2CD' }
 
-              claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
-              draftStoreServiceMock.resolveFind('directionsQuestionnaire')
-              draftStoreServiceMock.resolveFind('response')
-              courtFinderMock.resolveFind()
-              courtFinderMock.resolveCourtDetails()
-              courtFinderMock.resolveFind()
-              courtFinderMock.resolveCourtDetails()
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
+            draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+            draftStoreServiceMock.resolveFind('response')
+            courtFinderMock.resolveFind()
+            courtFinderMock.resolveCourtDetails()
+            courtFinderMock.resolveFind()
+            courtFinderMock.resolveCourtDetails()
 
-              await request(app)
-                .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
-                .send(searchWithPostCodeSecondLoopFormData)
-                .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to '))
-            })
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send(searchWithPostCodeSecondLoopFormData)
+              .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to '))
+          })
+
+          it('should render error for invalid post code', async () => {
+            const searchWithPostCodeSecondLoopFormData = { courtAccepted: undefined, courtName: 'Test court', alternativeCourtSelected: 'no', alternativeOption: 'postcode', alternativePostcode: '', searchParam: 'AB1 2CD', searchLoop: true, searchType: 'postcode' }
+
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
+            draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+            draftStoreServiceMock.resolveFind('response')
+            courtFinderMock.resolveFind()
+            courtFinderMock.resolveCourtDetails()
+            courtFinderMock.resolveFind()
+            courtFinderMock.resolveCourtDetails()
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send(searchWithPostCodeSecondLoopFormData)
+              .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to ', 'div class="error-summary"'))
           })
         })
 
@@ -328,24 +356,40 @@ describe('Directions Questionnaire - hearing location', () => {
         })
 
         context('when court is rejected and searched via location from second loop', () => {
-          context('when form is valid', () => {
-            it('should display the search result', async () => {
-              const searchWithPostCodeSecondLoopFormData = { courtAccepted: undefined, courtName: 'Test court', alternativeCourtSelected: 'no', alternativeOption: 'name', alternativeCourtName: 'AB1 2CD' }
+          it('should display the search result for valid search input', async () => {
+            const searchWithPostCodeSecondLoopFormData = { courtAccepted: undefined, courtName: 'Test court', alternativeCourtSelected: 'no', alternativeOption: 'name', alternativeCourtName: 'AB1 2CD' }
 
-              claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
-              draftStoreServiceMock.resolveFind('directionsQuestionnaire')
-              draftStoreServiceMock.resolveFind('response')
-              courtFinderMock.resolveNameFind()
-              courtFinderMock.resolveCourtDetails()
-              courtFinderMock.resolveFind()
-              courtFinderMock.resolveCourtDetails()
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
+            draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+            draftStoreServiceMock.resolveFind('response')
+            courtFinderMock.resolveNameFind()
+            courtFinderMock.resolveCourtDetails()
+            courtFinderMock.resolveFind()
+            courtFinderMock.resolveCourtDetails()
 
-              await request(app)
-                .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
-                .send(searchWithPostCodeSecondLoopFormData)
-                .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to '))
-            })
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send(searchWithPostCodeSecondLoopFormData)
+              .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to '))
+          })
+
+          it('should render error for invalid location', async () => {
+            const searchWithPostCodeSecondLoopFormData = { courtAccepted: undefined, courtName: 'Test court', alternativeCourtSelected: 'no', alternativeOption: 'name', alternativeCourtName: '', searchParam: 'Birmingham', searchLoop: true, searchType: 'name' }
+
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
+            draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+            draftStoreServiceMock.resolveFind('response')
+            courtFinderMock.resolveNameFind()
+            courtFinderMock.resolveCourtDetails()
+            courtFinderMock.resolveFind()
+            courtFinderMock.resolveCourtDetails()
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send(searchWithPostCodeSecondLoopFormData)
+              .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to ', 'div class="error-summary"'))
           })
         })
 
