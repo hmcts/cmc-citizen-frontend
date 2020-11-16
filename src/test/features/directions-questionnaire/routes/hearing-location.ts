@@ -111,6 +111,36 @@ describe('Directions Questionnaire - hearing location', () => {
           })
         })
 
+        context('when draft is available and alternative court was selected previously by search', () => {
+          it('should render page when everything is fine', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
+            draftStoreServiceMock.resolveFind('directionsQuestionnaireWithAlternateCourt')
+            draftStoreServiceMock.resolveFind('response')
+            courtFinderMock.resolveFind()
+            courtFinderMock.resolveCourtDetails()
+
+            await request(app)
+              .get(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', `${courtFinderMock.searchResponse[0].name}`, 'This is the closest court to the address you gave us'))
+          })
+        })
+
+        context('when draft is available and nearest court was selected previously by search', () => {
+          it('should render page when everything is fine', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
+            draftStoreServiceMock.resolveFind('directionsQuestionnaireWithAlternateCourt')
+            draftStoreServiceMock.resolveFind('response')
+            courtFinderMock.resolveFind()
+            courtFinderMock.resolveCourtDetails()
+
+            await request(app)
+              .get(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', `${courtFinderMock.searchResponse[0].name}`, 'This is the closest court to the address you gave us'))
+          })
+        })
+
       })
     })
 
