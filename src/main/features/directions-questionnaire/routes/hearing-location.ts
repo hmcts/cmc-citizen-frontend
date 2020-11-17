@@ -125,7 +125,7 @@ async function locationSearch (res: express.Response, form: Form<HearingLocation
       renderPage(res, new Form<HearingLocation>(new HearingLocation(draft.document.hearingLocation.courtName,
         undefined, draft.document.hearingLocation.facilities, draft.document.hearingLocation.courtAccepted,
         draft.document.hearingLocation.alternativeOption, draft.document.hearingLocation.alternativeCourtName,
-        form.model.alternativePostcode, undefined, courtDetails, searchParam, nearestCourtDetails, true, AlternativeCourtOption.BY_NAME
+        form.model.alternativePostcode, form.model.alternativeCourtSelected, courtDetails, searchParam, nearestCourtDetails, true, AlternativeCourtOption.BY_NAME
       )), true, apiError)
     } else {
       if (errorHandling) {
@@ -251,11 +251,10 @@ export default express.Router()
               const courtNames = form.model.alternativeCourtSelected
               if (courtNames) {
                 let courtDetail: CourtDetails = undefined
-                if (form.model.alternativeCourtName !== undefined && form.model.alternativeCourtName !== '') {
-                  const court: Court[] = await Court.getCourtsByName(form.model.alternativeCourtSelected)
-                  if (court[0]) {
-                    courtDetail = await Court.getCourtDetails(court[0].slug)
-                  }
+                const court: Court[] = await Court.getCourtsByName(form.model.alternativeCourtSelected)
+
+                if (court[0]) {
+                  courtDetail = await Court.getCourtDetails(court[0].slug)
                 }
                 draft.document.hearingLocation = form.model
                 draft.document.hearingLocation.courtName = courtDetail.name
