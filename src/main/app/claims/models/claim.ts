@@ -86,6 +86,7 @@ export class Claim {
   claimDocuments?: ClaimDocument[]
   proceedOfflineReason: string
   transferContent?: TransferContents
+  isOconResponse: boolean
   directionOrderType: string
 
   get defendantOffer (): Offer {
@@ -230,8 +231,6 @@ export class Claim {
       return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ
     } else if (this.hasIntentionToProceedDeadlinePassed()) {
       return ClaimStatus.INTENTION_TO_PROCEED_DEADLINE_PASSED
-    } else if (this.isOconFormResponse()) {
-      return ClaimStatus.DEFENDANT_OCON_FORM_RESPONSE
     } else if (this.hasDefendantRejectedClaimWithDQs()) {
       return ClaimStatus.DEFENDANT_REJECTS_WITH_DQS
     } else if (this.hasClaimantAcceptedStatesPaid()) {
@@ -437,10 +436,11 @@ export class Claim {
         this.proceedOfflineReason = input.proceedOfflineReason
       }
 
+      this.isOconResponse = this.isOconFormResponse()
+
       if (input.directionOrderType) {
         this.directionOrderType = input.directionOrderType
       }
-
       return this
     }
   }
@@ -717,7 +717,7 @@ export class Claim {
       && this.claimantResponse.type === ClaimantResponseType.REJECTION
       && ((this.response.responseType === ResponseType.FULL_DEFENCE && this.response.defenceType === DefenceType.ALREADY_PAID)
         || this.response.responseType === ResponseType.PART_ADMISSION)
-      && this.response.paymentDeclaration !== undefined
+      && (this.response.paymentDeclaration !== undefined || this.isOconFormResponse())
   }
 
   private hasClaimantRejectedDefendantDefence (): boolean {
