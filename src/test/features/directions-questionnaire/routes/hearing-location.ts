@@ -450,6 +450,20 @@ describe('Directions Questionnaire - hearing location', () => {
               .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to ', 'div class="error-summary"'))
           })
 
+          it('should render error for invalid searchType', async () => {
+            const searchWithLocationSecondLoopFormData = { courtAccepted: undefined, courtName: 'Test court', alternativeCourtSelected: 'no', alternativeOption: 'name', alternativeCourtName: '', searchParam: 'Birmingham', searchLoop: true, searchType: 'search' }
+
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
+            draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+            draftStoreServiceMock.resolveFind('response')
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send(searchWithLocationSecondLoopFormData)
+              .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', 'div class="error-summary"'))
+          })
+
           it('should handle exception and reder error if court finder is not functioning', async () => {
             const searchWithLocationSecondLoopFormData = { courtAccepted: undefined, courtName: 'Test court', alternativeCourtSelected: 'no', alternativeOption: 'name', alternativeCourtName: 'Birmingham', searchParam: 'Birmingham', searchLoop: true, searchType: 'name' }
 

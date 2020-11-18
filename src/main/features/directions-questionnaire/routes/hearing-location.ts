@@ -204,18 +204,14 @@ export default express.Router()
 
       if (form.hasErrors()) {
         if (form.model.searchLoop) {
-          try {
-            const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
-            draft.document.hearingLocation = form.model
-            if (form.model.searchType === AlternativeCourtOption.BY_POSTCODE) {
-              handlePostCodeSearchError(res, form, draft, true)
-            } else if (form.model.searchType === AlternativeCourtOption.BY_NAME) {
-              handleLocationSearchError(res, form, draft, true)
-            } else {
-              renderPage(res, form, false, undefined)
-            }
-          } catch (err) {
-            next(err)
+          const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
+          draft.document.hearingLocation = form.model
+          if (form.model.searchType === AlternativeCourtOption.BY_POSTCODE) {
+            await handlePostCodeSearchError(res, form, draft, true)
+          } else if (form.model.searchType === AlternativeCourtOption.BY_NAME) {
+            await handleLocationSearchError(res, form, draft, true)
+          } else {
+            renderPage(res, form, false, undefined)
           }
         } else {
           renderPage(res, form, false, undefined)
@@ -250,7 +246,6 @@ export default express.Router()
             } else if (form.model.alternativeCourtSelected !== undefined && form.model.alternativeCourtSelected !== 'no') {
               let courtDetail: CourtDetails = undefined
               const court: Court[] = await Court.getCourtsByName(form.model.alternativeCourtSelected)
-
               if (court[0]) {
                 courtDetail = await Court.getCourtDetails(court[0].slug)
                 draft.document.hearingLocation = form.model
