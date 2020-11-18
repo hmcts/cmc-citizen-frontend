@@ -33,6 +33,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
+    await userSteps.prepareAuthenticatedUser(testData.claimantEmail)
     claimantResponseSteps.viewClaimFromDashboard(testData.claimRef)
     claimantResponseSteps.respondToOffer('View and respond')
     claimantResponseSteps.reject(testData, claimantResponseTestData)
@@ -57,6 +58,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
+    await userSteps.prepareAuthenticatedUser(testData.claimantEmail)
     claimantResponseSteps.acceptSettlementFromDashboardWhenAcceptPaymentMethod(testData, claimantResponseTestData, 'View and respond')
     checkAndSendPage.verifyFactsForSettlement()
     checkAndSendPage.submitNoDq()
@@ -80,6 +82,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
+    await userSteps.prepareAuthenticatedUser(testData.claimantEmail)
     claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData, 'View and respond')
     checkAndSendPage.verifyFactsForSettlement()
     I.click('input[type=submit]')
@@ -104,6 +107,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
+    await userSteps.prepareAuthenticatedUser(testData.claimantEmail)
     claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData, 'View and respond')
     checkAndSendPage.verifyFactsForSettlement()
     checkAndSendPage.submitNoDq()
@@ -127,6 +131,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
+    await userSteps.prepareAuthenticatedUser(testData.claimantEmail)
     claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData, 'View and respond')
     checkAndSendPage.verifyFactsForSettlement()
     checkAndSendPage.submitNoDq()

@@ -19,6 +19,7 @@ async function prepareClaim (I: I) {
 
   await helperSteps.enterPinNumber(claimRef, claimantEmail)
   helperSteps.linkClaimToDefendant(defendantEmail)
+  userSteps.prepareAuthenticatedUser(defendantEmail)
   helperSteps.startResponseFromDashboard(claimRef)
 
   return { data: claimData }

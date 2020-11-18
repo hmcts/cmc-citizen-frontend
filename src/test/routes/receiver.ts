@@ -11,7 +11,6 @@ import { eligibleCookie } from 'test/data/cookie/eligibility'
 import * as request from 'supertest'
 
 import { app } from 'main/app'
-import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
@@ -27,11 +26,9 @@ describe('Login receiver', async () => {
   describe('on GET', async () => {
 
     describe('for authorized user', async () => {
-      beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-      })
 
       it('should save bearer token in cookie when auth token is retrieved from idam', async () => {
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
         const token = 'I am dummy access token'
         idamServiceMock.resolveExchangeCode(token)
 
@@ -42,6 +39,7 @@ describe('Login receiver', async () => {
       })
 
       it('should clear state cookie when auth token is retrieved from idam', async () => {
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
         const token = 'I am dummy access token'
         idamServiceMock.resolveExchangeCode(token)
 
@@ -51,33 +49,8 @@ describe('Login receiver', async () => {
           .expect(res => expect(res).to.have.cookie('state', ''))
       })
 
-      it('should return 500 and render error page when cannot retrieve claimant claims', async () => {
-        const token = 'I am dummy access token'
-        idamServiceMock.resolveExchangeCode(token)
-        claimStoreServiceMock.resolveLinkDefendant()
-        claimStoreServiceMock.rejectRetrieveByClaimantId('HTTP error')
-
-        await request(app)
-          .get(`${AppPaths.receiver.uri}?code=ABC&state=123`)
-          .set('Cookie', 'state=123')
-          .expect(res => expect(res).to.be.serverError.withText('Error'))
-      })
-
-      it('should return 500 and render error page when cannot retrieve defendant claims', async () => {
-        claimStoreServiceMock.resolveLinkDefendant()
-        claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
-        claimStoreServiceMock.rejectRetrieveByDefendantId('HTTP error')
-
-        await request(app)
-          .get(AppPaths.receiver.uri)
-          .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.serverError.withText('Error'))
-      })
-
       it('should return 500 and render error page when cannot retrieve claim drafts', async () => {
-        claimStoreServiceMock.resolveLinkDefendant()
-        claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
-        claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
         draftStoreServiceMock.rejectFind('HTTP error')
 
         await request(app)
@@ -87,9 +60,7 @@ describe('Login receiver', async () => {
       })
 
       it('should return 500 and render error page when cannot retrieve response drafts', async () => {
-        claimStoreServiceMock.resolveLinkDefendant()
-        claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
-        claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
         draftStoreServiceMock.resolveFindNoDraftFound()
         draftStoreServiceMock.rejectFind('HTTP error')
 
@@ -101,8 +72,7 @@ describe('Login receiver', async () => {
 
       context('when valid eligibility cookie exists (user with intention to create a claim)', async () => {
         it('should redirect to task list', async () => {
-          claimStoreServiceMock.resolveLinkDefendant()
-
+          idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
           const encryptedEligibilityCookie = cookieEncrypter.encryptCookie('j:' + JSON.stringify(eligibleCookie), { key: config.get('secrets.cmc.encryptionKey') })
 
           await request(app)
@@ -114,9 +84,7 @@ describe('Login receiver', async () => {
 
       context('when no claim issued or received and no drafts (new claimant)', async () => {
         it('should redirect to eligibility start page', async () => {
-          claimStoreServiceMock.resolveLinkDefendant()
-          claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
-          claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
+          idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
           draftStoreServiceMock.resolveFindNoDraftFound()
           draftStoreServiceMock.resolveFindNoDraftFound()
 
@@ -129,9 +97,7 @@ describe('Login receiver', async () => {
 
       context('when only draft claim exists (claimant making first claim)', async () => {
         it('should redirect to dashboard', async () => {
-          claimStoreServiceMock.resolveLinkDefendant()
-          claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
-          claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
+          idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
           draftStoreServiceMock.resolveFind('claim')
           draftStoreServiceMock.resolveFindNoDraftFound()
 
@@ -144,9 +110,7 @@ describe('Login receiver', async () => {
 
       context('when only claim issued (claimant made first claim)', async () => {
         it('should redirect to dashboard', async () => {
-          claimStoreServiceMock.resolveLinkDefendant()
-          claimStoreServiceMock.resolveRetrieveByClaimantId()
-          claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
+          idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-1')
           draftStoreServiceMock.resolveFindNoDraftFound()
           draftStoreServiceMock.resolveFindNoDraftFound()
 
@@ -159,9 +123,7 @@ describe('Login receiver', async () => {
 
       context('when claim issued and draft claim exists (claimant making another claim)', async () => {
         it('should redirect to dashboard', async () => {
-          claimStoreServiceMock.resolveLinkDefendant()
-          claimStoreServiceMock.resolveRetrieveByClaimantId()
-          claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
+          idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-1')
           draftStoreServiceMock.resolveFind('claim')
           draftStoreServiceMock.resolveFindNoDraftFound()
 
@@ -174,9 +136,7 @@ describe('Login receiver', async () => {
 
       context('when only claim received (defendant served with first claim)', async () => {
         it('should redirect to dashboard', async () => {
-          claimStoreServiceMock.resolveLinkDefendant()
-          claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
-          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
+          idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-1')
           draftStoreServiceMock.resolveFindNoDraftFound()
           draftStoreServiceMock.resolveFindNoDraftFound()
 
@@ -189,9 +149,7 @@ describe('Login receiver', async () => {
 
       context('when claim received and draft response exists (defendant responding to claim)', async () => {
         it('should redirect to dashboard', async () => {
-          claimStoreServiceMock.resolveLinkDefendant()
-          claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
-          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
+          idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-1')
           draftStoreServiceMock.resolveFindNoDraftFound()
           draftStoreServiceMock.resolveFind('response')
 
@@ -205,9 +163,7 @@ describe('Login receiver', async () => {
 
       context('when claim received and draft claim exists (defendant making first claim)', async () => {
         it('should redirect to dashboard', async () => {
-          claimStoreServiceMock.resolveLinkDefendant()
-          claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
-          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
+          idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
           draftStoreServiceMock.resolveFind('claim')
           draftStoreServiceMock.resolveFindNoDraftFound()
 
@@ -220,9 +176,7 @@ describe('Login receiver', async () => {
 
       context('when claim received and another claim issued (defendant made first claim)', async () => {
         it('should redirect to dashboard', async () => {
-          claimStoreServiceMock.resolveLinkDefendant()
-          claimStoreServiceMock.resolveRetrieveByClaimantId()
-          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
+          idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-1')
           draftStoreServiceMock.resolveFindNoDraftFound()
           draftStoreServiceMock.resolveFindNoDraftFound()
 
