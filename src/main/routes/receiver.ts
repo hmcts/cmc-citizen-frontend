@@ -89,20 +89,20 @@ async function retrieveRedirectForLandingPage (req: express.Request, res: expres
     return ClaimPaths.taskListPage.uri
   }
   const user: User = res.locals.user
-  let noClaimIssued: boolean = true
-  user.roles.forEach(role => noClaimIssued = !(isLetterHolderRole(role)))
+  let isClaimExists: boolean = false
+  user.roles.some(role => {
+    if (role.startsWith('letter-') && role !== 'letter-holder' && !role.endsWith('loa1')) {
+      return isClaimExists = true
+    }
+  })
   const noDraftClaims: boolean = (await draftService.find('claim', '100', user.bearerToken, value => value)).length === 0
   const noDraftResponses: boolean = (await draftService.find('response', '100', user.bearerToken, value => value)).length === 0
 
-  if (noClaimIssued && noDraftClaims && noDraftResponses) {
+  if (!isClaimExists && noDraftClaims && noDraftResponses) {
     return EligibilityPaths.startPage.uri
   } else {
     return DashboardPaths.dashboardPage.uri
   }
-}
-
-function isLetterHolderRole (role: string): boolean {
-  return role.startsWith('letter-') && role !== 'letter-holder' && !role.endsWith('loa1')
 }
 
 function setAuthCookie (cookies: Cookies, authenticationToken: string): void {
