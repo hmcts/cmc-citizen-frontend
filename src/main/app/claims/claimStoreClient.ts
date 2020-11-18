@@ -168,7 +168,7 @@ export class ClaimStoreClient {
     }
 
     return this.request
-      .get(`${claimStoreApiUrl}/claimant/${user.id}`, {
+      .get(`${claimStoreApiUrl}/claimant/${user.id}?pageNo=1`, {
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
         }
@@ -224,7 +224,7 @@ export class ClaimStoreClient {
     }
 
     return this.request
-      .get(`${claimStoreApiUrl}/defendant/${user.id}`, {
+      .get(`${claimStoreApiUrl}/defendant/${user.id}?pageNo=1`, {
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
         }
