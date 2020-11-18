@@ -248,14 +248,11 @@ export default express.Router()
                 await new DraftService().save(draft, user.bearerToken)
               }
             } else if (form.model.alternativeCourtSelected !== undefined && form.model.alternativeCourtSelected !== 'no') {
-              const courtNames = form.model.alternativeCourtSelected
-              if (courtNames) {
-                let courtDetail: CourtDetails = undefined
-                const court: Court[] = await Court.getCourtsByName(form.model.alternativeCourtSelected)
+              let courtDetail: CourtDetails = undefined
+              const court: Court[] = await Court.getCourtsByName(form.model.alternativeCourtSelected)
 
-                if (court[0]) {
-                  courtDetail = await Court.getCourtDetails(court[0].slug)
-                }
+              if (court[0]) {
+                courtDetail = await Court.getCourtDetails(court[0].slug)
                 draft.document.hearingLocation = form.model
                 draft.document.hearingLocation.courtName = courtDetail.name
                 draft.document.hearingLocation.alternativeCourtName = courtDetail.name
@@ -263,9 +260,9 @@ export default express.Router()
                 draft.document.hearingLocation.courtAccepted = YesNoOption.YES
                 draft.document.hearingLocationSlug = courtDetail.slug
                 draft.document.hearingLocation.facilities = courtDetail.facilities
-              }
 
-              await new DraftService().save(draft, user.bearerToken)
+                await new DraftService().save(draft, user.bearerToken)
+              }
             } else {
               draft.document.hearingLocation = form.model
               draft.document.hearingLocation.courtName = form.model.courtName
