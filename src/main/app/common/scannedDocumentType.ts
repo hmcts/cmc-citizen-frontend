@@ -1,6 +1,6 @@
 export class ScannedDocumentType {
   static readonly FORM_OCON9X = {
-    text: 'Download OCON9x Form',
+    text: "Download the defendant's response",
     uri: 'form-ocon9x'
   }
   static readonly FORM_N9A = {
