@@ -21,6 +21,21 @@ export function initialTransitions (claim: Claim): StateMachine {
         to: InitialStates.NO_RESPONSE
       },
       {
+        name: 'checkHwf',
+        from: [InitialStates.INIT, InitialStates.NO_RESPONSE],
+        to: InitialStates.HWF_APPLICATION_PENDING
+      },
+      {
+        name: 'checkHwfFeesReject',
+        from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.HWF_AWAITING_RESPONSE_HWF],
+        to: InitialStates.HWF_Rejected
+      },
+      {
+        name: 'checkHwfInvalid',
+        from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.HWF_AWAITING_RESPONSE_HWF],
+        to: InitialStates.HWF_INVALID_REFERENCE
+      },
+      {
         name: 'checkMoreTimeRequested',
         from: [InitialStates.INIT, InitialStates.NO_RESPONSE],
         to: InitialStates.MORE_TIME_REQUESTED
@@ -49,6 +64,18 @@ export function initialTransitions (claim: Claim): StateMachine {
 
       onBeforeCheckNoResponse () {
         return !claim.response
+      },
+
+      onBeforeCheckHwf () {
+        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'HWF_APPLICATION_PENDING'
+      },
+
+      onBeforeCheckHwfFeesReject () {
+        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF' && claim.claimData.hwfFeeDetailsSummary !== undefined
+      },
+
+      onBeforeCheckHwfInvalid () {
+        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF'
       },
 
       onBeforeCheckMoreTimeRequested () {
