@@ -739,7 +739,7 @@ export const sampleDirectionsQuestionnaireDraftObj = {
   }
 }
 
-export const sampleDirectionsQuestionnaireWithNearestCourtSelectedDraftObj = {
+export const sampleDirectionsQuestionnaireNearestCourtDraftObj = {
   selfWitness: {
     option: {
       option: 'yes'
@@ -752,18 +752,10 @@ export const sampleDirectionsQuestionnaireWithNearestCourtSelectedDraftObj = {
     howMany: 1
   },
   hearingLocation: {
-    courtName: 'Central London County Court',
-    courtPostcode: 'AB1 2CD',
+    courtName: 'Birmingham District Probate Registry',
+    courtPostCode: undefined,
     courtAccepted: { option: 'yes' },
-    alternativeOption: 'nearestCourtSelected',
-    alternativeCourtName: 'Central London County Court',
-    alternativePostcode: 'AB1 2CD',
-    alternativeCourtSelected: undefined,
-    courtDetails: undefined,
-    searchParam: undefined,
-    nearestCourt: undefined,
-    searchLoop: undefined,
-    searchType: undefined
+    alternativeOption: 'nearestCourtSelected'
   },
   exceptionalCircumstances: {
     exceptionalCircumstances: { option: 'yes' },
@@ -820,7 +812,7 @@ export const sampleDirectionsQuestionnaireWithNearestCourtSelectedDraftObj = {
   }
 }
 
-export const sampleDirectionsQuestionnaireDraftWithAlternateCourtSelectedObj = {
+export const sampleDirectionsQuestionnaireDraftAltCourtObj = {
   selfWitness: {
     option: {
       option: 'yes'
@@ -833,18 +825,12 @@ export const sampleDirectionsQuestionnaireDraftWithAlternateCourtSelectedObj = {
     howMany: 1
   },
   hearingLocation: {
-    courtName: 'Central London County Court',
+    courtName: 'Birmingham District Probate Registry',
     courtPostcode: 'AB1 2CD',
     courtAccepted: { option: 'yes' },
     alternativeOption: 'search',
-    alternativeCourtName: 'Central London County Court',
-    alternativePostcode: 'AB1 2CD',
-    alternativeCourtSelected: undefined,
-    courtDetails: undefined,
-    searchParam: undefined,
-    nearestCourt: undefined,
-    searchLoop: undefined,
-    searchType: undefined
+    alternativeCourtName: 'Birmingham District Probate Registry',
+    alternativePostcode: 'AB1 2CD'
   },
   exceptionalCircumstances: {
     exceptionalCircumstances: { option: 'yes' },
@@ -914,11 +900,11 @@ export const sampleDirectionsQuestionnaireDraftWithNameObj = {
     howMany: 1
   },
   hearingLocation: {
-    courtName: 'Central London County Court',
+    courtName: 'Birmingham District Probate Registry',
     courtPostcode: 'AB1 2CD',
     courtAccepted: { option: 'yes' },
     alternativeOption: 'name',
-    alternativeCourtName: 'Central London County Court',
+    alternativeCourtName: 'Birmingham District Probate Registry',
     alternativePostcode: 'AB1 2CD',
     alternativeCourtSelected: undefined,
     courtDetails: undefined,
@@ -1030,14 +1016,14 @@ export function resolveFind (draftType: string, draftOverride?: object): mock.Sc
     case 'directionsQuestionnaire':
       documentDocument = { ...sampleDirectionsQuestionnaireDraftObj, ...draftOverride }
       break
-    case 'directionsQuestionnaireWithAlternateCourt':
-      documentDocument = { ...sampleDirectionsQuestionnaireDraftWithAlternateCourtSelectedObj, ...draftOverride }
+    case 'directionsQuestionnaire:altCourt':
+      documentDocument = { ...sampleDirectionsQuestionnaireDraftAltCourtObj, ...draftOverride }
       break
-    case 'directionsQuestionnaireWithName':
+    case 'directionsQuestionnaire:name':
       documentDocument = { ...sampleDirectionsQuestionnaireDraftWithNameObj, ...draftOverride }
       break
-    case 'directionsQuestionnaireWithNearestCourt':
-      documentDocument = { ...sampleDirectionsQuestionnaireWithNearestCourtSelectedDraftObj, ...draftOverride }
+    case 'directionsQuestionnaire:nearestCourt':
+      documentDocument = { ...sampleDirectionsQuestionnaireNearestCourtDraftObj, ...draftOverride }
       break
     case 'orders':
       documentDocument = { ...sampleOrdersDraftObj, ...draftOverride }

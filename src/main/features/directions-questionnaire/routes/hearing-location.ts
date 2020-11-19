@@ -55,22 +55,17 @@ async function getNearestCourtDetails (res: express.Response): Promise<CourtDeta
 
 async function postCodeSearch (res: express.Response, form: Form<HearingLocation>, draft: Draft<DirectionsQuestionnaireDraft>, resultPage: boolean) {
   let apiError = ''
-  const searchParam = form.model.alternativePostcode
-  if (searchParam !== undefined) {
-    const court: Court = await Court.getNearestCourt(searchParam)
-    if (court !== undefined) {
-      let courtDetails: CourtDetails[] = []
-      courtDetails.push(await Court.getCourtDetails(court.slug))
-      const nearestCourtDetails: CourtDetails = await getNearestCourtDetails(res)
+  const court: Court = await Court.getNearestCourt(form.model.alternativePostcode)
+  if (court !== undefined) {
+    let courtDetails: CourtDetails[] = []
+    courtDetails.push(await Court.getCourtDetails(court.slug))
+    const nearestCourtDetails: CourtDetails = await getNearestCourtDetails(res)
 
-      renderPage(res, new Form<HearingLocation>(new HearingLocation(draft.document.hearingLocation.courtName,
-            undefined, draft.document.hearingLocation.facilities, draft.document.hearingLocation.courtAccepted,
-            draft.document.hearingLocation.alternativeOption, draft.document.hearingLocation.alternativeCourtName,
-            form.model.alternativePostcode, undefined, courtDetails, searchParam, nearestCourtDetails, true, AlternativeCourtOption.BY_POSTCODE
-            )), true, apiError)
-    } else {
-      await handlePostCodeSearchError(res, form, draft, resultPage)
-    }
+    renderPage(res, new Form<HearingLocation>(new HearingLocation(draft.document.hearingLocation.courtName,
+          undefined, draft.document.hearingLocation.facilities, draft.document.hearingLocation.courtAccepted,
+          draft.document.hearingLocation.alternativeOption, draft.document.hearingLocation.alternativeCourtName,
+          form.model.alternativePostcode, undefined, courtDetails, form.model.alternativePostcode, nearestCourtDetails, true, AlternativeCourtOption.BY_POSTCODE
+          )), true, apiError)
   } else {
     await handlePostCodeSearchError(res, form, draft, resultPage)
   }

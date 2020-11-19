@@ -114,10 +114,8 @@ describe('Directions Questionnaire - hearing location', () => {
         context('when draft is available and alternative court was selected previously by search', () => {
           it('should render page when everything is fine', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
-            draftStoreServiceMock.resolveFind('directionsQuestionnaireWithAlternateCourt')
+            draftStoreServiceMock.resolveFind('directionsQuestionnaire:altCourt')
             draftStoreServiceMock.resolveFind('response')
-            courtFinderMock.resolveFind()
-            courtFinderMock.resolveCourtDetails()
 
             await request(app)
               .get(pagePath)
@@ -129,10 +127,8 @@ describe('Directions Questionnaire - hearing location', () => {
         context('when draft is available and nearest court was selected previously by search', () => {
           it('should render page when everything is fine', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
-            draftStoreServiceMock.resolveFind('directionsQuestionnaireWithAlternateCourt')
+            draftStoreServiceMock.resolveFind('directionsQuestionnaire:nearestCourt')
             draftStoreServiceMock.resolveFind('response')
-            courtFinderMock.resolveFind()
-            courtFinderMock.resolveCourtDetails()
 
             await request(app)
               .get(pagePath)
@@ -144,7 +140,7 @@ describe('Directions Questionnaire - hearing location', () => {
         context('Display the nearest court when the alternatice court has not been selected by search or nearest court', () => {
           it('should render page when everything is fine', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
-            draftStoreServiceMock.resolveFind('directionsQuestionnaireWithName')
+            draftStoreServiceMock.resolveFind('directionsQuestionnaire:name')
             draftStoreServiceMock.resolveFind('response')
             courtFinderMock.resolveFind()
             courtFinderMock.resolveCourtDetails()
