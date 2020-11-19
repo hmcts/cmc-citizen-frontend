@@ -71,7 +71,7 @@ describe('Directions Questionnaire - hearing location', () => {
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', `${courtFinderMock.searchResponse[0].name}`, 'This is the closest court to the address you gave us'))
+            .expect(res => expect(res).to.be.successful.withText('Request a hearing location'))
         })
       })
 
