@@ -16,6 +16,7 @@ import { checkAuthorizationGuards } from 'test/features/dashboard/routes/checks/
 
 import { sampleClaimDraftObj } from 'test/http-mocks/draft-store'
 import { company, individual, organisation, soleTrader } from 'test/data/entity/party'
+import { ResponseMethod } from 'claims/models/response/responseMethod'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
