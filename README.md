@@ -1,4 +1,4 @@
-# CMC Frontend
+## CMC Frontend
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/hmcts/cmc-citizen-frontend.svg)](https://greenkeeper.io/)
 
