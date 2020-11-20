@@ -1,5 +1,5 @@
 import { IsDefined, ValidateIf, ValidateNested } from '@hmcts/class-validator'
-import * as i18next from 'i18next'
+import i18next from 'i18next'
 import { Moment } from 'moment'
 
 import { IsValidLocalDate } from '@hmcts/cmc-validators'
@@ -28,7 +28,6 @@ export class DateOfBirth implements CompletableTask {
   @MinimumAgeValidator(18, {
     message: () => {
       const limit: Moment = MomentFactory.currentDate().subtract(18, 'years').add(1, 'day')
-
       return i18next.t(ValidationErrors.DATE_UNDER_18, {
         postProcess: 'sprintf', sprintf: [MomentFormatter.formatLongDate(limit)]
       })
