@@ -6,5 +6,6 @@ export enum InitialStates {
   HWF_APPLICATION_PENDING = 'help-with-fees',
   HWF_INVALID_REFERENCE = 'help-with-fees-invalid',
   HWF_AWAITING_RESPONSE_HWF = 'awaiting_response_hwf',
-  HWF_Rejected = 'help-with-fees-rejected'
+  HWF_Rejected = 'help-with-fees-rejected',
+  HWF_More_Info = 'help-with-fess-more-info-required'
 }
