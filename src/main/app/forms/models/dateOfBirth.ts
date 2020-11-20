@@ -1,5 +1,5 @@
 import { IsDefined, ValidateIf, ValidateNested } from '@hmcts/class-validator'
-import i18next from 'i18next'
+import * as i18next from 'i18next'
 import { Moment } from 'moment'
 
 import { IsValidLocalDate } from '@hmcts/cmc-validators'
