@@ -53,7 +53,12 @@ async function runPa11y (url: string): Promise<Issue[]> {
     ignore: [
       'WCAG2AA.Principle1.Guideline1_4.1_4_3.G18.Abs',  // Visual warning on invisible elements, so not relevant
       'WCAG2AA.Principle1.Guideline1_3.1_3_1_A.G141',  // DAC have rated Semantically Incorrect Headings as AAA, not AA
-      'WCAG2AA.Principle1.Guideline1_4.1_4_10.C32,C31,C33,C38,SCR34,G206'
+      'WCAG2AA.Principle1.Guideline1_4.1_4_10.C32',
+      'WCAG2AA.Principle1.Guideline1_4.1_4_10.C31',
+      'WCAG2AA.Principle1.Guideline1_4.1_4_10.C33',
+      'WCAG2AA.Principle1.Guideline1_4.1_4_10.C38',
+      'WCAG2AA.Principle1.Guideline1_4.1_4_10.SCR34',
+      'WCAG2AA.Principle1.Guideline1_4.1_4_10.G206'
     ],
     headers: {
       Cookie: `${cookieName}=ABC`
@@ -66,7 +71,6 @@ async function runPa11y (url: string): Promise<Issue[]> {
     .filter((issue: Issue) => issue.code !== 'WCAG2AA.Principle2.Guideline2_4.2_4_1.H64.1')
     .filter((issue: Issue) => issue.code !== 'WCAG2AA.Principle4.Guideline4_1.4_1_2.H91.A.NoContent')
     .filter((issue: Issue) => issue.code !== 'WCAG2AA.Principle1.Guideline1_3.1_3_1.H85.2')
-    .filter((issue: Issue) => issue.code !== 'WCAG2AA.Principle2.Guideline2_4.2_4_1.H64.1')
 }
 
 function check (uri: string, customTests: CustomChecks = [], requestDetails: RequestDetails = { method: 'get' }): void {
