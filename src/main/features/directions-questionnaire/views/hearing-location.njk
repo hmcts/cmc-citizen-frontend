@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, radioOption, saveAndContinueButton, errorSummary, numericInput, textInput, radioGroup, apiError, apiErrorPostCodeField, apiErrorCourtNameField %}
+{% from "form.njk" import csrfProtection, radioOption, saveAndContinueButton, errorSummary, numericInput, textInput, radioGroup, apiError, apiErrorPostCodeField, apiErrorCourtNameField, apiErrorAlternateCourtSelected %}
 
 {% if party === MadeBy.DEFENDANT and (claim.claimData.defendant.type === PartyType.ORGANISATION.value or claim.claimData.defendant.type === PartyType.COMPANY.value) %}
   {% set heading = 'Request a hearing location' %}
@@ -87,7 +87,7 @@
 
             <p>{{ t('We have found a court nearest to ') }} {{ searchParam }}</p>
             <p>Select requested court</p>
-
+            {{ apiErrorAlternateCourtSelected(error) }}
             {% for court in courtDetails %}
               {{ radioOption(form = form, label = court.name, name = 'alternativeCourtSelected', value = court.name, bold = true, replaceValue = 'yes') }}
               <details class="form-group analytics-click-event-trigger"

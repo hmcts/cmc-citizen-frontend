@@ -440,13 +440,22 @@
           <li><a href="#alternativePostcode[label]">{{ t(error) }}</a></li>
       </ul>
     </div>
-    {% elseif error == 'Could not find a court name to match. Try searching by postcode instead.' %}
+  {% elseif error == 'Could not find a court name to match. Try searching by postcode instead.' %}
     <div class="error-summary" role="group" aria-labelledby="error-summary-heading" tabindex="-1">
       <h2 class="heading-medium error-summary-heading" id="error-summary-heading">
         {{ t('There was a problem') }}
       </h2>
       <ul class="error-summary-list">
           <li><a href="#alternativeCourtName[label]">{{ t(error) }}</a></li>
+      </ul>
+    </div>
+  {% elseif error == 'Select an alternative court option' %}
+    <div class="error-summary" role="group" aria-labelledby="error-summary-heading" tabindex="-1">
+      <h2 class="heading-medium error-summary-heading" id="error-summary-heading">
+        {{ t('There was a problem') }}
+      </h2>
+      <ul class="error-summary-list">
+        <li><a href="#alternativeCourtSelected[label]">{{ t(error) }}</a></li>
       </ul>
     </div>
   {% endif %}
@@ -463,6 +472,15 @@
 
 {% macro apiErrorCourtNameField(error) %}
   {% if error == 'Could not find a court name to match. Try searching by postcode instead.' %}
+    <div class="form-group form-group-error">
+      <label for="formfield" id="formfield[label]" class="form-label">{{ t(label) }}
+      <span class="error-message">{{ t(error) }}</span>
+    </div>
+  {% endif %}
+{% endmacro %}
+
+{% macro apiErrorAlternateCourtSelected(error) %}
+  {% if error == 'Select an alternative court option' %}
     <div class="form-group form-group-error">
       <label for="formfield" id="formfield[label]" class="form-label">{{ t(label) }}
       <span class="error-message">{{ t(error) }}</span>
