@@ -89,16 +89,24 @@ async function retrieveRedirectForLandingPage (req: express.Request, res: expres
     return ClaimPaths.taskListPage.uri
   }
   const user: User = res.locals.user
-  let isClaimExists: boolean = false
+  let isDefendant: boolean = false
+  let noClaimIssued: boolean = true
+  let noDraftClaims: boolean = true
+  let noDraftResponses: boolean = true
+
   user.roles.forEach(role => {
     if (role.startsWith('letter-') && role !== 'letter-holder' && !role.endsWith('loa1')) {
-      return isClaimExists = true
+      return isDefendant = true
     }
   })
-  const noDraftClaims: boolean = (await draftService.find('claim', '100', user.bearerToken, value => value)).length === 0
-  const noDraftResponses: boolean = (await draftService.find('response', '100', user.bearerToken, value => value)).length === 0
 
-  if (!isClaimExists && noDraftClaims && noDraftResponses) {
+  if (!isDefendant) {
+    noClaimIssued = (await claimStoreClient.retrieveByClaimantId(user, String(1))).length === 0
+    noDraftClaims = (await draftService.find('claim', '100', user.bearerToken, value => value)).length === 0
+    noDraftResponses = (await draftService.find('response', '100', user.bearerToken, value => value)).length === 0
+  }
+
+  if (!isDefendant && noDraftClaims && noDraftResponses && noClaimIssued) {
     return EligibilityPaths.startPage.uri
   } else {
     return DashboardPaths.dashboardPage.uri

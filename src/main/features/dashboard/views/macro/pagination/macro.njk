@@ -1,11 +1,13 @@
-<nav class="moj-pagination {{- ' ' + params.classes if params.classes}}" id="pagination-label">
+{% macro mojPagination(params) %}
 
-  <p class="govuk-visually-hidden" aria-labelledby="pagination-label">Pagination navigation</p>
+  <nav class="moj-pagination {{- ' ' + params.classes if params.classes}}" id="pagination-label">
+
+  <p class="visually-hidden" aria-labelledby="pagination-label">Pagination navigation</p>
 
   <ul class="moj-pagination__list">
     {%- if params.previous %}
       <li class="moj-pagination__item  moj-pagination__item--prev">
-        <a class="moj-pagination__link" href="{{ params.previous.href }}">{{ params.previous.text }}<span class="govuk-visually-hidden"> set of pages</span></a>
+        <a class="moj-pagination__link" href="{{ params.previous.href }}">{{ params.previous.text }}</a>
       </li>
     {% endif -%}
 
@@ -13,7 +15,7 @@
       {%- if item.type == 'dots' %}
         <li class="moj-pagination__item moj-pagination__item--dots">...</li>
       {% else %}
-        {%- if item.selected %}
+        {%- if item.selected == true %}
           <li class="moj-pagination__item moj-pagination__item--active">{{ item.text }}</li>
         {% else %}
           <li class="moj-pagination__item"><a class="moj-pagination__link" href="{{ item.href }}">{{ item.text }}</a></li>
@@ -23,13 +25,14 @@
 
     {%- if params.next %}
       <li class="moj-pagination__item  moj-pagination__item--next">
-        <a class="moj-pagination__link" href="{{ params.next.href }}">{{ params.next.text }}<span class="govuk-visually-hidden"> set of pages</span></a>
+        <a class="moj-pagination__link" href="{{ params.next.href }}">{{ params.next.text }}</a>
       </li>
     {% endif -%}
   </ul>
 
   {%- if params.results %}
-    <p class="moj-pagination__results">Showing <b>{{ params.results.from }}</b> to <b>{{ params.results.to }}</b> of <b>{{params.results.count}}</b> results</p>
+    <p class="moj-pagination__results">Showing <b class= "moj-pagination__results-text">{{ params.results.from }}</b> to <b class= "moj-pagination__results-text">{{ params.results.to }}</b> of <b class= "moj-pagination__results-text">{{params.results.count}}</b> results</p>
   {% endif -%}
 
 </nav>
+{% endmacro %}
