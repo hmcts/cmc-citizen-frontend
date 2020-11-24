@@ -12,6 +12,7 @@ import * as request from 'supertest'
 
 import { app } from 'main/app'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
+import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
 import 'test/routes/expectations'
@@ -52,6 +53,7 @@ describe('Login receiver', async () => {
       it('should return 500 and render error page when cannot retrieve claim drafts', async () => {
         idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
         draftStoreServiceMock.rejectFind('HTTP error')
+        claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
 
         await request(app)
           .get(AppPaths.receiver.uri)
@@ -63,6 +65,7 @@ describe('Login receiver', async () => {
         idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
         draftStoreServiceMock.resolveFindNoDraftFound()
         draftStoreServiceMock.rejectFind('HTTP error')
+        claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
 
         await request(app)
           .get(AppPaths.receiver.uri)
@@ -87,6 +90,7 @@ describe('Login receiver', async () => {
           idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
           draftStoreServiceMock.resolveFindNoDraftFound()
           draftStoreServiceMock.resolveFindNoDraftFound()
+          claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
 
           await request(app)
             .get(AppPaths.receiver.uri)
@@ -97,9 +101,7 @@ describe('Login receiver', async () => {
 
       context('when only draft claim exists (claimant making first claim)', async () => {
         it('should redirect to dashboard', async () => {
-          idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-          draftStoreServiceMock.resolveFind('claim')
-          draftStoreServiceMock.resolveFindNoDraftFound()
+          idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-1')
 
           await request(app)
             .get(AppPaths.receiver.uri)
@@ -110,7 +112,8 @@ describe('Login receiver', async () => {
 
       context('when only claim issued (claimant made first claim)', async () => {
         it('should redirect to dashboard', async () => {
-          idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-1')
+          idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+          claimStoreServiceMock.resolveRetrieveByClaimantId()
           draftStoreServiceMock.resolveFindNoDraftFound()
           draftStoreServiceMock.resolveFindNoDraftFound()
 
@@ -123,8 +126,9 @@ describe('Login receiver', async () => {
 
       context('when claim issued and draft claim exists (claimant making another claim)', async () => {
         it('should redirect to dashboard', async () => {
-          idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-1')
-          draftStoreServiceMock.resolveFind('claim')
+          idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+          claimStoreServiceMock.resolveRetrieveByClaimantId()
+          draftStoreServiceMock.resolveFindNoDraftFound()
           draftStoreServiceMock.resolveFindNoDraftFound()
 
           await request(app)
@@ -137,8 +141,6 @@ describe('Login receiver', async () => {
       context('when only claim received (defendant served with first claim)', async () => {
         it('should redirect to dashboard', async () => {
           idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-1')
-          draftStoreServiceMock.resolveFindNoDraftFound()
-          draftStoreServiceMock.resolveFindNoDraftFound()
 
           await request(app)
             .get(AppPaths.receiver.uri)
@@ -150,8 +152,6 @@ describe('Login receiver', async () => {
       context('when claim received and draft response exists (defendant responding to claim)', async () => {
         it('should redirect to dashboard', async () => {
           idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-1')
-          draftStoreServiceMock.resolveFindNoDraftFound()
-          draftStoreServiceMock.resolveFind('response')
 
           await request(app)
             .get(AppPaths.receiver.uri)
@@ -163,9 +163,7 @@ describe('Login receiver', async () => {
 
       context('when claim received and draft claim exists (defendant making first claim)', async () => {
         it('should redirect to dashboard', async () => {
-          idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-          draftStoreServiceMock.resolveFind('claim')
-          draftStoreServiceMock.resolveFindNoDraftFound()
+          idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-1')
 
           await request(app)
             .get(AppPaths.receiver.uri)
@@ -177,8 +175,6 @@ describe('Login receiver', async () => {
       context('when claim received and another claim issued (defendant made first claim)', async () => {
         it('should redirect to dashboard', async () => {
           idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-1')
-          draftStoreServiceMock.resolveFindNoDraftFound()
-          draftStoreServiceMock.resolveFindNoDraftFound()
 
           await request(app)
             .get(AppPaths.receiver.uri)
