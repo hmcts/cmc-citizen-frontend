@@ -1343,7 +1343,7 @@ describe('OconFormResponse', () => {
   })
 
   it('should return ClaimStatus.DEFENDANT_OCON_FORM_RESPONSE ', () => {
-    expect(claim.status).to.be.equal(ClaimStatus.DEFENDANT_OCON_FORM_RESPONSE)
+    expect(claim.status).to.be.equal(ClaimStatus.RESPONSE_SUBMITTED)
   })
 })
 
