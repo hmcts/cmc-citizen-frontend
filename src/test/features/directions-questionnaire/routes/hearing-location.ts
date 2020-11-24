@@ -267,7 +267,7 @@ describe('Directions Questionnaire - hearing location', () => {
               await request(app)
                 .post(pagePath)
                 .set('Cookie', `${cookieName}=ABC`)
-                .send({ alternativeCourtName: 'Test' })
+                .send({ courtAccepted: 'yes', alternativeCourtName: 'Test' })
                 .expect(res => expect(res).to.be.redirect.toLocation(expertPath))
             })
           })
