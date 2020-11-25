@@ -4,7 +4,7 @@
 {% from "internalLink.njk" import internalLink %}
 
 {% if reason === NotEligibleReason.HELP_WITH_FEES_REFERENCE %}
-  {% set heading = 'Decide whether to apply for Help With Fees' %}
+  {% set heading = 'You can use this service' %}
 {% else %}
   {% set heading = 'You can’t use this service' %}
 {% endif %}
@@ -58,11 +58,10 @@
         <p>{{ t(externalLink('Download a paper form', n1FormUrl) + ', complete it and return it to make your claim.') | safe }}</p>
         {{ paperFormAddress() }}
       {% elseif reason === NotEligibleReason.HELP_WITH_FEES_REFERENCE %}
-        <p>You can either:</p>
-      <ul class="list list-bullet">
-        <li>{{ t(externalLink('apply for Help With Fees', feesHelpUri, '', false ) + ' and make a claim using a Help With Fees number') | safe }}</li>
-        <li>{{ internalLink( t('continue making this claim'), EligibilityPaths.eligiblePage.uri) | safe }} {{ t(' and pay a fee based on the amount you claim' ) }}</li>
-      </ul>
+        <p>{{ t('Based on your answers you can make a money claim using this service.') }}</p>
+        <p>{{ t('You will have to pay court fees unless you are eligible for Help with Fees.' + 
+        externalLink('Find out more about Help with Fees', 'https://www.gov.uk/get-help-with-court-fees', false, true, true)) | safe }}</p>
+        {{ internalLink(t('Continue'), ClaimPaths.taskListPage.uri, 'button analytics-click-event-trigger', dataEventLabel='Eligibility: You can use this service') }}
       {% elseif reason === NotEligibleReason.CLAIMANT_ADDRESS %}
         <p>{{ t('You need to have an address in the UK to make a money claim.') }}</p>
       {% elseif reason === NotEligibleReason.DEFENDANT_ADDRESS %}
