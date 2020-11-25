@@ -1,4 +1,5 @@
 import { ClaimAmountBreakdown } from 'features/claim/form/models/claimAmountBreakdown'
+import { MoneyConverter } from 'fees/moneyConverter'
 import { Party } from 'claims/models/details/yours/party'
 import { Individual as ClaimantAsIndividual } from 'claims/models/details/yours/individual'
 import { Company as ClaimantAsCompany } from 'claims/models/details/yours/company'
@@ -34,6 +35,7 @@ export class ClaimData {
   hwfFeeDetailsSummary?: string
   hwfMandatoryDetails?: string
   moreInfoDetails?: string
+  feeRemitted?:number
 
   get claimant (): Party {
     if (this.claimants.length === 1) {
@@ -100,6 +102,9 @@ export class ClaimData {
       }
       if (input.moreInfoDetails) {
         this.moreInfoDetails = input.moreInfoDetails
+      }
+      if (input.feeRemitted) {
+        this.feeRemitted = MoneyConverter.convertPenniesToPounds(input.feeRemitted)
       }
     }
     return this
