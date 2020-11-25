@@ -49,7 +49,7 @@ describe('ClaimDocument', () => {
 describe('ScannedDocument', () => {
   it('should return Claim document with values mapped from Scanned document', () => {
     const actual: ClaimDocument = claimDocument.deserializeScannedDocument(scannedDocumentSample)
-    expect(actual.documentDisplayName).to.be.eq('Download OCON9x Form')
+    expect(actual.documentDisplayName).to.be.eq("Download the defendant's response")
     expect(actual.documentManagementUrl).to.be.eq('http://localhost')
     expect(actual.uri).to.be.eq('form-ocon9x')
     expect(actual.documentName).to.be.eq('000MC258-ocon9x-form')
