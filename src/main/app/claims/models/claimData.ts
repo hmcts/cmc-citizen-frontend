@@ -35,7 +35,7 @@ export class ClaimData {
   hwfFeeDetailsSummary?: string
   hwfMandatoryDetails?: string
   moreInfoDetails?: string
-  feeRemitted?:number
+  feeRemitted?: number
 
   get claimant (): Party {
     if (this.claimants.length === 1) {
