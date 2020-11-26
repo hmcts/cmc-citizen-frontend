@@ -490,7 +490,8 @@ describe('Claim issue: check and send page', () => {
       it('should redirect to confirmation page when form is valid and help with fee is submitted', async () => {
         draftStoreServiceMock.resolveFind('claim', { helpWithFees: {
           declared: YesNoOption.YES,
-          helpWithFeesNumber: '123456'
+          helpWithFeesNumber: 'HWF123456',
+          feeAmountInPennies: 200
         } })
         claimStoreServiceMock.resolveSaveHelpWithFeesClaimForUser()
         claimStoreServiceMock.resolveRetrieveUserRoles()
@@ -508,7 +509,7 @@ describe('Claim issue: check and send page', () => {
       it('should redirect to tasklist page when form is valid and help with fee submission throws error', async () => {
         draftStoreServiceMock.resolveFind('claim', { helpWithFees: {
           declared: YesNoOption.YES,
-          helpWithFeesNumber: '123456'
+          helpWithFeesNumber: 'HWF123456'
         } })
         // mock 'saveHelpWithFees' request with error
         claimStoreServiceMock.resolveSaveHelpWithFeesClaimWithError()
@@ -526,7 +527,7 @@ describe('Claim issue: check and send page', () => {
       it('should redirect to confirmation page when form is valid, user initiated payment, but help with fee is submitted', async () => {
         draftStoreServiceMock.resolveFind('claim', { helpWithFees: {
           declared: YesNoOption.YES,
-          helpWithFeesNumber: '123456'
+          helpWithFeesNumber: 'HWF123456'
         } })
         // mock 'awaiting payment' state
         claimStoreServiceMock.resolveRetrieveClaimByExternalId({ state: 'AWAITING_CITIZEN_PAYMENT' })
@@ -549,7 +550,7 @@ describe('Claim issue: check and send page', () => {
       it('should redirect to tasklist page when form is valid, user initiated payment, but used help with fee submission which failed with errors', async () => {
         draftStoreServiceMock.resolveFind('claim', { helpWithFees: {
           declared: YesNoOption.YES,
-          helpWithFeesNumber: '123456'
+          helpWithFeesNumber: 'HWF123456'
         } })
         // mock 'awaiting payment' state
         claimStoreServiceMock.resolveRetrieveClaimByExternalId({ state: 'AWAITING_CITIZEN_PAYMENT' })

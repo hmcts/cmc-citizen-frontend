@@ -129,6 +129,10 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response, next: 
   getClaimAmountTotal(draft.document)
     .then(async (interestTotal: TotalAmount) => {
       const helpWithFeesFeature: boolean = await featureToggles.isHelpWithFeesEnabled()
+      if (helpWithFeesFeature
+      && draft.document.helpWithFees && draft.document.helpWithFees.declared.option === YesNoOption.YES.option) {
+        draft.document.feeAmountInPennies = MoneyConverter.convertPoundsToPennies(interestTotal.feeAmount)
+      }
       res.render(Paths.checkAndSendPage.associatedView, {
         draftClaim: draft.document,
         claimAmountTotal: interestTotal,
@@ -201,10 +205,6 @@ export default express.Router()
         // help with fees
         if (await featureToggles.isHelpWithFeesEnabled()
           && draft.document.helpWithFees && draft.document.helpWithFees.declared.option === YesNoOption.YES.option) {
-          await getClaimAmountTotal(draft.document)
-          .then(async (interestTotal: TotalAmount) => {
-            draft.document.feeAmountInPennies = MoneyConverter.convertPoundsToPennies(interestTotal.feeAmount)
-          }).catch(next)
 
           // handle helpWithFees
           const helpWithFeesSuccessful = await handleHelpwWithFees(draft, user)
