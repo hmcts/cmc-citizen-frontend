@@ -8,5 +8,6 @@ export enum InitialStates {
   HWF_AWAITING_RESPONSE_HWF = 'awaiting_response_hwf',
   HWF_Rejected = 'help-with-fees-rejected',
   HWF_More_Info = 'help-with-fess-more-info-required',
-  HWF_Part_Remitted = 'help-with-fess-part-remittion-granted'
+  HWF_Part_Remitted = 'help-with-fess-part-remittion-granted',
+  HWF_CLOSED = 'help-with-fess-closed'
 }

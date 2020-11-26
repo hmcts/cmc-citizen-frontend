@@ -44,6 +44,7 @@ export class DraftClaim extends DraftDocument {
   qualifiedStatementOfTruth?: QualifiedStatementOfTruth
   timeline: ClaimantTimeline = new ClaimantTimeline()
   evidence: Evidence = new Evidence()
+  feeAmountInPennies: number = 0
 
   deserialize (input: any): DraftClaim {
     if (input) {
@@ -65,6 +66,7 @@ export class DraftClaim extends DraftDocument {
       this.amount = new ClaimAmountBreakdown().deserialize(input.amount)
       this.reason = new Reason().deserialize(input.reason)
       this.readResolveDispute = input.readResolveDispute
+      this.feeAmountInPennies = input.feeAmountInPennies
       this.readCompletingClaim = input.readCompletingClaim
       if (input.qualifiedStatementOfTruth) {
         this.qualifiedStatementOfTruth = new QualifiedStatementOfTruth().deserialize(input.qualifiedStatementOfTruth)

@@ -13,7 +13,21 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      <p><span class="bold-small">{{ t('Claim number') }}:</span> {{ claim.claimNumber }}</p>
+
+      {% if claim.helpWithFeesNumber %}
+        <p> <span class="bold-small">{{ t('Claim number:') }} </span>
+          <span>
+            {% set dash = joiner("-") %}
+            {% for batch in claim.ccdCaseId | string | batch(4) -%}
+              {{ dash() }}{% for items in batch -%}{{ items }}
+                {%- endfor %}
+              {%- endfor %}
+         </span>
+        </p>
+      {% else %}
+        <p><span class="bold-small">{{ t('Claim number') }}:</span> {{ claim.claimNumber }}</p>
+      {% endif %}
+
       <p><span class="bold-small">{{ t('Claim amount') }}:</span> {{ claim.totalAmountTillToday | numeral }}</p>
 
       {{ amountBreakdownTable('View amount breakdown', claim, interestData) }}

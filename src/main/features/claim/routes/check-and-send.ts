@@ -32,6 +32,7 @@ import { FeaturesBuilder } from 'claim/helpers/featuresBuilder'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { noRetryRequest } from 'client/request'
 import { Logger } from '@hmcts/nodejs-logging'
+import { MoneyConverter } from 'fees/moneyConverter'
 
 const logger = Logger.getLogger('claims/claimStoreClient')
 const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
@@ -200,6 +201,10 @@ export default express.Router()
         // help with fees
         if (await featureToggles.isHelpWithFeesEnabled()
           && draft.document.helpWithFees && draft.document.helpWithFees.declared.option === YesNoOption.YES.option) {
+          await getClaimAmountTotal(draft.document)
+          .then(async (interestTotal: TotalAmount) => {
+            draft.document.feeAmountInPennies = MoneyConverter.convertPoundsToPennies(interestTotal.feeAmount)
+          }).catch(next)
 
           // handle helpWithFees
           const helpWithFeesSuccessful = await handleHelpwWithFees(draft, user)
