@@ -132,6 +132,8 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response, next: 
       if (helpWithFeesFeature
       && draft.document.helpWithFees && draft.document.helpWithFees.declared.option === YesNoOption.YES.option) {
         draft.document.feeAmountInPennies = MoneyConverter.convertPoundsToPennies(interestTotal.feeAmount)
+        const user: User = res.locals.user
+        await new DraftService().save(draft, user.bearerToken)
       }
       res.render(Paths.checkAndSendPage.associatedView, {
         draftClaim: draft.document,
