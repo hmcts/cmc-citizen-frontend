@@ -1,8 +1,40 @@
 import { omit } from 'lodash'
+import { ActorType } from 'claims/models/claim-states/actor-type'
 
-export function formPaginationToDisplay (totalPage: number, selectedPageNo: number, totalClaimCount: number): object {
+export function formPaginationToDisplay (pagingInfo: object, selectedPageNo: number, usertype: string): object {
+
+  let hyperlinkText: string = ''
+  if (usertype === ActorType.CLAIMANT) {
+    hyperlinkText = '?c_pid='
+  } else if (usertype === ActorType.DEFENDANT) {
+    hyperlinkText = '?d_pid='
+  }
+
+  const totalClaimCount = pagingInfo['totalClaims']
+  const totalPage = pagingInfo['totalPages']
+
+  const pagesItems: object = formItemswithHyperlink(hyperlinkText, selectedPageNo, totalClaimCount, totalPage)
+
+  if (selectedPageNo !== 1) {
+    let updatedFromvalue: number = (25 * (selectedPageNo - 1) + 1)
+    let updatedToValueCalculate: number = (selectedPageNo * 25)
+    let updatedTovalue: number = updatedToValueCalculate > totalClaimCount ? totalClaimCount : updatedToValueCalculate
+    pagesItems['results'].from = updatedFromvalue
+    pagesItems['results'].to = updatedTovalue
+  }
+
+  if (pagesItems['previous'] === undefined) {
+    omit(pagesItems, 'previous')
+  }
+
+  if (pagesItems['next'] === undefined) {
+    omit(pagesItems, 'next')
+  }
+  return pagesItems
+}
+
+function formItemswithHyperlink(hyperlinkText: string, selectedPageNo: number, totalClaimCount: number, totalPage: number): object {
   let pagesItems: Array<object> = []
-  let items: object
   let nextArrow: object
   let previousArrow: object
   let results: object = {
@@ -11,13 +43,13 @@ export function formPaginationToDisplay (totalPage: number, selectedPageNo: numb
     count: totalClaimCount
   }
 
-  for (let i = 1; i <= totalPage; i++) {
-    let pageNumber: number = i
-    let href: string = '?page=' + i
-    if (pageNumber === selectedPageNo) {
-      items = { text : pageNumber, href: href, 'selected': true }
+  for (let i: number = 1; i <= totalPage; i++) {
+    let items: object
+    let href: string = hyperlinkText + i
+    if (i === selectedPageNo) {
+      items = { text : i, href: href, 'selected': true }
     } else {
-      items = { text : pageNumber, href: href, 'selected': false }
+      items = { text : i, href: href, 'selected': false }
     }
     pagesItems.push(items)
   }
@@ -32,7 +64,7 @@ export function formPaginationToDisplay (totalPage: number, selectedPageNo: numb
 
     nextArrow = {
       text: 'Next',
-      href: '?page=' + nextPagetoSelect
+      href: hyperlinkText + nextPagetoSelect
     }
   }
 
@@ -46,7 +78,7 @@ export function formPaginationToDisplay (totalPage: number, selectedPageNo: numb
 
     previousArrow = {
       text: 'previous',
-      href: '?page=' + previousPagetoSelect
+      href: hyperlinkText + previousPagetoSelect
     }
   }
 
@@ -57,21 +89,5 @@ export function formPaginationToDisplay (totalPage: number, selectedPageNo: numb
     items: pagesItems
   }
 
-  if (selectedPageNo !== 1) {
-    let updatedFromvalue: number = (25 * (selectedPageNo - 1) + 1)
-    let updatedToValueCalculate: number = (selectedPageNo * 25)
-    let updatedTovalue: number = updatedToValueCalculate > totalClaimCount ? totalClaimCount : updatedToValueCalculate
-
-    paginationToDisplay.results['from'] = updatedFromvalue
-    paginationToDisplay.results['to'] = updatedTovalue
-  }
-
-  if (paginationToDisplay['previous'] === undefined) {
-    omit(paginationToDisplay, 'previous')
-  }
-
-  if (paginationToDisplay['next'] === undefined) {
-    omit(paginationToDisplay, 'next')
-  }
   return paginationToDisplay
 }

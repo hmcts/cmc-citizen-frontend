@@ -72,9 +72,9 @@
           </tbody>
         </table>
         
-        {% if featureToggles.pagination %}
+        {% if paginationArgument_claimant %}
           <div>
-            {{ mojPagination(paginationArgument)}}
+            {{ mojPagination(paginationArgument_claimant)}}
           </div>
         {% endif %}
 
@@ -133,6 +133,13 @@
           {% endfor %}
           </tbody>
         </table>
+
+        {% if paginationArgument_defendant %}
+          <div>
+            {{ mojPagination(paginationArgument_defendant)}}
+          </div>
+        {% endif %}
+        
       </div>
     {% endif %}
   </div>

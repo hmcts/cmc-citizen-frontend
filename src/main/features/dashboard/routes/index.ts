@@ -16,15 +16,14 @@ import { formPaginationToDisplay } from '../helpers/formPagination'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
-function renderPage (res: express.Response, claimsAsClaimant: Claim[], claimDraftSaved: boolean, claimsAsDefendant: Claim[], responseDraftSaved: boolean, pagingInfo: string[], paginationArgument: object) {
+function renderPage (res: express.Response, claimsAsClaimant: Claim[], claimDraftSaved: boolean, claimsAsDefendant: Claim[], responseDraftSaved: boolean, paginationArgument_claimant: object, paginationArgument_defendant: object) {
   res.render(Paths.dashboardPage.associatedView, {
     claimsAsClaimant: claimsAsClaimant,
     claimDraftSaved: claimDraftSaved,
     claimsAsDefendant: claimsAsDefendant,
     responseDraftSaved: responseDraftSaved,
-    pagingInfo: pagingInfo,
-    paginationArgument: paginationArgument
-
+    paginationArgument_claimant: paginationArgument_claimant,
+    paginationArgument_defendant: paginationArgument_defendant
   })
 }
 
@@ -39,38 +38,36 @@ export default express.Router()
     const responseDraftSaved = responseDraft && responseDraft.document && responseDraft.id !== 0
     const launchDarklyClient = new LaunchDarklyClient()
     const featureToggles = new FeatureToggles(launchDarklyClient)
-    let pagingInfo: string[] = []
-    let paginationArgument: object = undefined
-    let totalPagesforClaimant: number = undefined
-    let totalClaimsforClaimant: number = undefined
+    let paginationArgument_claimant: object = undefined
+    let paginationArgument_defendant: object = undefined
 
     if (await featureToggles.isDashboardPaginationEnabled()) {
-      const selectedPageNo = (req.query.page === undefined || req.query.page === '') ? 1 : req.query.page
+      const selectedPId_claimant: number = (req.query.c_pid === undefined || req.query.c_pid === '') ? 1 : parseInt(req.query.c_pid)
+      const selectedPId_defendant: number = (req.query.d_pid === undefined || req.query.d_pid === '') ? 1 : parseInt(req.query.d_pid)
+      const pagingInfo_claimant = await claimStoreClient.retrievePaginationInfo(user, ActorType.CLAIMANT)
+      const pagingInfo_defendant = await claimStoreClient.retrievePaginationInfo(user, ActorType.DEFENDANT)
 
-      if (totalPagesforClaimant === undefined || pagingInfo.length === 0) {
-        pagingInfo = await claimStoreClient.retrievePaginationInfo(user)
-        totalPagesforClaimant = pagingInfo['totalPages']
-        totalClaimsforClaimant = pagingInfo['totalClaims']
+      if (pagingInfo_claimant !== undefined  && selectedPId_claimant !== undefined && pagingInfo_claimant['totalPages'] > 1) {
+        paginationArgument_claimant = formPaginationToDisplay(pagingInfo_claimant, selectedPId_claimant , ActorType.CLAIMANT)
       }
 
-      if ((totalPagesforClaimant !== undefined && totalPagesforClaimant > 1) && selectedPageNo !== undefined) {
-        paginationArgument = formPaginationToDisplay(totalPagesforClaimant, selectedPageNo, totalClaimsforClaimant)
+      if (pagingInfo_defendant !== undefined && selectedPId_defendant !== undefined && pagingInfo_defendant['totalPages'] > 1) {
+        paginationArgument_defendant = formPaginationToDisplay(pagingInfo_defendant, selectedPId_defendant, ActorType.DEFENDANT)
       }
 
-      const claimsAsClaimant: Claim[] = await claimStoreClient.retrieveByClaimantId(user, selectedPageNo)
-      const claimsAsDefendant: Claim[] = await claimStoreClient.retrieveByDefendantId(user, selectedPageNo)
+      const claimsAsClaimant: Claim[] = await claimStoreClient.retrieveByClaimantId(user, selectedPId_claimant)
+      const claimsAsDefendant: Claim[] = await claimStoreClient.retrieveByDefendantId(user, selectedPId_defendant)
       claimState(claimsAsClaimant,ActorType.CLAIMANT)
       claimState(claimsAsDefendant,ActorType.DEFENDANT)
 
-      renderPage(res, claimsAsClaimant, claimDraftSaved, claimsAsDefendant, responseDraftSaved, pagingInfo, paginationArgument)
-
+      renderPage(res, claimsAsClaimant, claimDraftSaved, claimsAsDefendant, responseDraftSaved, paginationArgument_claimant, paginationArgument_defendant)
     } else {
       const claimsAsClaimant: Claim[] = await claimStoreClient.retrieveByClaimantId(user, undefined)
       const claimsAsDefendant: Claim[] = await claimStoreClient.retrieveByDefendantId(user, undefined)
       claimState(claimsAsClaimant,ActorType.CLAIMANT)
       claimState(claimsAsDefendant,ActorType.DEFENDANT)
 
-      renderPage(res, claimsAsClaimant, claimDraftSaved, claimsAsDefendant, responseDraftSaved, pagingInfo, paginationArgument)
+      renderPage(res, claimsAsClaimant, claimDraftSaved, claimsAsDefendant, responseDraftSaved, undefined, undefined)
     }
 
   }))

@@ -18,6 +18,8 @@ import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/dir
 import { OrdersDraft } from 'orders/draft/ordersDraft'
 import { OrdersConverter } from 'claims/ordersConverter'
 import { ReviewOrder } from 'claims/models/reviewOrder'
+import { ActorType } from './models/claim-states/actor-type'
+import { EnumMember } from 'typescript'
 
 export const claimApiBaseUrl: string = `${config.get<string>('claim-store.url')}`
 export const claimStoreApiUrl: string = `${claimApiBaseUrl}/claims`
@@ -162,13 +164,13 @@ export class ClaimStoreClient {
       })
   }
 
-  retrieveByClaimantId (user: User, pageNo: string): Promise<Claim[]> {
+  retrieveByClaimantId (user: User, pageNo: number): Promise<Claim[]> {
     if (!user) {
       return Promise.reject(new Error('User is required'))
     }
 
-    if (pageNo === undefined || pageNo === '') {
-      pageNo = ''
+    if (pageNo === undefined) {
+      pageNo = 1
     }
 
     return this.request
@@ -222,17 +224,17 @@ export class ClaimStoreClient {
       })
   }
 
-  retrieveByDefendantId (user: User, pageNo: string): Promise<Claim[]> {
+  retrieveByDefendantId (user: User, pageNo: number): Promise<Claim[]> {
     if (!user) {
       return Promise.reject('User is required')
     }
 
-    if (pageNo === undefined || pageNo === '') {
-      pageNo = ''
+    if (pageNo === undefined) {
+      pageNo = 1
     }
 
     return this.request
-      .get(`${claimStoreApiUrl}/defendant/${user.id}`, {
+      .get(`${claimStoreApiUrl}/defendant/${user.id}?pageNo=${pageNo}`, {
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
         }
@@ -342,13 +344,13 @@ export class ClaimStoreClient {
     })
   }
 
-  retrievePaginationInfo (user: User): Promise<string[]> {
+  retrievePaginationInfo (user: User, type: string): Promise<string[]> {
     if (!user) {
       return Promise.reject('User is required')
     }
 
     return this.request
-      .get(`${claimStoreApiUrl}/pagination-metadata`, {
+      .get(`${claimStoreApiUrl}/pagination-metadata?userType=${type}`, {
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
         }
