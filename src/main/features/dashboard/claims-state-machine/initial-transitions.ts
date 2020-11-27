@@ -26,8 +26,28 @@ export function initialTransitions (claim: Claim): StateMachine {
         to: InitialStates.HWF_APPLICATION_PENDING
       },
       {
+        name: 'checkHwfFeesReject',
+        from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.HWF_AWAITING_RESPONSE_HWF],
+        to: InitialStates.HWF_Rejected
+      },
+      {
+        name: 'checkHwfFeesMoreInfo',
+        from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.HWF_AWAITING_RESPONSE_HWF],
+        to: InitialStates.HWF_More_Info
+      },
+      {
+        name: 'checkHwfFeesApplicationClosed',
+        from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.HWF_AWAITING_RESPONSE_HWF],
+        to: InitialStates.HWF_CLOSED
+      },
+      {
+        name: 'checkHwfPartRemitted',
+        from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.HWF_AWAITING_RESPONSE_HWF],
+        to: InitialStates.HWF_Part_Remitted
+      },
+      {
         name: 'checkHwfInvalid',
-        from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.HWF_APPLICATION_PENDING],
+        from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.HWF_AWAITING_RESPONSE_HWF],
         to: InitialStates.HWF_INVALID_REFERENCE
       },
       {
@@ -63,6 +83,22 @@ export function initialTransitions (claim: Claim): StateMachine {
 
       onBeforeCheckHwf () {
         return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'HWF_APPLICATION_PENDING'
+      },
+
+      onBeforeCheckHwfFeesReject () {
+        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF' && claim.claimData.hwfFeeDetailsSummary !== undefined
+      },
+
+      onBeforeCheckHwfFeesMoreInfo () {
+        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF' && claim.claimData.moreInfoDetails !== undefined
+      },
+
+      onBeforeCheckHwfFeesApplicationClosed () {
+        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'CLOSED_HWF'
+      },
+
+      onBeforeCheckHwfPartRemitted () {
+        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF' && claim.claimData.feeRemitted !== undefined
       },
 
       onBeforeCheckHwfInvalid () {

@@ -39,6 +39,7 @@ import { ClaimDocumentType } from 'common/claimDocumentType'
 import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
 import * as config from 'config'
 import { ScannedDocumentType } from 'common/scannedDocumentType'
+import { MoneyConverter } from 'fees/moneyConverter'
 
 interface State {
   status: ClaimStatus
@@ -89,6 +90,7 @@ export class Claim {
   isOconResponse: boolean
   directionOrderType: string
   helpWithFeesNumber?: string
+  helpWithFessBalanceClaimFee?: number
 
   get defendantOffer (): Offer {
     if (!this.settlement) {
@@ -331,19 +333,23 @@ export class Claim {
       this.createdAt = MomentFactory.parse(input.createdAt)
       this.claimData = new ClaimData().deserialize(input.claim)
       this.moreTimeRequested = input.moreTimeRequested
-      if ((input.state === 'HWF_APPLICATION_PENDING' || input.state === 'AWAITING_RESPONSE_HWF') && input.claim.helpWithFeesNumber !== undefined) {
+      if (this.claimData.feeRemitted !== undefined && this.claimData.feeAmountInPennies !== undefined) {
+        this.helpWithFessBalanceClaimFee = MoneyConverter.convertPenniesToPounds(this.claimData.feeAmountInPennies - input.claim.feeRemitted)
+      }
+
+      if ((input.state === 'HWF_APPLICATION_PENDING' || input.state === 'AWAITING_RESPONSE_HWF' || input.state === 'CLOSED_HWF') && input.claim.helpWithFeesNumber !== undefined) {
         this.helpWithFeesNumber = input.claim.helpWithFeesNumber
       } else {
         this.helpWithFeesNumber = null
       }
       if (input.issuedOn) {
         this.issuedOn = MomentFactory.parse(input.issuedOn)
-      } else if ((input.state === 'HWF_APPLICATION_PENDING' || input.state === 'AWAITING_RESPONSE_HWF') && input.issuedOn === undefined && input.claim.helpWithFeesNumber !== undefined) {
+      } else if ((input.state === 'HWF_APPLICATION_PENDING' || input.state === 'AWAITING_RESPONSE_HWF' || input.state === 'CLOSED_HWF') && input.issuedOn === undefined && input.claim.helpWithFeesNumber !== undefined) {
         this.issuedOn = MomentFactory.currentDate()
       }
       if (input.responseDeadline) {
         this.responseDeadline = MomentFactory.parse(input.responseDeadline)
-      } else if ((input.state === 'HWF_APPLICATION_PENDING' || input.state === 'AWAITING_RESPONSE_HWF') && input.responseDeadline === undefined && input.claim.helpWithFeesNumber !== undefined) {
+      } else if ((input.state === 'HWF_APPLICATION_PENDING' || input.state === 'AWAITING_RESPONSE_HWF' || input.state === 'CLOSED_HWF') && input.responseDeadline === undefined && input.claim.helpWithFeesNumber !== undefined) {
         this.responseDeadline = MomentFactory.currentDate().add(19, 'day')
       }
       if (input.respondedAt) {
@@ -378,7 +384,7 @@ export class Claim {
       if (input.claimantRespondedAt) {
         this.claimantRespondedAt = MomentFactory.parse(input.claimantRespondedAt)
       }
-      if ((input.state === 'HWF_APPLICATION_PENDING' || input.state === 'AWAITING_RESPONSE_HWF') && input.responseDeadline === undefined && input.claim.helpWithFeesNumber !== undefined && input.totalAmountTillDateOfIssue === undefined) {
+      if ((input.state === 'HWF_APPLICATION_PENDING' || input.state === 'AWAITING_RESPONSE_HWF' || input.state === 'CLOSED_HWF') && input.responseDeadline === undefined && input.claim.helpWithFeesNumber !== undefined && input.totalAmountTillDateOfIssue === undefined) {
         this.totalAmountTillDateOfIssue = input.totalAmountTillToday
       } else {
         this.totalAmountTillDateOfIssue = input.totalAmountTillDateOfIssue

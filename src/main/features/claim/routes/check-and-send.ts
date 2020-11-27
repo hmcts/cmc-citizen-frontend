@@ -32,6 +32,7 @@ import { FeaturesBuilder } from 'claim/helpers/featuresBuilder'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { noRetryRequest } from 'client/request'
 import { Logger } from '@hmcts/nodejs-logging'
+import { MoneyConverter } from 'fees/moneyConverter'
 
 const logger = Logger.getLogger('claims/claimStoreClient')
 const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
@@ -128,6 +129,12 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response, next: 
   getClaimAmountTotal(draft.document)
     .then(async (interestTotal: TotalAmount) => {
       const helpWithFeesFeature: boolean = await featureToggles.isHelpWithFeesEnabled()
+      if (helpWithFeesFeature
+      && draft.document.helpWithFees && draft.document.helpWithFees.declared.option === YesNoOption.YES.option) {
+        draft.document.feeAmountInPennies = MoneyConverter.convertPoundsToPennies(interestTotal.feeAmount)
+        const user: User = res.locals.user
+        await new DraftService().save(draft, user.bearerToken)
+      }
       res.render(Paths.checkAndSendPage.associatedView, {
         draftClaim: draft.document,
         claimAmountTotal: interestTotal,
