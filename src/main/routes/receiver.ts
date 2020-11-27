@@ -101,7 +101,7 @@ async function retrieveRedirectForLandingPage (req: express.Request, res: expres
   })
 
   if (!isDefendant) {
-    noClaimIssued = (await claimStoreClient.retrieveByClaimantId(user, String(1))).length === 0
+    noClaimIssued = (await claimStoreClient.retrieveByClaimantId(user, 1)).length === 0
     noDraftClaims = (await draftService.find('claim', '100', user.bearerToken, value => value)).length === 0
     noDraftResponses = (await draftService.find('response', '100', user.bearerToken, value => value)).length === 0
   }

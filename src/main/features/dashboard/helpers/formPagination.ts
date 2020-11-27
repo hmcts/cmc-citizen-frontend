@@ -33,7 +33,7 @@ export function formPaginationToDisplay (pagingInfo: object, selectedPageNo: num
   return pagesItems
 }
 
-function formItemswithHyperlink(hyperlinkText: string, selectedPageNo: number, totalClaimCount: number, totalPage: number): object {
+function formItemswithHyperlink (hyperlinkText: string, selectedPageNo: number, totalClaimCount: number, totalPage: number): object {
   let pagesItems: Array<object> = []
   let nextArrow: object
   let previousArrow: object
