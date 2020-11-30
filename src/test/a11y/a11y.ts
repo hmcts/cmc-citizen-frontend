@@ -53,7 +53,8 @@ async function runPa11y (url: string): Promise<Issue[]> {
     ignore: [
       'WCAG2AA.Principle1.Guideline1_4.1_4_3.G18.Abs',  // Visual warning on invisible elements, so not relevant
       'WCAG2AA.Principle1.Guideline1_3.1_3_1_A.G141',  // DAC have rated Semantically Incorrect Headings as AAA, not AA
-      'WCAG2AA.Principle1.Guideline1_4.1_4_3.G18.Alpha' // DAC for This element's text or background contains transparency
+      'WCAG2AA.Principle1.Guideline1_4.1_4_3.G18.Alpha', // DAC for This element's text or background contains transparency
+      'WCAG2AA.Principle1.Guideline1_1.1_1_1.H30.2'   // CTSC Web_Chat fnding
     ],
     headers: {
       Cookie: `${cookieName}=ABC`
@@ -122,6 +123,7 @@ const excludedPaths: Paths[] = [
   ClaimIssuePaths.initiatePaymentController,
   ClaimIssuePaths.receiptReceiver,
   ClaimIssuePaths.sealedClaimPdfReceiver,
+  ClaimIssuePaths.draftReceiptReceiver,
   DefendantResponsePaths.receiptReceiver,
   DefendantResponsePaths.scannedResponseForm,
   DefendantResponsePaths.legacyDashboardRedirect,

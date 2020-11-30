@@ -21,6 +21,36 @@ export function initialTransitions (claim: Claim): StateMachine {
         to: InitialStates.NO_RESPONSE
       },
       {
+        name: 'checkHwf',
+        from: [InitialStates.INIT, InitialStates.NO_RESPONSE],
+        to: InitialStates.HWF_APPLICATION_PENDING
+      },
+      {
+        name: 'checkHwfFeesReject',
+        from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.HWF_AWAITING_RESPONSE_HWF],
+        to: InitialStates.HWF_Rejected
+      },
+      {
+        name: 'checkHwfFeesMoreInfo',
+        from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.HWF_AWAITING_RESPONSE_HWF],
+        to: InitialStates.HWF_More_Info
+      },
+      {
+        name: 'checkHwfFeesApplicationClosed',
+        from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.HWF_AWAITING_RESPONSE_HWF],
+        to: InitialStates.HWF_CLOSED
+      },
+      {
+        name: 'checkHwfPartRemitted',
+        from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.HWF_AWAITING_RESPONSE_HWF],
+        to: InitialStates.HWF_Part_Remitted
+      },
+      {
+        name: 'checkHwfInvalid',
+        from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.HWF_AWAITING_RESPONSE_HWF],
+        to: InitialStates.HWF_INVALID_REFERENCE
+      },
+      {
         name: 'checkMoreTimeRequested',
         from: [InitialStates.INIT, InitialStates.NO_RESPONSE],
         to: InitialStates.MORE_TIME_REQUESTED
@@ -49,6 +79,30 @@ export function initialTransitions (claim: Claim): StateMachine {
 
       onBeforeCheckNoResponse () {
         return !claim.response
+      },
+
+      onBeforeCheckHwf () {
+        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'HWF_APPLICATION_PENDING'
+      },
+
+      onBeforeCheckHwfFeesReject () {
+        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF' && claim.claimData.hwfFeeDetailsSummary !== undefined
+      },
+
+      onBeforeCheckHwfFeesMoreInfo () {
+        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF' && claim.claimData.moreInfoDetails !== undefined
+      },
+
+      onBeforeCheckHwfFeesApplicationClosed () {
+        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'CLOSED_HWF'
+      },
+
+      onBeforeCheckHwfPartRemitted () {
+        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF' && claim.claimData.feeRemitted !== undefined
+      },
+
+      onBeforeCheckHwfInvalid () {
+        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF'
       },
 
       onBeforeCheckMoreTimeRequested () {

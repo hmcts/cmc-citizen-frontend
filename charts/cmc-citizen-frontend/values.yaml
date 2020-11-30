@@ -40,6 +40,8 @@ nodejs:
     FEATURE_ANTENNA_WEB_CHAT: true
     FEATURE_SIGN_POSTING_CTSC: false
     AUTO_ENROLL_INTO_NEW_FEATURE: true
+    FEATURE_HELP_WITH_FEES: false
+
   keyVaults:
     cmc:
       secrets:
