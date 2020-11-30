@@ -12,7 +12,7 @@ import { claimState } from 'dashboard/claims-state-machine/claim-state'
 import { ActorType } from 'claims/models/claim-states/actor-type'
 import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 import { FeatureToggles } from 'utils/featureToggles'
-import { formPaginationToDisplay } from '../helpers/formPagination'
+import { formPaginationToDisplay } from '../helpers/paginationBuilder'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
@@ -46,6 +46,8 @@ export default express.Router()
       const selectedPIdByDefendant: number = (req.query.d_pid === undefined || req.query.d_pid === '') ? 1 : Number(req.query.d_pid)
       const pagingInfoClaimant = await claimStoreClient.retrievePaginationInfo(user, ActorType.CLAIMANT)
       const pagingInfoDefendant = await claimStoreClient.retrievePaginationInfo(user, ActorType.DEFENDANT)
+      const claimsAsClaimant: Claim[] = await claimStoreClient.retrieveByClaimantId(user, selectedPIdByClaimant)
+      const claimsAsDefendant: Claim[] = await claimStoreClient.retrieveByDefendantId(user, selectedPIdByDefendant)
 
       if (pagingInfoClaimant !== undefined && selectedPIdByClaimant !== undefined && pagingInfoClaimant['totalPages'] > 1) {
         paginationArgumentClaimant = formPaginationToDisplay(pagingInfoClaimant, selectedPIdByClaimant , ActorType.CLAIMANT)
@@ -55,8 +57,6 @@ export default express.Router()
         paginationArgumentDefendant = formPaginationToDisplay(pagingInfoDefendant, selectedPIdByDefendant, ActorType.DEFENDANT)
       }
 
-      const claimsAsClaimant: Claim[] = await claimStoreClient.retrieveByClaimantId(user, selectedPIdByClaimant)
-      const claimsAsDefendant: Claim[] = await claimStoreClient.retrieveByDefendantId(user, selectedPIdByDefendant)
       claimState(claimsAsClaimant,ActorType.CLAIMANT)
       claimState(claimsAsDefendant,ActorType.DEFENDANT)
 
