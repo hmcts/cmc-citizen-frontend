@@ -5,7 +5,7 @@ import { Paths as EligibilityPaths } from 'eligibility/paths'
 import * as config from 'config'
 import * as cookieEncrypter from '@hmcts/cookie-encrypter'
 import { Paths as DashboardPaths } from 'dashboard/paths'
-
+import { Paths as FirstContactPaths } from 'first-contact/paths'
 import { cookieName as eligibilityCookieName } from 'eligibility/store'
 import { eligibleCookie } from 'test/data/cookie/eligibility'
 import * as request from 'supertest'
@@ -19,6 +19,8 @@ import 'test/routes/expectations'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import { FeatureToggles } from 'utils/featureToggles'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
+import * as toBoolean from 'to-boolean'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -142,7 +144,6 @@ describe('Login receiver', async () => {
             draftStoreServiceMock.resolveFindNoDraftFound()
             claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
           }
-
           await request(app)
             .get(AppPaths.receiver.uri)
             .set('Cookie', `${cookieName}=ABC`)
@@ -151,6 +152,19 @@ describe('Login receiver', async () => {
       })
 
       context('when claim issued and draft claim exists (claimant making another claim)', async () => {
+        it('should redirect to dashboard', async () => {
+          if (FeatureToggles.isAnyEnabled('dashboard_pagination_enabled')) {
+            idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+            claimStoreServiceMock.resolveRetrieveByClaimantId()
+            draftStoreServiceMock.resolveFind('claim')
+            draftStoreServiceMock.resolveFindNoDraftFound()
+          }
+          await request(app)
+            .get(AppPaths.receiver.uri)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
+        })
+
         it('should redirect to dashboard', async () => {
           if (FeatureToggles.isAnyEnabled('dashboard_pagination_enabled')) {
             idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
@@ -192,6 +206,27 @@ describe('Login receiver', async () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
               .toLocation(DashboardPaths.dashboardPage.uri))
+        })
+      })
+
+      context('when defendant starts response journey ', async () => {
+        it('when claim is valid claim summary page to be displayed', async () => {
+          idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-1')
+
+          await request(app)
+            .get(AppPaths.receiver.uri + '?state=000MC027')
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.redirect
+              .toLocation(FirstContactPaths.claimSummaryPage.uri))
+        })
+
+        it('when defendant tries to link and authentication is required', async () => {
+
+          await request(app)
+            .get(AppPaths.receiver.uri + '?state=123')
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.redirect
+              .toLocation(/.*\/login.*/))
         })
       })
 
@@ -249,6 +284,16 @@ describe('Login receiver', async () => {
   })
 })
 
+describe('isPaginationForDashboardEnabled', () => {
+  it('should return toggle if pagination toggle exists', async () => {
+    const mockLaunchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
+    const featureToggles = new FeatureToggles(mockLaunchDarklyClient)
+    let actual = toBoolean(config.get<boolean>(`featureToggles.dashboard_pagination_enabled`))
+    let result = await featureToggles.isDashboardPaginationEnabled()
+    expect(result).to.equal(actual)
+  })
+})
+
 describe('Defendant link receiver', () => {
   const pagePath = AppPaths.linkDefendantReceiver.uri
   attachDefaultHooks(app)
@@ -289,6 +334,14 @@ describe('Defendant link receiver', () => {
           .expect(res => expect(res).to.be.serverError)
       })
 
+      it('should redirect to link defendant when there is no auth token', async () => {
+        const token = ''
+        idamServiceMock.resolveExchangeCode(token)
+
+        await request(app)
+          .get(`${pagePath}?code=123`)
+          .expect(res => expect(res).to.be.redirect.toLocation(/.*\/login.*/))
+      })
     })
   })
 })
