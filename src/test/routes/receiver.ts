@@ -223,7 +223,7 @@ describe('Login receiver', async () => {
           await request(app)
             .get(AppPaths.receiver.uri)
             .set('Cookie', `${cookieName}=1`)
-            .expect(res => expect(res).to.be.redirect.toLocation(/.*\/login.*/))
+            .expect(res => expect(res).to.be.serverError)
         })
       })
     })
@@ -243,7 +243,7 @@ describe('Login receiver', async () => {
         await request(app)
           .get(`${AppPaths.receiver.uri}?code=ABC&state=123`)
           .set('Cookie', 'state=123')
-          .expect(res => expect(res).to.be.badRequest)
+          .expect(res => expect(res).to.be.serverError)
       })
     })
   })
@@ -286,7 +286,7 @@ describe('Defendant link receiver', () => {
 
         await request(app)
           .get(`${pagePath}?code=123`)
-          .expect(res => expect(res).to.be.badRequest)
+          .expect(res => expect(res).to.be.serverError)
       })
 
     })
