@@ -225,8 +225,7 @@ describe('Login receiver', async () => {
           await request(app)
             .get(AppPaths.receiver.uri + '?state=123')
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.redirect
-              .toLocation(/.*\/login.*/))
+            .expect(res => expect(res).to.be.serverError)
         })
       })
 
