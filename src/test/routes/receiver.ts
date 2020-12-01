@@ -65,20 +65,13 @@ describe('Login receiver', async () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should return 500 and render error page when cannot retrieve response drafts', async () => {
+      it('should return 500 and render error page when cannot retrieve response drafts with LD ON', async () => {
         if (FeatureToggles.isAnyEnabled('dashboard_pagination_enabled')) {
           idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
           draftStoreServiceMock.resolveFindNoDraftFound()
           draftStoreServiceMock.rejectFind('HTTP error')
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
-        } else {
-          idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-          draftStoreServiceMock.resolveFindNoDraftFound()
-          draftStoreServiceMock.rejectFind('HTTP error')
-          claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
-          claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
         }
-
         await request(app)
           .get(AppPaths.receiver.uri)
           .set('Cookie', `${cookieName}=ABC`)
@@ -97,19 +90,13 @@ describe('Login receiver', async () => {
         })
       })
 
-      context('when no claim issued or received and no drafts (new claimant)', async () => {
+      context('when no claim issued or received and no drafts (new claimant) with LD ON', async () => {
         it('should redirect to eligibility start page', async () => {
           if (FeatureToggles.isAnyEnabled('dashboard_pagination_enabled')) {
             idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
             claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
             draftStoreServiceMock.resolveFindNoDraftFound()
             draftStoreServiceMock.resolveFindNoDraftFound()
-          } else {
-            idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-            claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
-            draftStoreServiceMock.resolveFindNoDraftFound()
-            draftStoreServiceMock.resolveFindNoDraftFound()
-            claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
           }
 
           await request(app)
@@ -130,19 +117,13 @@ describe('Login receiver', async () => {
         })
       })
 
-      context('when only claim issued (claimant made first claim)', async () => {
+      context('when only claim issued (claimant made first claim) with LD ON', async () => {
         it('should redirect to dashboard', async () => {
           if (FeatureToggles.isAnyEnabled('dashboard_pagination_enabled')) {
             idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
             claimStoreServiceMock.resolveRetrieveByClaimantId()
             draftStoreServiceMock.resolveFindNoDraftFound()
             draftStoreServiceMock.resolveFindNoDraftFound()
-          } else {
-            idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-            claimStoreServiceMock.resolveRetrieveByClaimantId()
-            draftStoreServiceMock.resolveFindNoDraftFound()
-            draftStoreServiceMock.resolveFindNoDraftFound()
-            claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
           }
           await request(app)
             .get(AppPaths.receiver.uri)
@@ -171,7 +152,7 @@ describe('Login receiver', async () => {
             claimStoreServiceMock.resolveRetrieveByClaimantId()
             draftStoreServiceMock.resolveFind('claim')
             draftStoreServiceMock.resolveFindNoDraftFound()
-          } else {
+          } else if (!FeatureToggles.isAnyEnabled('dashboard_pagination_enabled')) {
             idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
             claimStoreServiceMock.resolveRetrieveByClaimantId()
             draftStoreServiceMock.resolveFind('claim')
@@ -221,11 +202,20 @@ describe('Login receiver', async () => {
         })
 
         it('when defendant tries to link and authentication is required', async () => {
-
           await request(app)
             .get(AppPaths.receiver.uri + '?state=123')
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError)
+        })
+
+        it('when letter holder cookie present then by linking redirect to dashboard', async () => {
+          idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-1')
+          claimStoreServiceMock.resolveLinkDefendant()
+
+          await request(app)
+            .get(AppPaths.receiver.uri + '?state=123')
+            .set('Cookie', [`${cookieName}=ABC`, 'lid=lasjlfkkjlef'])
+            .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
         })
       })
 
