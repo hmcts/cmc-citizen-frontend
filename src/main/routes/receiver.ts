@@ -23,6 +23,8 @@ import { OAuthHelper } from 'idam/oAuthHelper'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { trackCustomEvent } from 'logging/customEventTracker'
+import { FeatureToggles } from 'utils/featureToggles'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
 const logger = Logger.getLogger('router/receiver')
 
@@ -33,6 +35,8 @@ const draftService: DraftService = new DraftService()
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
 const eligibilityStore = new CookieEligibilityStore()
+
+const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
 
 async function getOAuthAccessToken (req: express.Request, receiver: RoutablePath): Promise<string> {
   if (req.query.state !== OAuthHelper.getStateCookie(req)) {
@@ -88,25 +92,32 @@ async function retrieveRedirectForLandingPage (req: express.Request, res: expres
   if (eligibility.eligible) {
     return ClaimPaths.taskListPage.uri
   }
+
   const user: User = res.locals.user
-  let isDefendant: boolean = false
   let noClaimIssued: boolean = true
   let noDraftClaims: boolean = true
   let noDraftResponses: boolean = true
+  let noClaimReceived: boolean = true
 
-  user.roles.forEach(role => {
-    if (role.startsWith('letter-') && role !== 'letter-holder' && !role.endsWith('loa1')) {
-      return isDefendant = true
+  if (featureToggles.isDashboardPaginationEnabled) {
+    user.roles.some(role => {
+      if (role.startsWith('letter-') && role !== 'letter-holder' && !role.endsWith('loa1')) {
+        return noClaimReceived = false
+      }
+    })
+    if (noClaimReceived) {
+      noClaimIssued = (await claimStoreClient.retrieveByClaimantId(user)).length === 0
+      noDraftClaims = (await draftService.find('claim', '100', user.bearerToken, value => value)).length === 0
+      noDraftResponses = (await draftService.find('response', '100', user.bearerToken, value => value)).length === 0
     }
-  })
-
-  if (!isDefendant) {
+  } else {
     noClaimIssued = (await claimStoreClient.retrieveByClaimantId(user)).length === 0
+    noClaimReceived = (await claimStoreClient.retrieveByDefendantId(user)).length === 0
     noDraftClaims = (await draftService.find('claim', '100', user.bearerToken, value => value)).length === 0
     noDraftResponses = (await draftService.find('response', '100', user.bearerToken, value => value)).length === 0
   }
 
-  if (!isDefendant && noDraftClaims && noDraftResponses && noClaimIssued) {
+  if (noClaimReceived && noDraftClaims && noDraftResponses && noClaimIssued) {
     return EligibilityPaths.startPage.uri
   } else {
     return DashboardPaths.dashboardPage.uri
@@ -145,10 +156,14 @@ export default express.Router()
           cookies.set(stateCookieName, req.query.state)
           return res.redirect(FirstContactPaths.claimSummaryPage.uri)
         } else {
-          if (cookies.get('lid') && cookies.get('lid') !== undefined && cookies.get('lid') !== '') {
-            await claimStoreClient.linkDefendant(user, cookies.get('lid'))
+          if (featureToggles.isDashboardPaginationEnabled) {
+            if (cookies.get('lid') && cookies.get('lid') !== undefined && cookies.get('lid') !== '') {
+              await claimStoreClient.linkDefendant(user, cookies.get('lid'))
+            }
+            cookies.set('lid', '')
+          } else {
+            await claimStoreClient.linkDefendant(user, '')
           }
-          cookies.set('lid', '')
           res.redirect(await retrieveRedirectForLandingPage(req, res))
         }
       } else {
