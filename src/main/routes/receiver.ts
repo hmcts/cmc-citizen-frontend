@@ -98,8 +98,9 @@ async function retrieveRedirectForLandingPage (req: express.Request, res: expres
   let noDraftClaims: boolean = true
   let noDraftResponses: boolean = true
   let noClaimReceived: boolean = true
+  const dashboardPaginationEnabled: boolean = await featureToggles.isDashboardPaginationEnabled()
 
-  if (featureToggles.isDashboardPaginationEnabled) {
+  if (dashboardPaginationEnabled) {
     user.roles.some(role => {
       if (role.startsWith('letter-') && role !== 'letter-holder' && !role.endsWith('loa1')) {
         return noClaimReceived = false
