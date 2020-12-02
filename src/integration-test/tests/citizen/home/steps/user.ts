@@ -22,10 +22,10 @@ export class UserSteps {
     loginPage.login(username, DEFAULT_PASSWORD)
   }
 
-  async prepareAuthenticatedUser (userEmail: string): Promise<User> {
+  async prepareAuthenticatedUser (userEmail: string): Promise<void> {
     const jwt: string = await IdamClient.authenticateUser(userEmail)
     const user: User = await IdamClient.retrieveUser(jwt)
-    return { ...user, bearerToken: jwt }
+    user.roles.push('letter-1')
   }
 
   loginWithPreRegisteredUser (username: string, password: string): void {
