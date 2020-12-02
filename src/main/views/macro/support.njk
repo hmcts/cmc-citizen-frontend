@@ -41,9 +41,15 @@
     {{ _phoneWidget('0300 123 7050') }}
 {% endmacro %}
 
-{% macro supportWidget1(label = 'Email') %}
+{% macro supportWidgetaccessibility(label = 'Email') %}
     {{ _emailWidget('contactocmc@justice.gov.uk') }}
     {{ _phoneWidget('0300 123 7050') }}
+{% endmacro %}
+
+{% macro supportWidgetContactus(label = 'Email') %}
+    {{ _emailWidget('contactocmc@justice.gov.uk') }}
+    {{ _phoneWidget('0300 123 7050') }}
+    {{ _holidayWidget() }}
 {% endmacro %}
 
 {% macro mcolSupportWidget(label = 'Help and advice') %}
