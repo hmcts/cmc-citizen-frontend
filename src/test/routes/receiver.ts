@@ -97,7 +97,7 @@ describe('Login receiver', async () => {
         await request(app)
           .get(AppPaths.receiver.uri)
           .set('Cookie', `${cookieName}=1`)
-          .expect(res => expect(res).to.be.serverError)
+          .expect(res => expect(res.status).to.equal(401))
       })
 
       it('when claim issued and draft claim exists, should redirect to dashboard', async () => {
@@ -244,7 +244,7 @@ describe('Login receiver', async () => {
         await request(app)
           .get(AppPaths.receiver.uri + '?state=123')
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.redirect.toLocation(/.*\/login.*/))
+          .expect(res => expect(res).to.be.serverError)
       })
 
       it('when letter holder cookie present then by linking redirect to dashboard', async () => {
@@ -271,7 +271,7 @@ describe('Login receiver', async () => {
         await request(app)
           .get(`${AppPaths.receiver.uri}?code=ABC&state=123`)
           .set('Cookie', 'state=123')
-          .expect(res => expect(res).to.be.badRequest)
+          .expect(res => expect(res).to.be.serverError)
       })
     })
   })
