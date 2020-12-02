@@ -18,7 +18,7 @@
             const ccState = metricsDetail.contactCenterState;
             const availableAgents = metricsDetail.availableAgents;
             if (ccState != "Open" || (today.getHours() < 9 || today.getHours() > 17)) {
-                document.getElementById("metrics").textContent = 'Web chat is now closed. Come back Monday to Friday 9am to 5pm or contact us by phone or email.';
+                document.getElementById("metrics").textContent = 'Web chat is now closed. Come back Monday to Friday 8.30am to 5pm or contact us by phone or email.';
                 button.classList.add('hidden');
                 buttonChat.classList.add('hidden');
             } else if (availableAgents == 0)
