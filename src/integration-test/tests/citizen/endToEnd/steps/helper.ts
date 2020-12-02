@@ -3,11 +3,9 @@ import { DefenceSteps } from 'integration-test/tests/citizen/defence/steps/defen
 import { DefenceType } from 'integration-test/data/defence-type'
 import { PaymentOption } from 'integration-test/data/payment-option'
 import { EndToEndTestData } from 'integration-test/tests/citizen/endToEnd/data/EndToEndTestData'
-import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
 
 const I: I = actor()
 const defenceSteps: DefenceSteps = new DefenceSteps()
-const userSteps: UserSteps = new UserSteps()
 
 export class Helper {
 
@@ -34,7 +32,6 @@ export class Helper {
       testData.defenceType = DefenceType.FULL_REJECTION_WITH_DISPUTE
     }
     defenceSteps.loginAsDefendant(testData.defendantEmail)
-    userSteps.prepareAuthenticatedUser(testData.defendantEmail)
     I.click(testData.claimRef)
     I.click('Respond to claim')
     defenceSteps.makeDefenceAndSubmit(
@@ -54,7 +51,6 @@ export class Helper {
       testData.paymentOption = PaymentOption.IMMEDIATELY
     }
     defenceSteps.loginAsDefendant(testData.defendantEmail)
-    userSteps.prepareAuthenticatedUser(testData.defendantEmail)
     I.click(testData.claimRef)
     I.click('Respond to claim')
     defenceSteps.makeFullAdmission(testData.defendant, testData.defendantPartyType, testData.paymentOption, testData.claimantName, false)
