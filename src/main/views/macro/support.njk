@@ -7,6 +7,27 @@
     {% endif %}
 {% endmacro%}
 
+{% macro _antennawebChatWidget(label = 'Web chat') %}
+   {% if antennawebChat %}
+      <h2 class="heading-medium contact-us">{{ t(label)}}</h2>
+      <button class="webChat">Talk to an Agent</button>
+      <p> 
+      <p id="metrics"></p>
+        <web-chat class="hidden"
+            chat-title="Money Claims Web Chat"
+            url="webchat.ctsc.hmcts.net"
+            chat-icon-url="/img/lib/gov.uk_logotype_crown_invert_trans.png?0.26.0"
+            locale-url="/assets/locale"
+            api-version="1.0"
+            Language="English"
+            Service="OCMC"
+            page-name="Money Claims"
+            route-point-identifier="Default" work-flow-type lease-time="24" priority="5" secure-connections="true">
+        </web-chat>
+      </p>
+    {% endif %}
+{% endmacro%}
+
 {% macro _emailWidget(email = supportEmailAddress) %}
     <h2 class="heading-medium contact-mail">{{ t('Email') }}</h2>
     <p><a href="mailto:{{t(email)}}">{{ t(email)}}</a>
@@ -34,6 +55,7 @@
 {% macro supportWidget(label = 'Help and support') %}
     <h2 class="heading-medium">{{ t(label) }}</h2>
     {{ _webChatWidget() }}
+    {{ _antennawebChatWidget() }}
     {{ _emailWidget() }}
     {{ _phoneWidget() }}
     {{ _holidayWidget() }}
@@ -54,6 +76,7 @@
 {% macro mcolSupportWidget(label = 'Help and advice') %}
   <h2 class="heading-medium">{{ t(label) }}</h2>
   {{ _webChatWidget() }}
+  {{ _antennawebChatWidget() }}
   {{ _emailWidget('ccbc@hmcts.gsi.gov.uk') }}
   {{ _phoneWidget('0300 123 1057') }}
   {{ _holidayWidget() }}
@@ -77,6 +100,7 @@
   <summary><span class="summary">{{ t('Contact us for help') }}</span></summary>
   <div class="panel">
     {{ _webChatWidget() }}
+    {{ _antennawebChatWidget() }}
     {{ _emailWidget() }}
     {{ _phoneWidget() }}
     {{ _holidayWidget() }}

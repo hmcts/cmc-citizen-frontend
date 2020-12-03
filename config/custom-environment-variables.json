@@ -78,6 +78,7 @@
     "mediationPilot": "FEATURE_MEDIATION_PILOT",
     "directionsQuestionnaire": "FEATURE_DIRECTIONS_QUESTIONNAIRE",
     "newDashboardStatus": "FEATURE_NEW_DASHBOARD_STATUS",
+    "antennaWebChat": "FEATURE_ANTENNA_WEB_CHAT",
     "webChat": "FEATURE_WEB_CHAT",
     "inversionOfControl": "FEATURE_INVERSION_OF_CONTROL",
     "warningBanner": "FEATURE_WARNING_BANNER",
