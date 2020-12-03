@@ -35,6 +35,7 @@ import { DefendantHowMuchYouOwePage } from 'integration-test/tests/citizen/defen
 import { MediationSteps } from 'integration-test/tests/citizen/mediation/steps/mediation'
 import { DefendantPhonePage } from 'integration-test/tests/citizen/defence/pages/defendant-phone'
 import I = CodeceptJS.I
+import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
 
 const I: I = actor()
 const defendantStartPage: DefendantStartPage = new DefendantStartPage()
@@ -76,6 +77,8 @@ const defendantRepaymentPlan: PaymentPlan = {
   frequency: 'everyWeek'
 }
 
+const userSteps: UserSteps = new UserSteps()
+
 export class DefenceSteps {
 
   async getClaimPin (claimRef: string, authorisation: string): Promise<string> {
@@ -106,6 +109,7 @@ export class DefenceSteps {
     // defendantRegisterPage.clickLinkIAlreadyHaveAnAccount()
     loginPage.open()
     loginPage.login(defendantEmail, DEFAULT_PASSWORD)
+    userSteps.prepareAuthenticatedUser(defendantEmail)
   }
 
   confirmYourDetails (defendant: Party, expectPhonePage: boolean = false): void {

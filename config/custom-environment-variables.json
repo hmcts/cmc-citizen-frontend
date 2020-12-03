@@ -86,7 +86,7 @@
     "pcq": "FEATURE_PCQ",
     "signPostingCTSC": "FEATURE_SIGN_POSTING_CTSC",
     "autoEnrollIntoNewFeature": "AUTO_ENROLL_INTO_NEW_FEATURE",
-    "pagination": "dashboard_pagination_enabled"
+    "dashboard_pagination_enabled": "dashboard_pagination_enabled"
   },
 
   "oauth": {
