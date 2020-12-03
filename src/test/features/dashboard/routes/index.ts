@@ -171,7 +171,7 @@ describe('Dashboard page', () => {
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', Paths.dashboardPage.uri)
 
-    if (FeatureToggles.isEnabled('pagination')) {
+    if (FeatureToggles.isEnabled('dashboard_pagination_enabled')) {
 
       context('when user authorised', () => {
         beforeEach(() => {
@@ -286,7 +286,7 @@ describe('Dashboard page', () => {
           })
         })
       })
-    } else if (!FeatureToggles.isEnabled('pagination')) {
+    } else if (!FeatureToggles.isEnabled('dashboard_pagination_enabled')) {
       context('when user authorised', () => {
         beforeEach(() => {
           idamServiceMock.resolveRetrieveUserFor('1', 'citizen')

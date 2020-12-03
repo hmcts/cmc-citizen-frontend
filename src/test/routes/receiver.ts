@@ -38,7 +38,6 @@ describe('Login receiver', async () => {
       })
 
       it('should save bearer token in cookie when auth token is retrieved from idam', async () => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
         const token = 'I am dummy access token'
         idamServiceMock.resolveExchangeCode(token)
 
@@ -49,7 +48,6 @@ describe('Login receiver', async () => {
       })
 
       it('should clear state cookie when auth token is retrieved from idam', async () => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
         const token = 'I am dummy access token'
         idamServiceMock.resolveExchangeCode(token)
 
@@ -61,6 +59,7 @@ describe('Login receiver', async () => {
 
       it('should return 500 and render error page when cannot retrieve claim drafts', async () => {
         claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
+        claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
         draftStoreServiceMock.resolveFindNoDraftFound()
         draftStoreServiceMock.rejectFind('HTTP error')
 
@@ -72,6 +71,7 @@ describe('Login receiver', async () => {
 
       it('when no claim issued or received and no drafts (new claimant) should redirect to start page', async () => {
         claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
+        claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
         draftStoreServiceMock.resolveFindNoDraftFound()
         draftStoreServiceMock.resolveFindNoDraftFound()
 
@@ -83,8 +83,6 @@ describe('Login receiver', async () => {
 
       it('when only claim issued (claimant made first claim) should redirect to dashboard', async () => {
         claimStoreServiceMock.resolveRetrieveByClaimantId()
-        draftStoreServiceMock.resolveFindNoDraftFound()
-        draftStoreServiceMock.resolveFindNoDraftFound()
 
         await request(app)
           .get(AppPaths.receiver.uri)
@@ -104,8 +102,6 @@ describe('Login receiver', async () => {
 
       it('when claim issued and draft claim exists, should redirect to dashboard', async () => {
         claimStoreServiceMock.resolveRetrieveByClaimantId()
-        draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveFindNoDraftFound()
 
         await request(app)
           .get(AppPaths.receiver.uri)
@@ -132,7 +128,6 @@ describe('Login receiver', async () => {
 
       context('when only draft claim exists (claimant making first claim)', async () => {
         it('should redirect to dashboard', async () => {
-
           await request(app)
             .get(AppPaths.receiver.uri)
             .set('Cookie', `${cookieName}=ABC`)
