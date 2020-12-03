@@ -1,4 +1,3 @@
-import { IdamClient } from 'integration-test/helpers/clients/idamClient'
 import { DEFAULT_PASSWORD, UserEmails } from 'integration-test/data/test-data'
 import { ClaimantTaskListPage } from 'integration-test/tests/citizen/claim/pages/claimant-task-list'
 import { LoginPage } from 'integration-test/tests/citizen/home/pages/login'
@@ -20,12 +19,6 @@ export class UserSteps {
   login (username: string): void {
     loginPage.open()
     loginPage.login(username, DEFAULT_PASSWORD)
-  }
-
-  async prepareAuthenticatedUser (userEmail: string): Promise<void> {
-    const jwt: string = await IdamClient.authenticateUser(userEmail)
-    const user: User = await IdamClient.retrieveUser(jwt)
-    user.roles.push('letter-1')
   }
 
   loginWithPreRegisteredUser (username: string, password: string): void {

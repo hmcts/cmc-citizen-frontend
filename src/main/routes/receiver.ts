@@ -108,8 +108,11 @@ async function retrieveRedirectForLandingPage (req: express.Request, res: expres
     })
     if (noClaimReceived) {
       noClaimIssued = (await claimStoreClient.retrieveByClaimantId(user)).length === 0
-      noDraftClaims = (await draftService.find('claim', '100', user.bearerToken, value => value)).length === 0
-      noDraftResponses = (await draftService.find('response', '100', user.bearerToken, value => value)).length === 0
+      if (noClaimIssued) {
+        noClaimReceived = (await claimStoreClient.retrieveByDefendantId(user)).length === 0
+        noDraftClaims = (await draftService.find('claim', '100', user.bearerToken, value => value)).length === 0
+        noDraftResponses = (await draftService.find('response', '100', user.bearerToken, value => value)).length === 0
+      }
     }
   } else {
     noClaimIssued = (await claimStoreClient.retrieveByClaimantId(user)).length === 0
@@ -118,7 +121,7 @@ async function retrieveRedirectForLandingPage (req: express.Request, res: expres
     noDraftResponses = (await draftService.find('response', '100', user.bearerToken, value => value)).length === 0
   }
 
-  if (noClaimReceived && noDraftClaims && noDraftResponses && noClaimIssued) {
+  if (noClaimReceived && noClaimIssued && noDraftClaims && noDraftResponses) {
     return EligibilityPaths.startPage.uri
   } else {
     return DashboardPaths.dashboardPage.uri

@@ -26,7 +26,6 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
-    await userSteps.prepareAuthenticatedUser(testData.claimantEmail)
     claimantResponseSteps.viewClaimFromDashboard(testData.claimRef)
     I.click('View and respond')
     claimantResponseSteps.acceptPartAdmitFromBusinessWithAlternativePaymentIntention()
@@ -46,10 +45,10 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     const claimantResponseTestData: ClaimantResponseTestData = new ClaimantResponseTestData()
     // as defendant
     helperSteps.finishResponse(testData, false)
+
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
-    await userSteps.prepareAuthenticatedUser(testData.claimantEmail)
     claimantResponseSteps.viewClaimFromDashboard(testData.claimRef)
     I.click('View and respond')
     claimantResponseSteps.acceptFullAdmitFromBusinessWithAlternativePaymentIntention(claimantResponseTestData)
