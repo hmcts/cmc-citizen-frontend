@@ -41,7 +41,9 @@ export default express.Router()
     let paginationArgumentClaimant: object = undefined
     let paginationArgumentDefendant: object = undefined
 
-    if (await featureToggles.isDashboardPaginationEnabled()) {
+    const dashboardPaginationEnabled: boolean = await featureToggles.isDashboardPaginationEnabled()
+
+    if (dashboardPaginationEnabled) {
       const selectedPIdByClaimant: number = (req.query.c_pid === undefined || req.query.c_pid === '') ? 1 : Number(req.query.c_pid)
       const selectedPIdByDefendant: number = (req.query.d_pid === undefined || req.query.d_pid === '') ? 1 : Number(req.query.d_pid)
       const pagingInfoClaimant = await claimStoreClient.retrievePaginationInfo(user, ActorType.CLAIMANT)

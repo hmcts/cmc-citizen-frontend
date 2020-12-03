@@ -39,7 +39,7 @@ const testData = [
   }
 ]
 
-describe('Dashboard page', () => {
+describe('Dashboard page claim issue', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
@@ -48,6 +48,8 @@ describe('Dashboard page', () => {
     context('when user authorised', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+        claimStoreServiceMock.resolveRetrievePaginationInfoEmptyList()
+        claimStoreServiceMock.resolveRetrievePaginationInfoEmptyList()
       })
 
       context('Dashboard Status', () => {

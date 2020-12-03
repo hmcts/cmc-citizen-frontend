@@ -732,19 +732,19 @@ export function resolveRetrievePaginationInfo (pagination: object = samplePagina
     .reply(HttpStatus.OK, { ...pagination })
 }
 
+export function resolveRejectPaginationInfo (reason: string) {
+  mock(`${serviceBaseURL}/claims`)
+    .get(new RegExp('/pagination-metadata'))
+    .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
+}
+
 export function resolveRetrieveByClaimantIdToEmptyList () {
   mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/claimant/[0-9]+'))
     .reply(HttpStatus.OK, [])
 }
 
-export function resolveRetrievePaginationInfoClaimantToEmptyList () {
-  mock(`${serviceBaseURL}/claims`)
-    .get(new RegExp('/pagination-metadata'))
-    .reply(HttpStatus.OK, [])
-}
-
-export function resolveRetrievePaginationInfoDefendantToEmptyList () {
+export function resolveRetrievePaginationInfoEmptyList () {
   mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/pagination-metadata'))
     .reply(HttpStatus.OK, [])
