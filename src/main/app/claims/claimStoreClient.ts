@@ -162,13 +162,17 @@ export class ClaimStoreClient {
       })
   }
 
-  retrieveByClaimantId (user: User): Promise<Claim[]> {
+  retrieveByClaimantId (user: User, pageNo: number): Promise<Claim[]> {
     if (!user) {
       return Promise.reject(new Error('User is required'))
     }
 
+    if (pageNo === undefined) {
+      pageNo = 1
+    }
+
     return this.request
-      .get(`${claimStoreApiUrl}/claimant/${user.id}`, {
+      .get(`${claimStoreApiUrl}/claimant/${user.id}?pageNo=${pageNo}`, {
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
         }
@@ -218,13 +222,17 @@ export class ClaimStoreClient {
       })
   }
 
-  retrieveByDefendantId (user: User): Promise<Claim[]> {
+  retrieveByDefendantId (user: User, pageNo: number): Promise<Claim[]> {
     if (!user) {
       return Promise.reject('User is required')
     }
 
+    if (pageNo === undefined) {
+      pageNo = 1
+    }
+
     return this.request
-      .get(`${claimStoreApiUrl}/defendant/${user.id}`, {
+      .get(`${claimStoreApiUrl}/defendant/${user.id}?pageNo=${pageNo}`, {
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
         }
@@ -332,5 +340,21 @@ export class ClaimStoreClient {
     return requestPromiseApi(options).then(function () {
       return Promise.resolve()
     })
+  }
+
+  retrievePaginationInfo (user: User, type: string): Promise<string[]> {
+    if (!user) {
+      return Promise.reject('User is required')
+    }
+
+    return this.request
+      .get(`${claimStoreApiUrl}/pagination-metadata?userType=${type}`, {
+        headers: {
+          Authorization: `Bearer ${user.bearerToken}`
+        }
+      })
+      .then(response => {
+        return response
+      })
   }
 }

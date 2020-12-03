@@ -38,6 +38,7 @@ describe('Login receiver', async () => {
       })
 
       it('should save bearer token in cookie when auth token is retrieved from idam', async () => {
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
         const token = 'I am dummy access token'
         idamServiceMock.resolveExchangeCode(token)
 
@@ -48,6 +49,7 @@ describe('Login receiver', async () => {
       })
 
       it('should clear state cookie when auth token is retrieved from idam', async () => {
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
         const token = 'I am dummy access token'
         idamServiceMock.resolveExchangeCode(token)
 
@@ -130,6 +132,7 @@ describe('Login receiver', async () => {
 
       context('when only draft claim exists (claimant making first claim)', async () => {
         it('should redirect to dashboard', async () => {
+
           await request(app)
             .get(AppPaths.receiver.uri)
             .set('Cookie', `${cookieName}=ABC`)

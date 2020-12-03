@@ -92,7 +92,6 @@ async function retrieveRedirectForLandingPage (req: express.Request, res: expres
   if (eligibility.eligible) {
     return ClaimPaths.taskListPage.uri
   }
-
   const user: User = res.locals.user
   let noClaimIssued: boolean = true
   let noDraftClaims: boolean = true

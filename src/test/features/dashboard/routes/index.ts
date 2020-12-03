@@ -25,6 +25,7 @@ import {
   partialAdmissionAlreadyPaidData
 } from 'test/data/entity/responseData'
 import { baseAcceptationClaimantResponseData } from 'test/data/entity/claimantResponseData'
+import { FeatureToggles } from 'utils/featureToggles'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -46,6 +47,11 @@ const fullDefenceClaim = {
     ...baseDefenceData,
     amount: 30
   }
+}
+
+export const paginationData = {
+  totalPages: 2,
+  totalClaims: 30
 }
 
 function testData () {
@@ -165,108 +171,225 @@ describe('Dashboard page', () => {
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', Paths.dashboardPage.uri)
 
-    context('when user authorised', () => {
-      beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-      })
+    if (FeatureToggles.isEnabled('pagination')) {
 
-      it('should return 500 and render error page when cannot retrieve claims', async () => {
-        draftStoreServiceMock.resolveFind('claim')
-        claimStoreServiceMock.rejectRetrieveByClaimantId('HTTP error')
-
-        await request(app)
-          .get(Paths.dashboardPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.serverError.withText('Error'))
-      })
-
-      context('when no claims issued', () => {
+      context('when user authorised', () => {
         beforeEach(() => {
-          claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
-          claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
+          idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
         })
 
-        it('should render page with start claim button when everything is fine', async () => {
-          draftStoreServiceMock.resolveFindNoDraftFound()
+        it('should return 500 and render error page when cannot retrieve paginationInfo', async () => {
+          draftStoreServiceMock.resolveFind('claim')
+          claimStoreServiceMock.rejectretrievePaginationInfo('HTTP error')
 
           await request(app)
+            .get(Paths.dashboardPage.uri)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.serverError.withText('Error'))
+        })
+
+        context('when no claims issued', () => {
+          beforeEach(() => {
+            claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
+            claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
+            claimStoreServiceMock.resolveRetrievePaginationInfoClaimantToEmptyList()
+            claimStoreServiceMock.resolveRetrievePaginationInfoDefendantToEmptyList()
+          })
+
+          it('should render page with start claim button when everything is fine', async () => {
+
+            draftStoreServiceMock.resolveFindNoDraftFound()
+
+            await request(app)
             .get(Paths.dashboardPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Make a new money claim'))
+          })
+
+          it('should render page with continue claim button when everything is fine', async () => {
+            draftStoreServiceMock.resolveFind('claim')
+
+            await request(app)
+            .get(Paths.dashboardPage.uri)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Continue with claim'))
+          })
         })
 
-        it('should render page with continue claim button when everything is fine', async () => {
+        context('Dashboard Status', () => {
+          context('as a claimant', () => {
+            beforeEach(() => {
+              claimStoreServiceMock.resolveRetrievePaginationInfoDefendantToEmptyList()
+              claimStoreServiceMock.resolveRetrievePaginationInfo(paginationData)
+              claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
+            })
+
+            it('should render page with start claim button when everything is fine', async () => {
+              draftStoreServiceMock.resolveFindNoDraftFound()
+              claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
+              await request(app)
+                .get(Paths.dashboardPage.uri)
+                .set('Cookie', `${cookieName}=ABC`)
+                .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Make a new money claim'))
+            })
+
+            testData().forEach(data => {
+              it(`should render dashboard: ${data.status}`, async () => {
+                draftStoreServiceMock.resolveFindNoDraftFound()
+                claimStoreServiceMock.resolveRetrieveByClaimantId(data.claim, data.claimOverride)
+                await request(app)
+                  .get(Paths.dashboardPage.uri)
+                  .query({ d_pid: 2 })
+                  .set('Cookie', `${cookieName}=ABC`)
+                  .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
+              })
+            })
+          })
+
+          context('as a defendant', () => {
+            beforeEach(() => {
+              claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
+              claimStoreServiceMock.resolveRetrievePaginationInfo(paginationData)
+              claimStoreServiceMock.resolveRetrievePaginationInfoClaimantToEmptyList()
+            })
+
+            it('should render page with start claim button when everything is fine', async () => {
+              draftStoreServiceMock.resolveFindNoDraftFound()
+              claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
+              await request(app)
+                .get(Paths.dashboardPage.uri)
+                .set('Cookie', `${cookieName}=ABC`)
+                .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Make a new money claim'))
+            })
+
+            it('should render page with claim number and status', async () => {
+              draftStoreServiceMock.resolveFindNoDraftFound()
+              claimStoreServiceMock.resolveRetrieveByDefendantId(claimStoreServiceMock.sampleClaimIssueObj.referenceNumber, '1', claimStoreServiceMock.sampleClaimIssueObj)
+              await request(app)
+                .get(Paths.dashboardPage.uri)
+                .set('Cookie', `${cookieName}=ABC`)
+                .expect(res => expect(res).to.be.successful.withText('000MC050', 'Respond to claim'))
+            })
+
+            testData().forEach(data => {
+              it(`should render dashboard: ${data.status}`, async () => {
+                draftStoreServiceMock.resolveFindNoDraftFound()
+                claimStoreServiceMock.resolveRetrieveByDefendantId(data.claim.referenceNumber, '1', data.claim, data.claimOverride)
+
+                await request(app)
+                  .get(Paths.dashboardPage.uri)
+                  .query({ c_pid: 2 })
+                  .set('Cookie', `${cookieName}=ABC`)
+                  .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
+              })
+            })
+          })
+        })
+      })
+    } else if (!FeatureToggles.isEnabled('pagination')) {
+      context('when user authorised', () => {
+        beforeEach(() => {
+          idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+        })
+
+        it('should return 500 and render error page when cannot retrieve claims', async () => {
           draftStoreServiceMock.resolveFind('claim')
+          claimStoreServiceMock.rejectRetrieveByClaimantId('HTTP error')
 
           await request(app)
             .get(Paths.dashboardPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Continue with claim'))
+            .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
-      })
 
-      context('Dashboard Status', () => {
-        context('as a claimant', () => {
+        context('when no claims issued', () => {
           beforeEach(() => {
+            claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
             claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
           })
 
           it('should render page with start claim button when everything is fine', async () => {
             draftStoreServiceMock.resolveFindNoDraftFound()
-            claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
+
             await request(app)
               .get(Paths.dashboardPage.uri)
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Make a new money claim'))
           })
 
-          testData().forEach(data => {
-            it(`should render dashboard: ${data.status}`, async () => {
-              draftStoreServiceMock.resolveFindNoDraftFound()
-              claimStoreServiceMock.resolveRetrieveByClaimantId(data.claim, data.claimOverride)
-              await request(app)
-                .get(Paths.dashboardPage.uri)
-                .set('Cookie', `${cookieName}=ABC`)
-                .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
-            })
+          it('should render page with continue claim button when everything is fine', async () => {
+            draftStoreServiceMock.resolveFind('claim')
+
+            await request(app)
+              .get(Paths.dashboardPage.uri)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Continue with claim'))
           })
         })
 
-        context('as a defendant', () => {
-          beforeEach(() => {
-            claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
-          })
+        context('Dashboard Status', () => {
+          context('as a claimant', () => {
+            beforeEach(() => {
+              claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
+            })
 
-          it('should render page with start claim button when everything is fine', async () => {
-            draftStoreServiceMock.resolveFindNoDraftFound()
-            claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
-            await request(app)
-              .get(Paths.dashboardPage.uri)
-              .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Make a new money claim'))
-          })
-
-          it('should render page with claim number and status', async () => {
-            draftStoreServiceMock.resolveFindNoDraftFound()
-            claimStoreServiceMock.resolveRetrieveByDefendantId(claimStoreServiceMock.sampleClaimIssueObj.referenceNumber, '1', claimStoreServiceMock.sampleClaimIssueObj)
-            await request(app)
-              .get(Paths.dashboardPage.uri)
-              .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withText('000MC050', 'Respond to claim'))
-          })
-
-          testData().forEach(data => {
-            it(`should render dashboard: ${data.status}`, async () => {
+            it('should render page with start claim button when everything is fine', async () => {
               draftStoreServiceMock.resolveFindNoDraftFound()
-              claimStoreServiceMock.resolveRetrieveByDefendantId(data.claim.referenceNumber, '1', data.claim, data.claimOverride)
+              claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
               await request(app)
                 .get(Paths.dashboardPage.uri)
                 .set('Cookie', `${cookieName}=ABC`)
-                .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
+                .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Make a new money claim'))
+            })
+
+            testData().forEach(data => {
+              it(`should render dashboard: ${data.status}`, async () => {
+                draftStoreServiceMock.resolveFindNoDraftFound()
+                claimStoreServiceMock.resolveRetrieveByClaimantId(data.claim, data.claimOverride)
+                await request(app)
+                  .get(Paths.dashboardPage.uri)
+                  .set('Cookie', `${cookieName}=ABC`)
+                  .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
+              })
+            })
+          })
+
+          context('as a defendant', () => {
+            beforeEach(() => {
+              claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
+            })
+
+            it('should render page with start claim button when everything is fine', async () => {
+              draftStoreServiceMock.resolveFindNoDraftFound()
+              claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
+              await request(app)
+                .get(Paths.dashboardPage.uri)
+                .set('Cookie', `${cookieName}=ABC`)
+                .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Make a new money claim'))
+            })
+
+            it('should render page with claim number and status', async () => {
+              draftStoreServiceMock.resolveFindNoDraftFound()
+              claimStoreServiceMock.resolveRetrieveByDefendantId(claimStoreServiceMock.sampleClaimIssueObj.referenceNumber, '1', claimStoreServiceMock.sampleClaimIssueObj)
+              await request(app)
+                .get(Paths.dashboardPage.uri)
+                .set('Cookie', `${cookieName}=ABC`)
+                .expect(res => expect(res).to.be.successful.withText('000MC050', 'Respond to claim'))
+            })
+
+            testData().forEach(data => {
+              it(`should render dashboard: ${data.status}`, async () => {
+                draftStoreServiceMock.resolveFindNoDraftFound()
+                claimStoreServiceMock.resolveRetrieveByDefendantId(data.claim.referenceNumber, '1', data.claim, data.claimOverride)
+                await request(app)
+                  .get(Paths.dashboardPage.uri)
+                  .set('Cookie', `${cookieName}=ABC`)
+                  .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
+              })
             })
           })
         })
       })
-    })
+    }
   })
 })

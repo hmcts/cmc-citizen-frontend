@@ -502,6 +502,11 @@ export const sampleDefendantResponseWithDQAndNoMediationObj = {
   }
 }
 
+export const samplePaginationInfoObj = {
+  totalPages: 2,
+  totalClaims: 30
+}
+
 export const sampleDefendantResponseAlreadyPaidWithMediationObj = {
   ...this.sampleClaimIssueObj,
   respondedAt: '2017-07-25T22:45:51.785',
@@ -721,9 +726,27 @@ export function resolveRetrieveByClaimantId (claim: object = sampleClaimObj, cla
     .reply(HttpStatus.OK, [{ ...claim, ...claimOverride }])
 }
 
+export function resolveRetrievePaginationInfo (pagination: object = samplePaginationInfoObj) {
+  mock(`${serviceBaseURL}/claims`)
+    .get(new RegExp('/pagination-metadata'))
+    .reply(HttpStatus.OK, { ...pagination })
+}
+
 export function resolveRetrieveByClaimantIdToEmptyList () {
   mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/claimant/[0-9]+'))
+    .reply(HttpStatus.OK, [])
+}
+
+export function resolveRetrievePaginationInfoClaimantToEmptyList () {
+  mock(`${serviceBaseURL}/claims`)
+    .get(new RegExp('/pagination-metadata'))
+    .reply(HttpStatus.OK, [])
+}
+
+export function resolveRetrievePaginationInfoDefendantToEmptyList () {
+  mock(`${serviceBaseURL}/claims`)
+    .get(new RegExp('/pagination-metadata'))
     .reply(HttpStatus.OK, [])
 }
 
@@ -736,6 +759,12 @@ export function resolveRetrieveByDefendantIdToEmptyList () {
 export function rejectRetrieveByClaimantId (reason: string) {
   mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/claimant/[0-9]+'))
+    .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
+}
+
+export function rejectretrievePaginationInfo (reason: string) {
+  mock(`${serviceBaseURL}/claims`)
+    .get(new RegExp('/pagination-metadata'))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 

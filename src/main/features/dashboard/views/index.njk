@@ -2,7 +2,7 @@
 {% from "form.njk" import submitButton, errorSummary %}
 {% from "./macro/caseStatus.njk" import caseStatusForDefendant, caseStatusForClaimant %}
 {% from "internalLink.njk" import internalLink %}
-
+{% from "./macro/pagination/macro.njk" import mojPagination %}
 {% set heading = 'Your money claims account' %}
 
 {% block content %}
@@ -16,6 +16,7 @@
       {% if claimsAsClaimant | length or claimDraftSaved %}
 
         <h2 class="heading-medium"> {{ t('Claims you’ve made') }}</h2>
+        <p> Most recently updated claims are listed first.</p>
         <table class="claim-dashboard">
           <thead>
           <tr>
@@ -70,7 +71,15 @@
           {% endfor %}
           </tbody>
         </table>
+        
+        {% if paginationArgumentClaimant %}
+          <div>
+            {{ mojPagination(paginationArgumentClaimant)}}
+          </div>
+        {% endif %}
+
      {% endif %}
+
     </div>
 
     {% if claimsAsDefendant | length or responseDraftSaved %}
@@ -124,6 +133,13 @@
           {% endfor %}
           </tbody>
         </table>
+
+        {% if paginationArgumentDefendant %}
+          <div>
+            {{ mojPagination(paginationArgumentDefendant)}}
+          </div>
+        {% endif %}
+        
       </div>
     {% endif %}
   </div>
