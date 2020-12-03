@@ -40,6 +40,8 @@ export const searchResponse = [
   }
 ]
 
+export const searchResponseWithNoCourt = [{}]
+
 export const courtDetailsResponse = {
   name: 'Birmingham District Probate Registry',
   slug: 'birmingham-district-probate-registry',
@@ -62,6 +64,12 @@ export function resolveNameFind (): mock.Scope {
   return mock(baseURL)
     .get(searchNamePath)
     .reply(HttpStatus.OK, searchResponse)
+}
+
+export function resolveNameFindWithNoCourt (): mock.Scope {
+  return mock(baseURL)
+    .get(searchNamePath)
+    .reply(HttpStatus.OK, searchResponseWithNoCourt)
 }
 
 export function rejectFind (): mock.Scope {
