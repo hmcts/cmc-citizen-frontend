@@ -47,7 +47,7 @@ export function initialTransitions (claim: Claim): StateMachine {
       },
       {
         name: 'checkHwfInvalid',
-        from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.HWF_AWAITING_RESPONSE_HWF],
+        from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.HWF_APPLICATION_PENDING],
         to: InitialStates.HWF_INVALID_REFERENCE
       },
       {
