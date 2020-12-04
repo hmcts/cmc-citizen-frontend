@@ -60,7 +60,9 @@
               <td>{{ claim.totalAmountTillToday | numeral }}</td>
               <td class="mobile-hide">
               {% if featureToggles.newDashboardStatus and claim.template.dashboard %}
-                  {% include claim.template.dashboard ignore missing %}
+                {% include claim.template.dashboard ignore missing %}
+              {% elif claim.helpWithFeesNumber %}
+                {% include claim.template.dashboard ignore missing %}
               {% else %}
                 {{ caseStatusForClaimant(claim.status, claim) }}
               {% endif %}
@@ -78,6 +80,8 @@
               <td colspan="3" class="mobile-table-status">
                 {{ t('Next Step:') }}
                 {% if featureToggles.newDashboardStatus and claim.template.dashboard %}
+                  {% include claim.template.dashboard ignore missing %}
+                {% elif claim.helpWithFeesNumber %}
                   {% include claim.template.dashboard ignore missing %}
                 {% else %}
                   {{ caseStatusForClaimant(claim.status, claim) }}
