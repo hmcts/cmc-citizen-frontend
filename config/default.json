@@ -97,7 +97,8 @@
     "helpWithFees": false,
     "pcq":true,
     "signPostingCTSC": false,
-    "autoEnrollIntoNewFeature": true
+    "autoEnrollIntoNewFeature": true,
+    "dashboard_pagination_enabled": true
   },
   "oauth": {
     "clientId": "cmc_citizen"
