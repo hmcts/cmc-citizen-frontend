@@ -51,6 +51,7 @@
             <tr class="claims default mobile-table">
               <td>
                 {% if claim.helpWithFeesNumber %}
+                {{ claim.state }}
                   {{ internalLink(claim.ccdCaseId, '/dashboard/' + claim.externalId + '/claimant',ariaLabel= claim.claimNumber + ' (Claim number) Claims you’ve made')}}
                     {% else %}
                       {{ internalLink(claim.claimNumber, '/dashboard/' + claim.externalId + '/claimant',ariaLabel= claim.claimNumber + ' (Claim number) Claims you’ve made')}}
