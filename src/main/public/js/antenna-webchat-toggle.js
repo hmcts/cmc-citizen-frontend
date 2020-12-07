@@ -23,12 +23,12 @@
                 buttonChat.classList.add('hidden');
             } else if (availableAgents == 0)
             {
-                document.getElementById("metrics").textContent = 'No agents are currently available, Come back later.';
+                document.getElementById("metrics").textContent = 'No Advisor are currently available, Come back later.';
                 button.classList.add('hidden');
                 buttonChat.classList.add('hidden');
             } else if (waitTimeInMinutes > 5 && waitTimeInMinutes < 60 )
             {
-                document.getElementById("metrics").textContent = 'All our agents are busy helping other people. Please try again later or contact us by phone or email.';
+                document.getElementById("metrics").textContent = 'All our Advisor are busy helping other people. Please try again later or contact us by phone or email.';
                 button.classList.add('hidden');
                 buttonChat.classList.add('hidden');
             }

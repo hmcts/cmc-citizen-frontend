@@ -1,7 +1,7 @@
 {
   "iconAltText": "Web chat icon",
   "hideChat": "Hide",
-  "noAvailableAgents": "No agents are currently available",
+  "noAvailableAgents": "No Advisors are currently available",
   "contactCenterClosed": "The Contact Center is closed",
   "connectionLost": "Connection lost",
   "connected": "Connected",
@@ -36,16 +36,23 @@
   },
   "chat": {
     "waitingForParticipant": "Waiting for participant...",
-    "ewtUpdateStatus": "An agent will be with you in approximately {{time}}",
+    "ewtUpdateStatus": "An Advisor will be with you in approximately {{time}}",
     "ewtUpdateTimestamp": "Last updated: {{update}}",
-    "ewtAgentAvailableSoon": "An agent will be with you in less than one minute",
-    "ewtLongWait": "An agent will be with you in {{hours}} hours, {{minutes}} minutes and {{seconds}} seconds",
-    "ewtShortWait": "An agent will be with you in {{minutes}} minutes and {{seconds}} seconds",
+    "ewtAgentAvailableSoon": "An Advisor will be with you in less than one minute",
+    "ewtLongWait": "An Advisor will be with you in {{hours}} hours, {{minutes}} minutes and {{seconds}} seconds",
+    "ewtShortWait": "An Advisor will be with you in {{minutes}} minutes and {{seconds}} seconds",
+    "legalAdviceNotice": "Please note, the Web Chat Advisor cannot provide you with legal advice.",
+    "chatEndedNotice": "The customer has ended this conversation.",
     "messageFieldPlaceholder": "Your message...",
     "sendMessage": "Send message",
-    "agentIsTyping": "Agent is typing...",
+    "agentIsTyping": "Advisor is typing...",
     "conversationEnded": "The chat session has ended but you can start a new one if you need more help",
     "startNewSession": "Start new session",
-    "endChat": "End chat"
+    "endChat": "End chat",
+    "prompt": {
+      "message": "If you leave the chat you will lose your place in the queue. Are you sure?",
+      "yes": "Yes",
+      "no": "No"
+    }
   }
 }
