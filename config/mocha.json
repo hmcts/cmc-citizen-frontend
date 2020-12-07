@@ -48,6 +48,6 @@
     "maxAttempts": 1
   },
   "launchDarkly": {
-    "offline": true
+    "offline": false
   }
 }

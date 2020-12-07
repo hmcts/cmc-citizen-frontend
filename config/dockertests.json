@@ -9,6 +9,7 @@
     "newDashboardStatus": false,
     "warningBanner": false,
     "inversionOfControl": true,
+    "helpWithFees": true,
     "autoEnrollIntoNewFeature": true
   },
   "appInsights": {
