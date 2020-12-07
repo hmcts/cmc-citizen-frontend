@@ -216,6 +216,9 @@ export class ClaimSteps {
     this.enterTestDataClaimAmount()
     this.claimantTotalAmountPageRead()
     interestSteps.enterDefaultInterest()
+    if (process.env.FEATURE_HELP_WITH_FEES) {
+      hwfSteps.noHWF()
+    }
     I.see('Total amount you’re claiming')
     I.see(AmountHelper.formatMoney(claimAmount.getClaimTotal()), 'table.table-form > tbody > tr:nth-of-type(1) >td.numeric.last > span')
     I.see(AmountHelper.formatMoney(claimAmount.getTotal()), 'table.table-form > tfoot > tr > td.numeric.last > span')
