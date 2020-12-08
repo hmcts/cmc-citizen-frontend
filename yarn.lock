@@ -379,10 +379,10 @@
   dependencies:
     "@types/chai" "*"
 
-"@types/chai-spies@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@types/chai-spies/-/chai-spies-1.0.2.tgz#f47e81b97199262ef5e63b28d4edf9657971cd5a"
-  integrity sha512-Z04E43GW/dnYdQyj/N868wT5HhMDw2DbfxfPV7DNOX70PqODv9BKXGriFWY508vk1rPAtYcgENaRh/YCikuFtQ==
+"@types/chai-spies@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@types/chai-spies/-/chai-spies-1.0.3.tgz#a52dc61af3853ec9b80965040811d15dfd401542"
+  integrity sha512-RBZjhVuK7vrg4rWMt04UF5zHYwfHnpk5mIWu3nQvU3AKGDixXzSjZ6v0zke6pBcaJqMv3IBZ5ibLWPMRDL0sLw==
   dependencies:
     "@types/chai" "*"
 
