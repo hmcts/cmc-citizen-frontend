@@ -76,4 +76,14 @@ describe('FeatureToggles', () => {
       expect(result).to.equal(actual)
     })
   })
+
+  describe('isPaginationForDashboardEnabled', () => {
+    it('should return toggle if pagination toggle exists', async () => {
+      const mockLaunchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
+      const featureToggles = new FeatureToggles(mockLaunchDarklyClient)
+      let actual = toBoolean(config.get<boolean>(`featureToggles.dashboard_pagination_enabled`))
+      let result = await featureToggles.isDashboardPaginationEnabled()
+      expect(result).to.equal(actual)
+    })
+  })
 })
