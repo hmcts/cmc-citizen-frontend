@@ -19,7 +19,7 @@ export default express.Router()
       const { externalId } = req.params
       const user: User = res.locals.user
       const claim: Claim = await claimStoreClient.retrieveByExternalId(externalId, user)
-      const reconsiderationDeadline: Moment = claim ? await claim.respondToReconsiderationDeadline() : undefined
+      const reconsiderationDeadline: Moment = claim ? await claim.respondToOnlineOconReconsiderationDeadline() : undefined
       const isReviewOrderEligible: boolean = DirectionOrder.isReviewOrderEligible(reconsiderationDeadline)
       const respondToReviewOrderDeadline: Moment = claim ? await claim.respondToReviewOrderDeadline() : undefined
       const judgePilot: boolean = claim ? claim.features !== undefined && claim.features.includes('judgePilotEligible') : false
