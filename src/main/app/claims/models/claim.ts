@@ -39,6 +39,7 @@ import { ClaimDocumentType } from 'common/claimDocumentType'
 import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
 import * as config from 'config'
 import { ScannedDocumentType } from 'common/scannedDocumentType'
+import { MoneyConverter } from 'fees/moneyConverter'
 
 interface State {
   status: ClaimStatus
@@ -51,9 +52,9 @@ export class Claim {
   state: string
   defendantId: string
   claimNumber: string
-  responseDeadline: Moment
+  responseDeadline?: Moment
   createdAt: Moment
-  issuedOn: Moment
+  issuedOn?: Moment
   claimData: ClaimData
   moreTimeRequested: boolean
   respondedAt: Moment
@@ -88,6 +89,8 @@ export class Claim {
   transferContent?: TransferContents
   isOconResponse: boolean
   directionOrderType: string
+  helpWithFeesNumber?: string
+  helpWithFessBalanceClaimFee?: number
 
   get defendantOffer (): Offer {
     if (!this.settlement) {
@@ -327,14 +330,33 @@ export class Claim {
       this.externalId = input.externalId
       this.defendantId = input.defendantId
       this.state = input.state
-      this.claimNumber = input.referenceNumber
       this.createdAt = MomentFactory.parse(input.createdAt)
-      this.responseDeadline = MomentFactory.parse(input.responseDeadline)
-      this.issuedOn = MomentFactory.parse(input.issuedOn)
       this.claimData = new ClaimData().deserialize(input.claim)
       this.moreTimeRequested = input.moreTimeRequested
+      if (this.claimData.feeRemitted !== undefined && this.claimData.feeAmountInPennies !== undefined) {
+        this.helpWithFessBalanceClaimFee = MoneyConverter.convertPenniesToPounds(this.claimData.feeAmountInPennies - input.claim.feeRemitted)
+      }
+
+      if ((input.state === 'HWF_APPLICATION_PENDING' || input.state === 'AWAITING_RESPONSE_HWF' || input.state === 'CLOSED_HWF') && input.claim.helpWithFeesNumber !== undefined) {
+        this.helpWithFeesNumber = input.claim.helpWithFeesNumber
+      } else {
+        this.helpWithFeesNumber = null
+      }
+      if (input.issuedOn) {
+        this.issuedOn = MomentFactory.parse(input.issuedOn)
+      } else if ((input.state === 'HWF_APPLICATION_PENDING' || input.state === 'AWAITING_RESPONSE_HWF' || input.state === 'CLOSED_HWF') && input.issuedOn === undefined && input.claim.helpWithFeesNumber !== undefined) {
+        this.issuedOn = MomentFactory.currentDate()
+      }
+      if (input.responseDeadline) {
+        this.responseDeadline = MomentFactory.parse(input.responseDeadline)
+      } else if ((input.state === 'HWF_APPLICATION_PENDING' || input.state === 'AWAITING_RESPONSE_HWF' || input.state === 'CLOSED_HWF') && input.responseDeadline === undefined && input.claim.helpWithFeesNumber !== undefined) {
+        this.responseDeadline = MomentFactory.currentDate().add(19, 'day')
+      }
       if (input.respondedAt) {
         this.respondedAt = MomentFactory.parse(input.respondedAt)
+      }
+      if (input.referenceNumber) {
+        this.claimNumber = input.referenceNumber
       }
       if (input.defendantEmail) {
         this.defendantEmail = input.defendantEmail
@@ -362,8 +384,12 @@ export class Claim {
       if (input.claimantRespondedAt) {
         this.claimantRespondedAt = MomentFactory.parse(input.claimantRespondedAt)
       }
+      if ((input.state === 'HWF_APPLICATION_PENDING' || input.state === 'AWAITING_RESPONSE_HWF' || input.state === 'CLOSED_HWF') && input.responseDeadline === undefined && input.claim.helpWithFeesNumber !== undefined && input.totalAmountTillDateOfIssue === undefined) {
+        this.totalAmountTillDateOfIssue = input.totalAmountTillToday
+      } else {
+        this.totalAmountTillDateOfIssue = input.totalAmountTillDateOfIssue
+      }
       this.totalAmountTillToday = input.totalAmountTillToday
-      this.totalAmountTillDateOfIssue = input.totalAmountTillDateOfIssue
       this.totalInterest = input.totalInterest
       this.features = input.features
       if (input.directionsQuestionnaireDeadline) {
@@ -429,7 +455,6 @@ export class Claim {
           return o.createdDatetime
         }]).reverse()
       }
-
       if (input.proceedOfflineReason) {
         this.proceedOfflineReason = input.proceedOfflineReason
       }

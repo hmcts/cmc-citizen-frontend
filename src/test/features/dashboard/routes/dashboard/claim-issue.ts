@@ -28,6 +28,15 @@ const testData = [
     defendantAssertions: ['000MC050', 'Respond to claim.']
   },
   {
+    status: 'Claim issued with HWF reference',
+    claim: claimStoreServiceMock.sampleHwfClaimIssueObj,
+    claimOverride: {
+      responseDeadline: MomentFactory.currentDate().add(1, 'days')
+    },
+    claimantAssertions: ['123', 'We’re checking your Help With Fees application'],
+    defendantAssertions: ['000MC050', 'Respond to claim.']
+  },
+  {
     status: 'Requested more time',
     claim: claimStoreServiceMock.sampleClaimIssueObj,
     claimOverride: {

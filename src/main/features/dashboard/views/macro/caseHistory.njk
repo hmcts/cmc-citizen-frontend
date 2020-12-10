@@ -146,6 +146,15 @@
   claimTransferredClaimantClaimDetails
 %}
 
+{% from "./claimStatus/helpWithFees.njk" import
+  helpWithFeesValidationClaimStatus, 
+  invalidHelpWithFeesValidationClaimStatus, 
+  rejectedHelpWithFeesValidationClaimStatus,
+  helpWithFeesRequiredmoreInfoClaimStatus,
+  helpWithFeesPartRemettedClaimStatus,
+  helpWithFeesClosed
+%}
+
 {% from "./claimStatus/businessQueue.njk" import
   businessQueueDefendantClaimDetails,
   businessQueueClaimantClaimDetails
@@ -153,7 +162,7 @@
 
 {% macro caseHistoryForClaimantClaimDetails(claim, csrf, mediationDeadline, reconsiderationDeadline, isReviewOrderEligible, respondToReviewOrderDeadline, judgePilot) %}
   {% for state in claim.stateHistory %}
-    {% if state.status === ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE %}
+    {% if state.status === ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE and claim.state !== 'CLOSED_HWF' %}
       {{ paidInFullClaimantClaimDetails(claim.externalId) }}
     {% elif state.status === ClaimStatus.PAID_IN_FULL %}
       {{ paidInFullClaimantClaimSettledDetails(claim) }}
@@ -161,7 +170,19 @@
       {{ paidInFullCCJCancelledClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED %}
       {{ paidInFullCCJSatisfiedClaimantClaimDetails(claim) }}
-      {% elif state.status === ClaimStatus.NO_RESPONSE %}
+    {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.state === 'AWAITING_RESPONSE_HWF' and claim.claimData.hwfFeeDetailsSummary !== undefined %}
+      {{ rejectedHelpWithFeesValidationClaimStatus(claim) }}
+    {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.state === 'AWAITING_RESPONSE_HWF' and claim.claimData.moreInfoDetails !== undefined %}
+      {{ helpWithFeesRequiredmoreInfoClaimStatus(claim) }}
+    {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.state === 'AWAITING_RESPONSE_HWF' and claim.claimData.feeRemitted !== undefined %}
+      {{ helpWithFeesPartRemettedClaimStatus(claim) }}
+    {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.state === 'CLOSED_HWF' %}
+      {{ helpWithFeesClosed(claim) }}
+    {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.state === 'AWAITING_RESPONSE_HWF' %}
+      {{ invalidHelpWithFeesValidationClaimStatus(claim) }}
+    {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber %}
+      {{ helpWithFeesValidationClaimStatus(claim) }}
+    {% elif state.status === ClaimStatus.NO_RESPONSE %}
       {{ noResponseForClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.TRANSFERRED %}
       {{ claimTransferredClaimantClaimDetails(claim) }}
