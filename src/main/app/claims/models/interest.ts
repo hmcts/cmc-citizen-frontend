@@ -1,10 +1,12 @@
 import { InterestBreakdown } from 'claims/models/interestBreakdown'
 import { InterestDate } from 'claims/models/interestDate'
+import { Moment } from 'moment'
+import { MomentFactory } from 'shared/momentFactory'
 
 export class Interest {
 
   constructor (public type?: string, public rate?: number, public reason?: string, public specificDailyAmount?: number,
-               public interestBreakdown?: InterestBreakdown, public interestDate?: InterestDate) {}
+               public interestBreakdown?: InterestBreakdown, public interestDate?: InterestDate, public lastInterestCalculationDate?: Moment) {}
 
   deserialize (input?: any): Interest {
     if (input) {
@@ -23,6 +25,9 @@ export class Interest {
       }
       if (input.interestDate) {
         this.interestDate = new InterestDate().deserialize(input.interestDate)
+      }
+      if (input.lastInterestCalculationDate) {
+        this.lastInterestCalculationDate = MomentFactory.parse(input.lastInterestCalculationDate)
       }
     }
     return this

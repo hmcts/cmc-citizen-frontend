@@ -152,7 +152,8 @@
   rejectedHelpWithFeesValidationClaimStatus,
   helpWithFeesRequiredmoreInfoClaimStatus,
   helpWithFeesPartRemettedClaimStatus,
-  helpWithFeesClosed
+  helpWithFeesClosed,
+  helpWithFeesIntrestRecalculateStatus
 %}
 
 {% from "./claimStatus/businessQueue.njk" import
@@ -170,6 +171,10 @@
       {{ paidInFullCCJCancelledClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED %}
       {{ paidInFullCCJSatisfiedClaimantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.state === 'HWF_APPLICATION_PENDING' and claim.claimData.interest.lastInterestCalculationDate !== undefined %}
+      {{ helpWithFeesIntrestRecalculateStatus(claim) }}
+    {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.state === 'AWAITING_RESPONSE_HWF' and claim.claimData.interest.lastInterestCalculationDate !== undefined %}
+      {{ helpWithFeesIntrestRecalculateStatus(claim) }}
     {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.state === 'AWAITING_RESPONSE_HWF' and claim.claimData.hwfFeeDetailsSummary !== undefined %}
       {{ rejectedHelpWithFeesValidationClaimStatus(claim) }}
     {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.state === 'AWAITING_RESPONSE_HWF' and claim.claimData.moreInfoDetails !== undefined %}

@@ -9,5 +9,6 @@ export enum InitialStates {
   HWF_Rejected = 'help-with-fees-rejected',
   HWF_More_Info = 'help-with-fess-more-info-required',
   HWF_Part_Remitted = 'help-with-fess-part-remittion-granted',
-  HWF_CLOSED = 'help-with-fess-closed'
+  HWF_CLOSED = 'help-with-fess-closed',
+  HWF_Intrest_Recalculate = 'help-with-fess-intrest-recalculated'
 }
