@@ -150,8 +150,13 @@
   <p>{{ t('You are eligible for a {{ claimAmount }} reduction of your claim fees.', { claimAmount : claim.claimData.feeRemitted | numeral }) }}</p>
 
   <h3 class="heading-small">{{ t('What to do next') }}</h3>
+  {% if claim.helpWithFessBalanceClaimFee === 0 %}
+    <p>{{ t('You don’t have to be pay any further fees and we will issue your claim and send it to the defendant.') }}</p>
+  {% elif claim.helpWithFessBalanceClaimFee !== 0 %}
+    <p>{{ t('Pay the remaining claim fee of {{ claimAmount }} and we will issue your claim and send it to the defendant.', { claimAmount : claim.helpWithFessBalanceClaimFee | numeral }) }}</p>
+  {% endif %}
 
-  <p>{{ t('Pay the remaining claim fee of {{ claimAmount }} and we will issue your claim and send it to the defendant.', { claimAmount : claim.helpWithFessBalanceClaimFee | numeral }) }}</p>
+  <p>{{ t('This calculation can increase the total claim amount and so incur a higher claim issue fee. The claim fee is {{ claimFees }}.', { claimFees : claim.claimData.feeAmountInPennies | pennies2pounds | numeral }) }}</p>
   <p>{{ t('To pay by card, phone 0300 123 7050') }}</p>
   
   {% set dash = joiner("-") %}
