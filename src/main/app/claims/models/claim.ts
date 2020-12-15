@@ -85,7 +85,9 @@ export class Claim {
   paperResponse: YesNoOption
   claimDocuments?: ClaimDocument[]
   proceedOfflineReason: string
+  proceedViaPaperResponse: boolean
   transferContent?: TransferContents
+  isOconResponse: boolean
   directionOrderType: string
 
   get defendantOffer (): Offer {
@@ -125,11 +127,17 @@ export class Claim {
     if (!this.directionOrder) {
       return undefined
     }
-    const reconsiderationDeadlineChangeDate: Moment = MomentFactory.parse(config.get<any>('reviewOrderDeadLine.changeDate'))
-    if (reconsiderationDeadlineChangeDate && this.directionOrder.createdOn.isAfter(reconsiderationDeadlineChangeDate)) {
-      return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, config.get<number>('reviewOrderDeadLine.numberOfDays'))
+    return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, 7)
+  }
+
+  async respondToOnlineOconReconsiderationDeadline (): Promise<Moment> {
+    if (!this.directionOrder) {
+      return undefined
     }
-    return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, 19)
+    if (this.isOconFormResponse()) {
+      return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, config.get<number>('reconsiderationDeadLine.oconNumberOfDays'))
+    }
+    return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, config.get<number>('reconsiderationDeadLine.onlineNumberOfDays'))
   }
 
   get remainingDays (): number {
@@ -228,8 +236,6 @@ export class Claim {
       return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ
     } else if (this.hasIntentionToProceedDeadlinePassed()) {
       return ClaimStatus.INTENTION_TO_PROCEED_DEADLINE_PASSED
-    } else if (this.isOconFormResponse()) {
-      return ClaimStatus.DEFENDANT_OCON_FORM_RESPONSE
     } else if (this.hasDefendantRejectedClaimWithDQs()) {
       return ClaimStatus.DEFENDANT_REJECTS_WITH_DQS
     } else if (this.hasClaimantAcceptedStatesPaid()) {
@@ -415,6 +421,7 @@ export class Claim {
         const scannedDocuments: ClaimDocument[] = input.claimDocumentCollection.scannedDocuments
           .filter(value => ScannedDocumentType[(value.documentType + '_' + value.subtype).toUpperCase()] !== undefined)
           .map((value) => {
+            this.proceedViaPaperResponse = this.proceedViaPaperResponse || ScannedDocumentType.PAPER_RESPONSE_FORMS.includes(value.subtype)
             return new ClaimDocument().deserializeScannedDocument(value)
           })
 
@@ -435,10 +442,11 @@ export class Claim {
         this.proceedOfflineReason = input.proceedOfflineReason
       }
 
+      this.isOconResponse = this.isOconFormResponse()
+
       if (input.directionOrderType) {
         this.directionOrderType = input.directionOrderType
       }
-
       return this
     }
   }
@@ -715,7 +723,7 @@ export class Claim {
       && this.claimantResponse.type === ClaimantResponseType.REJECTION
       && ((this.response.responseType === ResponseType.FULL_DEFENCE && this.response.defenceType === DefenceType.ALREADY_PAID)
         || this.response.responseType === ResponseType.PART_ADMISSION)
-      && this.response.paymentDeclaration !== undefined
+      && (this.response.paymentDeclaration !== undefined || this.isOconFormResponse())
   }
 
   private hasClaimantRejectedDefendantDefence (): boolean {
