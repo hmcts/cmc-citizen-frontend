@@ -29,7 +29,7 @@
       <p>{{ t('They’ve offered to pay you this in instalments.') }}</p>
     {% endif %}
   {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
-    <p>{{ t('They’ve offered to pay you {{ amount }} immediately.', { amount: amount | numeral }) }}</p>
+    <p>{{ t('They’ve offered to pay you {{ amount }} immediately. This is the total amount you’ll be paid, including the claim fee and interest if applicable.', { amount: amount | numeral }) }}</p>
   {% endif %}
 {% endmacro %}
 
