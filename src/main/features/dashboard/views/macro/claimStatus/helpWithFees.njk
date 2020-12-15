@@ -111,7 +111,7 @@
   <h3 class="heading-small">{{ t('What to do next') }}</h3>
 
   <p>{{ t('Wait until we contact you regarding the information that we need') }}</p>
-  <p>{{ t('Alternatively, if you want the claim to be issued to the defendant now, you can pay the {{ claimAmount }} claim fee.', { claimAmount : claim.claimData.feeRemitted | numeral }) }} </p>
+  <p>{{ t('Alternatively, if you want the claim to be issued to the defendant now, you can pay the {{ claimAmount }} claim fee.', { claimAmount : claim.totalAmountTillToday | numeral }) }} </p>
   <p>{{ t('To pay by card, phone 0300 123 7050') }}</p>
   
   {% set dash = joiner("-") %}
