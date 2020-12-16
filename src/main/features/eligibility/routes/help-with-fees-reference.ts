@@ -2,7 +2,7 @@ import { Paths } from 'eligibility/paths'
 
 import { EligibilityPage } from 'eligibility/eligibilityPage'
 import { YesNoOption } from 'models/yesNoOption'
-import { EligibilityCheck, eligible, hwfEligible} from 'eligibility/model/eligibilityCheck'
+import { EligibilityCheck, eligible, hwfEligible } from 'eligibility/model/eligibilityCheck'
 import { NotEligibleReason } from 'eligibility/notEligibleReason'
 import { RoutablePath } from 'shared/router/routablePath'
 
