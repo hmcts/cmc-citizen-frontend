@@ -85,6 +85,7 @@ export class Claim {
   paperResponse: YesNoOption
   claimDocuments?: ClaimDocument[]
   proceedOfflineReason: string
+  proceedViaPaperResponse: boolean
   transferContent?: TransferContents
   isOconResponse: boolean
   directionOrderType: string
@@ -126,11 +127,17 @@ export class Claim {
     if (!this.directionOrder) {
       return undefined
     }
-    const reconsiderationDeadlineChangeDate: Moment = MomentFactory.parse(config.get<any>('reviewOrderDeadLine.changeDate'))
-    if (reconsiderationDeadlineChangeDate && this.directionOrder.createdOn.isAfter(reconsiderationDeadlineChangeDate)) {
-      return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, config.get<number>('reviewOrderDeadLine.numberOfDays'))
+    return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, 7)
+  }
+
+  async respondToOnlineOconReconsiderationDeadline (): Promise<Moment> {
+    if (!this.directionOrder) {
+      return undefined
     }
-    return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, 19)
+    if (this.isOconFormResponse()) {
+      return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, config.get<number>('reconsiderationDeadLine.oconNumberOfDays'))
+    }
+    return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, config.get<number>('reconsiderationDeadLine.onlineNumberOfDays'))
   }
 
   get remainingDays (): number {
@@ -414,6 +421,7 @@ export class Claim {
         const scannedDocuments: ClaimDocument[] = input.claimDocumentCollection.scannedDocuments
           .filter(value => ScannedDocumentType[(value.documentType + '_' + value.subtype).toUpperCase()] !== undefined)
           .map((value) => {
+            this.proceedViaPaperResponse = this.proceedViaPaperResponse || ScannedDocumentType.PAPER_RESPONSE_FORMS.includes(value.subtype)
             return new ClaimDocument().deserializeScannedDocument(value)
           })
 
