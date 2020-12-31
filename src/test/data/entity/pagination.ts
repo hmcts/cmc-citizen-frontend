@@ -2,7 +2,7 @@
 export const paginationObjectForClaimant = {
   results: {
     from: 1,
-    to: 25,
+    to: 10,
     count: 30
   },
   next: {
@@ -27,7 +27,7 @@ export const paginationObjectForClaimant = {
 export const paginationObjectForDefendant = {
   results: {
     from: 1,
-    to: 25,
+    to: 10,
     count: 30
   },
   next: {
@@ -51,8 +51,8 @@ export const paginationObjectForDefendant = {
 
 export const paginationObjectForClaimantforPage = {
   results: {
-    from: 26,
-    to: 30,
+    from: 11,
+    to: 20,
     count: 30
   },
   next: undefined,

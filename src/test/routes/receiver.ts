@@ -128,6 +128,10 @@ describe('Login receiver', async () => {
 
       it('when letter holder cookie present then by linking redirect to dashboard', async () => {
         idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-1')
+        claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
+        claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
+        draftStoreServiceMock.resolveFindNoDraftFound()
+        draftStoreServiceMock.resolveFind('claim')
         claimStoreServiceMock.resolveLinkDefendant()
 
         await request(app)
