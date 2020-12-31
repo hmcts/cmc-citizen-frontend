@@ -16,8 +16,8 @@ export function formPaginationToDisplay (pagingInfo: object, selectedPageNo: num
   const pagesItems: object = formItemswithHyperlink(hyperlinkText, selectedPageNo, totalClaimCount, totalPage)
 
   if (selectedPageNo !== 1) {
-    let updatedFromvalue: number = (25 * (selectedPageNo - 1) + 1)
-    let updatedToValueCalculate: number = (selectedPageNo * 25)
+    let updatedFromvalue: number = (10 * (selectedPageNo - 1) + 1)
+    let updatedToValueCalculate: number = (selectedPageNo * 10)
     let updatedTovalue: number = updatedToValueCalculate > totalClaimCount ? totalClaimCount : updatedToValueCalculate
     pagesItems['results'].from = updatedFromvalue
     pagesItems['results'].to = updatedTovalue
@@ -39,7 +39,7 @@ function formItemswithHyperlink (hyperlinkText: string, selectedPageNo: number, 
   let previousArrow: object
   let results: object = {
     from: 1,
-    to: 25,
+    to: 10,
     count: totalClaimCount
   }
 
