@@ -54,7 +54,7 @@ describe('Claim eligibility: help with fees reference page', () => {
       await request(app)
         .post(pagePath)
         .send({ helpWithFeesReference: YesNoOption.NO.option })
-        .expect(res => expect(res).to.be.redirect.toLocation(`${Paths.notEligiblePage.uri}?reason=${notEligibleReason}`))
+        .expect(res => expect(res).to.be.redirect.toLocation(`${Paths.eligiblePage.uri}?reason=${notEligibleReason}`))
     })
   })
 })
