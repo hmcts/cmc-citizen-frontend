@@ -82,15 +82,15 @@ export function initialTransitions (claim: Claim): StateMachine {
       },
 
       onBeforeCheckHwf () {
-        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'HWF_APPLICATION_PENDING'
+        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'HWF_APPLICATION_PENDING' && claim.lastEventTriggeredForHwfCase === 'CreateHelpWithFeesClaim'
       },
 
       onBeforeCheckHwfFeesReject () {
-        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF' && claim.claimData.hwfFeeDetailsSummary !== undefined
+        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF' && claim.claimData.hwfFeeDetailsSummary !== undefined && claim.lastEventTriggeredForHwfCase === 'FullRemissionHWFRejected'
       },
 
       onBeforeCheckHwfFeesMoreInfo () {
-        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF' && claim.claimData.moreInfoDetails !== undefined
+        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF' && claim.claimData.moreInfoDetails !== undefined && claim.lastEventTriggeredForHwfCase === 'MoreInfoRequiredForHWF'
       },
 
       onBeforeCheckHwfFeesApplicationClosed () {
@@ -98,11 +98,11 @@ export function initialTransitions (claim: Claim): StateMachine {
       },
 
       onBeforeCheckHwfPartRemitted () {
-        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF' && claim.claimData.feeRemitted !== undefined
+        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF' && claim.claimData.feeRemitted !== undefined && claim.lastEventTriggeredForHwfCase === 'HWFPartRemission'
       },
 
       onBeforeCheckHwfInvalid () {
-        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF'
+        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF' && claim.lastEventTriggeredForHwfCase === 'InvalidHWFReference'
       },
 
       onBeforeCheckMoreTimeRequested () {

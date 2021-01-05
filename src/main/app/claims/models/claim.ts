@@ -92,7 +92,8 @@ export class Claim {
   directionOrderType: string
   helpWithFeesNumber?: string
   helpWithFessBalanceClaimFee?: number
-
+  lastEventTriggeredForHwfCase?: string
+  
   get defendantOffer (): Offer {
     if (!this.settlement) {
       return undefined
@@ -399,6 +400,11 @@ export class Claim {
       this.totalAmountTillToday = input.totalAmountTillToday
       this.totalInterest = input.totalInterest
       this.features = input.features
+      
+      if (input.lastEventTriggeredForHwfCase) {
+        this.lastEventTriggeredForHwfCase = input.lastEventTriggeredForHwfCase
+      }
+
       if (input.directionsQuestionnaireDeadline) {
         this.directionsQuestionnaireDeadline = MomentFactory.parse(input.directionsQuestionnaireDeadline)
       }

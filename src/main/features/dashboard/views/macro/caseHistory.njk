@@ -170,15 +170,15 @@
       {{ paidInFullCCJCancelledClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED %}
       {{ paidInFullCCJSatisfiedClaimantClaimDetails(claim) }}
-    {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.state === 'AWAITING_RESPONSE_HWF' and claim.claimData.hwfFeeDetailsSummary !== undefined %}
+    {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.state === 'AWAITING_RESPONSE_HWF' and claim.claimData.hwfFeeDetailsSummary !== undefined and claim.lastEventTriggeredForHwfCase === 'FullRemissionHWFRejected' %}
       {{ rejectedHelpWithFeesValidationClaimStatus(claim) }}
-    {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.state === 'AWAITING_RESPONSE_HWF' and claim.claimData.moreInfoDetails !== undefined %}
+    {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.state === 'AWAITING_RESPONSE_HWF' and claim.claimData.moreInfoDetails !== undefined and claim.lastEventTriggeredForHwfCase === 'MoreInfoRequiredForHWF' %}
       {{ helpWithFeesRequiredmoreInfoClaimStatus(claim) }}
-    {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.state === 'AWAITING_RESPONSE_HWF' and claim.claimData.feeRemitted !== undefined %}
+    {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.state === 'AWAITING_RESPONSE_HWF' and claim.claimData.feeRemitted !== undefined and claim.lastEventTriggeredForHwfCase === 'HWFPartRemission' %}
       {{ helpWithFeesPartRemettedClaimStatus(claim) }}
     {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.state === 'CLOSED_HWF' %}
       {{ helpWithFeesClosed(claim) }}
-    {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.state === 'AWAITING_RESPONSE_HWF' %}
+    {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.state === 'AWAITING_RESPONSE_HWF' and claim.lastEventTriggeredForHwfCase === 'InvalidHWFReference' %}
       {{ invalidHelpWithFeesValidationClaimStatus(claim) }}
     {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber %}
       {{ helpWithFeesValidationClaimStatus(claim) }}
