@@ -93,7 +93,7 @@ export class Claim {
   helpWithFeesNumber?: string
   helpWithFessBalanceClaimFee?: number
   lastEventTriggeredForHwfCase?: string
-  
+
   get defendantOffer (): Offer {
     if (!this.settlement) {
       return undefined
@@ -400,7 +400,7 @@ export class Claim {
       this.totalAmountTillToday = input.totalAmountTillToday
       this.totalInterest = input.totalInterest
       this.features = input.features
-      
+
       if (input.lastEventTriggeredForHwfCase) {
         this.lastEventTriggeredForHwfCase = input.lastEventTriggeredForHwfCase
       }
