@@ -109,7 +109,7 @@ export function initialTransitions (claim: Claim): StateMachine {
       },
 
       onBeforeCheckHwfFeesReject () {
-        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF' && claim.claimData.hwfFeeDetailsSummary !== undefined && claim.lastEventTriggeredForHwfCase === 'FullRemissionHWFRejected'
+        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF' && claim.claimData.hwfFeeDetailsSummary !== undefined && (claim.lastEventTriggeredForHwfCase === 'FullRemissionHWFRejected'|| claim.lastEventTriggeredForHwfCase === 'NoRemissionHWF')
       },
 
       onBeforeCheckHwfFeesMoreInfo () {
