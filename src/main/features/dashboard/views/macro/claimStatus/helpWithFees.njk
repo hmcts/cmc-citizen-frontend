@@ -93,16 +93,7 @@
   {% elif claim.claimData.interest.lastInterestCalculationDate === undefined %}
     <p>{{ t('The full claim fee shown on the dashboard is calculated as on {{ createdAt }}.', { createdAt: claim.createdAt | date }) | safe }}</p>
   {% endif %}
-
-</div>
-<div class="status-block">
-  <div class="govuk-details govuk-dashboard-details__text">
-    <p>{{ t('The claim fee may increase if:') }}</p>
-    <ul class="list list-bullet">
-      <li>{{ t('you have claimed interest') }}</li>
-      <li>{{ t('the Help With Fees application takes more than 5 days to progress') }}</li>
-    </ul>
-</div>
+  <p>{{ t('The claim fee may increase if you have claimed interest. Claim interest is calculated up to the date when the claim is sent to the defendant. This calculation can increase the total claim amount and so incur a higher claim issue fee.') }}</p>
 <p>{{ t('If there is no response in next 90 days, the claim will be closed and you will need to create a new claim.') }}</p>
 </div>
 {% endmacro %}
