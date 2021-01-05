@@ -94,7 +94,7 @@ export function initialTransitions (claim: Claim): StateMachine {
       onBeforeCheckHwf () {
         return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'HWF_APPLICATION_PENDING' && claim.lastEventTriggeredForHwfCase === 'CreateHelpWithFeesClaim'
       },
-      
+
       onBeforeCheckHwfIntrest () {
         return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'HWF_APPLICATION_PENDING' && claim.claimData.interest.lastInterestCalculationDate !== undefined
       },
@@ -121,10 +121,6 @@ export function initialTransitions (claim: Claim): StateMachine {
 
       onBeforeCheckHwfInvalid () {
         return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF' && claim.lastEventTriggeredForHwfCase === 'InvalidHWFReference'
-      },
-
-      onBeforeCheckHwf () {
-        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'HWF_APPLICATION_PENDING'
       },
 
       onBeforeCheckMoreTimeRequested () {
