@@ -72,7 +72,7 @@ export function initialTransitions (claim: Claim): StateMachine {
       },
       {
         name: 'checkHwfMiscellaneous',
-        from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.HWF_AWAITING_RESPONSE_HWF],
+        from: InitialStates.HWF_AWAITING_RESPONSE_HWF,
         to: InitialStates.HWF_APPLICATION_PENDING
       },
       {
@@ -94,6 +94,18 @@ export function initialTransitions (claim: Claim): StateMachine {
 
       onBeforeCheckNoResponse () {
         return !claim.response
+      },
+
+      onBeforeCheckMoreTimeRequested () {
+        return this.state !== 'init' && claim.moreTimeRequested
+      },
+
+      onBeforeCheckIsFullDefence () {
+        return (claim.response.responseType && claim.response.responseType === ResponseType.FULL_DEFENCE)
+      },
+
+      onBeforeCheckCCJEnabled () {
+        return this.state !== 'init' && isPastDeadline(MomentFactory.currentDateTime(), claim.responseDeadline)
       },
 
       onBeforeCheckHwf () {
@@ -130,18 +142,6 @@ export function initialTransitions (claim: Claim): StateMachine {
 
       onBeforecheckHwfMiscellaneous () {
         return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF' && (claim.lastEventTriggeredForHwfCase === 'CreateHelpWithFeesClaim' || claim.lastEventTriggeredForHwfCase === 'MiscHWF')
-      },
-
-      onBeforeCheckMoreTimeRequested () {
-        return this.state !== 'init' && claim.moreTimeRequested
-      },
-
-      onBeforeCheckIsFullDefence () {
-        return (claim.response.responseType && claim.response.responseType === ResponseType.FULL_DEFENCE)
-      },
-
-      onBeforeCheckCCJEnabled () {
-        return this.state !== 'init' && isPastDeadline(MomentFactory.currentDateTime(), claim.responseDeadline)
       },
 
       findState (currentSate: StateMachine) {
