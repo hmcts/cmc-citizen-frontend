@@ -179,7 +179,7 @@
       {{ rejectedHelpWithFeesValidationClaimStatus(claim) }}
     {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.state === 'AWAITING_RESPONSE_HWF' and claim.claimData.moreInfoDetails !== undefined and claim.lastEventTriggeredForHwfCase === 'MoreInfoRequiredForHWF' %}
       {{ helpWithFeesRequiredmoreInfoClaimStatus(claim) }}
-    {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.state === 'AWAITING_RESPONSE_HWF' and claim.claimData.feeRemitted !== undefined and claim.lastEventTriggeredForHwfCase === 'HWFPartRemission' %}
+    {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.state === 'AWAITING_RESPONSE_HWF' and claim.claimData.feeRemitted !== undefined and (claim.lastEventTriggeredForHwfCase === 'HWFPartRemission' or claim.lastEventTriggeredForHwfCase === 'HWFFullRemision') %}
       {{ helpWithFeesPartRemettedClaimStatus(claim) }}
     {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.state === 'CLOSED_HWF' %}
       {{ helpWithFeesClosed(claim) }}

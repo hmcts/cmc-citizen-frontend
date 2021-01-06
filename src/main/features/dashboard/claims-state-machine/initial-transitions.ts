@@ -26,6 +26,11 @@ export function initialTransitions (claim: Claim): StateMachine {
         to: InitialStates.MORE_TIME_REQUESTED
       },
       {
+        name: 'checkFullGrant',
+        from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.HWF_AWAITING_RESPONSE_HWF],
+        to: InitialStates.HWF_Part_Remitted
+      },
+      {
         name: 'checkCCJEnabled',
         from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.MORE_TIME_REQUESTED],
         to: InitialStates.NO_RESPONSE_PAST_DEADLINE
@@ -134,6 +139,10 @@ export function initialTransitions (claim: Claim): StateMachine {
 
       onBeforeCheckHwfPartRemitted () {
         return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF' && claim.claimData.feeRemitted !== undefined && claim.lastEventTriggeredForHwfCase === 'HWFPartRemission'
+      },
+
+      onBeforeCheckFullGrant () {
+        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF' && claim.claimData.feeRemitted !== undefined && claim.lastEventTriggeredForHwfCase === 'HWFFullRemision'
       },
 
       onBeforeCheckHwfInvalid () {
