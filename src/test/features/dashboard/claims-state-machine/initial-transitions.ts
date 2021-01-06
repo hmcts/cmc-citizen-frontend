@@ -36,7 +36,7 @@ describe('State Machine for the dashboard status before response', () => {
 
   describe('HWF no-remission entitled / Full remission rejected', () => {
     it('should extract the correct state for the HWF no-remission entitled / Full remission rejected', () => {
-      const claim: Claim = new Claim().deserialize({ ...sampleHwfClaimIssueRejectObj, state: 'AWAITING_RESPONSE_HWF', lastEventTriggeredForHwfCase : 'FullRemissionHWFRejected'  })
+      const claim: Claim = new Claim().deserialize({ ...sampleHwfClaimIssueRejectObj, state: 'AWAITING_RESPONSE_HWF', lastEventTriggeredForHwfCase : 'FullRemissionHWFRejected' })
       let claimState = initialTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('help-with-fees-rejected')
