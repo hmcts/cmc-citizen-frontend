@@ -168,7 +168,7 @@ export class ClaimStoreClient {
     }
 
     if (pageNo === undefined) {
-      pageNo = 1
+      pageNo = 0
     }
 
     return this.request
@@ -228,7 +228,7 @@ export class ClaimStoreClient {
     }
 
     if (pageNo === undefined) {
-      pageNo = 1
+      pageNo = 0
     }
 
     return this.request
