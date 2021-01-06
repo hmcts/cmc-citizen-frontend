@@ -21,6 +21,21 @@ export function initialTransitions (claim: Claim): StateMachine {
         to: InitialStates.NO_RESPONSE
       },
       {
+        name: 'checkMoreTimeRequested',
+        from: [InitialStates.INIT, InitialStates.NO_RESPONSE],
+        to: InitialStates.MORE_TIME_REQUESTED
+      },
+      {
+        name: 'checkCCJEnabled',
+        from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.MORE_TIME_REQUESTED],
+        to: InitialStates.NO_RESPONSE_PAST_DEADLINE
+      },
+      {
+        name: 'checkIsFullDefence',
+        from: [InitialStates.INIT],
+        to: FullDefenceStates.FULL_DEFENCE
+      },
+      {
         name: 'checkHwfIntrest',
         from: [InitialStates.INIT, InitialStates.NO_RESPONSE],
         to: InitialStates.HWF_Intrest_Recalculate
@@ -64,21 +79,6 @@ export function initialTransitions (claim: Claim): StateMachine {
         name: 'checkHwfInvalid',
         from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.HWF_APPLICATION_PENDING],
         to: InitialStates.HWF_INVALID_REFERENCE
-      },
-      {
-        name: 'checkMoreTimeRequested',
-        from: [InitialStates.INIT, InitialStates.NO_RESPONSE],
-        to: InitialStates.MORE_TIME_REQUESTED
-      },
-      {
-        name: 'checkCCJEnabled',
-        from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.MORE_TIME_REQUESTED],
-        to: InitialStates.NO_RESPONSE_PAST_DEADLINE
-      },
-      {
-        name: 'checkIsFullDefence',
-        from: [InitialStates.INIT],
-        to: FullDefenceStates.FULL_DEFENCE
       }
     ],
     data: {
