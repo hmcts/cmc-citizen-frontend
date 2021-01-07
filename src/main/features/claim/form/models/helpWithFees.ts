@@ -1,4 +1,4 @@
-import { IsDefined, IsIn, ValidateIf } from '@hmcts/class-validator'
+import { IsDefined, IsIn, ValidateIf, MaxLength } from '@hmcts/class-validator'
 import { IsNotBlank } from '@hmcts/cmc-validators'
 import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
 import { YesNoOption } from 'models/yesNoOption'
@@ -17,6 +17,7 @@ export class HelpWithFees implements CompletableTask {
   @ValidateIf(o => o.declared === YesNoOption.YES)
   @IsDefined({ message: ValidationErrors.HELP_WITH_FEES_NUMBER_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.HELP_WITH_FEES_NUMBER_REQUIRED })
+  @MaxLength(11, { message: 'Enter your 11 character Help with Fees number' })
   helpWithFeesNumber?: string
 
   constructor (declared?: YesNoOption, helpWithFeesNumber?: string) {

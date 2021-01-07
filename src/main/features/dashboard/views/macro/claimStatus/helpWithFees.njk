@@ -88,17 +88,12 @@
   {% endset %}
   <p>{{ t('You will need your claim reference number. {{ ccdId }}', { ccdId: hyphenatedCcdCaseId }) }}</p>
 
-  <p>{{ t('The full claim fee shown on the dashboard is calculated as on {{ createdAt }}.', { createdAt: claim.createdAt | date }) | safe }}</p>
-
-</div>
-<div class="status-block">
-  <div class="govuk-details govuk-dashboard-details__text">
-    <p>{{ t('The claim fee may increase if:') }}</p>
-    <ul class="list list-bullet">
-      <li>{{ t('you have claimed interest') }}</li>
-      <li>{{ t('the Help With Fees application takes more than 5 days to progress') }}</li>
-    </ul>
-</div>
+  {% if claim.claimData.interest.lastInterestCalculationDate %}
+    <p>{{ t('The full claim fee shown on the dashboard is calculated as on {{ createdAt }}.', { createdAt: claim.claimData.interest.lastInterestCalculationDate | date }) | safe }}</p>
+  {% elif claim.claimData.interest.lastInterestCalculationDate === undefined %}
+    <p>{{ t('The full claim fee shown on the dashboard is calculated as on {{ createdAt }}.', { createdAt: claim.createdAt | date }) | safe }}</p>
+  {% endif %}
+  <p>{{ t('The claim fee may increase if you have claimed interest. Claim interest is calculated up to the date when the claim is sent to the defendant. This calculation can increase the total claim amount and so incur a higher claim issue fee.') }}</p>
 <p>{{ t('If there is no response in next 90 days, the claim will be closed and you will need to create a new claim.') }}</p>
 </div>
 {% endmacro %}
@@ -123,7 +118,11 @@
   {% endset %}
   <p>{{ t('You will need your claim reference number: {{ ccdId }}', { ccdId: hyphenatedCcdCaseId }) }}</p>
 
-  <p>{{ t('The full claim fee shown on the dashboard is calculated as on {{ createdAt }}.', { createdAt: claim.createdAt | date }) | safe }}</p>
+  {% if claim.claimData.interest.lastInterestCalculationDate %}
+    <p>{{ t('The full claim fee shown on the dashboard is calculated as on {{ createdAt }}.', { createdAt: claim.claimData.interest.lastInterestCalculationDate | date }) | safe }}</p>
+  {% elif claim.claimData.interest.lastInterestCalculationDate === undefined %}
+    <p>{{ t('The full claim fee shown on the dashboard is calculated as on {{ createdAt }}.', { createdAt: claim.createdAt | date }) | safe }}</p>
+  {% endif %}
 </div>
 <div class="status-block">
   <div class="govuk-details govuk-dashboard-details__text">
@@ -142,8 +141,13 @@
   <p>{{ t('You are eligible for a {{ claimAmount }} reduction of your claim fees.', { claimAmount : claim.claimData.feeRemitted | numeral }) }}</p>
 
   <h3 class="heading-small">{{ t('What to do next') }}</h3>
+  {% if claim.helpWithFessBalanceClaimFee === 0 %}
+    <p>{{ t('You don’t have to be pay any further fees and we will issue your claim and send it to the defendant.') }}</p>
+  {% elif claim.helpWithFessBalanceClaimFee !== 0 %}
+    <p>{{ t('Pay the remaining claim fee of {{ claimAmount }} and we will issue your claim and send it to the defendant.', { claimAmount : claim.helpWithFessBalanceClaimFee | numeral }) }}</p>
+  {% endif %}
 
-  <p>{{ t('Pay the remaining claim fee of {{ claimAmount }} and we will issue your claim and send it to the defendant.', { claimAmount : claim.helpWithFessBalanceClaimFee | numeral }) }}</p>
+  <p>{{ t('This calculation can increase the total claim amount and so incur a higher claim issue fee. The claim fee is {{ claimFees }}.', { claimFees : claim.claimData.feeAmountInPennies | pennies2pounds | numeral }) }}</p>
   <p>{{ t('To pay by card, phone 0300 123 7050') }}</p>
   
   {% set dash = joiner("-") %}
@@ -155,7 +159,11 @@
   {% endset %}
   <p>{{ t('You will need your claim reference number: {{ ccdId }}', { ccdId: hyphenatedCcdCaseId }) }}</p>
 
-  <p>{{ t('The full claim fee shown on the dashboard is calculated as on {{ createdAt }}.', { createdAt: claim.createdAt | date }) | safe }}</p>
+  {% if claim.claimData.interest.lastInterestCalculationDate %}
+    <p>{{ t('The full claim fee shown on the dashboard is calculated as on {{ createdAt }}.', { createdAt: claim.claimData.interest.lastInterestCalculationDate | date }) | safe }}</p>
+  {% elif claim.claimData.interest.lastInterestCalculationDate === undefined %}
+    <p>{{ t('The full claim fee shown on the dashboard is calculated as on {{ createdAt }}.', { createdAt: claim.createdAt | date }) | safe }}</p>
+  {% endif %}
 </div>
 <div class="status-block">
   <div class="govuk-details govuk-dashboard-details__text">
@@ -166,6 +174,31 @@
     </ul>
   </div>
 </div>
+{% endmacro %}
+
+{% macro helpWithFeesIntrestRecalculateStatus(claim) %}
+<div class="status-block">
+  <h2 class="heading-medium">{{ t('Your Help with Fees application has been updated') }}</h2>
+  <p>{{ t('We have updated your Help with Fees application for the following reason:') }}</p>
+  <p>{{ t('Claim interest is calculated up to the date when the claim is sent to the defendant.') }}</p>
+  <p>{{ t('This calculation can increase the total claim amount and so incur a higher claim issue fee. The claim fee is {{ claimFees }}.', { claimFees : claim.claimData.feeAmountInPennies | pennies2pounds | numeral }) }}</p>
+  <p>{{ t('If the court asks you to pay some or all of the court fees you must pay as soon as you can.') }}</p>
+  <p>{{ t('To pay by card, phone 0300 123 7050.') }}</p>
+  {% set dash = joiner("-") %}
+  {% set hyphenatedCcdCaseId %}
+  {% for batch in claim.ccdCaseId | string | batch(4) -%}
+      {{ dash() }}{% for items in batch -%}{{ items }}
+      {%- endfor %}
+  {%- endfor %}
+  {% endset %}
+  <p>{{ t('You will need your claim reference number: {{ ccdId }}', { ccdId: hyphenatedCcdCaseId }) }}</p>
+  {% if claim.claimData.interest.lastInterestCalculationDate %}
+    <p>{{ t('The full claim fee shown on the dashboard is calculated as on {{ createdAt }}.', { createdAt: claim.claimData.interest.lastInterestCalculationDate | date }) | safe }}</p>
+  {% elif claim.claimData.interest.lastInterestCalculationDate === undefined %}
+    <p>{{ t('The full claim fee shown on the dashboard is calculated as on {{ createdAt }}.', { createdAt: claim.createdAt | date }) | safe }}</p>
+  {% endif %}
+</div>
+
 {% endmacro %}
 
 {% macro helpWithFeesClosed(claim) %}

@@ -92,6 +92,7 @@ export class Claim {
   directionOrderType: string
   helpWithFeesNumber?: string
   helpWithFessBalanceClaimFee?: number
+  lastEventTriggeredForHwfCase?: string
 
   get defendantOffer (): Offer {
     if (!this.settlement) {
@@ -130,11 +131,17 @@ export class Claim {
     if (!this.directionOrder) {
       return undefined
     }
-    const reconsiderationDeadlineChangeDate: Moment = MomentFactory.parse(config.get<any>('reviewOrderDeadLine.changeDate'))
-    if (reconsiderationDeadlineChangeDate && this.directionOrder.createdOn.isAfter(reconsiderationDeadlineChangeDate)) {
-      return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, config.get<number>('reviewOrderDeadLine.numberOfDays'))
+    return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, 7)
+  }
+
+  async respondToOnlineOconReconsiderationDeadline (): Promise<Moment> {
+    if (!this.directionOrder) {
+      return undefined
     }
-    return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, 19)
+    if (this.isOconFormResponse()) {
+      return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, config.get<number>('reconsiderationDeadLine.oconNumberOfDays'))
+    }
+    return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, config.get<number>('reconsiderationDeadLine.onlineNumberOfDays'))
   }
 
   get remainingDays (): number {
@@ -393,6 +400,11 @@ export class Claim {
       this.totalAmountTillToday = input.totalAmountTillToday
       this.totalInterest = input.totalInterest
       this.features = input.features
+
+      if (input.lastEventTriggeredForHwfCase) {
+        this.lastEventTriggeredForHwfCase = input.lastEventTriggeredForHwfCase
+      }
+
       if (input.directionsQuestionnaireDeadline) {
         this.directionsQuestionnaireDeadline = MomentFactory.parse(input.directionsQuestionnaireDeadline)
       }
