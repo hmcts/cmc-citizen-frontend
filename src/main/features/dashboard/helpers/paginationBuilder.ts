@@ -77,7 +77,7 @@ function formItemswithHyperlink (hyperlinkText: string, selectedPageNo: number, 
     })
 
     previousArrow = {
-      text: 'previous',
+      text: 'Previous',
       href: hyperlinkText + previousPagetoSelect
     }
   }

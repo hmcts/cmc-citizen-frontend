@@ -57,7 +57,7 @@ export const paginationObjectForClaimantforPage = {
   },
   next: undefined,
   previous: {
-    text: 'previous',
+    text: 'Previous',
     href: '?c_pid=1'
   },
   items: [
