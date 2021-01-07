@@ -201,6 +201,38 @@
 
 {% endmacro %}
 
+{% macro HWF_APPLICATION_PENDING() %}
+  {{ t('We’re checking your Help With Fees application') }}
+{% endmacro %}
+
+{% macro HWF_INVALID_REFERENCE() %}
+  {{ t('You gave us an invalid Help With Fees number') }}
+{% endmacro %}
+
+{% macro HWF_Rejected() %}
+{{ t('Your Help With Fees application has been rejected') }}
+{% endmacro %}
+
+{% macro HWF_More_Info() %}
+  {{ t('We need more information') }}
+{% endmacro %}
+
+{% macro HWF_Part_Remitted() %}
+  {{ t("We've reviewed your Help With Fees application") }}
+{% endmacro %}
+
+{% macro HWF_Full_Granted() %}
+  {{ t("We've reviewed your Help With Fees application") }}
+{% endmacro %}
+
+{% macro HWF_Intrest_Recalculate() %}
+  {{ t("Your Help with Fees application has been updated") }}
+{% endmacro %}
+
+{% macro HWF_Miscellaneous(claim) %}
+  {{ t('We’re checking your Help With Fees application') }}
+{% endmacro %}
+
 {% macro helpWithFeesClosed(claim) %}
 
 {% endmacro %}
