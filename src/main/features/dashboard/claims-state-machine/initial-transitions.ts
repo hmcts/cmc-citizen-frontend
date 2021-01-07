@@ -77,7 +77,7 @@ export function initialTransitions (claim: Claim): StateMachine {
       },
       {
         name: 'checkHwfMiscellaneous',
-        from: InitialStates.HWF_AWAITING_RESPONSE_HWF,
+        from: [InitialStates.HWF_APPLICATION_PENDING,InitialStates.HWF_AWAITING_RESPONSE_HWF],
         to: InitialStates.HWF_APPLICATION_PENDING
       },
       {

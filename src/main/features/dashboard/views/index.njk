@@ -61,8 +61,8 @@
               <td class="mobile-hide">
               {% if featureToggles.newDashboardStatus and claim.template.dashboard %}
                 {% include claim.template.dashboard ignore missing %}
-              {% elif claim.helpWithFeesNumber %}
-                {% include claim.template.dashboard ignore missing %}
+{#               {% elif claim.helpWithFeesNumber %}
+                {% include claim.template.dashboard ignore missing %} #}
               {% else %}
                 {{ caseStatusForClaimant(claim.status, claim) }}
               {% endif %}
@@ -81,8 +81,8 @@
                 {{ t('Next Step:') }}
                 {% if featureToggles.newDashboardStatus and claim.template.dashboard %}
                   {% include claim.template.dashboard ignore missing %}
-                {% elif claim.helpWithFeesNumber %}
-                  {% include claim.template.dashboard ignore missing %}
+{#                 {% elif claim.helpWithFeesNumber %}
+                  {% include claim.template.dashboard ignore missing %} #}
                 {% else %}
                   {{ caseStatusForClaimant(claim.status, claim) }}
                 {% endif %}
