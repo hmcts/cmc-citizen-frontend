@@ -23,7 +23,6 @@
             <li>Annual interest on, for example, {{ claim.totalClaimAmount | numeral }} is {{ (claim.totalClaimAmount * (interestData.rate)/100) | numeral }} ({{ claim.totalClaimAmount }} x {{ interestData.rate / 100 }})</li>
             <li>Daily interest on {{ claim.totalClaimAmount | numeral }} is {{ ((claim.totalClaimAmount * (interestData.rate/100))/isLeapYear) | numeral }} ({{ claim.totalClaimAmount * interestData.rate / 100 }} / {{ isLeapYear }})</li>
             <li>Interest on {{ claim.totalClaimAmount | numeral }} at {{ interestData.rate }}% for {{ interestData.numberOfDays }} days is {{ (((claim.totalClaimAmount * (interestData.rate/100))/isLeapYear)* interestData.numberOfDays) | numeral }} ({{ claim.totalClaimAmount * interestData.rate / 100 }} x {{ interestData.numberOfDays }} / {{  isLeapYear}})</li>
-            <li><div class="font-xsmall">{{ t('({{ interestDate }} to {{ interestToDate }})', { interestDate: interestData.interestFromDate | date, interestToDate: interestData.interestToDate | date }) }}</div></li>
           </ul>
         </div>  
       </div>
