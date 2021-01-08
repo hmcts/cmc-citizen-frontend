@@ -22,9 +22,13 @@
             <th>{{ t('Claim number') }}</th>
             <th>{{ t('Defendant name') }}</th>
             <th>{{ t('Claim amount') }}</th>
-            <th class="mobile-hide">{{ t('Next steps') }}</th>
-            <th class="mobile-hide">{{ t('Deadline') }}</th>
-            <th class="mobile-hide">{{ t('Actions') }}</th>
+            {% if featureToggles.helpWithFees %}
+              <th class="mobile-hide">{{ t('Next steps') }}</th>
+              <th class="mobile-hide">{{ t('Deadline') }}</th>
+              <th class="mobile-hide">{{ t('Actions') }}</th>
+            {% else %}
+              <th class="mobile-hide">{{ t('Status') }}</th>
+            {% endif %}
           </tr>
           </thead>
           <tbody>
@@ -37,12 +41,18 @@
               <td class="mobile-hide">
                 {{ internalLink(t('Continue with claim'), ClaimPaths.taskListPage.uri) }}
               </td>
-              <td class="mobile-hide">-</td>
-              <td class="mobile-hide">{{ internalLink(t('View'), ClaimPaths.taskListPage.uri) }}</td>
+              {% if featureToggles.helpWithFees %}
+                <td class="mobile-hide">-</td>
+                <td class="mobile-hide">{{ internalLink(t('View'), ClaimPaths.taskListPage.uri) }}</td>
+              {% endif %}
             </tr>
             <tr>
               <td colspan="3" class="mobile-table-status">
-                {{ t('Next steps:') }} {{ internalLink(t('Continue with claim'), ClaimPaths.taskListPage.uri) }}
+                {% if featureToggles.helpWithFees %}
+                  {{ t('Next steps:') }} {{ internalLink(t('Continue with claim'), ClaimPaths.taskListPage.uri) }}
+                {% else %}
+                  {{ t('Status:') }} {{ internalLink(t('Continue with claim'), ClaimPaths.taskListPage.uri) }}
+                {% endif %}
               </td>
             </tr>
           {% endif %}
@@ -65,6 +75,7 @@
                 {{ caseStatusForClaimant(claim.status, claim) }}
               {% endif %}
               </td>
+              {% if featureToggles.helpWithFees %}
               <td class="mobile-hide">
                {% if claim.helpWithFeesNumber %}
                   -
@@ -73,16 +84,22 @@
                 {% endif %}
               </td>
               <td class="mobile-hide">{{ internalLink('View', '/dashboard/' + claim.externalId + '/claimant') }}</td>
+              {% endif %}
             </tr>
             <tr>
               <td colspan="3" class="mobile-table-status">
-                {{ t('Next Step:') }}
+                {% if featureToggles.helpWithFees %}
+                  {{ t('Next Step:') }}
+                {% else %}
+                  {{ t('Status:') }}
+                {% endif %}
                 {% if featureToggles.newDashboardStatus and claim.template.dashboard %}
                   {% include claim.template.dashboard ignore missing %}
                 {% else %}
                   {{ caseStatusForClaimant(claim.status, claim) }}
                 {% endif %}
                 <br>
+                {% if featureToggles.helpWithFees %}
                 {{ t('Deadline:') }}
                 {% if claim.helpWithFeesNumber %}
                   -
@@ -91,6 +108,7 @@
                 {% endif %}
                 <br>
                 {{ t('Actions:')}} {{ internalLink('View', '/dashboard/' + claim.externalId + '/claimant') }}
+                {% endif %}
               </td>
             </tr>
           {% endfor %}
