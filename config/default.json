@@ -94,9 +94,9 @@
     "AntennawebChat": true,
     "inversionOfControl": true,
     "warningBanner": false,
-    "helpWithFees": true,
+    "helpWithFees": false,
     "pcq":true,
-    "signPostingCTSC": false,
+    "signPostingCTSC": true,
     "autoEnrollIntoNewFeature": true,
     "dashboard_pagination_enabled": true
   },
