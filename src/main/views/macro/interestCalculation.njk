@@ -22,7 +22,7 @@
             <li>The rate of annual interest is {{ interestData.rate }}%.</li>
             <li>Annual interest on, for example, {{ claim.totalClaimAmount | numeral }} is {{ (claim.totalClaimAmount * (interestData.rate)/100) | numeral }} ({{ claim.totalClaimAmount }} x {{ interestData.rate / 100 }})</li>
             <li>Daily interest on {{ claim.totalClaimAmount | numeral }} is {{ ((claim.totalClaimAmount * (interestData.rate/100))/isLeapYear) | numeral }} ({{ claim.totalClaimAmount * interestData.rate / 100 }} / {{ isLeapYear }})</li>
-            <li>Interest on {{ claim.totalClaimAmount | numeral }} at {{ interestData.rate }}% for {{ interestData.numberOfDays }} days is {{ (((claim.totalClaimAmount * (interestData.rate/100))/isLeapYear)* interestData.numberOfDays) | numeral }} ({{ claim.totalClaimAmount * interestData.rate / 100 }} x {{ interestData.numberOfDays }} / {{  isLeapYear}})</li>
+            <li>Total amount of interest on {{ claim.totalClaimAmount | numeral }} for {{ interestData.numberOfDays }} days is {{ (((claim.totalClaimAmount * (interestData.rate/100))/isLeapYear)* interestData.numberOfDays) | numeral }} ({{ claim.totalClaimAmount * interestData.rate / 100 }} x {{ interestData.numberOfDays }} / {{  isLeapYear}})</li>
           </ul>
         </div>  
       </div>
