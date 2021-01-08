@@ -42,6 +42,15 @@ describe('Details In case of hearing task', () => {
     expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft, claim)).to.be.false
   })
 
+  it('should not be completed when defendant is business and exceptional circumstances is not completed', () => {
+    const draft = new ResponseDraft()
+    const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
+    const claim: Claim = new Claim().deserialize({
+      ...claimStoreMock.sampleClaimWithDefAsBusinessObj, ...{ features: ['directionsQuestionnaire'] }
+    })
+    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft, claim)).to.be.false
+  })
+
   it('should not be completed when hearing location is not selected', () => {
     const draft = new ResponseDraft()
     const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
@@ -119,6 +128,53 @@ describe('Details In case of hearing task', () => {
     directionsQuestionnaireDraft.expertRequired = new ExpertRequired().deserialize({ option: 'yes' })
     directionsQuestionnaireDraft.expertReports = new ExpertReports().deserialize({ declared: false, rows: [] })
 
+    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft, claim)).to.be.false
+  })
+
+  it('should not be completed when expert report is selected but not mentioned', () => {
+    const draft = new ResponseDraft()
+    const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
+    const claim: Claim = new Claim().deserialize({
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
+    })
+    directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
+    directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
+    directionsQuestionnaireDraft.expertRequired = new ExpertRequired().deserialize({ option: 'yes' })
+    directionsQuestionnaireDraft.expertReports = new ExpertReports().deserialize({ declared: { option: 'yes' }, rows: [] })
+
+    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft, claim)).to.be.false
+  })
+
+  it('should not be completed when expert report is selected as no', () => {
+    const draft = new ResponseDraft()
+    const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
+    const claim: Claim = new Claim().deserialize({
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
+    })
+    directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
+    directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
+    directionsQuestionnaireDraft.expertRequired = new ExpertRequired().deserialize({ option: 'yes' })
+    directionsQuestionnaireDraft.expertReports = new ExpertReports().deserialize({ declared: { option: 'no' }, rows: [] })
+
+    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft, claim)).to.be.false
+  })
+
+  it('should not be completed when expert report is selected as no and expert evidence is not mentioned', () => {
+    const draft = new ResponseDraft()
+    const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
+    const claim: Claim = new Claim().deserialize({
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
+    })
+    directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
+    directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
+    directionsQuestionnaireDraft.expertRequired = new ExpertRequired().deserialize({ option: 'yes' })
+    directionsQuestionnaireDraft.expertReports = new ExpertReports().deserialize({ declared: { option: 'no' }, rows: [] })
+    directionsQuestionnaireDraft.permissionForExpert = new PermissionForExpert().deserialize({ option: { option: 'yes' } })
+    directionsQuestionnaireDraft.expertEvidence = new ExpertEvidence().deserialize({
+      expertEvidence: { option: 'yes' },
+      whatToExamine: 'documents'
+    })
+    directionsQuestionnaireDraft.whyExpertIsNeeded = new WhyExpertIsNeeded()
     expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft, claim)).to.be.false
   })
 
