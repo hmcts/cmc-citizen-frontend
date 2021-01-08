@@ -5,6 +5,7 @@ import {
   defenceWithAmountClaimedAlreadyPaidData,
   defenceWithDisputeData,
   partialAdmissionAlreadyPaidData,
+  partialAdmissionAlreadyPaidLessData,
   fullAdmissionWithImmediatePaymentData,
   partialAdmissionWithImmediatePaymentData
 } from 'test/data/entity/responseData'
@@ -60,6 +61,26 @@ describe('directionsQuestionnaireHelper', () => {
       {
         ...sampleClaimObj,
         response: partialAdmissionAlreadyPaidData,
+        features: ['directionsQuestionnaire']
+      }
+    )
+    const claimantResponseDraft: DraftClaimantResponse = new DraftClaimantResponse().deserialize({
+      accepted: {
+        accepted: {
+          option: YesNoOption.NO
+        }
+      }
+    })
+    if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+      expect(DirectionsQuestionnaireHelper.isDirectionsQuestionnaireEligible(claimantResponseDraft, claim)).to.equal(true)
+    }
+  })
+
+  it('Should return true if response is part admission and there is no payment intention and claimant rejects the defence', () => {
+    const claim: Claim = new Claim().deserialize(
+      {
+        ...sampleClaimObj,
+        response: partialAdmissionAlreadyPaidLessData,
         features: ['directionsQuestionnaire']
       }
     )
