@@ -68,6 +68,7 @@ export class Claim {
   settlementReachedAt: Moment
   claimantResponse: ClaimantResponse
   claimantRespondedAt: Moment
+  totalClaimAmount?: number
   totalAmountTillToday: number
   totalAmountTillDateOfIssue: number
   totalInterest: number
@@ -398,6 +399,7 @@ export class Claim {
         this.totalAmountTillDateOfIssue = input.totalAmountTillDateOfIssue
       }
       this.totalAmountTillToday = input.totalAmountTillToday
+      this.totalClaimAmount = input.totalClaimAmount
       this.totalInterest = input.totalInterest
       this.features = input.features
 
