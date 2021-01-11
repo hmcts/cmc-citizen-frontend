@@ -36,7 +36,7 @@
     "newDashboardStatus": false,
     "inversionOfControl": true,
     "warningBanner": false,
-    "helpWithFees": false,
+    "helpWithFees": true,
     "pcq": true,
     "autoEnrollIntoNewFeature": true,
     "dashboard_pagination_enabled": true
