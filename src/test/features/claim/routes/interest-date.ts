@@ -71,19 +71,12 @@ describe('Claim issue: interest date page', () => {
       it('should redirect to help with fees page when form is valid, submission date selected and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveUpdate()
-        if (process.env.FEATURE_HELP_WITH_FEES) {
-          await request(app)
-            .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .send({ type: InterestDateType.SUBMISSION })
-            .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.helpWithFeesPage.uri))
-        } else {
-          await request(app)
-            .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .send({ type: InterestDateType.SUBMISSION })
-            .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.totalPage.uri))
-        }
+
+        await request(app)
+          .post(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({ type: InterestDateType.SUBMISSION })
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.helpWithFeesPage.uri))
       })
 
       it('should redirect to interest start date page when form is valid, custom date selected and everything is fine', async () => {
