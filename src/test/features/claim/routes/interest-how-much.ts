@@ -82,26 +82,43 @@ describe('Claim issue: interest how much page', () => {
       it('should redirect to help with fees page when form is valid, 8% is selected and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveUpdate()
-
-        await request(app)
-          .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
-          .send({ type: InterestRateOption.STANDARD })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.helpWithFeesPage.uri))
+        if (process.env.FEATURE_HELP_WITH_FEES) {
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({ type: InterestRateOption.STANDARD })
+            .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.helpWithFeesPage.uri))
+        } else {
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({ type: InterestRateOption.STANDARD })
+            .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.totalPage.uri))
+        }
       })
 
       it('should redirect to help with fees page when form is valid, a dailyAmount is entered and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveUpdate()
-
-        await request(app)
-          .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
-          .send({
-            type: InterestRateOption.DIFFERENT,
-            dailyAmount: '10'
-          })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.helpWithFeesPage.uri))
+        if (process.env.FEATURE_HELP_WITH_FEES) {
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({
+              type: InterestRateOption.DIFFERENT,
+              dailyAmount: '10'
+            })
+            .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.helpWithFeesPage.uri))
+        } else {
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({
+              type: InterestRateOption.DIFFERENT,
+              dailyAmount: '10'
+            })
+            .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.totalPage.uri))
+        }
       })
     })
   })

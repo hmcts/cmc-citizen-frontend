@@ -81,11 +81,19 @@ describe('Claim issue: interest page', () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveUpdate()
 
-        await request(app)
-          .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
-          .send({ option: YesNoOption.NO.option })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.helpWithFeesPage.uri))
+        if (process.env.FEATURE_HELP_WITH_FEES) {
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({ option: YesNoOption.NO.option })
+            .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.helpWithFeesPage.uri))
+        } else {
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({ option: YesNoOption.NO.option })
+            .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.totalPage.uri))
+        }
       })
     })
   })

@@ -28,7 +28,7 @@ import {
 } from 'test/data/draft/partyDetails'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const expectedLink = ({ href= '', text= '', hiddenText= '' }) => {
+const expectedLink = ({ href = '', text = '', hiddenText = '' }) => {
   return `<a class="govuk-link" href="${href}">${text} <span class="govuk-visually-hidden">${hiddenText}</span></a>`
 }
 const hiddenTextFullName = 'full name'
@@ -103,7 +103,7 @@ describe('Claim issue: check and send page', () => {
           .expect(res => expect(res).to.be.successful.withText(expectedLink({ href: '/claim/reason', text: 'Change', hiddenText: 'why you believe you’re owed the money:' })))
           .expect(res => expect(res).to.be.successful.withText(expectedLink({ href: '/claim/timeline', text: 'Change', hiddenText: 'timeline of what happened' })))
           .expect(res => expect(res).to.be.successful.withText(expectedLink({ href: '/claim/evidence', text: 'Change', hiddenText: 'your evidence (optional)' })))
-          .expect(res => expect(res).to.be.successful.withText('Statement of truth', 'I believe that the facts stated in this claim are true.','I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.'))
+          .expect(res => expect(res).to.be.successful.withText('Statement of truth', 'I believe that the facts stated in this claim are true.', 'I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.'))
           .expect(res => expect(res).to.be.successful.withText('input id="signedtrue" type="checkbox" name="signed" value="true"'))
           .expect(res => expect(res).to.be.successful.withText('input type="submit" class="button"'))
       })
@@ -488,29 +488,46 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('should redirect to confirmation page when form is valid and help with fee is submitted', async () => {
-        draftStoreServiceMock.resolveFind('claim', { helpWithFees: {
-          declared: YesNoOption.YES,
-          helpWithFeesNumber: 'HWF123456',
-          feeAmountInPennies: 200
-        } })
+        draftStoreServiceMock.resolveFind('claim', {
+          helpWithFees: {
+            declared: YesNoOption.YES,
+            helpWithFeesNumber: 'HWF123456',
+            feeAmountInPennies: 200
+          }
+        })
         claimStoreServiceMock.resolveSaveHelpWithFeesClaimForUser()
         claimStoreServiceMock.resolveRetrieveUserRoles()
         draftStoreServiceMock.resolveDelete()
 
         const nextPage = ClaimPaths.confirmationPage.uri.replace(':externalId', 'fe6e9413-e804-48d5-bbfd-645917fc46e5')
-        await request(app)
-          .post(ClaimPaths.checkAndSendPage.uri)
-          .send({ type: SignatureType.BASIC })
-          .set('Cookie', `${cookieName}=ABC`)
-          .send({ signed: 'true' })
-          .expect(res => expect(res).to.be.redirect.toLocation(nextPage))
+        if (process.env.FEATURE_HELP_WITH_FEES) {
+          await request(app)
+            .post(ClaimPaths.checkAndSendPage.uri)
+            .send({ type: SignatureType.BASIC })
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({ signed: 'true' })
+            .expect(res => expect(res).to.be.redirect.toLocation(nextPage))
+        } else {
+          let nextPaymentPage: string = ClaimPaths.startPaymentReceiver.uri
+          if (toBoolean(config.get('featureToggles.inversionOfControl'))) {
+            nextPaymentPage = ClaimPaths.initiatePaymentController.uri
+          }
+          await request(app)
+            .post(ClaimPaths.checkAndSendPage.uri)
+            .send({ type: SignatureType.BASIC })
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({ signed: 'true' })
+            .expect(res => expect(res).to.be.redirect.toLocation(nextPaymentPage))
+        }
       })
 
       it('should redirect to tasklist page when form is valid and help with fee submission throws error', async () => {
-        draftStoreServiceMock.resolveFind('claim', { helpWithFees: {
-          declared: YesNoOption.YES,
-          helpWithFeesNumber: 'HWF123456'
-        } })
+        draftStoreServiceMock.resolveFind('claim', {
+          helpWithFees: {
+            declared: YesNoOption.YES,
+            helpWithFeesNumber: 'HWF123456'
+          }
+        })
         // mock 'saveHelpWithFees' request with error
         claimStoreServiceMock.resolveSaveHelpWithFeesClaimWithError()
         claimStoreServiceMock.resolveRetrieveUserRoles()
@@ -525,10 +542,12 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('should redirect to confirmation page when form is valid, user initiated payment, but help with fee is submitted', async () => {
-        draftStoreServiceMock.resolveFind('claim', { helpWithFees: {
-          declared: YesNoOption.YES,
-          helpWithFeesNumber: 'HWF123456'
-        } })
+        draftStoreServiceMock.resolveFind('claim', {
+          helpWithFees: {
+            declared: YesNoOption.YES,
+            helpWithFeesNumber: 'HWF123456'
+          }
+        })
         // mock 'awaiting payment' state
         claimStoreServiceMock.resolveRetrieveClaimByExternalId({ state: 'AWAITING_CITIZEN_PAYMENT' })
         // mock updateHelpWithFees 'put' request
@@ -548,10 +567,12 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('should redirect to tasklist page when form is valid, user initiated payment, but used help with fee submission which failed with errors', async () => {
-        draftStoreServiceMock.resolveFind('claim', { helpWithFees: {
-          declared: YesNoOption.YES,
-          helpWithFeesNumber: 'HWF123456'
-        } })
+        draftStoreServiceMock.resolveFind('claim', {
+          helpWithFees: {
+            declared: YesNoOption.YES,
+            helpWithFeesNumber: 'HWF123456'
+          }
+        })
         // mock 'awaiting payment' state
         claimStoreServiceMock.resolveRetrieveClaimByExternalId({ state: 'AWAITING_CITIZEN_PAYMENT' })
         // mock updateHelpWithFees 'put' request failed with error

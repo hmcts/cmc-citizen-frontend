@@ -67,23 +67,38 @@ describe('Claim issue: interest end date page', () => {
       it('should redirect to help with fees page when form is valid, submission date selected and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveUpdate()
-
-        await request(app)
-          .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
-          .send({ option: InterestEndDateOption.SUBMISSION })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.helpWithFeesPage.uri))
+        if (process.env.FEATURE_HELP_WITH_FEES) {
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({ option: InterestEndDateOption.SUBMISSION })
+            .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.helpWithFeesPage.uri))
+        } else {
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({ option: InterestEndDateOption.SUBMISSION })
+            .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.totalPage.uri))
+        }
       })
 
       it('should redirect to help with fees page when form is valid, settled or judgment is selected and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveUpdate()
 
-        await request(app)
-          .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
-          .send({ option: InterestEndDateOption.SETTLED_OR_JUDGMENT })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.helpWithFeesPage.uri))
+        if (process.env.FEATURE_HELP_WITH_FEES) {
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({ option: InterestEndDateOption.SETTLED_OR_JUDGMENT })
+            .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.helpWithFeesPage.uri))
+        } else {
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({ option: InterestEndDateOption.SETTLED_OR_JUDGMENT })
+            .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.totalPage.uri))
+        }
       })
     })
   })
