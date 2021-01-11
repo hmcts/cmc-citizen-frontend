@@ -51,7 +51,7 @@ env.FEATURE_DIRECTIONS_QUESTIONNAIRE = 'true'
 env.FEATURE_TESTING_SUPPORT = 'true'
 env.FEATURE_INVERSION_OF_CONTROL = 'true'
 env.FEATURE_PCQ = 'true'
-env.FEATURE_HELP_WITH_FEES = 'true'
+env.FEATURE_HELP_WITH_FEES = 'false'
 // add any others needed to selective testing...
 
 String notificationsChannel = '#cmc-tech-notification'
