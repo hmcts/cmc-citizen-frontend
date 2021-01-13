@@ -92,34 +92,12 @@ async function retrieveRedirectForLandingPage (req: express.Request, res: expres
   if (eligibility.eligible) {
     return ClaimPaths.taskListPage.uri
   }
-
   const user: User = res.locals.user
-  let noClaimIssued: boolean = true
-  let noDraftClaims: boolean = true
-  let noDraftResponses: boolean = true
-  let noClaimReceived: boolean = true
-  const dashboardPaginationEnabled: boolean = await featureToggles.isDashboardPaginationEnabled()
 
-  if (dashboardPaginationEnabled) {
-    user.roles.some(role => {
-      if (role.startsWith('letter-') && role !== 'letter-holder' && !role.endsWith('loa1')) {
-        return noClaimReceived = false
-      }
-    })
-    if (noClaimReceived) {
-      noClaimIssued = (await claimStoreClient.retrieveByClaimantId(user)).length === 0
-      if (noClaimIssued) {
-        noClaimReceived = (await claimStoreClient.retrieveByDefendantId(user)).length === 0
-        noDraftClaims = (await draftService.find('claim', '100', user.bearerToken, value => value)).length === 0
-        noDraftResponses = (await draftService.find('response', '100', user.bearerToken, value => value)).length === 0
-      }
-    }
-  } else {
-    noClaimIssued = (await claimStoreClient.retrieveByClaimantId(user)).length === 0
-    noClaimReceived = (await claimStoreClient.retrieveByDefendantId(user)).length === 0
-    noDraftClaims = (await draftService.find('claim', '100', user.bearerToken, value => value)).length === 0
-    noDraftResponses = (await draftService.find('response', '100', user.bearerToken, value => value)).length === 0
-  }
+  const noClaimIssued: boolean = (await claimStoreClient.retrieveByClaimantId(user, 1)).length === 0
+  const noClaimReceived: boolean = (await claimStoreClient.retrieveByDefendantId(user, 1)).length === 0
+  const noDraftClaims: boolean = (await draftService.find('claim', '100', user.bearerToken, value => value)).length === 0
+  const noDraftResponses: boolean = (await draftService.find('response', '100', user.bearerToken, value => value)).length === 0
 
   if (noClaimReceived && noClaimIssued && noDraftClaims && noDraftResponses) {
     return EligibilityPaths.startPage.uri
