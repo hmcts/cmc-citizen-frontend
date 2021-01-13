@@ -244,7 +244,7 @@ describe('Details In case of hearing task', () => {
     expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft, claim)).to.be.false
   })
 
-  it('should not be completed when export evidence is not selected', () => {
+  it('should not be completed when expert evidence is not selected', () => {
     const draft = new ResponseDraft()
     const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
     const claim: Claim = new Claim().deserialize({
@@ -254,6 +254,21 @@ describe('Details In case of hearing task', () => {
     directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
     directionsQuestionnaireDraft.expertRequired = new ExpertRequired().deserialize({ option: 'yes' })
     directionsQuestionnaireDraft.expertReports = new ExpertReports().deserialize({ declared: false, rows: [] })
+    directionsQuestionnaireDraft.permissionForExpert = new PermissionForExpert().deserialize({ option: { option: 'yes' } })
+
+    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft, claim)).to.be.false
+  })
+
+  it('should not be completed when expert evidence is undefined', () => {
+    const draft = new ResponseDraft()
+    const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
+    const claim: Claim = new Claim().deserialize({
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
+    })
+    directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
+    directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
+    directionsQuestionnaireDraft.expertRequired = new ExpertRequired().deserialize({ option: 'yes' })
+    directionsQuestionnaireDraft.expertReports = new ExpertReports().deserialize({ declared: { option: 'no' }, rows: [] })
     directionsQuestionnaireDraft.permissionForExpert = new PermissionForExpert().deserialize({ option: { option: 'yes' } })
 
     expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft, claim)).to.be.false
