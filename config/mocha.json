@@ -39,7 +39,7 @@
     "helpWithFees": true,
     "pcq": true,
     "autoEnrollIntoNewFeature": true,
-    "dashboard_pagination_enabled": true
+    "dashboard_pagination_enabled": false
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"
