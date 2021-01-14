@@ -23,6 +23,8 @@ import { OAuthHelper } from 'idam/oAuthHelper'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { trackCustomEvent } from 'logging/customEventTracker'
+import { FeatureToggles } from 'utils/featureToggles'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
 const logger = Logger.getLogger('router/receiver')
 
@@ -33,6 +35,8 @@ const draftService: DraftService = new DraftService()
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
 const eligibilityStore = new CookieEligibilityStore()
+
+const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
 
 async function getOAuthAccessToken (req: express.Request, receiver: RoutablePath): Promise<string> {
   if (req.query.state !== OAuthHelper.getStateCookie(req)) {
@@ -88,14 +92,14 @@ async function retrieveRedirectForLandingPage (req: express.Request, res: expres
   if (eligibility.eligible) {
     return ClaimPaths.taskListPage.uri
   }
-
   const user: User = res.locals.user
-  const noClaimIssued: boolean = (await claimStoreClient.retrieveByClaimantId(user)).length === 0
-  const noClaimReceived: boolean = (await claimStoreClient.retrieveByDefendantId(user)).length === 0
+
+  const noClaimIssued: boolean = (await claimStoreClient.retrieveByClaimantId(user, 1)).length === 0
+  const noClaimReceived: boolean = (await claimStoreClient.retrieveByDefendantId(user, 1)).length === 0
   const noDraftClaims: boolean = (await draftService.find('claim', '100', user.bearerToken, value => value)).length === 0
   const noDraftResponses: boolean = (await draftService.find('response', '100', user.bearerToken, value => value)).length === 0
 
-  if (noClaimIssued && noClaimReceived && noDraftClaims && noDraftResponses) {
+  if (noClaimReceived && noClaimIssued && noDraftClaims && noDraftResponses) {
     return EligibilityPaths.startPage.uri
   } else {
     return DashboardPaths.dashboardPage.uri
@@ -134,7 +138,14 @@ export default express.Router()
           cookies.set(stateCookieName, req.query.state)
           return res.redirect(FirstContactPaths.claimSummaryPage.uri)
         } else {
-          await claimStoreClient.linkDefendant(user)
+          if (featureToggles.isDashboardPaginationEnabled) {
+            if (cookies.get('lid') && cookies.get('lid') !== undefined && cookies.get('lid') !== '') {
+              await claimStoreClient.linkDefendant(user, cookies.get('lid'))
+            }
+            cookies.set('lid', '')
+          } else {
+            await claimStoreClient.linkDefendant(user, '')
+          }
           res.redirect(await retrieveRedirectForLandingPage(req, res))
         }
       } else {

@@ -10,16 +10,13 @@
 {% macro _emailWidget(email = supportEmailAddress) %}
     <h2 class="heading-medium contact-mail">{{ t('Email') }}</h2>
     <p><a href="mailto:{{t(email)}}">{{ t(email)}}</a>
-  
-  
     </p>
 {% endmacro%}
 
 {% macro _phoneWidget(phoneNumber = '0300 123 7050') %}
     <h2 class="heading-medium contact-us">{{ t('Telephone') }}</h2>
     <p>{{ t(phoneNumber) }}
-      <span class="block">{{ t("Monday to Thursday, 8.30am to 5pm.") }}</span>
-      <span class="block">{{ t("Friday, 8.30am to 4pm.") }}</span>
+      <span class="block">{{ t("Monday to Friday, 8.30am to 5pm.") }}</span>
       <span class="block">{{ _callCharges()}}</span>
     </p>
 {% endmacro %}
@@ -40,15 +37,19 @@
 {% endmacro %}
 
 {% macro supportWidget(label = 'Email') %}
-  
     {{ _emailWidget('contactocmc@justice.gov.uk') }}
     {{ _phoneWidget('0300 123 7050') }}
 {% endmacro %}
 
-{% macro supportWidget1(label = 'Email') %}
-  
+{% macro supportWidgetaccessibility(label = 'Email') %}
     {{ _emailWidget('contactocmc@justice.gov.uk') }}
     {{ _phoneWidget('0300 123 7050') }}
+{% endmacro %}
+
+{% macro supportWidgetContactus(label = 'Email') %}
+    {{ _emailWidget('contactocmc@justice.gov.uk') }}
+    {{ _phoneWidget('0300 123 7050') }}
+    {{ _holidayWidget() }}
 {% endmacro %}
 
 {% macro mcolSupportWidget(label = 'Help and advice') %}

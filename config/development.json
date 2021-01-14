@@ -8,7 +8,7 @@
     "legalAdvisorPilot": true,
     "judgePilot": true,
     "directionsQuestionnaire": true,
-    "newDashboardStatus": true,
+    "newDashboardStatus": false,
     "inversionOfControl": true,
     "warningBanner": false,
     "helpWithFees": true,
