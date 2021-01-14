@@ -1,6 +1,9 @@
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
 import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
+import { Logger } from '@hmcts/nodejs-logging'
+
+const logger = Logger.getLogger('applicationRunner')
 
 export class FeatureToggles {
   readonly launchDarklyClient: LaunchDarklyClient
@@ -53,6 +56,7 @@ export class FeatureToggles {
   }
 
   async isDashboardPaginationEnabled (): Promise<boolean> {
+    logger.info('calling LD ->' + this.launchDarklyClient.serviceVariation('dashboard_pagination_enabled', toBoolean(config.get<boolean>(`featureToggles.dashboard_pagination_enabled`))))
     return this.launchDarklyClient.serviceVariation('dashboard_pagination_enabled', toBoolean(config.get<boolean>(`featureToggles.dashboard_pagination_enabled`)))
   }
 }
