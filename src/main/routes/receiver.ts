@@ -93,9 +93,15 @@ async function retrieveRedirectForLandingPage (req: express.Request, res: expres
     return ClaimPaths.taskListPage.uri
   }
   const user: User = res.locals.user
-
-  const noClaimIssued: boolean = (await claimStoreClient.retrieveByClaimantId(user, 1)).length === 0
-  const noClaimReceived: boolean = (await claimStoreClient.retrieveByDefendantId(user, 1)).length === 0
+  let noClaimIssued: boolean = true
+  let noClaimReceived: boolean = true
+  if (featureToggles.isDashboardPaginationEnabled()) {
+    noClaimIssued = (await claimStoreClient.retrieveByClaimantId(user, 1)).length === 0
+    noClaimReceived = (await claimStoreClient.retrieveByDefendantId(user, 1)).length === 0
+  } else {
+    noClaimIssued = (await claimStoreClient.retrieveByClaimantId(user, 0)).length === 0
+    noClaimReceived = (await claimStoreClient.retrieveByDefendantId(user, 0)).length === 0
+  }
   const noDraftClaims: boolean = (await draftService.find('claim', '100', user.bearerToken, value => value)).length === 0
   const noDraftResponses: boolean = (await draftService.find('response', '100', user.bearerToken, value => value)).length === 0
 
