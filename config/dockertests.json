@@ -9,7 +9,8 @@
     "newDashboardStatus": false,
     "warningBanner": false,
     "inversionOfControl": true,
-    "autoEnrollIntoNewFeature": true
+    "autoEnrollIntoNewFeature": true,
+    "dashboard_pagination_enabled": false
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"
