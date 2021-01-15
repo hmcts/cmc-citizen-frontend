@@ -138,7 +138,7 @@ export default express.Router()
           cookies.set(stateCookieName, req.query.state)
           return res.redirect(FirstContactPaths.claimSummaryPage.uri)
         } else {
-          if (featureToggles.isDashboardPaginationEnabled) {
+          if (await featureToggles.isDashboardPaginationEnabled()) {
             if (cookies.get('lid') && cookies.get('lid') !== undefined && cookies.get('lid') !== '') {
               await claimStoreClient.linkDefendant(user, cookies.get('lid'))
             }
