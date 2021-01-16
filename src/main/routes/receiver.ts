@@ -95,12 +95,14 @@ async function retrieveRedirectForLandingPage (req: express.Request, res: expres
   const user: User = res.locals.user
   let noClaimIssued: boolean = true
   let noClaimReceived: boolean = true
-  if (featureToggles.isDashboardPaginationEnabled()) {
+  if (await featureToggles.isDashboardPaginationEnabled()) {
+    logger.info('Receiver: Dashboard feature is enabled')
     noClaimIssued = (await claimStoreClient.retrieveByClaimantId(user, 1)).length === 0
     noClaimReceived = (await claimStoreClient.retrieveByDefendantId(user, 1)).length === 0
   } else {
-    noClaimIssued = (await claimStoreClient.retrieveByClaimantId(user, 0)).length === 0
-    noClaimReceived = (await claimStoreClient.retrieveByDefendantId(user, 0)).length === 0
+    logger.info('Receiver: Dashboard feature is not enabled')
+    noClaimIssued = (await claimStoreClient.retrieveByClaimantId(user, undefined)).length === 0
+    noClaimReceived = (await claimStoreClient.retrieveByDefendantId(user, undefined)).length === 0
   }
   const noDraftClaims: boolean = (await draftService.find('claim', '100', user.bearerToken, value => value)).length === 0
   const noDraftResponses: boolean = (await draftService.find('response', '100', user.bearerToken, value => value)).length === 0
