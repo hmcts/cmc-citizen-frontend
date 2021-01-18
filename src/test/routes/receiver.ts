@@ -12,12 +12,13 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
 import 'test/routes/expectations'
-
+import * as sinon from 'sinon'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import { FeatureToggles } from 'utils/featureToggles'
 import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 import * as toBoolean from 'to-boolean'
 
+let isDashboardPaginationEnabledStub: sinon.SinonStub
 const cookieName: string = config.get<string>('session.cookieName')
 
 describe('Login receiver', async () => {
@@ -155,6 +156,31 @@ describe('Login receiver', async () => {
           .get(`${AppPaths.receiver.uri}?code=ABC&state=123`)
           .set('Cookie', 'state=123')
           .expect(res => expect(res).to.be.serverError)
+      })
+    })
+
+    describe('when LD if Off', () => {
+      beforeEach(() => {
+        isDashboardPaginationEnabledStub = sinon.stub(FeatureToggles.prototype, 'isDashboardPaginationEnabled')
+        isDashboardPaginationEnabledStub.returns(false)
+      })
+
+      afterEach(() => {
+        isDashboardPaginationEnabledStub.restore()
+      })
+
+      it('when claim received first time, should redirect to dashboard', async () => {
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-1')
+        claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
+        claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
+        draftStoreServiceMock.resolveFindNoDraftFound()
+        draftStoreServiceMock.resolveFind('claim')
+        claimStoreServiceMock.resolveLinkDefendant()
+
+        await request(app)
+          .get(AppPaths.receiver.uri + '?state=123')
+          .set('Cookie', [`${cookieName}=ABC`, 'lid=lasjlfkkjlef'])
+          .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
       })
     })
   })

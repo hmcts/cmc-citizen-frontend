@@ -93,9 +93,17 @@ async function retrieveRedirectForLandingPage (req: express.Request, res: expres
     return ClaimPaths.taskListPage.uri
   }
   const user: User = res.locals.user
-
-  const noClaimIssued: boolean = (await claimStoreClient.retrieveByClaimantId(user, 1)).length === 0
-  const noClaimReceived: boolean = (await claimStoreClient.retrieveByDefendantId(user, 1)).length === 0
+  let noClaimIssued: boolean = true
+  let noClaimReceived: boolean = true
+  if (await featureToggles.isDashboardPaginationEnabled()) {
+    logger.info('Receiver: Dashboard feature is enabled')
+    noClaimIssued = (await claimStoreClient.retrieveByClaimantId(user, 1)).length === 0
+    noClaimReceived = (await claimStoreClient.retrieveByDefendantId(user, 1)).length === 0
+  } else {
+    logger.info('Receiver: Dashboard feature is not enabled')
+    noClaimIssued = (await claimStoreClient.retrieveByClaimantId(user, undefined)).length === 0
+    noClaimReceived = (await claimStoreClient.retrieveByDefendantId(user, undefined)).length === 0
+  }
   const noDraftClaims: boolean = (await draftService.find('claim', '100', user.bearerToken, value => value)).length === 0
   const noDraftResponses: boolean = (await draftService.find('response', '100', user.bearerToken, value => value)).length === 0
 
@@ -138,7 +146,7 @@ export default express.Router()
           cookies.set(stateCookieName, req.query.state)
           return res.redirect(FirstContactPaths.claimSummaryPage.uri)
         } else {
-          if (featureToggles.isDashboardPaginationEnabled) {
+          if (await featureToggles.isDashboardPaginationEnabled()) {
             if (cookies.get('lid') && cookies.get('lid') !== undefined && cookies.get('lid') !== '') {
               await claimStoreClient.linkDefendant(user, cookies.get('lid'))
             }

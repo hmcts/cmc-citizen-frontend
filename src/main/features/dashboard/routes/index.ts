@@ -13,8 +13,10 @@ import { ActorType } from 'claims/models/claim-states/actor-type'
 import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 import { FeatureToggles } from 'utils/featureToggles'
 import { formPaginationToDisplay } from '../helpers/paginationBuilder'
+import { Logger } from '@hmcts/nodejs-logging'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
+const logger = Logger.getLogger('router/dashboards')
 
 function renderPage (res: express.Response, claimsAsClaimant: Claim[], claimDraftSaved: boolean, claimsAsDefendant: Claim[], responseDraftSaved: boolean, paginationArgumentClaimant: object, paginationArgumentDefendant: object) {
   res.render(Paths.dashboardPage.associatedView, {
@@ -41,9 +43,8 @@ export default express.Router()
     let paginationArgumentClaimant: object = undefined
     let paginationArgumentDefendant: object = undefined
 
-    const dashboardPaginationEnabled: boolean = await featureToggles.isDashboardPaginationEnabled()
-
-    if (dashboardPaginationEnabled) {
+    if (await featureToggles.isDashboardPaginationEnabled()) {
+      logger.info('Dashboard feature is enabled')
       const selectedPIdByClaimant: number = (req.query.c_pid === undefined || req.query.c_pid === '') ? 1 : Number(req.query.c_pid)
       const selectedPIdByDefendant: number = (req.query.d_pid === undefined || req.query.d_pid === '') ? 1 : Number(req.query.d_pid)
       const pagingInfoClaimant = await claimStoreClient.retrievePaginationInfo(user, ActorType.CLAIMANT)
@@ -64,6 +65,7 @@ export default express.Router()
 
       renderPage(res, claimsAsClaimant, claimDraftSaved, claimsAsDefendant, responseDraftSaved, paginationArgumentClaimant, paginationArgumentDefendant)
     } else {
+      logger.info('Dashboard feature is not enabled')
       const claimsAsClaimant: Claim[] = await claimStoreClient.retrieveByClaimantId(user, undefined)
       const claimsAsDefendant: Claim[] = await claimStoreClient.retrieveByDefendantId(user, undefined)
       claimState(claimsAsClaimant,ActorType.CLAIMANT)
