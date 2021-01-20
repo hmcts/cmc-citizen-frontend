@@ -158,7 +158,7 @@ Scenario('I should be redirected to PCQ if "Your details" are filled in while ma
 
 })
 
-// The @citizen-smoke-test tag used for running smoke tests with pre-registered user for help with fees
+// Test for help with fees
 
 if (process.env.FEATURE_HELP_WITH_FEES) {
   Scenario('I can enter a claim details and i can create a claim with Help With Fees reference number @smoke-test', { retries: 3 }, (I: I) => {

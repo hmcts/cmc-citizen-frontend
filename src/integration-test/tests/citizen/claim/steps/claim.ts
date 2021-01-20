@@ -395,7 +395,7 @@ export class ClaimSteps {
     const claimant = createClaimant(PartyType.INDIVIDUAL)
     const defendant = createDefendant(PartyType.INDIVIDUAL, true)
     claimantCheckAndSendPage.open('')
-    // userSteps.loginWithPreRegisteredUser(SMOKE_TEST_CITIZEN_USERNAME, SMOKE_TEST_USER_PASSWORD)
+    userSteps.login(userSteps.getClaimantEmail())
     if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
       testingSupport.deleteClaimDraft()
     }
