@@ -170,5 +170,11 @@
     "**/download": "8.0.0",
     "sass-lint/eslint": "5.0.0",
     "bootstrap-datepicker/jquery": "3.5.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint",
+      "pre-push": "yarn tests && yarn test:routes"
+    }
   }
 }
