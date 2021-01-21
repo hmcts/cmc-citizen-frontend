@@ -39,7 +39,7 @@ env.FEATURE_DIRECTIONS_QUESTIONNAIRE = 'true'
 env.FEATURE_TESTING_SUPPORT = 'true'
 env.FEATURE_INVERSION_OF_CONTROL = 'true'
 env.FEATURE_PCQ = 'true'
-env.FEATURE_HELP_WITH_FEES = 'false'
+env.FEATURE_HELP_WITH_FEES = 'true'
 // add any others needed to selective testing...
 
 // SAUCELABS config - configured on Jenkins (also IDAM_URL above used)
