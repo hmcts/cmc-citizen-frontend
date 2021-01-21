@@ -43,6 +43,24 @@ describe('State Machine for the dashboard status before response', () => {
     })
   })
 
+  describe('given the HWF claim which is under review', () => {
+    it('should extract the correct state for the claim issued', () => {
+      const claim: Claim = new Claim().deserialize({ ...sampleHwfClaimIssueObj, state: 'AWAITING_RESPONSE_HWF', lastEventTriggeredForHwfCase : 'HWFPartRemission' })
+      let claimState = initialTransitions(claim)
+      claimState.findState(claimState)
+      expect(claimState.state).to.equal('help-with-fess-part-remittion-granted')
+    })
+  })
+
+  describe('given the HWF claim which is under review', () => {
+    it('should extract the correct state for the claim issued', () => {
+      const claim: Claim = new Claim().deserialize({ ...sampleHwfClaimIssueObj, state: 'AWAITING_RESPONSE_HWF', lastEventTriggeredForHwfCase : 'HWFFullRemision' })
+      let claimState = initialTransitions(claim)
+      claimState.findState(claimState)
+      expect(claimState.state).to.equal('help-with-fess-part-remittion-granted')
+    })
+  })
+
   describe('HWF reference is invalid', () => {
     it('should extract the correct state for the invalid HWF reference', () => {
       const claim: Claim = new Claim().deserialize({ ...sampleHwfClaimIssueObj, state: 'AWAITING_RESPONSE_HWF', lastEventTriggeredForHwfCase : 'InvalidHWFReference' })
