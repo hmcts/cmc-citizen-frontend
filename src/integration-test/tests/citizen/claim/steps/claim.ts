@@ -449,7 +449,6 @@ export class ClaimSteps {
     claimantCheckAndSendPage.verifyDefendantCheckAndSendAnswers(PartyType.INDIVIDUAL, true)
     claimantCheckAndSendPage.verifyClaimAmount()
     I.see('HWF1234567')
-    I.see('Submit claim')
     if (!process.env.CITIZEN_APP_URL.includes('sprod')) {
       claimantCheckAndSendPage.checkFactsTrueAndSubmit()
       I.waitForText('Claim submitted')
