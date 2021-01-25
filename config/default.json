@@ -95,7 +95,7 @@
     "warningBanner": false,
     "helpWithFees": false,
     "pcq":true,
-    "signPostingCTSC": false,
+    "signPostingCTSC": true,
     "autoEnrollIntoNewFeature": true,
     "dashboard_pagination_enabled": false
   },
@@ -136,6 +136,6 @@
   },
   "pcq":
   {
-    "url":"http://localhost:4000"
+    "url":"http://localhost:4001"
   }
 }

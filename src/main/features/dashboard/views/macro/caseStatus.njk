@@ -124,10 +124,40 @@
   claimTransferredClaimantClaimStatus
 %}
 
+{% from "./claimStatus/helpWithFees.njk" import
+  helpWithFeesValidationDashboard,
+  HWF_APPLICATION_PENDING,
+  HWF_INVALID_REFERENCE,
+  HWF_Rejected,
+  HWF_More_Info,
+  HWF_Part_Remitted,
+  HWF_Full_Granted,
+  HWF_Intrest_Recalculate,
+  HWF_Miscellaneous
+%}
+
 {% macro caseStatusForClaimant(status, claim) %}
   {% if status === ClaimStatus.PAID_IN_FULL or status === ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED or status === ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
     or status === ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID %}
     {{ claimSettledDashboard() }}
+{#   {% elif status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber %}
+    {{ helpWithFeesValidationDashboard() }} #}
+  {% elif status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.lastEventTriggeredForHwfCase === 'CreateHelpWithFeesClaim' %}
+    {{ HWF_APPLICATION_PENDING() }}
+  {% elif status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.lastEventTriggeredForHwfCase === 'InvalidHWFReference' %}
+    {{ HWF_INVALID_REFERENCE() }}
+  {% elif status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and (claim.lastEventTriggeredForHwfCase === 'FullRemissionHWFRejected' or claim.lastEventTriggeredForHwfCase === 'NoRemissionHWF') %}
+    {{ HWF_Rejected() }}
+  {% elif status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.lastEventTriggeredForHwfCase === 'MoreInfoRequiredForHWF' %}
+    {{ HWF_More_Info() }}
+  {% elif status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.lastEventTriggeredForHwfCase === 'HWFPartRemission' %}
+    {{ HWF_Part_Remitted() }}
+  {% elif status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.lastEventTriggeredForHwfCase === 'HWFFullRemision' %}
+    {{ HWF_Full_Granted() }}
+  {% elif status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.lastEventTriggeredForHwfCase === 'RecalculateInterest' %}
+    {{ HWF_Intrest_Recalculate() }}
+  {% elif status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.lastEventTriggeredForHwfCase === 'MiscHWF' %}
+    {{ HWF_Miscellaneous() }}
   {% elif status === ClaimStatus.NO_RESPONSE %}
     {{ noResponseForClaimantDashboard() }}
   {% elif status === ClaimStatus.MORE_TIME_REQUESTED %}

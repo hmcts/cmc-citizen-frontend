@@ -138,7 +138,7 @@ export class Eligibility {
 
   helpWithFeeEligible (): boolean {
     return this.helpWithFeesReference
-      ? this.helpWithFees === YesNoOption.NO || (this.helpWithFees === YesNoOption.YES && this.helpWithFeesReference === YesNoOption.YES)
+      ? this.helpWithFees === YesNoOption.NO || (this.helpWithFees === YesNoOption.YES && (this.helpWithFeesReference === YesNoOption.YES) || this.helpWithFeesReference === YesNoOption.NO)
       : this.helpWithFees === YesNoOption.NO
   }
 }
