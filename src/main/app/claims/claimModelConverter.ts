@@ -66,6 +66,12 @@ export class ClaimModelConverter {
         draftClaim.qualifiedStatementOfTruth.signerRole
       )
     }
+    if (draftClaim.helpWithFees && draftClaim.helpWithFees.declared
+      && draftClaim.helpWithFees.declared.option === YesNoOption.YES.option) {
+      claimData.helpWithFeesNumber = draftClaim.helpWithFees.helpWithFeesNumber
+      claimData.feeAmountInPennies = draftClaim.feeAmountInPennies
+      claimData.helpWithFeesType = 'Claim Issue'
+    }
     return claimData
   }
 

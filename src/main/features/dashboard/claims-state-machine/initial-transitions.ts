@@ -26,6 +26,11 @@ export function initialTransitions (claim: Claim): StateMachine {
         to: InitialStates.MORE_TIME_REQUESTED
       },
       {
+        name: 'checkFullGrant',
+        from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.HWF_AWAITING_RESPONSE_HWF],
+        to: InitialStates.HWF_Part_Remitted
+      },
+      {
         name: 'checkCCJEnabled',
         from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.MORE_TIME_REQUESTED],
         to: InitialStates.NO_RESPONSE_PAST_DEADLINE
@@ -34,6 +39,51 @@ export function initialTransitions (claim: Claim): StateMachine {
         name: 'checkIsFullDefence',
         from: [InitialStates.INIT],
         to: FullDefenceStates.FULL_DEFENCE
+      },
+      {
+        name: 'checkHwfIntrest',
+        from: [InitialStates.INIT, InitialStates.NO_RESPONSE],
+        to: InitialStates.HWF_Intrest_Recalculate
+      },
+      {
+        name: 'checkHwf',
+        from: [InitialStates.INIT, InitialStates.NO_RESPONSE],
+        to: InitialStates.HWF_APPLICATION_PENDING
+      },
+      {
+        name: 'checkHwfIntrestReCalculate',
+        from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.HWF_AWAITING_RESPONSE_HWF],
+        to: InitialStates.HWF_Intrest_Recalculate
+      },
+      {
+        name: 'checkHwfFeesReject',
+        from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.HWF_AWAITING_RESPONSE_HWF],
+        to: InitialStates.HWF_Rejected
+      },
+      {
+        name: 'checkHwfFeesMoreInfo',
+        from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.HWF_AWAITING_RESPONSE_HWF],
+        to: InitialStates.HWF_More_Info
+      },
+      {
+        name: 'checkHwfFeesApplicationClosed',
+        from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.HWF_AWAITING_RESPONSE_HWF],
+        to: InitialStates.HWF_CLOSED
+      },
+      {
+        name: 'checkHwfPartRemitted',
+        from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.HWF_AWAITING_RESPONSE_HWF],
+        to: InitialStates.HWF_Part_Remitted
+      },
+      {
+        name: 'checkHwfMiscellaneous',
+        from: InitialStates.HWF_AWAITING_RESPONSE_HWF,
+        to: InitialStates.HWF_APPLICATION_PENDING
+      },
+      {
+        name: 'checkHwfInvalid',
+        from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.HWF_APPLICATION_PENDING],
+        to: InitialStates.HWF_INVALID_REFERENCE
       }
     ],
     data: {
@@ -61,6 +111,46 @@ export function initialTransitions (claim: Claim): StateMachine {
 
       onBeforeCheckCCJEnabled () {
         return this.state !== 'init' && isPastDeadline(MomentFactory.currentDateTime(), claim.responseDeadline)
+      },
+
+      onBeforeCheckHwf () {
+        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'HWF_APPLICATION_PENDING' && (claim.lastEventTriggeredForHwfCase === 'CreateHelpWithFeesClaim' || claim.lastEventTriggeredForHwfCase === 'MiscHWF')
+      },
+
+      onBeforeCheckHwfIntrest () {
+        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'HWF_APPLICATION_PENDING' && claim.claimData.interest.lastInterestCalculationDate !== undefined && claim.lastEventTriggeredForHwfCase === 'RecalculateInterest'
+      },
+
+      onBeforeCheckHwfIntrestReCalculate () {
+        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF' && claim.claimData.interest.lastInterestCalculationDate !== undefined && claim.lastEventTriggeredForHwfCase === 'RecalculateInterest'
+      },
+
+      onBeforeCheckHwfFeesReject () {
+        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF' && claim.claimData.hwfFeeDetailsSummary !== undefined && (claim.lastEventTriggeredForHwfCase === 'FullRemissionHWFRejected' || claim.lastEventTriggeredForHwfCase === 'NoRemissionHWF')
+      },
+
+      onBeforeCheckHwfFeesMoreInfo () {
+        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF' && claim.claimData.moreInfoDetails !== undefined && claim.lastEventTriggeredForHwfCase === 'MoreInfoRequiredForHWF'
+      },
+
+      onBeforeCheckHwfFeesApplicationClosed () {
+        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'CLOSED_HWF'
+      },
+
+      onBeforeCheckHwfPartRemitted () {
+        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF' && claim.claimData.feeRemitted !== undefined && claim.lastEventTriggeredForHwfCase === 'HWFPartRemission'
+      },
+
+      onBeforeCheckFullGrant () {
+        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF' && claim.claimData.feeRemitted !== undefined && claim.lastEventTriggeredForHwfCase === 'HWFFullRemision'
+      },
+
+      onBeforeCheckHwfInvalid () {
+        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF' && claim.lastEventTriggeredForHwfCase === 'InvalidHWFReference'
+      },
+
+      onBeforecheckHwfMiscellaneous () {
+        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF' && (claim.lastEventTriggeredForHwfCase === 'CreateHelpWithFeesClaim' || claim.lastEventTriggeredForHwfCase === 'MiscHWF')
       },
 
       findState (currentSate: StateMachine) {

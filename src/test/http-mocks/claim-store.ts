@@ -105,6 +105,145 @@ export const sampleClaimIssueOrgVOrgPhone = {
   }
 }
 
+export const sampleHwfClaimIssueRejectObj = {
+  id: 1,
+  ccdCaseId: 123,
+  submitterId: '1',
+  submitterEmail: 'claimant@example.com',
+  externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc',
+  defendantId: '123',
+  referenceNumber: '000MC050',
+  createdAt: MomentFactory.currentDateTime(),
+  issuedOn: undefined,
+  totalAmountTillToday: 200,
+  totalAmountTillDateOfIssue: undefined,
+  moreTimeRequested: false,
+  state: 'HWF_APPLICATION_PENDING',
+  claim: {
+    helpWithFeesNumber: 'hwf1234567',
+    helpWithFeesType: 'Claim Issue',
+    hwfFeeDetailsSummary: 'FEES_REQUIREMENT_NOT_MET',
+    hwfMandatoryDetails: 'You have stated that you earn more than £1,085 a month.',
+    claimants: [
+      {
+        type: 'individual',
+        name: 'John Smith',
+        address: {
+          line1: 'line1',
+          line2: 'line2',
+          city: 'city',
+          postcode: 'bb127nq'
+        },
+        dateOfBirth: '1990-02-17'
+      }
+    ],
+    defendants: [
+      {
+        type: 'individual',
+        name: 'John Doe',
+        address: {
+          line1: 'line1',
+          line2: 'line2',
+          city: 'city',
+          postcode: 'bb127nq'
+        }
+      }
+    ],
+    payment: {
+      id: '12',
+      amount: 2500,
+      state: { status: 'failed' }
+    },
+    amount: {
+      type: 'breakdown',
+      rows: [{ reason: 'Reason', amount: 200 }]
+    },
+    interest: {
+      type: ClaimInterestType.STANDARD,
+      rate: 10,
+      reason: 'Special case',
+      interestDate: {
+        type: InterestDateType.SUBMISSION,
+        endDateType: InterestEndDateOption.SETTLED_OR_JUDGMENT
+      } as InterestDate
+    } as Interest,
+    reason: 'Because I can',
+    feeAmountInPennies: 2500,
+    timeline: { rows: [{ date: 'a', description: 'b' }] }
+  },
+  responseDeadline: undefined,
+  intentionToProceedDeadline: MomentFactory.currentDateTime().add(33, 'days'),
+  features: []
+}
+
+export const sampleHwfClaimIssueObj = {
+  id: 1,
+  ccdCaseId: 123,
+  submitterId: '1',
+  submitterEmail: 'claimant@example.com',
+  externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc',
+  defendantId: '123',
+  referenceNumber: '000MC050',
+  createdAt: MomentFactory.currentDateTime(),
+  issuedOn: undefined,
+  totalAmountTillToday: 200,
+  totalAmountTillDateOfIssue: undefined,
+  moreTimeRequested: false,
+  state: 'HWF_APPLICATION_PENDING',
+  claim: {
+    helpWithFeesNumber: 'hwf123',
+    claimants: [
+      {
+        type: 'individual',
+        name: 'John Smith',
+        address: {
+          line1: 'line1',
+          line2: 'line2',
+          city: 'city',
+          postcode: 'bb127nq'
+        },
+        dateOfBirth: '1990-02-17'
+      }
+    ],
+    defendants: [
+      {
+        type: 'individual',
+        name: 'John Doe',
+        address: {
+          line1: 'line1',
+          line2: 'line2',
+          city: 'city',
+          postcode: 'bb127nq'
+        }
+      }
+    ],
+    payment: {
+      id: '12',
+      amount: 2500,
+      state: { status: 'failed' }
+    },
+    amount: {
+      type: 'breakdown',
+      rows: [{ reason: 'Reason', amount: 200 }]
+    },
+    interest: {
+      type: ClaimInterestType.STANDARD,
+      rate: 10,
+      reason: 'Special case',
+      interestDate: {
+        type: InterestDateType.SUBMISSION,
+        endDateType: InterestEndDateOption.SETTLED_OR_JUDGMENT
+      } as InterestDate
+    } as Interest,
+    reason: 'Because I can',
+    feeAmountInPennies: 2500,
+    timeline: { rows: [{ date: 'a', description: 'b' }] }
+  },
+  responseDeadline: undefined,
+  intentionToProceedDeadline: MomentFactory.currentDateTime().add(33, 'days'),
+  features: []
+}
+
 export const sampleClaimDocuments = {
   claimDocumentCollection: {
     claimDocuments: [
@@ -273,6 +412,90 @@ export const sampleClaimObj = {
     timeline: { rows: [{ date: 'a', description: 'b' }] }
   },
   responseDeadline: '2017-08-08',
+  countyCourtJudgment: {
+    defendantDateOfBirth: '1990-11-01',
+    paidAmount: 2,
+    paymentOption: 'IMMEDIATELY'
+  },
+  settlement: {
+    partyStatements: [
+      {
+        type: StatementType.OFFER.value,
+        madeBy: MadeBy.DEFENDANT.value,
+        offer: { content: 'offer text', completionDate: '2017-08-08' }
+      }
+    ]
+  },
+  intentionToProceedDeadline: MomentFactory.currentDateTime().add(33, 'days'),
+  features: []
+}
+
+export const sampleHwfClaimObj = {
+  id: 1594030137299050,
+  ccdCaseId: 1594030137299050,
+  submitterId: '1',
+  submitterEmail: 'claimant@example.com',
+  externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc',
+  defendantId: '123',
+  state: 'HWF_APPLICATION_PENDING',
+  referenceNumber: '000MC000',
+  createdAt: MomentFactory.currentDateTime(),
+  issuedOn: '2020-11-10',
+  totalAmountTillToday: 200,
+  totalAmountTillDateOfIssue: 200,
+  moreTimeRequested: false,
+  claim: {
+    claimants: [
+      {
+        type: 'individual',
+        name: 'John Smith',
+        address: {
+          line1: 'line1',
+          line2: 'line2',
+          city: 'city',
+          postcode: 'bb127nq'
+        },
+        dateOfBirth: '1990-02-17'
+      }
+    ],
+    defendants: [
+      {
+        type: 'individual',
+        name: 'John Doe',
+        email: 'johndoe@example.com',
+        address: {
+          line1: 'line1',
+          line2: 'line2',
+          city: 'city',
+          postcode: 'bb127nq'
+        }
+      }
+    ],
+    payment: {
+      id: '12',
+      amount: 2500,
+      state: { status: 'failed' }
+    },
+    amount: {
+      type: 'breakdown',
+      rows: [{ reason: 'Reason', amount: 200 }]
+    },
+    interest: {
+      type: ClaimInterestType.STANDARD,
+      rate: 10,
+      reason: 'Special case',
+      interestDate: {
+        type: InterestDateType.SUBMISSION,
+        endDateType: InterestEndDateOption.SETTLED_OR_JUDGMENT
+      } as InterestDate
+    } as Interest,
+    reason: 'Because I can',
+    feeAmountInPennies: 2500,
+    timeline: { rows: [{ date: 'a', description: 'b' }] },
+    helpWithFeesNumber: 'HWF123456',
+    helpWithFeesType: 'ClaimIssue'
+  },
+  responseDeadline: '2020-11-10',
   countyCourtJudgment: {
     defendantDateOfBirth: '1990-11-01',
     paidAmount: 2,
@@ -514,6 +737,11 @@ export const sampleDefendantResponseWithDQAndNoMediationObj = {
   }
 }
 
+export const samplePaginationInfoObj = {
+  totalPages: 2,
+  totalClaims: 30
+}
+
 export const sampleDefendantResponseAlreadyPaidWithMediationObj = {
   ...this.sampleClaimIssueObj,
   respondedAt: '2017-07-25T22:45:51.785',
@@ -690,6 +918,11 @@ export function resolveRetrieveClaimByExternalId (claimOverride?: object): mock.
     .get(new RegExp('/' + externalIdPattern))
     .reply(HttpStatus.OK, { ...sampleClaimObj, ...claimOverride })
 }
+export function resolveRetrieveHwfClaimByExternalId (claimOverride?: object): mock.Scope {
+  return mock(`${serviceBaseURL}/claims`)
+    .get(new RegExp('/' + externalIdPattern))
+    .reply(HttpStatus.OK, { ...sampleHwfClaimObj, ...claimOverride })
+}
 
 export function resolveRetrieveByExternalId (claim: object = sampleClaimObj, claimOverride?: object): mock.Scope {
   return mock(`${serviceBaseURL}/claims`)
@@ -733,9 +966,27 @@ export function resolveRetrieveByClaimantId (claim: object = sampleClaimObj, cla
     .reply(HttpStatus.OK, [{ ...claim, ...claimOverride }])
 }
 
+export function resolveRetrievePaginationInfo (pagination: object = samplePaginationInfoObj) {
+  mock(`${serviceBaseURL}/claims`)
+    .get(new RegExp('/pagination-metadata'))
+    .reply(HttpStatus.OK, { ...pagination })
+}
+
+export function resolveRejectPaginationInfo (reason: string) {
+  mock(`${serviceBaseURL}/claims`)
+    .get(new RegExp('/pagination-metadata'))
+    .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
+}
+
 export function resolveRetrieveByClaimantIdToEmptyList () {
   mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/claimant/[0-9]+'))
+    .reply(HttpStatus.OK, [])
+}
+
+export function resolveRetrievePaginationInfoEmptyList () {
+  mock(`${serviceBaseURL}/claims`)
+    .get(new RegExp('/pagination-metadata'))
     .reply(HttpStatus.OK, [])
 }
 
@@ -748,6 +999,12 @@ export function resolveRetrieveByDefendantIdToEmptyList () {
 export function rejectRetrieveByClaimantId (reason: string) {
   mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/claimant/[0-9]+'))
+    .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
+}
+
+export function rejectretrievePaginationInfo (reason: string) {
+  mock(`${serviceBaseURL}/claims`)
+    .get(new RegExp('/pagination-metadata'))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
@@ -827,6 +1084,30 @@ export function rejectSaveClaimForUser (reason: string = 'HTTP error', status: n
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp('/[0-9]+'))
     .reply(status, reason)
+}
+
+export function resolveSaveHelpWithFeesClaimForUser () {
+  mock(`${serviceBaseURL}/claims`)
+    .post(new RegExp('/[0-9]+/hwf'))
+    .reply(HttpStatus.OK, { ...sampleClaimObj })
+}
+
+export function resolveSaveHelpWithFeesClaimWithError (reason: string = 'HTTP error') {
+  mock(`${serviceBaseURL}/claims`)
+    .post(new RegExp('/[0-9]+/hwf'))
+    .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
+}
+
+export function resolveUpdateHelpWithFeesClaimForUser () {
+  mock(`${serviceBaseURL}/claims`)
+    .put('/resume-hwf')
+    .reply(HttpStatus.OK, { ...sampleClaimObj })
+}
+
+export function resolveUpdateHelpWithFeesClaimWithError (reason: string = 'HTTP error') {
+  mock(`${serviceBaseURL}/claims`)
+    .put('/resume-hwf')
+    .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
 export function resolveSaveCcjForExternalId () {

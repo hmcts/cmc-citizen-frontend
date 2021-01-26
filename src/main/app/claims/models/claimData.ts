@@ -1,4 +1,5 @@
 import { ClaimAmountBreakdown } from 'features/claim/form/models/claimAmountBreakdown'
+import { MoneyConverter } from 'fees/moneyConverter'
 import { Party } from 'claims/models/details/yours/party'
 import { Individual as ClaimantAsIndividual } from 'claims/models/details/yours/individual'
 import { Company as ClaimantAsCompany } from 'claims/models/details/yours/company'
@@ -29,6 +30,12 @@ export class ClaimData {
   interest: Interest
   payment: Payment = new Payment()
   statementOfTruth?: StatementOfTruth
+  helpWithFeesNumber?: string
+  helpWithFeesType?: string
+  hwfFeeDetailsSummary?: string
+  hwfMandatoryDetails?: string
+  moreInfoDetails?: string
+  feeRemitted?: number
 
   get claimant (): Party {
     if (this.claimants.length === 1) {
@@ -77,6 +84,27 @@ export class ClaimData {
 
       if (input.statementOfTruth) {
         this.statementOfTruth = new StatementOfTruth().deserialize(input.statementOfTruth)
+      }
+
+      // help with fees
+      if (input.helpWithFeesNumber) {
+        this.helpWithFeesNumber = input.helpWithFeesNumber
+      }
+      // help with fees type
+      if (input.helpWithFeesType) {
+        this.helpWithFeesType = 'ClaimIssue'
+      }
+      if (input.hwfFeeDetailsSummary) {
+        this.hwfFeeDetailsSummary = input.hwfFeeDetailsSummary
+      }
+      if (input.hwfMandatoryDetails) {
+        this.hwfMandatoryDetails = input.hwfMandatoryDetails
+      }
+      if (input.moreInfoDetails) {
+        this.moreInfoDetails = input.moreInfoDetails
+      }
+      if (input.feeRemitted) {
+        this.feeRemitted = MoneyConverter.convertPenniesToPounds(input.feeRemitted)
       }
     }
     return this
