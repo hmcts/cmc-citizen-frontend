@@ -912,7 +912,7 @@ const mediationDQEnabledClaimDetails = [
 const claimPagePath = Paths.claimantPage.evaluateUri({ externalId: partAdmissionClaim().externalId })
 const defendantPagePath = Paths.defendantPage.evaluateUri({ externalId: partAdmissionClaim().externalId })
 
-describe('Dashboard page', () => {
+describe('Dashboard page part admission claim status', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
