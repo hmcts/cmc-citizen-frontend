@@ -2,15 +2,24 @@ import { DraftClaim } from 'drafts/models/draftClaim'
 import { InterestDateType } from 'common/interestDateType'
 import { InterestTypeOption } from 'claim/form/models/interestType'
 import { YesNoOption } from 'models/yesNoOption'
+import { FeatureToggles } from 'utils/featureToggles'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
+
+const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
 
 export class ClaimAmount {
 
-  static isCompleted (claim: DraftClaim): boolean {
-    if (claim.interest.option === YesNoOption.NO) {
-      return this.amountAndNoInterestCompleted(claim)
-    } else {
-      return this.amountAndInterestCompleted(claim)
-    }
+  static async isCompleted (claim: DraftClaim): Promise<boolean> {
+    return featureToggles.isHelpWithFeesEnabled()
+      .then(helpWithFeesEnabled => {
+        if (helpWithFeesEnabled && !claim.helpWithFees.isCompleted()) {
+          return false
+        }
+        if (claim.interest.option === YesNoOption.NO) {
+          return this.amountAndNoInterestCompleted(claim)
+        }
+        return this.amountAndInterestCompleted(claim)
+      })
   }
 
   private static amountAndInterestCompleted (claim: DraftClaim): boolean {

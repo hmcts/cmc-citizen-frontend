@@ -96,3 +96,11 @@ export const claimDraft = {
     rows: []
   }
 }
+
+export const claimDraftHelpWithFees = {
+  ...claimDraft,
+  helpWithFees: {
+    declared: YesNoOption.YES,
+    helpWithFeesNumber: '89674523'
+  }
+}
