@@ -1,0 +1,30 @@
+{% from "interestSnippet.njk" import interestSnippet %}
+
+{% macro interestCalculationBreakdownTable(label, claim, interestData, isLeapYear) %}
+  <details>
+    <summary>{{ t(label) }}</summary>
+      <div class="panel panel-border-narrow">
+        <p>For most types of debt the rate is usually 8%.</p>
+        <p>To calculate this, we use the steps below.</p>
+        <ol class="list list-number">
+          <li>
+            <p>Work out the yearly interest: take the amount you’re claiming and multiply it by 0.08 (which is 8%).</p>
+          </li>
+          <li>
+            <p>Work out the daily interest: divide your yearly interest from step 1 by 365 (the number of days in a year).</p>
+          </li>
+          <li>
+            <p>Work out the total amount of interest: multiply the daily interest from step 2 by the number of days the debt has been overdue.</p>
+          </li>
+        </ol>
+        <div class="example">
+          <ul>
+            <li>The rate of annual interest is {{ interestData.rate }}%.</li>
+            <li>Annual interest on, for example, {{ claim.totalClaimAmount | numeral }} is {{ (claim.totalClaimAmount * (interestData.rate)/100) | numeral }} ({{ claim.totalClaimAmount }} x {{ interestData.rate / 100 }})</li>
+            <li>Daily interest on {{ claim.totalClaimAmount | numeral }} is {{ ((claim.totalClaimAmount * (interestData.rate/100))/isLeapYear) | numeral }} ({{ claim.totalClaimAmount * interestData.rate / 100 }} / {{ isLeapYear }})</li>
+            <li>Total amount of interest on {{ claim.totalClaimAmount | numeral }} for {{ interestData.numberOfDays }} days is {{ (((claim.totalClaimAmount * (interestData.rate/100))/isLeapYear)* interestData.numberOfDays) | numeral }} ({{ claim.totalClaimAmount * interestData.rate / 100 }} x {{ interestData.numberOfDays }} / {{  isLeapYear}})</li>
+          </ul>
+        </div>  
+      </div>
+  </details>
+{% endmacro %}

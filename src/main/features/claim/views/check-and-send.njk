@@ -104,6 +104,9 @@
         {% else %}
           {{ partyDetailRow('Interest rate', t('I don’t want to claim interest'), paths.interestPage.uri) }}
         {% endif %}
+        {% if helpWithFeesFeature %}
+          {{ partyDetailRow('Help With Fees reference number', draftClaim.helpWithFees.helpWithFeesNumber if (draftClaim.helpWithFees is defined and draftClaim.helpWithFees.helpWithFeesNumber is defined) else t('None'), paths.helpWithFeesPage.uri, bold = true) }}
+        {% endif %}
       </dl>
 
       <h2 class="govuk-heading-m">{{ t("Total amount") }}</h2>
@@ -141,8 +144,12 @@
           )
         }}
 
-        {% set submitButtonLabel = t('Submit and continue to payment ') %}
-        {{ submitButton(submitButtonLabel + '(' + (claimAmountTotal.feeAmount | numeral) + ')') }}
+        {% if helpWithFeesFeature and draftClaim.helpWithFees.declared.option === YesNoOption.YES.option %}
+          {% set submitButtonLabel = t('Submit claim') %}
+        {% else %}
+          {% set submitButtonLabel = t('Submit and continue to payment') + ' (' + (claimAmountTotal.feeAmount | numeral) + ')' %}
+        {% endif %}
+        {{ submitButton(submitButtonLabel) }}
         <input type="hidden" name="type" value="{{ form.model.type }}">
       </div>
     </form>

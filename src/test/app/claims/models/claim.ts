@@ -773,6 +773,29 @@ describe('Claim', () => {
     })
   })
 
+  describe('Help With fees', () => {
+
+    it('should return HWF number when the claim is submited with HWF', () => {
+      const claimWithHwf = new Claim().deserialize(claimStoreMock.sampleHwfClaimIssueObj)
+      expect(claimWithHwf.helpWithFeesNumber).to.be.eq('hwf123')
+    })
+
+    it('should return todays data for issued-on', () => {
+      const claimWithHwf = new Claim().deserialize(claimStoreMock.sampleHwfClaimIssueObj)
+      expect(claimWithHwf.issuedOn.toISOString()).to.be.eq(MomentFactory.currentDate().toISOString())
+    })
+
+    it('should return response dead line', () => {
+      const claimWithHwf = new Claim().deserialize(claimStoreMock.sampleHwfClaimIssueObj)
+      expect(claimWithHwf.responseDeadline).to.be.not.null
+    })
+
+    it('should return total Amount Till Date Of Issue', () => {
+      const claimWithHwf = new Claim().deserialize(claimStoreMock.sampleHwfClaimIssueObj)
+      expect(claimWithHwf.totalAmountTillDateOfIssue).to.be.eq(claimWithHwf.totalAmountTillToday)
+    })
+  })
+
   describe('respondToResponseDeadline', () => {
 
     it('should add 33 days to the response deadline', () => {

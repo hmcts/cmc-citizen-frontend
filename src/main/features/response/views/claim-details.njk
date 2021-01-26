@@ -4,6 +4,7 @@
 
 {% from "form.njk" import csrfProtection %}
 {% from "amountBreakdown.njk" import amountBreakdownTable %}
+{% from "interestCalculation.njk" import interestCalculationBreakdownTable %}
 {% from "summaryTable.njk" import timelineSummary, evidenceSummary %}
 {% from "internalLink.njk" import internalLink %}
 
@@ -13,10 +14,29 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      <p><span class="bold-small">{{ t('Claim number') }}:</span> {{ claim.claimNumber }}</p>
+
+      {% if claim.helpWithFeesNumber %}
+        <p> <span class="bold-small">{{ t('Claim number:') }} </span>
+          <span>
+            {% set dash = joiner("-") %}
+            {% for batch in claim.ccdCaseId | string | batch(4) -%}
+              {{ dash() }}{% for items in batch -%}{{ items }}
+                {%- endfor %}
+              {%- endfor %}
+         </span>
+        </p>
+      {% else %}
+        <p><span class="bold-small">{{ t('Claim number') }}:</span> {{ claim.claimNumber }}</p>
+      {% endif %}
+
       <p><span class="bold-small">{{ t('Claim amount') }}:</span> {{ claim.totalAmountTillToday | numeral }}</p>
 
       {{ amountBreakdownTable('View amount breakdown', claim, interestData) }}
+
+      {% if claim.helpWithFeesNumber and interestData !== undefined and interestData.rate !== undefined and claim.claimData.interest.type !== 'breakdown' %}
+        {{ interestCalculationBreakdownTable('How interest to date is calculated', claim, interestData, numOfDayInYear) }}
+      {% endif %}
+
       <p><span class="bold-small">{{ t('Reason for claim') }}:</span></p>
       <p>{{ claim.claimData.reason }}</p>
 
