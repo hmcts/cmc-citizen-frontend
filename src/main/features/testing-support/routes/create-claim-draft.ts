@@ -32,7 +32,7 @@ export default express.Router()
       const draft: Draft<DraftClaim> = res.locals.claimDraft
       const user: User = res.locals.user
 
-      draft.document = new DraftClaim().deserialize(prepareClaimDraft(user.email))
+      draft.document = new DraftClaim().deserialize(prepareClaimDraft(user.email, await featureToggles.isHelpWithFeesEnabled()))
       await new DraftService().save(draft, user.bearerToken)
 
       const roles: string[] = await claimStoreClient.retrieveUserRoles(user)

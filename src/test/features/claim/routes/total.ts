@@ -78,7 +78,7 @@ describe('Claim issue: total page', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should render page when everything is fine', async () => {
+      it('should render page when everything is fine and help with fees was not selected', async () => {
         draftStoreServiceMock.resolveFind('claim')
         feesServiceMock.resolveCalculateIssueFee()
         feesServiceMock.resolveCalculateHearingFee()
@@ -88,7 +88,32 @@ describe('Claim issue: total page', () => {
         await request(app)
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText(pageContent, 'Total claim amount'))
+          .expect(res => expect(res).to.be.successful.withText(
+            pageContent,
+            'Total claim amount',
+            'If you settle out of court'
+          ))
+          .expect(res => expect(res).to.be.successful.withoutText(
+            'We’ll review your Help With Fees application after you submit the claim'
+          ))
+      })
+
+      it('should render page when everything is fine and help with fees was selected', async () => {
+        draftStoreServiceMock.resolveFind('claim', { helpWithFees: { declared: { option: 'yes' }, helpWithFeesNumber: 'HWF-12345' } })
+        feesServiceMock.resolveCalculateIssueFee()
+        feesServiceMock.resolveCalculateHearingFee()
+        feesServiceMock.resolveGetIssueFeeRangeGroup()
+        feesServiceMock.resolveGetHearingFeeRangeGroup()
+
+        await request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText(
+            pageContent,
+            'Total claim amount',
+            'If you settle out of court',
+            'We’ll review your Help With Fees application after you submit the claim'
+          ))
       })
 
       it('should throw error when claim value is above £10000 including interest', async () => {
