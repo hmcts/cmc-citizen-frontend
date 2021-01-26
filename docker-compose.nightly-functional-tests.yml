@@ -19,6 +19,7 @@ services:
         - FEATURE_TESTING_SUPPORT
         - FEATURE_INVERSION_OF_CONTROL
         - FEATURE_PCQ
+        - FEATURE_HELP_WITH_FEES
       volumes:
         - ./functional-output:/usr/src/app/output
     remote-webdriver:

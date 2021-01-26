@@ -1,0 +1,43 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, saveAndContinueButton, radioOption, textInput %}
+
+{% set heading = 'Do you have a Help With Fees reference number?' %}
+
+{% block content %}
+<div class="grid-row">
+  <div class="column-two-thirds">
+
+    <form method="post" novalidate>
+      {{ csrfProtection(csrf) }}
+
+      <fieldset>
+        <legend class="visually-hidden">{{ t(heading) }}</legend>
+        <p>{{ t('You’ll only have one if you applied for Help With Fees.') }}</p>
+
+        {{ radioOption(
+          label = 'Yes',
+          name = 'declared',
+          form = form,
+          value = YesNoOption.YES.option,
+          checked = form.valueFor('declared').option === YesNoOption.YES.option
+        ) }}
+        <div class="form-group panel panel-border-narrow js-hidden" id="declared-yes" aria-hidden="false">
+          {{ textInput('' if form.errorFor('helpWithFeesNumber') else 'Enter the Help With Fees number',
+            'helpWithFeesNumber', form, hint = '') }}
+        </div>
+
+        {{ radioOption(
+          label = 'No',
+          name = 'declared',
+          form = form,
+          value = YesNoOption.NO.option,
+          checked = form.valueFor('declared').option === YesNoOption.NO.option
+        ) }}
+
+      </fieldset>
+
+      <p>{{ saveAndContinueButton() }}</p>
+    </form>
+  </div>
+</div>
+{% endblock %}

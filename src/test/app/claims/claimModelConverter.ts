@@ -28,13 +28,17 @@ import { YesNoOption } from 'models/yesNoOption'
 import { Interest } from 'claim/form/models/interest'
 import { Individual } from 'claims/models/details/theirs/individual'
 
-function prepareClaimDraft (claimantPartyDetails: object, defendantPartyDetails: object): DraftClaim {
+function prepareClaimDraft (claimantPartyDetails: object, defendantPartyDetails: object, helpWithFeesEnabled?: boolean): DraftClaim {
   return new DraftClaim().deserialize({
     ...draftTemplate,
     claimant: { ...draftTemplate.claimant, partyDetails: claimantPartyDetails },
     defendant: {
       ...draftTemplate.defendant,
       partyDetails: { ...defendantPartyDetails, hasCorrespondenceAddress: false, correspondenceAddress: undefined }
+    },
+    helpWithFees: {
+      declared:  helpWithFeesEnabled ? YesNoOption.YES : YesNoOption.NO,
+      helpWithFeesNumber: helpWithFeesEnabled ? '098765' : '123456'
     }
   })
 }
@@ -81,5 +85,22 @@ describe('ClaimModelConverter', () => {
     const claimDraft = prepareClaimDraft(defendantIndividualDetails, defendantWithoutTitle)
     const converted: ClaimData = ClaimModelConverter.convert(claimDraft)
     expect((converted.defendant as Individual).title).to.be.undefined
+  })
+
+  it('should not contain helpWithFeesNumber and helpWithFeesType if hwf is not provided', () => {
+    const defendantWithoutTitle = { ...individualDefendant, title: ' ' }
+    const claimDraft = prepareClaimDraft(defendantIndividualDetails, defendantWithoutTitle)
+    const converted: ClaimData = ClaimModelConverter.convert(claimDraft)
+    expect(converted.helpWithFeesNumber).to.be.undefined
+    expect(converted.helpWithFeesType).to.be.undefined
+  })
+
+  it('should return helpWithFeesNumber and helpWithFeesType if hwf is provided', () => {
+    const defendantWithoutTitle = { ...individualDefendant, title: ' ' }
+    const claimDraft = prepareClaimDraft(defendantIndividualDetails, defendantWithoutTitle, true)
+    const converted: ClaimData = ClaimModelConverter.convert(claimDraft)
+    // console.log(converted)
+    expect(converted.helpWithFeesNumber).to.equal('098765')
+    expect(converted.helpWithFeesType).to.equal('Claim Issue')
   })
 })

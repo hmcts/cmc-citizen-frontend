@@ -68,6 +68,7 @@
   "requestRetry": {
     "maxAttempts": "REQUEST_RETRY_MAX_ATTEMPTS"
   },
+
   "featureToggles": {
     "clusterMode": "FEATURE_CLUSTER_MODE",
     "testingSupport": "FEATURE_TESTING_SUPPORT",
@@ -84,7 +85,8 @@
     "helpWithFees": "FEATURE_HELP_WITH_FEES",
     "pcq": "FEATURE_PCQ",
     "signPostingCTSC": "FEATURE_SIGN_POSTING_CTSC",
-    "autoEnrollIntoNewFeature": "AUTO_ENROLL_INTO_NEW_FEATURE"
+    "autoEnrollIntoNewFeature": "AUTO_ENROLL_INTO_NEW_FEATURE",
+    "dashboard_pagination_enabled": "dashboard_pagination_enabled"
   },
 
   "oauth": {

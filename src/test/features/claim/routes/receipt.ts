@@ -59,3 +59,47 @@ describe('Claim issue: receipt', () => {
     })
   })
 })
+
+describe('Claim issue: HWF Draft receipt', () => {
+  attachDefaultHooks(app)
+
+  describe('on GET HWF draft claim', () => {
+    checkAuthorizationGuards(app, 'get', ClaimPaths.draftReceiptReceiver.evaluateUri({ externalId: externalId }))
+
+    describe('for authorized user', () => {
+      beforeEach(() => {
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+      })
+
+      it('should return 500 and render error page when cannot retrieve HWF draft claim by external id', async () => {
+        claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
+
+        await request(app)
+          .get(ClaimPaths.draftReceiptReceiver.evaluateUri({ externalId: externalId }))
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.serverError.withText('Error'))
+      })
+
+      it('should return 500 and render error page when HWF draft claim cannot generate PDF', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+        claimStoreServiceMock.rejectRetrieveDocument('HTTP error')
+
+        await request(app)
+          .get(ClaimPaths.draftReceiptReceiver.evaluateUri({ externalId: externalId }))
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.serverError.withText('Error'))
+      })
+
+      it('should return HWF draft claim when  everything is fine', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+        claimStoreServiceMock.resolveRetrieveDocument()
+
+        await request(app)
+          .get(ClaimPaths.draftReceiptReceiver.evaluateUri({ externalId: externalId }))
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful)
+      })
+    })
+  })
+
+})

@@ -39,6 +39,7 @@ import { ClaimDocumentType } from 'common/claimDocumentType'
 import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
 import * as config from 'config'
 import { ScannedDocumentType } from 'common/scannedDocumentType'
+import { MoneyConverter } from 'fees/moneyConverter'
 
 interface State {
   status: ClaimStatus
@@ -51,9 +52,9 @@ export class Claim {
   state: string
   defendantId: string
   claimNumber: string
-  responseDeadline: Moment
+  responseDeadline?: Moment
   createdAt: Moment
-  issuedOn: Moment
+  issuedOn?: Moment
   claimData: ClaimData
   moreTimeRequested: boolean
   respondedAt: Moment
@@ -67,6 +68,7 @@ export class Claim {
   settlementReachedAt: Moment
   claimantResponse: ClaimantResponse
   claimantRespondedAt: Moment
+  totalClaimAmount?: number
   totalAmountTillToday: number
   totalAmountTillDateOfIssue: number
   totalInterest: number
@@ -85,8 +87,13 @@ export class Claim {
   paperResponse: YesNoOption
   claimDocuments?: ClaimDocument[]
   proceedOfflineReason: string
+  proceedViaPaperResponse: boolean
   transferContent?: TransferContents
+  isOconResponse: boolean
   directionOrderType: string
+  helpWithFeesNumber?: string
+  helpWithFessBalanceClaimFee?: number
+  lastEventTriggeredForHwfCase?: string
 
   get defendantOffer (): Offer {
     if (!this.settlement) {
@@ -125,11 +132,17 @@ export class Claim {
     if (!this.directionOrder) {
       return undefined
     }
-    const reconsiderationDeadlineChangeDate: Moment = MomentFactory.parse(config.get<any>('reviewOrderDeadLine.changeDate'))
-    if (reconsiderationDeadlineChangeDate && this.directionOrder.createdOn.isAfter(reconsiderationDeadlineChangeDate)) {
-      return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, config.get<number>('reviewOrderDeadLine.numberOfDays'))
+    return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, 7)
+  }
+
+  async respondToOnlineOconReconsiderationDeadline (): Promise<Moment> {
+    if (!this.directionOrder) {
+      return undefined
     }
-    return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, 19)
+    if (this.isOconFormResponse()) {
+      return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, config.get<number>('reconsiderationDeadLine.oconNumberOfDays'))
+    }
+    return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, config.get<number>('reconsiderationDeadLine.onlineNumberOfDays'))
   }
 
   get remainingDays (): number {
@@ -228,8 +241,6 @@ export class Claim {
       return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ
     } else if (this.hasIntentionToProceedDeadlinePassed()) {
       return ClaimStatus.INTENTION_TO_PROCEED_DEADLINE_PASSED
-    } else if (this.isOconFormResponse()) {
-      return ClaimStatus.DEFENDANT_OCON_FORM_RESPONSE
     } else if (this.hasDefendantRejectedClaimWithDQs()) {
       return ClaimStatus.DEFENDANT_REJECTS_WITH_DQS
     } else if (this.hasClaimantAcceptedStatesPaid()) {
@@ -328,14 +339,33 @@ export class Claim {
       this.externalId = input.externalId
       this.defendantId = input.defendantId
       this.state = input.state
-      this.claimNumber = input.referenceNumber
       this.createdAt = MomentFactory.parse(input.createdAt)
-      this.responseDeadline = MomentFactory.parse(input.responseDeadline)
-      this.issuedOn = MomentFactory.parse(input.issuedOn)
       this.claimData = new ClaimData().deserialize(input.claim)
       this.moreTimeRequested = input.moreTimeRequested
+      if (this.claimData.feeRemitted !== undefined && this.claimData.feeAmountInPennies !== undefined) {
+        this.helpWithFessBalanceClaimFee = MoneyConverter.convertPenniesToPounds(this.claimData.feeAmountInPennies - input.claim.feeRemitted)
+      }
+
+      if ((input.state === 'HWF_APPLICATION_PENDING' || input.state === 'AWAITING_RESPONSE_HWF' || input.state === 'CLOSED_HWF') && input.claim.helpWithFeesNumber !== undefined) {
+        this.helpWithFeesNumber = input.claim.helpWithFeesNumber
+      } else {
+        this.helpWithFeesNumber = null
+      }
+      if (input.issuedOn) {
+        this.issuedOn = MomentFactory.parse(input.issuedOn)
+      } else if ((input.state === 'HWF_APPLICATION_PENDING' || input.state === 'AWAITING_RESPONSE_HWF' || input.state === 'CLOSED_HWF') && input.issuedOn === undefined && input.claim.helpWithFeesNumber !== undefined) {
+        this.issuedOn = MomentFactory.currentDate()
+      }
+      if (input.responseDeadline) {
+        this.responseDeadline = MomentFactory.parse(input.responseDeadline)
+      } else if ((input.state === 'HWF_APPLICATION_PENDING' || input.state === 'AWAITING_RESPONSE_HWF' || input.state === 'CLOSED_HWF') && input.responseDeadline === undefined && input.claim.helpWithFeesNumber !== undefined) {
+        this.responseDeadline = MomentFactory.currentDate().add(19, 'day')
+      }
       if (input.respondedAt) {
         this.respondedAt = MomentFactory.parse(input.respondedAt)
+      }
+      if (input.referenceNumber) {
+        this.claimNumber = input.referenceNumber
       }
       if (input.defendantEmail) {
         this.defendantEmail = input.defendantEmail
@@ -363,10 +393,20 @@ export class Claim {
       if (input.claimantRespondedAt) {
         this.claimantRespondedAt = MomentFactory.parse(input.claimantRespondedAt)
       }
+      if ((input.state === 'HWF_APPLICATION_PENDING' || input.state === 'AWAITING_RESPONSE_HWF' || input.state === 'CLOSED_HWF') && input.responseDeadline === undefined && input.claim.helpWithFeesNumber !== undefined && input.totalAmountTillDateOfIssue === undefined) {
+        this.totalAmountTillDateOfIssue = input.totalAmountTillToday
+      } else {
+        this.totalAmountTillDateOfIssue = input.totalAmountTillDateOfIssue
+      }
       this.totalAmountTillToday = input.totalAmountTillToday
-      this.totalAmountTillDateOfIssue = input.totalAmountTillDateOfIssue
+      this.totalClaimAmount = input.totalClaimAmount
       this.totalInterest = input.totalInterest
       this.features = input.features
+
+      if (input.lastEventTriggeredForHwfCase) {
+        this.lastEventTriggeredForHwfCase = input.lastEventTriggeredForHwfCase
+      }
+
       if (input.directionsQuestionnaireDeadline) {
         this.directionsQuestionnaireDeadline = MomentFactory.parse(input.directionsQuestionnaireDeadline)
       }
@@ -415,6 +455,7 @@ export class Claim {
         const scannedDocuments: ClaimDocument[] = input.claimDocumentCollection.scannedDocuments
           .filter(value => ScannedDocumentType[(value.documentType + '_' + value.subtype).toUpperCase()] !== undefined)
           .map((value) => {
+            this.proceedViaPaperResponse = this.proceedViaPaperResponse || ScannedDocumentType.PAPER_RESPONSE_FORMS.includes(value.subtype)
             return new ClaimDocument().deserializeScannedDocument(value)
           })
 
@@ -430,15 +471,15 @@ export class Claim {
           return o.createdDatetime
         }]).reverse()
       }
-
       if (input.proceedOfflineReason) {
         this.proceedOfflineReason = input.proceedOfflineReason
       }
 
+      this.isOconResponse = this.isOconFormResponse()
+
       if (input.directionOrderType) {
         this.directionOrderType = input.directionOrderType
       }
-
       return this
     }
   }
@@ -715,7 +756,7 @@ export class Claim {
       && this.claimantResponse.type === ClaimantResponseType.REJECTION
       && ((this.response.responseType === ResponseType.FULL_DEFENCE && this.response.defenceType === DefenceType.ALREADY_PAID)
         || this.response.responseType === ResponseType.PART_ADMISSION)
-      && this.response.paymentDeclaration !== undefined
+      && (this.response.paymentDeclaration !== undefined || this.isOconFormResponse())
   }
 
   private hasClaimantRejectedDefendantDefence (): boolean {
