@@ -41,7 +41,7 @@ exports.config = {
     PcqHelper: {
       require: './src/integration-test/helpers/pcqHelper'
     },
-    HelpWithFeesHelper: {
+    hwfHelper: {
       require: './src/integration-test/helpers/hwfHelper'
     }
   },

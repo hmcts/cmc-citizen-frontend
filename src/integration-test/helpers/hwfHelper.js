@@ -2,7 +2,7 @@
 /* globals codecept_helper */
 
 // eslint-disable-next-line no-unused-vars
-class HelpWithFeesHelper extends codecept_helper {
+class hwfHelper extends codecept_helper {
   async checkHWF () {
     const helper = this.helpers['WebDriver'];
     const heading = await helper.grabTextFrom('h1');
