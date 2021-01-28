@@ -40,7 +40,7 @@ const testData = [
       helpWithFeesNumber: true
     },
     claimantAssertions: ['1594-1121-4047-0504',
-      'We’re checking your Help With Fees application',
+      'We’re checking your Help with Fees application',
       'We’ll email you the result within 5 days.',
       'If you qualify for the whole court fee to be paid'
     ],

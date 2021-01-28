@@ -17,6 +17,8 @@ import { ClaimantTimeline } from 'claim/form/models/claimantTimeline'
 import { Evidence } from 'forms/models/evidence'
 import { InterestDate } from 'claims/models/interestDate'
 import { Interest } from 'claims/models/interest'
+import { Moment } from 'moment'
+import { MomentFactory } from 'shared/momentFactory'
 
 export class ClaimData {
   externalId: string
@@ -36,6 +38,8 @@ export class ClaimData {
   hwfMandatoryDetails?: string
   moreInfoDetails?: string
   feeRemitted?: number
+  hwfDocumentsToBeSentBefore?: Moment
+  hwfMoreInfoNeededDocuments?: string[]
 
   get claimant (): Party {
     if (this.claimants.length === 1) {
@@ -105,6 +109,12 @@ export class ClaimData {
       }
       if (input.feeRemitted) {
         this.feeRemitted = MoneyConverter.convertPenniesToPounds(input.feeRemitted)
+      }
+      if (input.hwfMoreInfoNeededDocuments) {
+        this.hwfMoreInfoNeededDocuments = input.hwfMoreInfoNeededDocuments
+      }
+      if (input.hwfDocumentsToBeSentBefore) {
+        this.hwfDocumentsToBeSentBefore = MomentFactory.parse(input.hwfDocumentsToBeSentBefore)
       }
     }
     return this
