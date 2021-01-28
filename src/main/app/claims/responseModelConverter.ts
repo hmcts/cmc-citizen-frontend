@@ -563,7 +563,7 @@ export class ResponseModelConverter {
       })
     }
     if (income.otherSources && income.anyOtherIncomePopulated) {
-      income.otherSources.map(source => {
+      income.otherSources.forEach(source => {
         incomes.push({
           type: IncomeType.OTHER,
           frequency: source.schedule.value as PaymentFrequency,
@@ -687,7 +687,7 @@ export class ResponseModelConverter {
     }
 
     if (monthlyExpenses.other && monthlyExpenses.anyOtherPopulated) {
-      monthlyExpenses.other.map(source => {
+      monthlyExpenses.other.forEach(source => {
         expenses.push({
           type: ExpenseType.OTHER,
           frequency: source.schedule.value as PaymentFrequency,

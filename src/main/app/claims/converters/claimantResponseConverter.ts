@@ -54,18 +54,11 @@ export class ClaimantResponseConverter {
   }
 
   private static isResponseAcceptance (draftClaimantResponse: DraftClaimantResponse): boolean {
-    if (draftClaimantResponse.settleAdmitted && draftClaimantResponse.settleAdmitted.admitted.option === YesNoOption.NO) {
-      return false
-    } else if (draftClaimantResponse.accepted && draftClaimantResponse.accepted.accepted.option === YesNoOption.NO) {
-      return false
-    } else if (draftClaimantResponse.partPaymentReceived && draftClaimantResponse.partPaymentReceived.received.option === YesNoOption.NO) {
-      return false
-    } else if (draftClaimantResponse.intentionToProceed && draftClaimantResponse.intentionToProceed.proceed.option === YesNoOption.YES) {
+    if ((draftClaimantResponse.settleAdmitted && draftClaimantResponse.settleAdmitted.admitted.option === YesNoOption.NO) || (draftClaimantResponse.accepted && draftClaimantResponse.accepted.accepted.option === YesNoOption.NO) ||
+    (draftClaimantResponse.partPaymentReceived && draftClaimantResponse.partPaymentReceived.received.option === YesNoOption.NO) || (draftClaimantResponse.intentionToProceed && draftClaimantResponse.intentionToProceed.proceed.option === YesNoOption.YES)) {
       return false
     }
-
     return true
-
   }
 
   private static createResponseAcceptance (

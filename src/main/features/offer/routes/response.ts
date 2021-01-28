@@ -15,8 +15,8 @@ function renderView (form: Form<DefendantResponse>, res: express.Response, next:
   const claim: Claim = res.locals.claim
   const offer: Offer = claim.defendantOffer
   if (!offer) {
-    const claim: Claim = res.locals.claim
-    res.redirect(DashboardPaths.claimantPage.evaluateUri({ externalId: claim.externalId }))
+    const responseClaim: Claim = res.locals.claim
+    res.redirect(DashboardPaths.claimantPage.evaluateUri({ externalId: responseClaim.externalId }))
   } else {
     res.render(Paths.responsePage.associatedView, {
       form: form,
