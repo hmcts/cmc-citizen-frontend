@@ -165,9 +165,3 @@ Scenario('I can enter a claim details and navigate up to payment page @smoke-tes
 })
 
 // The @citizen-smoke-test tag used for running smoke tests with pre-registered user for help with fees
-
-if (process.env.FEATURE_HELP_WITH_FEES) {
-  Scenario('I can enter a claim details and navigate up to payment page (Choosing no HWF) @smoke-test', { retries: 3 }, (I: I) => {
-    claimSteps.makeAHwfClaimAndNavigateUpToPayment()
-  })
-}
