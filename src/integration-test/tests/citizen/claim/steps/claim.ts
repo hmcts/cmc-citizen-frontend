@@ -283,9 +283,10 @@ export class ClaimSteps {
     this.claimantTotalAmountPageRead()
     I.see('Do you want to claim interest?')
     interestSteps.enterDefaultInterest()
-    if (process.env.FEATURE_HELP_WITH_FEES) {
+    I.handelHelpWithFees()
+/*     if (process.env.FEATURE_HELP_WITH_FEES) {
       hwfSteps.noHWF()
-    }
+    } */
     I.see('Total amount you’re claiming')
     I.see('£25')
     I.see(AmountHelper.formatMoney(claimAmount.getClaimTotal()), 'table.table-form > tbody > tr:nth-of-type(1) >td.numeric.last > span')

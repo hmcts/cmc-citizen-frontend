@@ -14,6 +14,8 @@ declare namespace CodeceptJS {
     rejectAnsweringPCQ: () => any
     bypassPCQ: () => Promise<any>
     checkPCQHealth: () => Promise<boolean>
+    handelHelpWithFees: () => Promise<any>
+    rejectHWF: () => any
   }
 }
 
