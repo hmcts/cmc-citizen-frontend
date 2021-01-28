@@ -40,6 +40,9 @@ exports.config = {
     },
     PcqHelper: {
       require: './src/integration-test/helpers/pcqHelper'
+    },
+    HelpWithFeesHelper: {
+      require: './src/integration-test/helpers/hwfHelper'
     }
   },
   mocha: {

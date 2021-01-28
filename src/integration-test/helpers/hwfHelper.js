@@ -54,4 +54,4 @@ class HelpWithFeesHelper extends codecept_helper {
 
 }
 
-module.exports = HelpWithFeesHelper
+module.exports = hwfHelper

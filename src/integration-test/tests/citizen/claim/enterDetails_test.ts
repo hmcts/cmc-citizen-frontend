@@ -169,7 +169,7 @@ Scenario('I can enter a claim details and i can create a claim with Help With Fe
 
 // The @citizen-smoke-test tag used for running smoke tests with pre-registered user
 
-Scenario('I can enter a claim details and navigate up to payment page @smoke-test', { retries: 3 }, (I: I) => {
+Scenario('I can enter a claim details and navigate up to payment page @smoke-test', { retries: 3 }, async (I: I) => {
   claimSteps.makeAClaimAndNavigateUpToPayment()
 })
 
