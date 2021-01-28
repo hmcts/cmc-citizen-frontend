@@ -34,7 +34,7 @@ const testData = [
       responseDeadline: MomentFactory.currentDate().add(1, 'days'),
       lastEventTriggeredForHwfCase : 'CreateHelpWithFeesClaim'
     },
-    claimantAssertions: ['123', 'We’re checking your Help With Fees application'],
+    claimantAssertions: ['123', 'We’re checking your Help with Fees application'],
     defendantAssertions: ['000MC050', 'Respond to claim.']
   },
   {
