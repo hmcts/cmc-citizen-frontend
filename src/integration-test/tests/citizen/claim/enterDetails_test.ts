@@ -158,6 +158,12 @@ Scenario('I should be redirected to PCQ if "Your details" are filled in while ma
 
 })
 
+// Test for help with fees
+
+Scenario('I can enter a claim details and i can create a claim with Help With Fees reference number @citizen', { retries: 3 }, (I: I) => {
+  claimSteps.makeAHwfClaimAndSubmit()
+})
+
 // The @citizen-smoke-test tag used for running smoke tests with pre-registered user
 
 Scenario('I can enter a claim details and navigate up to payment page @smoke-test', { retries: 3 }, (I: I) => {
@@ -165,3 +171,7 @@ Scenario('I can enter a claim details and navigate up to payment page @smoke-tes
 })
 
 // The @citizen-smoke-test tag used for running smoke tests with pre-registered user for help with fees
+
+  Scenario('I can enter a claim details and navigate up to payment page (Providing HWF reference number) @smoke-test', { retries: 3 }, (I: I) => {
+    claimSteps.makeAHwfClaimAndNavigateUpToPayment()
+  })
