@@ -24,7 +24,7 @@ Scenario('I can prepare a claim with no interest @citizen', { retries: 0 }, asyn
   claimSteps.completeEligibility()
   claimSteps.completeStartOfClaimJourney(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true)
   interestSteps.skipClaimInterest()
-  const isHwfEnabled = await I.checkPCQHealth()
+  const isHwfEnabled = await I.checkHWF()
   if (isHwfEnabled) {
     hwfSteps.noHWF()
   }
@@ -71,7 +71,7 @@ Scenario('I can prepare a claim with different interest rate and date @citizen',
   claimSteps.completeEligibility()
   claimSteps.completeStartOfClaimJourney(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true)
   interestSteps.enterSpecificInterestRateAndDate(2, '1990-01-01')
-  const isHwfEnabled = await I.checkPCQHealth()
+  const isHwfEnabled = await I.checkHWF()
   if (isHwfEnabled) {
     hwfSteps.noHWF()
   }
@@ -95,7 +95,7 @@ Scenario('I can prepare a claim with a manually entered interest amount and a da
   claimSteps.completeEligibility()
   claimSteps.completeStartOfClaimJourney(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true)
   interestSteps.enterBreakdownInterestAmountAndDailyAmount()
-  const isHwfEnabled = await I.checkPCQHealth()
+  const isHwfEnabled = await I.checkHWF()
   if (isHwfEnabled) {
     hwfSteps.noHWF()
   }
