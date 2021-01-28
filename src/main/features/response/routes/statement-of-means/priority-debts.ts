@@ -54,15 +54,11 @@ function actionHandler (req: express.Request, res: express.Response, next: expre
 
     const actionName = extractPropertyName(req.body.action)
     const form: Form<PriorityDebt> = req.body
-
-    switch (actionName) {
-      case 'resetDebt':
-        const propertyName = extractPropertyName(req.body.action[actionName])
-        const selectedForReset: ExpenseSource = form.valueFor(propertyName)
-        form.model.resetIncome(propertyName, selectedForReset)
-        break
+    if (actionName === 'resetDebt') {
+      const propertyName = extractPropertyName(req.body.action[actionName])
+      const selectedForReset: ExpenseSource = form.valueFor(propertyName)
+      form.model.resetIncome(propertyName, selectedForReset)
     }
-
     return renderView(form, res)
   }
   next()

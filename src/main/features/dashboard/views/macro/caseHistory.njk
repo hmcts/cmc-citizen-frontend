@@ -178,7 +178,9 @@
       {{ helpWithFeesIntrestRecalculateStatus(claim) }}
     {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.state === 'AWAITING_RESPONSE_HWF' and claim.claimData.hwfFeeDetailsSummary !== undefined and (claim.lastEventTriggeredForHwfCase === 'FullRemissionHWFRejected' or claim.lastEventTriggeredForHwfCase === 'NoRemissionHWF') %}
       {{ rejectedHelpWithFeesValidationClaimStatus(claim) }}
-    {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.state === 'AWAITING_RESPONSE_HWF' and claim.claimData.moreInfoDetails !== undefined and claim.lastEventTriggeredForHwfCase === 'MoreInfoRequiredForHWF' %}
+    {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.state === 'AWAITING_RESPONSE_HWF' and claim.lastEventTriggeredForHwfCase === 'MoreInfoRequiredForHWF' %}
+      {{ helpWithFeesRequiredmoreInfoClaimStatus(claim) }}
+    {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.state === 'HWF_APPLICATION_PENDING' and claim.lastEventTriggeredForHwfCase === 'MoreInfoRequiredForHWF' %}
       {{ helpWithFeesRequiredmoreInfoClaimStatus(claim) }}
     {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.state === 'AWAITING_RESPONSE_HWF' and claim.claimData.feeRemitted !== undefined and claim.lastEventTriggeredForHwfCase === 'HWFPartRemission' %}
       {{ helpWithFeesPartRemettedClaimStatus(claim) }}

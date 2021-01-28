@@ -20,9 +20,7 @@ export class DirectionsQuestionnaireHelper {
         return true
       } else {
         if (StatesPaidHelper.isAlreadyPaidLessThanAmount(claim)) {
-          if (draft.partPaymentReceived && draft.partPaymentReceived.received.option === YesNoOption.NO) {
-            return true
-          } else if (draft.accepted && draft.accepted.accepted.option === YesNoOption.NO) {
+          if ((draft.partPaymentReceived && draft.partPaymentReceived.received.option === YesNoOption.NO) || (draft.accepted && draft.accepted.accepted.option === YesNoOption.NO)) {
             return true
           }
         } else if (draft.accepted && draft.accepted.accepted.option === YesNoOption.NO) {
