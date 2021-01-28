@@ -24,7 +24,8 @@ Scenario('I can prepare a claim with no interest @citizen', { retries: 0 }, asyn
   claimSteps.completeEligibility()
   claimSteps.completeStartOfClaimJourney(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true)
   interestSteps.skipClaimInterest()
-  if (process.env.FEATURE_HELP_WITH_FEES) {
+  const isHwfEnabled = await I.checkPCQHealth()
+  if (isHwfEnabled) {
     hwfSteps.noHWF()
   }
   I.see('Total amount you’re claiming')
@@ -70,7 +71,8 @@ Scenario('I can prepare a claim with different interest rate and date @citizen',
   claimSteps.completeEligibility()
   claimSteps.completeStartOfClaimJourney(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true)
   interestSteps.enterSpecificInterestRateAndDate(2, '1990-01-01')
-  if (process.env.FEATURE_HELP_WITH_FEES) {
+  const isHwfEnabled = await I.checkPCQHealth()
+  if (isHwfEnabled) {
     hwfSteps.noHWF()
   }
   I.see('Total amount you’re claiming')
@@ -93,7 +95,8 @@ Scenario('I can prepare a claim with a manually entered interest amount and a da
   claimSteps.completeEligibility()
   claimSteps.completeStartOfClaimJourney(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true)
   interestSteps.enterBreakdownInterestAmountAndDailyAmount()
-  if (process.env.FEATURE_HELP_WITH_FEES) {
+  const isHwfEnabled = await I.checkPCQHealth()
+  if (isHwfEnabled) {
     hwfSteps.noHWF()
   }
   I.see('Total amount you’re claiming')
@@ -160,7 +163,7 @@ Scenario('I should be redirected to PCQ if "Your details" are filled in while ma
 
 // Test for help with fees
 
-Scenario('I can enter a claim details and i can create a claim with Help With Fees reference number @citizen', { retries: 3 }, (I: I) => {
+Scenario('I can enter a claim details and i can create a claim with Help With Fees reference number @citizen', { retries: 3 }, async (I: I) => {
   claimSteps.makeAHwfClaimAndSubmit()
 })
 
@@ -172,6 +175,6 @@ Scenario('I can enter a claim details and navigate up to payment page @smoke-tes
 
 // The @citizen-smoke-test tag used for running smoke tests with pre-registered user for help with fees
 
-  Scenario('I can enter a claim details and navigate up to payment page (Providing HWF reference number) @smoke-test', { retries: 3 }, (I: I) => {
-    claimSteps.makeAHwfClaimAndNavigateUpToPayment()
-  })
+Scenario('I can enter a claim details and navigate up to payment page (Providing HWF reference number) @smoke-test', { retries: 3 }, async (I: I) => {
+  claimSteps.makeAHwfClaimAndNavigateUpToPayment()
+})

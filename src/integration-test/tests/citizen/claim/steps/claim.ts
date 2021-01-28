@@ -244,7 +244,7 @@ export class ClaimSteps {
     newFeaturesPage.optIn()
   }
 
-  makeAClaimAndNavigateUpToPayment () {
+  async makeAClaimAndNavigateUpToPayment () {
     const claimant = createClaimant(PartyType.INDIVIDUAL)
     const defendant = createDefendant(PartyType.INDIVIDUAL, true)
 
@@ -283,7 +283,11 @@ export class ClaimSteps {
     this.claimantTotalAmountPageRead()
     I.see('Do you want to claim interest?')
     interestSteps.enterDefaultInterest()
-    I.handelHelpWithFees()
+    const isHwfEnabled = await I.checkPCQHealth()
+    if (isHwfEnabled) {
+      hwfSteps.noHWF()
+    }
+    // I.handelHelpWithFees()
 /*     if (process.env.FEATURE_HELP_WITH_FEES) {
       hwfSteps.noHWF()
     } */
