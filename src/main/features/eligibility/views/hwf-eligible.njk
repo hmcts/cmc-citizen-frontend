@@ -1,0 +1,19 @@
+{% extends "layout.njk" %}
+{% from "internalLink.njk" import internalLink %}
+{% from "externalLink.njk" import externalLink %}
+
+{% set heading = 'You can use this service' %}
+
+{% block content %}
+
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <p>{{ t('Based on your answers you can make a money claim using this service.') }}</p>
+        <p>{{ t('You will have to pay court fees unless you are eligible for Help with Fees.' + 
+        externalLink('Find out more about Help with Fees', 'https://www.gov.uk/get-help-with-court-fees', false, true, true)) | safe }}</p>
+
+      {{ internalLink(t('Continue'), nextPage, 'button analytics-click-event-trigger', dataEventLabel='Eligibility: You can use this service') }}
+    </div>
+  </div>
+
+{% endblock %}
