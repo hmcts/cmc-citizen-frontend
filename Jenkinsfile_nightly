@@ -50,7 +50,7 @@ env.CHUNKS = 3
 
 withNightlyPipeline("nodejs", product, component) {
   loadVaultSecrets(secrets)
-  enableCrossBrowserTest()
+  enableCrossBrowserTest(['chrome'])
   enableSecurityScan()
   enableFullFunctionalTest(200)
 
