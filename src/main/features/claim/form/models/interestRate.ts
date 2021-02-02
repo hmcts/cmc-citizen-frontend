@@ -45,13 +45,10 @@ export class InterestRate implements CompletableTask {
 
     const instance = new InterestRate(value.type, toNumberOrUndefined(value.rate), value.reason)
 
-    switch (instance.type) {
-      case InterestRateOption.STANDARD:
-        instance.rate = getStandardInterestRate()
-        instance.reason = undefined
-        break
+    if (instance.type === InterestRateOption.STANDARD) {
+      instance.rate = getStandardInterestRate()
+      instance.reason = undefined
     }
-
     return instance
   }
 

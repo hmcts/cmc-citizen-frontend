@@ -6,7 +6,13 @@ export class ApiLogger {
   }
 
   logRequest (requestData): void {
-    this.logger.info(this._buildRequestEntry(requestData))
+    if (requestData.requestBody) {
+      if (!requestData.requestBody.hasOwnProperty('oneTimePassword')) {
+        this.logger.info(this._buildRequestEntry(requestData))
+      }
+    } else {
+      this.logger.info(this._buildRequestEntry(requestData))
+    }
   }
 
   _buildRequestEntry (requestData): string {
