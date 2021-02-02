@@ -23,6 +23,7 @@ import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { MomentFactory } from 'shared/momentFactory'
 import { LocalDate } from 'forms/models/localDate'
 import { PaymentIntention as DraftPaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
+import { IntentionToProceed } from 'claimant-response/form/models/intentionToProceed'
 import {
   payByInstallmentsIntent,
   payBySetDateIntent,
@@ -170,6 +171,18 @@ describe('claimant response converter', () => {
           'paymentReceived': 'yes',
           'settleForAmount': 'no',
           'reason': 'OBJECTION!'
+        })
+      })
+
+      it('rejection when intends to proceed', () => {
+        const draftClaimantResponse = new DraftClaimantResponse()
+        draftClaimantResponse.intentionToProceed = new IntentionToProceed(YesNoOption.YES)
+
+        expect(converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft, false)).to.deep.eq({
+          'type': 'REJECTION',
+          'freeMediation': 'yes',
+          'mediationContactPerson': undefined,
+          'mediationPhoneNumber': '07777777788'
         })
       })
 

@@ -28,6 +28,16 @@ const testData = [
     defendantAssertions: ['000MC050', 'Respond to claim.']
   },
   {
+    status: 'Claim issued with HWF reference',
+    claim: claimStoreServiceMock.sampleHwfClaimIssueObj,
+    claimOverride: {
+      responseDeadline: MomentFactory.currentDate().add(1, 'days'),
+      lastEventTriggeredForHwfCase : 'CreateHelpWithFeesClaim'
+    },
+    claimantAssertions: ['123', 'We’re checking your Help with Fees application'],
+    defendantAssertions: ['000MC050', 'Respond to claim.']
+  },
+  {
     status: 'Requested more time',
     claim: claimStoreServiceMock.sampleClaimIssueObj,
     claimOverride: {
@@ -39,7 +49,7 @@ const testData = [
   }
 ]
 
-describe('Dashboard page', () => {
+describe('Dashboard page claim issue', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
@@ -48,6 +58,8 @@ describe('Dashboard page', () => {
     context('when user authorised', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+        claimStoreServiceMock.resolveRetrievePaginationInfoEmptyList()
+        claimStoreServiceMock.resolveRetrievePaginationInfoEmptyList()
       })
 
       context('Dashboard Status', () => {
