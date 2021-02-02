@@ -20,7 +20,7 @@ const checkAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage(
 
 Feature('E2E tests for defence journeys')
 
-Scenario('I can as an Individual make a claim against an Individual who then fully defends and I proceed with the claim @citizen', { retries: 3 }, async (I: I) => {
+Scenario('I can as an Individual make a claim against an Individual who then fully defends and I proceed with the claim @citizen @crossbrowser', { retries: 3 }, async (I: I) => {
   const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
   const claimData: ClaimData = createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
   testData.defenceType = DefenceType.FULL_REJECTION_WITH_DISPUTE
