@@ -14,7 +14,7 @@ export class CCJGuard {
     if ((claim.eligibleForCCJ
       || claim.eligibleForCCJAfterBreachedSettlementTerms
       || claim.isSettlementAgreementRejected)
-      && !(claim.paperResponse === YesNoOption.YES)) {
+      && (claim.paperResponse !== YesNoOption.YES)) {
       next()
     } else {
       logger.warn(`Claim ${claim.claimNumber} not eligible for a CCJ - redirecting to dashboard page`)

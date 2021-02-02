@@ -9,6 +9,7 @@
     "newDashboardStatus": false,
     "warningBanner": false,
     "inversionOfControl": true,
+    "helpWithFees": false,
     "autoEnrollIntoNewFeature": true,
     "dashboard_pagination_enabled": false
   },

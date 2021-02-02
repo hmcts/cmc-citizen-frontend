@@ -77,6 +77,6 @@ export class Allowance {
     if (!allowanceItem) {
       return allowanceItem
     }
-    return allowanceItem.map(allowanceItem => new AllowanceItem().deserialize(allowanceItem))
+    return allowanceItem.map(allowanceItems => new AllowanceItem().deserialize(allowanceItems))
   }
 }

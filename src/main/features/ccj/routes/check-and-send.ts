@@ -95,9 +95,9 @@ function retrieveAndSetValuesInDraft (claim: Claim, draft: Draft<DraftCCJ>): Dra
   const paymentOption: CCJPaymentOption = retrievePaymentOptionsFromClaim(claim)
   if (paymentOption) {
     draft.document.paymentOption = paymentOption
-    if (paymentOption && paymentOption.option.value === PaymentOption.INSTALMENTS) {
+    if (paymentOption.option.value === PaymentOption.INSTALMENTS) {
       draft.document.repaymentPlan = getRepaymentPlanForm(claim, draft)
-    } else if (paymentOption && paymentOption.option.value === PaymentOption.BY_SPECIFIED_DATE) {
+    } else if (paymentOption.option.value === PaymentOption.BY_SPECIFIED_DATE) {
       draft.document.payBySetDate = new PaymentDate(LocalDate.fromMoment(claim.settlement.getLastOffer().paymentIntention.paymentDate))
     }
   }
