@@ -1,11 +1,11 @@
 {% macro helpWithFeesValidationDashboard() %}
-  {{ t('We’re checking your Help With Fees application') }}
+  {{ t('We’re checking your Help with Fees application') }}
 {% endmacro %}
 
 
 {% macro helpWithFeesValidationClaimStatus(claim) %}
 <div class="status-block">
-  <h2 class="heading-medium">{{ t('We’re checking your Help With Fees application') }}</h2>
+  <h2 class="heading-medium">{{ t('We’re checking your Help with Fees application') }}</h2>
   <p>{{ t('We’ll email you the result within 5 days.') }}</p>
 
   <h3 class="heading-small">{{ t('If you qualify for the whole court fee to be paid') }}</h3>
@@ -23,15 +23,15 @@
 
 {% macro invalidHelpWithFeesValidationClaimStatus(claim) %}
 <div class="status-block">
-  <h2 class="heading-medium">{{ t('You gave us an invalid Help With Fees number') }}</h2>
+  <h2 class="heading-medium">{{ t('You gave us an invalid Help with Fees number') }}</h2>
   <p>{{ t('The number you gave was {{ helpWithFeesNumber }}.', { helpWithFeesNumber: claim.helpWithFeesNumber }) }}</p>
 
   <p>{{ t('You can either:') }}</p>
 
   <p>
     <ul class="list list-bullet">
-      <li>{{ t('contact us with the correct Help With Fees number (call 0300 123 7050 or email ')}} {{ t('<a href="mailto:{{ emailSubject }}">{{ email }}</a>)', { ccdId: claim.ccdCaseId ,email: 'moneyclaims@justice.gov.uk', emailSubject: 'moneyclaims@justice.gov.uk?subject={{ ccdId }}' }) | safe }}</li>
-      <li>call us to pay the full claim fee by card (if you don't have a valid Help With Fees number)</li>
+      <li>{{ t('contact us with the correct Help with Fees number (call 0300 123 7050 or email ')}} {{ t('<a href="mailto:{{ emailSubject }}">{{ email }}</a>)', { ccdId: claim.ccdCaseId ,email: 'contactocmc@justice.gov.uk', emailSubject: 'contactocmc@justice.gov.uk?subject={{ ccdId }}' }) | safe }}</li>
+      <li>call us to pay the full claim fee by card (if you don't have a valid Help with Fees number)</li>
     </ul>
   </p>
   
@@ -51,8 +51,8 @@
 
 {% macro rejectedHelpWithFeesValidationClaimStatus(claim) %}
 <div class="status-block">
-  <h2 class="heading-medium">{{ t('Your Help With Fees application has been rejected') }}</h2>
-  <p>{{ t('We have rejected your Help With Fees application for the following reason:') }}</p>
+  <h2 class="heading-medium">{{ t('Your Help with Fees application has been rejected') }}</h2>
+  <p>{{ t('We have rejected your Help with Fees application for the following reason:') }}</p>
   
   {% if claim.claimData.hwfFeeDetailsSummary === 'NOT_QUALIFY_FEE_ASSISTANCE' %}
       <p>{{ t('You do not qualify for assistance.') }}</p>
@@ -76,7 +76,7 @@
 
   <h3 class="heading-small">{{ t('What to do next') }}</h3>
 
-  <p>{{ t('If you want to appeal this decision you need to email') }} {{ t('<a href="mailto:{{ emailSubject }}">{{ email }}</a>', { ccdId: claim.ccdCaseId ,email: 'moneyclaims@justice.gov.uk', emailSubject: 'moneyclaims@justice.gov.uk?subject={{ ccdId }}' }) | safe }} </p>
+  <p>{{ t('If you want to appeal this decision you need to email') }} {{ t('<a href="mailto:{{ emailSubject }}">{{ email }}</a>', { ccdId: claim.ccdCaseId ,email: 'contactocmc@justice.gov.uk', emailSubject: 'contactocmc@justice.gov.uk?subject={{ ccdId }}' }) | safe }} </p>
   <p>{{ t('If you still want the claim to be issued to the defendant you need to pay the {{ claimFee }} claim fee.', { claimFee : claim.claimData.feeAmountInPennies | pennies2pounds | numeral }) }} </p>
   <p>{{ t('To pay by card, phone 0300 123 7050') }}</p>
   {% set dash = joiner("-") %}
@@ -100,12 +100,35 @@
 
 {% macro helpWithFeesRequiredmoreInfoClaimStatus(claim) %}
 <div class="status-block">
-  <h2 class="heading-medium">{{ t('Your Help With Fees application: more information needed') }}</h2>
-  <p>{{ t('We’ll email you within 5 days to tell you what we need.') }}</p>
-
+  <h2 class="heading-medium">{{ t('Your Help with Fees application: more information needed') }}</h2>
+  <p>{{ t('You need to provide proof of your income, such as a wage slip, pension or type and amount of benefit, before {{ dedlineDate }} or you will not get a reduction in court fees.', { dedlineDate: claim.claimData.hwfDocumentsToBeSentBefore | date }) | safe  }}</p>
+  <p>{{ t('You need to get a copy of all the documents that apply to you. Make sure your name is clearly visible on every document. Write your HwF reference at the top of every document. Scan and email the document to ') }}{{ t('<a href="mailto:{{ emailSubject }}">{{ email }}</a>', { ccdId: claim.ccdCaseId, email: 'contactocmc@justice.gov.uk', emailSubject: 'contactocmc@justice.gov.uk?subject={{ ccdId }}' }) | safe }}</p>
+  
+  <h3 class="heading-small">{{ t('Proof of income you need to send in') }}</h3>
+  <ul class="list list-bullet">
+  {% set loopIndex = 0 %}
+  {% for row in claim.claimData.hwfMoreInfoNeededDocuments %}
+    {% if row === 'BANK_STATEMENTS' %}
+      <li>a bank statement from the last 3 months </li>
+      {% elif row === 'ANY_OTHER_INCOME' %}
+        {% set otherDoc = 1 %}
+      {% elif row === 'WAGE_SLIPS' %}
+        <li>if you’re employed, a payslip dated in the last 6 weeks, or, if you’re self-employed, your most recent self-assessment tax return and SA302 tax calculation which you can get from www.gov.uk/sa302-tax-calculation</li>
+      {% elif row === 'CHILD_MAINTENANCE' %}
+        <li>evidence of being in receipt of Child Maintenance, such as a Child Support Agency assessment, sealed court order or letter of agreement showing how often and much you’re paid</li>
+      {% elif row === 'BENEFITS_AND_TAX_CREDITS' %}
+        <li>a letter or document dated in the last 3 months, of contribution-based Job Seekers Allowance (JSA) contribution-based Employment and Support Allowance (JSA), Universal Credit, Child Benefit, Working Tax Credit or Child Tax Credit</li>
+      {% elif (row === 'PENSIONS' or row === 'RENTAL_INCOME' or row === 'INCOME_FROM_SELLING_GOODS' or row === 'PRISONERS_INCOME') and loopIndex === 0 %}
+        <li>evidence of any other income such as from a pension, rent, selling goods or from a prisoners income</li>
+        {% set loopIndex = 1 %}
+      {% elif otherDoc === 1 and row !== 'PENSIONS' and row !== 'RENTAL_INCOME' and row !== 'INCOME_FROM_SELLING_GOODS' and row !== 'PRISONERS_INCOME' %}
+        <li>{{ row }}</li>
+    {% endif %} 
+  {% endfor %}
+  </ul>
+  
   <h3 class="heading-small">{{ t('What to do next') }}</h3>
-
-  <p>{{ t('Wait until we contact you regarding the information that we need') }}</p>
+  <p>{{ t('Send in the relevant proof of income documents before {{ dedlineDate }} or you will not get a reduction in court fees.', { dedlineDate: claim.claimData.hwfDocumentsToBeSentBefore | date }) | safe }}</p>
   <p>{{ t('Alternatively, if you want the claim to be issued to the defendant now, you can pay the {{ claimAmount }} claim fee.', { claimAmount : claim.claimData.feeAmountInPennies | pennies2pounds | numeral }) }} </p>
   <p>{{ t('To pay by card, phone 0300 123 7050') }}</p>
   
@@ -129,7 +152,7 @@
     <p>{{ t('The claim fee may increase if:') }}</p>
     <ul class="list list-bullet">
       <li>{{ t('you have claimed interest') }}</li>
-      <li>{{ t('the Help With Fees application takes more than 5 days to progress') }}</li>
+      <li>{{ t('the Help with Fees application takes more than 5 days to progress') }}</li>
     </ul>
   </div>
 </div>
@@ -137,18 +160,16 @@
 
 {% macro helpWithFeesPartRemettedClaimStatus(claim) %}
 <div class="status-block">
-  <h2 class="heading-medium">{{ t('Your Help With Fees application has been reviewed') }}</h2>
-  <p>{{ t('You are eligible for a {{ claimAmount }} reduction of your claim fees.', { claimAmount : claim.claimData.feeRemitted | numeral }) }}</p>
+  <h2 class="heading-medium">{{ t('Your Help with Fees application has been reviewed') }}</h2>
+
+  <p>{{ t('You are eligible for a claim fee remission of {{ claimAmount }}.', { claimAmount : claim.claimData.feeRemitted | numeral }) }}</p>
 
   <h3 class="heading-small">{{ t('What to do next') }}</h3>
   {% if claim.helpWithFessBalanceClaimFee === 0 %}
     <p>{{ t('You don’t have to be pay any further fees and we will issue your claim and send it to the defendant.') }}</p>
   {% elif claim.helpWithFessBalanceClaimFee !== 0 %}
-    <p>{{ t('Pay the remaining claim fee of {{ claimAmount }} and we will issue your claim and send it to the defendant.', { claimAmount : claim.helpWithFessBalanceClaimFee | numeral }) }}</p>
+    <p>{{ t('Pay the remaining claim fee of {{ claimAmount }} by credit or debit card. Phone 0300 123 7050.', { claimAmount : claim.helpWithFessBalanceClaimFee | numeral }) }}</p>
   {% endif %}
-
-  <p>{{ t('This calculation can increase the total claim amount and so incur a higher claim issue fee. The claim fee is {{ claimFees }}.', { claimFees : claim.claimData.feeAmountInPennies | pennies2pounds | numeral }) }}</p>
-  <p>{{ t('To pay by card, phone 0300 123 7050') }}</p>
   
   {% set dash = joiner("-") %}
   {% set hyphenatedCcdCaseId %}
@@ -158,21 +179,28 @@
   {%- endfor %}
   {% endset %}
   <p>{{ t('You will need your claim reference number: {{ ccdId }}', { ccdId: hyphenatedCcdCaseId }) }}</p>
-
-  {% if claim.claimData.interest.lastInterestCalculationDate %}
-    <p>{{ t('The full claim fee shown on the dashboard is calculated as on {{ createdAt }}.', { createdAt: claim.claimData.interest.lastInterestCalculationDate | date }) | safe }}</p>
-  {% elif claim.claimData.interest.lastInterestCalculationDate === undefined %}
-    <p>{{ t('The full claim fee shown on the dashboard is calculated as on {{ createdAt }}.', { createdAt: claim.createdAt | date }) | safe }}</p>
-  {% endif %}
+  <p>{{ t('Once payment has been made your claim will be issued and sent to the defendant.') }}</p>
 </div>
 <div class="status-block">
   <div class="govuk-details govuk-dashboard-details__text">
     <p>{{ t('The claim fee may increase if:') }}</p>
     <ul class="list list-bullet">
       <li>{{ t('you have claimed interest') }}</li>
-      <li>{{ t('the Help With Fees application takes more than 5 days to progress') }}</li>
+      <li>{{ t('the Help with Fees application takes more than 5 days to progress') }}</li>
     </ul>
   </div>
+<p>{{ t('If there is no response in next 90 days, the claim will be closed and you will need to create a new claim.') }}</p>
+</div>
+
+{% endmacro %}
+
+{% macro helpWithFeesFullRemettedClaimStatus(claim) %}
+<div class="status-block">
+  <h2 class="heading-medium">{{ t('Your Help with Fees application has been reviewed') }}</h2>
+  <p>{{ t('You are eligible for a full claim fee remission of {{ claimAmount }}.', { claimAmount : claim.claimData.feeRemitted | numeral }) }}</p>
+
+  <h3 class="heading-small">{{ t('What to do next') }}</h3>
+  <p>{{ t('Your claim will be issued and sent to the defendant.') }}</p>
 </div>
 {% endmacro %}
 
@@ -202,15 +230,15 @@
 {% endmacro %}
 
 {% macro HWF_APPLICATION_PENDING() %}
-  {{ t('We’re checking your Help With Fees application') }}
+  {{ t('We’re checking your Help with Fees application') }}
 {% endmacro %}
 
 {% macro HWF_INVALID_REFERENCE() %}
-  {{ t('You gave us an invalid Help With Fees number') }}
+  {{ t('You gave us an invalid Help with Fees number') }}
 {% endmacro %}
 
 {% macro HWF_Rejected() %}
-{{ t('Your Help With Fees application has been rejected') }}
+{{ t('Your Help with Fees application has been rejected') }}
 {% endmacro %}
 
 {% macro HWF_More_Info() %}
@@ -218,11 +246,11 @@
 {% endmacro %}
 
 {% macro HWF_Part_Remitted() %}
-  {{ t("We've reviewed your Help With Fees application") }}
+  {{ t("We've reviewed your Help with Fees application") }}
 {% endmacro %}
 
 {% macro HWF_Full_Granted() %}
-  {{ t("We've reviewed your Help With Fees application") }}
+  {{ t("We've reviewed your Help with Fees application") }}
 {% endmacro %}
 
 {% macro HWF_Intrest_Recalculate() %}
@@ -230,7 +258,7 @@
 {% endmacro %}
 
 {% macro HWF_Miscellaneous(claim) %}
-  {{ t('We’re checking your Help With Fees application') }}
+  {{ t('We’re checking your Help with Fees application') }}
 {% endmacro %}
 
 {% macro helpWithFeesClosed(claim) %}
