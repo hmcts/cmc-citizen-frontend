@@ -5,7 +5,7 @@ const supportedBrowsers = require('./src/integration-test/crossbrowser/supported
 const waitForTimeout = parseInt(process.env.WAIT_FOR_TIMEOUT) || 45000;
 const smartWait = parseInt(process.env.SMART_WAIT) || 30000;
 const browser = process.env.BROWSER_GROUP || 'chrome';
-const outputDir = './output'
+const outputDir = './functional-output'
 const defaultSauceOptions = {
   username: process.env.SAUCE_USERNAME,
   accessKey: process.env.SAUCE_ACCESS_KEY,
