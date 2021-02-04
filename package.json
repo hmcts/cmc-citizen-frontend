@@ -78,7 +78,7 @@
     "i18next-sprintf-postprocessor": "^0.2.2",
     "jquery": "3.5.1",
     "js-base64": "^2.5.1",
-    "launchdarkly-node-server-sdk": "^5.11.3",
+    "launchdarkly-node-server-sdk": "^5.13.4",
     "ldclient-node": "^5.7.4",
     "lodash": "^4.17.15",
     "mime": "^2.4.6",
