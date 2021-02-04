@@ -67,6 +67,9 @@ const setupConfig = {
     SaucelabsReporter: {
       require: './src/integration-test/helpers/saucelabsReporter'
     },
+    hwfHelper: {
+      require: './src/integration-test/helpers/hwfHelper'
+    },
     Mochawesome: {
       uniqueScreenshotNames: 'true'
     }
