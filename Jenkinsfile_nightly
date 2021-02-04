@@ -42,11 +42,8 @@ env.FEATURE_PCQ = 'true'
 // add any others needed to selective testing...
 
 // SAUCELABS config - configured on Jenkins (also IDAM_URL above used)
-env.SAUCELABS_BROWSER = 'chrome_win_latest'
-env.SAUCELABS_TUNNEL_IDENTIFIER = 'reformtunnel'
 env.TEST_URL = params.URL_TO_TEST //required
 env.CITIZEN_APP_URL = params.URL_TO_TEST //required
-env.CHUNKS = 3
 
 withNightlyPipeline("nodejs", product, component) {
   loadVaultSecrets(secrets)
