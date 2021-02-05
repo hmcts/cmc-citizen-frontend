@@ -73,7 +73,7 @@ export function initialTransitions (claim: Claim): StateMachine {
       {
         name: 'checkHwfMiscellaneous',
         from: InitialStates.HWF_AWAITING_RESPONSE_HWF,
-        to: InitialStates.HWF_APPLICATION_PENDING
+        to: InitialStates.HWF_Part_Remitted
       },
       {
         name: 'checkHwfInvalid',
@@ -109,7 +109,7 @@ export function initialTransitions (claim: Claim): StateMachine {
       },
 
       onBeforeCheckHwf () {
-        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'HWF_APPLICATION_PENDING' && (claim.lastEventTriggeredForHwfCase === 'CreateHelpWithFeesClaim' || claim.lastEventTriggeredForHwfCase === 'MiscHWF')
+        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'HWF_APPLICATION_PENDING' && (claim.lastEventTriggeredForHwfCase === 'CreateHelpWithFeesClaim' || claim.lastEventTriggeredForHwfCase === 'UpdateHWFNumber')
       },
 
       onBeforeCheckHwfIntrestReCalculate () {
@@ -141,7 +141,7 @@ export function initialTransitions (claim: Claim): StateMachine {
       },
 
       onBeforecheckHwfMiscellaneous () {
-        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF' && (claim.lastEventTriggeredForHwfCase === 'CreateHelpWithFeesClaim' || claim.lastEventTriggeredForHwfCase === 'MiscHWF')
+        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF' && (claim.lastEventTriggeredForHwfCase === 'CreateHelpWithFeesClaim' || claim.lastEventTriggeredForHwfCase === 'UpdateHWFNumber')
       },
 
       findState (currentSate: StateMachine) {
