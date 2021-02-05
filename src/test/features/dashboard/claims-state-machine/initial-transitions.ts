@@ -30,7 +30,7 @@ describe('State Machine for the dashboard status before response', () => {
       const claim: Claim = new Claim().deserialize({ ...sampleHwfClaimIssueObj, lastEventTriggeredForHwfCase : 'UpdateHWFNumber' })
       let claimState = initialTransitions(claim)
       claimState.findState(claimState)
-      expect(claimState.state).to.equal('help-with-fess-part-remittion-granted')
+      expect(claimState.state).to.equal('help-with-fees')
     })
   })
 
