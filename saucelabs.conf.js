@@ -2,6 +2,8 @@ require("ts-node/register");
 require("tsconfig-paths/register");
 
 const supportedBrowsers = require('./src/integration-test/crossbrowser/supportedBrowsers.js');
+const { bootstrapAll } = require('./src/integration-test/bootstrap/bootstrap')
+const { teardownAll } = require('./src/integration-test/bootstrap/teardown')
 const waitForTimeout = parseInt(process.env.WAIT_FOR_TIMEOUT) || 45000;
 const smartWait = parseInt(process.env.SMART_WAIT) || 30000;
 const browser = process.env.BROWSER_GROUP || 'chrome';
@@ -40,7 +42,8 @@ function getBrowserConfig(browserGroup) {
 
 const setupConfig = {
   name: 'integration-tests',
-  bootstrap: './src/integration-test/bootstrap/bootstrap.ts',
+  bootstrapAll,
+  teardownAll,
   tests: './src/integration-test/tests/**/*_test.*',
   output: `${process.cwd()}/${outputDir}`,
   helpers: {

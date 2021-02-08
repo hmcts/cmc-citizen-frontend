@@ -2,14 +2,14 @@ require('ts-node/register')
 require('tsconfig-paths/register')
 
 const ProxySettings = require('./src/integration-test/config/proxy-settings').ProxySettings
-const bootstrapFn = require('./src/integration-test/bootstrap/bootstrap').bootstrapAll
-const tearDownFn = require('./src/integration-test/bootstrap/teardown').teardownAll
+const { bootstrapAll } = require('./src/integration-test/bootstrap/bootstrap')
+const { teardownAll } = require('./src/integration-test/bootstrap/teardown')
 const outputDir = './output'
 
 exports.config = {
   name: 'citizen-integration-tests',
-  bootstrapAll: bootstrapFn,
-  teardownAll: tearDownFn,
+  bootstrapAll,
+  teardownAll,
   tests: './src/integration-test/tests/**/*_test.*',
   output: `${process.cwd()}/${outputDir}`,
   timeout: 20000,
