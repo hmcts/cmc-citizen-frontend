@@ -221,7 +221,7 @@ export class UserEmails {
       .replace('cmc-citizen-', '')
       .split('/')[0]
       .split('.')[0]
-    const postfix = Math.floor(Math.random() * 999999)
+    const postfix = moment().format('YYMMDD')
     return `civilmoneyclaims+${type}-${subdomain}-${postfix}@gmail.com`
   }
 
