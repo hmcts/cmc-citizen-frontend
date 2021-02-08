@@ -10,12 +10,11 @@
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
           <table class="table-form form-group">
-            <caption class="visuallyhidden"></caption>
+            <caption class="visuallyhidden" aira-hidden="true">{{ heading }}</caption>
             <tbody>
             <tr>
               <th scope="row">{{ t('Claim amount') }}</th>
               <td class="numeric last">
-                <label class="visuallyhidden" for="amount">{{ t('Claim amount') }}</label>
                 <span class="font-small">{{ interestTotal.claimAmount | numeral }}</span>
               </td>
             </tr>
@@ -23,7 +22,6 @@
               <tr>
                 <th scope="row">{{ t('Interest to date') }}</th>
                 <td class="numeric last">
-                  <label class="visuallyhidden" for="amount">{{ t('Interest') }}</label>
                   <span class="font-small">{{ interestTotal.interestAmount | numeral }}</span>
                 </td>
               </tr>
@@ -31,7 +29,6 @@
             <tr>
               <th scope="row">{{ t('Claim fee') }}</th>
               <td class="numeric last">
-                <label class="visuallyhidden" for="amount">{{ t('Claim fee') }}</label>
                 <span class="font-small">{{ interestTotal.feeAmount | numeral }}</span>
               </td>
             </tr>
@@ -39,15 +36,27 @@
             <tfoot>
             <tr>
               <th scope="col"><span class="bold-small">{{ t('Total claim amount') }}</span></th>
-              <td class="numeric last"><span class="bold-medium">{{ interestTotal.totalAmountTillToday | numeral }}</span></td>
+              <td class="numeric last">
+                <span class="bold-medium">{{ interestTotal.totalAmountTillToday | numeral }}</span>
+              </td>
             </tr>
           </tfoot>
           </table>
 
-          <p>{{ t('If you settle out of court we won’t refund your claim fee. You can ask the defendant to pay back your claim fee as part of the settlement.') }}</p>
+          {% if helpWithFeesFeature %}
+            <p class="bold">{{ t('We’ll review your Help With Fees application after you submit the claim') }}</p>
+            <ol class="list list-number">
+              <li>{{ t('If it’s successful, you may not have to pay any or all of the claim fee.') }}</li>
+              <li>{{ t('That would mean the total claim amount would be lower than the amount shown on this page.') }}</li>
+              <li>{{ t('If it’s unsuccessful, we’ll ask you to pay the claim fee shown on this page in full.') }}</li>
+            </ol>
+          {% endif %}
+
+          <p class="bold">{{ t('If you settle out of court') }}</p>
+          <p>{{ t('We won’t refund your claim fee. You can ask the defendant to pay back your claim fee as part of the settlement.') }}</p>
 
           <table class="table-form form-group">
-            <caption class="visuallyhidden"></caption>
+            <caption class="visuallyhidden" aira-hidden="true">Other fees</caption>
             <thead>
               <tr>
                 <th scope="col">{{ t('Other fees') }}</th>

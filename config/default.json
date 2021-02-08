@@ -73,7 +73,7 @@
     }
   },
   "http": {
-    "timeout": 10000
+    "timeout": 60000
   },
   "requestRetry": {
     "maxAttempts": 3
@@ -93,10 +93,11 @@
     "webChat": true,
     "inversionOfControl": true,
     "warningBanner": false,
-    "helpWithFees": false,
+    "helpWithFees": true,
     "pcq":true,
-    "signPostingCTSC": false,
-    "autoEnrollIntoNewFeature": true
+    "signPostingCTSC": true,
+    "autoEnrollIntoNewFeature": true,
+    "dashboard_pagination_enabled": false
   },
   "oauth": {
     "clientId": "cmc_citizen"
@@ -107,9 +108,9 @@
   "appInsights": {
     "roleName": "citizen-frontend"
   },
-  "reviewOrderDeadLine": {
-    "changeDate": "2020-07-27T11:00:00-00:00",
-    "numberOfDays": 7
+  "reconsiderationDeadLine": {
+    "onlineNumberOfDays": 7,
+    "oconNumberOfDays": 12
   },
   "secrets": {
     "cmc": {
@@ -135,6 +136,6 @@
   },
   "pcq":
   {
-    "url":"http://localhost:4000"
+    "url":"http://localhost:4001"
   }
 }

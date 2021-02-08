@@ -63,7 +63,9 @@ async function waitTillHealthy (appURL: string) {
       console.log(`FEATURE_DIRECTIONS_QUESTIONNAIRE=${process.env.FEATURE_DIRECTIONS_QUESTIONNAIRE}`)
       console.log(`FEATURE_INVERSION_OF_CONTROL=${process.env.FEATURE_INVERSION_OF_CONTROL}`)
       console.log(`FEATURE_PCQ=${process.env.FEATURE_PCQ}`)
+      console.log(`dashboard_pagination_enabled=${process.env.dashboard_pagination_enabled}`)
       console.log(`AUTO_ENROLL_INTO_NEW_FEATURE=${process.env.AUTO_ENROLL_INTO_NEW_FEATURE}`)
+      console.log(`FEATURE_HELP_WITH_FEES=${process.env.FEATURE_HELP_WITH_FEES}`)
       return Promise.resolve()
     } else {
       logStartupProblem(response)

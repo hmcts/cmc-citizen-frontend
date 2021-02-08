@@ -27,14 +27,14 @@
         <tbody>
         {% if amountSettledFor === undefined %}
           <tr>
-            <th scope="row">{{ t('Amount of claim included') }}</th>
+            <th scope="row">{{ t('Claim amount') }}</th>
             <td class="numeric last">
               <span class="font-small">{{ claim.claimData.amount.totalAmount() | numeral }}</span>
             </td>
           </tr>
         {% else %}
           <tr>
-            <th scope="row">{{ t('Amount you’re settling for') }}</th>
+            <th scope="row">{{ t('Claim amount') }}</th>
             <td class="numeric last">
               <span class="font-small">{{ amountSettledFor | numeral }}</span>
             </td>
@@ -52,7 +52,7 @@
         </tr>
         {% endif %}
         <tr>
-          <th scope="row">{{ t('Amount of claim fee included') }}</th>
+          <th scope="row">{{ t('Claim fee amount') }}</th>
           <td class="numeric last">
             <span class="font-small">{{ claimFee | pennies2pounds | numeral }}</span>
           </td>

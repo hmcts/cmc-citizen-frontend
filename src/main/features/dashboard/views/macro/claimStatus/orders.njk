@@ -55,8 +55,16 @@
   {{ t('Send us more details before the hearing') }}
 {% endmacro %}
 
+{% macro directionsBespokeOrderIssuedClaimantDashboard() %}
+  {{ t('An Order has been issued by a Judge') }}
+{% endmacro %}
+
 {% macro directionsOrderIssuedDefendantDashboard() %}
   {{ t('Send us more details before the hearing') }}
+{% endmacro %}
+
+{% macro directionsBespokeOrderIssuedDefendantDashboard() %}
+  {{ t('An Order has been issued by a Judge') }}
 {% endmacro %}
 
 {% macro directionsOrderReviewRequestedClaimantDashboard(claim) %}
@@ -112,5 +120,15 @@
       </p>
       <p>{{ t('A judge will consider your request. You should give details of how you want the order changed and the reasons for your request.') }}</p>
     {% endif %}
+  </div>
+{% endmacro %}
+
+
+{% macro bespokeDirectionsOrderIssued(claim) %}
+  <div class="status-block">
+    <h2 class="heading-medium">{{ t('An order has been issued by a Judge') }}</h2>
+    <p>{{ t('Please follow the instructions in the order and comply with the deadlines, if applicable.') }}</p>
+    <p>{{ internalLink(t('Download the court’s order (PDF) '), OrdersPaths.directionsOrderDocument.evaluateUri({ externalId: claim.externalId })) }}
+      {{ t('to find out the details you need to send.') }}</p>
   </div>
 {% endmacro %}

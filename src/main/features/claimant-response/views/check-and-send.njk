@@ -191,7 +191,8 @@
                 bold = true
               )
             }}
-
+          </dl>
+          <dl class="govuk-summary-list govuk-!-margin-bottom-9">
             {% if mediationEnabled %}
               {% if draft.intentionToProceed.proceed.option === YesNoOption.YES.option and claim.response.freeMediation === YesNoOption.YES.option %}
                 {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot, mediationEnabled) }}
@@ -436,7 +437,6 @@
         {% endif %}
         
         {{ submitButton('Submit response') }}
-
       </form>
     </div>
   </div>

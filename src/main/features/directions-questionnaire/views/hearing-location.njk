@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, radioOption, saveAndContinueButton, errorSummary, numericInput, textInput, radioGroup %}
+{% from "form.njk" import csrfProtection, radioOption, saveAndContinueButton, errorSummary, numericInput, textInput, radioGroup, apiError, apiErrorPostCodeField, apiErrorCourtNameField, apiErrorAlternateCourtSelected %}
 
 {% if party === MadeBy.DEFENDANT and (claim.claimData.defendant.type === PartyType.ORGANISATION.value or claim.claimData.defendant.type === PartyType.COMPANY.value) %}
   {% set heading = 'Request a hearing location' %}
@@ -9,10 +9,11 @@
 
 {% macro commonContent()  %}
   <p>{{ t('Tell us your preferred location for a hearing, in case the claim goes to one.') }}</p>
-  <p>{{ t('We’ll use the location you choose unless the claimant has an exceptional reason to object, for example accessibility needs.') }}</p>
+  <p>{{ t('The hearing will be held at this court unless the claimant has an exceptional reason to choose another one, for example, because of accessibility requirements.') }}</p>
 {% endmacro %}
 
 {% block content %}
+  {{ apiError(error) }}
   <div class="grid-row">
     <div class="column-two-thirds">
       <form method="post" class="analytics-submit-event-trigger" data-event-action="DQ: Hearing Location"
@@ -25,16 +26,13 @@
           {% set courtName = form.valueFor('courtName') %}
           {% set courtPostcode = form.valueFor('courtPostcode') %}
           {% set courtFacilities = form.valueFor('facilities') %}
-          {% if not fallbackPage %}
-            {% if courtPostcode %}
-              <p>{{ t('The nearest court to {{ courtPostcode }} is {{ courtName }}', { courtPostcode: courtPostcode, courtName: courtName }) }}</p>
-            {% elseif party === MadeBy.DEFENDANT and (claim.claimData.defendant.type === PartyType.ORGANISATION.value or claim.claimData.defendant.type === PartyType.COMPANY.value) %}
-              <p>{{ t('You can request any location - {{ courtName }} is the nearest to the address you gave us.', { courtName: courtName }) }}</p>
-            {% else %}
-              {{ commonContent() }}
-
-            {% endif %}
-
+          {% set courtDetails = form.valueFor('courtDetails') %}
+          {% set searchParam = form.valueFor('searchParam') %}
+          {% set nearestCourt = form.valueFor('nearestCourt') %}
+          {% set searchLoop = form.valueFor('searchLoop') %}
+          {% set searchType = form.valueFor('searchType') %}
+           {% if not resultPage %}
+            {{ commonContent() }}
             {% if party === MadeBy.DEFENDANT and (claim.claimData.defendant.type === PartyType.ORGANISATION.value or claim.claimData.defendant.type === PartyType.COMPANY.value) %}
               <h2 class="heading-medium">{{ t('Do you want to request {{ courtName }}?', { courtName: form.valueFor('courtName') }) }}</h2>
             {% else %}
@@ -53,7 +51,6 @@
                 {% endfor %}
               </div>
             </details>
-
 
             {{ radioGroup(
               form = form,
@@ -77,23 +74,105 @@
               <h2 class="heading-medium">{{ t('Choose another court') }}</h2>
               {{ radioOption(form = form, label = 'Search by postcode', name = 'alternativeOption', value = 'postcode', checked = form.valueFor('alternativeOption') === 'postcode', bold = true) }}
               <div class="form-group panel panel-border-narrow js-hidden " id="alternativeOption-postcode" aria-hidden="false">
+                {{ apiErrorPostCodeField(error) }}
                 {{ textInput(label = 'Postcode', form = form, name = 'alternativePostcode', inputClass = 'form-control-1-3') }}
               </div>
-              {{ radioOption(form = form, label = 'Find and select a court', name = 'alternativeOption', value = 'search', checked = form.valueFor('alternativeOption') === 'search', bold = true) }}
-              <div class="form-group panel panel-border-narrow js-hidden " id="alternativeOption-search" aria-hidden="false">
+              {{ radioOption(form = form, label = 'Find and select a court', name = 'alternativeOption', value = 'name', checked = form.valueFor('alternativeOption') === 'name', bold = true) }}
+              <div class="form-group panel panel-border-narrow js-hidden " id="alternativeOption-name" aria-hidden="false">
+                {{ apiErrorCourtNameField(error) }}
                 {{ textInput(label = 'Enter a court name or the name of a place', form = form, name = 'alternativeCourtName', inputClass = 'full-width') }}
               </div>
             </div>
           {% else %}
-            {{ commonContent() }}
-            <h2 class="heading-medium">{{ t('Enter a court name') }}</h2>
-            {{ textInput(form = form, name = 'alternativeCourtName', inputClass = 'form-control-1-100') }}
+
+            <p>{{ t('We have found a court nearest to ') }} {{ searchParam }}</p>
+            <p>Select requested court</p>
+            {{ apiErrorAlternateCourtSelected(error) }}
+            {% for court in courtDetails %}
+              {{ radioOption(form = form, label = court.name, name = 'alternativeCourtSelected', value = court.name, bold = true, replaceValue = 'yes') }}
+              <details class="form-group analytics-click-event-trigger"
+                       data-event-label="Court-Facilities: Facilities of the chosen court.">
+                <summary>
+                  <p><span class="link">{{ t('See this court’s facilities') }}</span></p>
+                </summary>
+
+                <div class="panel">
+                  {% for facility in court.facilities %}
+                    <h3 class="heading-small form-group-related">{{ facility.name }}</h3>
+                    {{ facility.description | safe }}
+                  {% endfor %}
+                </div>
+              </details>
+            {% endfor %}
+
+            {{ radioGroup(
+              form = form,
+              label = heading,
+              labelForScreenReadersOnly = true,
+              name = 'alternativeCourtSelected',
+              options = [
+                {
+                  label: 'No, I’ll choose another',
+                  value: 'no'
+                }
+              ]
+            ) }}
+            <div class="js-hidden" id="alternativeCourtSelected-no">
+              <h2 class="heading-medium">{{ t('Choose another court') }}</h2>
+              {{ radioOption(form = form, label = 'Search by postcode', name = 'alternativeOption', value = 'postcode',
+              checked = form.valueFor('alternativeOption') === 'postcode', bold = true) }}
+              <div class="form-group panel panel-border-narrow js-hidden " id="alternativeOption-postcode" aria-hidden="false">
+               {{ apiErrorPostCodeField(error) }}
+               {{ textInput(label = 'Postcode', form = form, name = 'alternativePostcode', inputClass = 'form-control-1-3') }}
+              </div>
+
+              {{ radioOption(form = form, label = 'Find and select a court', name = 'alternativeOption', value = 'name',
+              checked = form.valueFor('alternativeOption') === 'name', bold = true) }}
+              <div class="form-group panel panel-border-narrow js-hidden " id="alternativeOption-name" aria-hidden="false">
+              {{ apiErrorCourtNameField(error) }}
+               {{ textInput(label = 'Enter a court name or the name of a place', form = form, name = 'alternativeCourtName', inputClass = 'full-width') }}
+              </div>
+
+              {{ radioOption(form = form, label = nearestCourt.name, name = 'alternativeOption', value = 'nearestCourtSelected',
+                 bold = true, checked = (form.valueFor('alternativeOption') === 'nearestCourtSelected'), replaceValue = 'yes') }}
+                 <div class="form-group panel panel-border-narrow"  id="alternativeOption-nearestCourtSelected" aria-hidden="false">
+                 <p>{{ t('This is the closest court to address you gave us.') }}</p>
+                <details class="form-group analytics-click-event-trigger"
+                        data-event-label="Court-Facilities: Facilities of the chosen court.">
+                 <summary>
+                   <p><span class="link">{{ t('See this court’s facilities') }}</span></p>
+                 </summary>
+
+                 <div class="panel">
+                   {% for facility in nearestCourt.facilities %}
+                     <h3 class="heading-small form-group-related">{{ facility.name }}</h3>
+                     {{ facility.description | safe }}
+                   {% endfor %}
+                 </div>
+                </details>
+                </div>
+            </div>
+          {% endif %}
+          {% if courtPostcode %}
+            <input type="hidden" name="courtPostcode" value="{{ courtPostcode }}">
           {% endif %}
           {% if courtName %}
             <input type="hidden" name="courtName" value="{{ courtName }}">
           {% endif %}
-          {% if courtPostcode %}
-            <input type="hidden" name="courtPostcode" value="{{ courtPostcode }}">
+          {% if courtDetails %}
+            <input type="hidden" name="courtDetails" value="{{ courtDetails }}">
+          {% endif %}
+          {% if searchParam %}
+            <input type="hidden" name="searchParam" value="{{ searchParam }}">
+          {% endif %}
+          {% if nearestCourt %}
+            <input type="hidden" name="nearestCourt" value="{{ nearestCourt }}">
+          {% endif %}
+          {% if searchLoop %}
+            <input type="hidden" name="searchLoop" value="{{ searchLoop }}">
+          {% endif %}
+          {% if searchType %}
+            <input type="hidden" name="searchType" value="{{ searchType }}">
           {% endif %}
         </fieldset>
         {{ saveAndContinueButton() }}

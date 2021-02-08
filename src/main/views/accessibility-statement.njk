@@ -1,5 +1,6 @@
 {% extends "layout.njk" %}
 {% from "support.njk" import supportWidget %}
+{% from "support.njk" import supportWidgetaccessibility %}
 {% from "externalLink.njk" import externalLink %}
 {% from "internalLink.njk" import internalLink %}
 {% set heading = 'Accessibility statement for the Online Civil Money Claims service' %}
@@ -8,6 +9,7 @@
 {% set eass = 'https://www.equalityadvisoryservice.com/' %}
 {% set wcaStandards = 'https://www.w3.org/TR/WCAG21/' %}
 {% set wcaGuidline = 'https://www.w3.org/TR/WCAG21/' %}
+{% set access = 'https://hmcts-access.service.gov.uk/contact-us' %}
 
 {% block content %}
   <div class="grid-row">
@@ -15,7 +17,7 @@
       <p>
         {{ t('This service allows you to make a money claim against an individual or an organisation for £10,000 or less. ') }}
       </p>
-      <p>{{ t('This website is run by HM Courts and Tribunals Services (HMCTS). We want as many people as possible to be able to use it, so we’ve designed it to be accessible. That means you should be able to:') }}</p>
+      <p>{{ t('This website is run by HM Courts and Tribunals Services (HMCTS). We want as many people as possible to be able to use it, so we’ve designed it to be accessible. For example, you should be able to:') }}</p>
 
       <ul class="list list-bullet">
         <li>{{ t('change colours, contrast levels and fonts') }}</li>
@@ -27,143 +29,123 @@
       <p>{{ t('We’ve also made the website text as simple as possible to understand.') }}</p>
       <p>{{ t(externalLink('AbilityNet', abilityNet) +' has advice on making your device easier to use if you have a disability.') | safe }}</p>
 
-      <h2 class="heading-medium">{{ t('How accessible is this website?') }}</h2>
+       <h2 class="heading-medium">{{ t('How accessible this website is') }}</h2>
       <p>
-        {{ t('The website has been tested by the Digital Accessibility Centre (DAC) and it meets the required level of accessibility.') }}
+        {{ t('This service was audited by the Digital Accessibility Centre (DAC) in January 2020 for compliance with the Web Content Accessibility Guidelines V2.1 using a combination of technical auditing and feedback from users with accessibility needs.') }}
       </p>
       <p>
-        {{ t('Some PDFs, documents and email attachments may not be fully accessible. For example, the forms and guidance documents which can be downloaded. These will be tested and made accessible by September 2020.') }}
+        {{ t('Except where stated below, all issues and recommendations from DAC have been implemented.') }}
+      </p>
+       <p>
+        {{ t('Parts of this website are not fully accessible.') }}
       </p>
 
-      <h2 class="heading-medium">{{ t('Get accessible formats') }}</h2>
+       <h2 class="heading-medium">{{ t('Feedback and contact information') }}</h2>
       <p>
-        {{ t('If you need information on this website in a different format like accessible PDF, large print, Easy Read or braille then email HMCTSforms@justice.gov.uk or phone us using the contact information on this page.') }}
+        {{ t('If you need information on this website in a different format like accessible PDF, large print, easy read, audio recording or braille:') }}
       </p>
 
-      <h2 class="heading-medium">{{ t('Tell us about accessibility problems') }}</h2>
+      {{ supportWidget('Email') }}
+
+      <p>Alternatively, contact your service representative.</p>
+
+
+      <h2 class="heading-medium">{{ t('Reporting accessibility problems with this website') }}</h2>
       <p>
-        {{ t('We want to keep improving accessibility.  Contact us using the contact details on this page if you find any problems or think we’re not meeting your accessibility needs.') }}
+        {{ t('We’re always looking to improve the accessibility of this website. If you find any problems not listed on this page or think we’re not meeting accessibility requirements, contact:') }}
       </p>
 
-      {{ supportWidget('Contact Money Claims') }}
+       {{ supportWidgetaccessibility('Email') }}
 
-      <h2 class="heading-medium">{{ t('Enforcement procedure') }}</h2>
+    <h2 class="heading-medium">{{ t('Enforcement procedure') }}</h2>
       <p>
         {{ t('The Equality and Human Rights Commission (EHRC) is responsible for enforcing the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018 (the ‘accessibility regulations’). If you’re not happy with how we respond to your complaint, '
         +  externalLink('contact the Equality Advisory and Support Service (EASS)', eass)) | safe}}
       </p>
 
-      <h2 class="heading-medium">{{ t('If the claim goes to a hearing') }}</h2>
+      <h2 class="heading-large">{{ t('Contacting us by phone or visiting us in person') }}</h2>
 
       <p>
-        {{ t('We’ll tell you the hearing centre you need to go to and give you information about its accessibility.') }}
+        {{ t('We provide a text relay service for people who are D/deaf, hearing impaired or have a speech impediment') }}
       </p>
-
-      <h2 class="heading-medium">{{ t('Technical information about this website’s accessibility') }}</h2>
+       <p>
+        {{ t('Our offices and Tribunal venues have audio induction loops, or if you contact us before your visit we can arrange a British Sign Language (BSL) interpreter.') }}
+      </p>
+       <p>
+        {{ t('You can also request step-free access or a foreign language interpreter.') }}
+      </p>
       <p>
-        {{ t('HMCTS is committed to making its website accessible, in accordance with the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018.') }}
+      {{externalLink('Find out how to contact us', access) | safe}}
       </p>
-      <p> {{ t('The website is fully compliant with the' + externalLink('Web Content Accessibility Guidelines version 2.0 AA standard', wcaStandards)) | safe }}</p>
-      <p> {{ t('We are in the process of testing the full service against the new' + externalLink('Web Content Accessibility Guidelines version 2.1 AA standard', wcaGuidline) + '. We commit to being fully compliant against this standard by 2020.') | safe }}</p>
 
-      <h2 class="heading-medium">{{ t('Non-accessible content') }}</h2>
-
+      <h2 class="heading-large">{{ t('Technical information about this website’s accessibility') }}</h2>
       <p>
-        {{ t('Some PDFs, documents, and attachments to email notifications may not meet accessibility standards or work with a screen reader.') }}
+        {{ t('Online Civil Money Claims (OCMC) service is committed to making its website accessible, in accordance with the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018.') }}
       </p>
 
-      <p> {{ t('This is because they were created before current accessibility legislation was introduced. We plan to make them accessible by September 2020.') }}
+      <h2 class="heading-medium">{{ t('Compliance status') }}</h2>
+
+      <p> {{ t('This website is partially compliant with the'
+       + externalLink('Web Content Accessibility Guidelines version 2.1 AA standard', wcaStandards) + ', due to the non-compliances listed below.') | safe }}</p>
+
+      <h2 class="heading-large">{{ t('Non-accessible content') }}</h2>
+      <p>
+        {{ t('The content listed below is non-accessible for the following reasons.') }}
       </p>
 
       <h2 class="heading-medium">{{ t('Non-compliance with the accessibility regulations') }}</h2>
       <p>
-        {{ t('We found issues with these URLs:') }}
+        {{ t('Online Civil Money Claims (OCMC) service has been tested for accessibility. The content that is not accessible is outlined below with details of:') }}
       </p>
-
-      <ul class="list list-bullet">
-        <li>{{ t('URL: /claim/amount')}} <br>
-          {{ t('Issue 1: Adding another row keeps the ’focus’ on the ‘add a new row’ button instead of the newly added row.') }} <br>
-          {{ t('Issue 2: The ’Total amount’ should include a label stating ‘Total amount’') }}
+       <ul class="list list-bullet">
+        <li>{{ t('where it fails the success criteria')}}
         </li>
-        <li>{{ t('URL: /claim/total')}} <br>
-          {{ t('Issue 1: The ‘Total amount’ is not read by the voice-over') }} <br>
-          {{ t('Issue 2: Skipping ‘Hearing Fees’ and ‘Amount’ for ‘Other Fees’') }}
-        </li>
-        <li>{{ t('URL: /claim/timeline')}} <br>
-          {{ t('Issue 1: ’Label’ description is needed for each ‘Date’ textfield and for ‘What happened’ textfield') }} <br>
-          {{ t('Issue 2: Adding another row keeps "focus" on the ‘add a new row’ button but not on the newly added row') }}
-        </li>
-        <li>{{ t('URL: /claim/evidence')}} <br>
-          {{ t('Issue: All the hidden textboxes jump directly to describe first the “Report a problem with this page” and then it goes on to the contents in the footer') }} <br>
-        </li>
-        <li>{{ t('URL: /claim/check-and-send')}} <br>
-          {{ t('Issue: All the headings for the tables are non-existent and each of the needs to be set as heading 2, <H2>') }} <br>
-        </li>
-        <li>{{ t('URL:')}} <br>
-          {{ t('Issue:  H1 misplaced on the very claim number') }} <br>
-        </li>
-        <li>{{ t('URL: /case/ CLAIM_IDENTIFIER/response/timeline')}} <br>
-          {{ t('Issue 1: The second heading must be replaced by heading level 2, as it currently states heading level 3') }} <br>
-          {{ t('Issue 2: Label description is needed for each ‘Date’ textfield and for ‘What happened’ text field') }}
-          {{ t('Issue 3: Adding another row keeps focus on the ‘add a new row button’ but not on the newly added row') }}
-        </li>
-        <li>{{ t('URL: /case/ CLAIM_IDENTIFIER/response/evidence')}} <br>
-          {{ t('Issue 1: The second heading, ‘Their evidence’ must be replaced by heading level 2, as it currently states heading level 3') }} <br>
-          {{ t('Issue 2: The third heading, ‘List your evidence (optional)’ must be replaced by heading level 2, as it currently states heading level 3') }}
-          {{ t('Issue 3: When adding another row it keeps the “focus” on the ‘add a new row’ button but not on the newly added row') }}
-          {{ t('Issue 4: The fourth heading, “List any parts of their evidence you disagree with (optional)” must be replaced by heading level 2, as it currently states heading level 3') }}
-        </li>
-        <li>{{ t('URL: /case/CLAIM_IDENTIFIER/directions-questionnaire/hearing-dates')}} <br>
-          {{ t('Issue: Issues with calendar  “>” does state what it does = “go to next month”)') }} <br>
+        <li>{{ t('planned dates for when issues will be fixed')}}
         </li>
 
       </ul>
-
-      <h2 class="heading-medium">{{ t('Disproportionate burden') }}</h2>
-
-      <p>
-        {{ t('We believe fixing some issues would be a disproportionate burden - this means we’ve decided the time it would take would not be worth it for the limited benefit to accessibility.') }}
+    <p>{{ t('Images within some emails cannot be read by screen readers. This fails WCAG 2.1A [1.1.1] success criterion (Non-text Content). We plan to fix this by February 2021.') }}
       </p>
 
-      <p>{{ t('For claim issue and defendant response, these issues are:') }}
+      <p>{{ t('Links within some emails cannot be read by screen readers. This fails WCAG 2.1A [2.4.4] success criterion (Link Purpose in Context). We plan to fix this by February 2021.') }}
       </p>
-
-      <ul class="list list-bullet">
-        <li>{{ t('text fields must contain the appropriate labelling') }}</li>
-        <li>{{ t('headings must contain the correct syntax') }}</li>
-      </ul>
 
       <h2 class="heading-medium">{{ t('Content that’s not within the scope of the accessibility regulations') }}</h2>
-      <h2 class="heading-small">
-        {{ t('PDFs and other documents') }}
-      </h2>
 
-      <p>{{ t('PDFs, documents, and attachments to email notifications published before 23 September 2018 may not meet accessibility standards. For example, they may not be structured so they’re accessible to a screen reader. ') }}</p>
+      <p>{{ t('Some PDFs, documents and email attachments might not meet accessibility standards, such as being screen reader compatible.') }}</p>
 
-      <h2 class="heading-medium">{{ t('How we tested this website') }}</h2>
+      <h2 class="heading-large">{{ t('How we tested this website') }}</h2>
 
-      <p>{{ t('We’ve carried out manual accessibility testing using multiple in-browser accessibility tools. Axe and Wave (tools) comply with WCAG 2 and Section 508 accessibility (which covers WCAG 2.1)') }}</p>
-      <p>{{ t('In addition to this, the Online Civil Money Claims website was tested by the Digital Accessibility Centre (DAC) in February 2018.') }}</p>
-      <p>{{ t('We continually run automated accessibility testing as part of our development practices. This helps us to resolve issues before we launch new pages or features. We use Voice Over and Axe as part of our quality assurance processes.') }}</p>
-      <p>{{ t('This is a summary of the DAC Report from Feb 2018. Many of the high to medium issues mentioned have now been resolved.') }}</p>
-      <p>{{ t('“The Digital Accessibility Centre (DAC) user/technical team carried out an accessibility audit for the Ministry of Justice’s Civil Money Claims service on 13th February 2018. This document incorporates the findings regarding any accessibility barriers identified during the process.') }}</p>
-      <p>{{ t('There were areas of the service that caused some difficulties for our analysts.
-Screen reader software reads the content on a page in a linear fashion and this also applies to layout tables, unless table headers are used. Table headers ensure that content is read out in columns and rows. Tables were encountered that contained headers that were layout tables and vice versa, which cause confusion for our screen reader analyst.
-') }}</p>
-      <p>{{ t('All of the error skip links functioned as expected; however, the third-party area that users were taken to did not possess one. There is no ‘skip to content’ link is present on the ‘Court and tribunal form finder’ page. A skip to content link would usually benefit users by navigating their focus to the primary content of the page.') }}</p>
-      <p>{{ t('Links were present that were not descriptive to users that rely on audio feedback, whether navigating within the context of the page, or out of context (viewing by links alone). More description/context is required to ensure that users that rely on audio feedback can navigate with confidence.
-Form fields had not been labelled in some instances and others had labels hidden off screen, which were read to screen reader users, but were of no benefit to cognitive or dyslexic users.
-') }}</p>
-      <p>{{ t('As a result of updating page content, user focus was taken to the top of the page, resulting in keyboard users needing to re-navigate the page in order to return to the point at which they lost focus; this can be extremely frustrating to keyboard only users and disorienting to screen reader and screen magnification user groups.“') }}</p>
+      <p>
+        {{ t('This website was and is currently being internally tested for compliance with the Web Content Accessibility Guidelines V2.1 level A and level AA.') }}
+      </p>
+      <p>
+        {{ t('We continually run automated accessibility testing as part of our development practices. This helps us to resolve issues before we launch new pages or features.') }}
+      </p>
+      <p>
+        {{ t('This website was also tested by the Digital Accessibility Centre (DAC) in January 2020 against WCAG 2.1 standards.') }}
+      </p>
+      <p>
+        {{ t('To give a more accurate review of the service the DAC team employed two differing testing processes:') }}
+      </p>
+      <ul class="list list-bullet">
+        <li>{{ t('a manual technical audit using automated tools')}}
+        </li>
+        <li>{{ t('a dedicated team of users with differing disabilities tested the service using a range of adaptive technologies')}}
+        </li>
+      </ul>
+       <p>
+        {{ t('The report combined technical auditing and feedback from users with accessibility needs.') }}
+      </p>
 
+      <h2 class="heading-large">{{ t('What we’re doing to improve accessibility') }}</h2>
 
-      <h2 class="heading-medium">{{ t('What we’re doing to improve accessibility') }}</h2>
+      <p>{{ t('We plan to fix identified issues according to the timescales shown for each area above.') }}</p>
+      <p>{{ t('We will continue to test this website using accessibility software for any new features which are introduced.') }}</p>
+      <p>{{ t('We also endeavour to fix any issues identified by our users or any new issues that we identify as part of our internal testing or external audits.') }}</p>
 
-      <p>{{ t('This website is continually tested using accessibility software. Any new features which are introduced are also tested.') }}</p>
-      <p>{{ t('We will be making the PDFs, documents and attachments that are essential to using our service accessible.') }}</p>
-      <p>{{ t('We aim to carry out an accessibility audit with DAC in the near future.') }}</p>
-      <p>{{ t('This statement was prepared and published on 23 September 2019.') }}</p>
-
+      <h2 class="heading-large">{{ t('Preparation of this accessibility statement') }}</h2>
+      <p>{{ t('This statement was prepared on 23 September 2019. It was last updated on 25 November 2020.') }}</p>
     </div>
   </div>
 {% endblock %}
