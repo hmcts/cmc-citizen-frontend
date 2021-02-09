@@ -8,10 +8,10 @@ export class ProxySettings {
 
   constructor () {
     if (process.env.http_proxy) {
-      this.httpProxy = url.parse(process.env.http_proxy).host
+      this.httpProxy = new url.URL(process.env.http_proxy).host
     }
     if (process.env.https_proxy) {
-      this.sslProxy = url.parse(process.env.https_proxy).host
+      this.sslProxy = new url.URL(process.env.http_proxy).host
     }
     if (process.env.no_proxy) {
       this.noProxy = process.env.no_proxy
