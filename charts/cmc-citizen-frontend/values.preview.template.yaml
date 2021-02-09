@@ -4,11 +4,7 @@ postgresql:
     tag: '11.3.0'
   resources:
     requests:
-      cpu: 100m
-      memory: 512Mi
-    limits:
-      cpu: 500m
-      memory: 1Gi
+      cpu: 25m
   initdbScripts:
     init.sql: |-
       CREATE DATABASE cmc WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
