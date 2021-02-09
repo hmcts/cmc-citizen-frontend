@@ -2,7 +2,6 @@
   "enabledManagers": ["helm-requirements","gradle-wrapper"],
   "helm-requirements":
   {
-    "enabled": true,
     "fileMatch": ["\\Chart.yaml$"],
     "aliases": {
       "hmctspublic": "https://hmctspublic.azurecr.io/helm/v1/repo/"
