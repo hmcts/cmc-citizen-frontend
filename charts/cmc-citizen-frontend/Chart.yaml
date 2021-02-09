@@ -12,7 +12,7 @@ maintainers:
     email: cmc-developers@HMCTS.NET
 dependencies:
   - name: nodejs
-    version: 2.3.4
+    version: ~2.3.4
     repository: '@hmctspublic'
 
   - name: idam-pr
