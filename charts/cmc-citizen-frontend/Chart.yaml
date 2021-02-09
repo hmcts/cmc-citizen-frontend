@@ -16,22 +16,21 @@ dependencies:
     repository: '@hmctspublic'
 
   - name: idam-pr
-    version: 2.2.6
+    version: 2.2.7
     repository: '@hmctspublic'
     condition: idam-pr.enabled
 
   - name: cmc-claim-store
-    version: 4.1.11
+    version: 4.1.17
     repository: '@hmctspublic'
     condition: cmc-claim-store.enabled
 
-  - name: postgresql
     version: 10.2.7
     repository: https://charts.bitnami.com/bitnami
     condition: postgresql.enabled
 
   - name: ccd
-    version: 4.3.2
+    version: 4.3.5
     repository: '@hmctspublic'
     condition: ccd.enabled
 
