@@ -106,7 +106,7 @@
       "citizen-oauth-client-secret": "OAUTH_CLIENT_SECRET",
       "os-postcode-lookup-api-key": "POSTCODE_LOOKUP_API_KEY",
       "encryptionKey": "COOKIE_ENCRYPTION_KEY",
-      "AppInsightsInstrumentationKey":"APPINSIGHTS_INSTRUMENTATIONKEY",
+      "AppInsightsInstrumentationKey":"app_insights_instrumental_key",
       "launchDarkly-sdk-key": "LAUNCH_DARKLY_SDK_KEY",
       "cmc-webchat-id": "WEBCHAT_CHAT_ID",
       "cmc-webchat-tenant": "WEBCHAT_TENANT",
