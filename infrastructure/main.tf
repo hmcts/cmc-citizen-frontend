@@ -7,8 +7,8 @@ locals {
 }
 
 data "azurerm_key_vault" "cmc_key_vault" {
-  name = "${local.vaultName}"
-  resource_group_name = "${local.vaultName}"
+  name = local.vaultName
+  resource_group_name = local.vaultName
 }
 
 data "azurerm_key_vault_secret" "cookie_encryption_key" {
