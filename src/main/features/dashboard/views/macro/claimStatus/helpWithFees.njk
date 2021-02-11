@@ -207,7 +207,7 @@
 {% macro helpWithFeesUpdateNumber(claim) %}
 <div class="status-block">
   <h2 class="heading-medium">{{ t('Your Help with Fees application has been reviewed') }}</h2>
-  <p>{{ t('Based on the information you provided the correct Help with Fees reference number ({{ helpWithFeesNumber }}) has now been assigned to your claim.', { helpWithFeesNumber: claim.helpWithFeesNumber }) }}</p>
+  <p>{{ t('You have provided a new Help with Fees reference number ({{ helpWithFeesNumber }}).', { helpWithFeesNumber: claim.helpWithFeesNumber }) }}</p>
 
   <h3 class="heading-small">{{ t('What to do next') }}</h3>
   <p>{{ t('Your Help with Fees application will be processed. Wait to hear from us.') }}</p>
