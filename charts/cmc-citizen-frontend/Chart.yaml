@@ -1,7 +1,7 @@
 apiVersion: v2
 name: cmc-citizen-frontend
 home: https://github.com/hmcts/cmc-citizen-frontend
-version: 3.3.14
+version: 3.3.15
 description: Helm chart for the HMCTS CMC Citizen Frontend service
 # be aware when bumping version that it is used elsewhere, e.g.:
 # chart-cmc - demo: https://github.com/hmcts/chart-cmc/tree/master/cmc
@@ -16,22 +16,22 @@ dependencies:
     repository: '@hmctspublic'
 
   - name: idam-pr
-    version: 2.2.6
+    version: 2.2.7
     repository: '@hmctspublic'
     condition: idam-pr.enabled
 
   - name: cmc-claim-store
-    version: 4.1.11
+    version: 4.1.17
     repository: '@hmctspublic'
     condition: cmc-claim-store.enabled
 
   - name: postgresql
-    version: 8.9.8
+    version: 10.2.7
     repository: https://charts.bitnami.com/bitnami
     condition: postgresql.enabled
 
   - name: ccd
-    version: 4.3.2
+    version: 4.3.5
     repository: '@hmctspublic'
     condition: ccd.enabled
 
