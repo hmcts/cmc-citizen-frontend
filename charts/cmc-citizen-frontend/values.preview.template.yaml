@@ -30,8 +30,8 @@ nodejs:
   ingressIP: ${INGRESS_IP}
   consulIP: ${CONSUL_LB_IP}
   ingressHost: ${SERVICE_FQDN}
-  readinessDelay: 270  # claim-store will start much slower
-  livenessDelay: 270  # claim-store will start much slower
+  readinessDelay: 90  # claim-store will start much slower
+  livenessDelay: 90  # claim-store will start much slower
   environment:
     LOG_LEVEL: DEBUG
     HTTP_TIMEOUT: 60000
