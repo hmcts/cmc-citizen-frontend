@@ -19,10 +19,14 @@ postgresql:
 
 nodejs:
   image: ${IMAGE_NAME}
+  devmemoryRequests: 512Mi
+  devcpuRequests: "1000m"
+  devmemoryLimits: 1024Mi
+  devcpuLimits: "2500m"
   resources:
     requests:
-      cpu: 25m
-      memory: 64Mi
+      cpu: 1000m
+      memory: 512Mi
   ingressIP: ${INGRESS_IP}
   consulIP: ${CONSUL_LB_IP}
   ingressHost: ${SERVICE_FQDN}
