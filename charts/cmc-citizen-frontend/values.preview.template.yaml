@@ -4,8 +4,7 @@ postgresql:
     tag: '11.3.0'
   resources:
     requests:
-      cpu: 1000m
-      memory: 512Mi
+      cpu: 25m
   initdbScripts:
     init.sql: |-
       CREATE DATABASE cmc WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
@@ -20,6 +19,10 @@ postgresql:
 
 nodejs:
   image: ${IMAGE_NAME}
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 512Mi
   ingressIP: ${INGRESS_IP}
   consulIP: ${CONSUL_LB_IP}
   ingressHost: ${SERVICE_FQDN}
