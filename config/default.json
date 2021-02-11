@@ -121,7 +121,7 @@
       "citizen-oauth-client-secret": "12345678",
       "os-postcode-lookup-api-key": "AAAAAAA",
       "encryptionKey": "not-a-real-32-bit-encryption-key",
-      "AppInsightsInstrumentationKey": "app_insights_instrumental_key",
+      "AppInsightsInstrumentationKey": "APPINSIGHTS_INSTRUMENTATIONKEY",
       "cmc-webchat-id": "17284281475d5519274e25a3.69472655",
       "cmc-webchat-tenant": "aG1jdHNzdGFnaW5nMDE",
       "cmc-webchat-button-no-agents": "7732814745cac6f4603c4d1.53357933",
