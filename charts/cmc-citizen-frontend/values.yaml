@@ -2,13 +2,13 @@ nodejs:
   image: hmctspublic.azurecr.io/cmc/citizen-frontend:latest
   applicationPort: 3000
   memoryRequests: 512Mi
-  memoryLimits: 1536Mi
+  memoryLimits: 1024Mi
   cpuRequests: "1000m"
-  cpuLimits: "3500m"
+  cpuLimits: "2500m"
   devmemoryRequests: 512Mi
-  devcpuRequests: "1500m"
-  devmemoryLimits: 1536Mi
-  devcpuLimits: "3500m"
+  devcpuRequests: "1000m"
+  devmemoryLimits: 1024Mi
+  devcpuLimits: "2500m"
   aadIdentityName: money-claims
   environment:
     NODE_ENV: production
