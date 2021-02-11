@@ -44,7 +44,7 @@
     "@hmcts/os-places-client": "^1.0.6",
     "@hmcts/properties-volume": "0.0.9",
     "@hmcts/requestretry": "^1.1.2",
-    "@taoqf/javascript-state-machine": "^3.1.3",
+    "@taoqf/javascript-state-machine": "^3.1.6",
     "@types/config": "^0.0.38",
     "@types/cookies": "^0.7.6",
     "@types/csurf": "^1.9.36",

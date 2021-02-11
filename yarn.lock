@@ -360,10 +360,10 @@
   dependencies:
     defer-to-connect "^2.0.0"
 
-"@taoqf/javascript-state-machine@^3.1.3":
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/@taoqf/javascript-state-machine/-/javascript-state-machine-3.1.3.tgz#d6086074aa8b8976c77067ee6df15a098c0b38fd"
-  integrity sha512-6gXrc1M0A3MUmmsr/JyUVIqZ+bwZ3gN5ZQMVkpbR0Rq15MNG7ijX8anuF72NRHh1AALnPMCTiMQSixiJZFHOmQ==
+"@taoqf/javascript-state-machine@^3.1.6":
+  version "3.1.6"
+  resolved "https://registry.yarnpkg.com/@taoqf/javascript-state-machine/-/javascript-state-machine-3.1.6.tgz#4ad6532b6c465ad4b2dbf827eee32d9bdcb5b9b7"
+  integrity sha512-gQLLW//fNRtXzrzcng/+y9PkzdFzoCcI7j/AdJLGY93XYlQ7O6l01IuuIDNPdXXdXitFYxVuIPlMyDDL/jBEQA==
 
 "@typed/is-promise@^1.0.0":
   version "1.0.0"
