@@ -138,13 +138,10 @@ moment.prototype.toISOString = function () {
   return this.format('YYYY-MM-DD[T]HH:mm:ss.SSS')
 }
 
-logger.info('Loading routes (analytics)')
+logger.info('Loading routes')
 app.use('/analytics', analytics)
-logger.info('Loading routes (health & receiver)')
 app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
-logger.info('Loading routes-public-third')
 app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes-public-third')))
-logger.info('Loading routes-public-second')
 app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes-public-second')))
 logger.info('Loading routes-public (accessibility-statement)')
 app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes-public')))
