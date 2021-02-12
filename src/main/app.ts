@@ -10,7 +10,7 @@ import * as cookieEncrypter from '@hmcts/cookie-encrypter'
 import * as bodyParser from 'body-parser'
 import { ForbiddenError, NotFoundError } from 'errors'
 import { ErrorLogger } from 'logging/errorLogger'
-import { RouterFinder } from 'shared/router/routerFinder'
+// import { RouterFinder } from 'shared/router/routerFinder'
 import { Config as HelmetConfig, Helmet } from 'modules/helmet'
 import { I18Next } from 'modules/i18n'
 import { Nunjucks } from 'modules/nunjucks'
@@ -138,7 +138,7 @@ moment.prototype.toISOString = function () {
 }
 
 logger.info('Loading routes')
-app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
+// app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
 
 // Below will match all routes not covered by the router, which effectively translates to a 404 response
 app.use((req, res, next) => {
