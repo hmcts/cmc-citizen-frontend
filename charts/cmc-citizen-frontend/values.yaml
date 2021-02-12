@@ -3,10 +3,10 @@ nodejs:
   applicationPort: 3000
   memoryRequests: 1024Mi
   memoryLimits: 1536Mi
-  cpuRequests: "1000m"
+  cpuRequests: "2000m"
   cpuLimits: "2500m"
   devmemoryRequests: 1024Mi
-  devcpuRequests: "1000m"
+  devcpuRequests: "2000m"
   devmemoryLimits: 1536Mi
   devcpuLimits: "2500m"
   aadIdentityName: money-claims
