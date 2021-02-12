@@ -19,19 +19,23 @@ postgresql:
 
 nodejs:
   image: ${IMAGE_NAME}
-  devmemoryRequests: 512Mi
+  devmemoryRequests: 1024Mi
   devcpuRequests: "1000m"
-  devmemoryLimits: 1024Mi
+  devmemoryLimits: 1536Mi
   devcpuLimits: "2500m"
   resources:
     requests:
-      cpu: 1000m
-      memory: 512Mi
+      cpu: 2000m
+      memory: 1024Mi
   ingressIP: ${INGRESS_IP}
   consulIP: ${CONSUL_LB_IP}
   ingressHost: ${SERVICE_FQDN}
   readinessDelay: 90  # claim-store will start much slower
   livenessDelay: 90  # claim-store will start much slower
+  autoscaling:        # Default is false
+    enabled: true
+    maxReplicas: 5    # Required setting
+    targetCPUUtilizationPercentage: 80 # Default is 80% target CPU utilization
   environment:
     LOG_LEVEL: DEBUG
     HTTP_TIMEOUT: 60000

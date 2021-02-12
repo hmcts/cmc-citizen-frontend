@@ -2,16 +2,18 @@ nodejs:
   image: hmctspublic.azurecr.io/cmc/citizen-frontend:latest
   applicationPort: 3000
   memoryRequests: 512Mi
-  memoryLimits: 1024Mi
+  memoryLimits: 1536Mi
   cpuRequests: "1000m"
   cpuLimits: "2500m"
   devmemoryRequests: 512Mi
   devcpuRequests: "1000m"
-  devmemoryLimits: 1024Mi
+  devmemoryLimits: 1536Mi
   devcpuLimits: "2500m"
   aadIdentityName: money-claims
-  autoscaling:
+  autoscaling:        # Default is false
     enabled: true
+    maxReplicas: 5    # Required setting
+    targetCPUUtilizationPercentage: 80 # Default is 80% target CPU utilization
   environment:
     NODE_ENV: production
     REFORM_TEAM: cmc
