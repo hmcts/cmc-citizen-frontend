@@ -139,6 +139,8 @@ moment.prototype.toISOString = function () {
 
 logger.info('Loading routes')
 app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
+logger.info('Loading routes-public')
+app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes-public')))
 
 // Below will match all routes not covered by the router, which effectively translates to a 404 response
 app.use((req, res, next) => {
