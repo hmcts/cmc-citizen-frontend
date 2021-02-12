@@ -145,10 +145,10 @@ logger.info('Loading routes-public (accessibility-statement)')
 app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes-public')))
 logger.info('Loading routes-public (Contact-us)')
 app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes-contact-us')))
-logger.info('Loading routes-public (cookies)')
-app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes-cookies')))
 app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes-public-third')))
 app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes-public-second')))
+logger.info('Loading routes-public (cookies)')
+app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes-cookies')))
 logger.info('All the routes are loaded')
 
 // Below will match all routes not covered by the router, which effectively translates to a 404 response

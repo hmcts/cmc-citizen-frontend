@@ -10,6 +10,8 @@ nodejs:
   devmemoryLimits: 1024Mi
   devcpuLimits: "2500m"
   aadIdentityName: money-claims
+  autoscaling:
+    enabled: true
   environment:
     NODE_ENV: production
     REFORM_TEAM: cmc
