@@ -137,8 +137,8 @@ moment.prototype.toISOString = function () {
   return this.format('YYYY-MM-DD[T]HH:mm:ss.SSS')
 }
 
-logger.info('Loading routes (health & receiver)')
-app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
+logger.info('Loading routes-public-fourth')
+app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes-public-fourth')))
 logger.info('Loading routes-public-third')
 app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes-public-third')))
 logger.info('Loading routes-public-second')
@@ -146,6 +146,8 @@ app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes-public-second')))
 logger.info('Loading routes-public-first')
 app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes-public')))
 logger.info('All the routes are loaded')
+logger.info('Loading routes (health & receiver)')
+app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
 
 // Below will match all routes not covered by the router, which effectively translates to a 404 response
 app.use((req, res, next) => {

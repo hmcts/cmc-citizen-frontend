@@ -21,5 +21,7 @@ import { ApplicationRunner } from './applicationRunner'
 if (toBoolean(config.get<boolean>('featureToggles.clusterMode'))) {
   ApplicationCluster.execute(() => ApplicationRunner.run(app))
 } else {
+  logger.info('Starting App (ApplicationRunner)')
   ApplicationRunner.run(app)
+  logger.info('App started sucessfully (ApplicationRunner)')
 }
