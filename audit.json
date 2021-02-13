@@ -370,7 +370,7 @@
   "10055_CSP: style-src unsafe-inline_https://moneyclaims.aat.platform.hmcts.net/privacy-policy_GET": "ignore",
   "10055_CSP: style-src unsafe-inline_https://moneyclaims.aat.platform.hmcts.net/sitemap.xml_GET": "ignore",
   "10055_CSP: style-src unsafe-inline_https://moneyclaims.aat.platform.hmcts.net/terms-and-conditions_GET": "ignore",
-  "10055_CSP: Wildcard Directive_https://moneyclaims.aat.platform.hmcts.net/accessibility-statement_GET": "ignore",
+  "10055_CSP: Wildcard Directive Content-Security-Policy_https://moneyclaims.aat.platform.hmcts.net/accessibility-statement_GET": "ignore",
   "10055_CSP: Wildcard Directive_https://moneyclaims.aat.platform.hmcts.net/contact-us_GET": "ignore",
   "10055_CSP: Wildcard Directive_https://moneyclaims.aat.platform.hmcts.net/cookies_GET": "ignore",
   "10055_CSP: Wildcard Directive_https://moneyclaims.aat.platform.hmcts.net/privacy-policy_GET": "ignore",
@@ -395,7 +395,16 @@
   "40025_Proxy Disclosure_https://moneyclaims.aat.platform.hmcts.net/img/lib/apple-touch-icon.png?0.26.0_GET": "ignore",
   "40025_Proxy Disclosure_https://moneyclaims.aat.platform.hmcts.net/js/lib/govuk-template.js?0.26.0_GET": "ignore",
   "40025_Proxy Disclosure_https://moneyclaims.aat.platform.hmcts.net/stylesheets/lib/govuk-template.css?0.26.0_GET": "ignore",
-  "40025_Proxy Disclosure_https://moneyclaims.aat.platform.hmcts.net/testing-support_GET": "ignore"
+  "40025_Proxy Disclosure_https://moneyclaims.aat.platform.hmcts.net/testing-support_GET": "ignore",
+  "10055_CSP: style-src unsafe-inline Content-Security-Policy_https://moneyclaims.aat.platform.hmcts.net/sitemap.xml_GET": "ignore",
+  "10055_CSP: Content-Security-Policy_https://moneyclaims.aat.platform.hmcts.net/accessibility-statement_GET": "ignore",
+  "10055_CSP: Content-Security-Policy_https://moneyclaims.aat.platform.hmcts.net/contact-us_GET": "ignore",
+  "10055_CSP: Content-Security-Policy_https://moneyclaims.aat.platform.hmcts.net/cookies_GET": "ignore",
+  "10055_CSP: Content-Security-Policy_https://moneyclaims.aat.platform.hmcts.net/privacy-policy_GET": "ignore",
+  "10055_CSP: Content-Security-Policy_https://moneyclaims.aat.platform.hmcts.net/sitemap.xml_GET": "ignore",
+  "10055_CSP: Content-Security-Policy_https://moneyclaims.aat.platform.hmcts.net/terms-and-conditions_GET": "ignore",
+  "10055_CSP: Content-Security-Policy_https://moneyclaims.aat.platform.hmcts.net/ruxitagentjs_ICA2QSVfqru_10193200616095656.js_GET": "ignore",
+  "10055_CSP: Content-Security-Policy_https://moneyclaims.aat.platform.hmcts.net/ruxitagentjs_ICA2QSVfjqru_10193200616095656.js_GET": "ignore"
 },
  {"task":"OWASP Zaproxy","appname":"https://moneyclaims.aat.platform.hmcts.net","description":"\u003cp\u003eRepeated GET requests: drop a different cookie each time, followed by normal request with all cookies to stabilize session, compare responses against original baseline GET. This can reveal areas where cookie based authentication/attributes are not actually enforced.\u003c/p\u003e","fingerprint":"90027_Cookie Slack Detector_https://moneyclaims.aat.platform.hmcts.net/_GET","detail":"Cookie Slack Detector \n Evidence: null \n Solution: \u003cp\u003e\u003c/p\u003e \n Other info: \u003cp\u003eCookies that don't have expected effects can reveal flaws in application logic. In the worst case, this can reveal where authentication via cookie token(s) is not actually enforced.\u003c/p\u003e\u003cp\u003eThese cookies affected the response: \u003c/p\u003e\u003cp\u003eThese cookies did NOT affect the response: dtCookie,_csrf,state,lang\u003c/p\u003e\u003cp\u003e\u003c/p\u003e \n Reference: \u003cp\u003ehttp://projects.webappsec.org/Fingerprinting\u003c/p\u003e\u003cp\u003e\u003c/p\u003e","source":"URI: https://moneyclaims.aat.platform.hmcts.net/ Method: GET","severity":1,"timestamp":"2020-11-12T05:33:03.180+00:00"}
  ]
