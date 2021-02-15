@@ -5,6 +5,12 @@ nodejs:
   memoryLimits: 1024Mi
   cpuRequests: "1000m"
   cpuLimits: "2500m"
+  devmemoryRequests: 512Mi
+  devcpuRequests: "1000m"
+  devmemoryLimits: 1024Mi
+  devcpuLimits: "2500m"
+  readinessDelay: 60      
+  livenessDelay: 60
   aadIdentityName: money-claims
   environment:
     NODE_ENV: production
