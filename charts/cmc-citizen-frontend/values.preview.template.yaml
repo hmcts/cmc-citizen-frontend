@@ -22,8 +22,8 @@ nodejs:
   ingressIP: ${INGRESS_IP}
   consulIP: ${CONSUL_LB_IP}
   ingressHost: ${SERVICE_FQDN}
-  readinessDelay: 130
-  livenessDelay: 130
+  readinessDelay: 90
+  livenessDelay: 90
   devmemoryRequests: 1024Mi
   devcpuRequests: "1000m"
   devmemoryLimits: 2000Mi
