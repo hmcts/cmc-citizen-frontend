@@ -32,6 +32,10 @@ nodejs:
   memoryLimits: 6000Mi
   cpuRequests: "1000m"
   cpuLimits: "2500m"
+  autoscaling:        # Default is false
+    enabled: true
+    maxReplicas: 5    # Required setting
+    targetCPUUtilizationPercentage: 80 # Default is 80% target CPU utilization
   environment:
     LOG_LEVEL: DEBUG
     HTTP_TIMEOUT: 60000
