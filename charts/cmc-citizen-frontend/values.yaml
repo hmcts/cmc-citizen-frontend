@@ -10,7 +10,6 @@ nodejs:
   devmemoryLimits: 1024Mi
   devcpuLimits: "2500m"
   aadIdentityName: money-claims
-  useInterpodAntiAffinity: true
   readinessDelay: 60
   livenessDelay: 60
   environment:
