@@ -204,6 +204,25 @@
 </div>
 {% endmacro %}
 
+{% macro helpWithFeesUpdateNumber(claim) %}
+<div class="status-block">
+  <h2 class="heading-medium">{{ t('Your Help with Fees application has been reviewed') }}</h2>
+  <p>{{ t('You have provided a new Help with Fees reference number ({{ helpWithFeesNumber }}).', { helpWithFeesNumber: claim.helpWithFeesNumber }) }}</p>
+
+  <h3 class="heading-small">{{ t('What to do next') }}</h3>
+  <p>{{ t('Your Help with Fees application will be processed. Wait to hear from us.') }}</p>
+</div>
+<div class="status-block">
+  <div class="govuk-details govuk-dashboard-details__text">
+    <p>{{ t('The claim fee may increase if:') }}</p>
+    <ul class="list list-bullet">
+      <li>{{ t('you have claimed interest') }}</li>
+      <li>{{ t('the Help with Fees application takes more than 5 days to progress') }}</li>
+    </ul>
+  </div>
+</div>
+{% endmacro %}
+
 {% macro helpWithFeesIntrestRecalculateStatus(claim) %}
 <div class="status-block">
   <h2 class="heading-medium">{{ t('Your Help with Fees application has been updated') }}</h2>
@@ -257,8 +276,8 @@
   {{ t("Your Help with Fees application has been updated") }}
 {% endmacro %}
 
-{% macro HWF_Miscellaneous(claim) %}
-  {{ t('We’re checking your Help with Fees application') }}
+{% macro HWF_Update_Number(claim) %}
+  {{ t("We’re checking your Help with Fees application") }}
 {% endmacro %}
 
 {% macro helpWithFeesClosed(claim) %}
