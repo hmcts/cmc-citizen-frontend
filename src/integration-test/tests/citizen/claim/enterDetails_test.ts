@@ -16,12 +16,17 @@ const hwfSteps: HwfSteps = new HwfSteps()
 
 Feature('Claimant Enter details of claim')
 
-Scenario('I can prepare a claim with no interest @citizen', { retries: 0 }, async (I: I) => {
+Before(async () => {
   userSteps.login(userSteps.getClaimantEmail())
   if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
     testingSupport.deleteClaimDraft()
   }
   claimSteps.completeEligibility()
+
+})
+
+Scenario('Claim with no interest... @citizen', { retries: 0 }, async (I: I) => {
+
   claimSteps.completeStartOfClaimJourney(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true)
   interestSteps.skipClaimInterest()
   const isHwfEnabled = await I.checkHWF()
@@ -63,12 +68,8 @@ Scenario('I can prepare a claim with no interest @citizen', { retries: 0 }, asyn
   I.waitForText('Claim submitted')
 })
 
-Scenario('I can prepare a claim with different interest rate and date @citizen', { retries: 3 }, async (I: I) => {
-  userSteps.login(userSteps.getClaimantEmail())
-  if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
-    testingSupport.deleteClaimDraft()
-  }
-  claimSteps.completeEligibility()
+Scenario('Claim with different interest rate and date... @citizen', { retries: 3 }, async (I: I) => {
+
   claimSteps.completeStartOfClaimJourney(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true)
   interestSteps.enterSpecificInterestRateAndDate(2, '1990-01-01')
   const isHwfEnabled = await I.checkHWF()
@@ -87,12 +88,8 @@ Scenario('I can prepare a claim with different interest rate and date @citizen',
   }
 })
 
-Scenario('I can prepare a claim with a manually entered interest amount and a daily amount added @citizen', { retries: 3 }, async (I: I) => {
-  userSteps.login(userSteps.getClaimantEmail())
-  if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
-    testingSupport.deleteClaimDraft()
-  }
-  claimSteps.completeEligibility()
+Scenario('Claim with a manually entered interest amount and a daily amount added... @citizen', { retries: 3 }, async (I: I) => {
+
   claimSteps.completeStartOfClaimJourney(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true)
   interestSteps.enterBreakdownInterestAmountAndDailyAmount()
   const isHwfEnabled = await I.checkHWF()
@@ -115,15 +112,8 @@ Scenario('I can prepare a claim with a manually entered interest amount and a da
 
 // PCQ related tests
 Scenario('I should not see PCQ if "Your deails" are missing while making a claim @citizen', { retries: 3 }, async (I: I) => {
-  userSteps.login(userSteps.getClaimantEmail())
 
-  if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
-    testingSupport.deleteClaimDraft()
-  }
-  claimSteps.completeEligibility()
-  // enters only claimDetails and continue
   claimSteps.enterClaimDetails()
-
   // I shouldn't be navigated to PCQ instead I should be taken back to "Make a money claim" page
   I.see('Make a money claim')
   I.see('COMPLETE')
@@ -131,15 +121,9 @@ Scenario('I should not see PCQ if "Your deails" are missing while making a claim
     testingSupport.deleteClaimDraft()
   }
 })
+
 Scenario('I should be redirected to PCQ if "Your details" are filled in while making a claim @citizen', { retries: 3 }, async (I: I) => {
-  userSteps.login(userSteps.getClaimantEmail())
 
-  if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
-    testingSupport.deleteClaimDraft()
-  }
-  claimSteps.completeEligibility()
-
-  // add your details
   userSteps.selectYourDetails()
   claimSteps.enterMyDetails(PartyType.INDIVIDUAL)
 
@@ -159,22 +143,4 @@ Scenario('I should be redirected to PCQ if "Your details" are filled in while ma
   // Then i should be taken back to money claim
   I.see('Make a money claim')
 
-})
-
-// Test for help with fees
-
-Scenario('I can enter a claim details and i can create a claim with Help With Fees reference number @citizen', { retries: 3 }, async (I: I) => {
-  claimSteps.makeAHwfClaimAndSubmit()
-})
-
-// The @citizen-smoke-test tag used for running smoke tests with pre-registered user
-
-Scenario('I can enter a claim details and navigate up to payment page @smoke-test', { retries: 3 }, async (I: I) => {
-  claimSteps.makeAClaimAndNavigateUpToPayment()
-})
-
-// The @citizen-smoke-test tag used for running smoke tests with pre-registered user for help with fees
-
-Scenario('I can enter a claim details and navigate up to payment page (Providing HWF reference number) @smoke-test', { retries: 3 }, async (I: I) => {
-  claimSteps.makeAHwfClaimAndNavigateUpToPayment()
 })
