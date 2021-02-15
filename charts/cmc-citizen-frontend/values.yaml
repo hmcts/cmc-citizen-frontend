@@ -1,14 +1,14 @@
 nodejs:
   image: hmctspublic.azurecr.io/cmc/citizen-frontend:latest
   applicationPort: 3000
-  readinessDelay: 275
-  livenessDelay: 275
+  readinessDelay: 130
+  livenessDelay: 130
   devmemoryRequests: 1024Mi
   devcpuRequests: "1000m"
-  devmemoryLimits: 6000Mi
+  devmemoryLimits: 2000Mi
   devcpuLimits: "2500m"
   memoryRequests: 1024Mi
-  memoryLimits: 6000Mi
+  memoryLimits: 2000Mi
   cpuRequests: "1000m"
   cpuLimits: "2500m"
   aadIdentityName: money-claims
