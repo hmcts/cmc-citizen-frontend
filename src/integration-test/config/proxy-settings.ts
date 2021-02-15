@@ -11,7 +11,7 @@ export class ProxySettings {
       this.httpProxy = new url.URL(process.env.http_proxy).host
     }
     if (process.env.https_proxy) {
-      this.sslProxy = new url.URL(process.env.http_proxy).host
+      this.sslProxy = new url.URL(process.env.https_proxy).host
     }
     if (process.env.no_proxy) {
       this.noProxy = process.env.no_proxy
