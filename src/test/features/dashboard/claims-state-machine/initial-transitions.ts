@@ -27,7 +27,7 @@ describe('State Machine for the dashboard status before response', () => {
 
   describe('given the HWF claim which is under review', () => {
     it('should extract the correct state for the claim issued', () => {
-      const claim: Claim = new Claim().deserialize({ ...sampleHwfClaimIssueObj, lastEventTriggeredForHwfCase : 'MiscHWF' })
+      const claim: Claim = new Claim().deserialize({ ...sampleHwfClaimIssueObj, lastEventTriggeredForHwfCase : 'UpdateHWFNumber' })
       let claimState = initialTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('help-with-fees')

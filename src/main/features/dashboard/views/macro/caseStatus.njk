@@ -133,7 +133,7 @@
   HWF_Part_Remitted,
   HWF_Full_Granted,
   HWF_Intrest_Recalculate,
-  HWF_Miscellaneous
+  HWF_Update_Number
 %}
 
 {% macro caseStatusForClaimant(status, claim) %}
@@ -156,8 +156,8 @@
     {{ HWF_Full_Granted() }}
   {% elif status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.lastEventTriggeredForHwfCase === 'RecalculateInterest' %}
     {{ HWF_Intrest_Recalculate() }}
-  {% elif status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.lastEventTriggeredForHwfCase === 'MiscHWF' %}
-    {{ HWF_Miscellaneous() }}
+  {% elif status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.lastEventTriggeredForHwfCase === 'UpdateHWFNumber' %}
+    {{ HWF_Update_Number() }}
   {% elif status === ClaimStatus.NO_RESPONSE %}
     {{ noResponseForClaimantDashboard() }}
   {% elif status === ClaimStatus.MORE_TIME_REQUESTED %}
