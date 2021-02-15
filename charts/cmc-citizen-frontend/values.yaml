@@ -1,8 +1,8 @@
 nodejs:
   image: hmctspublic.azurecr.io/cmc/citizen-frontend:latest
   applicationPort: 3000
-  readinessDelay: 245
-  livenessDelay: 245
+  readinessDelay: 275
+  livenessDelay: 275
   devmemoryRequests: 512Mi
   devcpuRequests: "1000m"
   devmemoryLimits: 1024Mi
