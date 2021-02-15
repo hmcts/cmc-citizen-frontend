@@ -4,12 +4,12 @@ nodejs:
   readinessDelay: 275
   livenessDelay: 275
   devmemoryRequests: 512Mi
-  devcpuRequests: "1000m"
+  devcpuRequests: "2000m"
   devmemoryLimits: 1024Mi
   devcpuLimits: "2500m"
   memoryRequests: 512Mi
   memoryLimits: 1024Mi
-  cpuRequests: "1000m"
+  cpuRequests: "2000m"
   cpuLimits: "2500m"
   aadIdentityName: money-claims
   environment:
