@@ -3,6 +3,9 @@ import { Router } from 'express'
 import * as requireDirectory from 'require-directory'
 import * as uuid from 'uuid'
 
+import { Logger } from '@hmcts/nodejs-logging'
+const logger = Logger.getLogger('routerFinder.ts')
+
 const fileExtension: string = path.extname(__filename).slice(1)
 
 const options: object = {
@@ -19,25 +22,30 @@ const options: object = {
 export class RouterFinder {
 
   static findAll (path: string): Router[] {
-    const routes: object = requireDirectory(module, path, options)
+    try {
+      const routes: object = requireDirectory(module, path, options)
 
-    const map = (value: object): Router[] => {
-      return Object.values(value).reduce((routes: Router[], value: Router | object) => {
-        const type: string = typeof value
+      const map = (value: object): Router[] => {
+        return Object.values(value).reduce((routes: Router[], value: Router | object) => {
+          const type: string = typeof value
 
-        switch (type) {
-          case 'function':
-            routes.push(value as Router)
-            break
-          case 'object':
-            routes.push(...map(value))
-            break
-        }
-        return routes
-      }, [])
+          switch (type) {
+            case 'function':
+              logger.info(type)
+              routes.push(value as Router)
+              break
+            case 'object':
+              routes.push(...map(value))
+              break
+          }
+          return routes
+        }, [])
+      }
+
+      return map(routes)
+    } catch (err) {
+      logger.error(err.stack)
     }
-
-    return map(routes)
   }
 
 }
