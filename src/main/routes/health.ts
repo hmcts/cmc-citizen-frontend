@@ -5,6 +5,9 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { FeatureToggles } from 'utils/featureToggles'
 
+import { Logger } from '@hmcts/nodejs-logging'
+const logger = Logger.getLogger('health.ts')
+
 /* tslint:disable:no-default-export */
 
 let healthCheckRouter = express.Router()
@@ -35,6 +38,7 @@ function basicHealthCheck (serviceName) {
   if (serviceName === 'pay' && FeatureToggles.isEnabled('mockPay')) {
     return healthcheck.raw(() => { return healthcheck.up() })
   }
+  logger.info(serviceName + ': ' + healthcheck.status(serviceName).status)
   return healthcheck.web(url(serviceName), options)
 }
 
