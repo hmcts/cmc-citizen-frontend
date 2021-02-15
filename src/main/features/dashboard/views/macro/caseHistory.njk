@@ -154,7 +154,8 @@
   helpWithFeesPartRemettedClaimStatus,
   helpWithFeesClosed,
   helpWithFeesIntrestRecalculateStatus,
-  helpWithFeesFullRemettedClaimStatus
+  helpWithFeesFullRemettedClaimStatus,
+  helpWithFeesUpdateNumber
 %}
 
 {% from "./claimStatus/businessQueue.njk" import
@@ -186,6 +187,8 @@
       {{ helpWithFeesPartRemettedClaimStatus(claim) }}
     {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.state === 'AWAITING_RESPONSE_HWF' and claim.claimData.feeRemitted !== undefined and claim.lastEventTriggeredForHwfCase === 'HWFFullRemision' %}
       {{ helpWithFeesFullRemettedClaimStatus(claim) }}
+    {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.lastEventTriggeredForHwfCase === 'UpdateHWFNumber' %}
+      {{ helpWithFeesUpdateNumber(claim) }}
     {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.state === 'CLOSED_HWF' %}
       {{ helpWithFeesClosed(claim) }}
     {% elif state.status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.state === 'AWAITING_RESPONSE_HWF' and claim.lastEventTriggeredForHwfCase === 'InvalidHWFReference' %}
