@@ -19,6 +19,9 @@ postgresql:
 
 nodejs:
   image: ${IMAGE_NAME}
+  useInterpodAntiAffinity: true
+  readinessDelay: 60
+  livenessDelay: 60
   devmemoryRequests: 512Mi
   devcpuRequests: "1000m"
   devmemoryLimits: 1024Mi
