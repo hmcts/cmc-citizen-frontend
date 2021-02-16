@@ -14,23 +14,23 @@ let healthCheckRouter = express.Router()
 
 let healthCheckConfig = {
   checks: {
-    // 'claimstore': basicHealthCheck('claim-store'),
-    'draft-store': basicHealthCheck('draft-store')
-    // 'fees': basicHealthCheck('fees'),
-    // 'pay': basicHealthCheck('pay'),
-    // 'idam-service-2-service-auth': basicHealthCheck('idam.service-2-service-auth'),
-    // 'idam-api': basicHealthCheck('idam.api')
+    'claimstore': basicHealthCheck('claim-store'),
+    'draft-store': basicHealthCheck('draft-store'),
+    'fees': basicHealthCheck('fees'),
+    'pay': basicHealthCheck('pay'),
+    'idam-service-2-service-auth': basicHealthCheck('idam.service-2-service-auth'),
+    'idam-api': basicHealthCheck('idam.api')
   }
 }
 
 export default express.Router().use(healthCheckRouter)
 try {
-  // logger.info(healthCheckConfig.checks.claimstore.url)
+  logger.info(healthCheckConfig.checks.claimstore.url)
   logger.info(healthCheckConfig.checks['draft-store'].url)
-  // logger.info(healthCheckConfig.checks.fees.url)
-  // logger.info(healthCheckConfig.checks.pay.url)
-  // logger.info(healthCheckConfig.checks['idam-api'].url)
-  // logger.info(healthCheckConfig.checks['idam-service-2-service-auth'].url)
+  logger.info(healthCheckConfig.checks.fees.url)
+  logger.info(healthCheckConfig.checks.pay.url)
+  logger.info(healthCheckConfig.checks['idam-api'].url)
+  logger.info(healthCheckConfig.checks['idam-service-2-service-auth'].url)
   healthcheck.addTo(healthCheckRouter, healthCheckConfig)
   logger.info('health route added')
 } catch (err) {

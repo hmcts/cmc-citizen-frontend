@@ -36,7 +36,6 @@ import { trackCustomEvent } from 'logging/customEventTracker'
 import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
 import analytics from 'routes/analytics'
-import logout from 'routes/logout'
 import paymentPlanCalculation from 'routes/payment-plan-calculation'
 import postCodeLookup from 'routes/postcode-lookup'
 import webChat from 'routes/webchat'
@@ -164,8 +163,6 @@ try {
   router.route('/').get(function (req, res, next) {
     res.redirect(AppPaths.receiver.uri)
   })
-
-  app.use('/logout', logout)
 
   router.route('/not-implemented-yet').get(function (req, res, next) {
     res.render('not-implemented-yet')
