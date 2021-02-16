@@ -1,5 +1,6 @@
 import { Logger } from '@hmcts/nodejs-logging'
 const logger = Logger.getLogger('app.ts')
+import { Paths as AppPaths } from 'paths'
 
 import * as express from 'express'
 import * as config from 'config'
@@ -33,6 +34,12 @@ import { DirectionsQuestionnaireFeature } from 'features/directions-questionnair
 import { OrdersFeature } from 'orders/index'
 import { trackCustomEvent } from 'logging/customEventTracker'
 import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
+
+import analytics from 'routes/analytics'
+import logout from 'routes/logout'
+import paymentPlanCalculation from 'routes/payment-plan-calculation'
+import postCodeLookup from 'routes/postcode-lookup'
+import webChat from 'routes/webchat'
 
 logger.info('Creating express server object')
 
@@ -138,7 +145,55 @@ moment.prototype.toISOString = function () {
 }
 
 logger.info('Loading routes')
-app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
+let router = express.Router()
+try {
+  router.route('/accessibility-statement').get(function (req, res, next) {
+    res.render(AppPaths.accessibilityPage.associatedView)
+  })
+
+  app.use('/analytics', analytics)
+
+  router.route('/contact-us').get(function (req, res, next) {
+    res.render(AppPaths.contactUsPage.associatedView)
+  })
+
+  router.route('/cookies').get(function (req, res, next) {
+    res.render(AppPaths.cookiesPage.associatedView)
+  })
+
+  router.route('/').get(function (req, res, next) {
+    res.redirect(AppPaths.receiver.uri)
+  })
+
+  app.use('/logout', logout)
+
+  router.route('/not-implemented-yet').get(function (req, res, next) {
+    res.render('not-implemented-yet')
+  })
+
+  app.use('/payment-plan-calculation', paymentPlanCalculation)
+  app.use('/postcode-lookup', postCodeLookup)
+
+  router.route('/privacy-policy').get(function (req, res, next) {
+    res.render(AppPaths.privacyPolicyPage.associatedView)
+  })
+
+  router.route('/terms-and-conditions').get(function (req, res, next) {
+    res.render(AppPaths.termsAndConditionsPage.associatedView)
+  })
+
+  router.route('/resolve-before-claim').get(function (req, res, next) {
+    res.render(AppPaths.resolveBeforeClaimPage.associatedView)
+  })
+
+  app.use('/webchat', webChat)
+  app.use('/', router)
+  app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes-auth')))
+  logger.info('Routes loaded')
+
+} catch (err) {
+  logger.error(err.stack)
+}
 
 // Below will match all routes not covered by the router, which effectively translates to a 404 response
 app.use((req, res, next) => {

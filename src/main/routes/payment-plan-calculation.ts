@@ -2,13 +2,12 @@ import * as express from 'express'
 import * as HttpStatus from 'http-status-codes'
 import * as _ from 'lodash'
 
-import { Paths as AppPaths } from 'paths'
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'
 import { Frequency } from 'common/frequency/frequency'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(AppPaths.paymentPlanCalculation.uri, (req, res) => {
+  .get('/', (req, res) => {
 
     const totalAmount: string = req.query['total-amount']
     const instalmentAmount: string = req.query['instalment-amount']

@@ -32,6 +32,7 @@ try {
   // logger.info(healthCheckConfig.checks['idam-api'].url)
   // logger.info(healthCheckConfig.checks['idam-service-2-service-auth'].url)
   healthcheck.addTo(healthCheckRouter, healthCheckConfig)
+  logger.info('health route added')
 } catch (err) {
   logger.error(err.stack)
 }

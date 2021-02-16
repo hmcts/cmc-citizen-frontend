@@ -2,7 +2,7 @@ import * as express from 'express'
 import * as config from 'config'
 
 export class WebChat {
-  static main: string = '/webchat'
+  static main: string = '/'
 
   static filterSecrets (accepted, secrets) {
     let result = {}

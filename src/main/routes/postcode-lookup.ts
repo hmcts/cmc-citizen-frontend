@@ -1,7 +1,6 @@
 import * as express from 'express'
 import { AddressInfoResponse } from '@hmcts/os-places-client'
 
-import { Paths as AppPaths } from 'paths'
 import { Logger } from '@hmcts/nodejs-logging'
 import { ClientFactory } from 'postcode-lookup/clientFactory'
 import { trackCustomEvent } from 'logging/customEventTracker'
@@ -11,7 +10,7 @@ const logger = Logger.getLogger('postcode-lookup')
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(AppPaths.postcodeLookupProxy.uri, (req, res) => {
+  .get('/', (req, res) => {
     if (!req.query.postcode || !req.query.postcode.trim()) {
       return res.status(400).json({
         error: {
