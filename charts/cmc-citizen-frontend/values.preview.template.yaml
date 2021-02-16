@@ -37,7 +37,6 @@ nodejs:
     maxReplicas: 5    # Required setting
     targetCPUUtilizationPercentage: 80 # Default is 80% target CPU utilization
   environment:
-    NODE_ENV: preview
     REFORM_TEAM: cmc
     REFORM_SERVICE_NAME: citizen-frontend
     LOG_LEVEL: DEBUG
