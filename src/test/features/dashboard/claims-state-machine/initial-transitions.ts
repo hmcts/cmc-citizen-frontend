@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { Claim } from 'claims/models/claim'
-import { sampleClaimIssueObj } from 'test/http-mocks/claim-store'
+import { sampleClaimIssueObj, sampleHwfClaimIssueObj, sampleHwfClaimIssueRejectObj } from 'test/http-mocks/claim-store'
 
 import { initialTransitions } from 'dashboard/claims-state-machine/initial-transitions'
 import { MomentFactory } from 'shared/momentFactory'
@@ -13,6 +13,78 @@ describe('State Machine for the dashboard status before response', () => {
       let claimState = initialTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('no-response')
+    })
+  })
+
+  describe('given the HWF claim which is under review', () => {
+    it('should extract the correct state for the claim issued', () => {
+      const claim: Claim = new Claim().deserialize({ ...sampleHwfClaimIssueObj, lastEventTriggeredForHwfCase : 'CreateHelpWithFeesClaim' })
+      let claimState = initialTransitions(claim)
+      claimState.findState(claimState)
+      expect(claimState.state).to.equal('help-with-fees')
+    })
+  })
+
+  describe('given the HWF claim which is under review', () => {
+    it('should extract the correct state for the claim issued', () => {
+      const claim: Claim = new Claim().deserialize({ ...sampleHwfClaimIssueObj, lastEventTriggeredForHwfCase : 'UpdateHWFNumber' })
+      let claimState = initialTransitions(claim)
+      claimState.findState(claimState)
+      expect(claimState.state).to.equal('help-with-fees')
+    })
+  })
+
+  describe('given the HWF claim which is under review', () => {
+    it('should extract the correct state for the claim issued', () => {
+      const claim: Claim = new Claim().deserialize({ ...sampleHwfClaimIssueObj, state: 'AWAITING_RESPONSE_HWF', lastEventTriggeredForHwfCase : 'RecalculateInterest' })
+      let claimState = initialTransitions(claim)
+      claimState.findState(claimState)
+      expect(claimState.state).to.equal('help-with-fess-intrest-recalculated')
+    })
+  })
+
+  describe('given the HWF claim which is under review', () => {
+    it('should extract the correct state for the claim issued', () => {
+      const claim: Claim = new Claim().deserialize({ ...sampleHwfClaimIssueObj, state: 'AWAITING_RESPONSE_HWF', lastEventTriggeredForHwfCase : 'HWFPartRemission' })
+      let claimState = initialTransitions(claim)
+      claimState.findState(claimState)
+      expect(claimState.state).to.equal('help-with-fess-part-remittion-granted')
+    })
+  })
+
+  describe('given the HWF claim which is under review', () => {
+    it('should extract the correct state for the claim issued', () => {
+      const claim: Claim = new Claim().deserialize({ ...sampleHwfClaimIssueObj, state: 'AWAITING_RESPONSE_HWF', lastEventTriggeredForHwfCase : 'HWFFullRemision' })
+      let claimState = initialTransitions(claim)
+      claimState.findState(claimState)
+      expect(claimState.state).to.equal('help-with-fess-part-remittion-granted')
+    })
+  })
+
+  describe('HWF reference is invalid', () => {
+    it('should extract the correct state for the invalid HWF reference', () => {
+      const claim: Claim = new Claim().deserialize({ ...sampleHwfClaimIssueObj, state: 'AWAITING_RESPONSE_HWF', lastEventTriggeredForHwfCase : 'InvalidHWFReference' })
+      let claimState = initialTransitions(claim)
+      claimState.findState(claimState)
+      expect(claimState.state).to.equal('help-with-fees-invalid')
+    })
+  })
+
+  describe('HWF no-remission entitled / Full remission rejected', () => {
+    it('should extract the correct state for the HWF no-remission entitled / Full remission rejected', () => {
+      const claim: Claim = new Claim().deserialize({ ...sampleHwfClaimIssueRejectObj, state: 'AWAITING_RESPONSE_HWF', lastEventTriggeredForHwfCase : 'NoRemissionHWF' })
+      let claimState = initialTransitions(claim)
+      claimState.findState(claimState)
+      expect(claimState.state).to.equal('help-with-fees-rejected')
+    })
+  })
+
+  describe('HWF no-remission entitled / Full remission rejected', () => {
+    it('should extract the correct state for the HWF no-remission entitled / Full remission rejected', () => {
+      const claim: Claim = new Claim().deserialize({ ...sampleHwfClaimIssueRejectObj, state: 'AWAITING_RESPONSE_HWF', lastEventTriggeredForHwfCase : 'MoreInfoRequiredForHWF' })
+      let claimState = initialTransitions(claim)
+      claimState.findState(claimState)
+      expect(claimState.state).to.equal('help-with-fess-more-info-required')
     })
   })
 

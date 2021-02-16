@@ -8,13 +8,14 @@
     "legalAdvisorPilot": true,
     "judgePilot": true,
     "directionsQuestionnaire": true,
-    "newDashboardStatus": true,
+    "newDashboardStatus": false,
     "inversionOfControl": true,
     "warningBanner": false,
     "helpWithFees": true,
     "pcq":true,
     "signPostingCTSC": false,
-    "autoEnrollIntoNewFeature": true
+    "autoEnrollIntoNewFeature": true,
+    "dashboard_pagination_enabled": false
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"

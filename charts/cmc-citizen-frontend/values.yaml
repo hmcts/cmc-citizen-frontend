@@ -3,7 +3,8 @@ nodejs:
   applicationPort: 3000
   memoryRequests: 512Mi
   memoryLimits: 1024Mi
-  cpuLimits: 1
+  cpuRequests: "1000m"
+  cpuLimits: "2500m"
   aadIdentityName: money-claims
   environment:
     NODE_ENV: production
@@ -38,6 +39,7 @@ nodejs:
     FEATURE_PCQ: false
     FEATURE_SIGN_POSTING_CTSC: false
     AUTO_ENROLL_INTO_NEW_FEATURE: true
+
   keyVaults:
     cmc:
       secrets:

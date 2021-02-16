@@ -5,12 +5,14 @@ import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
 import { PartyType } from 'integration-test/data/party-type'
 import { PaymentSteps } from 'integration-test/tests/citizen/claim/steps/payment'
 import { TestingSupportSteps } from 'integration-test/tests/citizen/testingSupport/steps/testingSupport'
+import { HwfSteps } from 'integration-test/tests/citizen/claim/steps/help-with-fees'
 
 const userSteps: UserSteps = new UserSteps()
 const claimSteps: ClaimSteps = new ClaimSteps()
 const interestSteps: InterestSteps = new InterestSteps()
 const paymentSteps: PaymentSteps = new PaymentSteps()
 const testingSupport: TestingSupportSteps = new TestingSupportSteps()
+const hwfSteps: HwfSteps = new HwfSteps()
 
 Feature('Claimant Enter details of claim')
 
@@ -22,6 +24,10 @@ Scenario('I can prepare a claim with no interest @citizen', { retries: 0 }, asyn
   claimSteps.completeEligibility()
   claimSteps.completeStartOfClaimJourney(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true)
   interestSteps.skipClaimInterest()
+  const isHwfEnabled = await I.checkHWF()
+  if (isHwfEnabled) {
+    hwfSteps.noHWF()
+  }
   I.see('Total amount you’re claiming')
   I.click('summary')
   I.see('Claim amount Claim fee Hearing fee')
@@ -65,6 +71,10 @@ Scenario('I can prepare a claim with different interest rate and date @citizen',
   claimSteps.completeEligibility()
   claimSteps.completeStartOfClaimJourney(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true)
   interestSteps.enterSpecificInterestRateAndDate(2, '1990-01-01')
+  const isHwfEnabled = await I.checkHWF()
+  if (isHwfEnabled) {
+    hwfSteps.noHWF()
+  }
   I.see('Total amount you’re claiming')
   interestSteps.skipClaimantInterestTotalPage()
   I.see('Prepare your claim')
@@ -85,6 +95,10 @@ Scenario('I can prepare a claim with a manually entered interest amount and a da
   claimSteps.completeEligibility()
   claimSteps.completeStartOfClaimJourney(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true)
   interestSteps.enterBreakdownInterestAmountAndDailyAmount()
+  const isHwfEnabled = await I.checkHWF()
+  if (isHwfEnabled) {
+    hwfSteps.noHWF()
+  }
   I.see('Total amount you’re claiming')
   interestSteps.skipClaimantInterestTotalPage()
   I.see('Prepare your claim')
@@ -147,8 +161,20 @@ Scenario('I should be redirected to PCQ if "Your details" are filled in while ma
 
 })
 
+// Test for help with fees
+
+Scenario('I can enter a claim details and i can create a claim with Help With Fees reference number @citizen', { retries: 3 }, async (I: I) => {
+  claimSteps.makeAHwfClaimAndSubmit()
+})
+
 // The @citizen-smoke-test tag used for running smoke tests with pre-registered user
 
-Scenario('I can enter a claim details and navigate up to payment page @smoke-test', { retries: 3 }, (I: I) => {
+Scenario('I can enter a claim details and navigate up to payment page @smoke-test', { retries: 3 }, async (I: I) => {
   claimSteps.makeAClaimAndNavigateUpToPayment()
+})
+
+// The @citizen-smoke-test tag used for running smoke tests with pre-registered user for help with fees
+
+Scenario('I can enter a claim details and navigate up to payment page (Providing HWF reference number) @smoke-test', { retries: 3 }, async (I: I) => {
+  claimSteps.makeAHwfClaimAndNavigateUpToPayment()
 })

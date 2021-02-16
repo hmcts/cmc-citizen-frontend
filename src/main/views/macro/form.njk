@@ -160,16 +160,22 @@
   }}
 {% endmacro %}
 
-{% macro radioOption(label, name, form, value, hint = '', checked = form.valueFor(name) == value, bold = false, greyHint = true, className = '') %}
-  {{ option(label = label, name = name, form = form, value = value, type = 'radio', hint = hint, checked = checked, bold = bold, greyHint = greyHint, className = className) }}
+{% macro radioOption(label, name, form, value, hint = '', checked = form.valueFor(name) == value, bold = false, greyHint = true, className = '', replaceValue = '') %}
+  {{ option(label = label, name = name, form = form, value = value, type = 'radio', hint = hint, checked = checked, bold = bold, greyHint = greyHint, className = className, replaceValue = replaceValue) }}
 {% endmacro %}
 
 {% macro checkboxOption(label, name, form, value, hint = '', checked = false, bold = false) %}
-  {{ option(label, name, form, value, 'checkbox', hint, checked, bold) }}
+  {{ option(label, name, form, value, 'checkbox', hint, checked = checked, bold) }}
 {% endmacro %}
 
-{% macro option(label, name, form, value, type, hint = '', checked = false, bold = false, hidden, className, dataTarget, greyHint = true) %}
-  <div class="multiple-choice {{ className | default('') }}" data-target="{{ dataTarget | default(name + '-' + value ) }}">
+{% macro option(label, name, form, value, type, hint = '', checked = false, bold = false, hidden, className, dataTarget, greyHint = true, replaceValue = '') %}
+  {% set regExp = r/[^\w\s]/i %}
+  {% if replaceValue == '' %}
+    <div class="multiple-choice {{ className | default('') }}" data-target="{{ dataTarget | default(name + '-' + value ) }}">
+  {% else %}
+    {% set updatedValue = value | replace(regExp, '') %}
+      <div class="multiple-choice {{ className | default('') }}" data-target="{{ dataTarget | default(name + '-' + updatedValue ) }}">
+  {% endif %}
     {% set idValue = name + value | replace(' ', '') %}
     <input id="{{ idValue }}" type="{{ type }}" name="{{ name }}" value="{{ value }}"
            {% if checked %}checked{% endif %}>
@@ -268,15 +274,15 @@
 {% endmacro %}
 
 {% macro radioGroup(
-  label, name, options, form, isInline = false, legendHidden = false, labelForScreenReadersOnly = false, labelBold = true
+  label, name, options, form, isInline = false, legendHidden = false, labelForScreenReadersOnly = false, labelBold = true, ariahidden = false
   ) %}
 
   {% set error = form.errorFor(name) %}
   {% set selection = form.valueFor(name) %}
   <div class="form-group {% if error %} form-group-error {% endif %}">
     <fieldset name="{{ name }}[label]" id="{{ name }}[label]" {% if isInline %} class="inline" {% endif %}>
-      <legend {% if legendHidden %}class="visuallyhidden"{% endif %}>
-        <span class="{% if labelForScreenReadersOnly %}visually-hidden{% elseif labelBold %} form-label-bold {% endif %}">
+      <legend {% if legendHidden %}class="visuallyhidden"{% endif %} {% if ariahidden %}aria-hidden = true{% endif %} >
+        <span class="{% if labelForScreenReadersOnly %}visually-hidden{% elseif labelBold %} form-label-bold {% endif %}" {% if ariahidden %}aria-hidden = true{% endif %}>
           {{ t(label) }}
         </span>
         <span class="error-message">{{ t(error) }}</span>
@@ -399,9 +405,9 @@
 {% macro errorSummary(form) %}
   {% if form.hasErrors() %}
     <div class="error-summary" role="group" aria-labelledby="error-summary-heading" tabindex="-1">
-      <h1 class="heading-medium error-summary-heading" id="error-summary-heading">
+      <h2 class="heading-medium error-summary-heading" id="error-summary-heading">
         {{ t('There was a problem') }}
-      </h1>
+      </h2>
       <ul class="error-summary-list">
         {% for error in form.errors %}
           <li><a href="#{{ error.fieldName }}[label]">{{ t(error.message) }}</a></li>
@@ -422,4 +428,62 @@
 {% macro readOnlyField(label, value) %}
   <h2 class="heading-medium">{{ t(label) }}</h2>
   <p>{{ value }}</p>
+{% endmacro %}
+
+{% macro apiError(error) %}
+  {% if error == 'Enter a valid postcode. Try again using another postcode.' %}
+    <div class="error-summary" role="group" aria-labelledby="error-summary-heading" tabindex="-1">
+      <h2 class="heading-medium error-summary-heading" id="error-summary-heading">
+        {{ t('There was a problem') }}
+      </h2>
+      <ul class="error-summary-list">
+          <li><a href="#alternativePostcode[label]">{{ t(error) }}</a></li>
+      </ul>
+    </div>
+  {% elseif error == 'Could not find a court name to match. Try searching by postcode instead.' %}
+    <div class="error-summary" role="group" aria-labelledby="error-summary-heading" tabindex="-1">
+      <h2 class="heading-medium error-summary-heading" id="error-summary-heading">
+        {{ t('There was a problem') }}
+      </h2>
+      <ul class="error-summary-list">
+          <li><a href="#alternativeCourtName[label]">{{ t(error) }}</a></li>
+      </ul>
+    </div>
+  {% elseif error == 'Select an alternative court option' %}
+    <div class="error-summary" role="group" aria-labelledby="error-summary-heading" tabindex="-1">
+      <h2 class="heading-medium error-summary-heading" id="error-summary-heading">
+        {{ t('There was a problem') }}
+      </h2>
+      <ul class="error-summary-list">
+        <li><a href="#alternativeCourtSelected[label]">{{ t(error) }}</a></li>
+      </ul>
+    </div>
+  {% endif %}
+{% endmacro %}
+
+{% macro apiErrorPostCodeField(error) %}
+  {% if error == 'Enter a valid postcode. Try again using another postcode.' %}
+    <div class="form-group form-group-error">
+      <label for="formfield" id="formfield[label]" class="form-label">{{ t(label) }}
+      <span class="error-message">{{ t(error) }}</span>
+    </div>
+  {% endif %}
+{% endmacro %}
+
+{% macro apiErrorCourtNameField(error) %}
+  {% if error == 'Could not find a court name to match. Try searching by postcode instead.' %}
+    <div class="form-group form-group-error">
+      <label for="formfield" id="formfield[label]" class="form-label">{{ t(label) }}
+      <span class="error-message">{{ t(error) }}</span>
+    </div>
+  {% endif %}
+{% endmacro %}
+
+{% macro apiErrorAlternateCourtSelected(error) %}
+  {% if error == 'Select an alternative court option' %}
+    <div class="form-group form-group-error">
+      <label for="formfield" id="formfield[label]" class="form-label">{{ t(label) }}
+      <span class="error-message">{{ t(error) }}</span>
+    </div>
+  {% endif %}
 {% endmacro %}

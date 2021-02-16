@@ -9,9 +9,6 @@ services:
         - CITIZEN_APP_URL=${TEST_URL}
         - CLAIM_STORE_URL
         - IDAM_URL
-        - http_proxy=http://proxyout.reform.hmcts.net:8080
-        - https_proxy=http://proxyout.reform.hmcts.net:8080
-        - no_proxy=remote-webdriver
         - OAUTH_CLIENT_SECRET
         - SMOKE_TEST_CITIZEN_USERNAME
         - SMOKE_TEST_USER_PASSWORD
@@ -23,6 +20,7 @@ services:
         - FEATURE_TESTING_SUPPORT
         - FEATURE_INVERSION_OF_CONTROL
         - FEATURE_PCQ
+        - FEATURE_HELP_WITH_FEES
       volumes:
         - ./smoke-output:/usr/src/app/output
     remote-webdriver:

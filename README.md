@@ -8,7 +8,7 @@
 
 This is the frontend application for CMC. Service provides web UI for citizens, presented as sequence of HTML 5 web pages designed to GDS Service Design guidelines, so that they can make money claims and / or perform associated actions e.g submitting defence or requesting default judgement.
 
-Service delegates most of the non UI responsibilities to underlying services e.g. claim-store or pdf-service.  
+Service delegates most of the non UI responsibilities to underlying services e.g. claim-store or pdf-service.
 
 ## Getting Started
 
@@ -19,7 +19,7 @@ Service delegates most of the non UI responsibilities to underlying services e.g
 * [Gulp](http://gulpjs.com/)
 * [Docker](https://www.docker.com)
 
-### Running the application
+#### Running the application
 
 Install dependencies by executing the following command:
 
@@ -39,7 +39,7 @@ It will be available at https://localhost:3000
 
 See the README.md in hmcts/cmc-integration-tests
 
-## Developing 
+## Developing
 
 ### Code style
 
@@ -73,7 +73,7 @@ $ yarn tests:a11y
 For test coverage:
 
 ```bash
-$ yarn tests:coverage
+$ yarn test:coverage
 ```
 
 For unit test coverage only:
@@ -119,11 +119,11 @@ warning The case-insensitive file ..\cmc-citizen-frontend\node_modules\nyc\node_
 warning The case-insensitive file ..\cmc-citizen-frontend\node_modules\nyc\node_modules\ansi-regex shouldn't be copied twice in one bulk copy
 ```
 
-## Preview Environment
+## Preview Environment ##
 
 We get a fully functional environment in Azure Kubernetes (AKS) per pull request. For more
 info see: https://tools.hmcts.net/confluence/display/ROC/AKS+-+Azure+Managed+Kubernetes
 
-## License
+## License ##
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) file for details

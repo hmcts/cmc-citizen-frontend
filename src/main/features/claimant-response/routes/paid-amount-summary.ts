@@ -2,7 +2,7 @@ import * as express from 'express'
 
 import { AbstractPaidAmountSummaryPage } from 'shared/components/ccj/paid-amount-summary'
 import { AbstractModelAccessor, DefaultModelAccessor } from 'shared/components/model-accessor'
-
+import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 import { claimantResponseCCJPath, Paths } from 'features/claimant-response/paths'
 
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
@@ -25,6 +25,9 @@ class PaidAmountSummaryPage extends AbstractPaidAmountSummaryPage<DraftClaimantR
   }
 
   claimFeeInPennies (claim: Claim): number {
+    if ((claim.response as PartialAdmissionResponse).amount < claim.claimData.feeAmountInPennies / 100) {
+      return (claim.response as PartialAdmissionResponse).amount * 100
+    }
     return claim.claimData.feeAmountInPennies
   }
 }
