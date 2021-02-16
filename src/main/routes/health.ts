@@ -58,6 +58,6 @@ function url (serviceName: string): string {
   if (config.has(healthCheckUrlLocation)) {
     return config.get<string>(healthCheckUrlLocation)
   } else {
-    return config.get<string>(`${serviceName}.url`) + '/liveness'
+    return config.get<string>(`${serviceName}.url`) + '/health/liveness'
   }
 }
