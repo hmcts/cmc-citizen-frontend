@@ -5,6 +5,9 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { FeatureToggles } from 'utils/featureToggles'
 
+import { Logger } from '@hmcts/nodejs-logging'
+const logger = Logger.getLogger('health.ts')
+
 /* tslint:disable:no-default-export */
 
 let healthCheckRouter = express.Router()
@@ -21,7 +24,17 @@ let healthCheckConfig = {
 }
 
 export default express.Router().use(healthCheckRouter)
-healthcheck.addTo(healthCheckRouter, healthCheckConfig)
+try {
+  logger.info(healthCheckConfig.checks.claimstore.url)
+  logger.info(healthCheckConfig.checks['draft-store'].url)
+  logger.info(healthCheckConfig.checks.fees.url)
+  logger.info(healthCheckConfig.checks.pay.url)
+  logger.info(healthCheckConfig.checks['idam-api'].url)
+  logger.info(healthCheckConfig.checks['idam-service-2-service-auth'].url)
+  healthcheck.addTo(healthCheckRouter, healthCheckConfig)
+} catch (err) {
+  logger.error(err.stack)
+}
 
 function basicHealthCheck (serviceName) {
   const options = {
@@ -35,6 +48,7 @@ function basicHealthCheck (serviceName) {
   if (serviceName === 'pay' && FeatureToggles.isEnabled('mockPay')) {
     return healthcheck.raw(() => { return healthcheck.up() })
   }
+  logger.info(serviceName + ': ' + healthcheck.status(serviceName).status)
   return healthcheck.web(url(serviceName), options)
 }
 
@@ -44,6 +58,6 @@ function url (serviceName: string): string {
   if (config.has(healthCheckUrlLocation)) {
     return config.get<string>(healthCheckUrlLocation)
   } else {
-    return config.get<string>(`${serviceName}.url`) + '/health'
+    return config.get<string>(`${serviceName}.url`) + '/liveness'
   }
 }

@@ -24,7 +24,14 @@ nodejs:
   ingressHost: ${SERVICE_FQDN}
   readinessDelay: 90  # claim-store will start much slower
   livenessDelay: 90  # claim-store will start much slower
+  autoscaling:        # Default is false
+    enabled: true 
+    maxReplicas: 5    # Required setting
+    targetCPUUtilizationPercentage: 80 # Default is 80% target CPU utilization
   environment:
+    NODE_ENV: preview
+    REFORM_TEAM: cmc
+    REFORM_SERVICE_NAME: citizen-frontend
     LOG_LEVEL: DEBUG
     HTTP_TIMEOUT: 60000
     FEATURE_TOGGLES_API_URL: http://${SERVICE_NAME}-ftr-tgl
