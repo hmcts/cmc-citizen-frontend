@@ -22,8 +22,8 @@ nodejs:
   ingressIP: ${INGRESS_IP}
   consulIP: ${CONSUL_LB_IP}
   ingressHost: ${SERVICE_FQDN}
-  readinessDelay: 275
-  livenessDelay: 275
+  readinessDelay: 130
+  livenessDelay: 130
   devmemoryRequests: 1024Mi
   devcpuRequests: "1000m"
   devmemoryLimits: 6000Mi
@@ -176,7 +176,7 @@ ccd:
       - civilmoneyclaims+la@gmail.com|CMC|MoneyClaimCase|readyForDirections
 
   ccd-definition-importer:
-    image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.9.4
+    image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.9.5
     environment:
       CCD_DEF_CLAIM_STORE_BASE_URL: http://${SERVICE_NAME}-claim-store
     definitionFilename: cmc-ccd.xlsx
