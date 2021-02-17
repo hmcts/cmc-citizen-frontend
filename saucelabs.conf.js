@@ -1,5 +1,5 @@
-require("ts-node/register");
-require("tsconfig-paths/register");
+require('ts-node/register')
+require('tsconfig-paths/register')
 
 const supportedBrowsers = require('./src/integration-test/crossbrowser/supportedBrowsers.js');
 const { bootstrapAll } = require('./src/integration-test/bootstrap/bootstrap')
@@ -67,8 +67,8 @@ const setupConfig = {
     PageHelper: {
       require: './src/integration-test/helpers/pageHelper'
     },
-    SaucelabsReporter: {
-      require: './src/integration-test/helpers/saucelabsReporter'
+    PcqHelper: {
+      require: './src/integration-test/helpers/pcqHelper'
     },
     hwfHelper: {
       require: './src/integration-test/helpers/hwfHelper'
