@@ -19,22 +19,26 @@ postgresql:
 
 nodejs:
   image: ${IMAGE_NAME}
-  readinessDelay: 60
-  livenessDelay: 60
-  devmemoryRequests: 512Mi
-  devcpuRequests: "1000m"
-  devmemoryLimits: 1024Mi
-  devcpuLimits: "2500m"
-  resources:
-    requests:
-      cpu: 1000m
-      memory: 512Mi
   ingressIP: ${INGRESS_IP}
   consulIP: ${CONSUL_LB_IP}
   ingressHost: ${SERVICE_FQDN}
-  readinessDelay: 90  # claim-store will start much slower
-  livenessDelay: 90  # claim-store will start much slower
+  readinessDelay: 130  # claim-store will start much slower
+  livenessDelay: 130  # claim-store will start much slower
+  memoryRequests: 1024Mi
+  cpuRequests: 2000m
+  memoryLimits: 1536Mi
+  cpuLimits: 2500m
+  devmemoryRequests: 1024Mi
+  devcpuRequests: 2000m
+  devmemoryLimits: 1536Mi
+  devcpuLimits: 2500m
+  autoscaling:        # Default is false
+    enabled: true 
+    maxReplicas: 5    # Required setting
+    targetCPUUtilizationPercentage: 80 # Default is 80% target CPU utilization
   environment:
+    REFORM_TEAM: cmc
+    REFORM_SERVICE_NAME: citizen-frontend
     LOG_LEVEL: DEBUG
     HTTP_TIMEOUT: 60000
     FEATURE_TOGGLES_API_URL: http://${SERVICE_NAME}-ftr-tgl
@@ -174,7 +178,7 @@ ccd:
       - civilmoneyclaims+la@gmail.com|CMC|MoneyClaimCase|readyForDirections
 
   ccd-definition-importer:
-    image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.9.4
+    image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.9.5
     environment:
       CCD_DEF_CLAIM_STORE_BASE_URL: http://${SERVICE_NAME}-claim-store
     definitionFilename: cmc-ccd.xlsx
