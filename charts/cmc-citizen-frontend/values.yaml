@@ -1,13 +1,13 @@
 nodejs:
   image: hmctspublic.azurecr.io/cmc/citizen-frontend:latest
   applicationPort: 3000  
-  memoryRequests: 1024Mi
-  cpuRequests: 2000m
-  memoryLimits: 1536Mi
+  memoryRequests: 512Mi
+  cpuRequests: 1000m
+  memoryLimits: 1024Mi
   cpuLimits: 2500m
-  devmemoryRequests: 1024Mi
-  devcpuRequests: 2000m
-  devmemoryLimits: 1536Mi
+  devmemoryRequests: 512Mi
+  devcpuRequests: 1000m
+  devmemoryLimits: 1024Mi
   devcpuLimits: 2500m
   readinessDelay: 130  # claim-store will start much slower
   livenessDelay: 130  # claim-store will start much slower
