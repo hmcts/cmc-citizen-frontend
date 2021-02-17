@@ -19,14 +19,15 @@ const checkAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage(
 const confirmationPage: ClaimantConfirmation = new ClaimantConfirmation()
 let testData
 
-Feature('Claimant Response Fully Admit E2E Tests')
+Feature('Claimant Response Fully Admit E2E Tests...')
 
-Before(async (I: I) => testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL))
+BeforeSuite(async (I: I) => {
+  testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
+})
 
 if (process.env.FEATURE_ADMISSIONS === 'true') {
 
-  Scenario('I can as a claimant view the defendants full admission with immediate payment @citizen @admissions', { retries: 3 }, async (I: I) => {
-    // const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
+  Scenario('I can as a claimant view the defendants full admission with immediate payment( Full Admission-->Admit All of the claim) @citizen @admissions', { retries: 3 }, async (I: I) => {
     testData.paymentOption = PaymentOption.IMMEDIATELY
     // as defendant
     helperSteps.finishResponseWithFullAdmission(testData)
