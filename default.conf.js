@@ -2,15 +2,16 @@ require('ts-node/register')
 require('tsconfig-paths/register')
 
 const ProxySettings = require('./src/integration-test/config/proxy-settings').ProxySettings
-const bootstrapFn = require('./src/integration-test/bootstrap/bootstrap').bootstrapAll
-const tearDownFn = require('./src/integration-test/bootstrap/teardown').teardownAll
+const { bootstrapAll } = require('./src/integration-test/bootstrap/bootstrap')
+const { teardownAll } = require('./src/integration-test/bootstrap/teardown')
+const outputDir = './output'
 
 exports.config = {
   name: 'citizen-integration-tests',
-  bootstrapAll: bootstrapFn,
-  teardownAll: tearDownFn,
+  bootstrapAll,
+  teardownAll,
   tests: './src/integration-test/tests/**/*_test.*',
-  output: './output',
+  output: `${process.cwd()}/${outputDir}`,
   timeout: 20000,
   multiple: {
     parallel: {
@@ -43,6 +44,9 @@ exports.config = {
     },
     hwfHelper: {
       require: './src/integration-test/helpers/hwfHelper'
+    },
+    Mochawesome: {
+      uniqueScreenshotNames: 'true'
     }
   },
   mocha: {
@@ -54,15 +58,15 @@ exports.config = {
         }
       },
       'mocha-junit-reporter': {
-        stdout: './output/citizen-mocha-stdout.log',
+        stdout: `${outputDir}/citizen-mocha-stdout.log`,
         options: {
-          mochaFile: process.env.MOCHA_JUNIT_FILE_LOCATION || './output/citizen-integration-result.xml'
+          mochaFile: process.env.MOCHA_JUNIT_FILE_LOCATION || `${outputDir}/citizen-integration-result.xml`
         }
       },
       'mochawesome': {
-        stdout: `./output/citizen-mochawesome-stdout.log`,
+        stdout: `${outputDir}/citizen-mochawesome-stdout.log`,
         options: {
-          reportDir: 'output',
+          reportDir: outputDir,
           reportFilename: 'citizen-e2e-result',
           inlineAssets: true,
           reportTitle: `Citizen E2E tests result`
