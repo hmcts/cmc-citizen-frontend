@@ -33,7 +33,7 @@ nodejs:
   devmemoryLimits: 1024Mi
   devcpuLimits: 2500m
   autoscaling:        # Default is false
-    enabled: true 
+    enabled: true
     maxReplicas: 5    # Required setting
     targetCPUUtilizationPercentage: 80 # Default is 80% target CPU utilization
   environment:
@@ -178,7 +178,7 @@ ccd:
       - civilmoneyclaims+la@gmail.com|CMC|MoneyClaimCase|readyForDirections
 
   ccd-definition-importer:
-    image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.9.5
+    image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.9.4
     environment:
       CCD_DEF_CLAIM_STORE_BASE_URL: http://${SERVICE_NAME}-claim-store
     definitionFilename: cmc-ccd.xlsx
