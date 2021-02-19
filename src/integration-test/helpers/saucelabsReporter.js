@@ -8,7 +8,7 @@ const SUCCESS = true
 const FAILURE = false
 
 function reportBuildResultToSaucelabs (result) {
-  const sessionId = container.helpers('WebDriverIO').browser.requestHandler.sessionID
+  const sessionId = container.helpers('WebDriver').browser.sessionId
   const sauceUsername = process.env.SAUCE_USERNAME
 
   request.put({
@@ -26,7 +26,7 @@ function reportBuildResultToSaucelabs (result) {
   ).catch(
     err => console.log(err)
   )
-  console.log('SauceOnDemandSessionID=' + sessionId )
+  console.log('SauceOnDemandSessionID=' + sessionId + ' job-name=cmc-citizen-frontend')
 }
 
 module.exports = function () {
