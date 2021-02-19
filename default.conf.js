@@ -15,7 +15,7 @@ exports.config = {
   timeout: 20000,
   multiple: {
     parallel: {
-      chunks: parseInt(process.env.CHUNKS || '3')
+      chunks: parseInt(process.env.CHUNKS || '5')
     }
   },
   helpers: {
