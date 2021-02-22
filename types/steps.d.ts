@@ -4,6 +4,7 @@ declare const actor: () => CodeceptJS.I;
 declare const Feature: (string: string) => void;
 declare const Scenario: (string: string, callback: ICodeceptCallback) => void;
 declare const Before: (callback: ICodeceptCallback) => void;
+declare const BeforeSuite: (callback: ICodeceptCallback) => void;
 declare const After: (callback: ICodeceptCallback) => void;
 declare const within: (selector: string, callback: Function) => void;
 
