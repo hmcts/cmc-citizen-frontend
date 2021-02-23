@@ -22,10 +22,7 @@ export class FeaturesBuilder {
 
   async features (amount: number, user: User): Promise<string> {
     const roles: string[] = await this.claimStoreClient.retrieveUserRoles(user)
-    const autoEnrollFeatureEnabled: boolean = await featureToggles.isAutoEnrollIntoNewFeatureEnabled()
-
-    if (!autoEnrollFeatureEnabled && !roles.includes('cmc-new-features-consent-given')) {
-      // all features require consent
+    if (!await featureToggles.isAutoEnrollIntoNewFeatureEnabled() && !roles.includes('cmc-new-features-consent-given')) {
       return undefined
     }
 
