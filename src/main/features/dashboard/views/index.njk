@@ -9,14 +9,10 @@
 
   <div class="grid-row">
     <div class="column-full">
-      {% if not claimDraftSaved %}
-        {{ internalLink(t('Make a new money claim'), EligibilityPaths.startPage.uri, 'newclaim', 'start-now') }}
-      {% endif %}
-
       {% if claimsAsClaimant | length or claimDraftSaved %}
 
         <h2 class="heading-medium"> {{ t('Claims you’ve made') }}</h2>
-        <p> Most recently created claims are listed first.</p>
+        <p> Most recently created claims are listed first. To view or progress your case click on your claim number.</p>
         <table class="claim-dashboard">
           <thead>
           <tr>
@@ -122,14 +118,13 @@
           </div>
         {% endif %}
 
-     {% endif %}
-
+      {% endif %}
     </div>
 
     {% if claimsAsDefendant | length or responseDraftSaved %}
       <div class="column-full">
         <h2 class="heading-medium"> {{ t('Claims made against you') }}</h2>
-        <p> Most recently created claims are listed first.</p>
+        <p> Most recently created claims are listed first. To view or progress your case click on your claim number.</p>
         <table class="claim-dashboard">
           <thead>
           <tr class="mobile-table">
@@ -186,5 +181,10 @@
         
       </div>
     {% endif %}
+    <div class="column-full">
+      {% if not claimDraftSaved %}
+        {{ internalLink(t('Make a new money claim'), EligibilityPaths.startPage.uri, 'newclaim', 'start-now') }}
+      {% endif %}
+    </div>
   </div>
 {% endblock %}
