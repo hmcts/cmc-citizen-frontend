@@ -22,7 +22,7 @@ let testData
 
 Feature('Claimant Response Fully Admit E2E Tests...')
 
-BeforeSuite(async (I: I) => {
+Before(async (I: I) => {
   testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
 })
 
