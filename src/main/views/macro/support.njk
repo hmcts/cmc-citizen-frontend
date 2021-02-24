@@ -84,3 +84,13 @@
   </div>
 </details>
 {% endmacro %}
+
+{% macro citizensStartWidget() %}
+<div class="panel">
+  <h2 class="heading-small contact-us"> {{ t('Money Claims')}}</h2>
+  <span class="block"><a href="mailto:{{t('moneyclaims@justice.gov.uk')}}">{{ t('moneyclaims@justice.gov.uk')}}</a></span>
+  <span class="block">{{ t('Telephone: 0300 123 7050') }}</span>
+  <span class="block">{{ t('Monday to Friday, 8.30am to 5pm') }}</span>
+  <span class="block">{{ externalLink(t('Find out about call charges'), 'https://www.gov.uk/call-charges') }}</span>
+</div>
+{% endmacro %}

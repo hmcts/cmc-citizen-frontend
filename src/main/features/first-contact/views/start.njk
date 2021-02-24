@@ -3,7 +3,7 @@
 {% set heading = 'Respond to a money claim' %}
 
 {% from "form.njk" import csrfProtection, linkButton %}
-{% from "support.njk" import supportWidget %}
+{% from "support.njk" import citizensStartWidget %}
 {% from "internalLink.njk" import internalLink %}
 {% from "externalLink.njk" import externalLink %}
 
@@ -11,26 +11,38 @@
 
   <div class="grid-row">
     <div class="column-two-thirds">
-      <p>{{ t('You have 19 days to respond to the claim from the date the court issued it.') }}</p>
-      <p>{{ t('Find the exact deadline date in the letter or email you received explaining the claim.') }}</p>
-      <p>{{ t('We’ll send your response to the claimant (the person or organisation who says you owe them money).') }}</p>
+      <p>{{ t('You must respond if someone claims you owe them money. The deadline for responding is on the email or letter you received explaining the claim.') }}</p>
+
+      <p>{{ t('There’s a different process in {{ Scotland }}.',
+          { Scotland: externalLink('Scotland', 'https://www.gov.scot/') }) | safe  }}</p>
 
       <h2 class="heading-medium">{{ t('If you don’t respond') }}</h2>
 
-      <p>{{ t('The claimant can apply for a {{ ccj }} against you if you don’t respond before the deadline.',
+      <p>{{ t('You might get a {{ ccj }} if you don’t respond by the deadline.',
           { ccj: externalLink('County Court Judgment (CCJ)', 'https://www.gov.uk/county-court-judgments-ccj-for-debt') }) | safe }}</p>
 
-      <p>{{ t('They can use a CCJ to get the money from you, for example by applying to the court to send bailiffs to your home or business.') }}</p>
+      <p>{{ t('If you get a CCJ:') }}</p>
 
-      <p>{{ t('A CCJ may make it harder to get credit, such as a mobile phone contract, credit card or mortgage.') }}</p>
+      <p>
+        <ul class="list list-bullet">
+          <li>{{ t('bailiffs might be sent to your home or business') }}</li>
+          <li>{{ t('you might have problems getting credit, such as a mobile phone contract, credit card or mortgage') }}</li>
+        </ul>
+      </p>
 
       <form method="POST">
         {{ csrfProtection(csrf) }}
 
-        {{ linkButton('Start now', 'start-button', class='button button-start') }}
+        {{ linkButton('Respond to a money claim', 'start-button', class='button button-start') }}
       </form>
 
-      {{ supportWidget('Help to use this service') }}
+      <h2 class="heading-medium">{{ t('Return to an existing claim') }}</h2>
+      <p>{{ t('{{ signin }} to check updates and manage your response.',
+          { signin: internalLink( t('Sign in to your account'), AppPaths.homePage.uri, 'link') }) | safe  }}</p>
+
+      <h2 class="heading-medium">{{ t('Help responding online') }}</h2>
+      <p>{{ t('Contact Money Claims for help using this service.') }}</p>
+      {{ citizensStartWidget() }}
 
     </div>
     <div class="column-third">
