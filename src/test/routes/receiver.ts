@@ -67,6 +67,19 @@ describe('Login receiver', async () => {
           .expect(res => expect(res).to.be.redirect.toLocation(EligibilityPaths.startPage.uri))
       })
 
+      it('should return 500 and render error page when cannot retrieve claim drafts', async () => {
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+        claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
+        claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
+        draftStoreServiceMock.resolveFindNoDraftFound()
+        draftStoreServiceMock.rejectFind('HTTP error')
+
+        await request(app)
+          .get(AppPaths.receiver.uri)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.serverError.withText('Error'))
+      })
+
       it('when claim received and draft response exists, should redirect to dashboard', async () => {
         idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-1')
         claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()

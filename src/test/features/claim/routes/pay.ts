@@ -406,6 +406,23 @@ describe('Claim issue: post payment callback receiver', () => {
 
         describe('when claim already exists', () => {
 
+          it('should redirect to confirmation page when everything is fine', async () => {
+            draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
+            idamServiceMock.resolveRetrieveServiceToken()
+            payServiceMock.resolveRetrieve('Success')
+            draftStoreServiceMock.resolveUpdate()
+            claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
+            claimStoreServiceMock.rejectSaveClaimForUser('reason', 409)
+            claimStoreServiceMock.resolveRetrieveByExternalId()
+            payServiceMock.resolveUpdate()
+            draftStoreServiceMock.resolveDelete()
+
+            await request(app)
+              .get(Paths.finishPaymentReceiver.uri)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.redirect.toLocation(`/claim/${externalId}/confirmation`))
+          })
+
           it('should redirect to confirmation page when payment is missing', async () => {
             draftStoreServiceMock.resolveFind(draftType, { claimant: undefined })
 
@@ -462,6 +479,25 @@ describe('Claim issue: post payment callback receiver', () => {
               .get(Paths.finishPaymentReceiver.uri)
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
+          })
+
+          it('should redirect to confirmation page when everything is fine', async () => {
+            when(mockLaunchDarklyClient.userVariation(testUser, testRoles, 'admissions', false)).thenResolve(Promise.resolve(false))
+            draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
+            idamServiceMock.resolveRetrieveServiceToken()
+            payServiceMock.resolveRetrieve('Success')
+            draftStoreServiceMock.resolveUpdate()
+            claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
+            claimStoreServiceMock.resolveSaveClaimForUser()
+            draftStoreServiceMock.resolveDelete()
+            payServiceMock.resolveUpdate()
+
+            await request(app)
+              .get(Paths.finishPaymentReceiver.uri)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.redirect.toLocation(`/claim/${externalId}/confirmation`))
+
+            reset(mockLaunchDarklyClient)
           })
 
           it('should redirect to confirmation page when user have not given any consent', async () => {

@@ -14,6 +14,15 @@ export function checkAuthorizationGuards (app: any,
                                           method: string,
                                           pagePath: string,
                                           accessDeniedPage: string | RegExp = defaultAccessDeniedPagePattern) {
+  it('should redirect to access denied page when cannot retrieve user details (possibly session expired)', async () => {
+    mock.cleanAll()
+    idamServiceMock.rejectRetrieveUserFor('Response 403 from /details')
+
+    await request(app)[method](pagePath)
+      .set('Cookie', `${cookieName}=ABC`)
+      .expect(res => expect(res).redirect.toLocation(accessDeniedPage))
+  })
+
   it('should redirect to access denied page when user not in required role', async () => {
     mock.cleanAll()
     idamServiceMock.resolveRetrieveUserFor('1', 'divorce-private-beta')

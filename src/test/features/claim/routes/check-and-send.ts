@@ -487,6 +487,24 @@ describe('Claim issue: check and send page', () => {
           .expect(res => expect(res).to.be.redirect.toLocation(nextPage))
       })
 
+      it('should redirect to tasklist page when form is valid and help with fee submission throws error', async () => {
+        draftStoreServiceMock.resolveFind('claim', { helpWithFees: {
+          declared: YesNoOption.YES,
+          helpWithFeesNumber: 'HWF123456'
+        } })
+        // mock 'saveHelpWithFees' request with error
+        claimStoreServiceMock.resolveSaveHelpWithFeesClaimWithError()
+        claimStoreServiceMock.resolveRetrieveUserRoles()
+
+        const nextPage = ClaimPaths.taskListPage.uri
+        await request(app)
+          .post(ClaimPaths.checkAndSendPage.uri)
+          .send({ type: SignatureType.BASIC })
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({ signed: 'true' })
+          .expect(res => expect(res).to.be.redirect.toLocation(nextPage))
+      })
+
       it('should redirect to confirmation page when form is valid, user initiated payment, but help with fee is submitted', async () => {
         draftStoreServiceMock.resolveFind('claim', { helpWithFees: {
           declared: YesNoOption.YES,

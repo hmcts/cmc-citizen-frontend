@@ -57,6 +57,15 @@ describe('Testing Support: Create Claim Draft', () => {
         isAutoEnrollIntoNewFeatureEnabledStub.restore()
       })
 
+      it('should return 500 and render error page when cannot retrieve claim draft', async () => {
+        draftStoreServiceMock.rejectFind('HTTP Error')
+
+        await request(app)
+          .post(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.serverError.withText('Error'))
+      })
+
       it('should return 500 and render error page when cannot save claim draft', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.rejectUpdate()
