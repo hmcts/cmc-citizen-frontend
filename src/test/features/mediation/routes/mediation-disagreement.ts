@@ -146,7 +146,7 @@ describe('Free mediation: mediation disagreement page', () => {
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
 
-          it.only('should redirect to response task list when Yes was chosen and no response is available', async () => {
+          it('should redirect to response task list when Yes was chosen and no response is available', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveFind('response')
