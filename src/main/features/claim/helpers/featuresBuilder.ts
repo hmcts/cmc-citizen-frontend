@@ -1,6 +1,7 @@
 import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { User } from 'idam/user'
 import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
+import * as config from 'config'
 
 export class FeaturesBuilder {
   static readonly MEDIATION_PILOT_AMOUNT = 500
@@ -17,10 +18,16 @@ export class FeaturesBuilder {
   }
 
   async features (amount: number, user: User): Promise<string> {
+    const roles: string[] = await this.claimStoreClient.retrieveUserRoles(user)
+
     let features = []
     for (const feature of FEATURES) {
       if (feature.validForAmount(amount)) {
-        features.push(feature.feature)
+        const offlineDefault = config.get<boolean>(`featureToggles.${feature.setting}`) || false
+        const ldVariation = await this.launchDarklyClient.userVariation(user, roles, feature.toggle, offlineDefault)
+        if (ldVariation) {
+          features.push(feature.feature)
+        }
       }
     }
     return (!features || features.length === 0) ? undefined : features.join(', ')
