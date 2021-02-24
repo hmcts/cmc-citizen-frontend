@@ -10,7 +10,7 @@ let claimantEmail
 let defendantEmail
 let claimRef
 
-Feature('Offers')
+Feature('Full Defence Offer E2E Tests (via) Settle Out Of Court route')
 
 BeforeSuite(async (I: I) => {
   claimantEmail = userSteps.getClaimantEmail()
@@ -24,11 +24,38 @@ BeforeSuite(async (I: I) => {
   I.see('We’ve sent your offer to ' + createClaimant(PartyType.INDIVIDUAL).name)
   I.click('Sign out')
 
-  userSteps.login(claimantEmail)
-
 })
 
-Scenario('I can as a defendant make an offer, accept offer and counter sign the agreement @citizen @nightly', { retries: 3 }, async (I: I) => {
+Scenario('Claimant Accepted Offer @SettleOutOfCourt @nightly @citizen', { retries: 0 }, async (I: I) => {
+  userSteps.login(claimantEmail)
+  offerSteps.acceptOfferFromDashboard(claimRef)
+  I.seeTitleEquals('Confirmation - Money Claims')
+  I.click('Sign out')
+})
+
+Scenario(' Defendant countersigned offer @SettleOutOfCourt @nightly @citizen', { retries: 3 }, async (I: I) => {
+  userSteps.login(claimantEmail)
+  offerSteps.acceptOfferFromDashboard(claimRef)
+  I.click('Sign out')
+
+  userSteps.login(defendantEmail)
+  offerSteps.countersignOfferFromDashboard(claimRef)
+  offerSteps.viewClaimFromDashboard(claimRef)
+})
+
+Scenario('Claimant Rejected Offer @SettleOutOfCourt @citizen @nightly', { retries: 3 }, async (I: I) => {
+  userSteps.login(claimantEmail)
+  offerSteps.rejectOfferFromDashboard(claimRef)
+  I.click('Sign out')
+
+  userSteps.login(defendantEmail)
+  offerSteps.viewClaimFromDashboard(claimRef)
+
+  I.see('The claimant has rejected your offer to settle the claim.')
+})
+
+Scenario('Settle Out Of Court E2E @SettleOutOfCourt @nightly', { retries: 3 }, async (I: I) => {
+  userSteps.login(claimantEmail)
   offerSteps.acceptOfferFromDashboard(claimRef)
   I.click('Sign out')
 
@@ -37,14 +64,4 @@ Scenario('I can as a defendant make an offer, accept offer and counter sign the 
   offerSteps.viewClaimFromDashboard(claimRef)
 
   I.see('You’ve both signed a legal agreement. The claim is now settled.')
-})
-
-Scenario('I can make an offer as a defendant to a claimant and have the claimant reject it @citizen @nightly', { retries: 3 }, async (I: I) => {
-  offerSteps.rejectOfferFromDashboard(claimRef)
-  I.click('Sign out')
-
-  userSteps.login(defendantEmail)
-  offerSteps.viewClaimFromDashboard(claimRef)
-
-  I.see('The claimant has rejected your offer to settle the claim.')
 })
