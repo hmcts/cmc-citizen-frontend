@@ -37,6 +37,17 @@ describe('FeaturesBuilder', () => {
     isAutoEnrollIntoNewFeatureEnabledStub.restore()
   })
 
+  describe('Directions Questionnaire Feature', () => {
+
+    it(`should not add dq to features if amount > ${FeaturesBuilder.ONLINE_DQ_THRESHOLD}`, async () => {
+      isAutoEnrollIntoNewFeatureEnabledStub.returns(true)
+      const featuresBuilder = new FeaturesBuilder(new ClaimStoreClient(), instance(mockLaunchDarklyClient))
+      const features = await featuresBuilder.features(FeaturesBuilder.ONLINE_DQ_THRESHOLD + 0.01, user)
+      expect(features).to.be.undefined
+    })
+
+  })
+
   describe('Mediation Pilot Feature', () => {
     it(`should add mediation pilot to features if amount <= ${FeaturesBuilder.MEDIATION_PILOT_AMOUNT} and flag is set`, async () => {
       isAutoEnrollIntoNewFeatureEnabledStub.returns(true)

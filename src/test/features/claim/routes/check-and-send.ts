@@ -16,6 +16,8 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as feesServiceMock from 'test/http-mocks/fees'
 import { SignatureType } from 'common/signatureType'
+import { YesNoOption } from 'models/yesNoOption'
+import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import {
   claimantSoleTraderDetails,
   companyDetails,
@@ -477,6 +479,27 @@ describe('Claim issue: check and send page', () => {
         if (toBoolean(config.get('featureToggles.inversionOfControl'))) {
           nextPage = ClaimPaths.initiatePaymentController.uri
         }
+        await request(app)
+          .post(ClaimPaths.checkAndSendPage.uri)
+          .send({ type: SignatureType.BASIC })
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({ signed: 'true' })
+          .expect(res => expect(res).to.be.redirect.toLocation(nextPage))
+      })
+
+      it('should redirect to tasklist page when form is valid, user initiated payment, but used help with fee submission which failed with errors', async () => {
+        draftStoreServiceMock.resolveFind('claim', { helpWithFees: {
+          declared: YesNoOption.YES,
+          helpWithFeesNumber: 'HWF123456'
+        } })
+        // mock 'awaiting payment' state
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId({ state: 'AWAITING_CITIZEN_PAYMENT' })
+        // mock updateHelpWithFees 'put' request failed with error
+        claimStoreServiceMock.resolveUpdateHelpWithFeesClaimWithError()
+        // mock user roles
+        claimStoreServiceMock.resolveRetrieveUserRoles()
+
+        const nextPage = ClaimPaths.taskListPage.uri
         await request(app)
           .post(ClaimPaths.checkAndSendPage.uri)
           .send({ type: SignatureType.BASIC })
