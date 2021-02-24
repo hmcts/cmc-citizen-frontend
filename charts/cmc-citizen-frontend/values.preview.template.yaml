@@ -33,7 +33,7 @@ nodejs:
   devmemoryLimits: 1024Mi
   devcpuLimits: 2500m
   autoscaling:        # Default is false
-    enabled: true 
+    enabled: true
     maxReplicas: 5    # Required setting
     targetCPUUtilizationPercentage: 80 # Default is 80% target CPU utilization
   environment:
