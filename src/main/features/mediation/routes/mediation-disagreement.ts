@@ -52,7 +52,7 @@ export default express.Router()
           draft.document.youCanOnlyUseMediation = undefined
           draft.document.canWeUse = undefined
           draft.document.canWeUseCompany = undefined
-        } else if (form.model.option === FreeMediationOption.YES) {
+        } else {
           draft.document.willYouTryMediation = form.model
         }
 
