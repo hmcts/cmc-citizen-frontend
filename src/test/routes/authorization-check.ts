@@ -14,6 +14,11 @@ export function checkAuthorizationGuards (app: any,
                                           method: string,
                                           pagePath: string,
                                           accessDeniedPage: string | RegExp = defaultAccessDeniedPagePattern) {
+  it('should redirect to access denied page when JWT token is missing', async () => {
+    await request(app)[method](pagePath)
+      .expect(res => expect(res).redirect.toLocation(accessDeniedPage))
+  })
+
   it('should redirect to access denied page when cannot retrieve user details (possibly session expired)', async () => {
     mock.cleanAll()
     idamServiceMock.rejectRetrieveUserFor('Response 403 from /details')

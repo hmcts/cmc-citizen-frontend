@@ -33,6 +33,19 @@ describe('Claim issue: finish payment page', () => {
         .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.checkAndSendPage.uri))
     })
 
+    it('should create claim and redirect to check and send page if claim is in AWAITING_CITIZEN_PAYMENT state', async () => {
+      idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+      draftStoreServiceMock.resolveFind('claim', { externalId })
+      claimStoreServiceMock.resolveRetrieveClaimByExternalId({ externalId, state: 'AWAITING_CITIZEN_PAYMENT' })
+      claimStoreServiceMock.resolveRetrieveUserRoles()
+      claimStoreServiceMock.resolveCreateClaimCitizen({ externalId, state: 'AWAITING_CITIZEN_PAYMENT' })
+
+      await request(app)
+        .get(pagePath)
+        .set('Cookie', `${cookieName}=ABC`)
+        .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.checkAndSendPage.uri))
+    })
+
     it('should create claim delete draft and redirect to confirmation page if created claim is not in AWAITING_CITIZEN_PAYMENT state', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       draftStoreServiceMock.resolveFind('claim', { externalId })
