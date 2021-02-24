@@ -17,13 +17,6 @@ const featuresBuilder = new FeaturesBuilder(new ClaimStoreClient(), instance(moc
 
 const user = new User('1', 'user@example.com', 'John', 'Smith', ['cmc-new-features-consent-given'], 'citizen', '')
 
-const MIN_THRESHOLD = Math.min(
-  FeaturesBuilder.JUDGE_PILOT_THRESHOLD,
-  FeaturesBuilder.LA_PILOT_THRESHOLD,
-  FeaturesBuilder.MEDIATION_PILOT_AMOUNT,
-  FeaturesBuilder.ONLINE_DQ_THRESHOLD
-)
-
 function enableFeatures (...features: string[]) {
   FEATURES.map(feature => feature.toggle)
     .forEach(toggle => when(mockLaunchDarklyClient.userVariation(anything(), anything(), toggle, anything()))
@@ -104,33 +97,5 @@ describe('FeaturesBuilder', () => {
       const features = await featuresBuilder.features(FeaturesBuilder.JUDGE_PILOT_THRESHOLD, user)
       expect(features).to.be.undefined
     })
-  })
-
-  it(`should not add judge pilot if legal advisor pilot is eligible`, async () => {
-    isAutoEnrollIntoNewFeatureEnabledStub.returns(true)
-    enableFeatures('legal_advisor_pilot', 'judge_pilot')
-    const features = await featuresBuilder.features(FeaturesBuilder.LA_PILOT_THRESHOLD, user)
-    expect(features).to.equal('LAPilotEligible')
-  })
-})
-
-describe('Auto Enroll into new feature scenario', () => {
-  attachDefaultHooks(app)
-  let isAutoEnrollIntoNewFeatureEnabledStub: sinon.SinonStub
-
-  beforeEach(() => {
-    isAutoEnrollIntoNewFeatureEnabledStub = sinon.stub(FeatureToggles.prototype, 'isAutoEnrollIntoNewFeatureEnabled')
-  })
-
-  afterEach(() => {
-    isAutoEnrollIntoNewFeatureEnabledStub.restore()
-  })
-
-  it(`should return undefined when auto enroll toggle is set to true and roles do not contain consent given`, async () => {
-    claimStoreServiceMock.resolveRetrieveUserRoles('not-a-consent-role')
-    isAutoEnrollIntoNewFeatureEnabledStub.returns(true)
-    enableFeatures('legal_advisor_pilot', 'directions_questionnaire', 'mediation_pilot')
-    const features = await featuresBuilder.features(MIN_THRESHOLD, user)
-    expect(features).to.equal('mediationPilot, LAPilotEligible, directionsQuestionnaire')
   })
 })
