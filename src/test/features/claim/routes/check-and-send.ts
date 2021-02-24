@@ -487,29 +487,6 @@ describe('Claim issue: check and send page', () => {
           .expect(res => expect(res).to.be.redirect.toLocation(nextPage))
       })
 
-      it('should redirect to confirmation page when form is valid, user initiated payment, but help with fee is submitted', async () => {
-        draftStoreServiceMock.resolveFind('claim', { helpWithFees: {
-          declared: YesNoOption.YES,
-          helpWithFeesNumber: 'HWF123456'
-        } })
-        // mock 'awaiting payment' state
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId({ state: 'AWAITING_CITIZEN_PAYMENT' })
-        // mock updateHelpWithFees 'put' request
-        claimStoreServiceMock.resolveUpdateHelpWithFeesClaimForUser()
-        // mock user roles
-        claimStoreServiceMock.resolveRetrieveUserRoles()
-        // mock delete draft
-        draftStoreServiceMock.resolveDelete()
-
-        const nextPage = ClaimPaths.confirmationPage.uri.replace(':externalId', 'fe6e9413-e804-48d5-bbfd-645917fc46e5')
-        await request(app)
-          .post(ClaimPaths.checkAndSendPage.uri)
-          .send({ type: SignatureType.BASIC })
-          .set('Cookie', `${cookieName}=ABC`)
-          .send({ signed: 'true' })
-          .expect(res => expect(res).to.be.redirect.toLocation(nextPage))
-      })
-
       it('should redirect to tasklist page when form is valid, user initiated payment, but used help with fee submission which failed with errors', async () => {
         draftStoreServiceMock.resolveFind('claim', { helpWithFees: {
           declared: YesNoOption.YES,

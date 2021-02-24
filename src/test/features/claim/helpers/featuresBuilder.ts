@@ -38,12 +38,6 @@ describe('FeaturesBuilder', () => {
   })
 
   describe('Directions Questionnaire Feature', () => {
-    it(`should add dq to features if flag is set and amount <= ${FeaturesBuilder.ONLINE_DQ_THRESHOLD}`, async () => {
-      isAutoEnrollIntoNewFeatureEnabledStub.returns(true)
-      enableFeatures('directions_questionnaire')
-      const features = await featuresBuilder.features(FeaturesBuilder.ONLINE_DQ_THRESHOLD, user)
-      expect(features).to.equal('directionsQuestionnaire')
-    })
 
     it(`should not add dq to features if amount > ${FeaturesBuilder.ONLINE_DQ_THRESHOLD}`, async () => {
       isAutoEnrollIntoNewFeatureEnabledStub.returns(true)
