@@ -5,71 +5,75 @@ const I: I = actor()
 export class DefendantTaskListPage {
 
   selectTaskConfirmYourDetails (): void {
-    I.click('Confirm your details')
+    this.clickText('Confirm your details')
   }
 
   selectTaskMoreTimeNeededToRespond (): void {
-    I.click('Decide if you need more time to respond')
+    this.clickText('Decide if you need more time to respond')
   }
 
   selectChooseAResponse (): void {
-    I.click('Choose a response')
+    this.clickText('Choose a response')
   }
 
   selectTaskHowMuchPaidToClaiment (): void {
-    I.click('How much have you paid the claimant?')
+    this.clickText('How much have you paid the claimant?')
   }
 
   selectTaskHowMuchHaveYouPaid (): void {
-    I.click('How much have you paid?')
+    this.clickText('How much have you paid?')
   }
 
   selectTaskTellUsHowMuchYouHavePaid (): void {
-    I.click('Tell us how much you’ve paid')
+    this.clickText('Tell us how much you’ve paid')
   }
 
   selectTaskHowMuchMoneyBelieveYouOwe (): void {
-    I.click('How much money do you admit you owe?')
+    this.clickText('How much money do you admit you owe?')
   }
 
   selectTaskDecideHowWillYouPay (): void {
-    I.click('Decide how you’ll pay')
+    this.clickText('Decide how you’ll pay')
   }
 
   selectTaskWhenDidYouPay (): void {
-    I.click('When did you pay?')
+    this.clickText('When did you pay?')
   }
 
   selectTaskWhyDoYouDisagreeWithTheClaim (): void {
-    I.click('Tell us why you disagree with the claim')
+    this.clickText('Tell us why you disagree with the claim')
   }
 
   selectTaskWhyDoYouDisagreeWithTheAmountClaimed (): void {
-    I.click('Why do you disagree with the amount claimed?')
+    this.clickText('Why do you disagree with the amount claimed?')
   }
 
   selectTaskWhenWillYouPay (): void {
-    I.click('When will you pay')
+    this.clickText('When will you pay')
   }
 
   selectYourRepaymentPlanTask (): void {
-    I.click('Your repayment plan')
+    this.clickText('Your repayment plan')
   }
 
   selectShareYourFinancialDetailsTask (): void {
-    I.click('Share your financial details')
+    this.clickText('Share your financial details')
   }
 
   selectTaskCheckAndSendYourResponse (): void {
-    I.click('Check and submit your response')
+    this.clickText('Check and submit your response')
   }
 
   selectTaskFreeMediation (): void {
-    I.click('Free telephone mediation')
+    this.clickText('Free telephone mediation')
   }
 
   selectTaskHearingRequirements (): void {
-    I.click('Give us details in case there’s a hearing')
+    this.clickText('Give us details in case there’s a hearing')
   }
 
+  private clickText (text: string) {
+    I.waitForText(text)
+    I.click(text)
+  }
 }

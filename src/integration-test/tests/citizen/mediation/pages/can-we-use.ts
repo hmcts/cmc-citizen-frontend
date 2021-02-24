@@ -3,13 +3,13 @@ import I = CodeceptJS.I
 const I: I = actor()
 
 const buttons = {
-  submit: 'input[type=submit]'
+  submit: { css: 'input[type=submit]' }
 }
 
 const fields = {
-  mediationPhoneNumber: 'input[id="mediationPhoneNumber"]',
-  optionYes: 'input[id=optionyes]',
-  optionNo: 'input[id=optionno]'
+  mediationPhoneNumber: { css: 'input[id="mediationPhoneNumber"]' },
+  optionYes: { css: 'input[id=optionyes]' },
+  optionNo: { css: 'input[id=optionno]' }
 }
 
 export class CanWeUsePage {
