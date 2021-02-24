@@ -406,22 +406,6 @@ describe('Claim issue: post payment callback receiver', () => {
 
         describe('when claim already exists', () => {
 
-          it('should return 500 and render error page when cannot delete draft', async () => {
-            draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
-            claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
-            idamServiceMock.resolveRetrieveServiceToken()
-            payServiceMock.resolveRetrieve('Success')
-            payServiceMock.resolveUpdate()
-            draftStoreServiceMock.resolveUpdate()
-            claimStoreServiceMock.resolveSaveClaimForUser()
-            draftStoreServiceMock.rejectDelete()
-
-            await request(app)
-              .get(Paths.finishPaymentReceiver.uri)
-              .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.serverError.withText('Error'))
-          })
-
           it('should redirect to confirmation page when everything is fine', async () => {
             draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
             idamServiceMock.resolveRetrieveServiceToken()
@@ -459,25 +443,6 @@ describe('Claim issue: post payment callback receiver', () => {
             draftStoreServiceMock.resolveUpdate()
             claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
             claimStoreServiceMock.rejectSaveClaimForUser()
-
-            await request(app)
-              .get(Paths.finishPaymentReceiver.uri)
-              .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.serverError.withText('Error'))
-
-            reset(mockLaunchDarklyClient)
-          })
-
-          it('should return 500 and render error page when cannot delete draft', async () => {
-            when(mockLaunchDarklyClient.userVariation(testUser, testRoles, 'admissions', false)).thenResolve(Promise.resolve(false))
-            draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
-            idamServiceMock.resolveRetrieveServiceToken()
-            payServiceMock.resolveRetrieve('Success')
-            draftStoreServiceMock.resolveUpdate()
-            claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
-            claimStoreServiceMock.resolveSaveClaimForUser()
-            payServiceMock.resolveUpdate()
-            draftStoreServiceMock.rejectDelete()
 
             await request(app)
               .get(Paths.finishPaymentReceiver.uri)
