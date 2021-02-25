@@ -2,6 +2,7 @@ import { PartyType } from 'integration-test/data/party-type'
 import { InterestType } from 'integration-test/data/interest-type'
 import * as uuid from 'uuid'
 import * as moment from 'moment'
+import I = CodeceptJS.I
 
 export const DEFAULT_PASSWORD = process.env.SMOKE_TEST_USER_PASSWORD
 
@@ -34,11 +35,12 @@ export const postcodeLookupQuery: PostcodeLookupQuery = {
 
 export const claimReason = 'My reasons for the claim are that I am owed this money for a variety of reason, these being...'
 
-export function createClaimData (claimantType: PartyType, defendantType: PartyType, hasEmailAddress: boolean = true,
-                                 interestType: InterestType = InterestType.STANDARD): ClaimData {
+export async function createClaimData (I: I, claimantType: PartyType, defendantType: PartyType, hasEmailAddress: boolean = true,
+                                 interestType: InterestType = InterestType.STANDARD): Promise<ClaimData> {
+  const defendant = await createDefendant(I, defendantType, hasEmailAddress)
   let claimData = {
     claimants: [createClaimant(claimantType)],
-    defendants: [createDefendant(defendantType, hasEmailAddress)],
+    defendants: [defendant],
     payment: {
       amount: claimFee * 100,
       reference: 'RC-1524-6488-1670-7520',
@@ -131,7 +133,7 @@ export function createClaimant (type: PartyType): Party {
   return claimant
 }
 
-export function createDefendant (type: PartyType, hasEmailAddress: boolean = false): Party {
+export async function createDefendant (I: I, type: PartyType, hasEmailAddress: boolean = false): Promise<Party> {
   const defendant: Party = {
     type: type,
     name: undefined,
@@ -142,7 +144,7 @@ export function createDefendant (type: PartyType, hasEmailAddress: boolean = fal
       postcode: 'SW2 1AN'
     },
     phone: '07700000002',
-    email: hasEmailAddress ? new UserEmails().getDefendant() : undefined
+    email: hasEmailAddress ? await I.getDefendantEmail() : undefined
   }
 
   switch (type) {
@@ -171,11 +173,12 @@ export function createDefendant (type: PartyType, hasEmailAddress: boolean = fal
   return defendant
 }
 
-export function createResponseData (defendantType: PartyType): ResponseData {
+export async function createResponseData (I, defendantType: PartyType): Promise<ResponseData> {
+  const defendant = await createDefendant(I, defendantType, false)
   return {
     responseType: 'FULL_DEFENCE',
     defenceType: 'DISPUTE',
-    defendant: createDefendant(defendantType, false),
+    defendant: defendant,
     moreTimeNeeded: 'no',
     freeMediation: 'no',
     defence: 'I fully dispute this claim'
@@ -210,27 +213,4 @@ export const defence: PartialDefence = {
 export const offer: Offer = {
   offerText: 'My Offer is that I can only afford, x, y, z and so will only pay £X amount',
   completionDate: moment().add(6, 'months').format('YYYY-MM-DD')
-}
-
-export class UserEmails {
-
-  getUser (type: string): string {
-    let subdomain = process.env.CITIZEN_APP_URL
-      .replace('https://', '')
-      .replace('http://', '')
-      .replace('cmc-citizen-', '')
-      .split('/')[0]
-      .split('.')[0]
-    const postfix = moment().format('YYMMDD')
-    return `civilmoneyclaims+${type}-${subdomain}-${postfix}@gmail.com`
-  }
-
-  getClaimant (): string {
-    return this.getUser('claimant')
-  }
-
-  getDefendant (): string {
-    return this.getUser('defendant')
-  }
-
 }
