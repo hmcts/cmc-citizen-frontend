@@ -10,7 +10,7 @@ let claimantEmail
 let defendantEmail
 let claimRef
 
-Feature('Full Defence Offer E2E Tests (via) Settle Out Of Court route')
+Feature('Full Defence Offer E2E Tests (via) Settle Out Of Court route ')
 
 Before(async (I: I) => {
   claimantEmail = userSteps.getClaimantEmail()
