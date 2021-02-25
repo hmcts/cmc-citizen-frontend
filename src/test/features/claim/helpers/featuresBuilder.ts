@@ -16,7 +16,7 @@ const mockLaunchDarklyClient: LaunchDarklyClient = mock(LaunchDarklyClient)
 const featuresBuilder = new FeaturesBuilder(new ClaimStoreClient(), instance(mockLaunchDarklyClient))
 
 const user = new User('1', 'user@example.com', 'John', 'Smith', ['cmc-new-features-consent-given'], 'citizen', '')
-const userWithoutConsent = new User('1', 'user@example.com', 'John', 'Smith', [], 'citizen', '')
+const userWithoutConsent = new User('1', 'user@example.com', 'John', 'Smith', ['cmc-new-features-consent-not-given'], 'citizen', '')
 
 const MIN_THRESHOLD = Math.min(
   FeaturesBuilder.JUDGE_PILOT_THRESHOLD,
@@ -141,6 +141,14 @@ describe('Auto Enroll into new feature scenario', () => {
   it(`should return undefined when auto enroll toggle is set to true and roles do not contain consent given`, async () => {
     claimStoreServiceMock.resolveRetrieveUserRoles('not-a-consent-role')
     isAutoEnrollIntoNewFeatureEnabledStub.returns(true)
+    enableFeatures('legal_advisor_pilot', 'directions_questionnaire', 'mediation_pilot')
+    const features = await featuresBuilder.features(MIN_THRESHOLD, user)
+    expect(features).to.equal('mediationPilot, LAPilotEligible, directionsQuestionnaire')
+  })
+
+  it(`should return defined roles when auto enroll toggle is set to false and user has given consent to new feature`, async () => {
+    claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
+    isAutoEnrollIntoNewFeatureEnabledStub.returns(false)
     enableFeatures('legal_advisor_pilot', 'directions_questionnaire', 'mediation_pilot')
     const features = await featuresBuilder.features(MIN_THRESHOLD, user)
     expect(features).to.equal('mediationPilot, LAPilotEligible, directionsQuestionnaire')
