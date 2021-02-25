@@ -28,11 +28,11 @@ const defendantTaskListPage: DefendantTaskListPage = new DefendantTaskListPage()
 
 export class DefendantResponseSteps {
 
-  disputeAllClaim (testData: EndToEndTestData, claimantResponseTestData: ClaimantResponseTestData): void {
+  async disputeAllClaim (I: I, testData: EndToEndTestData, claimantResponseTestData: ClaimantResponseTestData): Promise<void> {
     defenceSteps.loginAsDefendant(testData.defendantEmail)
     I.click(testData.claimRef)
     I.click('Respond to claim')
-    defenceSteps.confirmYourDetails(createDefendant(testData.defendantPartyType, false))
+    defenceSteps.confirmYourDetails(await createDefendant(I, testData.defendantPartyType, false))
     defenceSteps.requestNoExtraTimeToRespond()
     defenceSteps.rejectAllOfClaimAsDisputeClaim()
     defendantSteps.selectTaskWhyDoYouDisagreeWithTheClaim()
@@ -58,11 +58,11 @@ export class DefendantResponseSteps {
     I.see(`We’ve emailed ${createClaimant(PartyType.INDIVIDUAL).name} your response, explaining why you reject the claim.`)
   }
 
-  disputeClaimAsAlreadyPaid (testData: EndToEndTestData, claimantResponseTestData: ClaimantResponseTestData, isClaimTotalPaid: boolean): void {
+  async disputeClaimAsAlreadyPaid (I: I, testData: EndToEndTestData, claimantResponseTestData: ClaimantResponseTestData, isClaimTotalPaid: boolean): Promise<void> {
     defenceSteps.loginAsDefendant(testData.defendantEmail)
     I.click(testData.claimRef)
     I.click('Respond to claim')
-    defenceSteps.confirmYourDetails(createDefendant(testData.defendantPartyType, false))
+    defenceSteps.confirmYourDetails(await createDefendant(I, testData.defendantPartyType, false))
     defenceSteps.requestNoExtraTimeToRespond()
     defenceSteps.rejectAllOfClaimAsAlreadyPaid()
     defendantSteps.selectTaskTellUsHowMuchYouHavePaid()
