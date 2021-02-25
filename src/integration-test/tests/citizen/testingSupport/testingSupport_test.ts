@@ -13,12 +13,12 @@ const claimantCheckAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndS
 Feature('Testing support')
 
 Scenario('I create a claim draft using testing support and submit it @nightly', { retries: 3 }, async (I: I) => {
-  const email: string = userSteps.getClaimantEmail()
+  const email: string = await I.getClaimantEmail()
 
   userSteps.login(email)
   testingSupportSteps.createClaimDraft()
   claimantCheckAndSendPage.checkFactsTrueAndSubmit()
-  paymentSteps.payWithWorkingCard()
+  await paymentSteps.payWithWorkingCard(I)
 
   I.waitForText('Claim submitted')
 })

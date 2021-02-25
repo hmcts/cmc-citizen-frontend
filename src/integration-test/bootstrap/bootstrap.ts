@@ -5,11 +5,8 @@ import { request } from 'integration-test/helpers/clients/base/request'
 import { RequestResponse } from 'request'
 import { IdamClient } from 'integration-test/helpers/clients/idamClient'
 import { ClaimStoreClient } from 'integration-test/helpers/clients/claimStoreClient'
-import { UserEmails } from 'integration-test/data/test-data'
 
 const citizenAppURL = process.env.CITIZEN_APP_URL
-
-const userEmails: UserEmails = new UserEmails()
 
 class Client {
   static checkHealth (appURL: string): Promise<RequestResponse> {
@@ -101,24 +98,24 @@ async function createSmokeTestsUserIfDoesntExist (username: string, userRole: st
     console.log('Failed to add user consent role')
     throw err
   }
+  console.log(`Test user created: ${username}`)
 }
 
 module.exports = {
-  bootstrapAll: async function (done) {
+  bootstrapAll: async function (claimantEmail: string, defendantEmail: string) {
     try {
       await waitTillHealthy(citizenAppURL)
       if (process.env.IDAM_URL) {
         if (process.env.SMOKE_TEST_CITIZEN_USERNAME) {
           await Promise.all([
             createSmokeTestsUserIfDoesntExist(process.env.SMOKE_TEST_CITIZEN_USERNAME, 'citizen', process.env.SMOKE_TEST_USER_PASSWORD),
-            createSmokeTestsUserIfDoesntExist(userEmails.getDefendant(), 'citizen', process.env.SMOKE_TEST_USER_PASSWORD),
-            createSmokeTestsUserIfDoesntExist(userEmails.getClaimant(), 'citizen', process.env.SMOKE_TEST_USER_PASSWORD)
+            createSmokeTestsUserIfDoesntExist(claimantEmail, 'citizen', process.env.SMOKE_TEST_USER_PASSWORD),
+            createSmokeTestsUserIfDoesntExist(defendantEmail, 'citizen', process.env.SMOKE_TEST_USER_PASSWORD)
           ])
         }
       }
     } catch (error) {
       handleError(error)
     }
-    done()
   }
 }

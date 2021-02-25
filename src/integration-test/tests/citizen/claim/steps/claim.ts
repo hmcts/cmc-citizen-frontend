@@ -108,8 +108,8 @@ export class ClaimSteps {
     citizenPhonePage.enterPhone(claimant.phone)
   }
 
-  enterTheirDetails (defendantType: PartyType, enterDefendantEmail: boolean = true, byLookup: boolean = false): void {
-    const defendant = createDefendant(defendantType, enterDefendantEmail)
+  async enterTheirDetails (I: I, defendantType: PartyType, enterDefendantEmail: boolean = true, byLookup: boolean = false): Promise<void> {
+    const defendant = await createDefendant(I, defendantType, enterDefendantEmail)
 
     let manualEntryLink = true
     switch (defendantType) {
@@ -188,8 +188,8 @@ export class ClaimSteps {
     claimantEvidencePage.enterEvidenceRow('CONTRACTS_AND_AGREEMENTS', 'ok')
   }
 
-  checkClaimFactsAreTrueAndSubmit (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true): void {
-    claimantCheckAndSendPage.verifyCheckAndSendAnswers(claimantType, defendantType, enterDefendantEmail)
+  async checkClaimFactsAreTrueAndSubmit (I: I, claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true): Promise<void> {
+    await claimantCheckAndSendPage.verifyCheckAndSendAnswers(I, claimantType, defendantType, enterDefendantEmail)
 
     if (claimantType === PartyType.COMPANY || claimantType === PartyType.ORGANISATION) {
       claimantCheckAndSendPage.signStatementOfTruthAndSubmit('Jonny', 'Director')
@@ -198,7 +198,7 @@ export class ClaimSteps {
     }
   }
 
-  async makeAClaimAndSubmitStatementOfTruth (email: string, claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true) {
+  async makeAClaimAndSubmitStatementOfTruth (I: I, email: string, claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true) {
     userSteps.login(email)
     if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
       testingSupport.deleteClaimDraft()
@@ -211,7 +211,7 @@ export class ClaimSteps {
     userSteps.selectYourDetails()
     this.enterMyDetails(claimantType)
     userSteps.selectTheirDetails()
-    this.enterTheirDetails(defendantType, enterDefendantEmail)
+    await this.enterTheirDetails(I, defendantType, enterDefendantEmail)
     userSteps.selectClaimAmount()
     this.enterTestDataClaimAmount()
     this.claimantTotalAmountPageRead()
@@ -227,12 +227,12 @@ export class ClaimSteps {
     this.enterClaimDetails()
     I.bypassPCQ()
     userSteps.selectCheckAndSubmitYourClaim()
-    this.checkClaimFactsAreTrueAndSubmit(claimantType, defendantType, enterDefendantEmail)
+    await this.checkClaimFactsAreTrueAndSubmit(I, claimantType, defendantType, enterDefendantEmail)
   }
 
-  async makeAClaimAndSubmit (email: string, claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true): Promise<string> {
-    this.makeAClaimAndSubmitStatementOfTruth(email, claimantType, defendantType, enterDefendantEmail)
-    paymentSteps.payWithWorkingCard()
+  async makeAClaimAndSubmit (I: I, email: string, claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true): Promise<string> {
+    await this.makeAClaimAndSubmitStatementOfTruth(I, email, claimantType, defendantType, enterDefendantEmail)
+    await paymentSteps.payWithWorkingCard(I)
     I.waitForText('Claim submitted')
     return claimantClaimConfirmedPage.getClaimReference()
   }
@@ -245,9 +245,9 @@ export class ClaimSteps {
     newFeaturesPage.optIn()
   }
 
-  async makeAClaimAndNavigateUpToPayment () {
+  async makeAClaimAndNavigateUpToPayment (I: I) {
     const claimant = createClaimant(PartyType.INDIVIDUAL)
-    const defendant = createDefendant(PartyType.INDIVIDUAL, true)
+    const defendant = await createDefendant(I, PartyType.INDIVIDUAL, true)
 
     userSteps.loginWithPreRegisteredUser(SMOKE_TEST_CITIZEN_USERNAME, SMOKE_TEST_USER_PASSWORD)
     if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
@@ -302,7 +302,7 @@ export class ClaimSteps {
     I.see('SW2 1AN')
     I.see('07700000001')
     I.see(claimReason)
-    claimantCheckAndSendPage.verifyDefendantCheckAndSendAnswers(PartyType.INDIVIDUAL, true)
+    await claimantCheckAndSendPage.verifyDefendantCheckAndSendAnswers(I, PartyType.INDIVIDUAL, true)
     claimantCheckAndSendPage.verifyClaimAmount()
 
     if (!process.env.CITIZEN_APP_URL.includes('sprod')) {
@@ -311,7 +311,7 @@ export class ClaimSteps {
     }
   }
 
-  completeStartOfClaimJourney (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true) {
+  async completeStartOfClaimJourney (I: I, claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true) {
     userSteps.selectResolvingThisDispute()
     this.resolveDispute()
     userSteps.selectCompletingYourClaim()
@@ -319,7 +319,7 @@ export class ClaimSteps {
     userSteps.selectYourDetails()
     this.enterMyDetails(claimantType)
     userSteps.selectTheirDetails()
-    this.enterTheirDetails(defendantType, enterDefendantEmail, true)
+    await this.enterTheirDetails(I, defendantType, enterDefendantEmail, true)
     userSteps.selectClaimAmount()
     I.see('Claim amount')
     this.enterClaimAmount(10, 20.50, 50)
@@ -335,9 +335,9 @@ export class ClaimSteps {
     this.enterClaimEvidence()
   }
 
-  async makeAHwfClaimAndNavigateUpToPayment () {
+  async makeAHwfClaimAndNavigateUpToPayment (I: I) {
     const claimant = createClaimant(PartyType.INDIVIDUAL)
-    const defendant = createDefendant(PartyType.INDIVIDUAL, true)
+    const defendant = await createDefendant(I, PartyType.INDIVIDUAL, true)
     claimantCheckAndSendPage.open('')
     // userSteps.loginWithPreRegisteredUser(SMOKE_TEST_CITIZEN_USERNAME, SMOKE_TEST_USER_PASSWORD)
     if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
@@ -391,14 +391,15 @@ export class ClaimSteps {
     I.see('SW2 1AN')
     I.see('07700000001')
     I.see(claimReason)
-    claimantCheckAndSendPage.verifyDefendantCheckAndSendAnswers(PartyType.INDIVIDUAL, true)
+    await claimantCheckAndSendPage.verifyDefendantCheckAndSendAnswers(I, PartyType.INDIVIDUAL, true)
     claimantCheckAndSendPage.verifyClaimAmount()
   }
-  async makeAHwfClaimAndSubmit () {
+  async makeAHwfClaimAndSubmit (I: I) {
     const claimant = createClaimant(PartyType.INDIVIDUAL)
-    const defendant = createDefendant(PartyType.INDIVIDUAL, true)
+    const defendant = await createDefendant(I, PartyType.INDIVIDUAL, true)
     claimantCheckAndSendPage.open('')
-    userSteps.login(userSteps.getClaimantEmail())
+    const claimantEmail = await I.getClaimantEmail()
+    userSteps.login(claimantEmail)
     if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
       testingSupport.deleteClaimDraft()
     }
@@ -450,7 +451,7 @@ export class ClaimSteps {
     I.see('SW2 1AN')
     I.see('07700000001')
     I.see(claimReason)
-    claimantCheckAndSendPage.verifyDefendantCheckAndSendAnswers(PartyType.INDIVIDUAL, true)
+    await claimantCheckAndSendPage.verifyDefendantCheckAndSendAnswers(I, PartyType.INDIVIDUAL, true)
     claimantCheckAndSendPage.verifyClaimAmount()
     if (isHwfEnabled) {
       I.see('HWF1234567')
