@@ -12,7 +12,7 @@ let claimRef
 
 Feature('Full Defence Offer E2E Tests (via) Settle Out Of Court route')
 
-BeforeSuite(async (I: I) => {
+Before(async (I: I) => {
   claimantEmail = userSteps.getClaimantEmail()
   defendantEmail = userSteps.getDefendantEmail()
 
@@ -33,7 +33,7 @@ Scenario('Claimant Accepted Offer @nightly @citizen', { retries: 3 }, async (I: 
   I.click('Sign out')
 })
 
-Scenario(' Defendant countersigned offer @nightly @citizen', { retries: 3 }, async (I: I) => {
+Scenario('Defendant Countersigned Offer @nightly @citizen', { retries: 3 }, async (I: I) => {
   userSteps.login(claimantEmail)
   offerSteps.acceptOfferFromDashboard(claimRef)
   I.click('Sign out')
