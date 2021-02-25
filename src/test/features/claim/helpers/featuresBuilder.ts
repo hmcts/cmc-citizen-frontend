@@ -48,9 +48,8 @@ describe('FeaturesBuilder', () => {
   describe('Directions Questionnaire Feature', () => {
     it(`should add dq to features if flag is set and amount <= ${FeaturesBuilder.ONLINE_DQ_THRESHOLD}`, async () => {
       isAutoEnrollIntoNewFeatureEnabledStub.returns(true)
-      enableFeatures('directions_questionnaire')
       const features = await featuresBuilder.features(FeaturesBuilder.ONLINE_DQ_THRESHOLD, user)
-      expect(features).to.equal('directionsQuestionnaire')
+      expect(features).to.equal('judgePilotEligible, directionsQuestionnaire')
     })
 
     it(`should not add dq to features if amount > ${FeaturesBuilder.ONLINE_DQ_THRESHOLD}`, async () => {
@@ -65,15 +64,14 @@ describe('FeaturesBuilder', () => {
   describe('Mediation Pilot Feature', () => {
     it(`should add mediation pilot to features if amount <= ${FeaturesBuilder.MEDIATION_PILOT_AMOUNT} and flag is set`, async () => {
       isAutoEnrollIntoNewFeatureEnabledStub.returns(true)
-      enableFeatures('mediation_pilot')
       const features = await featuresBuilder.features(FeaturesBuilder.MEDIATION_PILOT_AMOUNT, user)
-      expect(features).to.equal('mediationPilot')
+      expect(features).to.equal('mediationPilot, judgePilotEligible, directionsQuestionnaire')
     })
 
     it(`should not add mediation pilot to features if amount > ${FeaturesBuilder.MEDIATION_PILOT_AMOUNT}`, async () => {
       isAutoEnrollIntoNewFeatureEnabledStub.returns(true)
       const features = await featuresBuilder.features(FeaturesBuilder.MEDIATION_PILOT_AMOUNT + 0.01, user)
-      expect(features).to.be.undefined
+      expect(features).to.equal('judgePilotEligible, directionsQuestionnaire')
     })
   })
 
@@ -82,13 +80,13 @@ describe('FeaturesBuilder', () => {
       isAutoEnrollIntoNewFeatureEnabledStub.returns(true)
       enableFeatures('legal_advisor_pilot')
       const features = await featuresBuilder.features(FeaturesBuilder.LA_PILOT_THRESHOLD, user)
-      expect(features).to.equal('LAPilotEligible')
+      expect(features).to.equal('mediationPilot, LAPilotEligible, directionsQuestionnaire')
     })
 
     it(`should not add legal advisor eligible to features if amount > ${FeaturesBuilder.LA_PILOT_THRESHOLD}`, async () => {
       isAutoEnrollIntoNewFeatureEnabledStub.returns(true)
-      const features = await featuresBuilder.features(FeaturesBuilder.LA_PILOT_THRESHOLD, user)
-      expect(features).to.be.undefined
+      const features = await featuresBuilder.features(FeaturesBuilder.LA_PILOT_THRESHOLD + 1, user)
+      expect(features).to.equal('mediationPilot, judgePilotEligible, directionsQuestionnaire')
     })
   })
 
@@ -97,12 +95,12 @@ describe('FeaturesBuilder', () => {
       isAutoEnrollIntoNewFeatureEnabledStub.returns(true)
       enableFeatures('judge_pilot')
       const features = await featuresBuilder.features(FeaturesBuilder.JUDGE_PILOT_THRESHOLD, user)
-      expect(features).to.equal('judgePilotEligible')
+      expect(features).to.equal('judgePilotEligible, directionsQuestionnaire')
     })
 
     it(`should not add judge pilot eligible to features if amount > ${FeaturesBuilder.JUDGE_PILOT_THRESHOLD}`, async () => {
       isAutoEnrollIntoNewFeatureEnabledStub.returns(true)
-      const features = await featuresBuilder.features(FeaturesBuilder.JUDGE_PILOT_THRESHOLD, user)
+      const features = await featuresBuilder.features(FeaturesBuilder.JUDGE_PILOT_THRESHOLD + 1, user)
       expect(features).to.be.undefined
     })
   })
@@ -116,9 +114,8 @@ describe('FeaturesBuilder', () => {
 
   it(`should not add judge pilot if legal advisor pilot is eligible`, async () => {
     isAutoEnrollIntoNewFeatureEnabledStub.returns(true)
-    enableFeatures('legal_advisor_pilot', 'judge_pilot')
     const features = await featuresBuilder.features(FeaturesBuilder.LA_PILOT_THRESHOLD, user)
-    expect(features).to.equal('LAPilotEligible')
+    expect(features).to.equal('mediationPilot, LAPilotEligible, directionsQuestionnaire')
   })
 })
 
