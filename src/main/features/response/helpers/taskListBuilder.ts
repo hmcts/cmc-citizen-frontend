@@ -34,7 +34,6 @@ import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { DetailsInCaseOfHearingTask } from 'response/tasks/detailsInCaseOfHearingTask'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 import { FeatureToggles } from 'utils/featureToggles'
-import { DeadlineCalculatorClient } from 'claims/deadlineCalculatorClient'
 import { TaskStatus } from 'utils/taskStatus'
 
 export class TaskListBuilder extends TaskStatus {
@@ -50,8 +49,7 @@ export class TaskListBuilder extends TaskStatus {
       )
     )
 
-    const postponedDeadline: moment.Moment = await DeadlineCalculatorClient.calculatePostponedDeadline(claim.issuedOn)
-    if (!isPastDeadline(now, postponedDeadline)) {
+    if (!isPastDeadline(now, claim.responseDeadline)) {
       tasks.push(
         new TaskListItem(
           'Decide if you need more time to respond',
