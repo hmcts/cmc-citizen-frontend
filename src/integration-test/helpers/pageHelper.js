@@ -21,6 +21,10 @@ class PageHelper extends Helper {
     return this.helpers['WebDriver'].amOnPage(`${citizenAppBaseURL}${path}`)
   }
 
+  checkForIE11() {
+    return this.helpers['WebDriver'].config.browser === 'internet explorer'
+  }
+
   waitIfOnSafari() {
     const helper = this.helpers['WebDriver']
     if (helper.config.browser === 'safari') {

@@ -29,7 +29,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     const claimantResponseTestData = new ClaimantResponseTestData()
     claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage = true
     // as defendant
-    helperSteps.finishResponse(testData, false)
+    await helperSteps.finishResponse(testData, false)
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
@@ -53,7 +53,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     const claimantResponseTestData = new ClaimantResponseTestData()
     claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage = true
     // as defendant
-    helperSteps.finishResponse(testData)
+    await helperSteps.finishResponse(testData)
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
@@ -76,7 +76,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     const claimantResponseTestData = new ClaimantResponseTestData()
     claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage = true
     // as defendant
-    helperSteps.finishResponse(testData)
+    await helperSteps.finishResponse(testData)
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
@@ -100,7 +100,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage = true
     claimantResponseTestData.isExpectingToSeeCourtOfferedInstalmentsPage = true
     // as defendant
-    helperSteps.finishResponse(testData)
+    await helperSteps.finishResponse(testData)
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
@@ -123,7 +123,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     const claimantResponseTestData = new ClaimantResponseTestData()
     claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage = true
     // as defendant
-    helperSteps.finishResponse(testData)
+    await helperSteps.finishResponse(testData)
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)

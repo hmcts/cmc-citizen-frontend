@@ -25,7 +25,7 @@ Scenario('I can as an Individual make a claim against an Individual who then ful
   const claimData: ClaimData = await createClaimData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
   testData.defenceType = DefenceType.FULL_REJECTION_WITH_DISPUTE
   testData.defendantClaimsToHavePaidInFull = true
-  helperSteps.finishResponse(testData)
+  await helperSteps.finishResponse(testData)
 
   I.see(testData.claimRef)
   // check dashboard
@@ -56,7 +56,7 @@ Scenario('I can as an Individual make a claim against an Individual who then ful
   const claimData: ClaimData = await createClaimData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
   testData.defenceType = DefenceType.FULL_REJECTION_WITH_DISPUTE
   testData.defendantClaimsToHavePaidInFull = true
-  helperSteps.finishResponse(testData)
+  await helperSteps.finishResponse(testData)
 
   I.see(testData.claimRef)
   // check dashboard
@@ -83,7 +83,7 @@ Scenario('I can as an Individual make a claim against an Individual who then ful
 Scenario('I can as an Individual make a claim against an Individual who then fully rejects the claim as they have already paid the full amount and I proceed with the claim @citizen', { retries: 3 }, async (I: I) => {
   const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
   testData.defenceType = DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID
-  helperSteps.finishResponse(testData)
+  await helperSteps.finishResponse(testData)
   I.click('My account')
   I.see(testData.claimRef)
   I.click(testData.claimRef)
