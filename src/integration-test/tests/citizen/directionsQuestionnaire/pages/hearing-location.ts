@@ -3,7 +3,7 @@ import I = CodeceptJS.I
 const I: I = actor()
 
 const heading = {
-  text: 'Choose a hearing location'
+  partialText: 'location'
 }
 const fields = {
   alternativeCourtName: { css: 'input[id="alternativeCourtName"]' },
@@ -15,13 +15,13 @@ const buttons = {
 
 export class HearingLocationPage {
   chooseYes (): void {
-    I.waitForText(heading.text)
+    I.waitForText(heading.partialText)
     I.checkOption('Yes')
     I.click(buttons.submit)
   }
 
   chooseNo (): void {
-    I.waitForText(heading.text)
+    I.waitForText(heading.partialText)
     I.checkOption('No')
     I.waitForElement('#alternativeOptionname')
     I.checkOption(fields.enterACourtName)
@@ -30,7 +30,7 @@ export class HearingLocationPage {
   }
 
   chooseNoAsClaimant (): void {
-    I.waitForText(heading.text)
+    I.waitForText(heading.partialText)
     I.checkOption('No')
     I.click(buttons.submit)
   }
