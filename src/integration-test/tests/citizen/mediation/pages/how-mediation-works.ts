@@ -10,6 +10,7 @@ const buttons = {
 export class HowMediationWorksPage {
 
   chooseContinue (): void {
+    I.waitForText('How free mediation works')
     I.click('Continue')
   }
 
