@@ -6,18 +6,22 @@ import { UserEmails } from 'integration-test/data/test-data'
 const userEmails: UserEmails = new UserEmails()
 
 module.exports = {
-  teardownAll: function (done) {
+  teardownAll: async function (done) {
     try {
       if (process.env.IDAM_URL) {
         if (process.env.SMOKE_TEST_CITIZEN_USERNAME) {
-          IdamClient.deleteUser(userEmails.getDefendant())
-          IdamClient.deleteUser(userEmails.getClaimant())
-          IdamClient.deleteUsers([userEmails.getClaimant(), userEmails.getDefendant()])
+          await Promise.all([
+            console.log('Deleting test users...'),
+            IdamClient.deleteUser(userEmails.getDefendant()),
+            IdamClient.deleteUser(userEmails.getClaimant()),
+            IdamClient.deleteUsers([userEmails.getClaimant(), userEmails.getDefendant()])
+          ])
         }
       }
     } catch (error) {
       handleError(error)
     }
+    done()
   }
 }
 

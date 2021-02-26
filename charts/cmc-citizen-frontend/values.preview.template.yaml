@@ -22,9 +22,23 @@ nodejs:
   ingressIP: ${INGRESS_IP}
   consulIP: ${CONSUL_LB_IP}
   ingressHost: ${SERVICE_FQDN}
-  readinessDelay: 90  # claim-store will start much slower
-  livenessDelay: 90  # claim-store will start much slower
+  readinessDelay: 130  # claim-store will start much slower
+  livenessDelay: 130  # claim-store will start much slower
+  memoryRequests: 512Mi
+  cpuRequests: 1000m
+  memoryLimits: 1024Mi
+  cpuLimits: 2500m
+  devmemoryRequests: 512Mi
+  devcpuRequests: 1000m
+  devmemoryLimits: 1024Mi
+  devcpuLimits: 2500m
+  autoscaling:        # Default is false
+    enabled: true
+    maxReplicas: 5    # Required setting
+    targetCPUUtilizationPercentage: 80 # Default is 80% target CPU utilization
   environment:
+    REFORM_TEAM: cmc
+    REFORM_SERVICE_NAME: citizen-frontend
     LOG_LEVEL: DEBUG
     HTTP_TIMEOUT: 60000
     FEATURE_TOGGLES_API_URL: http://${SERVICE_NAME}-ftr-tgl
