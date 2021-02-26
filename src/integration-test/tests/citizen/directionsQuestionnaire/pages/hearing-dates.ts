@@ -2,18 +2,22 @@ import I = CodeceptJS.I
 
 const I: I = actor()
 
+const heading = {
+  partialText: 'Are there dates in the next 9 months'
+}
 const fields = {
-  next: '.next',
-  prev: '.prev',
-  day: '.day:not(.disabled)'
+  next: { css: '.next' },
+  prev: { css: '.prev' },
+  day: { css: '.day:not(.disabled)' }
 }
 const buttons = {
-  submit: 'input[id="saveAndContinue"]'
+  submit: { css: 'input[id="saveAndContinue"]' }
 }
 
 export class HearingDatesPage {
 
   chooseYes (): void {
+    I.waitForText(heading.partialText)
     I.checkOption('Yes')
     I.waitForElement(fields.next)
     I.click(fields.next)
@@ -24,6 +28,7 @@ export class HearingDatesPage {
   }
 
   chooseNo (): void {
+    I.waitForText(heading.partialText)
     I.checkOption('No')
     I.click(buttons.submit)
   }

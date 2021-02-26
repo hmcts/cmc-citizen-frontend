@@ -76,6 +76,9 @@ const setupConfig = {
     SaucelabsReporter: {
       require: './src/integration-test/helpers/saucelabsReporter'
     },
+    SauceLabsBrowserHelper: {
+      require: './src/integration-test/helpers/SauceLabsBrowserHelper.js'
+    },
     Mochawesome: {
       uniqueScreenshotNames: 'true'
     }
