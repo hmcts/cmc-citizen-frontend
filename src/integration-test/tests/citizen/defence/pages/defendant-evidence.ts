@@ -15,6 +15,8 @@ const buttons = {
 export class DefendantEvidencePage {
 
   enterEvidenceRow (type: string, description: string, comment: string): void {
+    I.waitForElement(fields.type)
+    I.waitIfOnSafari()
     I.selectOption(fields.type, type)
     I.waitForVisible(fields.description)
     I.fillField(fields.description, description)

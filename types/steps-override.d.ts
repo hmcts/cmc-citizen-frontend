@@ -9,6 +9,7 @@ declare namespace CodeceptJS {
     respondToClaim: (referenceNumber: string, ownerEmail: string, responseData: ResponseData, defendantEmail: string) => void
     retrievePin (letterHolderId: string): () => string
     amOnCitizenAppPage: (path: string) => void
+    waitIfOnSafari: () => any
     fillField: (locator: string | object, value: string) => any
     selectOption: (select: string | object, option: string) => any
     rejectAnsweringPCQ: () => any
