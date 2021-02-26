@@ -12,7 +12,7 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      <p>{{ t('The claimant provided these details. You can correct your address.') }}</p>
+      <p>{{ t('Your name and address were provided by the person, business or organisation claiming from you (the claimant).') }}</p>
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
         <input type="hidden" name="type" value="{{ form.model.type }}">
