@@ -12,6 +12,11 @@ class PcqHelper extends codecept_helper {
   // this silently bypasses PCQ without throwing any errors
   async bypassPCQ () {
     const helper = this.helpers['WebDriver'];
+    const crossBrowserTest = helper.options.capabilities['sauce:options']
+    if (crossBrowserTest) {
+      // add delay for crossbrowser tests as pages can take longer to load
+      await helper.wait(5)
+    }
     const heading = await helper.grabTextFrom('h1');
     console.log(heading);
     if (heading === 'Equality and diversity questions') {
