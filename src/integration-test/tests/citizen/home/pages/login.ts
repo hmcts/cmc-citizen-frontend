@@ -3,11 +3,11 @@ import I = CodeceptJS.I
 const I: I = actor()
 
 const fields = {
-  username: '#username',
-  password: '#password'
+  username: { css: '#username' },
+  password: { css: '#password' }
 }
 const buttons = {
-  submit: 'input[type=submit]'
+  submit: { css: 'input[type=submit]' }
 }
 
 export class LoginPage {
