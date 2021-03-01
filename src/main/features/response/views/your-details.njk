@@ -13,6 +13,7 @@
   <div class="grid-row">
     <div class="column-two-thirds">
       <p>{{ t('Your name and address were provided by the person, business or organisation claiming from you (the claimant).') }}</p>
+      <p>{{ t('If your address is not correct you can change it here. Any changes will be shared with the claimant when you submit your response.') }}</p>
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
         <input type="hidden" name="type" value="{{ form.model.type }}">
