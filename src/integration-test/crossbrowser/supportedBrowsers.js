@@ -3,15 +3,18 @@ const LATEST_WINDOWS = 'Windows 10';
 
 const supportedBrowsers = {
     microsoft: {
-        ie11_win: {
-            browserName: 'internet explorer',
-            platformName: LATEST_WINDOWS,
-            browserVersion: 'latest',
-            'sauce:options': {
-                name: 'OCMC Citizen: IE11',
-                screenResolution: '1400x1050'
-            }
-        },
+      // BUG: Date Picker not displaying in IE11 for citizen-frontend (25/2/21),
+      // https://tools.hmcts.net/jira/browse/ROC-8904
+      // uncomment IE11 config once bug is fixed.
+      // ie11_win: {
+        //     browserName: 'internet explorer',
+        //     platformName: LATEST_WINDOWS,
+        //     browserVersion: 'latest',
+        //     'sauce:options': {
+        //         name: 'OCMC Citizen: IE11',
+        //         screenResolution: '1400x1050'
+        //     }
+        // },
         edge_win_latest: {
             browserName: 'MicrosoftEdge',
             platformName: LATEST_WINDOWS,

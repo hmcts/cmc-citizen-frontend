@@ -3,7 +3,7 @@ import I = CodeceptJS.I
 const I: I = actor()
 
 const buttons = {
-  submit: 'input.button.button-start'
+  submit: { css: 'input.button.button-start' }
 }
 
 export class DefendantStartPage {

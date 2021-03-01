@@ -3,24 +3,26 @@ import I = CodeceptJS.I
 const I: I = actor()
 
 const buttons = {
-  submit: 'input[type=submit]'
+  submit: { css: 'input[type=submit]' }
 }
 
 export class DefendantDefenceTypePage {
 
   admitAllOfMoneyClaim (): void {
-    I.checkOption('I admit all of the claim')
-    I.click(buttons.submit)
+    this.answerClaim('I admit all of the claim')
   }
 
   admitPartOfMoneyClaim (): void {
-    I.checkOption('I admit part of the claim')
-    I.click(buttons.submit)
+    this.answerClaim('I admit part of the claim')
   }
 
   rejectAllOfMoneyClaim (): void {
-    I.checkOption('I reject all of the claim')
-    I.click(buttons.submit)
+    this.answerClaim('I reject all of the claim')
   }
 
+  private answerClaim (text: string): void {
+    I.waitForText(text)
+    I.checkOption(text)
+    I.click(buttons.submit)
+  }
 }
