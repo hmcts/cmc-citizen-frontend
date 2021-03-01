@@ -21,6 +21,12 @@ class PageHelper extends Helper {
     return this.helpers['WebDriver'].amOnPage(`${citizenAppBaseURL}${path}`)
   }
 
+  waitIfOnSafari() {
+    const helper = this.helpers['WebDriver']
+    if (helper.config.browser === 'safari') {
+      return this.helpers['WebDriver'].wait(5)
+    }
+  }
 }
 
 module.exports = PageHelper

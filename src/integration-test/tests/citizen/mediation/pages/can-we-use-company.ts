@@ -3,22 +3,24 @@ import I = CodeceptJS.I
 const I: I = actor()
 
 const buttons = {
-  submit: 'input[type=submit]'
+  submit: { css: 'input[type=submit]' }
 }
 
 const fields = {
-  mediationPhoneNumber: 'input[id="mediationPhoneNumber"]',
-  mediationContactPerson: 'input[id="mediationContactPerson"]'
+  mediationPhoneNumber: { css: 'input[id="mediationPhoneNumber"]' },
+  mediationContactPerson: { css: 'input[id="mediationContactPerson"]' }
 }
 
 export class CanWeUseCompanyPage {
 
   chooseYes (): void {
+    I.waitForText('Yes')
     I.checkOption('Yes')
     I.click(buttons.submit)
   }
 
   chooseNo (mediationPhoneNumber: string, mediationContactPerson: string): void {
+    I.waitForText('No')
     I.checkOption('No')
     I.fillField(fields.mediationPhoneNumber, mediationPhoneNumber)
     I.fillField(fields.mediationContactPerson, mediationContactPerson)
