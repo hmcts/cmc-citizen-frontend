@@ -146,14 +146,14 @@ export class DefenceSteps {
   }
 
   addTimeLineOfEvents (timeline: Timeline): void {
-    I.see('Add your timeline of events')
+    I.waitForText('Add your timeline of events')
     defendantTimelineOfEventsPage.enterTimelineEvent(0, timeline.events[0].date, timeline.events[0].description)
     defendantTimelineOfEventsPage.enterTimelineEvent(1, timeline.events[1].date, timeline.events[1].description)
     defendantTimelineOfEventsPage.submitForm()
   }
 
   enterEvidence (description: string, comment: string): void {
-    I.see('List your evidence')
+    I.waitForText('List your evidence')
     defendantEvidencePage.enterEvidenceRow('CONTRACTS_AND_AGREEMENTS', description, comment)
   }
 
@@ -296,11 +296,11 @@ export class DefenceSteps {
     isClaimAlreadyPaid: boolean = true,
     expectPhonePage: boolean = false
 ): void {
-    I.see('Confirm your details')
+    I.waitForText('Confirm your details')
     I.see('Decide if you need more time to respond')
     I.see('Choose a response')
     this.confirmYourDetails(defendantParty, expectPhonePage)
-    I.see('COMPLETE')
+    I.waitForText('COMPLETE')
 
     if (isRequestMoreTimeToRespond) {
       this.requestMoreTimeToRespond()
@@ -311,7 +311,7 @@ export class DefenceSteps {
     switch (defenceType) {
       case DefenceType.FULL_REJECTION_WITH_DISPUTE:
         this.rejectAllOfClaimAsDisputeClaim()
-        I.see('Tell us why you disagree with the claim')
+        I.waitForText('Tell us why you disagree with the claim')
         this.submitDefenceText('I fully dispute this claim')
         this.addTimeLineOfEvents({
           events: [{ date: 'may', description: 'ok' } as TimelineEvent, {
@@ -363,7 +363,7 @@ export class DefenceSteps {
         throw new Error('Unknown DefenceType')
     }
     this.checkAndSendAndSubmit(defendantType, defenceType)
-    I.see('You’ve submitted your response')
+    I.waitForText('You’ve submitted your response')
   }
 
   makeFullAdmission (

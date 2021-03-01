@@ -3,15 +3,15 @@ import I = CodeceptJS.I
 const I: I = actor()
 
 const fields = {
-  name: 'input[id=name]',
-  addressLine1: 'input[id="address[line1]"]',
-  addressLine2: 'input[id="address[line2]"]',
-  addressCity: 'input[id="address[city]"]',
-  postcode: 'input[id="address[postcode]"]'
+  name: { css: 'input[id=name]' },
+  addressLine1: { css: 'input[id="address[line1]"]' },
+  addressLine2: { css: 'input[id="address[line2]"]' },
+  addressCity: { css: 'input[id="address[city]"]' },
+  postcode: { css: 'input[id="address[postcode]"]' }
 }
 
 const buttons = {
-  submit: 'input[type=submit]'
+  submit: { css: 'input[type=submit]' }
 }
 
 export class DefendantNameAndAddressPage {
