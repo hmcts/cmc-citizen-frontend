@@ -15,8 +15,9 @@ export class OfferSteps {
 
   makeOfferFromDashboard (claimRef: string): void {
     I.click('My account')
+    I.waitForText('Your money claims account')
     I.see('Your money claims account')
-    I.click(claimRef)
+    I.retry(2).click(claimRef)
     I.click('settle the claim out of court')
     this.makeOffer()
   }
@@ -46,7 +47,7 @@ export class OfferSteps {
   }
 
   countersignAgreement (): void {
-    I.click('Sign the settlement agreement')
+    I.retry(2).click('Sign the settlement agreement')
     I.click('Make an agreement')
     this.signAgreement()
     I.see('You’ve both signed a settlement agreement')
@@ -59,13 +60,15 @@ export class OfferSteps {
 
   viewOfferFromDashboard (claimRef: string): void {
     this.viewClaimFromDashboard(claimRef)
-    I.click('View and respond to the offer')
+    I.wait(2)
+    I.retry(2).click('View and respond to the offer')
   }
 
   viewClaimFromDashboard (claimRef: string): void {
-    I.click('My account')
+    I.wait(2)
+    I.retry(2).click('My account')
     I.see('Your money claims account')
-    I.click(claimRef)
+    I.retry(2).click(claimRef)
   }
 
   private signAgreement (): void {
