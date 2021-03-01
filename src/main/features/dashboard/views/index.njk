@@ -9,17 +9,10 @@
 
   <div class="grid-row">
     <div class="column-full">
-    <div class="column-full">
       {% if not claimDraftSaved %}
         {{ internalLink(t('Make a new money claim'), EligibilityPaths.startPage.uri, 'newclaim', 'start-now') }}
       {% endif %}
-    </div><div class="column-full">
-      {% if not claimDraftSaved %}
-        {{ internalLink(t('Make a new money claim'), EligibilityPaths.startPage.uri, 'newclaim', 'start-now') }}
-      {% endif %}
-    </div>
       {% if claimsAsClaimant | length or claimDraftSaved %}
-
         <h2 class="heading-medium"> {{ t('Claims you’ve made') }}</h2>
         <p> To view or progress your case click on your claim number. Most recently created claims are listed first. </p>
         <table class="claim-dashboard">
