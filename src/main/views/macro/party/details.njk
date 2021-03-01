@@ -21,6 +21,7 @@
 
   {% if addressSection %}
     <h2 class="heading-medium">{{ t(addressSection.heading) }}</h2>
+    <p>{{ t('If your address is not correct you can change it here. Any changes will be shared with the claimant when you submit your response.') }}</p>
     {% if addressSection.hint %}
       <p>{{ t(addressSection.hint) }}</p>
     {% endif %}
