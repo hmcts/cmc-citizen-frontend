@@ -66,9 +66,9 @@ Scenario('Claim with no interest @citizen', { retries: 0 }, async (I: I) => {
   await claimSteps.checkClaimFactsAreTrueAndSubmit(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
   await paymentSteps.payWithWorkingCard(I)
   I.waitForText('Claim submitted')
-})
+}).retry(1)
 
-Scenario('Claim with different interest rate and date @citizen', { retries: 3 }, async (I: I) => {
+Scenario('Claim with different interest rate and date @citizen', { retries: 1 }, async (I: I) => {
   await claimSteps.completeStartOfClaimJourney(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true)
   interestSteps.enterSpecificInterestRateAndDate(2, '1990-01-01')
   const isHwfEnabled = await I.checkHWF()
@@ -85,9 +85,9 @@ Scenario('Claim with different interest rate and date @citizen', { retries: 3 },
   if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
     testingSupport.deleteClaimDraft()
   }
-})
+}).retry(3)
 
-Scenario('Claim with a manually entered interest amount and a daily amount added @citizen', { retries: 3 }, async (I: I) => {
+Scenario('Claim with a manually entered interest amount and a daily amount added @citizen', { retries: 0 }, async (I: I) => {
   await claimSteps.completeStartOfClaimJourney(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true)
   interestSteps.enterBreakdownInterestAmountAndDailyAmount()
   const isHwfEnabled = await I.checkHWF()
@@ -106,10 +106,10 @@ Scenario('Claim with a manually entered interest amount and a daily amount added
   if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
     testingSupport.deleteClaimDraft()
   }
-})
+}).retry(3)
 
 // PCQ related tests
-Scenario('I should not see PCQ if "Your deails" are missing while making a claim @citizen', { retries: 3 }, async (I: I) => {
+Scenario('I should not see PCQ if "Your deails" are missing while making a claim @citizen', { retries: 0 }, async (I: I) => {
   claimSteps.enterClaimDetails()
 
   // I shouldn't be navigated to PCQ instead I should be taken back to "Make a money claim" page
@@ -118,9 +118,9 @@ Scenario('I should not see PCQ if "Your deails" are missing while making a claim
   if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
     testingSupport.deleteClaimDraft()
   }
-})
+}).retry(3)
 
-Scenario('I should be redirected to PCQ if "Your details" are filled in while making a claim @citizen', { retries: 3 }, async (I: I) => {
+Scenario('I should be redirected to PCQ if "Your details" are filled in while making a claim @citizen', { retries: 0 }, async (I: I) => {
   // add your details
   userSteps.selectYourDetails()
   claimSteps.enterMyDetails(PartyType.INDIVIDUAL)
@@ -141,4 +141,4 @@ Scenario('I should be redirected to PCQ if "Your details" are filled in while ma
   // Then i should be taken back to money claim
   I.see('Make a money claim')
 
-})
+}).retry(3)

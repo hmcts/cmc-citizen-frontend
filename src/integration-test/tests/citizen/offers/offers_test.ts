@@ -27,14 +27,14 @@ Before(async (I: I) => {
 
 })
 
-Scenario('Claimant Accepted Offer @nightly @citizen', { retries: 3 }, async (I: I) => {
+Scenario('Claimant Accepted Offer @nightly @crossbrowser', { retries: 0 }, async (I: I) => {
   userSteps.login(claimantEmail)
   offerSteps.acceptOfferFromDashboard(claimRef)
   I.seeTitleEquals('Confirmation - Money Claims')
   I.click('Sign out')
-})
+}).tag('@citizen').retry(3)
 
-Scenario('Defendant Countersigned Offer @nightly @citizen', { retries: 3 }, async (I: I) => {
+Scenario('Defendant Countersigned Offer @nightly @crossbrowser', { retries: 0 }, async (I: I) => {
   userSteps.login(claimantEmail)
   offerSteps.acceptOfferFromDashboard(claimRef)
   I.click('Sign out')
@@ -42,9 +42,9 @@ Scenario('Defendant Countersigned Offer @nightly @citizen', { retries: 3 }, asyn
   userSteps.login(defendantEmail)
   offerSteps.countersignOfferFromDashboard(claimRef)
   offerSteps.viewClaimFromDashboard(claimRef)
-})
+}).tag('@citizen').retry(3)
 
-Scenario('Claimant Rejected Offer @citizen @nightly', { retries: 3 }, async (I: I) => {
+Scenario('Claimant Rejected Offer @crossbrowser @nightly', { retries: 0 }, async (I: I) => {
   userSteps.login(claimantEmail)
   offerSteps.rejectOfferFromDashboard(claimRef)
   I.click('Sign out')
@@ -53,9 +53,9 @@ Scenario('Claimant Rejected Offer @citizen @nightly', { retries: 3 }, async (I: 
   offerSteps.viewClaimFromDashboard(claimRef)
 
   I.see('The claimant has rejected your offer to settle the claim.')
-})
+}).tag('@citizen').retry(3)
 
-Scenario('Settle Out Of Court E2E @nightly', { retries: 3 }, async (I: I) => {
+Scenario('Settle Out Of Court E2E', { retries: 0 }, async (I: I) => {
   userSteps.login(claimantEmail)
   offerSteps.acceptOfferFromDashboard(claimRef)
   I.click('Sign out')
@@ -65,4 +65,6 @@ Scenario('Settle Out Of Court E2E @nightly', { retries: 3 }, async (I: I) => {
   offerSteps.viewClaimFromDashboard(claimRef)
 
   I.see('You’ve both signed a legal agreement. The claim is now settled.')
-})
+}).tag('@nightly')
+  .tag('@crossbrowser')
+  .retry(3)

@@ -11,11 +11,11 @@ Scenario('I can enter a CCBC reference and get sent to MCOL @nightly', { retries
   accessRoutesSteps.returnToClaimMcol()
 })
 
-Scenario('I can enter a moneyclaims reference and login to see the dashboard @citizen', { retries: 3 }, async (I: I) => {
+Scenario('I can enter a moneyclaims reference and login to see the dashboard @citizen', { retries: 0 }, async (I: I) => {
   const claimantEmail: string = await I.getClaimantEmail()
   const claimRef = await I.createClaim(await createClaimData(I, PartyType.SOLE_TRADER, PartyType.INDIVIDUAL), claimantEmail)
   accessRoutesSteps.returnToClaimMoneyClaims(claimRef, claimantEmail)
-})
+}).retry(3)
 
 Scenario('I can select don’t have a claim number and choose to go to moneyclaims, login and see the dashboard @nightly', { retries: 3 }, async (I: I) => {
   const claimantEmail: string = await I.getClaimantEmail()

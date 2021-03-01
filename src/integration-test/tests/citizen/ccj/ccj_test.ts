@@ -11,7 +11,7 @@ const ccjSteps: CountyCourtJudgementSteps = new CountyCourtJudgementSteps()
 
 Feature('CCJ')
 
-Scenario('Request judgment as an individual with no defendant email and pay by instalments @citizen @quick', { retries: 3 },
+Scenario('Request judgment as an individual with no defendant email and pay by instalments @citizen @quick', { retries: 0 },
   async (I: I) => {
     const email: string = await I.getClaimantEmail()
     const claimantType: PartyType = PartyType.INDIVIDUAL
@@ -25,7 +25,7 @@ Scenario('Request judgment as an individual with no defendant email and pay by i
     ccjSteps.ccjDefendantToPayByInstalments()
     ccjSteps.checkCCJFactsAreTrueAndSubmit(claimantType, claimData.defendants[0], defendantType)
     I.see('County Court Judgment requested', 'h1.bold-large')
-  })
+  }).retry(3)
 
 Scenario('Request judgment as a Company, pay by set date @nightly', { retries: 3 }, async (I: I) => {
   const email: string = await I.getClaimantEmail()

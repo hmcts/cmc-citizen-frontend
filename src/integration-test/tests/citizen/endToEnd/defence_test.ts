@@ -20,7 +20,7 @@ const checkAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage(
 
 Feature('E2E tests for defence journeys')
 
-Scenario('I can as an Individual make a claim against an Individual who then fully defends and I proceed with the claim @citizen', { retries: 3 }, async (I: I) => {
+Scenario('I can as an Individual make a claim against an Individual who then fully defends and I proceed with the claim ', { retries: 1 }, async (I: I) => {
   const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
   const claimData: ClaimData = await createClaimData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
   testData.defenceType = DefenceType.FULL_REJECTION_WITH_DISPUTE
@@ -49,7 +49,7 @@ Scenario('I can as an Individual make a claim against an Individual who then ful
   claimantResponseSteps.decideToProceed()
   checkAndSendPage.checkFactsTrueAndSubmit(testData.defenceType)
   I.see('You’ve rejected their response')
-})
+}).tag('@citizen').retry(2)
 
 Scenario('I can as an Individual make a claim against an Individual who then fully defends and I accept their response @nightly', { retries: 3 }, async (I: I) => {
   const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
@@ -80,7 +80,7 @@ Scenario('I can as an Individual make a claim against an Individual who then ful
   claimantResponseSteps.decideNotToProceed()
 })
 
-Scenario('I can as an Individual make a claim against an Individual who then fully rejects the claim as they have already paid the full amount and I proceed with the claim @citizen', { retries: 3 }, async (I: I) => {
+Scenario('I can as an Individual make a claim against an Individual who then fully rejects the claim as they have already paid the full amount and I proceed with the claim', { retries: 3 }, async (I: I) => {
   const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
   testData.defenceType = DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID
   await helperSteps.finishResponse(testData)
@@ -99,7 +99,7 @@ Scenario('I can as an Individual make a claim against an Individual who then ful
   I.click('View and respond')
   claimantResponseSteps.rejectFullDefencePaidFullAmount(testData)
   I.see('You’ve rejected their response')
-})
+}).tag('@citizen').retry(3)
 
 Scenario('I can as an Individual make a claim against an Individual who then rejects the claim as they have paid the full amount then I accept the defence @nightly', { retries: 3 }, async (I: I) => {
   const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
@@ -168,7 +168,7 @@ Scenario('I can as an Individual make a claim against an Individual who then rej
   I.click('Sign out')
 })
 
-Scenario('I can as an Individual make a claim against an Individual who then rejects the claim as they have paid less than the amount claimed and I then proceed with the claim @citizen', { retries: 3 }, async (I: I) => {
+Scenario('I can as an Individual make a claim against an Individual who then rejects the claim as they have paid less than the amount claimed and I then proceed with the claim @citizen', { retries: 0 }, async (I: I) => {
   const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
   const claimantResponseTestData = new ClaimantResponseTestData()
   claimantResponseTestData.pageSpecificValues.howMuchHaveYouPaidPageEnterAmountPaidWithDateAndExplanation = {
@@ -198,4 +198,4 @@ Scenario('I can as an Individual make a claim against an Individual who then rej
   I.click('Respond')
   claimantResponseSteps.rejectFullDefencePaidLessThanFullAmount(testData)
   I.click('Sign out')
-})
+}).retry(3)

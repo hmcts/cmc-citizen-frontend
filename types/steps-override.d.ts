@@ -1,4 +1,4 @@
-declare const Scenario: (string: string, { retries: number }, callback: ICodeceptCallback) => void;
+declare const Scenario: (string: string, { retries: number }, callback: ICodeceptCallback) => any;
 
 declare namespace CodeceptJS {
   export interface I {

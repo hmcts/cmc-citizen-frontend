@@ -25,18 +25,18 @@ async function prepareClaim (I: I) {
 if (process.env.FEATURE_ADMISSIONS === 'true') {
   Feature('Fully admit all of the claim')
 
-  Scenario('I can complete the journey when I fully admit all of the claim with immediate payment @nightly @admissions', { retries: 3 }, async (I: I) => {
+  Scenario('I can complete the journey when I fully admit all of the claim with immediate payment @nightly @admissions', { retries: 0 }, async (I: I) => {
     const claimData = await prepareClaim(I)
     defenceSteps.makeFullAdmission(claimData.data.defendants[0], PartyType.INDIVIDUAL, PaymentOption.IMMEDIATELY, claimData.data.claimants[0].name, false)
-  })
+  }).retry(3)
 
-  Scenario('I can complete the journey when I fully admit all of the claim with payment by set date @nightly @admissions', { retries: 3 }, async (I: I) => {
+  Scenario('I can complete the journey when I fully admit all of the claim with payment by set date @nightly @admissions', { retries: 0 }, async (I: I) => {
     const claimData = await prepareClaim(I)
     defenceSteps.makeFullAdmission(claimData.data.defendants[0], PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE, claimData.data.claimants[0].name, false)
-  })
+  }).retry(3)
 
-  Scenario('I can complete the journey when I fully admit all of the claim with full payment by instalments and also see PCQ in my journey @citizen @admissions', { retries: 3 }, async (I: I) => {
+  Scenario('I can complete the journey when I fully admit all of the claim with full payment by instalments and also see PCQ in my journey @citizen @admissions', { retries: 0 }, async (I: I) => {
     const claimData = await prepareClaim(I)
     defenceSteps.makeFullAdmission(claimData.data.defendants[0], PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS, claimData.data.claimants[0].name, false, true)
-  })
+  }).retry(3)
 }

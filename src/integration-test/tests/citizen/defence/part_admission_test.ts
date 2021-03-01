@@ -25,11 +25,11 @@ async function prepareClaim (I: I) {
 if (process.env.FEATURE_ADMISSIONS === 'true') {
   Feature('Partially admit the claim')
 
-  Scenario('I can complete the journey when I partially admit the claim with payment already made @citizen @admissions', { retries: 3 }, async (I: I) => {
+  Scenario('I can complete the journey when I partially admit the claim with payment already made @admissions', { retries: 0 }, async (I: I) => {
     const claimData = await prepareClaim(I)
     defenceSteps.makePartialAdmission(claimData.data.defendants[0])
     await defenceSteps.partialPaymentMade(PartyType.INDIVIDUAL)
-  })
+  }).tag('@citizen').retry(3)
 
   Scenario('I can complete the journey when I partially admit the claim with immediate payment @nightly @admissions', { retries: 3 }, async (I: I) => {
     const claimData = await prepareClaim(I)
@@ -37,11 +37,11 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     await defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.IMMEDIATELY)
   })
 
-  Scenario('I can complete the journey when I partially admit the claim with by set date payment @citizen @admissions', { retries: 3 }, async (I: I) => {
+  Scenario('I can complete the journey when I partially admit the claim with by set date payment @admissions', { retries: 0 }, async (I: I) => {
     const claimData = await prepareClaim(I)
     defenceSteps.makePartialAdmission(claimData.data.defendants[0])
     await defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE)
-  })
+  }).tag('@citizen').retry(3)
 
   Scenario('I can complete the journey when I partially admit the claim with instalments payment @nightly @admissions', { retries: 3 }, async (I: I) => {
     const claimData = await prepareClaim(I)

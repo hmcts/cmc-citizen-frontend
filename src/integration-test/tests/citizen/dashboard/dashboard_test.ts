@@ -10,7 +10,7 @@ const dashboardClaimDetails: DashboardClaimDetails = new DashboardClaimDetails()
 
 Feature('Dashboard')
 
-Scenario('Check newly created claim is in my account dashboard with correct claim amount @citizen', { retries: 3 }, async (I: I) => {
+Scenario('Check newly created claim is in my account dashboard with correct claim amount @citizen', { retries: 0 }, async (I: I) => {
   const email: string = await I.getClaimantEmail()
   const claimData: ClaimData = await createClaimData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
   const claimRef: string = await I.createClaim(claimData, email)
@@ -24,4 +24,4 @@ Scenario('Check newly created claim is in my account dashboard with correct clai
   I.see(claimRef)
   dashboardClaimDetails.clickViewClaim()
   dashboardClaimDetails.checkClaimData(claimRef, claimData)
-})
+}).retry(3)

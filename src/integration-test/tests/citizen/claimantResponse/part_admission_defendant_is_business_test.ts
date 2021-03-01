@@ -36,7 +36,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.click('My account')
     I.see(testData.claimRef)
     I.see('You need to send the defendant’s financial details to the court.')
-  })
+  }).retry(3)
 
   Scenario('I can as a claimant accept and suggest an alternative payment intention with instalments @citizen @admissions @business', { retries: 3 }, async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.COMPANY, PartyType.INDIVIDUAL)
@@ -59,5 +59,5 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.click('My account')
     I.see(testData.claimRef)
     I.see('You need to send the defendant’s financial details to the court.')
-  })
+  }).retry(3)
 }
