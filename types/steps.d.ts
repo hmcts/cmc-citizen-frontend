@@ -96,6 +96,7 @@ declare namespace CodeceptJS {
     say: (msg) => any
     getClaimantEmail: () => any
     getDefendantEmail: () => any
+    retry: (retries: number) => any
   }
 }
 

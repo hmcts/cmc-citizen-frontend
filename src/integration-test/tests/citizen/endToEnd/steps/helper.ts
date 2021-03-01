@@ -20,8 +20,9 @@ export class Helper {
 
   startResponseFromDashboard (claimRef: string): void {
     const text = 'Respond to claim'
+    I.wait(3)
     I.waitForText(claimRef)
-    I.click(claimRef)
+    I.retry(2).click(claimRef)
     I.waitForText(text)
     I.click(text)
   }
@@ -53,14 +54,16 @@ export class Helper {
       testData.paymentOption = PaymentOption.IMMEDIATELY
     }
     defenceSteps.loginAsDefendant(testData.defendantEmail)
-    I.click(testData.claimRef)
+    I.wait(3)
+    I.retry(2).click(testData.claimRef)
     I.click('Respond to claim')
     defenceSteps.makeFullAdmission(testData.defendant, testData.defendantPartyType, testData.paymentOption, testData.claimantName, false)
   }
 
   finishResponseWithHandOff (claimRef: string, defendant: Party, claimant: Party, defendantEmail: string, defenceType: DefenceType): void {
     defenceSteps.loginAsDefendant(defendantEmail)
-    I.click(claimRef)
+    I.wait(3)
+    I.retry(2).click(claimRef)
     defenceSteps.sendDefenceResponseHandOff(claimRef, defendant, claimant, defenceType)
   }
 
