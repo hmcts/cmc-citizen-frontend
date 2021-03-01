@@ -55,4 +55,8 @@ export class FeatureToggles {
   async isDashboardPaginationEnabled (): Promise<boolean> {
     return this.launchDarklyClient.serviceVariation('dashboard_pagination_enabled', toBoolean(config.get<boolean>(`featureToggles.dashboard_pagination_enabled`)))
   }
+
+  async isOCONEnhancementEnabled (): Promise<boolean> {
+    return this.launchDarklyClient.serviceVariation('ocon-enhancements', toBoolean(config.get<boolean>(`featureToggles.oconEnhancements`)))
+  }
 }

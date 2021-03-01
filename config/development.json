@@ -14,6 +14,7 @@
     "helpWithFees": true,
     "pcq":true,
     "signPostingCTSC": false,
+    "oconEnhancements": false,
     "autoEnrollIntoNewFeature": true,
     "dashboard_pagination_enabled": false
   },

@@ -85,6 +85,7 @@
     "helpWithFees": "FEATURE_HELP_WITH_FEES",
     "pcq": "FEATURE_PCQ",
     "signPostingCTSC": "FEATURE_SIGN_POSTING_CTSC",
+    "oconEnhancements": "FEATURE_OCON_ENHANCEMENTS",
     "autoEnrollIntoNewFeature": "AUTO_ENROLL_INTO_NEW_FEATURE",
     "dashboard_pagination_enabled": "dashboard_pagination_enabled"
   },

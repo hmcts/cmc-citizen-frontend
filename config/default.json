@@ -96,6 +96,7 @@
     "helpWithFees": true,
     "pcq":true,
     "signPostingCTSC": true,
+    "oconEnhancements": true,
     "autoEnrollIntoNewFeature": true,
     "dashboard_pagination_enabled": false
   },
