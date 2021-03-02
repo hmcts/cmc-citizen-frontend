@@ -116,7 +116,7 @@
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "codacy-coverage": "3.4.0",
-    "codeceptjs": "^2.4.3",
+    "codeceptjs": "^2.6.11",
     "codecov": "^3.6.5",
     "debug": "^4.1.1",
     "gulp-livereload": "^4.0.2",
@@ -149,7 +149,7 @@
     "tslint": "^5.20.1",
     "tslint-config-standard": "^9.0.0",
     "urlencode": "^1.1.0",
-    "webdriverio": "^5.8.6"
+    "webdriverio": "^6.12.1"
   },
   "nyc": {
     "extension": [
