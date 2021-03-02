@@ -88,6 +88,18 @@ describe('Free mediation: mediation disagreement page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
+
+          it('should render error page when there is no option selected', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveFind('response')
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ })
+              .expect(res => expect(res).to.be.successful.withText('There was a problem'))
+          })
         })
 
         context('when form is valid', () => {
@@ -131,6 +143,21 @@ describe('Free mediation: mediation disagreement page', () => {
               .send({ option: FreeMediationOption.NO })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.taskListPage
+                  .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+          })
+
+          it('should redirect to mediation agreement page when Yes was chosen', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveUpdate()
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ option: FreeMediationOption.YES })
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(MediationPaths.mediationAgreementPage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
         })
