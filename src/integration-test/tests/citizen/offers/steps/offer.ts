@@ -59,7 +59,8 @@ export class OfferSteps {
 
   viewOfferFromDashboard (claimRef: string): void {
     this.viewClaimFromDashboard(claimRef)
-    I.click('View and respond to the offer')
+    I.wait(2)
+    I.retry(2).click('View and respond to the offer')
   }
 
   viewClaimFromDashboard (claimRef: string): void {

@@ -70,6 +70,7 @@ declare namespace CodeceptJS {
     dragAndDrop: (srcElement, destElement) => any;
     closeOtherTabs: (closeOtherTabs) => any;
     wait: (sec) => any;
+    retry: (retries: number) => any
     waitForEnabled: (waitForEnabled) => any;
     waitForElement: (locator, sec=null) => any;
     waitUntilExists: (locator, sec=null) => any;
