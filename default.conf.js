@@ -34,7 +34,10 @@ exports.config = {
       restart: false,
       desiredCapabilities: {
         proxy: new ProxySettings()
-      }
+      },
+      chrome: {
+        'args': [ '--headless', '--disable-gpu', '--no-sandbox']
+      },
     },
     IdamHelper: {
       require: './src/integration-test/helpers/idamHelper',
