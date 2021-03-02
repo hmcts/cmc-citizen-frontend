@@ -30,7 +30,7 @@ exports.config = {
       port: process.env.WEB_DRIVER_PORT || 4444,
       browser: process.env.BROWSER || 'chrome',
       url: process.env.CITIZEN_APP_URL || 'https://localhost:3000',
-      waitForTimeout: 20000,
+      waitForTimeout: 40000,
       restart: false,
       desiredCapabilities: {
         proxy: new ProxySettings()
