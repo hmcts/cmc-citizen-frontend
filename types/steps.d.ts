@@ -3,8 +3,8 @@ type ICodeceptCallback = (i: CodeceptJS.I, ...steps: any) => void;
 declare const actor: () => CodeceptJS.I;
 declare const Feature: (string: string) => void;
 declare const Scenario: (string: string, callback: ICodeceptCallback) => any;
-// declare const Before: (callback: ICodeceptCallback) => void;
-declare function Before (callback: ICodeceptCallback): void;
+declare const Before: (callback: ICodeceptCallback) => any;
+// declare function Before (callback: ICodeceptCallback): void;
 declare const After: (callback: ICodeceptCallback) => void;
 declare const within: (selector: string, callback: Function) => void;
 
