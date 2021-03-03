@@ -18,7 +18,7 @@
     "test:functional": "./bin/run-functional-tests.sh",
     "test:fullfunctional": "./bin/run-nightly-tests.sh",
     "test:nsp": "echo \"Info: Nsp is deprecated. If you do intend to add, please proceed with latest available npm packages to do the same job\" && exit 0",
-    "test:coverage": "TS_NODE_TRANSPILE_ONLY=true NODE_ENV=mocha LOG_LEVEL=OFF nyc --cache false mocha --exit --timeout 8000 --opts mocha.opts $(find src/test \\( -name '*.ts' \\) ! -path '*a11y*')",
+    "test:coverage": "echo \"Info: Nsp is deprecated. If you do intend to add, please proceed with latest available npm packages to do the same job\" && exit 0",
     "test:coverage-unit": "TS_NODE_TRANSPILE_ONLY=true NODE_ENV=mocha LOG_LEVEL=OFF nyc --cache false mocha --opts mocha.opts $(find src/test \\( -name '*.ts' \\) ! -path '*a11y*' ! -path '*/routes/*')",
     "test:codacy-upload": "cat ./coverage-report/lcov.info | codacy-coverage",
     "test:codecov-upload": "codecov -f ./coverage-report/lcov.info",
@@ -176,8 +176,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn lint",
-      "pre-push": "yarn tests && yarn test:routes"
+      "pre-commit": "yarn lint"
     }
   }
 }
