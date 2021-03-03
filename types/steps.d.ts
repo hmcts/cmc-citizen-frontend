@@ -95,7 +95,7 @@ declare namespace CodeceptJS {
     debug: (msg) => any;
     debugSection: (section, msg) => any;
     say: (msg) => any;
-    retry: (retries: number) => any
+    retry: (retries) => any
   }
 }
 
