@@ -26,14 +26,14 @@ Before(async (I: I) => {
 
 })
 
-Scenario('Claimant Accepted Offer @nightly @citizen', { retries: 3 }, async (I: I) => {
+Scenario('Claimant Accepted Offer @nightly @citizen @e2e', { retries: 3 }, async (I: I) => {
   userSteps.login(claimantEmail)
   offerSteps.acceptOfferFromDashboard(claimRef)
   I.seeTitleEquals('Confirmation - Money Claims')
   I.click('Sign out')
 }).retry(2)
 
-Scenario('Defendant Countersigned Offer @nightly @citizen', { retries: 3 }, async (I: I) => {
+Scenario('Defendant Countersigned Offer @nightly @citizen @e2e', { retries: 3 }, async (I: I) => {
   userSteps.login(claimantEmail)
   offerSteps.acceptOfferFromDashboard(claimRef)
   I.click('Sign out')
@@ -43,7 +43,7 @@ Scenario('Defendant Countersigned Offer @nightly @citizen', { retries: 3 }, asyn
   offerSteps.viewClaimFromDashboard(claimRef)
 }).retry(2)
 
-Scenario('Claimant Rejected Offer @citizen @nightly', { retries: 3 }, async (I: I) => {
+Scenario('Claimant Rejected Offer @citizen @nightly @e2e', { retries: 3 }, async (I: I) => {
   userSteps.login(claimantEmail)
   offerSteps.rejectOfferFromDashboard(claimRef)
   I.click('Sign out')
