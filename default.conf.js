@@ -27,7 +27,10 @@ exports.config = {
       waitForTimeout: 20000,
       restart: false,
       desiredCapabilities: {
-        proxy: new ProxySettings()
+        proxy: new ProxySettings(),
+        chromeOptions: {
+          args: [ '--no-sandbox', '--disable-dev-shm-usage']
+        }
       }
     },
     IdamHelper: {
