@@ -12,7 +12,7 @@ exports.config = {
   teardownAll,
   tests: './src/integration-test/tests/**/*_test.*',
   output: `${process.cwd()}/${outputDir}`,
-  timeout: 20000,
+  timeout: 30000,
   multiple: {
     parallel: {
       chunks: parseInt(process.env.CHUNKS || '4')
@@ -24,7 +24,7 @@ exports.config = {
       port: process.env.WEB_DRIVER_PORT || 4444,
       browser: process.env.BROWSER || 'chrome',
       url: process.env.CITIZEN_APP_URL || 'https://localhost:3000',
-      waitForTimeout: 20000,
+      waitForTimeout: 30000,
       restart: false,
       desiredCapabilities: {
         proxy: new ProxySettings()
