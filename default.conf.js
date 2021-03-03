@@ -24,9 +24,13 @@ exports.config = {
       port: process.env.WEB_DRIVER_PORT || 4444,
       browser: process.env.BROWSER || 'chrome',
       url: process.env.CITIZEN_APP_URL || 'https://localhost:3000',
-      waitForTimeout: 20000,
+      waitForTimeout: 30000,
       restart: false,
+      cookies:true,
       desiredCapabilities: {
+        chromeOptions: {
+          args: [ "--headless", "--disable-dev-shm-usage", "--window-size=1200,800", "--no-sandbox" ]
+        },
         proxy: new ProxySettings()
       }
     },
