@@ -17,9 +17,9 @@ export class LoginPage {
   }
 
   login (email: string, password: string): void {
-    I.retry(2).fillField(fields.username, email)
-    I.retry(2).fillField(fields.password, password)
-    I.click(buttons.submit)
+    I.fillField(fields.username, email)
+    I.fillField(fields.password, password)
+    I.retry(2).click(buttons.submit)
   }
 
 }
