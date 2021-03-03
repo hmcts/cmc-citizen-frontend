@@ -15,7 +15,7 @@ Before(async (I: I) => {
 // Warning : Changing the text description of this scenario, could cause failure when running ZAP security test
 Scenario('I can as an Individual make a claim against an Individual Without a defendant email address and are able to pay on the Gov Pay page @citizen @crossbrowser', { retries: 3 }, async (I: I) => {
   helperSteps.finishResponse(testData, false, false)
-})
+}).retry(2)
 
 Scenario('I can as Sole Trader make a claim against an Individual and are able to pay on the Gov Pay page @nightly', { retries: 3 }, async (I: I) => {
   const testData = await EndToEndTestData.prepareData(I, PartyType.SOLE_TRADER, PartyType.INDIVIDUAL)

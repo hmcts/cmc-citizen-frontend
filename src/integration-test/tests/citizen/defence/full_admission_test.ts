@@ -38,5 +38,5 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
 
   Scenario('I can complete the journey when I fully admit all of the claim with full payment by instalments and also see PCQ in my journey @citizen @admissions', { retries: 3 }, async (I: I) => {
     defenceSteps.makeFullAdmission(claimData.data.defendants[0], PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS, claimData.data.claimants[0].name, false, true)
-  })
+  }).retry(2)
 }

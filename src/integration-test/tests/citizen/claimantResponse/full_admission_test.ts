@@ -40,7 +40,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.click('My account')
     I.see(testData.claimRef)
     I.see('Wait for the defendant to pay you')
-  })
+  }).retry(2)
 
   Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and accepting defendants payment method @citizen @admissions', { retries: 3 }, async (I: I) => {
     testData.paymentOption = PaymentOption.BY_SET_DATE
@@ -128,7 +128,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
     I.see('You’ve signed a settlement agreement')
-  })
+  }).retry(2)
 
   Scenario('I can as a claimant accept the defendants full admission by set date with CCJ and no previous payments made @admissions @citizen', { retries: 3 }, async (I: I) => {
     testData.paymentOption = PaymentOption.BY_SET_DATE
@@ -156,7 +156,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
     I.see('County Court Judgment')
-  })
+  }).retry(2)
 
   Scenario('I can as a claimant accept the defendants full admission by instalments and reject defendants payment method in favour of repayment plan, accepting court determination, requesting CCJ then finally settling @admissions @nightly', { retries: 3 }, async (I: I) => {
     testData.paymentOption = PaymentOption.INSTALMENTS
@@ -197,5 +197,5 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
       I.see('County Court Judgment requested')
       confirmationPage.clickGoToYourAccount()
       I.see(testData.claimRef)
-    })
+    }).retry(2)
 }

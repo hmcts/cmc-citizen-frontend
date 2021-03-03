@@ -18,7 +18,7 @@ Before(async (I: I) => {
 
 Scenario('I can enter a moneyclaims reference and login to see the dashboard @citizen', { retries: 3 }, async (I: I) => {
   accessRoutesSteps.returnToClaimMoneyClaims(claimRef, claimantEmail)
-})
+}).retry(2)
 
 Scenario('I can select don’t have a claim number and choose to go to moneyclaims, login and see the dashboard @nightly', { retries: 3 }, async (I: I) => {
   accessRoutesSteps.dontHaveAReferenceMoneyClaims(claimantEmail)

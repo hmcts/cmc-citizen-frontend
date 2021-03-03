@@ -63,5 +63,5 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.click('My account')
     I.see(testData.claimRef)
     I.see('You need to send the defendant’s financial details to the court.')
-  })
+  }).retry(2)
 }

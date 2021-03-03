@@ -101,7 +101,7 @@ Scenario('I can as an Individual make a claim against an Individual who then ful
   I.click('View and respond')
   claimantResponseSteps.rejectFullDefencePaidFullAmount(testData)
   I.see('You’ve rejected their response')
-})
+}).retry(2)
 
 Scenario('I can as an Individual make a claim against an Individual who then rejects the claim as they have paid the full amount then I accept the defence @nightly', { retries: 3 }, async (I: I) => {
   const claimantResponseTestData = new ClaimantResponseTestData()

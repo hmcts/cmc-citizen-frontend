@@ -42,7 +42,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
   Scenario('I can complete the journey when I partially admit the claim with by set date payment @citizen @admissions', { retries: 3 }, async (I: I) => {
     defenceSteps.makePartialAdmission(claimData.data.defendants[0])
     defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE)
-  })
+  }).retry(2)
 
   Scenario('I can complete the journey when I partially admit the claim with instalments payment @nightly @admissions', { retries: 3 }, async (I: I) => {
     defenceSteps.makePartialAdmission(claimData.data.defendants[0])

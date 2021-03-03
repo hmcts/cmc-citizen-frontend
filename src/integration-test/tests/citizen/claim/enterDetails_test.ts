@@ -65,7 +65,7 @@ Scenario('Claim with no interest @citizen', { retries: 0 }, async (I: I) => {
   claimSteps.checkClaimFactsAreTrueAndSubmit(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
   paymentSteps.payWithWorkingCard()
   I.waitForText('Claim submitted')
-})
+}).retry(2)
 
 Scenario('Claim with different interest rate and date @citizen', { retries: 3 }, async (I: I) => {
   claimSteps.completeStartOfClaimJourney(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true)
@@ -84,7 +84,7 @@ Scenario('Claim with different interest rate and date @citizen', { retries: 3 },
   if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
     testingSupport.deleteClaimDraft()
   }
-})
+}).retry(2)
 
 Scenario('Claim with a manually entered interest amount and a daily amount added @citizen', { retries: 3 }, async (I: I) => {
   claimSteps.completeStartOfClaimJourney(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true)
@@ -117,7 +117,7 @@ Scenario('I should not see PCQ if "Your deails" are missing while making a claim
   if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
     testingSupport.deleteClaimDraft()
   }
-})
+}).retry(2)
 
 Scenario('I should be redirected to PCQ if "Your details" are filled in while making a claim @citizen', { retries: 3 }, async (I: I) => {
   // add your details
@@ -140,4 +140,4 @@ Scenario('I should be redirected to PCQ if "Your details" are filled in while ma
   // Then i should be taken back to money claim
   I.see('Make a money claim')
 
-})
+}).retry(2)

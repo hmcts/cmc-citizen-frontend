@@ -30,4 +30,4 @@ Scenario('Check newly created claim is in my account dashboard with correct clai
   I.see(claimRef)
   dashboardClaimDetails.clickViewClaim()
   dashboardClaimDetails.checkClaimData(claimRef, claimData)
-})
+}).retry(2)
