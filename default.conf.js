@@ -30,7 +30,7 @@ exports.config = {
       desiredCapabilities: {
         proxy: new ProxySettings(),
         chromeOptions: {
-          args: [ "--headless", "--no-sandbox", "--disable-dev-shm-usage"]
+          args: [ "--no-sandbox", "--disable-dev-shm-usage", "--allow-running-insecure-content", "--ignore-certificate-errors"]
         }
       }
     },
