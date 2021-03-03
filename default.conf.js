@@ -26,12 +26,12 @@ exports.config = {
       url: process.env.CITIZEN_APP_URL || 'https://localhost:3000',
       waitForTimeout: 30000,
       restart: false,
-      cookies:true,
+      keepCookies: true,
       desiredCapabilities: {
+        proxy: new ProxySettings(),
         chromeOptions: {
-          args: [ "--headless", "--disable-dev-shm-usage", "--window-size=1200,800", "--no-sandbox" ]
-        },
-        proxy: new ProxySettings()
+          args: [ "--headless", "--disable-dev-shm-usage", "--window-size=1280,960", "--no-sandbox" ]
+        }
       }
     },
     IdamHelper: {
