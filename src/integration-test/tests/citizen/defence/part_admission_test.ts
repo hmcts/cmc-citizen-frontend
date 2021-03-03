@@ -9,44 +9,42 @@ import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
 const helperSteps: Helper = new Helper()
 const defenceSteps: DefenceSteps = new DefenceSteps()
 const userSteps: UserSteps = new UserSteps()
+let claimantEmail
+let defendantEmail
+let claimData
+let claimRef
 
-async function prepareClaim (I: I) {
-  const claimantEmail: string = userSteps.getClaimantEmail()
-  const defendantEmail: string = userSteps.getDefendantEmail()
+Feature('Partially admit the claim')
 
-  const claimData: ClaimData = createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
-  const claimRef: string = await I.createClaim(claimData, claimantEmail)
+Before(async (I: I) => {
+  claimantEmail = userSteps.getClaimantEmail()
+  defendantEmail = userSteps.getDefendantEmail()
+
+  claimData = createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
+  claimRef = await I.createClaim(claimData, claimantEmail)
 
   await helperSteps.enterPinNumber(claimRef, claimantEmail)
   helperSteps.linkClaimToDefendant(defendantEmail)
   helperSteps.startResponseFromDashboard(claimRef)
-
-  return { data: claimData }
-}
+})
 
 if (process.env.FEATURE_ADMISSIONS === 'true') {
-  Feature('Partially admit the claim')
-
   Scenario('I can complete the journey when I partially admit the claim with payment already made @citizen @admissions', { retries: 3 }, async (I: I) => {
-    const claimData = await prepareClaim(I)
     defenceSteps.makePartialAdmission(claimData.data.defendants[0])
     defenceSteps.partialPaymentMade(PartyType.INDIVIDUAL)
   })
 
   Scenario('I can complete the journey when I partially admit the claim with immediate payment @nightly @admissions', { retries: 3 }, async (I: I) => {
-    const claimData = await prepareClaim(I)
     defenceSteps.makePartialAdmission(claimData.data.defendants[0])
     defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.IMMEDIATELY)
   })
 
   Scenario('I can complete the journey when I partially admit the claim with by set date payment @citizen @admissions', { retries: 3 }, async (I: I) => {
-    const claimData = await prepareClaim(I)
     defenceSteps.makePartialAdmission(claimData.data.defendants[0])
     defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE)
   })
 
   Scenario('I can complete the journey when I partially admit the claim with instalments payment @nightly @admissions', { retries: 3 }, async (I: I) => {
-    const claimData = await prepareClaim(I)
     defenceSteps.makePartialAdmission(claimData.data.defendants[0])
     defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS)
   })

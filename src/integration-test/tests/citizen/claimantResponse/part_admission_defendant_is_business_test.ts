@@ -13,12 +13,17 @@ const helperSteps: Helper = new Helper()
 const userSteps: UserSteps = new UserSteps()
 const claimantResponseSteps: ClaimantResponseSteps = new ClaimantResponseSteps()
 const checkAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage()
+let testData
+
+Feature('Claimant Response ::: Part admit when defendant is business')
+
+Before(async (I: I) => {
+  testData = await EndToEndTestData.prepareData(I, PartyType.COMPANY, PartyType.INDIVIDUAL)
+})
 
 if (process.env.FEATURE_ADMISSIONS === 'true') {
-  Feature('Claimant Response ::: Part admit when defendant is business')
 
   Scenario('I can as a claimant accept and suggest an alternative payment intention with set date @nightly @admissions @business', { retries: 3 }, async (I: I) => {
-    const testData = await EndToEndTestData.prepareData(I, PartyType.COMPANY, PartyType.INDIVIDUAL)
     testData.defenceType = DefenceType.PART_ADMISSION_NONE_PAID
     testData.paymentOption = PaymentOption.BY_SET_DATE
     // as defendant
@@ -39,7 +44,6 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
   })
 
   Scenario('I can as a claimant accept and suggest an alternative payment intention with instalments @citizen @admissions @business', { retries: 3 }, async (I: I) => {
-    const testData = await EndToEndTestData.prepareData(I, PartyType.COMPANY, PartyType.INDIVIDUAL)
     testData.defenceType = DefenceType.PART_ADMISSION_NONE_PAID
     testData.paymentOption = PaymentOption.IMMEDIATELY
     const claimantResponseTestData: ClaimantResponseTestData = new ClaimantResponseTestData()

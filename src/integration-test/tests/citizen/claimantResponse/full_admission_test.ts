@@ -17,7 +17,6 @@ const userSteps: UserSteps = new UserSteps()
 const claimantResponseSteps: ClaimantResponseSteps = new ClaimantResponseSteps()
 const checkAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage()
 const confirmationPage: ClaimantConfirmation = new ClaimantConfirmation()
-
 let testData
 
 Feature('Claimant Response Fully Admit E2E Tests...')
