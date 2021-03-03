@@ -28,10 +28,11 @@ exports.config = {
       restart: false,
       keepCookies: true,
       desiredCapabilities: {
-        proxy: new ProxySettings()
-        // chromeOptions: {
-        //   args: [ "--no-sandbox", "--disable-dev-shm-usage", "--allow-running-insecure-content", "--ignore-certificate-errors"]
-        // }
+        browserName: 'chrome',
+        chromeOptions: {
+          args: [ "--no-sandbox", "--disable-dev-shm-usage", "--allow-running-insecure-content", "--ignore-certificate-errors"]
+        },
+        proxy: new ProxySettings(),
       }
     },
     IdamHelper: {
