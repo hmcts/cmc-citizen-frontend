@@ -75,15 +75,9 @@ withPipeline("nodejs", product, component) {
     }
   }
 
-  after('test') {
-    onMaster {
-      yarnBuilder.yarn('tests:a11y')
-    }
-  }
 
   enableAksStagingDeployment()
   disableLegacyDeployment()
 
   loadVaultSecrets(secrets)
-  enableSlackNotifications(notificationsChannel)
 }
