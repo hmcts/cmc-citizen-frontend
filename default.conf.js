@@ -12,7 +12,7 @@ exports.config = {
   teardownAll,
   tests: './src/integration-test/tests/**/*_test.*',
   output: `${process.cwd()}/${outputDir}`,
-  timeout: 20000,
+  timeout: 30000,
   multiple: {
     parallel: {
       chunks: parseInt(process.env.CHUNKS || '3')
@@ -27,6 +27,7 @@ exports.config = {
       waitForTimeout: 30000,
       restart: false,
       keepCookies: true,
+      smartWait:5000,
       desiredCapabilities: {
         browserName: 'chrome',
         chromeOptions: {
