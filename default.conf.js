@@ -29,7 +29,7 @@ exports.config = {
       desiredCapabilities: {
         proxy: new ProxySettings(),
         chromeOptions: {
-          args: ['--headless', '--no-sandbox', '--allow-running-insecure-content', '--ignore-certificate-errors']
+          args: ['--no-sandbox']
         }
       }
     },
