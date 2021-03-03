@@ -30,7 +30,7 @@ exports.config = {
       desiredCapabilities: {
         proxy: new ProxySettings(),
         chromeOptions: {
-          args: [ "--headless", "--disable-dev-shm-usage", "--window-size=1280,960", "--no-sandbox" ]
+          args: [ "--headless", "--no-sandbox", "--disable-dev-shm-usage", "--window-size=1280,960"]
         }
       }
     },
