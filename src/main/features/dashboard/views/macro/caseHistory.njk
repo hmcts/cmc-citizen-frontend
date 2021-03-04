@@ -193,7 +193,7 @@
       {{ helpWithFeesClosed(claim) }}
     {% elif (state.status === ClaimStatus.NO_RESPONSE or state.status === ClaimStatus.ELIGIBLE_FOR_CCJ) and claim.helpWithFeesNumber and claim.state === 'AWAITING_RESPONSE_HWF' and claim.lastEventTriggeredForHwfCase === 'InvalidHWFReference' %}
       {{ invalidHelpWithFeesValidationClaimStatus(claim) }}
-    {% elif (state.status === ClaimStatus.NO_RESPONSE or state.status === ClaimStatus.ELIGIBLE_FOR_CCJ) and claim.helpWithFeesNumber %}
+    {% elif (state.status === ClaimStatus.NO_RESPONSE or state.status === ClaimStatus.ELIGIBLE_FOR_CCJ) and claim.helpWithFeesNumber and claim.state === 'HWF_APPLICATION_PENDING' %}
       {{ helpWithFeesValidationClaimStatus(claim) }}
     {% elif state.status === ClaimStatus.NO_RESPONSE %}
       {{ noResponseForClaimantClaimDetails(claim) }}
