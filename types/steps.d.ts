@@ -94,6 +94,8 @@ declare namespace CodeceptJS {
     debug: (msg) => any;
     debugSection: (section, msg) => any;
     say: (msg) => any;
+    getClaimantEmail: () => any;
+    getDefendantEmail: () => any;
   }
 }
 

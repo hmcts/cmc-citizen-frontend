@@ -10,12 +10,12 @@ const offerSteps: OfferSteps = new OfferSteps()
 Feature('Offers')
 
 Scenario('I can as a defendant make an offer, accept offer and counter sign the agreement @nightly', { retries: 3 }, async (I: I) => {
-  const claimantEmail: string = userSteps.getClaimantEmail()
-  const defendantEmail: string = userSteps.getDefendantEmail()
+  const claimantEmail: string = await I.getClaimantEmail()
+  const defendantEmail: string = await I.getDefendantEmail()
 
-  const claimRef: string = await I.createClaim(createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL), claimantEmail)
+  const claimRef: string = await I.createClaim(await createClaimData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL), claimantEmail)
 
-  I.respondToClaim(claimRef, claimantEmail, createResponseData(PartyType.INDIVIDUAL), defendantEmail)
+  I.respondToClaim(claimRef, claimantEmail, await createResponseData(I, PartyType.INDIVIDUAL), defendantEmail)
 
   userSteps.login(defendantEmail)
   offerSteps.makeOfferFromDashboard(claimRef)
@@ -33,12 +33,12 @@ Scenario('I can as a defendant make an offer, accept offer and counter sign the 
 })
 
 Scenario('I can make an offer as a defendant to a claimant and have the claimant reject it @nightly', { retries: 3 }, async (I: I) => {
-  const claimantEmail: string = userSteps.getClaimantEmail()
-  const defendantEmail: string = userSteps.getDefendantEmail()
+  const claimantEmail: string = await I.getClaimantEmail()
+  const defendantEmail: string = await I.getDefendantEmail()
 
-  const claimRef: string = await I.createClaim(createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL), claimantEmail)
+  const claimRef: string = await I.createClaim(await createClaimData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL), claimantEmail)
 
-  I.respondToClaim(claimRef, claimantEmail, createResponseData(PartyType.INDIVIDUAL), defendantEmail)
+  I.respondToClaim(claimRef, claimantEmail, await createResponseData(I, PartyType.INDIVIDUAL), defendantEmail)
 
   userSteps.login(defendantEmail)
   offerSteps.makeOfferFromDashboard(claimRef)
