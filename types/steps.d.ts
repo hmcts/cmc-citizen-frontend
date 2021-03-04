@@ -96,6 +96,7 @@ declare namespace CodeceptJS {
     debugSection: (section, msg) => any;
     say: (msg) => any;
     retry: (retries) => any
+    waitForElement: (locator, sec?) => any;
   }
 }
 

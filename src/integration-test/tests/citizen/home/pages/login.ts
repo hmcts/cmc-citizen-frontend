@@ -17,7 +17,9 @@ export class LoginPage {
   }
 
   login (email: string, password: string): void {
+    I.waitForElement(fields.username)
     I.fillField(fields.username, email)
+    I.waitForElement(fields.password)
     I.fillField(fields.password, password)
     I.retry(2).click(buttons.submit)
   }
