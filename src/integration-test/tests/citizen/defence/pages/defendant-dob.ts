@@ -4,13 +4,13 @@ import { DateParser } from 'integration-test/utils/date-parser'
 const I: I = actor()
 
 const fields = {
-  day: 'input[id="date[day]"]',
-  month: 'input[id="date[month]"]',
-  year: 'input[id="date[year]"]'
+  day: { css: 'input[id="date[day]"]' },
+  month: { css: 'input[id="date[month]"]' },
+  year: { css: 'input[id="date[year]"]' }
 }
 
 const buttons = {
-  submit: 'input[type=submit]'
+  submit: { css: 'input[type=submit]' }
 }
 
 export class DefendantDobPage {

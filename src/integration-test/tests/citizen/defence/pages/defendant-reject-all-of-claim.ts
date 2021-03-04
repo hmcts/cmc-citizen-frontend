@@ -3,13 +3,13 @@ import I = CodeceptJS.I
 const I: I = actor()
 
 const fields = {
-  dispute: 'input[id=optiondispute]',
-  alreadyPaid: 'input[id=optionalreadyPaid]',
-  counterClaim: 'input[id=optioncounterClaim]'
+  dispute: { css: 'input[id=optiondispute]' },
+  alreadyPaid: { css: 'input[id=optionalreadyPaid]' },
+  counterClaim: { css: 'input[id=optioncounterClaim]' }
 }
 
 const buttons = {
-  submit: 'input[type=submit]'
+  submit: { css: 'input[type=submit]' }
 }
 
 export class DefendantRejectAllOfClaimPage {

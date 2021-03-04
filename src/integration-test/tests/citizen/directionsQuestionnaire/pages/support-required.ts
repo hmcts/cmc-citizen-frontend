@@ -4,22 +4,22 @@ const I: I = actor()
 
 const fields = {
   disabledAccess: {
-    input: 'input[id="disabledAccessSelectedtrue"]'
+    input: { css: 'input[id="disabledAccessSelectedtrue"]' }
   },
   hearingLoop: {
-    input: 'input[id="hearingLoopSelectedtrue"]'
+    input: { css: 'input[id="hearingLoopSelectedtrue"]' }
   },
   signLanguageInterpreter: {
-    input: 'input[id="signLanguageSelectedtrue"]',
-    details: 'input[id="signLanguageInterpreted"]'
+    input: { css: 'input[id="signLanguageSelectedtrue"]' },
+    details: { css: 'input[id="signLanguageInterpreted"]' }
   },
   languageInterpreter: {
-    input: 'input[id="languageSelectedtrue"]',
-    details: 'input[id="languageInterpreted"]'
+    input: { css: 'input[id="languageSelectedtrue"]' },
+    details: { css: 'input[id="languageInterpreted"]' }
   },
   otherSupport: {
-    input: 'input[id="otherSupportSelectedtrue"]',
-    details: 'textarea[id="otherSupport"]'
+    input: { css: 'input[id="otherSupportSelectedtrue"]' },
+    details: { css: 'textarea[id="otherSupport"]' }
   }
 }
 
