@@ -201,7 +201,7 @@
       {{ claimTransferredClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.MORE_TIME_REQUESTED %}
       {{ moreTimeRequestedForClaimantClaimDetails(claim) }}
-    {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
+    {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ and claim.state !== 'HWF_APPLICATION_PENDING' and claim.state !== 'AWAITING_RESPONSE_HWF'%}
       {% if not claim.isFullAdmissionPastPaymentDate %}
         {{ ccjEligibleForClaimantClaimDetails(claim, csrf) }}
       {% endif %}
