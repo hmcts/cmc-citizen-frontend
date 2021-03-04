@@ -140,23 +140,23 @@
   {% if status === ClaimStatus.PAID_IN_FULL or status === ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED or status === ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
     or status === ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID %}
     {{ claimSettledDashboard() }}
- {% elif status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber %}
+ {% elif (status === ClaimStatus.NO_RESPONSE or status === ClaimStatus.ELIGIBLE_FOR_CCJ) and claim.helpWithFeesNumber %}
     {{ helpWithFeesValidationDashboard() }}
-  {% elif status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.lastEventTriggeredForHwfCase === 'CreateHelpWithFeesClaim' %}
+  {% elif (status === ClaimStatus.NO_RESPONSE or status === ClaimStatus.ELIGIBLE_FOR_CCJ) and claim.helpWithFeesNumber and claim.lastEventTriggeredForHwfCase === 'CreateHelpWithFeesClaim' %}
     {{ HWF_APPLICATION_PENDING() }}
-  {% elif status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.lastEventTriggeredForHwfCase === 'InvalidHWFReference' %}
+  {% elif (status === ClaimStatus.NO_RESPONSE or status === ClaimStatus.ELIGIBLE_FOR_CCJ) and claim.helpWithFeesNumber and claim.lastEventTriggeredForHwfCase === 'InvalidHWFReference' %}
     {{ HWF_INVALID_REFERENCE() }}
-  {% elif status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and (claim.lastEventTriggeredForHwfCase === 'FullRemissionHWFRejected' or claim.lastEventTriggeredForHwfCase === 'NoRemissionHWF') %}
+  {% elif (status === ClaimStatus.NO_RESPONSE or status === ClaimStatus.ELIGIBLE_FOR_CCJ) and claim.helpWithFeesNumber and (claim.lastEventTriggeredForHwfCase === 'FullRemissionHWFRejected' or claim.lastEventTriggeredForHwfCase === 'NoRemissionHWF') %}
     {{ HWF_Rejected() }}
-  {% elif status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.lastEventTriggeredForHwfCase === 'MoreInfoRequiredForHWF' %}
+  {% elif (status === ClaimStatus.NO_RESPONSE or status === ClaimStatus.ELIGIBLE_FOR_CCJ) and claim.helpWithFeesNumber and claim.lastEventTriggeredForHwfCase === 'MoreInfoRequiredForHWF' %}
     {{ HWF_More_Info() }}
-  {% elif status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.lastEventTriggeredForHwfCase === 'HWFPartRemission' %}
+  {% elif (status === ClaimStatus.NO_RESPONSE or status === ClaimStatus.ELIGIBLE_FOR_CCJ) and claim.helpWithFeesNumber and claim.lastEventTriggeredForHwfCase === 'HWFPartRemission' %}
     {{ HWF_Part_Remitted() }}
-  {% elif status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.lastEventTriggeredForHwfCase === 'HWFFullRemision' %}
+  {% elif (status === ClaimStatus.NO_RESPONSE or status === ClaimStatus.ELIGIBLE_FOR_CCJ) and claim.helpWithFeesNumber and claim.lastEventTriggeredForHwfCase === 'HWFFullRemision' %}
     {{ HWF_Full_Granted() }}
-  {% elif status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.lastEventTriggeredForHwfCase === 'RecalculateInterest' %}
+  {% elif (status === ClaimStatus.NO_RESPONSE or status === ClaimStatus.ELIGIBLE_FOR_CCJ) and claim.helpWithFeesNumber and claim.lastEventTriggeredForHwfCase === 'RecalculateInterest' %}
     {{ HWF_Intrest_Recalculate() }}
-  {% elif status === ClaimStatus.NO_RESPONSE and claim.helpWithFeesNumber and claim.lastEventTriggeredForHwfCase === 'UpdateHWFNumber' %}
+  {% elif (status === ClaimStatus.NO_RESPONSE or status === ClaimStatus.ELIGIBLE_FOR_CCJ) and claim.helpWithFeesNumber and claim.lastEventTriggeredForHwfCase === 'UpdateHWFNumber' %}
     {{ HWF_Update_Number() }}
   {% elif status === ClaimStatus.NO_RESPONSE %}
     {{ noResponseForClaimantDashboard() }}
