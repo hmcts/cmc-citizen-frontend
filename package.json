@@ -17,7 +17,7 @@
     "tests:a11y": "TS_NODE_TRANSPILE_ONLY=true FEATURE_PCQ=false NODE_ENV=mocha LOG_LEVEL=OFF mocha --exit --opts mocha.opts src/test/a11y/a11y.ts --timeout 60000 --reporter-options reportFilename=a11y,inlineAssets=true,reportTitle=citizen-frontend-a11y",
     "test:functional": "./bin/run-functional-tests.sh",
     "test:fullfunctional": "./bin/run-nightly-tests.sh",
-    "test:nsp": "echo \"Info: Nsp is deprecated. If you do intend to add, please proceed with latest available npm packages to do the same job\" && exit 0",
+    "test:nsp": "echo \"Info: Nsp is de precated. If you do intend to add, please proceed with latest available npm packages to do the same job\" && exit 0",
     "test:coverage": "TS_NODE_TRANSPILE_ONLY=true NODE_ENV=mocha LOG_LEVEL=OFF nyc --cache false mocha --exit --timeout 8000 --opts mocha.opts $(find src/test \\( -name '*.ts' \\) ! -path '*a11y*')",
     "test:coverage-unit": "TS_NODE_TRANSPILE_ONLY=true NODE_ENV=mocha LOG_LEVEL=OFF nyc --cache false mocha --opts mocha.opts $(find src/test \\( -name '*.ts' \\) ! -path '*a11y*' ! -path '*/routes/*')",
     "test:codacy-upload": "cat ./coverage-report/lcov.info | codacy-coverage",
