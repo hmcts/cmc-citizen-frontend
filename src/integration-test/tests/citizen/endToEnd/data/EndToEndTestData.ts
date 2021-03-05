@@ -5,10 +5,8 @@ import { PaymentOption } from 'integration-test/data/payment-option'
 import { DefenceType } from 'integration-test/data/defence-type'
 import { Helper } from 'integration-test/tests/citizen/endToEnd/steps/helper'
 import { Moment } from 'moment'
-import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
 
 const helperSteps: Helper = new Helper()
-const userSteps: UserSteps = new UserSteps()
 
 export class EndToEndTestData {
 
@@ -32,7 +30,7 @@ export class EndToEndTestData {
     defendantPartyType: PartyType,
     claimantPartyType: PartyType
   ) {
-    const claimData: ClaimData = createClaimData(claimantPartyType, defendantPartyType)
+    const claimData: ClaimData = await createClaimData(I, claimantPartyType, defendantPartyType)
     return this.prepare(I, defendantPartyType, claimantPartyType, claimData)
   }
 
@@ -41,7 +39,7 @@ export class EndToEndTestData {
     defendantPartyType: PartyType,
     claimantPartyType: PartyType
   ) {
-    const claimData: ClaimData = createClaimData(claimantPartyType, defendantPartyType, false)
+    const claimData: ClaimData = await createClaimData(I, claimantPartyType, defendantPartyType, false)
     return this.prepare(I, defendantPartyType, claimantPartyType, claimData)
   }
 
@@ -51,10 +49,10 @@ export class EndToEndTestData {
     claimantPartyType: PartyType,
     claimData: ClaimData
   ) {
-    const claimantEmail: string = userSteps.getClaimantEmail()
-    const defendantEmail: string = userSteps.getDefendantEmail()
+    const claimantEmail: string = await I.getClaimantEmail()
+    const defendantEmail: string = await I.getDefendantEmail()
 
-    const claimRef: string = await I.createClaim(claimData, claimantEmail, true, ['admissions','directionsQuestionnaire'],'cmc-new-features-consent-given')
+    const claimRef: string = await I.createClaim(claimData, claimantEmail, true, ['admissions','directionsQuestionnaire'],defendantEmail)
     await helperSteps.enterPinNumber(claimRef, claimantEmail)
 
     const testData = new EndToEndTestData()
