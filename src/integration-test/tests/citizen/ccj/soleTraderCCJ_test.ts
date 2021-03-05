@@ -26,7 +26,7 @@ Before(async (I: I) => {
 
 })
 
-Scenario('CCJ requested as a sole trader, pay immediately... @nightly @crossbrowser', { retries: 3 }, async (I: I) => {
+Scenario('CCJ requested as a sole trader, pay immediately... @nightly', { retries: 3 }, async (I: I) => {
   userSteps.login(email)
   await ccjSteps.requestCCJ(I, claimRef, defendantType)
   ccjSteps.ccjDefendantToPayImmediately()

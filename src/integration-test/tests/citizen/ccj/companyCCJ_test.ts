@@ -26,7 +26,7 @@ Before(async (I: I) => {
 
 })
 
-Scenario('CCJ requested as a Company, pay by set date @nightly @crossbrowser', { retries: 3 }, async (I: I) => {
+Scenario('CCJ requested as a Company, pay by set date @nightly', { retries: 3 }, async (I: I) => {
   userSteps.login(email)
   await ccjSteps.requestCCJ(I, claimRef, defendantType)
   ccjSteps.ccjDefendantToPayBySetDate()
