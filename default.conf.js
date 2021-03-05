@@ -10,10 +10,10 @@ const outputDir = './output'
 
 exports.config = {
   name: 'citizen-integration-tests',
-  async bootstrapAll() {
+  async bootstrap() {
     await bootstrapAll(claimantEmail, defendantEmail)
   },
-  async teardownAll() {
+  async teardown() {
     await teardownAll(claimantEmail, defendantEmail)
   },
   tests: './src/integration-test/tests/**/*_test.*',
