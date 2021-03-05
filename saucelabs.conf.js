@@ -44,6 +44,12 @@ function getBrowserConfig(browserGroup) {
 
 const setupConfig = {
   name: 'integration-tests',
+  async bootstrapAll() {
+    await bootstrapAll(claimantEmail, defendantEmail)
+  },
+  async teardownAll() {
+    await teardownAll(claimantEmail, defendantEmail)
+  },
   async bootstrap() {
     await bootstrapAll(claimantEmail, defendantEmail)
   },
