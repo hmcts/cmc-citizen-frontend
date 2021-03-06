@@ -73,7 +73,7 @@
     "govuk-frontend": "^3.10.1",
     "govuk_template_jinja": "0.26.0",
     "gulp": "^4.0.2",
-    "helmet": "^3.21.2",
+    "helmet": "^3.23.3",
     "http-status-codes": "^1.4.0",
     "i18next": "^18.0.0",
     "i18next-conv": "^9.2.0",
@@ -102,7 +102,8 @@
     "tsconfig-paths": "^3.9.0",
     "tslint-microsoft-contrib": "^6.2.0",
     "typescript": "^3.9.8",
-    "uuid": "^3.4.0"
+    "uuid": "^3.4.0",
+    "webdriverio": "^6.12.1"
   },
   "devDependencies": {
     "@hmcts/cmc-supported-browsers": "^1.0.1",
