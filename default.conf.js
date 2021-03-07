@@ -16,12 +16,6 @@ exports.config = {
   async teardownAll() {
     await teardownAll(claimantEmail, defendantEmail)
   },
-  async bootstrap() {
-    await bootstrapAll(claimantEmail, defendantEmail)
-  },
-  async teardown() {
-    await teardownAll(claimantEmail, defendantEmail)
-  },
   tests: './src/integration-test/tests/**/*_test.*',
   output: `${process.cwd()}/${outputDir}`,
   timeout: 20000,
