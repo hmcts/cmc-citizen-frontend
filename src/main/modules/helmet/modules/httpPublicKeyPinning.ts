@@ -1,5 +1,5 @@
 import * as express from 'express'
-import * as helmet from 'helmet'
+import * as hpkp from 'hpkp'
 
 export interface Config {
   maxAge: number
@@ -15,7 +15,7 @@ export class HttpPublicKeyPinning {
   }
 
   enableFor (app: express.Express) {
-    app.use(helmet.hpkp({
+    app.use(hpkp({
       setIf: (req: express.Request) => {
         return req.secure
       },
