@@ -105,7 +105,7 @@
     "tslint-microsoft-contrib": "^6.2.0",
     "typescript": "^3.9.8",
     "uuid": "^3.4.0",
-    "webdriverio": "^6.12.1"
+    "webdriverio": "^7.0.3"
   },
   "devDependencies": {
     "@hmcts/cmc-supported-browsers": "^1.0.1",
