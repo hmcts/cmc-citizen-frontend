@@ -75,6 +75,7 @@
     "gulp": "^4.0.2",
     "helmet": "^4.4.1",
     "hpkp": "^2.0.1",
+    "nocache": "^2.1.0",
     "http-status-codes": "^1.4.0",
     "i18next": "^18.0.0",
     "i18next-conv": "^9.2.0",

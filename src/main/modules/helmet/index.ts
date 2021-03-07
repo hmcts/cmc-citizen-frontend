@@ -1,5 +1,6 @@
 import * as express from 'express'
 import * as helmet from 'helmet'
+import * as nocache from 'nocache'
 
 import { ContentSecurityPolicy } from './modules/contentSecurityPolicy'
 import { ReferrerPolicy } from './modules/referredPolicy'
@@ -22,7 +23,7 @@ export class Helmet {
     app.use(helmet.hidePoweredBy())
     app.disable('x-powered-by')
     app.disabled('Server')
-    app.use(/^\/(?!js|img|pdf|stylesheets).*$/, helmet.noCache())
+    app.use(/^\/(?!js|img|pdf|stylesheets).*$/, nocache())
 
     new ContentSecurityPolicy(this.developmentMode).enableFor(app)
 
