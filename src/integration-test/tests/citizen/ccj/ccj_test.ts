@@ -26,7 +26,7 @@ Before(async (I: I) => {
 
 })
 
-Scenario('Default CCJ E2E...  @nightly @citizen', { retries: 3 }, async (I: I) => {
+Scenario('Default CCJ E2E...@nightly @citizen', { retries: 3 }, async (I: I) => {
   userSteps.login(email)
   await ccjSteps.requestCCJWhenDefendantNotPaid(I, claimRef, defendantType)
   ccjSteps.ccjDefendantToPayImmediately()
