@@ -29,12 +29,12 @@ const ccjRepaymentPlan: PaymentPlan = {
 }
 
 const paymentBySetDate = '2025-01-01'
-const defendant: Party = createDefendant(PartyType.INDIVIDUAL, false)
 const defendantPaidAmount = 35.50
 
 export class CountyCourtJudgementSteps {
 
-  requestCCJ (claimRef: string, defendantType: PartyType): void {
+  async requestCCJ (I: I, claimRef: string, defendantType: PartyType): Promise<void> {
+    const defendant: Party = await createDefendant(I, PartyType.INDIVIDUAL, false)
     if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
       testingSupport.makeClaimAvailableForCCJ(claimRef)
     }

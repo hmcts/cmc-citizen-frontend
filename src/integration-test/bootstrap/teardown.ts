@@ -1,27 +1,23 @@
 /* tslint:disable:no-console */
 
 import { IdamClient } from 'integration-test/helpers/clients/idamClient'
-import { UserEmails } from 'integration-test/data/test-data'
-
-const userEmails: UserEmails = new UserEmails()
 
 module.exports = {
-  teardownAll: async function (done) {
+  teardownAll: async function (claimantEmail, defendantEmail) {
     try {
       if (process.env.IDAM_URL) {
         if (process.env.SMOKE_TEST_CITIZEN_USERNAME) {
           await Promise.all([
             console.log('Deleting test users...'),
-            IdamClient.deleteUser(userEmails.getDefendant()),
-            IdamClient.deleteUser(userEmails.getClaimant()),
-            IdamClient.deleteUsers([userEmails.getClaimant(), userEmails.getDefendant()])
+            IdamClient.deleteUser(claimantEmail),
+            IdamClient.deleteUser(defendantEmail),
+            IdamClient.deleteUsers([claimantEmail, defendantEmail])
           ])
         }
       }
     } catch (error) {
       handleError(error)
     }
-    done()
   }
 }
 
