@@ -14,30 +14,22 @@ let defendantType
 let claimData
 let claimRef
 
-Feature('Default CCJ E2E Tests')
+Feature('CCJ Requested Against Sole Trader E2E')
 
 Before(async (I: I) => {
   email = await I.getClaimantEmail()
-  claimantType = PartyType.INDIVIDUAL
-  defendantType = PartyType.INDIVIDUAL
+  claimantType = PartyType.SOLE_TRADER
+  defendantType = PartyType.ORGANISATION
 
   claimData = await createClaimData(I, claimantType, defendantType, true, InterestType.NO_INTEREST)
   claimRef = await I.createClaim(claimData, email)
 
 })
 
-Scenario('Default CCJ E2E...@nightly @citizen', { retries: 3 }, async (I: I) => {
-  userSteps.login(email)
-  await ccjSteps.requestCCJWhenDefendantNotPaid(I, claimRef, defendantType)
-  ccjSteps.ccjDefendantToPayImmediately()
-  ccjSteps.validateCheckAndSendPageAnswers(claimantType, claimData.defendants[0], defendantType)
-  I.see('County Court Judgment requested', 'h1.bold-large')
-})
-
-Scenario('CCJ requested with no defendant email... @citizen @nightly', { retries: 3 }, async (I: I) => {
+Scenario('CCJ requested as a sole trader, pay immediately... @nightly', { retries: 3 }, async (I: I) => {
   userSteps.login(email)
   await ccjSteps.requestCCJ(I, claimRef, defendantType)
-  ccjSteps.ccjDefendantToPayByInstalments()
+  ccjSteps.ccjDefendantToPayImmediately()
   ccjSteps.checkCCJFactsAreTrueAndSubmit(claimantType, claimData.defendants[0], defendantType)
   I.see('County Court Judgment requested', 'h1.bold-large')
 })
