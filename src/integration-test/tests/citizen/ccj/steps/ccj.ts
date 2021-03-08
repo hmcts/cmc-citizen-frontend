@@ -74,4 +74,24 @@ export class CountyCourtJudgementSteps {
       ccjCheckAndSendPage.checkFactsTrueAndSubmit()
     }
   }
+
+  async requestCCJWhenDefendantNotPaid (I: I, claimRef: string, defendantType: PartyType): Promise<void> {
+    if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
+      testingSupport.makeClaimAvailableForCCJ(claimRef)
+    }
+    dashboardSteps.startCCJ(claimRef)
+    if (defendantType === PartyType.INDIVIDUAL) {
+      I.see('Do you know the defendant’s date of birth?')
+      I.click('input[id=knownfalse]')
+      I.click('input[type=submit]')
+    }
+    ccjDefendantPaidAnyMoneyPage.defendantNotPaid()
+    ccjPaidAmountSummary.checkAmounts(0)
+    ccjPaidAmountSummary.continue()
+  }
+
+  validateCheckAndSendPageAnswers (claimantType: PartyType, defendant: Party, defendantType: PartyType): void {
+    ccjCheckAndSendPage.verifyCheckAndSendPageAnswers(defendant, defendantType, defendantPaidAmount, defendant.address)
+    ccjCheckAndSendPage.checkFactsTrueAndSubmit()
+  }
 }
