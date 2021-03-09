@@ -11,7 +11,7 @@ const helperSteps: Helper = new Helper()
 
 let testData
 
-Feature('Full Admission E2E Tests')
+Feature('Full Admission E2E')
 
 Before(async (I: I) => {
   testData = await EndToEndTestData.prepareData(I, PartyType.COMPANY, PartyType.COMPANY)
@@ -85,7 +85,13 @@ Scenario('Company agreed to pay all of the claim  to individual @nightly', { ret
   userSteps.login(testData.claimantEmail)
   claimantResponseSteps.viewClaimFromDashboard(testData.claimRef)
   I.see(testData.claimRef)
-  I.see('The defendant said they’ll pay you immediately')
   I.click('My account')
   I.see(testData.claimRef)
 })
+
+if (process.env.FEATURE_ADMISSIONS === 'true') {
+  Scenario('Admit all of the claim with PCQ... @citizen @admissions', { retries: 3 }, async (I: I) => {
+    testData.paymentOption = PaymentOption.INSTALMENTS
+    helperSteps.finishResponseWithFullAdmission(testData)
+  })
+}
