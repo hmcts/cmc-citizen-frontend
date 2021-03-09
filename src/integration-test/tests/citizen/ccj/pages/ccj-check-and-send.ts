@@ -64,15 +64,4 @@ export class CountyCourtJudgementCheckAndSendPage {
     I.see('Amount already paid')
     I.see(AmountHelper.formatMoney(defendantPaidAmount))
   }
-
-  verifyCheckAndSendPageAnswers (defendant: Party, defendantType: PartyType, defendantPaidAmount: number, address): void {
-    I.see('Check your answers')
-    this.checkDefendantName(defendant, defendantType)
-    I.see(address.line1)
-    I.see(address.line2)
-    I.see(address.city)
-    I.see(address.postcode)
-    I.see('Total to be paid by defendant')
-    I.see('How you want the defendant to pay')
-  }
 }

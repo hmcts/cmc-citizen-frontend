@@ -13,6 +13,7 @@ export class PaidAmountSummaryPage {
   // to be used in the future.
   checkAmounts (defendantPaidAmount: number): void {
     I.see('Judgment amount')
+    I.see('Minus amount already paid £' + defendantPaidAmount)
     const amountOutstanding: number = claimAmount.getTotal() - defendantPaidAmount
     I.see('Total ' + AmountHelper.formatMoney(amountOutstanding))
   }

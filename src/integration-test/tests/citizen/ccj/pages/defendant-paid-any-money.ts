@@ -34,9 +34,4 @@ export class DefendantPaidAnyMoneyPage {
     I.fillField(fields.paidAmount, amount.toString())
     I.click(buttons.submit)
   }
-
-  defendantNotPaid (): void {
-    this.notPaidSome()
-    I.click(buttons.submit)
-  }
 }
