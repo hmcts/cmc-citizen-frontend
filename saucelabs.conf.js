@@ -2,6 +2,8 @@ require('ts-node/register')
 require('tsconfig-paths/register')
 
 const supportedBrowsers = require('./src/integration-test/crossbrowser/supportedBrowsers.js');
+const claimantEmail = `civilmoneyclaims+claimant-${require('randomstring').generate(7).toLowerCase()}@gmail.com`
+const defendantEmail = `civilmoneyclaims+defendant-${require('randomstring').generate(7).toLowerCase()}@gmail.com`
 const { bootstrapAll } = require('./src/integration-test/bootstrap/bootstrap')
 const { teardownAll } = require('./src/integration-test/bootstrap/teardown')
 const waitForTimeout = parseInt(process.env.WAIT_FOR_TIMEOUT) || 45000;
@@ -42,8 +44,12 @@ function getBrowserConfig(browserGroup) {
 
 const setupConfig = {
   name: 'integration-tests',
-  bootstrapAll,
-  teardownAll,
+  async bootstrapAll() {
+    await bootstrapAll(claimantEmail, defendantEmail)
+  },
+  async teardownAll() {
+    await teardownAll(claimantEmail, defendantEmail)
+  },
   tests: './src/integration-test/tests/**/*_test.*',
   output: `${process.cwd()}/${outputDir}`,
   helpers: {
@@ -59,10 +65,14 @@ const setupConfig = {
       capabilities: {}
     },
     IdamHelper: {
-      require: './src/integration-test/helpers/idamHelper'
+      require: './src/integration-test/helpers/idamHelper',
+      claimantEmail,
+      defendantEmail
     },
     ClaimStoreHelper: {
-      require: './src/integration-test/helpers/claimStoreHelper'
+      require: './src/integration-test/helpers/claimStoreHelper',
+      claimantEmail,
+      defendantEmail
     },
     PageHelper: {
       require: './src/integration-test/helpers/pageHelper'

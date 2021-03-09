@@ -22,7 +22,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     testData.defenceType = DefenceType.PART_ADMISSION_NONE_PAID
     testData.paymentOption = PaymentOption.BY_SET_DATE
     // as defendant
-    helperSteps.finishResponse(testData, false)
+    await helperSteps.finishResponse(testData, false)
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
@@ -44,7 +44,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     testData.paymentOption = PaymentOption.IMMEDIATELY
     const claimantResponseTestData: ClaimantResponseTestData = new ClaimantResponseTestData()
     // as defendant
-    helperSteps.finishResponse(testData, false)
+    await helperSteps.finishResponse(testData, false)
 
     I.click('Sign out')
     // as claimant
