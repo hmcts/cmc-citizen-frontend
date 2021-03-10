@@ -41,7 +41,7 @@ Scenario('Self Employed Person agreed(Sole Trader Vs Individual) to pay all of t
   I.see(testData.claimRef)
 })
 
-Scenario('Organization agreed (Organization Vs Individual) to pay all of the claim... @nightly', { retries: 3 }, async (I: I) => {
+Scenario('Organization agreed (Organisation Vs Individual) to pay all of the claim... @nightly', { retries: 3 }, async (I: I) => {
   const testData = await EndToEndTestData.prepareData(I, PartyType.ORGANISATION, PartyType.INDIVIDUAL)
   testData.paymentOption = PaymentOption.IMMEDIATELY
   helperSteps.finishResponseWithFullAdmission(testData)
@@ -88,10 +88,3 @@ Scenario('Company agreed to pay all of the claim  to individual @nightly', { ret
   I.click('My account')
   I.see(testData.claimRef)
 })
-
-if (process.env.FEATURE_ADMISSIONS === 'true') {
-  Scenario('Admit all of the claim with PCQ... @citizen @admissions', { retries: 3 }, async (I: I) => {
-    testData.paymentOption = PaymentOption.INSTALMENTS
-    helperSteps.finishResponseWithFullAdmission(testData)
-  })
-}
