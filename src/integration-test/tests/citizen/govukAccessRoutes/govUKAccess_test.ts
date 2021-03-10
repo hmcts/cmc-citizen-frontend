@@ -23,6 +23,6 @@ Scenario('I can select don’t have a claim number and choose to go to moneyclai
   accessRoutesSteps.dontHaveAReferenceMoneyClaims(claimantEmail)
 })
 
-Scenario('I can enter a moneyclaims reference and get sent to enter a pin @citizen @nightly', { retries: 3 }, async (I: I) => {
+Scenario('I can enter a moneyclaims reference and get sent to enter a pin @nightly', { retries: 3 }, async (I: I) => {
   accessRoutesSteps.respondToClaimMoneyClaims(claimRef)
 })
