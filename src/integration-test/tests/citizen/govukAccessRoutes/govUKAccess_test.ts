@@ -7,7 +7,7 @@ const accessRoutesSteps: AccessRoutesSteps = new AccessRoutesSteps()
 let claimantEmail
 let claimRef
 
-Feature('GovUK Access Routes - Return & Respond To Claim')
+Feature('GovUK Access Routes - Return & Respond To Claim E2E')
 
 Before(async (I: I) => {
   claimantEmail = await I.getClaimantEmail()
