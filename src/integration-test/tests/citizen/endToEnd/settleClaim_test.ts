@@ -19,7 +19,7 @@ Before(async (I: I) => {
   testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
 })
 
-Scenario('Full Admission-->Settle Claim(Pay By Installment) @citizen @nightly', { retries: 3 }, async (I: I) => {
+Scenario('Full Admission-->Settle Claim(Pay By Instalment) @citizen @nightly', { retries: 3 }, async (I: I) => {
   testData.paymentOption = PaymentOption.INSTALMENTS
   testData.claimantPaymentOption = PaymentOption.INSTALMENTS
   const claimantResponseTestData = new UnreasonableClaimantResponseTestData()
@@ -54,6 +54,21 @@ Scenario('Full Admission-->Settle Claim(Pay By Set Date) @nightly', { retries: 3
   claimantResponseSteps.settleClaim(testData, claimantResponseTestData, 'Tell us you’ve been paid')
   I.see('The claim is now settled')
   confirmationPage.clickGoToYourAccount()
+  I.see(testData.claimRef)
+  I.see('This claim is settled.')
+})
+
+Scenario('Claimant Settle the claim vai pay Immediately(Full Admission->Admit All-->Settle)... @nightly @e2e', { retries: 3 }, async (I: I) => {
+  testData.paymentOption = PaymentOption.IMMEDIATELY
+  testData.claimantPaymentOption = PaymentOption.IMMEDIATELY
+  const claimantResponseTestData = new UnreasonableClaimantResponseTestData()
+  claimantResponseTestData.isExpectingToSeeCourtOfferedInstalmentsPage = true
+  claimantResponseTestData.pageSpecificValues.settleClaimEnterDate = '2021-03-03'
+  helperSteps.finishResponseWithFullAdmission(testData)
+  I.click('Sign out')
+  userSteps.login(testData.claimantEmail)
+  claimantResponseSteps.settleClaim(testData, claimantResponseTestData, 'Tell us you’ve been paid')
+  I.see('The claim is now settled')
   I.see(testData.claimRef)
   I.see('This claim is settled.')
 })
