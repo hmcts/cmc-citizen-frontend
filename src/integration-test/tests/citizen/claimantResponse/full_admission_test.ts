@@ -159,29 +159,6 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.see('County Court Judgment')
   })
 
-  Scenario('I can as a claimant accept the defendants full admission by instalments and reject defendants payment method in favour of repayment plan, accepting court determination, requesting CCJ then finally settling @admissions @nightly', { retries: 3 }, async (I: I) => {
-    testData.paymentOption = PaymentOption.INSTALMENTS
-    testData.claimantPaymentOption = PaymentOption.INSTALMENTS
-    const claimantResponseTestData = new UnreasonableClaimantResponseTestData()
-    claimantResponseTestData.isExpectingToSeeCourtOfferedInstalmentsPage = true
-    claimantResponseTestData.pageSpecificValues.settleClaimEnterDate = '2019-01-01'
-    // as defendant
-    helperSteps.finishResponseWithFullAdmission(testData)
-    I.click('Sign out')
-    // as claimant
-    userSteps.login(testData.claimantEmail)
-    claimantResponseSteps.acceptCcjFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData, 'View and respond to the offer')
-    I.see('County Court Judgment requested')
-    confirmationPage.clickGoToYourAccount()
-    I.see(testData.claimRef)
-    I.see('County Court Judgment')
-    claimantResponseSteps.settleClaim(testData, claimantResponseTestData, 'Tell us you’ve been paid')
-    I.see('The claim is now settled')
-    confirmationPage.clickGoToYourAccount()
-    I.see(testData.claimRef)
-    I.see('This claim is settled.')
-  })
-
   Scenario('Full Admission::Interlocutory judgement E2E ' +
     '( Repayment plan → suggest counter Repayment plan → reject court determination ) @FullAdmission @citizen @nightly ', { retries: 3 }, async (I: I) => {
       testData.paymentOption = PaymentOption.INSTALMENTS
