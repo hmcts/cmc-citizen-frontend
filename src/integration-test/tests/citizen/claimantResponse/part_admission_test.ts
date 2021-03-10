@@ -15,14 +15,16 @@ const userSteps: UserSteps = new UserSteps()
 const claimantResponseSteps: ClaimantResponseSteps = new ClaimantResponseSteps()
 const checkAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage()
 const confirmationPage: ClaimantConfirmation = new ClaimantConfirmation()
+let testData
 
-Feature('EMPTY')
+Feature('Claimant Response: Part Admit')
+
+Before(async (I: I) => {
+  testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
+})
+
 if (process.env.FEATURE_ADMISSIONS === 'true') {
-  Feature('Claimant Response: Part Admit')
-
   Scenario('I can as a claimant reject the defendants part admission by immediately @nightly @admissions', { retries: 3 }, async (I: I) => {
-
-    const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.IMMEDIATELY
     testData.defenceType = DefenceType.PART_ADMISSION
     testData.defendantClaimsToHavePaidInFull = false
@@ -46,7 +48,6 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
 
   Scenario('I can as a claimant accept the defendants part admission by immediately with settlement agreement and accepting defendants payment method @nightly @admissions', { retries: 3 }, async (I: I) => {
 
-    const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.IMMEDIATELY
     testData.defenceType = DefenceType.PART_ADMISSION
     testData.defendantClaimsToHavePaidInFull = false
@@ -66,9 +67,8 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.see('You’ve signed a settlement agreement.')
   })
 
-  Scenario('I can as a claimant accept the defendants part admission by instalments with settlement agreement and rejecting defendants payment method in favour of immediate payment @citizen @admissions', { retries: 3 }, async (I: I) => {
+  Scenario('I can as a claimant accept the defendants part admission by instalments with settlement agreement and rejecting defendants payment method in favour of immediate payment @citizen @admissions @e2e', { retries: 3 }, async (I: I) => {
 
-    const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.INSTALMENTS
     testData.defenceType = DefenceType.PART_ADMISSION
     testData.claimantPaymentOption = PaymentOption.IMMEDIATELY
@@ -91,7 +91,6 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
 
   Scenario('I can as a claimant accept the defendants part admission by instalments with settlement agreement and rejecting defendants payment method in favour of set date @nightly @admissions', { retries: 3 }, async (I: I) => {
 
-    const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.INSTALMENTS
     testData.defenceType = DefenceType.PART_ADMISSION
     testData.claimantPaymentOption = PaymentOption.BY_SET_DATE
@@ -115,7 +114,6 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
 
   Scenario('I can as a claimant accept the defendants part admission by instalments with settlement agreement and rejecting defendants payment method in favour of instalments @nightly @admissions', { retries: 3 }, async (I: I) => {
 
-    const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.BY_SET_DATE
     testData.defenceType = DefenceType.PART_ADMISSION
     testData.claimantPaymentOption = PaymentOption.INSTALMENTS
