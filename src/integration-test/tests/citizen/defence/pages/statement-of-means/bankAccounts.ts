@@ -4,9 +4,9 @@ const I: I = actor()
 
 const fields = {
   row: {
-    typeOfAccount: 'rows[0][typeOfAccount]',
-    joint: 'rows[0][joint]',
-    balance: 'rows[0][balance]'
+    typeOfAccount: '#rows[0][typeOfAccount]',
+    joint: '#rows[0][joint]',
+    balance: '#rows[0][balance]'
   }
 }
 
