@@ -57,3 +57,18 @@ Scenario('Full Admission-->Settle Claim(Pay By Set Date) @nightly', { retries: 3
   I.see(testData.claimRef)
   I.see('This claim is settled.')
 })
+
+Scenario('Claimant Settle Claim(Pay Immediately) @citizen @nightly', { retries: 3 }, async (I: I) => {
+  testData.claimantPaymentOption = PaymentOption.IMMEDIATELY
+  const claimantResponseTestData = new UnreasonableClaimantResponseTestData()
+  claimantResponseTestData.isExpectingToSeeCourtOfferedInstalmentsPage = true
+  claimantResponseTestData.pageSpecificValues.settleClaimEnterDate = '2019-01-01'
+  helperSteps.finishResponseWithFullAdmission(testData)
+  I.click('Sign out')
+  userSteps.login(testData.claimantEmail)
+  confirmationPage.clickGoToYourAccount()
+  claimantResponseSteps.settleClaim(testData, claimantResponseTestData, 'Tell us you’ve settled')
+  confirmationPage.clickGoToYourAccount()
+  I.see(testData.claimRef)
+  I.see('This claim is settled.')
+})
