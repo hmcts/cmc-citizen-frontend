@@ -17,7 +17,7 @@ const buttons = {
 export class BankAccountsPage {
 
   enterBankAccount (typeOfAccount: string, joint: boolean, balance: number): void {
-    I.waitForVisible(fields.row.typeOfAccount)
+    I.waitForElement(fields.row.typeOfAccount)
     I.selectOption(fields.row.typeOfAccount, typeOfAccount)
     I.selectOption(fields.row.joint, joint ? 'Yes' : 'No')
     I.fillField(fields.row.balance, balance.toFixed())
