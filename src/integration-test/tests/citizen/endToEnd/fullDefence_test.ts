@@ -30,7 +30,6 @@ Before(async (I: I) => {
   I.click('My account')
   I.click(testData.claimRef)
   I.see(testData.claimRef)
-  I.see('Your response to the claim')
   I.see('You have rejected the claim')
   defendantDetails.clickViewClaim()
   defendantDetails.checkClaimData(testData.claimRef, claimData)
