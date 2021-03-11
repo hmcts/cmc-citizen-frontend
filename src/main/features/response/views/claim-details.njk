@@ -55,7 +55,13 @@
       {% endif %}
 
       <p><span class="bold-small">{{ t('Download the claim') }}</span></p>
-      <p>{{ internalLink(t('Download claim (PDF)'), pdfUrl.evaluateUri({ externalId: claim.externalId })) }}</p>
+      <p>
+        {% if claim.state !== 'HWF_APPLICATION_PENDING' and claim.state !== 'AWAITING_RESPONSE_HWF' %}
+          {{ internalLink(t('Download claim (PDF)'), pdfUrl.evaluateUri({ externalId: claim.externalId })) }}
+        {% else %}
+          {{ internalLink(t('Download claim (PDF)'), ClaimPaths.draftReceiptReceiver.evaluateUri({ externalId: claim.externalId})) }}
+        {% endif %}
+      </p>
     </div>
   </div>
 {% endblock %}

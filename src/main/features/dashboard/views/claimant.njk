@@ -54,7 +54,11 @@
     {% endfor %}
   {% elseif(claim) %}
     <p>
-    {{ internalLink('Download claim (PDF)', ClaimPaths.documentPage.evaluateUri({ externalId: claim.externalId, documentURI: 'claim-receipt' })) }}
+    {% if claim.state !== 'HWF_APPLICATION_PENDING' and claim.state !== 'AWAITING_RESPONSE_HWF' %}
+      {{ internalLink('Download claim (PDF)', ClaimPaths.documentPage.evaluateUri({ externalId: claim.externalId, documentURI: 'claim-receipt' })) }}
+     {% else %}
+      {{ internalLink(t('Download claim (PDF)'), ClaimPaths.draftReceiptReceiver.evaluateUri({ externalId: claim.externalId})) }}
+    {% endif %}
     <br>
     <span style="color:grey; font-size: 15px">
       Created: {{ claim.createdAt.format('LL') }}
