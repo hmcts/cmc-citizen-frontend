@@ -6,7 +6,7 @@ const supportedBrowsers = require('./src/integration-test/crossbrowser/supported
 //const defendantEmail = `civilmoneyclaims+defendant-${require('randomstring').generate(7).toLowerCase()}@gmail.com`
 const claimantEmail = process.env.CLAIMANT_CITIZEN_USER_EMAIL;
 const defendantEmail = process.env.DEFENDANT_CITIZEN_USER_EMAIL;
-const { bootstrapAll } = require('./src/integration-test/bootstrap/bootstrap')
+//const { bootstrapAll } = require('./src/integration-test/bootstrap/bootstrap')
 const waitForTimeout = parseInt(process.env.WAIT_FOR_TIMEOUT) || 45000;
 const smartWait = parseInt(process.env.SMART_WAIT) || 30000;
 const browser = process.env.BROWSER_GROUP || 'chrome';
@@ -45,9 +45,6 @@ function getBrowserConfig(browserGroup) {
 
 const setupConfig = {
   name: 'integration-tests',
-  async bootstrapAll() {
-    await bootstrapAll(claimantEmail, defendantEmail)
-  },
   tests: './src/integration-test/tests/**/*_test.*',
   output: `${process.cwd()}/${outputDir}`,
   helpers: {
