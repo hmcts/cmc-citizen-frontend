@@ -4,9 +4,9 @@ const I: I = actor()
 
 const fields = {
   row: {
-    typeOfAccount: 'form select[name=rows[0][typeOfAccount]]',
-    joint: 'form select[name=rows[0][joint]]',
-    balance: 'form select[name=rows[0][balance]]'
+    typeOfAccount: 'rows[0][typeOfAccount]',
+    joint: 'rows[0][joint]',
+    balance: 'rows[0][balance]'
   }
 }
 
@@ -17,6 +17,7 @@ const buttons = {
 export class BankAccountsPage {
 
   enterBankAccount (typeOfAccount: string, joint: boolean, balance: number): void {
+    I.waitInUrl('bank-accounts');
     I.selectOption(fields.row.typeOfAccount, typeOfAccount)
     I.selectOption(fields.row.joint, joint ? 'Yes' : 'No')
     I.fillField(fields.row.balance, balance.toFixed())
