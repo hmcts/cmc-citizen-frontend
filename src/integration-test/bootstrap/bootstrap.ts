@@ -75,7 +75,7 @@ async function waitTillHealthy (appURL: string) {
   return Promise.reject(error)
 }
 
-async function createSmokeTestsUserIfDoesntExist (username: string, userRole: string, password: string): Promise<void> {
+async function createTestUserIfDoesntExist (username: string, userRole: string, password: string): Promise<void> {
   let bearerToken
   try {
     bearerToken = await IdamClient.authenticateUser(username, password)
@@ -108,9 +108,9 @@ module.exports = {
       if (process.env.IDAM_URL) {
         if (process.env.SMOKE_TEST_CITIZEN_USERNAME) {
           await Promise.all([
-            createSmokeTestsUserIfDoesntExist(process.env.SMOKE_TEST_CITIZEN_USERNAME, 'citizen', process.env.SMOKE_TEST_USER_PASSWORD),
-            createSmokeTestsUserIfDoesntExist(claimantEmail, 'citizen', process.env.SMOKE_TEST_USER_PASSWORD),
-            createSmokeTestsUserIfDoesntExist(defendantEmail, 'citizen', process.env.SMOKE_TEST_USER_PASSWORD)
+            createTestUserIfDoesntExist(process.env.SMOKE_TEST_CITIZEN_USERNAME, 'citizen', process.env.SMOKE_TEST_USER_PASSWORD),
+            createTestUserIfDoesntExist(claimantEmail, 'citizen', process.env.SMOKE_TEST_USER_PASSWORD),
+            createTestUserIfDoesntExist(defendantEmail, 'citizen', process.env.SMOKE_TEST_USER_PASSWORD)
           ])
         }
       }

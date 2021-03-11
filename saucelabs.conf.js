@@ -2,10 +2,11 @@ require('ts-node/register')
 require('tsconfig-paths/register')
 
 const supportedBrowsers = require('./src/integration-test/crossbrowser/supportedBrowsers.js');
-const claimantEmail = `civilmoneyclaims+claimant-${require('randomstring').generate(7).toLowerCase()}@gmail.com`
-const defendantEmail = `civilmoneyclaims+defendant-${require('randomstring').generate(7).toLowerCase()}@gmail.com`
+//const claimantEmail = `civilmoneyclaims+claimant-${require('randomstring').generate(7).toLowerCase()}@gmail.com`
+//const defendantEmail = `civilmoneyclaims+defendant-${require('randomstring').generate(7).toLowerCase()}@gmail.com`
+const claimantEmail = process.env.CLAIMANT_CITIZEN_USER_EMAIL;
+const defendantEmail = process.env.DEFENDANT_CITIZEN_USER_EMAIL;
 const { bootstrapAll } = require('./src/integration-test/bootstrap/bootstrap')
-const { teardownAll } = require('./src/integration-test/bootstrap/teardown')
 const waitForTimeout = parseInt(process.env.WAIT_FOR_TIMEOUT) || 45000;
 const smartWait = parseInt(process.env.SMART_WAIT) || 30000;
 const browser = process.env.BROWSER_GROUP || 'chrome';
@@ -46,9 +47,6 @@ const setupConfig = {
   name: 'integration-tests',
   async bootstrapAll() {
     await bootstrapAll(claimantEmail, defendantEmail)
-  },
-  async teardownAll() {
-    await teardownAll(claimantEmail, defendantEmail)
   },
   tests: './src/integration-test/tests/**/*_test.*',
   output: `${process.cwd()}/${outputDir}`,
