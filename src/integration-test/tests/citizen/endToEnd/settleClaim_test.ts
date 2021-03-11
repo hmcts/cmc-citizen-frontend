@@ -58,7 +58,7 @@ Scenario('Full Admission-->Settle Claim(Pay By Set Date) @nightly', { retries: 3
   I.see('This claim is settled.')
 })
 
-Scenario('Claimant Settle Claim(Pay Immediately) @citizen @nightly', { retries: 3 }, async (I: I) => {
+Scenario('Settle Claim(Pay Immediately) @citizen @nightly', { retries: 3 }, async (I: I) => {
   testData.claimantPaymentOption = PaymentOption.IMMEDIATELY
   const claimantResponseTestData = new UnreasonableClaimantResponseTestData()
   claimantResponseTestData.isExpectingToSeeCourtOfferedInstalmentsPage = true
