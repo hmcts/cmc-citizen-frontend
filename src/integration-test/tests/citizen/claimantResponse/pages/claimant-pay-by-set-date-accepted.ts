@@ -9,6 +9,7 @@ const buttons = {
 export class ClaimantPayBySetDateAcceptedPage {
 
   continue (): void {
+    I.waitForVisible(buttons.submit)
     I.click(buttons.submit)
   }
 

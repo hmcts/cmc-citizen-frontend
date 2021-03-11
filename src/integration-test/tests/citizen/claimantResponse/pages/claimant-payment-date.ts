@@ -24,6 +24,7 @@ export class ClaimantPaymentDatePage {
   }
 
   saveAndContinue (): void {
+    I.waitForVisible(buttons.submit)
     I.click(buttons.submit)
   }
 

@@ -16,13 +16,13 @@ const buttons = {
 export class ClaimantCourtOfferedInstalmentsPage {
 
   accept (): void {
-    I.see('The defendant can’t afford your plan')
+    I.waitForText('The defendant can’t afford your plan')
     I.checkOption(fields.accept.yes)
     I.click(buttons.submit)
   }
 
   checkingCourtOfferedPlanAndAccept (): void {
-    I.see('The defendant can’t afford your plan')
+    I.waitForText('The defendant can’t afford your plan')
     I.see('The court’s proposed repayment plan')
     I.see('Frequency of payments')
     I.see('Weekly')
@@ -31,7 +31,7 @@ export class ClaimantCourtOfferedInstalmentsPage {
   }
 
   reject (): void {
-    I.see('The defendant can’t afford your plan')
+    I.waitForText('The defendant can’t afford your plan')
     I.checkOption(fields.accept.no)
     I.click(buttons.submit)
   }
