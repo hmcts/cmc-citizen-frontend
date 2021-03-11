@@ -9,6 +9,7 @@ const buttons = {
 export class StartPage {
 
   clickContinue (): void {
+    I.waitInUrl('statement-of-means/intro');
     I.click(buttons.submit)
   }
 }
