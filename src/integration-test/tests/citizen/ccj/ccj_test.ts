@@ -14,7 +14,7 @@ let defendantType
 let claimData
 let claimRef
 
-Feature('Default CCJ E2E Tests')
+Feature('Default CCJ E2E')
 
 Before(async (I: I) => {
   email = await I.getClaimantEmail()
