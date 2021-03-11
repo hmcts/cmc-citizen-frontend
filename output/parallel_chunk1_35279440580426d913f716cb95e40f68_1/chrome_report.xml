@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="31.2920" tests="4" failures="1" skipped="3">
+  <testsuite name="Root Suite" timestamp="2021-03-11T16:17:59" tests="0" time="0.0000" failures="0">
+  </testsuite>
+  <testsuite name="Partially admit the claim" timestamp="2021-03-11T16:17:59" tests="4" file="/Users/ZeroZerp/Documents/HMCTS/2026/cmc-citizen-frontend/src/integration-test/tests/citizen/defence/part_admission_test.ts" time="31.2920" failures="1">
+    <testcase name="Partially admit the claim: I can complete the journey when I partially admit the claim with payment already made @citizen @admissions @e2e" time="31.2920" classname="I can complete the journey when I partially admit the claim with payment already made @citizen @admissions @e2e">
+      <failure message="Cannot read property &apos;defendants&apos; of undefined" type="TypeError"><![CDATA[Cannot read property 'defendants' of undefined]]></failure>
+    </testcase>
+  </testsuite>
+</testsuites>

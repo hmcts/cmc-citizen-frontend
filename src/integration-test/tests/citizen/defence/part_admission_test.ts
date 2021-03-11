@@ -17,19 +17,17 @@ Feature('Partially admit the claim')
 Before(async (I: I) => {
   claimantEmail = await I.getClaimantEmail()
   defendantEmail = await I.getDefendantEmail()
-
   claimData = await createClaimData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
   claimRef = await I.createClaim(claimData, claimantEmail)
 
   await helperSteps.enterPinNumber(claimRef, claimantEmail)
   helperSteps.linkClaimToDefendant(defendantEmail)
   helperSteps.startResponseFromDashboard(claimRef)
-
 })
 
 if (process.env.FEATURE_ADMISSIONS === 'true') {
 
-  Scenario('I can complete the journey when I partially admit the claim with payment already made @citizen @admissions', { retries: 3 }, async (I: I) => {
+  Scenario('I can complete the journey when I partially admit the claim with payment already made @citizen @admissions', { retries: 0 }, async (I: I) => {
     defenceSteps.makePartialAdmission(claimData.data.defendants[0])
     await defenceSteps.partialPaymentMade(PartyType.INDIVIDUAL)
   })
@@ -48,24 +46,4 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     defenceSteps.makePartialAdmission(claimData.data.defendants[0])
     await defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS)
   })
-
-  Scenario('Sole Trader Agreed to pay part of the claim.. @citizen @nightly @admissions', { retries: 3 }, async (I: I) => {
-    const claimData = await prepareClaim(I)
-    defenceSteps.makePartialAdmission(claimData.data.defendants[0])
-    await defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS)
-  })
-}
-
-async function prepareClaim (I: I) {
-  const claimantEmail: string = await I.getClaimantEmail()
-  const defendantEmail: string = await I.getDefendantEmail()
-
-  const claimData: ClaimData = await createClaimData(I, PartyType.INDIVIDUAL, PartyType.SOLE_TRADER)
-  const claimRef: string = await I.createClaim(claimData, claimantEmail)
-
-  await helperSteps.enterPinNumber(claimRef, claimantEmail)
-  helperSteps.linkClaimToDefendant(defendantEmail)
-  helperSteps.startResponseFromDashboard(claimRef)
-
-  return { data: claimData }
 }
