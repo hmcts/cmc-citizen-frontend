@@ -14,19 +14,19 @@ let defendantType
 let claimData
 let claimRef
 
-Feature('Limited Company Requested CCJ')
+Feature('CCJ Requested Against Organisation')
 
 Before(async (I: I) => {
   email = await I.getClaimantEmail()
-  claimantType = PartyType.ORGANISATION
-  defendantType = PartyType.SOLE_TRADER
+  claimantType = PartyType.COMPANY
+  defendantType = PartyType.COMPANY
 
   claimData = await createClaimData(I, claimantType, defendantType, true, InterestType.NO_INTEREST)
   claimRef = await I.createClaim(claimData, email)
 
 })
 
-Scenario('Company Requested CCJ(Company Vs Sole Trader) @nightly', { retries: 3 }, async (I: I) => {
+Scenario('CCJ requested as a Company, pay by set date @nightly', { retries: 3 }, async (I: I) => {
   userSteps.login(email)
   await ccjSteps.requestCCJ(I, claimRef, defendantType)
   ccjSteps.ccjDefendantToPayBySetDate()
