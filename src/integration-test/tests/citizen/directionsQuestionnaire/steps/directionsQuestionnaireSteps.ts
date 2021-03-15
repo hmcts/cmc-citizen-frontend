@@ -18,7 +18,7 @@ const otherWitnessPage: OtherWitnessPage = new OtherWitnessPage()
 const hearingDatesPage: HearingDatesPage = new HearingDatesPage()
 
 export class DirectionsQuestionnaireSteps {
-  acceptDirectionsQuestionnaireYesJourney (defendantType: PartyType = PartyType.INDIVIDUAL): void {
+  async acceptDirectionsQuestionnaireYesJourney (defendantType: PartyType = PartyType.INDIVIDUAL): Promise<void> {
     if (process.env.FEATURE_DIRECTIONS_QUESTIONNAIRE === 'true') {
       supportRequiredPage.selectAll()
       if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
@@ -30,7 +30,7 @@ export class DirectionsQuestionnaireSteps {
         '2019-01-01')
       selfWitnessPage.chooseYes()
       otherWitnessPage.chooseYes()
-      hearingDatesPage.chooseYes()
+      await hearingDatesPage.chooseYes()
     }
   }
 
