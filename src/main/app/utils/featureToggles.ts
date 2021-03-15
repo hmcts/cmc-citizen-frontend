@@ -57,6 +57,6 @@ export class FeatureToggles {
   }
 
   async isOCONEnhancementEnabled (): Promise<boolean> {
-    return this.launchDarklyClient.serviceVariation('ocon-enhancements', toBoolean(config.get<boolean>(`featureToggles.oconEnhancements`)))
+    return this.launchDarklyClient.serviceVariation('ocon-enhancement-2', toBoolean(config.get<boolean>(`featureToggles.oconEnhancements`)))
   }
 }
