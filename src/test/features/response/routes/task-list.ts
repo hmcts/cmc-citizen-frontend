@@ -50,7 +50,7 @@ describe('Defendant response: task list page', () => {
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
-        it.only('should render page when everything is fine', async () => {
+        it('should render page when everything is fine', async () => {
           draftStoreServiceMock.resolveFind('response')
           draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
