@@ -42,7 +42,7 @@ import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 import * as data from 'test/data/entity/settlement'
 import { FeatureToggles } from 'utils/featureToggles'
 import { MediationOutcome } from 'claims/models/mediationOutcome'
-import { defenceClaimData } from 'test/data/entity/claimData'
+import { claimData, defenceClaimData } from 'test/data/entity/claimData'
 import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
 import { ClaimDocument } from 'claims/models/claimDocument'
 
@@ -1381,5 +1381,12 @@ describe('ScannedDocument', () => {
     const claimWithResponse = new Claim().deserialize({ ...claimStoreMock.sampleClaimIssueObj, ...claimStoreMock.sampleClaimDocuments })
     const claimDocs: ClaimDocument[] = claimWithResponse.claimDocuments
     expect(1).to.be.eq(claimDocs.length)
+  })
+})
+
+describe('HwF fees details', () => {
+  const claim = new Claim().deserialize({ ...claimStoreMock.sampleClaimIssueObj })
+  it.only('should return helpWithFessBalanceClaimFee', () => {
+    expect(claim.helpWithFessBalanceClaimFee).to.equal(25)
   })
 })
