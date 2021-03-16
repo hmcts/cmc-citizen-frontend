@@ -1383,3 +1383,10 @@ describe('ScannedDocument', () => {
     expect(1).to.be.eq(claimDocs.length)
   })
 })
+
+describe('HwF fees details', () => {
+  const claim = new Claim().deserialize({ ...claimStoreMock.sampleClaimIssueObj })
+  it.only('should return helpWithFessBalanceClaimFee', () => {
+    expect(claim.helpWithFessBalanceClaimFee).to.equal(25)
+  })
+})
