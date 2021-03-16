@@ -42,7 +42,7 @@ import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 import * as data from 'test/data/entity/settlement'
 import { FeatureToggles } from 'utils/featureToggles'
 import { MediationOutcome } from 'claims/models/mediationOutcome'
-import { claimData, defenceClaimData } from 'test/data/entity/claimData'
+import { defenceClaimData } from 'test/data/entity/claimData'
 import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
 import { ClaimDocument } from 'claims/models/claimDocument'
 
