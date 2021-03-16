@@ -16,14 +16,13 @@ Before(async (I: I) => {
   testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
 })
 
-Scenario('I have paid what i believe i owe(Defendant Stated As Paid E2E) @citizen @nightly', { retries: 3 }, async (I: I) => {
+Scenario('I have paid what i believe i owe @citizen @nightly', { retries: 3 }, async (I: I) => {
   testData.defenceType = DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID
   await helperSteps.finishResponse(testData)
   I.click('My account')
   I.click(testData.claimRef)
   I.see(`We’ve emailed ${testData.claimantName} telling them when and how you said you paid the claim`)
   I.click('Sign out')
-
   userSteps.login(testData.claimantEmail)
   claimantResponseSteps.viewClaimFromDashboard(testData.claimRef)
   I.see(testData.claimRef)
