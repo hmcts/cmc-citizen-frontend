@@ -4,10 +4,8 @@ import { createClaimData } from 'integration-test/data/test-data'
 import { PaymentOption } from 'integration-test/data/payment-option'
 import { DefenceType } from 'integration-test/data/defence-type'
 import { Helper } from 'integration-test/tests/citizen/endToEnd/steps/helper'
-import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
 
 const helperSteps: Helper = new Helper()
-const userSteps: UserSteps = new UserSteps()
 
 interface PageSpecificValues {
   paymentDatePage_enterDate: string
@@ -66,9 +64,9 @@ export class ClaimantResponseTest {
   }
 
   public static async prepareData (I: I, defendantPartyType: PartyType, claimantPartyType: PartyType) {
-    const claimantEmail: string = userSteps.getClaimantEmail()
-    const defendantEmail: string = userSteps.getDefendantEmail()
-    const claimData: ClaimData = createClaimData(defendantPartyType, claimantPartyType)
+    const claimantEmail: string = await I.getClaimantEmail()
+    const defendantEmail: string = await I.getDefendantEmail()
+    const claimData: ClaimData = await createClaimData(I, defendantPartyType, claimantPartyType)
     const claimRef: string = await I.createClaim(claimData, claimantEmail)
 
     await helperSteps.enterPinNumber(claimRef, claimantEmail)

@@ -35,7 +35,11 @@
           {% endif %}
           <tr>
             <td>{{ t('Claim fee') }}</td>
-            <td class="numeric last">{{ claim.claimData.feeAmountInPennies | pennies2pounds | numeral }}</td>
+              {% if claim.claimData.feeAmountInPennies !== 0 %}
+                <td class="numeric last">{{ claim.claimData.feeAmountInPennies | pennies2pounds | numeral }}</td>
+            {% else %}
+                <td class="numeric last">£0</td>
+            {% endif %}
           </tr>
           <tr>
             <td class="bold-small">{{ t('Claim Total') }}</td>
