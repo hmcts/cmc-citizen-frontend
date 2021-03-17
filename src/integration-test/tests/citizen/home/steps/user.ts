@@ -1,20 +1,11 @@
-import { DEFAULT_PASSWORD, UserEmails } from 'integration-test/data/test-data'
+import { DEFAULT_PASSWORD } from 'integration-test/data/test-data'
 import { ClaimantTaskListPage } from 'integration-test/tests/citizen/claim/pages/claimant-task-list'
 import { LoginPage } from 'integration-test/tests/citizen/home/pages/login'
 
 const loginPage: LoginPage = new LoginPage()
 const taskListPage: ClaimantTaskListPage = new ClaimantTaskListPage()
-const userEmails: UserEmails = new UserEmails()
 
 export class UserSteps {
-
-  getClaimantEmail (): string {
-    return userEmails.getClaimant()
-  }
-
-  getDefendantEmail (): string {
-    return userEmails.getDefendant()
-  }
 
   login (username: string): void {
     loginPage.open()

@@ -26,17 +26,17 @@ export class Helper {
     I.click(text)
   }
 
-  finishResponse (
+  async finishResponse (
     testData: EndToEndTestData,
     isRequestMoreTimeToRespond: boolean = true,
     expectPhonePage: boolean = false
-  ): void {
+  ): Promise<void> {
     if (testData.defenceType === undefined) {
       testData.defenceType = DefenceType.FULL_REJECTION_WITH_DISPUTE
     }
     defenceSteps.loginAsDefendant(testData.defendantEmail)
     this.startResponseFromDashboard(testData.claimRef)
-    defenceSteps.makeDefenceAndSubmit(
+    await defenceSteps.makeDefenceAndSubmit(
       testData.defendant,
       testData.defendantEmail,
       testData.defendantPartyType,

@@ -16,8 +16,9 @@ const hwfSteps: HwfSteps = new HwfSteps()
 
 Feature('Claimant Enter details of claim')
 
-Before(async () => {
-  userSteps.login(userSteps.getClaimantEmail())
+Before(async (I: I) => {
+  const claimantEmail = await I.getClaimantEmail()
+  userSteps.login(claimantEmail)
   if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
     testingSupport.deleteClaimDraft()
   }
@@ -26,7 +27,7 @@ Before(async () => {
 })
 
 Scenario('Claim with no interest @citizen', { retries: 0 }, async (I: I) => {
-  claimSteps.completeStartOfClaimJourney(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true)
+  await claimSteps.completeStartOfClaimJourney(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true)
   interestSteps.skipClaimInterest()
   const isHwfEnabled = await I.checkHWF()
   if (isHwfEnabled) {
@@ -51,24 +52,24 @@ Scenario('Claim with no interest @citizen', { retries: 0 }, async (I: I) => {
   userSteps.selectCheckAndSubmitYourClaim()
   I.see('£80.50')
   I.see('I don’t want to claim interest')
-  claimSteps.checkClaimFactsAreTrueAndSubmit(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true)
-  paymentSteps.enterWorkingCard()
+  await claimSteps.checkClaimFactsAreTrueAndSubmit(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true)
+  await paymentSteps.enterWorkingCard(I)
   paymentSteps.cancelPaymentFromConfirmationPage()
   I.waitForText('Your payment has been cancelled')
   paymentSteps.goBackToServiceFromConfirmationPage()
 
-  claimSteps.checkClaimFactsAreTrueAndSubmit(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
-  paymentSteps.payWithDeclinedCard()
+  await claimSteps.checkClaimFactsAreTrueAndSubmit(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
+  await paymentSteps.payWithDeclinedCard(I)
   I.waitForText('Your payment has been declined')
   paymentSteps.goBackToServiceFromConfirmationPage()
 
-  claimSteps.checkClaimFactsAreTrueAndSubmit(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
-  paymentSteps.payWithWorkingCard()
+  await claimSteps.checkClaimFactsAreTrueAndSubmit(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
+  await paymentSteps.payWithWorkingCard(I)
   I.waitForText('Claim submitted')
 })
 
 Scenario('Claim with different interest rate and date @citizen', { retries: 3 }, async (I: I) => {
-  claimSteps.completeStartOfClaimJourney(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true)
+  await claimSteps.completeStartOfClaimJourney(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true)
   interestSteps.enterSpecificInterestRateAndDate(2, '1990-01-01')
   const isHwfEnabled = await I.checkHWF()
   if (isHwfEnabled) {
@@ -87,7 +88,7 @@ Scenario('Claim with different interest rate and date @citizen', { retries: 3 },
 })
 
 Scenario('Claim with a manually entered interest amount and a daily amount added @citizen', { retries: 3 }, async (I: I) => {
-  claimSteps.completeStartOfClaimJourney(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true)
+  await claimSteps.completeStartOfClaimJourney(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true)
   interestSteps.enterBreakdownInterestAmountAndDailyAmount()
   const isHwfEnabled = await I.checkHWF()
   if (isHwfEnabled) {
