@@ -14,7 +14,7 @@ let defendantType
 let claimData
 let claimRef
 
-Feature('CCJ Requested Against Sole Trader E2E')
+Feature('CCJ Requested Against Limited Company')
 
 Before(async (I: I) => {
   email = await I.getClaimantEmail()
