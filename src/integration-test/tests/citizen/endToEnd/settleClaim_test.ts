@@ -7,7 +7,7 @@ import { Helper } from './steps/helper'
 import { UserSteps } from '../home/steps/user'
 import { ClaimantResponseSteps } from '../claimantResponse/steps/claimant-reponse'
 import { ClaimantConfirmation } from '../claimantResponse/pages/claimant-confirmation'
-import {DefenceType} from "../../../data/defence-type";
+import { DefenceType } from '../../../data/defence-type'
 const helperSteps: Helper = new Helper()
 const userSteps: UserSteps = new UserSteps()
 const claimantResponseSteps: ClaimantResponseSteps = new ClaimantResponseSteps()
