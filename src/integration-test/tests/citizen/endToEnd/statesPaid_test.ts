@@ -10,7 +10,7 @@ const userSteps: UserSteps = new UserSteps()
 const claimantResponseSteps: ClaimantResponseSteps = new ClaimantResponseSteps()
 let testData
 
-Feature('States Paid E2E...')
+Feature('States Paid E2E')
 
 Before(async (I: I) => {
   testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
