@@ -22,7 +22,7 @@ Before(async (I: I) => {
   testData = await EndToEndTestData.prepareData(I, PartyType.COMPANY, PartyType.COMPANY)
 })
 
-Scenario(' Company Rejected Part Admit Offer (Company Vs Company) @business @admissions', { retries: 3 }, async (I: I) => {
+Scenario('Company Rejected Part Admit Offer (Company Vs Company) @business @admissions', { retries: 3 }, async (I: I) => {
   testData.paymentOption = PaymentOption.IMMEDIATELY
   testData.defenceType = DefenceType.PART_ADMISSION
   testData.defendantClaimsToHavePaidInFull = false
