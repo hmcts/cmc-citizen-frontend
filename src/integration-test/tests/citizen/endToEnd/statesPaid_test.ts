@@ -26,7 +26,6 @@ Scenario('I have paid what i believe i owe @citizen @nightly', { retries: 3 }, a
   userSteps.login(testData.claimantEmail)
   claimantResponseSteps.viewClaimFromDashboard(testData.claimRef)
   I.see(testData.claimRef)
-  I.see('Decide whether to proceed')
   I.click('View and respond')
   claimantResponseSteps.acceptFullDefencePaidFullAmount(testData)
 })
