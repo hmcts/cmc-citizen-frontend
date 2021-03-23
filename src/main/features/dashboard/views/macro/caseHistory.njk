@@ -163,6 +163,10 @@
   businessQueueClaimantClaimDetails
 %}
 
+{% from "./claimStatus/breathingSpace.njk" import
+  enterBreathingSpaceForClaimantClaimDetails
+%}
+
 {% macro caseHistoryForClaimantClaimDetails(claim, csrf, mediationDeadline, reconsiderationDeadline, isReviewOrderEligible, respondToReviewOrderDeadline, judgePilot) %}
   {% for state in claim.stateHistory %}
     {% if state.status === ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE and claim.state !== 'CLOSED_HWF' %}
@@ -317,6 +321,9 @@
       {{ intentionToProceedPastDeadlineForClaimantClaimDetails(claim) }}
     {% endif %}
   {% endfor %}
+  {% if claim.claimData.breathingSpace.breathingSpaceType !== undefined %}
+    {{ enterBreathingSpaceForClaimantClaimDetails(claim.externalId) }}
+  {% endif %}
 {% endmacro %}
 
 {% macro caseHistoryForDefendantClaimDetails(claim, reconsiderationDeadline, isReviewOrderEligible, respondToReviewOrderDeadline, judgePilot) %}

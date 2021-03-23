@@ -1,0 +1,17 @@
+{% from "form.njk" import csrfProtection, submitButton %}
+{% from "internalLink.njk" import internalLink %}
+{% from "externalLink.njk" import externalLink %}
+
+{% macro enterBreathingSpaceForClaimantClaimDetails(externalId) %}
+  <div class="status-block">
+    {% set defendantName = claim.claimData.defendant.name %}
+    <h2 class="heading-medium">{{ t('Notify debt respite scheme (Breathing Space)') }}</h2>
+    <p>{{ t('Do you want to notify us that the defendant has entered the debt respite scheme (Breathing Space)?') }}</p>
+    <p>{{ t('View the full government guidance on the {{ bs }} for more information.',
+    { bs: externalLink('debt respite scheme', 'https://www.gov.uk/government/publications/debt-respite-scheme-breathing-space-guidance/debt-respite-scheme-breathing-space-guidance-for-creditors') }) | safe }}</p>
+    <p>{{ internalLink(t('Enter the debt respite scheme'),
+        BreathingSpacePaths.referencNumberPage.evaluateUri({ externalId: externalId }),
+        'button button-secondary') | safe }}</p>
+  </div>
+{% endmacro %}
+

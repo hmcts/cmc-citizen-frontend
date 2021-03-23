@@ -33,6 +33,7 @@ import { DirectionsQuestionnaireFeature } from 'features/directions-questionnair
 import { OrdersFeature } from 'orders/index'
 import { trackCustomEvent } from 'logging/customEventTracker'
 import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
+import { Feature as BreathingSpaceFeature } from 'breathing-space/index'
 
 logger.info('Creating express server object')
 
@@ -109,6 +110,9 @@ new OfferFeature().enableFor(app)
 
 logger.info('Loading SettlementAgreementFeature')
 new SettlementAgreementFeature().enableFor(app)
+
+logger.info('Loading BreathingSpaceFeature')
+new BreathingSpaceFeature().enableFor(app)
 
 logger.info('Loading MediationFeature')
 new MediationFeature().enableFor(app)
