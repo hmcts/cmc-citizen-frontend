@@ -30,7 +30,7 @@ class PaidAmountSummaryPage extends AbstractPaidAmountSummaryPage<DraftCCJ> {
       if ((paymentOption && paymentOption.option.value === PaymentOption.INSTALMENTS) ||
         (claim.isSettlementAgreementRejected && claim.isSettlementPaymentDateValid())) {
         return Paths.checkAndSendPage.evaluateUri({ externalId: externalId })
-      } else if((paymentOption && paymentOption.option.value === PaymentOption.BY_SPECIFIED_DATE)){
+      } else if ((paymentOption && paymentOption.option.value === PaymentOption.BY_SPECIFIED_DATE)) {
         return Paths.checkAndSendPage.evaluateUri({ externalId: externalId })
       } else {
         return Paths.paymentOptionsPage.evaluateUri({ externalId: externalId })

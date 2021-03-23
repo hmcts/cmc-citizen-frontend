@@ -80,7 +80,7 @@ describe('CCJ: check and send page', () => {
             .expect(res => expect(res).to.be.successful.withoutText('/ccj/payment-options', '/ccj/date-of-birth'))
         })
 
-        it.only('should render page when everything is fine when settlement is broken with setDate', async () => {
+        it('should render page when everything is fine when settlement is broken with setDate', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithFullAdmissionAndSettlementBySetDate(claimStoreServiceMock.settlementBySetDateAndSettlementReachedAt)
           draftStoreServiceMock.resolveFind('ccj')
 
