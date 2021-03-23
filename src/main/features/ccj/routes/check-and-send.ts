@@ -28,7 +28,6 @@ import { PaymentDate } from 'shared/components/payment-intention/model/paymentDa
 import { LocalDate } from 'forms/models/localDate'
 import * as CCJHelper from 'main/common/helpers/ccjHelper'
 
-import { calculateMonthIncrement } from 'common/calculate-month-increment/calculateMonthIncrement'
 import { MomentFactory } from 'shared/momentFactory'
 
 function prepareUrls (externalId: string, claim: Claim, draft: Draft<DraftCCJ>): object {
