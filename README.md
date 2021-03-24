@@ -19,7 +19,7 @@ Service delegates most of the non UI responsibilities to underlying services e.g
 * [Gulp](http://gulpjs.com/)
 * [Docker](https://www.docker.com)
 
-#### Running the application
+### Running the application
 
 Install dependencies by executing the following command:
 
