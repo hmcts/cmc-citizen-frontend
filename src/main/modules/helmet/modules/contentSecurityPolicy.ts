@@ -1,7 +1,6 @@
 import * as express from 'express'
 import * as helmet from 'helmet'
 
-const none = '\'none\''
 const self = '\'self\''
 
 export class ContentSecurityPolicy {
@@ -22,7 +21,7 @@ export class ContentSecurityPolicy {
 
     app.use(helmet.contentSecurityPolicy({
       directives: {
-        defaultSrc: [none],
+        defaultSrc: [self],
         fontSrc: [self, 'data:'],
         scriptSrc: scriptSrc,
         connectSrc: connectSrc,
@@ -37,10 +36,7 @@ export class ContentSecurityPolicy {
           'vcc-eu4.8x8.com',
           'vcc-eu4b.8x8.com'
         ],
-        styleSrc: [
-          '\'self\'',
-          '\'unsafe-inline\''
-        ],
+        styleSrc: [self],
         objectSrc: [self],
         frameAncestors: ['\'self\'']
       },
