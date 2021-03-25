@@ -5,8 +5,6 @@ import { BreathingSpaceReferenceNumber } from 'features/breathing-space/models/b
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { ErrorHandling } from 'shared/errorHandling'
-import { Draft } from '@hmcts/draft-store-client'
-import { BreathingSpace } from 'features/claim/form/models/breathingSpace'
 
 function renderView (form: Form<BreathingSpaceReferenceNumber>, res: express.Response, next: express.NextFunction) {
   res.render(Paths.referencNumberPage.associatedView, {
