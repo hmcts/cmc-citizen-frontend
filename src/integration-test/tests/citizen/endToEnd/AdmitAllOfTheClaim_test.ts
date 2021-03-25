@@ -10,6 +10,8 @@ const defenceSteps: DefenceSteps = new DefenceSteps()
 let claimantEmail
 let defendantEmail
 let claimData
+let defendant
+let claimRef
 
 Feature('Admit All Of The Claim E2E')
 
@@ -18,34 +20,26 @@ Before(async (I: I) => {
   defendantEmail = await I.getDefendantEmail()
 
   claimData = await createClaimData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
+  defendant = claimData.defendants[0]
+  claimRef = await I.createClaim(claimData, claimantEmail)
+
+  await helperSteps.enterPinNumber(claimRef, claimantEmail)
+  helperSteps.linkClaimToDefendant(defendantEmail)
+  helperSteps.startResponseFromDashboard(claimRef)
+
 })
 
 if (process.env.FEATURE_ADMISSIONS === 'true') {
 
   Scenario('Admit all of the claim(Pay Immediately) @citizen @nightly @admissions', { retries: 3 }, async (I: I) => {
-    const claimRef = await I.createClaim(claimData, claimantEmail)
-
-    await helperSteps.enterPinNumber(claimRef, claimantEmail)
-    helperSteps.linkClaimToDefendant(defendantEmail)
-    helperSteps.startResponseFromDashboard(claimRef)
-    defenceSteps.makeFullAdmission(claimData.data.defendants[0], PartyType.INDIVIDUAL, PaymentOption.IMMEDIATELY, claimData.data.claimants[0].name, false)
+    defenceSteps.makeFullAdmission(defendant, PartyType.INDIVIDUAL, PaymentOption.IMMEDIATELY, claimData.data.claimants[0].name, false)
   })
 
   Scenario('Admit all of the claim(Pay By Set Date) @citizen @nightly @admissions', { retries: 3 }, async (I: I) => {
-    const claimRef = await I.createClaim(claimData, claimantEmail)
-
-    await helperSteps.enterPinNumber(claimRef, claimantEmail)
-    helperSteps.linkClaimToDefendant(defendantEmail)
-    helperSteps.startResponseFromDashboard(claimRef)
-    defenceSteps.makeFullAdmission(claimData.data.defendants[0], PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE, claimData.data.claimants[0].name, false)
+    defenceSteps.makeFullAdmission(defendant, PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE, claimData.data.claimants[0].name, false)
   })
 
   Scenario('Admit all of the claim(Pay By Instalment) with PCQ @citizen @admissions', { retries: 3 }, async (I: I) => {
-    const claimRef = await I.createClaim(claimData, claimantEmail)
-
-    await helperSteps.enterPinNumber(claimRef, claimantEmail)
-    helperSteps.linkClaimToDefendant(defendantEmail)
-    helperSteps.startResponseFromDashboard(claimRef)
-    defenceSteps.makeFullAdmission(claimData.data.defendants[0], PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS, claimData.data.claimants[0].name, false, true)
+    defenceSteps.makeFullAdmission(defendant, PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS, claimData.data.claimants[0].name, false, true)
   })
 }
