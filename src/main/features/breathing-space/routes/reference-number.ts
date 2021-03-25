@@ -15,7 +15,7 @@ function renderView (form: Form<BreathingSpaceReferenceNumber>, res: express.Res
 /* tslint:disable:no-default-export */
 export default express.Router()
 .get(Paths.referencNumberPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    renderView(new Form(new BreathingSpaceReferenceNumber(res.app.locals.breathingSpaceReferenceNumber)), res, next)
+  renderView(new Form(new BreathingSpaceReferenceNumber(res.app.locals.breathingSpaceReferenceNumber)), res, next)
 })
 .post(
   Paths.referencNumberPage.uri,

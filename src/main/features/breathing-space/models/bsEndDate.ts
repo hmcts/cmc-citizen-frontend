@@ -8,7 +8,6 @@ export class ValidationErrors {
 }
 
 export class BreathingSpaceRespiteEnd {
-  
   @IsValidLocalDate({ message: ValidationErrors.DATE_NOT_VALID })
   @IsTodayOrInFuture({ message: ValidationErrors.DATE_TODAY_OR_IN_FUTURE })
   respiteEnd?: LocalDate
@@ -22,7 +21,7 @@ export class BreathingSpaceRespiteEnd {
       return input
     }
 
-    const dateOfRespite = new BreathingSpaceRespiteEnd( LocalDate.fromObject(input.respiteEnd))
+    const dateOfRespite = new BreathingSpaceRespiteEnd(LocalDate.fromObject(input.respiteEnd))
 
     return dateOfRespite
   }

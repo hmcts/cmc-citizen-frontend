@@ -14,11 +14,11 @@ export class BreathingSpaceRespiteStart {
   @IsToday({ message: ValidationErrors.DATE_IN_FUTURE })
   respiteStart?: LocalDate
 
-  constructor(num?: LocalDate) {
+  constructor (num?: LocalDate) {
     this.respiteStart = num
   }
 
-  static fromObject(input?: any): BreathingSpaceRespiteStart {
+  static fromObject (input?: any): BreathingSpaceRespiteStart {
     if (!input) {
       return input
     }
@@ -28,14 +28,14 @@ export class BreathingSpaceRespiteStart {
     return dateOfRespite
   }
 
-  deserialize(input?: any): BreathingSpaceRespiteStart {
+  deserialize (input?: any): BreathingSpaceRespiteStart {
     if (input) {
       this.respiteStart = new LocalDate().deserialize(input.respiteStart)
     }
     return this
   }
 
-  isCompleted(): boolean {
+  isCompleted (): boolean {
     return !!this.respiteStart.year && this.respiteStart.year.toString().length > 0
   }
 }

@@ -24,7 +24,7 @@ export default express.Router()
       res.app.locals.breathingSpaceEndDate = null
       res.app.locals.breathingSpaceEnteredDate = null
       res.app.locals.breathingSpaceReferenceNumber = ''
-      res.app.locals.breathingSpaceType  = null
+      res.app.locals.breathingSpaceType = null
 
       const claim = externalId !== draftExternalId ? await claimStoreClient.retrieveByExternalId(externalId, res.locals.user as User) : undefined
       const mediationDeadline: Moment = claim ? await claim.respondToMediationDeadline() : undefined

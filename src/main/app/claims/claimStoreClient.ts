@@ -98,7 +98,6 @@ export class ClaimStoreClient {
   }
 
   saveBreatingSpace (draft: DraftClaim, claimant: User): Promise<Claim> {
-    
     return this.request
       .post(`${claimStoreApiUrl}/${claimant.id}/${draft.breathingSpace.breathingSpaceExternalId.toString()}/breathingSpace`, {
         body: {
