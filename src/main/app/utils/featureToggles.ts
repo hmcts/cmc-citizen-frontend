@@ -57,6 +57,6 @@ export class FeatureToggles {
   }
 
   async isBreathingSpaceEnabled (): Promise<boolean> {
-    return this.launchDarklyClient.serviceVariation('breathing-space', toBoolean(config.get<boolean>(`featureToggles.breathing-space`)))
+    return this.launchDarklyClient.serviceVariation('breathing-space', toBoolean(config.get<boolean>(`featureToggles.breathingSpace`)))
   }
 }

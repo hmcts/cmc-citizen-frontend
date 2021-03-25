@@ -26,7 +26,7 @@ export default express.Router()
         FormValidator.requestHandler(BreathingSpaceRespiteEnd, BreathingSpaceRespiteEnd.fromObject),
         ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
             const form: Form<BreathingSpaceRespiteEnd> = req.body
-            if ((form.model.respiteEnd.day && form.model.respiteEnd.month && form.model.respiteEnd.year) && form.hasErrors()) {
+            if ((form.model.respiteEnd.day || form.model.respiteEnd.month || form.model.respiteEnd.year) && form.hasErrors()) {
                 renderView(form, res, next)
             } else {
                 res.app.locals.breathingSpaceEndDate = form.model.respiteEnd

@@ -322,11 +322,13 @@
       {{ intentionToProceedPastDeadlineForClaimantClaimDetails(claim) }}
     {% endif %}
   {% endfor %}
-  {% if claim.claimData.breathingSpace.breathingSpaceType === undefined %}
-    {{ enterBreathingSpaceForClaimantClaimDetails(claim.externalId) }}
-  {% endif %}
-  {% if claim.claimData.breathingSpace.breathingSpaceType %}
-    {{ liftingBreathingSpaceForClaimantClaimDetails(claim.externalId) }}
+  {% if breathingSpace and claim.state !== 'HWF_APPLICATION_PENDING' and claim.state !== 'AWAITING_RESPONSE_HWF' %}
+    {% if claim.claimData.breathingSpace.breathingSpaceType === undefined %}
+      {{ enterBreathingSpaceForClaimantClaimDetails(claim.externalId) }}
+    {% endif %}
+    {% if claim.claimData.breathingSpace.breathingSpaceType %}
+      {{ liftingBreathingSpaceForClaimantClaimDetails(claim.externalId) }}
+    {% endif %}
   {% endif %}
 {% endmacro %}
 

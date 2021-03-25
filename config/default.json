@@ -98,7 +98,7 @@
     "signPostingCTSC": true,
     "autoEnrollIntoNewFeature": true,
     "dashboard_pagination_enabled": false,
-    "breathing-space": true
+    "breathingSpace": true
   },
   "oauth": {
     "clientId": "cmc_citizen"
