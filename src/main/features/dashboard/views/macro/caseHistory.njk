@@ -164,7 +164,8 @@
 %}
 
 {% from "./claimStatus/breathingSpace.njk" import
-  enterBreathingSpaceForClaimantClaimDetails
+  enterBreathingSpaceForClaimantClaimDetails,
+  liftingBreathingSpaceForClaimantClaimDetails
 %}
 
 {% macro caseHistoryForClaimantClaimDetails(claim, csrf, mediationDeadline, reconsiderationDeadline, isReviewOrderEligible, respondToReviewOrderDeadline, judgePilot) %}
@@ -323,6 +324,9 @@
   {% endfor %}
   {% if claim.claimData.breathingSpace.breathingSpaceType === undefined %}
     {{ enterBreathingSpaceForClaimantClaimDetails(claim.externalId) }}
+  {% endif %}
+  {% if claim.claimData.breathingSpace.breathingSpaceType %}
+    {{ liftingBreathingSpaceForClaimantClaimDetails(claim.externalId) }}
   {% endif %}
 {% endmacro %}
 

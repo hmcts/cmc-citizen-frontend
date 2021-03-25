@@ -12,17 +12,24 @@ import { DraftClaim } from 'drafts/models/draftClaim'
 
 function renderView (form: Form<BreathingSpace>, res: express.Response, next: express.NextFunction) {
     let bsType: any
+    let bsEnteredDate: any
+    let bsEndDate: any
     if (res.app.locals.breathingSpaceType === 'STANDARD_BS_ENTERED') {
         bsType = 'Standard breathing space'
     } else {
         bsType = 'Mental health crisis moratorium'
     }
-
+    if (res.app.locals.breathingSpaceEndDate.day !== undefined) {
+        bsEndDate = moment(res.app.locals.breathingSpaceEndDate).format('MM/DD/YYYY')
+    }
+    if (res.app.locals.breathingSpaceEnteredDate.day !== undefined) {
+        bsEnteredDate = moment(res.app.locals.breathingSpaceEnteredDate).format('MM/DD/YYYY')
+    }
     res.render (Paths.bsCheckAnswersPage.associatedView, {
         form: form,
         breathingSpaceExternalId: res.app.locals.breathingSpaceExternalId,
-        breathingSpaceEndDate: moment(res.app.locals.breathingSpaceEndDate).format('MM/DD/YYYY'),
-        breathingSpaceEnteredDate: moment(res.app.locals.breathingSpaceEnteredDate).format('MM/DD/YYYY'),
+        breathingSpaceEndDate: bsEndDate,
+        breathingSpaceEnteredDate: bsEnteredDate,
         breathingSpaceReferenceNumber: res.app.locals.breathingSpaceReferenceNumber,
         breathingSpaceType: bsType
     })

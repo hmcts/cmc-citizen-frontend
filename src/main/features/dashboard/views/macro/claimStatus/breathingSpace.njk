@@ -15,3 +15,15 @@
   </div>
 {% endmacro %}
 
+{% macro liftingBreathingSpaceForClaimantClaimDetails(externalId) %}
+  <div class="status-block">
+    {% set defendantName = claim.claimData.defendant.name %}
+    <h2 class="heading-medium">{{ t('Lift the debt respite scheme (Breathing Space)') }}</h2>
+    <p>{{ t('Some useful information here about lifting the Debt Respit Scheme') }}</p>
+    <p>{{ t('View the full government guidance on the {{ bs }} for more information.',
+    { bs: externalLink('debt respite scheme', 'https://www.gov.uk/government/publications/debt-respite-scheme-breathing-space-guidance/debt-respite-scheme-breathing-space-guidance-for-creditors') }) | safe }}</p>
+    <p>{{ internalLink(t('Enter the debt respite scheme'),
+        DashboardPaths.dashboardPage.uri,
+        'button button-secondary') | safe }}</p>
+  </div>
+{% endmacro %}
