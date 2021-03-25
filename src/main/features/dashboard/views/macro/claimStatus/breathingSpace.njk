@@ -10,7 +10,7 @@
     <p>{{ t('View the full government guidance on the {{ bs }} for more information.',
     { bs: externalLink('debt respite scheme', 'https://www.gov.uk/government/publications/debt-respite-scheme-breathing-space-guidance/debt-respite-scheme-breathing-space-guidance-for-creditors') }) | safe }}</p>
     <p>{{ internalLink(t('Enter the debt respite scheme'),
-        BreathingSpacePaths.referencNumberPage.evaluateUri({ externalId: externalId }),
+        BreathingSpacePaths.referencNumberPage.uri,
         'button button-secondary') | safe }}</p>
   </div>
 {% endmacro %}

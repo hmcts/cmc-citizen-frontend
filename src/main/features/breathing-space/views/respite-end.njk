@@ -2,7 +2,7 @@
 {% from "form.njk" import csrfProtection, textInput, saveAndContinueButton, errorSummary %}
 {% from "date.njk" import dateInput %}
 
-{% set heading = 'When did it start?' %}
+{% set heading = 'Expected end date' %}
 
 {% block content %}
   <div class="grid-row">
@@ -11,7 +11,7 @@
       <form method="post">
         <input type="hidden" name="known" value="true" />
         {{ csrfProtection(csrf) }}
-        {{ dateInput('respiteStart', form, hint = t('For example, {{ pastDate }}', { pastDate: pastDate | inputDate })) }}
+        {{ dateInput('respiteEnd', form, hint = t('For example, {{ currentDate }}', { currentDate: currentDate | inputDate })) }}
         {{ saveAndContinueButton() }}
       </form>
     </div>

@@ -18,6 +18,7 @@ import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/dir
 import { OrdersDraft } from 'orders/draft/ordersDraft'
 import { OrdersConverter } from 'claims/ordersConverter'
 import { ReviewOrder } from 'claims/models/reviewOrder'
+import moment = require('moment')
 
 export const claimApiBaseUrl: string = `${config.get<string>('claim-store.url')}`
 export const claimStoreApiUrl: string = `${claimApiBaseUrl}/claims`
@@ -91,6 +92,31 @@ export class ClaimStoreClient {
         if (err.statusCode === HttpStatus.CONFLICT) {
           logger.warn(`Claim ${draft.document.externalId} appears to have been saved successfully on initial timed out attempt, retrieving the saved instance`)
           return this.retrieveByExternalId(draft.document.externalId, claimant)
+        }
+        throw err
+      })
+  }
+
+  saveBreatingSpace (draft: DraftClaim, claimant: User): Promise<Claim> {
+    
+    return this.request
+      .post(`${claimStoreApiUrl}/${claimant.id}/${draft.breathingSpace.breathingSpaceExternalId.toString()}/breathingSpace`, {
+        body: {
+          'bs_entered_date': moment(draft.breathingSpace.breathingSpaceEnteredDate).format('YYYY-MM-DD'),
+          'bs_expected_end_date': moment(draft.breathingSpace.breathingSpaceEndDate).format('YYYY-MM-DD'),
+          'bs_reference_number': draft.breathingSpace.breathingSpaceReferenceNumber.toString(),
+          'bs_type': draft.breathingSpace.breathingSpaceType.toString(),
+          'bs_lifted_flag': 'NO'
+        },
+        headers: {
+          Authorization: `Bearer ${claimant.bearerToken}`
+        }
+      })
+      .then(claim => new Claim().deserialize(claim))
+      .catch(err => {
+        if (err.statusCode === HttpStatus.CONFLICT) {
+          logger.warn(`Claim ${draft.externalId} appears to have been saved successfully on initial timed out attempt, retrieving the saved instance`)
+          return this.retrieveByExternalId(draft.externalId, claimant)
         }
         throw err
       })

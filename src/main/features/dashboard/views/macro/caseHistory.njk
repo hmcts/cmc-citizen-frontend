@@ -321,7 +321,7 @@
       {{ intentionToProceedPastDeadlineForClaimantClaimDetails(claim) }}
     {% endif %}
   {% endfor %}
-  {% if claim.claimData.breathingSpace.breathingSpaceType !== undefined %}
+  {% if claim.claimData.breathingSpace.breathingSpaceType === undefined %}
     {{ enterBreathingSpaceForClaimantClaimDetails(claim.externalId) }}
   {% endif %}
 {% endmacro %}

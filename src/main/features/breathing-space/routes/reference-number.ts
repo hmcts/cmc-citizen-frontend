@@ -2,12 +2,14 @@ import * as express from 'express'
 
 import { Paths } from 'breathing-space/paths'
 import { BreathingSpaceReferenceNumber } from 'features/breathing-space/models/bsReferenceNumber'
-import { BreathingSpace } from 'features/claim/form/models/breathingSpace'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { ErrorHandling } from 'shared/errorHandling'
+import { Draft } from '@hmcts/draft-store-client'
+import { BreathingSpace } from 'features/claim/form/models/breathingSpace'
+import { DraftService } from 'services/draftService'
 
-// import { User } from 'idam/user'
+const bsDraft = new Draft<BreathingSpace>(null,null,null,null,null)
 
 function renderView (form: Form<BreathingSpaceReferenceNumber>, res: express.Response, next: express.NextFunction) {
   res.render(Paths.referencNumberPage.associatedView, {
@@ -18,10 +20,7 @@ function renderView (form: Form<BreathingSpaceReferenceNumber>, res: express.Res
 /* tslint:disable:no-default-export */
 export default express.Router()
 .get(Paths.referencNumberPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-  const { externalId } = req.params
-  res.locals.breathingSpaceExternalId = externalId
-  
-  renderView(new Form(new BreathingSpaceReferenceNumber()), res, next)
+    renderView(new Form(new BreathingSpaceReferenceNumber(res.app.locals.breathingSpaceReferenceNumber)), res, next)
 })
 .post(
   Paths.referencNumberPage.uri,
@@ -32,8 +31,8 @@ export default express.Router()
     if (form.hasErrors()) {
       renderView(form, res, next)
     } else {
-      
-      res.locals.breathingSpaceReferenceNumber = form.model.bsNumber
-      // res.redirect(Paths.referencNumberPage.uri)
+      res.app.locals.breathingSpaceReferenceNumber = form.model.bsNumber
+
+      res.redirect(Paths.bsStartDatePage.uri)
     }
   }))

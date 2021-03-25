@@ -1,8 +1,7 @@
-export class ValidationErrors {
-  static readonly NUMBER_REQUIRED: string = 'Enter UK phone number'
-}
+import { MaxLength } from '@hmcts/class-validator'
 
 export class BreathingSpaceReferenceNumber {
+  @MaxLength(16, { message: 'Reference number must not be more than 16 characters' })
   bsNumber?: string
 
   constructor (num?: string) {
