@@ -40,6 +40,9 @@ export class Eligibility {
   @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: ['claimIsForTenancyDeposit'] })
   claimIsForTenancyDeposit?: YesNoOption
 
+  @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: ['infoAboutHelpWithFees'] })
+  infoAboutHwFeligibility?: YesNoOption
+
   constructor (claimValue?: ClaimValue,
                helpWithFees?: YesNoOption,
                helpWithFeesReference?: YesNoOption,
@@ -50,7 +53,8 @@ export class Eligibility {
                claimType?: ClaimType,
                singleClaimant?: YesNoOption,
                governmentDepartment?: YesNoOption,
-               claimIsForTenancyDeposit?: YesNoOption) {
+               claimIsForTenancyDeposit?: YesNoOption, 
+               infoAboutHwFeligibility?: YesNoOption) {
     this.claimValue = claimValue
     this.helpWithFees = helpWithFees
     this.helpWithFeesReference = helpWithFeesReference
@@ -62,6 +66,7 @@ export class Eligibility {
     this.singleDefendant = singleClaimant
     this.governmentDepartment = governmentDepartment
     this.claimIsForTenancyDeposit = claimIsForTenancyDeposit
+    this.infoAboutHwFeligibility = infoAboutHwFeligibility
   }
 
   static fromObject (input: any): Eligibility {
@@ -79,7 +84,8 @@ export class Eligibility {
       ClaimType.fromObject(input.claimType),
       YesNoOption.fromObject(input.singleDefendant),
       YesNoOption.fromObject(input.governmentDepartment),
-      YesNoOption.fromObject(input.claimIsForTenancyDeposit)
+      YesNoOption.fromObject(input.claimIsForTenancyDeposit),
+      YesNoOption.fromObject(input.infoAboutHwFeligibility)
     )
   }
 
@@ -118,6 +124,9 @@ export class Eligibility {
       if (input.claimIsForTenancyDeposit) {
         this.claimIsForTenancyDeposit = YesNoOption.fromObject(input.claimIsForTenancyDeposit.option)
       }
+      if (input.infoAboutHwFeligibility) {
+        this.infoAboutHwFeligibility = YesNoOption.fromObject(input.infoAboutHwFeligibility.option)
+      }
     }
 
     return this
@@ -133,7 +142,9 @@ export class Eligibility {
       this.claimType === ClaimType.PERSONAL_CLAIM &&
       this.singleDefendant === YesNoOption.NO &&
       this.governmentDepartment === YesNoOption.NO &&
-      this.claimIsForTenancyDeposit === YesNoOption.NO
+      this.claimIsForTenancyDeposit === YesNoOption.NO &&
+      this.infoAboutHwFeligibility === YesNoOption.YES || 
+      this.infoAboutHwFeligibility === YesNoOption.NO
   }
 
   helpWithFeeEligible (): boolean {

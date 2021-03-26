@@ -16,16 +16,15 @@ class InfoAboutHwFeligibilityPage extends EligibilityPage<YesNoOption> {
   }
 
   checkEligibility (value: YesNoOption): Promise<EligibilityCheck> {
-    return featureToggles.isHelpWithFeesEnabled()
-      .then(active => active
-        ? value === YesNoOption.YES ? eligible() : notEligible(undefined, Paths.eligiblePage)
-        : value === YesNoOption.NO ? eligible() : notEligible(NotEligibleReason.HELP_WITH_FEES)
-      )
+    console.log(value)
+    return Promise.resolve(value === YesNoOption.YES
+      ? eligible()
+      : notEligible(undefined, Paths.helpWithFeesPage)
+    )
   }
 
   protected async nextPagePath (): Promise<RoutablePath> {
-    return featureToggles.isHelpWithFeesEnabled()
-      .then(active => active ? Paths.applyForHelpWithFeesPage : Paths.helpWithFeesPage)
+    return Promise.resolve(Paths.applyForHelpWithFeesPage)
   }
 }
 

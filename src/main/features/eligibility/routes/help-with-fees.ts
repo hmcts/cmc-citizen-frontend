@@ -16,6 +16,7 @@ class HelpWithFeesEligibilityPage extends EligibilityPage<YesNoOption> {
   }
 
   checkEligibility (value: YesNoOption): Promise<EligibilityCheck> {
+    console.log(value)
     return featureToggles.isHelpWithFeesEnabled()
       .then(active => active
         ? value === YesNoOption.YES ? eligible() : notEligible(undefined, Paths.eligiblePage)
