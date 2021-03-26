@@ -45,6 +45,7 @@ export const claimData = {
     ],
     type: 'breakdown'
   },
+  breathingSpace: {},
   interest: interestData as Interest,
   reason: 'Because he did...',
   feeAmountInPennies: 1000000,
