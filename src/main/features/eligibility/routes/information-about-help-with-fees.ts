@@ -10,9 +10,9 @@ import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
 const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
 
-class HelpWithFeesEligibilityPage extends EligibilityPage<YesNoOption> {
+class InfoAboutHwFeligibilityPage extends EligibilityPage<YesNoOption> {
   constructor () {
-    super(Paths.helpWithFeesPage, 'helpWithFees')
+    super(Paths.helpWithFeesInfoPage, 'helpWithFeesInfo')
   }
 
   checkEligibility (value: YesNoOption): Promise<EligibilityCheck> {
@@ -25,9 +25,9 @@ class HelpWithFeesEligibilityPage extends EligibilityPage<YesNoOption> {
 
   protected async nextPagePath (): Promise<RoutablePath> {
     return featureToggles.isHelpWithFeesEnabled()
-      .then(active => active ? Paths.helpWithFeesInfoPage : Paths.eligiblePage)
+      .then(active => active ? Paths.applyForHelpWithFeesPage : Paths.helpWithFeesPage)
   }
 }
 
 /* tslint:disable:no-default-export */
-export default new HelpWithFeesEligibilityPage().buildRouter()
+export default new InfoAboutHwFeligibilityPage().buildRouter()
