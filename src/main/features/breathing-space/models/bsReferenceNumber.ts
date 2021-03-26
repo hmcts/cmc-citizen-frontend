@@ -8,8 +8,12 @@ export class BreathingSpaceReferenceNumber {
     this.bsNumber = num
   }
 
-  static fromObject (input?: any): BreathingSpaceReferenceNumber {
-    return new BreathingSpaceReferenceNumber(input.bsNumber)
+  static fromObject (value?: any): BreathingSpaceReferenceNumber {
+    if (!value) {
+      return value
+    }
+
+    return new BreathingSpaceReferenceNumber(value.bsNumber)
   }
 
   deserialize (input?: any): BreathingSpaceReferenceNumber {

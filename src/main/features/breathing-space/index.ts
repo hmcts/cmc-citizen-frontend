@@ -5,9 +5,6 @@ import { Paths } from 'breathing-space/paths'
 
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
 import { RouterFinder } from 'shared/router/routerFinder'
-import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
-import { DraftService } from 'services/draftService'
-import { DraftClaim } from 'drafts/models/draftClaim'
 import { OAuthHelper } from 'idam/oAuthHelper'
 
 function breathingSpaceRequestHandler (): express.RequestHandler {
@@ -29,10 +26,6 @@ export class Feature {
     }
 
     app.all(/^\/breathing-space.*$/, breathingSpaceRequestHandler())
-    app.all(/^\/breathing-space$/,
-      DraftMiddleware.requestHandler(new DraftService(), 'claim', 100, (value: any): DraftClaim => {
-        return new DraftClaim().deserialize(value)
-      }))
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
   }
 }

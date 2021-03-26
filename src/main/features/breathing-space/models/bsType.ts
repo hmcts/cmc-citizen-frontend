@@ -14,7 +14,7 @@ export class BreathingTypeOption {
 }
 
 export class ValidationErrors {
-  static readonly TYPE_REQUIRED: string = "Please select 'Standard breathing space' or 'Mental health crisis moratorium'"
+  static readonly TYPE_REQUIRED: string = "You must select the Type before continuing"
 }
 
 export class BreathingType implements CompletableTask {

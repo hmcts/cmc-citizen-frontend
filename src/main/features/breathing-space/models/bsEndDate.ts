@@ -4,7 +4,7 @@ import { IsTodayOrInFuture } from 'forms/validation/validators/isTodayOrInFuture
 
 export class ValidationErrors {
   static readonly DATE_NOT_VALID: string = 'Please enter a valid date'
-  static readonly DATE_TODAY_OR_IN_FUTURE: string = 'Enter a date that is today or in the future'
+  static readonly DATE_TODAY_OR_IN_FUTURE: string = "Expected end date must not be before today's date"
 }
 
 export class BreathingSpaceRespiteEnd {
@@ -20,10 +20,7 @@ export class BreathingSpaceRespiteEnd {
     if (!input) {
       return input
     }
-
-    const dateOfRespite = new BreathingSpaceRespiteEnd(LocalDate.fromObject(input.respiteEnd))
-
-    return dateOfRespite
+    return new BreathingSpaceRespiteEnd(LocalDate.fromObject(input.respiteEnd))
   }
 
   deserialize (input?: any): BreathingSpaceRespiteEnd {
