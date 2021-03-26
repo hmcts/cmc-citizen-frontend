@@ -40,7 +40,7 @@ export class Eligibility {
   @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: ['claimIsForTenancyDeposit'] })
   claimIsForTenancyDeposit?: YesNoOption
 
-  @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: ['infoAboutHelpWithFees'] })
+  @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED, groups: ['infoAboutHwFeligibility'] })
   infoAboutHwFeligibility?: YesNoOption
 
   constructor (claimValue?: ClaimValue,

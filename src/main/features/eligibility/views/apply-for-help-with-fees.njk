@@ -1,6 +1,7 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, radioGroup, errorSummary, textInput, saveAndContinueButton %}
 {% from "externalLink.njk" import externalLink %}
+{% from "internalLink.njk" import internalLink %}
 {% set heading = 'Apply for Help with Fees' %}
 {% set linkApplyHelpWithFees = t(externalLink('Apply for Help with Fees',
   'https://www.gov.uk/get-help-with-court-fees') + '.') %}
@@ -18,10 +19,7 @@
       <p>{{ additionalInformationHelp }}</p>
       <p>{{ additionalInformationCompleted }}</p>
       {% set name = 'infoAboutHelpWithFees' %}
-      <form novalidate method="post" class="analytics-submit-event-trigger" data-event-action="Eligibility: Select Help With Fees reference number option" data-event-label-from="{{ name }}">
-        {{ csrfProtection(csrf) }}
-        {{ saveAndContinueButton() }}
-      </form>
+      {{ internalLink(t('Save and Continue'), EligibilityPaths.helpWithFeesReferencePage.uri, 'button button-primary') | safe}}
     </div>
   </div>
 {% endblock %}

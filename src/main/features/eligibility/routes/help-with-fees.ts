@@ -16,7 +16,6 @@ class HelpWithFeesEligibilityPage extends EligibilityPage<YesNoOption> {
   }
 
   checkEligibility (value: YesNoOption): Promise<EligibilityCheck> {
-    console.log(value)
     return featureToggles.isHelpWithFeesEnabled()
       .then(active => active
         ? value === YesNoOption.YES ? eligible() : notEligible(undefined, Paths.eligiblePage)
@@ -26,7 +25,7 @@ class HelpWithFeesEligibilityPage extends EligibilityPage<YesNoOption> {
 
   protected async nextPagePath (): Promise<RoutablePath> {
     return featureToggles.isHelpWithFeesEnabled()
-      .then(active => active ? Paths.helpWithFeesInfoPage : Paths.eligiblePage)
+      .then(active => active ? Paths.infoAboutHwFeligibilityPage : Paths.eligiblePage)
   }
 }
 

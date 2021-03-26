@@ -5,8 +5,8 @@ import { Paths as ClaimPaths } from 'claim/paths'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.hwfEligiblePage.uri, (req: express.Request, res: express.Response): void => {
-    res.render(Paths.hwfEligiblePage.associatedView, {
+  .get(Paths.hwfEligibleReferencePage.uri, (req: express.Request, res: express.Response): void => {
+    res.render(Paths.hwfEligibleReferencePage.associatedView, {
       nextPage: ClaimPaths.taskListPage.uri
     })
   })
