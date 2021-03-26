@@ -29,7 +29,7 @@ describe('Breathing Space Reference Number', () => {
       expect(deserialized.bsNumber).to.be.undefined
     })
 
-    it.only('should return a BreathingSpaceReferenceNumber instance with fields set when given an object with value', () => {
+    it('should return a BreathingSpaceReferenceNumber instance with fields set when given an object with value', () => {
       const deserialized = new BreathingSpaceReferenceNumber().deserialize({ bsNumber: 'BS-1234567' })
       expect(deserialized.bsNumber).to.be.equal('BS-1234567')
     })

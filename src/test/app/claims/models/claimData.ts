@@ -75,7 +75,7 @@ describe('ClaimData', () => {
         expect(claimData.helpWithFeesNumber).to.equal('259023')
         expect(claimData.helpWithFeesType).to.equal('ClaimIssue')
       })
-      
+
       it('should return helpWithFeesNumber and helpWithFeesType if provided', () => {
         const claimData = new ClaimData().deserialize({})
 
@@ -90,14 +90,14 @@ describe('ClaimData', () => {
 describe('ClaimData', () => {
   describe('deserialize', () => {
     describe('breathingSpace', () => {
-      
+
       it('should return breathingSpaceReferenceNumber, bsType and other values if provided', () => {
         const actual: BreathingSpace = new BreathingSpace().deserialize(BREATHING_SPACE_DATA)
         let expected: 'BS-1234567890'
         let expectdType: 'STANDARD_BS_ENTERED'
 
         expect(actual.breathingSpaceReferenceNumber).to.be.eq(expected)
-        expect(actual.breathingSpaceType).to.be.eq(expectdType)       
+        expect(actual.breathingSpaceType).to.be.eq(expectdType)
       })
 
       it('should return undefined if undefined is provided', () => {

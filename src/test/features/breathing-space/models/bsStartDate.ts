@@ -4,15 +4,11 @@
 import * as i18next from 'i18next'
 import * as postProcessor from 'i18next-sprintf-postprocessor'
 i18next.use(postProcessor).init()
-
 import { expect } from 'chai'
 import * as moment from 'moment'
 import { Validator } from '@hmcts/class-validator'
-
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
-
-import { ValidationErrors } from 'breathing-space/models/bsStartDate'
-import { BreathingSpaceRespiteStart } from 'breathing-space/models/bsStartDate'
+import { ValidationErrors, BreathingSpaceRespiteStart } from 'breathing-space/models/bsStartDate'
 import { LocalDate } from 'forms/models/localDate'
 
 describe('BreathingSpaceRespiteStart', () => {

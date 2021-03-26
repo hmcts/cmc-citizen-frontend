@@ -8,11 +8,8 @@ i18next.use(postProcessor).init()
 import { expect } from 'chai'
 import * as moment from 'moment'
 import { Validator } from '@hmcts/class-validator'
-
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
-
-import { ValidationErrors } from 'breathing-space/models/bsEndDate'
-import { BreathingSpaceRespiteEnd } from 'breathing-space/models/bsEndDate'
+import { ValidationErrors, BreathingSpaceRespiteEnd } from 'breathing-space/models/bsEndDate'
 import { LocalDate } from 'forms/models/localDate'
 
 describe('BreathingSpaceRespiteEnd', () => {
@@ -41,7 +38,7 @@ describe('BreathingSpaceRespiteEnd', () => {
         expectValidationError(errors, ValidationErrors.DATE_NOT_VALID)
       })
 
-      it.only('should reject current date', () => {
+      it('should reject current date', () => {
         const today = moment()
         const errors = validator.validateSync(dateOfBirth(today.year(), today.month() - 1, today.date()))
         expect(errors.length).to.equal(1)
