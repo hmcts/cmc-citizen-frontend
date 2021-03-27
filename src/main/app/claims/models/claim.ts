@@ -155,7 +155,15 @@ export class Claim {
         || this.partAdmissionPayImmediatelyPastPaymentDate
         || this.hasDefendantNotSignedSettlementAgreementInTime()
         || (!this.respondedAt && isPastDeadline(MomentFactory.currentDateTime(), this.responseDeadline))
+        && this.isBreathingSpaceEntered
       )
+  }
+
+  get isBreathingSpaceEntered (): boolean {
+    if (this.claimData.breathingSpace !== undefined) {
+      return !(this.claimData.breathingSpace !== undefined && this.claimData.breathingSpace.breathingSpaceEnteredDate !== null
+        && this.claimData.breathingSpace.breathingSpaceLiftedDate === undefined)
+    }
   }
 
   get eligibleForCCJAfterBreachedSettlementTerms (): boolean {
