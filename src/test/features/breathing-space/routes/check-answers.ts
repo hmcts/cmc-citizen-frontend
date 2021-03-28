@@ -5,6 +5,7 @@ import * as config from 'config'
 import 'test/routes/expectations'
 
 import { Paths as BreathingSpacePaths } from 'breathing-space/paths'
+import { Paths as DashboardPaths } from 'dashboard/paths'
 import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
@@ -60,7 +61,7 @@ describe('Breathing Space: check-answer page', () => {
             .send({ breathingSpaceType: 'STANDARD_BS_ENTERED' })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Check your answers'))
-            .expect(res => expect(res).to.equal(302))
+            .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
         })
       })
     })
