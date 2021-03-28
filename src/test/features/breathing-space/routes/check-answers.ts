@@ -52,7 +52,6 @@ describe('Breathing Space: check-answer page', () => {
   })
 
   describe('on POST', () => {
-    const method = 'post'
 
     context('when user authorised', () => {
       beforeEach(() => {
