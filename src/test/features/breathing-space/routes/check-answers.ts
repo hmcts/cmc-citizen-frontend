@@ -16,7 +16,6 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { SignatureType } from 'common/signatureType'
-import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
 import {
   verifyRedirectForGetWhenAlreadyPaidInFull,
   verifyRedirectForPostWhenAlreadyPaidInFull
@@ -31,7 +30,6 @@ describe('Breathing Space: check-answer page', () => {
 
   describe('on GET', () => {
     const method = 'get'
-    checkNotDefendantInCaseGuard(app, method, pagePath)
 
     context('when user authorised', () => {
       beforeEach(() => {
@@ -59,7 +57,6 @@ describe('Breathing Space: check-answer page', () => {
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .send({ breathingSpaceType: 'STANDARD_BS_ENTERED', bsEndDate: '2025-01-01', breathingSpaceEndDate: '2021-01-01', breathingSpaceExternalId: 'bbb89313-7e4c-4124-8899-34389312033a', breathingSpaceReferenceNumber: 'BS-1234567890' })
-            .expect(res => res.status = 302)
             .expect(res => expect(res).to.be.successful.withText('Check your answers before submitting'))
             .expect(res => expect(res).to.be.successful.withText('Standard breathing space'))
             .expect(res => expect(res).to.be.successful.withText('Standard breathing space'))
@@ -70,7 +67,6 @@ describe('Breathing Space: check-answer page', () => {
 
   describe('on POST', () => {
     const method = 'post'
-    checkNotDefendantInCaseGuard(app, method, pagePath)
 
     context('when user authorised', () => {
       beforeEach(() => {
