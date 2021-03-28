@@ -53,7 +53,7 @@ describe('Breathing Space: check-answer page', () => {
       })
 
       context('when response not submitted', () => {
-        it.only('should redirect to dashboard-claimant details page', async () => {
+        it('should redirect to dashboard-claimant details page', async () => {
           idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
 
           await request(app)
