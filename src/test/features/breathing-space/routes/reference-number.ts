@@ -51,7 +51,7 @@ describe('Breathing space: reference number page page', () => {
         await request(app)
           .post(BreathingSpacePaths.referencNumberPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send( {bsNumber: 'BS-12345678909876'} )
+          .send({ bsNumber: 'BS-12345678909876' })
           .expect(res => expect(res).to.be.successful.withText(headerText, 'div class="error-summary"'))
       })
 
