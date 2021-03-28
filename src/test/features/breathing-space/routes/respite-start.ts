@@ -21,7 +21,6 @@ describe('Enter breathing space: Respite start date page', () => {
   describe('on GET', () => {
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-      draftStoreServiceMock.resolveFind('claim')
 
       await request(app)
         .get(BreathingSpacePaths.bsStartDatePage.uri)
@@ -37,7 +36,6 @@ describe('Enter breathing space: Respite start date page', () => {
       })
 
       it('should render page with error when date is less than or equal to today', async () => {
-        draftStoreServiceMock.resolveFind('claim')
         const date: Moment = MomentFactory.currentDate().subtract(1, 'year')
         await request(app)
           .post(BreathingSpacePaths.bsStartDatePage.uri)

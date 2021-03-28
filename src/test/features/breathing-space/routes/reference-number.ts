@@ -3,7 +3,7 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 
-import { attachDefaultHooks } from 'test/routes/hooks'
+// import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
 import { Paths as BreathingSpacePaths } from 'breathing-space/paths'
 
@@ -16,12 +16,11 @@ const cookieName: string = config.get<string>('session.cookieName')
 const headerText: string = 'Reference number must not be more than 16 characters'
 
 describe('Breathing space: reference number page page', () => {
-  attachDefaultHooks(app)
 
   describe('on GET', () => {
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-      draftStoreServiceMock.resolveFind('claim')
+
 
       await request(app)
         .get(BreathingSpacePaths.referencNumberPage.uri)
