@@ -32,7 +32,7 @@ describe('Breathing Space: check-answer page', () => {
             .expect(res => expect(res).to.be.successful.withText('Check your answers before submitting'))
         })
 
-        it.only('should render the page with all the values', async () => {
+        it('should render the page with all the values', async () => {
           idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
           draftStoreServiceMock.resolveFind('claim')
           await request(app)
