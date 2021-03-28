@@ -20,8 +20,6 @@ describe('Breathing space: reference number page page', () => {
   describe('on GET', () => {
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-
-
       await request(app)
         .get(BreathingSpacePaths.referencNumberPage.uri)
         .set('Cookie', `${cookieName}=ABC`)
