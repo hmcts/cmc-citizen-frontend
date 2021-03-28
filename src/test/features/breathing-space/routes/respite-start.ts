@@ -7,9 +7,7 @@ import 'test/routes/expectations'
 import { Paths as BreathingSpacePaths } from 'breathing-space/paths'
 
 import { app } from 'main/app'
-
 import * as idamServiceMock from 'test/http-mocks/idam'
-import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { Moment } from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
 
@@ -35,17 +33,16 @@ describe('Enter breathing space: Respite start date page', () => {
         idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       })
 
-      it('should render page with error when date is less than or equal to today', async () => {
+      it('should render page with error when date is greater than or equal to today', async () => {
         const date: Moment = MomentFactory.currentDate().subtract(1, 'year')
         await request(app)
           .post(BreathingSpacePaths.bsStartDatePage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ respiteStart: { day: date.date(), month: date.month() + 1, year: date.year() } })
-          .expect(res => expect(res).to.be.successful.withText('The start date must not be after today', 'There was a problem'))
+          .send({ respiteStart: { day: date.date() + 1, month: date.month() + 2, year: date.year() + 1 } })
+          .expect(res => expect(res).to.be.successful.withText('There was a problem'))
       })
 
       it('should redirect to type page when form is valid and everything is fine', async () => {
-        draftStoreServiceMock.resolveFind('claim')
         const date: Moment = MomentFactory.currentDate().subtract(1, 'year')
 
         await request(app)
@@ -56,8 +53,6 @@ describe('Enter breathing space: Respite start date page', () => {
       })
 
       it('should redirect to type page when form is valid (without date) and everything is fine', async () => {
-        draftStoreServiceMock.resolveFind('claim')
-
         await request(app)
           .post(BreathingSpacePaths.bsStartDatePage.uri)
           .set('Cookie', `${cookieName}=ABC`)
@@ -66,8 +61,6 @@ describe('Enter breathing space: Respite start date page', () => {
       })
 
       it('should render page with error when invalid day is provided', async () => {
-        draftStoreServiceMock.resolveFind('claim')
-
         await request(app)
           .post(BreathingSpacePaths.bsStartDatePage.uri)
           .set('Cookie', `${cookieName}=ABC`)
@@ -76,8 +69,6 @@ describe('Enter breathing space: Respite start date page', () => {
       })
 
       it('should render page with error when invalid month is provided', async () => {
-        draftStoreServiceMock.resolveFind('claim')
-
         await request(app)
           .post(BreathingSpacePaths.bsStartDatePage.uri)
           .set('Cookie', `${cookieName}=ABC`)
@@ -86,8 +77,6 @@ describe('Enter breathing space: Respite start date page', () => {
       })
 
       it('should render page with error when invalid day is provided', async () => {
-        draftStoreServiceMock.resolveFind('claim')
-
         await request(app)
           .post(BreathingSpacePaths.bsStartDatePage.uri)
           .set('Cookie', `${cookieName}=ABC`)

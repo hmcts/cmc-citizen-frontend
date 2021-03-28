@@ -7,7 +7,6 @@ import 'test/routes/expectations'
 import { Paths as BreathingSpacePaths } from 'breathing-space/paths'
 import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
-import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
@@ -34,7 +33,6 @@ describe('Breathing Space: check-answer page', () => {
 
         it('should render the page with all the values', async () => {
           idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-          draftStoreServiceMock.resolveFind('claim')
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
@@ -56,13 +54,13 @@ describe('Breathing Space: check-answer page', () => {
       context('when response not submitted', () => {
         it('should redirect to dashboard-claimant details page', async () => {
           idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-          draftStoreServiceMock.resolveFind('claim')
 
           await request(app)
             .post(pagePath)
             .send({ breathingSpaceType: 'STANDARD_BS_ENTERED' })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Check your answers'))
+            .expect(res => expect(res).to.equal(302))
         })
       })
     })

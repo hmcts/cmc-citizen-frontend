@@ -14,13 +14,12 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
-describe('Claim issue: claimant party type selection page', () => {
+describe('Breathing Space: BS Type selection page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-      draftStoreServiceMock.resolveFind('claim')
 
       await request(app)
         .get(BreathingSpacePaths.bsTypePage.uri)
