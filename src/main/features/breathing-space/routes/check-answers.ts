@@ -61,7 +61,7 @@ export default express.Router()
           renderView(form, res, next)
         } else {
           try {
-            await new ClaimStoreClient().saveBreatingSpace(draft, res.locals.user)
+            let result = await new ClaimStoreClient().saveBreatingSpace(draft, res.locals.user)
             res.redirect(DashboardPaths.claimantPage.uri.replace(':externalId', res.app.locals.breathingSpaceExternalId))
           } catch {
             res.redirect(DashboardPaths.dashboardPage.uri)

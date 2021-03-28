@@ -4,7 +4,6 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
-import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
 import { checkAlreadySubmittedGuard } from 'test/common/checks/already-submitted-check'
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
 
@@ -32,7 +31,6 @@ describe('Breathing Space: check-answer page', () => {
 
   describe('on GET', () => {
     const method = 'get'
-    checkAuthorizationGuards(app, method, pagePath)
     checkNotDefendantInCaseGuard(app, method, pagePath)
 
     context('when user authorised', () => {
@@ -72,7 +70,6 @@ describe('Breathing Space: check-answer page', () => {
 
   describe('on POST', () => {
     const method = 'post'
-    checkAuthorizationGuards(app, method, pagePath)
     checkNotDefendantInCaseGuard(app, method, pagePath)
 
     context('when user authorised', () => {
