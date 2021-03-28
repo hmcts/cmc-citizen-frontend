@@ -80,7 +80,6 @@ describe('Breathing Space: check-answer page', () => {
       context('when response not submitted', () => {
         it('should redirect to dashboard-claimant details page', async () => {
           idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-          draftStoreServiceMock.resolveFind('claim')
 
           await request(app)
             .post(pagePath)
@@ -92,8 +91,6 @@ describe('Breathing Space: check-answer page', () => {
 
         it('should render page when everything is fine', async () => {
           idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-          draftStoreServiceMock.resolveFind('claim')
-
           await request(app)
             .post(pagePath)
             .send({ type: SignatureType.BASIC })
