@@ -10,8 +10,6 @@ import { Paths as BreathingSpacePaths } from 'breathing-space/paths'
 import { app } from 'main/app'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
-import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
-
 const cookieName: string = config.get<string>('session.cookieName')
 const headerText: string = 'Reference number must not be more than 16 characters'
 
@@ -21,8 +19,6 @@ describe('Breathing space: reference number page page', () => {
   describe('on GET', () => {
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-      draftStoreServiceMock.resolveFind('claim')
-
       await request(app)
         .get(BreathingSpacePaths.referencNumberPage.uri)
         .set('Cookie', `${cookieName}=ABC`)
@@ -37,8 +33,6 @@ describe('Breathing space: reference number page page', () => {
       })
 
       it('should render page when form is invalid and everything is fine', async () => {
-        draftStoreServiceMock.resolveFind('claim')
-
         await request(app)
           .post(BreathingSpacePaths.referencNumberPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
@@ -47,9 +41,6 @@ describe('Breathing space: reference number page page', () => {
       })
 
       it('should redirect to Start date page when form is valid and nothing is submitted', async () => {
-        draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveUpdate()
-
         await request(app)
           .post(BreathingSpacePaths.referencNumberPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
@@ -58,9 +49,6 @@ describe('Breathing space: reference number page page', () => {
       })
 
       it('should redirect to start date page when form is valid and number is provided', async () => {
-        draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveUpdate()
-
         await request(app)
           .post(BreathingSpacePaths.referencNumberPage.uri)
           .set('Cookie', `${cookieName}=ABC`)

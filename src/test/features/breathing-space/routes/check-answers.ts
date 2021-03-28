@@ -13,7 +13,6 @@ import { Paths as DashboardPaths } from 'dashboard/paths'
 import { app } from 'main/app'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
-import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { SignatureType } from 'common/signatureType'
 import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
@@ -45,7 +44,6 @@ describe('Breathing Space: check-answer page', () => {
       context('Breathing Space check your answer', () => {
         it('should render page when everything is fine', async () => {
           idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-          draftStoreServiceMock.resolveFind('claim')
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
@@ -54,7 +52,6 @@ describe('Breathing Space: check-answer page', () => {
 
         it('should render the page with all the values', async () => {
           idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-          draftStoreServiceMock.resolveFind('claim')
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
