@@ -45,7 +45,7 @@ describe('Breathing Space: check-answer page', () => {
       verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
 
       context('Breathing Space check your answer', () => {
-        it.only('should render page when everything is fine', async () => {
+        it('should render page when everything is fine', async () => {
           idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
           draftStoreServiceMock.resolveFind('claim')
           await request(app)
@@ -66,9 +66,9 @@ describe('Breathing Space: check-answer page', () => {
             .expect(res => expect(res).to.be.successful.withText('Standard breathing space'))
             .expect(res => expect(res).to.be.successful.withText('Standard breathing space'))
         })
+      })
     })
   })
-})
 
   describe('on POST', () => {
     const method = 'post'
@@ -96,26 +96,26 @@ describe('Breathing Space: check-answer page', () => {
               .toLocation(DashboardPaths.claimantPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
         })
 
-          it('should render page when everything is fine', async () => {
-            idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-            draftStoreServiceMock.resolveFind('claim')
+        it('should render page when everything is fine', async () => {
+          idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+          draftStoreServiceMock.resolveFind('claim')
 
-            await request(app)
-              .post(pagePath)
-              .send({ type: SignatureType.BASIC })
-              .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withText('Check your answers'))
-          })
+          await request(app)
+            .post(pagePath)
+            .send({ type: SignatureType.BASIC })
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Check your answers'))
         })
+      })
 
-        context('when form is valid', () => {
-          it('should redirect to climant detailes page when form is valid and cannot enter breathing space', async () => {
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withText('Notify debt respite scheme'))
-          })
+      context('when form is valid', () => {
+        it('should redirect to climant detailes page when form is valid and cannot enter breathing space', async () => {
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Notify debt respite scheme'))
         })
+      })
     })
   })
 })
