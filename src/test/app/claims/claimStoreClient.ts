@@ -20,7 +20,7 @@ import { ReviewOrder } from 'claims/models/reviewOrder'
 import { OrdersDraft } from 'orders/draft/ordersDraft'
 import { resolveSaveOrder, sampleClaimIssueObj } from 'test/http-mocks/claim-store'
 import { MadeBy } from 'claims/models/madeBy'
-import { MomentFactory } from 'shared/momentFactory'
+// import { MomentFactory } from 'shared/momentFactory'
 
 const claimDraft = new Draft<DraftClaim>(123, 'claim', new DraftClaim().deserialize(claimDraftData), moment(), moment())
 const claimDraftHwf = new Draft<DraftClaim>(123, 'claim', new DraftClaim().deserialize(claimDraftHelpWithFees), moment(), moment())
