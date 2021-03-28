@@ -29,7 +29,7 @@ describe('Breathing space: reference number page page', () => {
       await request(app)
         .get(BreathingSpacePaths.referencNumberPage.uri)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.successful.withText(headerText))
+        .expect(res => expect(res).to.be.successful.withText('Do you have a Debt Respite Scheme reference number?'))
     })
   })
 
