@@ -16,14 +16,8 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
-
-import { ResponseType } from 'response/form/models/responseType'
 import { SignatureType } from 'common/signatureType'
-import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
-import { fullAdmissionWithPaymentByInstalmentsDataCompany } from 'test/data/entity/responseData'
-import { FeatureToggles } from 'utils/featureToggles'
-import { MomentFactory } from 'shared/momentFactory'
 import {
   verifyRedirectForGetWhenAlreadyPaidInFull,
   verifyRedirectForPostWhenAlreadyPaidInFull
@@ -31,7 +25,6 @@ import {
 
 const cookieName: string = config.get<string>('session.cookieName')
 
-const draftType = 'response'
 const pagePath = BreathingSpacePaths.bsCheckAnswersPage.uri
 
 describe('Breathing Space: check-answer page', () => {
