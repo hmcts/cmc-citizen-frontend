@@ -29,7 +29,7 @@ describe('Enter breathing space: Respite start date page', () => {
       await request(app)
         .get(BreathingSpacePaths.bsStartDatePage.uri)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.successful.withText('Expected end date'))
+        .expect(res => expect(res).to.be.successful.withText('When did it start?'))
     })
   })
 
