@@ -53,14 +53,14 @@ describe('Breathing Space: check-answer page', () => {
       })
 
       context('when response not submitted', () => {
-        it('should redirect to dashboard-claimant details page', async () => {
+        it.only('should redirect to dashboard-claimant details page', async () => {
           idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
 
           await request(app)
             .post(pagePath)
             .send({ breathingSpaceType: 'STANDARD_BS_ENTERED' })
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.redirect.toLocation.(DashboardPaths.dashboardPage.uri))
+            .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
         })
       })
     })
