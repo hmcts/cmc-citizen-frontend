@@ -20,7 +20,6 @@ import { ReviewOrder } from 'claims/models/reviewOrder'
 import { OrdersDraft } from 'orders/draft/ordersDraft'
 import { resolveSaveOrder, sampleClaimIssueObj } from 'test/http-mocks/claim-store'
 import { MadeBy } from 'claims/models/madeBy'
-// import { MomentFactory } from 'shared/momentFactory'
 
 const claimDraft = new Draft<DraftClaim>(123, 'claim', new DraftClaim().deserialize(claimDraftData), moment(), moment())
 const claimDraftHwf = new Draft<DraftClaim>(123, 'claim', new DraftClaim().deserialize(claimDraftHelpWithFees), moment(), moment())
@@ -347,27 +346,6 @@ describe('ClaimStoreClient', () => {
 
         expect.fail() // Exception should have been thrown due to 500 response code
       })
-    })
-
-    describe('saveBreatingSpace', () => {
-      // function mockSuccessOnFirstSaveAttempt () {
-      //   mock(`${claimStoreApiUrl}`)
-      //     .post(`/${claimant.id}/${claimDraftData.externalId}/breathingSpace`)
-      //     .reply(HttpStatus.OK, { returnedClaim })
-      // }
-
-      // it.only('should retrieve a claim that was successfully saved on first attempt with feature toggles', async () => {
-      //   mockSuccessOnFirstSaveAttempt()
-      //   let draft: DraftClaim = new DraftClaim()
-      //   draft.breathingSpace.breathingSpaceReferenceNumber = 'BS-0000000000'
-      //   draft.breathingSpace.breathingSpaceExternalId = 'bbb89313-7e4c-4124-8899-34389312033a'
-      //   draft.breathingSpace.breathingSpaceType = 'STANDARD_BS_ENTERED'
-      //   draft.breathingSpace.breathingSpaceEnteredDate = MomentFactory.parse('2020-01-01')
-      //   draft.breathingSpace.breathingSpaceEndDate = MomentFactory.parse('2029-01-01')
-
-      //   const claim: Claim = await claimStoreClient.saveBreatingSpace(draft, claimant)
-      //   expect(claim.claimData).to.deep.equal(new ClaimData().deserialize(expectedClaimData))
-      // })
     })
   })
 })
