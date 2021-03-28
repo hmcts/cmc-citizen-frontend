@@ -5,8 +5,6 @@ import * as config from 'config'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
 import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
-import { checkEligibilityGuards } from 'test/features/claim/routes/checks/eligibility-check'
-
 import { Paths as BreathingSpacePaths } from 'breathing-space/paths'
 
 import { app } from 'main/app'
@@ -23,7 +21,6 @@ describe('Enter breathing space: Respite start date page', () => {
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', BreathingSpacePaths.bsStartDatePage.uri)
-    checkEligibilityGuards(app, 'get', BreathingSpacePaths.bsStartDatePage.uri)
 
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
@@ -38,7 +35,6 @@ describe('Enter breathing space: Respite start date page', () => {
 
   describe('on POST', () => {
     checkAuthorizationGuards(app, 'post', BreathingSpacePaths.bsStartDatePage.uri)
-    checkEligibilityGuards(app, 'post', BreathingSpacePaths.bsStartDatePage.uri)
 
     describe('for authorized user', () => {
       beforeEach(() => {
