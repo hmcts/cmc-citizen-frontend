@@ -35,7 +35,6 @@ describe('Enter breathing space: Respite end date page', () => {
       })
 
       it('should render page with error when date is less than or equal to today', async () => {
-        draftStoreServiceMock.resolveFind('claim')
         const date: Moment = MomentFactory.currentDate().subtract(1, 'year')
         await request(app)
           .post(BreathingSpacePaths.bsEndDatePage.uri)
