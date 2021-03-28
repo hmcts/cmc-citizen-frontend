@@ -32,8 +32,4 @@ export class BreathingSpaceRespiteStart {
     }
     return this
   }
-
-  isCompleted (): boolean {
-    return !!this.respiteStart.year && this.respiteStart.year.toString().length > 0
-  }
 }

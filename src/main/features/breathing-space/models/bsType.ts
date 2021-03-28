@@ -42,8 +42,4 @@ export class BreathingType implements CompletableTask {
 
     return this
   }
-
-  isCompleted (): boolean {
-    return !!this.option && (this.option === BreathingTypeOption.STANDARD || this.option === BreathingTypeOption.MENTAL_HEALTH)
-  }
 }
