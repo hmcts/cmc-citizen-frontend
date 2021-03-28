@@ -20,7 +20,6 @@ describe('Enter breathing space: Respite end date page', () => {
   describe('on GET', () => {
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-      draftStoreServiceMock.resolveFind('claim')
 
       await request(app)
         .get(BreathingSpacePaths.bsEndDatePage.uri)
