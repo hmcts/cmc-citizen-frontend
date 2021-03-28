@@ -40,7 +40,7 @@ describe('Enter breathing space: Respite start date page', () => {
         await request(app)
           .post(BreathingSpacePaths.bsStartDatePage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ respiteEnd: { day: date.date(), month: date.month() + 1, year: date.year() } })
+          .send({ respiteStart: { day: date.date(), month: date.month() + 1, year: date.year() } })
           .expect(res => expect(res).to.be.successful.withText('The start date must not be after today', 'There was a problem'))
       })
 
@@ -51,7 +51,7 @@ describe('Enter breathing space: Respite start date page', () => {
         await request(app)
           .post(BreathingSpacePaths.bsStartDatePage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ respiteEnd: { day: '31', month: '12', year: date.year() - 1 } })
+          .send({ respiteStart: { day: '31', month: '12', year: date.year() - 1 } })
           .expect(res => expect(res).to.be.redirect.toLocation(BreathingSpacePaths.bsTypePage.uri))
       })
 
@@ -61,7 +61,7 @@ describe('Enter breathing space: Respite start date page', () => {
         await request(app)
           .post(BreathingSpacePaths.bsStartDatePage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ respiteEnd: { day: '', month: '', year: '' } })
+          .send({ respiteStart: { day: '', month: '', year: '' } })
           .expect(res => expect(res).to.be.redirect.toLocation(BreathingSpacePaths.bsTypePage.uri))
       })
 
@@ -71,7 +71,7 @@ describe('Enter breathing space: Respite start date page', () => {
         await request(app)
           .post(BreathingSpacePaths.bsStartDatePage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ respiteEnd: { day: '33', month: '', year: '2021' } })
+          .send({ respiteStart: { day: '33', month: '', year: '2021' } })
           .expect(res => expect(res).to.be.successful.withText('Please enter a valid date', 'There was a problem'))
       })
 
@@ -81,7 +81,7 @@ describe('Enter breathing space: Respite start date page', () => {
         await request(app)
           .post(BreathingSpacePaths.bsStartDatePage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ respiteEnd: { day: '3', month: '18', year: '2021' } })
+          .send({ respiteStart: { day: '3', month: '18', year: '2021' } })
           .expect(res => expect(res).to.be.successful.withText('Please enter a valid date', 'There was a problem'))
       })
 
@@ -91,7 +91,7 @@ describe('Enter breathing space: Respite start date page', () => {
         await request(app)
           .post(BreathingSpacePaths.bsStartDatePage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ respiteEnd: { day: '3', month: '3', year: '12345' } })
+          .send({ respiteStart: { day: '3', month: '3', year: '12345' } })
           .expect(res => expect(res).to.be.successful.withText('Please enter a valid date', 'There was a problem'))
       })
     })
