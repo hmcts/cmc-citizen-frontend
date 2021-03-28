@@ -8,7 +8,6 @@ import { Paths as BreathingSpacePaths } from 'breathing-space/paths'
 import { app } from 'main/app'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
-import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { Moment } from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
 
@@ -44,7 +43,6 @@ describe('Enter breathing space: Respite end date page', () => {
       })
 
       it('should redirect to check answer page when form is valid and everything is fine', async () => {
-        draftStoreServiceMock.resolveFind('claim')
         const date: Moment = MomentFactory.currentDate().subtract(1, 'year')
 
         await request(app)
@@ -55,7 +53,6 @@ describe('Enter breathing space: Respite end date page', () => {
       })
 
       it('should redirect to check answer page when form is valid (without date) and everything is fine', async () => {
-        draftStoreServiceMock.resolveFind('claim')
 
         await request(app)
           .post(BreathingSpacePaths.bsEndDatePage.uri)
@@ -65,7 +62,6 @@ describe('Enter breathing space: Respite end date page', () => {
       })
 
       it('should render page with error when invalid day is provided', async () => {
-        draftStoreServiceMock.resolveFind('claim')
 
         await request(app)
           .post(BreathingSpacePaths.bsEndDatePage.uri)
@@ -75,7 +71,6 @@ describe('Enter breathing space: Respite end date page', () => {
       })
 
       it('should render page with error when invalid month is provided', async () => {
-        draftStoreServiceMock.resolveFind('claim')
 
         await request(app)
           .post(BreathingSpacePaths.bsEndDatePage.uri)
@@ -85,7 +80,6 @@ describe('Enter breathing space: Respite end date page', () => {
       })
 
       it('should render page with error when invalid year is provided', async () => {
-        draftStoreServiceMock.resolveFind('claim')
 
         await request(app)
           .post(BreathingSpacePaths.bsEndDatePage.uri)
