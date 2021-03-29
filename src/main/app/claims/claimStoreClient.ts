@@ -99,7 +99,7 @@ export class ClaimStoreClient {
 
   saveBreatingSpace (draft: DraftClaim, claimant: User): Promise<Claim> {
     return this.request
-      .post(`${claimStoreApiUrl}/${claimant.id}/${draft.breathingSpace.breathingSpaceExternalId.toString()}/breathingSpace`, {
+      .post(`${claimStoreApiUrl}/${draft.breathingSpace.breathingSpaceExternalId.toString()}/breathingSpace`, {
         body: {
           'bs_entered_date': moment(draft.breathingSpace.breathingSpaceEnteredDate).format('YYYY-MM-DD'),
           'bs_expected_end_date': moment(draft.breathingSpace.breathingSpaceEndDate).format('YYYY-MM-DD'),
