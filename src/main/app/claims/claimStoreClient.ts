@@ -98,14 +98,18 @@ export class ClaimStoreClient {
   }
 
   saveBreatingSpace (draft: DraftClaim, claimant: User): Promise<Claim> {
-    let endDate = undefined
-    let StartDate = undefined
+    let endDate = ''
+    let StartDate = ''
 
-    if (draft.breathingSpace.breathingSpaceEndDate) {
+    if (draft.breathingSpace.breathingSpaceEndDate.day !== undefined) {
       endDate = moment(draft.breathingSpace.breathingSpaceEndDate).format('YYYY-MM-DD')
+    } else {
+      endDate = moment('9999-09-09').format('YYYY-MM-DD')
     }
-    if (draft.breathingSpace.breathingSpaceEnteredDate) {
+    if (draft.breathingSpace.breathingSpaceEnteredDate.day !== undefined) {
       StartDate = moment(draft.breathingSpace.breathingSpaceEnteredDate).format('YYYY-MM-DD')
+    } else {
+      StartDate = moment('9999-09-09').format('YYYY-MM-DD')
     }
 
     return this.request
