@@ -40,6 +40,11 @@ import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
 import * as config from 'config'
 import { ScannedDocumentType } from 'common/scannedDocumentType'
 import { MoneyConverter } from 'fees/moneyConverter'
+import { FeatureToggles } from 'utils/featureToggles'
+const util = require('util');
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
+const launchDarklyClient = new LaunchDarklyClient()
+const featureToggles = new FeatureToggles(launchDarklyClient)
 
 interface State {
   status: ClaimStatus
@@ -155,7 +160,7 @@ export class Claim {
         || this.partAdmissionPayImmediatelyPastPaymentDate
         || this.hasDefendantNotSignedSettlementAgreementInTime()
         || (!this.respondedAt && isPastDeadline(MomentFactory.currentDateTime(), this.responseDeadline))
-        && this.isBreathingSpaceEntered
+        && this.isBreathingSpaceEntered && util.promisify(featureToggles.isBreathingSpaceEnabled())
       )
   }
 
