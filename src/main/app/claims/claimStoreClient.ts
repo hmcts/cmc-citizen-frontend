@@ -99,9 +99,9 @@ export class ClaimStoreClient {
 
   saveBreatingSpace (draft: DraftClaim, claimant: User): Promise<Claim> {
     return this.request
-      .post(`${claimStoreApiUrl}/${draft.breathingSpace.breathingSpaceExternalId.toString()}/breathingSpace`, {
+      .post(`${claimStoreApiUrl}/${claimant.id}/${draft.breathingSpace.breathingSpaceExternalId.toString()}/breathingSpace`, {
         body: {
-          'bs_entered_date': moment(draft.breathingSpace.breathingSpaceEnteredDate).format('YYYY-MM-DD'),
+          'bs_entered_date_by_insolvency_team': moment(draft.breathingSpace.breathingSpaceEnteredDate).format('YYYY-MM-DD'),
           'bs_expected_end_date': moment(draft.breathingSpace.breathingSpaceEndDate).format('YYYY-MM-DD'),
           'bs_reference_number': draft.breathingSpace.breathingSpaceReferenceNumber.toString(),
           'bs_type': draft.breathingSpace.breathingSpaceType.toString(),
@@ -117,6 +117,7 @@ export class ClaimStoreClient {
           logger.warn(`Claim ${draft.externalId} appears to have been saved successfully on initial timed out attempt, retrieving the saved instance`)
           return this.retrieveByExternalId(draft.externalId, claimant)
         }
+        console.log(err)
         throw err
       })
   }
