@@ -98,11 +98,18 @@ export class ClaimStoreClient {
   }
 
   saveBreatingSpace (draft: DraftClaim, claimant: User): Promise<Claim> {
+    let requestBody = null
+    if (draft.breathingSpace.breathingSpaceEndDate !== undefined) {
+      requestBody = "'bs_entered_date_by_insolvency_team': " + moment(draft.breathingSpace.breathingSpaceEnteredDate).format('YYYY-MM-DD')+"," +
+      "'bs_expected_end_date': "+ moment(draft.breathingSpace.breathingSpaceEndDate).format('YYYY-MM-DD')
+    } else {
+      requestBody = "'bs_entered_date_by_insolvency_team': " + moment(draft.breathingSpace.breathingSpaceEnteredDate).format('YYYY-MM-DD')
+    }
+
     return this.request
       .post(`${claimStoreApiUrl}/${claimant.id}/${draft.breathingSpace.breathingSpaceExternalId.toString()}/breathingSpace`, {
         body: {
-          'bs_entered_date_by_insolvency_team': moment(draft.breathingSpace.breathingSpaceEnteredDate).format('YYYY-MM-DD'),
-          'bs_expected_end_date': moment(draft.breathingSpace.breathingSpaceEndDate).format('YYYY-MM-DD'),
+          requestBody,
           'bs_reference_number': draft.breathingSpace.breathingSpaceReferenceNumber.toString(),
           'bs_type': draft.breathingSpace.breathingSpaceType.toString(),
           'bs_lifted_flag': 'NO'
@@ -117,7 +124,6 @@ export class ClaimStoreClient {
           logger.warn(`Claim ${draft.externalId} appears to have been saved successfully on initial timed out attempt, retrieving the saved instance`)
           return this.retrieveByExternalId(draft.externalId, claimant)
         }
-        console.log(err)
         throw err
       })
   }
