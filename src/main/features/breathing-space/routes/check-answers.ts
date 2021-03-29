@@ -64,7 +64,7 @@ export default express.Router()
             await new ClaimStoreClient().saveBreatingSpace(draft, res.locals.user)
             res.redirect(DashboardPaths.claimantPage.uri.replace(':externalId', res.app.locals.breathingSpaceExternalId))
           } catch {
-            res.redirect(DashboardPaths.dashboardPage.uri)
+            res.redirect(DashboardPaths.claimantPage.uri.replace(':externalId', res.app.locals.breathingSpaceExternalId))
           }
         }
       }))
