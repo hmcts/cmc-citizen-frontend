@@ -5,7 +5,6 @@ import * as config from 'config'
 import 'test/routes/expectations'
 
 import { Paths as BreathingSpacePaths } from 'breathing-space/paths'
-import { Paths as DashboardPaths } from 'dashboard/paths'
 import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
