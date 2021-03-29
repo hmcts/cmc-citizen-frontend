@@ -102,12 +102,12 @@ export class ClaimStoreClient {
     let StartDate = ''
 
     if (draft.breathingSpace.breathingSpaceEndDate.day !== undefined) {
-      endDate = moment(draft.breathingSpace.breathingSpaceEndDate).format('YYYY-MM-DD')
+      endDate = moment(draft.breathingSpace.breathingSpaceEndDate).subtract(1,'M').format('YYYY-MM-DD')
     } else {
       endDate = moment('9999-09-09').format('YYYY-MM-DD')
     }
     if (draft.breathingSpace.breathingSpaceEnteredDate.day !== undefined) {
-      StartDate = moment(draft.breathingSpace.breathingSpaceEnteredDate).format('YYYY-MM-DD')
+      StartDate = moment(draft.breathingSpace.breathingSpaceEnteredDate).subtract(1,'M').format('YYYY-MM-DD')
     } else {
       StartDate = moment('9999-09-09').format('YYYY-MM-DD')
     }
