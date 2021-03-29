@@ -346,6 +346,32 @@ describe('ClaimStoreClient', () => {
 
         expect.fail() // Exception should have been thrown due to 500 response code
       })
+
+      function mockInternalServerErrorforSaveBreathingSpaceOnAllAttempts () {
+        mock(`${claimStoreApiUrl}`)
+          .post(`/${claimant.id}/${claimDraftData.externalId}/breathingSpace`)
+          .times(retryAttempts)
+          .reply(HttpStatus.INTERNAL_SERVER_ERROR, 'An unexpected error occurred')
+      }
+
+      it.only('should fail while saving the Breathing space', async () => {
+        mockInternalServerErrorforSaveBreathingSpaceOnAllAttempts()
+        try {
+          let draft: DraftClaim = new DraftClaim()
+          draft.breathingSpace.breathingSpaceType = 'STANDARD_BS_LIFTED'
+          draft.breathingSpace.breathingSpaceEnteredDate = moment('9999-09-09')
+          draft.breathingSpace.breathingSpaceEndDate = moment('9999-09-09')
+          draft.breathingSpace.breathingSpaceExternalId = 'bbb89313-7e4c-4124-8899-34389312033a'
+          draft.breathingSpace.breathingSpaceReferenceNumber = 'BS12345678'
+  
+          await claimStoreClient.saveBreatingSpace(draft, claimant)
+        } catch (err) {
+          expect(err.statusCode).to.equal(HttpStatus.NOT_FOUND)
+          return
+        }
+
+        expect.fail() // Exception should have been thrown due to 404 response code
+      })
     })
   })
 })
