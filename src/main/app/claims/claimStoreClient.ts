@@ -113,7 +113,7 @@ export class ClaimStoreClient {
     }
 
     return this.request
-      .post(`${claimStoreApiUrl}/${draft.breathingSpace.breathingSpaceExternalId.toString()}/breathingSpace`, {
+      .post(`${claimStoreApiUrl}/${claimant.id}/${draft.breathingSpace.breathingSpaceExternalId.toString()}/breathingSpace`, {
         body: {
           'bs_entered_date_by_insolvency_team': StartDate,
           'bs_expected_end_date': endDate,
