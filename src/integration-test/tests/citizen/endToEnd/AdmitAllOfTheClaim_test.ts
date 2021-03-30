@@ -12,8 +12,9 @@ let defendantEmail
 let claimData
 let defendant
 let claimRef
+let claimant
 
-Feature('Admit part of the claim E2E')
+Feature('Admit All Of The Claim E2E')
 
 Before(async (I: I) => {
   claimantEmail = await I.getClaimantEmail()
@@ -21,6 +22,7 @@ Before(async (I: I) => {
 
   claimData = await createClaimData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
   defendant = claimData.defendants[0]
+  claimant = claimData.claimants[0].name
   claimRef = await I.createClaim(claimData, claimantEmail)
 
   await helperSteps.enterPinNumber(claimRef, claimantEmail)
@@ -31,23 +33,15 @@ Before(async (I: I) => {
 
 if (process.env.FEATURE_ADMISSIONS === 'true') {
 
-  Scenario('Admit part of the claim with payment already made @citizen @admissions', { retries: 3 }, async (I: I) => {
-    defenceSteps.makePartialAdmission(defendant)
-    await defenceSteps.partialPaymentMade(PartyType.INDIVIDUAL)
+  Scenario('Admit all of the claim(Pay Immediately) @citizen @nightly @admissions', { retries: 3 }, async (I: I) => {
+    defenceSteps.makeFullAdmission(defendant, PartyType.INDIVIDUAL, PaymentOption.IMMEDIATELY, claimant, false)
   })
 
-  Scenario('Admit part of the claim (Pay Immediately) @nightly @admissions', { retries: 3 }, async (I: I) => {
-    defenceSteps.makePartialAdmission(defendant)
-    await defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.IMMEDIATELY)
+  Scenario('Admit all of the claim(Pay By Set Date) @citizen @nightly @admissions', { retries: 3 }, async (I: I) => {
+    defenceSteps.makeFullAdmission(defendant, PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE, claimant, false)
   })
 
-  Scenario('Admit part of the claim (Pay By Set Date) @citizen @admissions', { retries: 3 }, async (I: I) => {
-    defenceSteps.makePartialAdmission(defendant)
-    await defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE)
-  })
-
-  Scenario('Admit part of the claim (Pay By Instalment) @nightly @admissions', { retries: 3 }, async (I: I) => {
-    defenceSteps.makePartialAdmission(defendant)
-    await defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS)
+  Scenario('Admit all of the claim(Pay By Instalment) with PCQ @citizen @admissions', { retries: 3 }, async (I: I) => {
+    defenceSteps.makeFullAdmission(defendant, PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS, claimant, false, true)
   })
 }
