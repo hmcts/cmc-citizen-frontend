@@ -41,7 +41,7 @@ import * as config from 'config'
 import { ScannedDocumentType } from 'common/scannedDocumentType'
 import { MoneyConverter } from 'fees/moneyConverter'
 import { FeatureToggles } from 'utils/featureToggles'
-const util = require('util');
+const util = require('util')
 import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 const launchDarklyClient = new LaunchDarklyClient()
 const featureToggles = new FeatureToggles(launchDarklyClient)
