@@ -322,7 +322,7 @@
       {{ intentionToProceedPastDeadlineForClaimantClaimDetails(claim) }}
     {% endif %}
   {% endfor %}
-  {% if breathingSpace and claim.state !== 'HWF_APPLICATION_PENDING' and claim.state !== 'TRANSFER_TO_CCBC' and claim.state !== 'SETTLED_PRE_JUDGMENT' and claim.state !== 'BUSINESS_QUEUE' and claim.state !== 'TRANSFER' and claim.state !== 'AWAITING_RESPONSE_HWF' %}
+  {% if breathingSpace and claim.state !== 'HWF_APPLICATION_PENDING' and claim.state !== 'TRANSFER_TO_CCBC' and claim.state !== 'SETTLED' and claim.state !== 'BUSINESS_QUEUE' and claim.state !== 'TRANSFER' and claim.state !== 'AWAITING_RESPONSE_HWF' %}
     {% if claim.claimData.breathingSpace.breathingSpaceType === undefined %}
       {{ enterBreathingSpaceForClaimantClaimDetails(claim.externalId) }}
     {% endif %}
