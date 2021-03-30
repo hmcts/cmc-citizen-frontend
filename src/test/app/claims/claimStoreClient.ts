@@ -363,7 +363,6 @@ describe('ClaimStoreClient', () => {
           draft.breathingSpace.breathingSpaceEndDate = moment('9999-09-09')
           draft.breathingSpace.breathingSpaceExternalId = 'bbb89313-7e4c-4124-8899-34389312033a'
           draft.breathingSpace.breathingSpaceReferenceNumber = 'BS12345678'
-  
           await claimStoreClient.saveBreatingSpace(draft, claimant)
         } catch (err) {
           expect(err.statusCode).to.equal(HttpStatus.NOT_FOUND)
