@@ -13,7 +13,7 @@ import { CookieEligibilityStore } from 'eligibility/store'
 
 const eligibilityStore: CookieEligibilityStore = new CookieEligibilityStore()
 
-  export abstract class EligibilityPage<T> {
+export abstract class EligibilityPage<T> {
   protected constructor (private path: RoutablePath, private property: string) {
   }
 

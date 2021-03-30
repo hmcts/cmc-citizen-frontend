@@ -53,7 +53,7 @@ export class Eligibility {
                claimType?: ClaimType,
                singleClaimant?: YesNoOption,
                governmentDepartment?: YesNoOption,
-               claimIsForTenancyDeposit?: YesNoOption, 
+               claimIsForTenancyDeposit?: YesNoOption,
                infoAboutHwFeligibility?: YesNoOption) {
     this.claimValue = claimValue
     this.helpWithFees = helpWithFees
@@ -143,7 +143,7 @@ export class Eligibility {
       this.singleDefendant === YesNoOption.NO &&
       this.governmentDepartment === YesNoOption.NO &&
       this.claimIsForTenancyDeposit === YesNoOption.NO &&
-      this.infoAboutHwFeligibility === YesNoOption.YES || 
+      this.infoAboutHwFeligibility === YesNoOption.YES ||
       this.infoAboutHwFeligibility === YesNoOption.NO
   }
 
