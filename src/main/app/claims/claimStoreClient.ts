@@ -98,11 +98,25 @@ export class ClaimStoreClient {
   }
 
   saveBreatingSpace (draft: DraftClaim, claimant: User): Promise<Claim> {
+    let endDate = ''
+    let StartDate = ''
+
+    if (draft.breathingSpace.breathingSpaceEndDate.day !== undefined) {
+      endDate = moment(draft.breathingSpace.breathingSpaceEndDate).subtract(1,'M').format('YYYY-MM-DD')
+    } else {
+      endDate = moment('9999-09-09').format('YYYY-MM-DD')
+    }
+    if (draft.breathingSpace.breathingSpaceEnteredDate.day !== undefined) {
+      StartDate = moment(draft.breathingSpace.breathingSpaceEnteredDate).subtract(1,'M').format('YYYY-MM-DD')
+    } else {
+      StartDate = moment('9999-09-09').format('YYYY-MM-DD')
+    }
+
     return this.request
       .post(`${claimStoreApiUrl}/${claimant.id}/${draft.breathingSpace.breathingSpaceExternalId.toString()}/breathingSpace`, {
         body: {
-          'bs_entered_date': moment(draft.breathingSpace.breathingSpaceEnteredDate).format('YYYY-MM-DD'),
-          'bs_expected_end_date': moment(draft.breathingSpace.breathingSpaceEndDate).format('YYYY-MM-DD'),
+          'bs_entered_date_by_insolvency_team': StartDate,
+          'bs_expected_end_date': endDate,
           'bs_reference_number': draft.breathingSpace.breathingSpaceReferenceNumber.toString(),
           'bs_type': draft.breathingSpace.breathingSpaceType.toString(),
           'bs_lifted_flag': 'NO'

@@ -20,13 +20,13 @@ function renderView (form: Form<BreathingSpace>, res: express.Response, next: ex
   }
   if (res.app.locals.breathingSpaceEndDate) {
     if (res.app.locals.breathingSpaceEndDate.day !== undefined) {
-      bsEndDate = res.app.locals.breathingSpaceEndDate.toMoment().format('DD-MM-YYYY')
+      bsEndDate = res.app.locals.breathingSpaceEndDate.toMoment().format('DD MMMM YYYY')
     }
   }
 
   if (res.app.locals.breathingSpaceEnteredDate) {
     if (res.app.locals.breathingSpaceEnteredDate.day !== undefined) {
-      bsEnteredDate = res.app.locals.breathingSpaceEnteredDate.toMoment().format('DD-MM-YYYY')
+      bsEnteredDate = res.app.locals.breathingSpaceEnteredDate.toMoment().format('DD MMMM YYYY')
     }
   }
 
@@ -64,7 +64,7 @@ export default express.Router()
             await new ClaimStoreClient().saveBreatingSpace(draft, res.locals.user)
             res.redirect(DashboardPaths.claimantPage.uri.replace(':externalId', res.app.locals.breathingSpaceExternalId))
           } catch {
-            res.redirect(DashboardPaths.dashboardPage.uri)
+            res.redirect(DashboardPaths.claimantPage.uri.replace(':externalId', res.app.locals.breathingSpaceExternalId))
           }
         }
       }))
