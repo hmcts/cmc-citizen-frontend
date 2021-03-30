@@ -45,6 +45,7 @@ import { MediationOutcome } from 'claims/models/mediationOutcome'
 import { defenceClaimData } from 'test/data/entity/claimData'
 import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
 import { ClaimDocument } from 'claims/models/claimDocument'
+import { BreathingSpace } from 'features/claim/form/models/breathingSpace'
 
 describe('Claim', () => {
   describe('eligibleForCCJ', () => {
@@ -53,6 +54,11 @@ describe('Claim', () => {
     context('response deadline has passed', () => {
       before('setup', () => {
         claim.countyCourtJudgmentRequestedAt = undefined
+        claim.claimData = new ClaimData().deserialize({
+          breathingSpace: new BreathingSpace().deserialize({
+            bs_entered_date: moment('9999-09-09')
+          })
+        })
         claim.responseDeadline = MomentFactory.currentDate().subtract(1, 'day')
       })
 
