@@ -14,7 +14,7 @@ let defendant
 let claimRef
 let claimant
 
-Feature('Admit All Of The Claim E2E')
+Feature('Admit All Of The Claim E2E ')
 
 Before(async (I: I) => {
   claimantEmail = await I.getClaimantEmail()
