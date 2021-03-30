@@ -168,7 +168,7 @@ export class Claim {
     if (this.claimData.breathingSpace !== undefined) {
       return !(this.claimData.breathingSpace !== undefined && this.claimData.breathingSpace.breathingSpaceEnteredDate !== null
         && this.claimData.breathingSpace.breathingSpaceLiftedDate === undefined)
-    }
+    } else { return true }
   }
 
   get eligibleForCCJAfterBreachedSettlementTerms (): boolean {

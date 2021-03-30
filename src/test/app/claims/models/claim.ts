@@ -54,22 +54,42 @@ describe('Claim', () => {
     context('response deadline has passed', () => {
       before('setup', () => {
         claim.countyCourtJudgmentRequestedAt = undefined
-        claim.claimData = new ClaimData().deserialize({
-          breathingSpace: new BreathingSpace().deserialize({
-            bs_entered_date: moment('9999-09-09')
-          })
-        })
+        claim.claimData = new ClaimData()
         claim.responseDeadline = MomentFactory.currentDate().subtract(1, 'day')
       })
 
-      it('should return true when claim not responded to', () => {
-        expect(claim.eligibleForCCJ).to.be.true
+      it('should return false when claim not responded to', () => {
+        expect(claim.eligibleForCCJ).to.be.false
       })
 
       it('should return false when claim responded to', () => {
         claim.respondedAt = MomentFactory.currentDateTime()
         expect(claim.eligibleForCCJ).to.be.false
       })
+
+      it('should return false when breathing space entered', () => {
+        claim.claimData = new ClaimData().deserialize({
+          breathingSpace: new BreathingSpace().deserialize({
+            bs_entered_date: moment('2021-03-28')
+          })
+        })
+        expect(claim.eligibleForCCJ).to.be.false
+      })
+
+      it('should return false when breathing space lifted', () => {
+        claim.claimData = new ClaimData().deserialize({
+          breathingSpace: new BreathingSpace().deserialize({
+            bs_entered_date: moment('2021-03-28'),
+            bs_lifted_date: moment('2021-05-28')
+          })
+        })
+        expect(claim.eligibleForCCJ).to.be.false
+      })
+
+      it('should return false when breathing space undefined', () => {
+        expect(claim.eligibleForCCJ).to.be.false
+      })
+
     })
 
     context('defendant still has time to respond', () => {
