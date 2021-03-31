@@ -28,11 +28,3 @@ export function hwfEligible (reason: string, notEligiblePage: RoutablePath = Pat
     notEligiblePage: notEligiblePage
   }
 }
-
-export function hwfInfoEligible (reason: string, notEligiblePage: RoutablePath = Paths.applyForHelpWithFeesPage): EligibilityCheck {
-  return {
-    eligible: false,
-    notEligibleReason: reason,
-    notEligiblePage: notEligiblePage
-  }
-}
