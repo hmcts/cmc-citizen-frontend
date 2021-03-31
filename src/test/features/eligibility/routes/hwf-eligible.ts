@@ -10,7 +10,6 @@ import { Paths } from 'eligibility/paths'
 import { app } from 'main/app'
 
 const pagePath: string = Paths.hwfEligiblePage.uri
-// const pageRedirect: string = Paths.helpWithFeesReferencePage.uri
 const expectedTextOnPage: string = 'You will have to pay court fees unless you are eligible for Help with Fees.'
 
 describe('Claim eligibility: You can use this Service HwF Eligible without reference number', () => {
@@ -26,14 +25,4 @@ describe('Claim eligibility: You can use this Service HwF Eligible without refer
         .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage))
     })
   })
-
-  // context('on POST', () => {
-  //   checkAuthorizationMiddleware(app, 'post', pagePath)
-  //   it("should display the 'Do you have a help with fees reference number' ", async () => {
-
-  //     await request(app)
-  //       .post(pagePath)
-  //       .expect(res => expect(res).to.be.redirect.toLocation(pageRedirect))
-  //   })
-  // })
 })

@@ -10,7 +10,6 @@ import { Paths } from 'eligibility/paths'
 import { app } from 'main/app'
 
 const pagePath: string = Paths.hwfEligibleReferencePage.uri
-// const pageRedirect: string = Paths.helpWithFeesReferencePage.uri
 const expectedTextOnPage: string = 'Remember that you will not know about the fee until we have processed your Help with Fees application. Your claim will only be issued after Help with Fees is confirmed, or the fee is paid.'
 
 describe('Claim eligibility: You can use this Service HwF Eligible with reference number', () => {
@@ -26,14 +25,4 @@ describe('Claim eligibility: You can use this Service HwF Eligible with referenc
         .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage))
     })
   })
-
-  // context('on POST', () => {
-  //   checkAuthorizationMiddleware(app, 'post', pagePath)
-  //   it("should display the 'Do you have a help with fees reference number' ", async () => {
-
-  //     await request(app)
-  //       .post(pagePath)
-  //       .expect(res => expect(res).to.be.redirect.toLocation(pageRedirect))
-  //   })
-  // })
 })

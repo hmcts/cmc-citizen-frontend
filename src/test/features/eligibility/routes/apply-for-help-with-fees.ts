@@ -10,7 +10,6 @@ import { Paths } from 'eligibility/paths'
 import { app } from 'main/app'
 
 const pagePath: string = Paths.applyForHelpWithFeesPage.uri
-const pageRedirect: string = Paths.helpWithFeesReferencePage.uri
 const expectedTextOnPage: string = 'Apply for Help with Fees'
 
 describe('Claim eligibility: Apply for help with fees', () => {
@@ -24,16 +23,6 @@ describe('Claim eligibility: Apply for help with fees', () => {
       await request(app)
         .get(pagePath)
         .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage))
-    })
-  })
-
-  context('on POST', () => {
-    checkAuthorizationMiddleware(app, 'post', pagePath)
-    it("should display the 'Do you have a help with fees reference number' ", async () => {
-
-      await request(app)
-        .post(pagePath)
-        .expect(res => expect(res).to.be.redirect.toLocation(pageRedirect))
     })
   })
 })
