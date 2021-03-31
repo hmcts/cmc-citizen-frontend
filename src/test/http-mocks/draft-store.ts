@@ -71,7 +71,8 @@ const commonClaimObject = {
     claimType: ClaimType.PERSONAL_CLAIM,
     singleDefendant: YesNoOption.NO,
     governmentDepartment: YesNoOption.NO,
-    claimIsForTenancyDeposit: YesNoOption.NO
+    claimIsForTenancyDeposit: YesNoOption.NO,
+    infoAboutHwFeligibility: YesNoOption.YES
   } as Eligibility,
   readResolveDispute: true,
   readCompletingClaim: true,
