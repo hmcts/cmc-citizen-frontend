@@ -102,6 +102,17 @@ idam-pr:
       - IDAM_SPI_FORGEROCK_IDM_ROOT=http://cmc-pr-fr-idm/openidm
       - IDAM_SPI_FORGEROCK_IDM_USERNAME=openidm-admin #fake user
       - APPINSIGHTS_INSTRUMENTATIONKEY=fake-key
+    depends_on:
+      idam-web-public:
+        condition: service_started
+      fr-am:
+        condition: service_started
+      fr-idm:
+        condition: service_started
+      idam-web-admin:
+        condition: service_started
+      service-auth-provider-api:
+        condition: service_started
 
   idam-web-public:
     image: hmctspublic.azurecr.io/idam/web-public:stable
@@ -228,9 +239,6 @@ ccd:
       keyVaults: []
       environment:
         IDAM_OAUTH2_AW_CLIENT_SECRET: ${ADMIN_WEB_IDAM_SECRET}
-    idam-pr:
-      enabled: true
-
 
   ccd-user-profile-api:
     java:
@@ -252,6 +260,10 @@ ccd:
         DEFINITION_STORE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_gw,ccd_admin,cmc_claim_store
         IDAM_USER_URL: http://cmc-pr-idam-web-public
         OIDC_ISSUER: http://cmc-pr-fr-am/openam/oauth2/hmcts
+      depends_on:
+        idam-web-public:
+          condition: service_started
+
 
   ccd-data-store-api:
     java:
@@ -264,6 +276,15 @@ ccd:
         IDAM_S2S_URL: http://cmc-pr-service-auth-provider-api
         IDAM_USER_URL: http://cmc-pr-idam-web-public
         OIDC_ISSUER: http://cmc-pr-fr-am/openam/oauth2/hmcts
+      depends_on:
+        idam-web-public:
+          condition: service_started
+        service-auth-provider-api:
+          condition: service_started
+        fr-am:
+          condition: service_started
+
+
 
   ccd-api-gateway:
     image: hmctspublic.azurecr.io/ccd/api-gateway-web
@@ -286,6 +307,16 @@ ccd:
       - APPINSIGHTS_INSTRUMENTATIONKEY=fake-key
       - PROXY_PAYMENTS=http://dummy
       - PROXY_PAY_BULKSCAN=http://dummy
+    depends_on:
+      idam-web-public:
+        condition: service_started
+      service-auth-provider-api:
+        condition: service_started
+      fr-am:
+        condition: service_started
+      idam-api:
+        condition: service_started
+
 
   ccd-user-profile-importer:
     image: hmctspublic.azurecr.io/ccd/user-profile-importer:db2r9a
