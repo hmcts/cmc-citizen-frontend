@@ -239,6 +239,8 @@ ccd:
       keyVaults: []
       environment:
         IDAM_OAUTH2_AW_CLIENT_SECRET: ${ADMIN_WEB_IDAM_SECRET}
+    idam-pr:
+      enabled: true
 
   ccd-user-profile-api:
     java:
