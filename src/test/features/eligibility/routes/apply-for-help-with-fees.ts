@@ -29,7 +29,7 @@ describe('Claim eligibility: Apply for help with fees', () => {
 
   context('on POST', () => {
     checkAuthorizationMiddleware(app, 'post', pagePath)
-    it.only("should display the 'Do you have a help with fees reference number' ", async () => {
+    it("should display the 'Do you have a help with fees reference number' ", async () => {
 
       await request(app)
         .post(pagePath)
