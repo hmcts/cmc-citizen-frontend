@@ -17,6 +17,14 @@ postgresql:
   persistence:
     enabled: false
 
+fr-am:
+  image: hmctsprivate.azurecr.io/idam/idam-fr-am:latest
+  releaseNameOverride: cmc-pr-fr-am
+
+fr-idm:
+  image: hmctsprivate.azurecr.io/idam/idam-fr-idm:latest
+  releaseNameOverride: cmc-pr-fr-idm
+
 nodejs:
   image: ${IMAGE_NAME}
   ingressIP: ${INGRESS_IP}
@@ -241,6 +249,9 @@ ccd:
         IDAM_OAUTH2_AW_CLIENT_SECRET: ${ADMIN_WEB_IDAM_SECRET}
     idam-pr:
       enabled: true
+    depends_on:
+      idam-api:
+        condition: service_started
 
   ccd-user-profile-api:
     java:
