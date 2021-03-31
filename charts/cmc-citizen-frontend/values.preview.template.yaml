@@ -61,6 +61,95 @@ idam-pr:
   redirect_uris:
     Money Claims - Citizen:
       - https://${SERVICE_FQDN}/receiver
+  fr-am:
+    image: hmctsprivate.azurecr.io/idam/idam-fr-am:latest
+    releaseNameOverride: cmc-pr-fr-am
+
+  fr-idm:
+    image: hmctsprivate.azurecr.io/idam/idam-fr-idm:latest
+    releaseNameOverride: cmc-pr-fr-idm
+  idam-api:
+    image: hmctspublic.azurecr.io/idam/api:stable
+    releaseNameOverride: cmc-pr-idm-api
+    ingressHost: idam-api-${SERVICE_FQDN}
+    keyVaults:
+      cmc:
+        resourceGroup: cmc
+        secrets:
+          - notify-api-key
+          - idam-spi-forgerock-idm-password
+          - idam-spi-forgerock-idm-pin-defaultpassword
+          - spring-datasource-password
+          - idam-spi-forgerock-am-password
+    environment:
+      - SPRING_PROFILES_ACTIVE=local
+      - CACHING_ENABLED=false
+      - SPRING_DATA_ELASTICSEARCH_PROPERTIES_PATH_HOME=/tmp/es
+      - TESTING_SUPPORT_ENABLED=true
+      - IDAMHEALTHCHECK_AM_ENABLED=false
+      - IDAMHEALTHCHECK_IDM_ENABLED=false
+      - STRATEGIC_ADMIN_URL=http://cmc-pr-idam-web-admin
+      - STRATEGIC_WEBPUBLIC_URL=http://cmc-pr-idam-web-public
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://${SERVICE_NAME}-postgresql/openidm?currentSchema=fridam
+      - SPRING_DATASOURCE_USERNAME=openidm
+      - SECURITY_OAUTH2_CLIENT_CLIENTSECRET=password #fake password
+      - SECURITY_OAUTH2_CLIENT_PRE_ESTABLISHED_REDIRECT_URI=http://cmc-pr-idam-web-public/login
+      - SECURITY_OAUTH2_CLIENT_REGISTERED_REDIRECT_URI=http://cmc-pr-idam-web-public/login
+      - IDAM_SPI_FORGEROCK_AM_ROOT=http://cmc-pr-fr-am/openam
+      - IDAM_SPI_FORGEROCK_AM_TOPLEVELHOST=fr-am
+      - IDAM_SPI_FORGEROCK_AM_USERNAME=amadmin
+      - IDAM_SPI_FORGEROCK_AM_JWKSURIFOROAUTH2CLIENTS=http://cmc-pr-fr-am/openam/oauth2/hmcts/connect/jwk_uri
+      - IDAM_SPI_FORGEROCK_IDM_ROOT=http://cmc-pr-fr-idm/openidm
+      - IDAM_SPI_FORGEROCK_IDM_USERNAME=openidm-admin #fake user
+      - APPINSIGHTS_INSTRUMENTATIONKEY=fake-key
+
+  idam-web-public:
+    image: hmctspublic.azurecr.io/idam/web-public:stable
+    releaseNameOverride: cmc-pr-idm-web-public
+    ingressHost: idam-web-public-${SERVICE_FQDN}
+    environment:
+      - STRATEGIC_SERVICE_URL=http://cmc-pr-idam-api
+
+  idam-web-admin:
+    image: hmctspublic.azurecr.io/idam/web-admin:stable
+    releaseNameOverride: cmc-pr-idm-web-admin
+    ingressHost: idam-web-admin-${SERVICE_FQDN}
+    environment:
+      - STRATEGIC_SERVICE_URL=http://cmc-pr-idam-api
+      - STRATEGIC_PUBLIC_URL=http://cmc-pr-idam-web-public
+
+  idam-importer:
+    build:
+      context: docker/idam-importer  # local
+    keyVaults:
+      cmc:
+        resourceGroup: cmc
+        secrets:
+          - idam-admin-password
+    environment:
+      - IDAM_API_URL=http://cmc-pr-idam-api
+      - IDAM_ADMIN_USER=idamowner%40hmcts.net #fake
+      - WAIT_HOSTS=cmc-pr-idam-api
+      - WAIT_HOSTS_TIMEOUT=900
+
+  service-auth-provider-api:
+    image: hmctspublic.azurecr.io/rpe/service-auth-provider
+    releaseNameOverride: cmc-pr-service-auth-provider-api
+    environment:
+      - SERVER_PORT=8080
+      - JWT_KEY=wThK0f0/lh3FlxFcL4xUWDMI5C1J9KyQBgXV4wseh1e5J1uYJIjvTvArHxQDrYoHJ23xFxjHkOnvNbR5dXRoxA== #fake jwt key for pr testing
+      - MICROSERVICEKEYS_CMC=AAAAAAAAAAAAAAAA
+      - MICROSERVICEKEYS_CMC_CLAIM_SUBMIT_API=AAAAAAAAAAAAAAAA
+      - MICROSERVICEKEYS_CMC_LEGAL_FRONTEND=AAAAAAAAAAAAAAAA
+      - MICROSERVICEKEYS_CMC_CLAIM_STORE=AAAAAAAAAAAAAAAA
+      - MICROSERVICEKEYS_EM_GW=AAAAAAAAAAAAAAAA
+      - MICROSERVICEKEYS_CCD_DATA=AAAAAAAAAAAAAAAA
+      - MICROSERVICEKEYS_CCD_DEFINITION=AAAAAAAAAAAAAAAA
+      - MICROSERVICEKEYS_CCD_GATEWAY=AAAAAAAAAAAAAAAA
+      - MICROSERVICEKEYS_DG_DOCASSEMBLY_API=AAAAAAAAAAAAAAAA
+      - MICROSERVICEKEYS_XUI_WEBAPP=XUIXUIXUIXUIXUIX
+      - TESTING_SUPPORT_ENABLED=true
+
 
 cmc-claim-store:
   enabled: true
@@ -103,7 +192,7 @@ cmc-claim-store:
       CMC_DB_USERNAME: hmcts
       CMC_DB_PASSWORD: hmcts
       CMC_DB_CONNECTION_OPTIONS: ''
-      CORE_CASE_DATA_API_URL: http://${SERVICE_NAME}-ccd-data-store-api
+      CORE_CASE_DATA_API_URL: http://cmc-pr-ccd-data-store-api
       STAFF_NOTIFICATIONS_LEGAL_RECIPIENT: moneyclaims@justice.gov.uk
       RPA_NOTIFICATIONS_LEGALSEALEDCLAIMRECIPIENT: civilmoneyclaims+rpa-legal-claim-issued@gmail.com
 
@@ -122,12 +211,12 @@ ccd:
   consulIP: ${CONSUL_LB_IP}
 
   global:
-    idamApiUrl: https://idam-api.aat.platform.hmcts.net
-    idamWebUrl: https://idam-web-public.aat.platform.hmcts.net
-    s2sUrl: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
+    idamApiUrl: http://cmc-pr-idam-api
+    idamWebUrl: http://cmc-pr-idam-web-public
+    s2sUrl: http://cmc-pr-service-auth-provider-api
     ccdAdminWebIngress: ccd-admin-web-${SERVICE_FQDN}
-    ccdDefinitionStoreUrl: http://${SERVICE_NAME}-ccd-definition-store
-    ccdUserProfileUrl: http://${SERVICE_NAME}-ccd-user-profile-api
+    ccdDefinitionStoreUrl: http://cmc-pr-ccd-definition-store
+    ccdUserProfileUrl: http://cmc-pr-ccd-user-profile-api
     postgresUsername: hmcts
     postgresPassword: hmcts
     devMode: true
@@ -136,6 +225,7 @@ ccd:
     nodejs:
       image: hmctspublic.azurecr.io/ccd/admin-web:latest
       ingressHost: ccd-admin-web-${SERVICE_FQDN}
+      releaseNameOverride: cmc-pr-ccd-admin-web
       keyVaults: []
       environment:
         IDAM_OAUTH2_AW_CLIENT_SECRET: ${ADMIN_WEB_IDAM_SECRET}
@@ -145,6 +235,7 @@ ccd:
   ccd-user-profile-api:
     java:
       image: hmctspublic.azurecr.io/ccd/user-profile-api:latest
+      releaseNameOverride: cmc-pr-ccd-user-profile-api
       keyVaults: []
       environment:
         USER_PROFILE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_definition,ccd_admin,cmc_claim_store
@@ -152,26 +243,31 @@ ccd:
   ccd-definition-store-api:
     java:
       image: hmctspublic.azurecr.io/ccd/definition-store-api:latest
+      releaseNameOverride: cmc-pr-ccd-definition-store-api
+      ingressHost: ccd-definition-store-api-${SERVICE_FQDN}
       imagePullPolicy: Always
       keyVaults: []
       environment:
         DEFINITION_STORE_IDAM_KEY: ${DEFINITION_STORE_S2S_KEY}
         DEFINITION_STORE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_gw,ccd_admin,cmc_claim_store
-        IDAM_USER_URL: https://idam-web-public.aat.platform.hmcts.net
-        OIDC_ISSUER: https://forgerock-am.service.core-compute-idam-aat2.internal:8443/openam/oauth2/hmcts
+        IDAM_USER_URL: http://cmc-pr-idam-web-public
+        OIDC_ISSUER: http://cmc-pr-fr-am/openam/oauth2/hmcts
 
   ccd-data-store-api:
     java:
       image: hmctspublic.azurecr.io/ccd/data-store-api:latest
+      releaseNameOverride: cmc-pr-ccd-data-store-api
+      ingressHost: ccd-data-store-api-${SERVICE_FQDN}
       keyVaults: []
       environment:
         DATA_STORE_IDAM_KEY: ${DATA_STORE_S2S_KEY}
-        IDAM_S2S_URL: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
-        IDAM_USER_URL: https://idam-web-public.aat.platform.hmcts.net
-        OIDC_ISSUER: https://forgerock-am.service.core-compute-idam-aat2.internal:8443/openam/oauth2/hmcts
+        IDAM_S2S_URL: http://cmc-pr-service-auth-provider-api
+        IDAM_USER_URL: http://cmc-pr-idam-web-public
+        OIDC_ISSUER: http://cmc-pr-fr-am/openam/oauth2/hmcts
 
   ccd-user-profile-importer:
     image: hmctspublic.azurecr.io/ccd/user-profile-importer:db2r9a
+    releaseNameOverride: cmc-pr-ccd-user-profile-importer
     users:
       - civilmoneyclaims+ccd@gmail.com|CMC|MoneyClaimCase|open
       - civilmoneyclaims+judge@gmail.com|CMC|MoneyClaimCase|orderForJudgeReview
@@ -179,6 +275,7 @@ ccd:
 
   ccd-definition-importer:
     image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.10.0
+    releaseNameOverride: cmc-pr-ccd-definition-importer
     environment:
       CCD_DEF_CLAIM_STORE_BASE_URL: http://${SERVICE_NAME}-claim-store
     definitionFilename: cmc-ccd.xlsx
