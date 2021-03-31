@@ -25,6 +25,88 @@ fr-idm:
   image: hmctsprivate.azurecr.io/idam/idam-fr-idm:latest
   releaseNameOverride: cmc-pr-fr-idm
 
+idam-web-public:
+  image: hmctspublic.azurecr.io/idam/web-public:stable
+  releaseNameOverride: cmc-pr-idm-web-public
+  ingressHost: idam-web-public-${SERVICE_FQDN}
+  environment:
+    - STRATEGIC_SERVICE_URL=http://cmc-pr-idam-api
+
+idam-web-admin:
+  image: hmctspublic.azurecr.io/idam/web-admin:stable
+  releaseNameOverride: cmc-pr-idm-web-admin
+  ingressHost: idam-web-admin-${SERVICE_FQDN}
+  environment:
+    - STRATEGIC_SERVICE_URL=http://cmc-pr-idam-api
+    - STRATEGIC_PUBLIC_URL=http://cmc-pr-idam-web-public
+idam-api:
+  image: hmctspublic.azurecr.io/idam/api:stable
+  releaseNameOverride: cmc-pr-idm-api
+  ingressHost: idam-api-${SERVICE_FQDN}
+  keyVaults:
+    cmc:
+      resourceGroup: cmc
+      secrets:
+        - notify-api-key
+        - idam-spi-forgerock-idm-password
+        - idam-spi-forgerock-idm-pin-defaultpassword
+        - spring-datasource-password
+        - idam-spi-forgerock-am-password
+  environment:
+    - SPRING_PROFILES_ACTIVE=local
+    - CACHING_ENABLED=false
+    - SPRING_DATA_ELASTICSEARCH_PROPERTIES_PATH_HOME=/tmp/es
+    - TESTING_SUPPORT_ENABLED=true
+    - IDAMHEALTHCHECK_AM_ENABLED=false
+    - IDAMHEALTHCHECK_IDM_ENABLED=false
+    - STRATEGIC_ADMIN_URL=http://cmc-pr-idam-web-admin
+    - STRATEGIC_WEBPUBLIC_URL=http://cmc-pr-idam-web-public
+    - SPRING_DATASOURCE_URL=jdbc:postgresql://${SERVICE_NAME}-postgresql/openidm?currentSchema=fridam
+    - SPRING_DATASOURCE_USERNAME=openidm
+    - SECURITY_OAUTH2_CLIENT_CLIENTSECRET=password #fake password
+    - SECURITY_OAUTH2_CLIENT_PRE_ESTABLISHED_REDIRECT_URI=http://cmc-pr-idam-web-public/login
+    - SECURITY_OAUTH2_CLIENT_REGISTERED_REDIRECT_URI=http://cmc-pr-idam-web-public/login
+    - IDAM_SPI_FORGEROCK_AM_ROOT=http://cmc-pr-fr-am/openam
+    - IDAM_SPI_FORGEROCK_AM_TOPLEVELHOST=fr-am
+    - IDAM_SPI_FORGEROCK_AM_USERNAME=amadmin
+    - IDAM_SPI_FORGEROCK_AM_JWKSURIFOROAUTH2CLIENTS=http://cmc-pr-fr-am/openam/oauth2/hmcts/connect/jwk_uri
+    - IDAM_SPI_FORGEROCK_IDM_ROOT=http://cmc-pr-fr-idm/openidm
+    - IDAM_SPI_FORGEROCK_IDM_USERNAME=openidm-admin #fake user
+    - APPINSIGHTS_INSTRUMENTATIONKEY=fake-key
+
+
+
+idam-importer:
+  build:
+    context: docker/idam-importer  # local
+  keyVaults:
+    cmc:
+      resourceGroup: cmc
+      secrets:
+        - idam-admin-password
+  environment:
+    - IDAM_API_URL=http://cmc-pr-idam-api
+    - IDAM_ADMIN_USER=idamowner%40hmcts.net #fake
+    - WAIT_HOSTS=cmc-pr-idam-api
+    - WAIT_HOSTS_TIMEOUT=900
+
+service-auth-provider-api:
+  image: hmctspublic.azurecr.io/rpe/service-auth-provider
+  releaseNameOverride: cmc-pr-service-auth-provider-api
+  environment:
+    - JWT_KEY=wThK0f0/lh3FlxFcL4xUWDMI5C1J9KyQBgXV4wseh1e5J1uYJIjvTvArHxQDrYoHJ23xFxjHkOnvNbR5dXRoxA== #fake jwt key for pr testing
+    - MICROSERVICEKEYS_CMC=AAAAAAAAAAAAAAAA
+    - MICROSERVICEKEYS_CMC_CLAIM_SUBMIT_API=AAAAAAAAAAAAAAAA
+    - MICROSERVICEKEYS_CMC_LEGAL_FRONTEND=AAAAAAAAAAAAAAAA
+    - MICROSERVICEKEYS_CMC_CLAIM_STORE=AAAAAAAAAAAAAAAA
+    - MICROSERVICEKEYS_EM_GW=AAAAAAAAAAAAAAAA
+    - MICROSERVICEKEYS_CCD_DATA=AAAAAAAAAAAAAAAA
+    - MICROSERVICEKEYS_CCD_DEFINITION=AAAAAAAAAAAAAAAA
+    - MICROSERVICEKEYS_CCD_GATEWAY=AAAAAAAAAAAAAAAA
+    - MICROSERVICEKEYS_DG_DOCASSEMBLY_API=AAAAAAAAAAAAAAAA
+    - MICROSERVICEKEYS_XUI_WEBAPP=XUIXUIXUIXUIXUIX
+    - TESTING_SUPPORT_ENABLED=true
+
 nodejs:
   image: ${IMAGE_NAME}
   ingressIP: ${INGRESS_IP}
@@ -69,105 +151,6 @@ idam-pr:
   redirect_uris:
     Money Claims - Citizen:
       - https://${SERVICE_FQDN}/receiver
-  fr-am:
-    image: hmctsprivate.azurecr.io/idam/idam-fr-am:latest
-    releaseNameOverride: cmc-pr-fr-am
-
-  fr-idm:
-    image: hmctsprivate.azurecr.io/idam/idam-fr-idm:latest
-    releaseNameOverride: cmc-pr-fr-idm
-  idam-api:
-    image: hmctspublic.azurecr.io/idam/api:stable
-    releaseNameOverride: cmc-pr-idm-api
-    ingressHost: idam-api-${SERVICE_FQDN}
-    keyVaults:
-      cmc:
-        resourceGroup: cmc
-        secrets:
-          - notify-api-key
-          - idam-spi-forgerock-idm-password
-          - idam-spi-forgerock-idm-pin-defaultpassword
-          - spring-datasource-password
-          - idam-spi-forgerock-am-password
-    environment:
-      - SPRING_PROFILES_ACTIVE=local
-      - CACHING_ENABLED=false
-      - SPRING_DATA_ELASTICSEARCH_PROPERTIES_PATH_HOME=/tmp/es
-      - TESTING_SUPPORT_ENABLED=true
-      - IDAMHEALTHCHECK_AM_ENABLED=false
-      - IDAMHEALTHCHECK_IDM_ENABLED=false
-      - STRATEGIC_ADMIN_URL=http://cmc-pr-idam-web-admin
-      - STRATEGIC_WEBPUBLIC_URL=http://cmc-pr-idam-web-public
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://${SERVICE_NAME}-postgresql/openidm?currentSchema=fridam
-      - SPRING_DATASOURCE_USERNAME=openidm
-      - SECURITY_OAUTH2_CLIENT_CLIENTSECRET=password #fake password
-      - SECURITY_OAUTH2_CLIENT_PRE_ESTABLISHED_REDIRECT_URI=http://cmc-pr-idam-web-public/login
-      - SECURITY_OAUTH2_CLIENT_REGISTERED_REDIRECT_URI=http://cmc-pr-idam-web-public/login
-      - IDAM_SPI_FORGEROCK_AM_ROOT=http://cmc-pr-fr-am/openam
-      - IDAM_SPI_FORGEROCK_AM_TOPLEVELHOST=fr-am
-      - IDAM_SPI_FORGEROCK_AM_USERNAME=amadmin
-      - IDAM_SPI_FORGEROCK_AM_JWKSURIFOROAUTH2CLIENTS=http://cmc-pr-fr-am/openam/oauth2/hmcts/connect/jwk_uri
-      - IDAM_SPI_FORGEROCK_IDM_ROOT=http://cmc-pr-fr-idm/openidm
-      - IDAM_SPI_FORGEROCK_IDM_USERNAME=openidm-admin #fake user
-      - APPINSIGHTS_INSTRUMENTATIONKEY=fake-key
-    depends_on:
-      idam-web-public:
-        condition: service_started
-      fr-am:
-        condition: service_started
-      fr-idm:
-        condition: service_started
-      idam-web-admin:
-        condition: service_started
-      service-auth-provider-api:
-        condition: service_started
-
-  idam-web-public:
-    image: hmctspublic.azurecr.io/idam/web-public:stable
-    releaseNameOverride: cmc-pr-idm-web-public
-    ingressHost: idam-web-public-${SERVICE_FQDN}
-    environment:
-      - STRATEGIC_SERVICE_URL=http://cmc-pr-idam-api
-
-  idam-web-admin:
-    image: hmctspublic.azurecr.io/idam/web-admin:stable
-    releaseNameOverride: cmc-pr-idm-web-admin
-    ingressHost: idam-web-admin-${SERVICE_FQDN}
-    environment:
-      - STRATEGIC_SERVICE_URL=http://cmc-pr-idam-api
-      - STRATEGIC_PUBLIC_URL=http://cmc-pr-idam-web-public
-
-  idam-importer:
-    build:
-      context: docker/idam-importer  # local
-    keyVaults:
-      cmc:
-        resourceGroup: cmc
-        secrets:
-          - idam-admin-password
-    environment:
-      - IDAM_API_URL=http://cmc-pr-idam-api
-      - IDAM_ADMIN_USER=idamowner%40hmcts.net #fake
-      - WAIT_HOSTS=cmc-pr-idam-api
-      - WAIT_HOSTS_TIMEOUT=900
-
-  service-auth-provider-api:
-    image: hmctspublic.azurecr.io/rpe/service-auth-provider
-    releaseNameOverride: cmc-pr-service-auth-provider-api
-    environment:
-      - JWT_KEY=wThK0f0/lh3FlxFcL4xUWDMI5C1J9KyQBgXV4wseh1e5J1uYJIjvTvArHxQDrYoHJ23xFxjHkOnvNbR5dXRoxA== #fake jwt key for pr testing
-      - MICROSERVICEKEYS_CMC=AAAAAAAAAAAAAAAA
-      - MICROSERVICEKEYS_CMC_CLAIM_SUBMIT_API=AAAAAAAAAAAAAAAA
-      - MICROSERVICEKEYS_CMC_LEGAL_FRONTEND=AAAAAAAAAAAAAAAA
-      - MICROSERVICEKEYS_CMC_CLAIM_STORE=AAAAAAAAAAAAAAAA
-      - MICROSERVICEKEYS_EM_GW=AAAAAAAAAAAAAAAA
-      - MICROSERVICEKEYS_CCD_DATA=AAAAAAAAAAAAAAAA
-      - MICROSERVICEKEYS_CCD_DEFINITION=AAAAAAAAAAAAAAAA
-      - MICROSERVICEKEYS_CCD_GATEWAY=AAAAAAAAAAAAAAAA
-      - MICROSERVICEKEYS_DG_DOCASSEMBLY_API=AAAAAAAAAAAAAAAA
-      - MICROSERVICEKEYS_XUI_WEBAPP=XUIXUIXUIXUIXUIX
-      - TESTING_SUPPORT_ENABLED=true
-
 
 cmc-claim-store:
   enabled: true
