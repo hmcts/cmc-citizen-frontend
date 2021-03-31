@@ -136,7 +136,6 @@ idam-pr:
     image: hmctspublic.azurecr.io/rpe/service-auth-provider
     releaseNameOverride: cmc-pr-service-auth-provider-api
     environment:
-      - SERVER_PORT=8080
       - JWT_KEY=wThK0f0/lh3FlxFcL4xUWDMI5C1J9KyQBgXV4wseh1e5J1uYJIjvTvArHxQDrYoHJ23xFxjHkOnvNbR5dXRoxA== #fake jwt key for pr testing
       - MICROSERVICEKEYS_CMC=AAAAAAAAAAAAAAAA
       - MICROSERVICEKEYS_CMC_CLAIM_SUBMIT_API=AAAAAAAAAAAAAAAA
@@ -232,6 +231,7 @@ ccd:
     idam-pr:
       enabled: true
 
+
   ccd-user-profile-api:
     java:
       image: hmctspublic.azurecr.io/ccd/user-profile-api:latest
@@ -265,6 +265,28 @@ ccd:
         IDAM_USER_URL: http://cmc-pr-idam-web-public
         OIDC_ISSUER: http://cmc-pr-fr-am/openam/oauth2/hmcts
 
+  ccd-api-gateway:
+    image: hmctspublic.azurecr.io/ccd/api-gateway-web
+    releaseNameOverride: cmc-pr-ccd-api-gateway
+    ingressHost: ccd-api-gateway-${SERVICE_FQDN}
+    environment:
+      - IDAM_BASE_URL=http://cmc-pr-idam-api
+      - IDAM_USER_URL=http://cmc-pr-idam-api
+      - IDAM_LOGOUT_URL=http://cmc-pr-idam-web-public/login/logout
+      - IDAM_OAUTH2_TOKEN_ENDPOINT=http://cmc-pr-idam-api/oauth2/token
+      - IDAM_S2S_URL=http://cmc-pr-service-auth-provider-api
+      - IDAM_SERVICE_KEY=AAAAAAAAAAAAAAAA #fake
+      - IDAM_SERVICE_NAME=ccd_gateway
+      - IDAM_OAUTH2_CLIENT_SECRET=12345678 #fake
+      - PROXY_AGGREGATED=http://cmc-pr-ccd-data-store-api
+      - PROXY_DATA=http://cmc-pr-ccd-data-store-api
+      - PROXY_DEFINITION_IMPORT=http://cmc-pr-ccd-definition-store-api
+      - PROXY_DOCUMENT_MANAGEMENT=http://cmc-pr-dm-store
+      - ADDRESS_LOOKUP_TOKEN
+      - APPINSIGHTS_INSTRUMENTATIONKEY=fake-key
+      - PROXY_PAYMENTS=http://dummy
+      - PROXY_PAY_BULKSCAN=http://dummy
+
   ccd-user-profile-importer:
     image: hmctspublic.azurecr.io/ccd/user-profile-importer:db2r9a
     releaseNameOverride: cmc-pr-ccd-user-profile-importer
@@ -291,3 +313,75 @@ ccd:
       - caseworker-cmc-legaladvisor
       - caseworker-cmc-pcqextractor
       - payments
+
+  dm-store:
+    image: hmcts/dm-store:latest  # dockerhub - should be changed
+    command: --wait-for-database 30
+    releaseNameOverride: cmc-pr-dm-store
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://${SERVICE_NAME}-postgresql/evidence
+      - SPRING_DATASOURCE_USERNAME=evidence
+      - SPRING_DATASOURCE_PASSWORD=evidence
+      - IDAM_USER_BASE_URI=http://cmc-pr-idam-api
+      - IDAM_S2S_BASE_URI=http://cmc-pr-service-auth-provider-api
+      - S2S_NAMES_WHITELIST=ccd_gateway,cmc,cmc_claim_store,ccd_data,dg_docassembly_api,xui_webapp
+      - http_proxy=
+      - https_proxy=
+      - no_proxy=
+      - ROOT_APPENDER=CONSOLE
+      - REFORM_SERVICE_TYPE=java
+      - REFORM_SERVICE_NAME=dm-store
+      - REFORM_TEAM=evidence
+      - REFORM_ENVIRONMENT=docker
+      - ENABLE_DELETE=true
+      - ENABLE_IDAM_HEALTH_CHECK=false
+      - ENABLE_METADATA_SEARCH=true
+      - ENABLE_DOCUMENT_AND_METADATA_UPLOAD=${ENABLE_DOCUMENT_AND_METADATA_UPLOAD:-false}
+      - ENABLE_FOLDER_API=true
+      - ENABLE_TTL=true
+      - ENABLE_THUMBNAIL=true
+      - DM_MULTIPART_WHITELIST=image/jpeg,application/pdf,image/tiff,image/png,image/bmp,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.wordprocessingml.template,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.spreadsheetml.template,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.openxmlformats-officedocument.presentationml.template,application/vnd.openxmlformats-officedocument.presentationml.slideshow
+      - DM_MULTIPART_WHITELIST_EXT=.jpg,.jpeg,.bmp,.tif,.tiff,.png,.pdf,.txt,.doc,.dot,.docx,.dotx,.xls,.xlt,.xla,.xlsx,.xltx,.xlsb,.ppt,.pot,.pps,.ppa,.pptx,.potx,.ppsx
+      - MAX_FILE_SIZE=500MB
+      - MAX_ACTIVE_DB_CONNECTIONS=10
+      - ENDPOINTS_HEALTH_SENSITIVE=false
+      - ENDPOINTS_INFO_SENSITIVE=false
+      - CASE_WORKER_ROLES=caseworker-cmc,caseworker-cmc-judge,caseworker-cmc-legaladvisor
+
+  xui:
+    image: hmctspublic.azurecr.io/xui/webapp:latest
+    releaseNameOverride: cmc-pr-xui
+    ingressHost: xui-${SERVICE_FQDN}
+    environment:
+      MICROSERVICE: xui_webapp
+      PROTOCOL: http
+      XUI_ENV: local
+      SERVICES_CCD_COMPONENT_API: http://cmc-pr-ccd-api-gateway
+      SERVICES_CCD_DATA_STORE_API: http://cmc-pr-ccd-data-store-api
+      SERVICES_DOCUMENTS_API: http://cmc-pr-dm-store
+      SERVICES_S2S: http://cmc-pr-service-auth-provider-api
+      SERVICES_IDAM_LOGIN_URL: http://cmc-pr-idam-web-public
+      SERVICES_IDAM_API_URL: http://cmc-pr-idam-api
+      SERVICES_IDAM_INDEX_URL: /
+      SERVICES_IDAM_OAUTH_CALLBACK_URL: /oauth2/callback
+      SERVICES_IDAM_CLIENT_ID: xui_webapp
+      SERVICES_PAYMENTS_URL: http://cmc-pr-wiremock
+      SERVICES_PRD_API: http://cmc-pr-wiremock
+      SERVICES_EM_ANNO_API: http://cmc-pr-ccd-api-gateway
+      REDISCLOUD_URL: http://dummyrediscloudurl
+      LAUNCH_DARKLY_CLIENT_ID: dummy
+      FEATURE_REDIS_ENABLED: "false"
+      FEATURE_APP_INSIGHTS_ENABLED: "false"
+      FEATURE_SECURE_COOKIE_ENABLED: "false"
+      APPINSIGHTS_INSTRUMENTATIONKEY: fake
+      IDAM_SECRET: OOOOOOOOOOOOOOOO
+      S2S_SECRET: XUIXUIXUIXUIXUIX
+      JURISDICTIONS: "CMC"
+      SYSTEM_USER_NAME: "dummy"
+      SYSTEM_USER_PASSWORD: "dummy"
+
+  wiremock:
+    releaseNameOverride: cmc-pr-wiremock
+    image: rodolpheche/wiremock
+    volumes:
+      - ./../mocks/wiremock:/home/wiremock:rw
