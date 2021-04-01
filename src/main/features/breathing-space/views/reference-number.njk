@@ -1,0 +1,19 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, errorSummary, submitButton, input %}
+{% from "components/free-mediation/howFreeMediationWorks.njk" import howMediationWorks %}
+
+{% set heading = 'Do you have a Debt Respite Scheme reference number?' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <form method="post" class="analytics-submit-event-trigger">
+        <input type="hidden" name="known" value="true"/>
+        {{ csrfProtection(csrf) }}
+        <p> {{ t('Enter the reference number (optional):')}} </p>
+        {{ input('Enter the reference number (optional)', 'bsNumber', form, labelClass='visually-hidden') }}
+        {{ submitButton('Continue') }}
+      </form>
+    </div>
+  </div>
+{% endblock %}
