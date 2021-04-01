@@ -20,6 +20,7 @@ services:
         - FEATURE_INVERSION_OF_CONTROL
         - FEATURE_PCQ
         - FEATURE_HELP_WITH_FEES
+        - FEATURE_BREATHING_SPACE
       volumes:
         - ./functional-output:/usr/src/app/output
     remote-webdriver:
