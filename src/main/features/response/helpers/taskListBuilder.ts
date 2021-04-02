@@ -242,7 +242,7 @@ export class TaskListBuilder extends TaskStatus {
       const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
       let path: string
       if(await featureToggles.isEnhancedMediationJourneyEnabled()) {
-        path = MediationPaths.howMediationWorksPage.evaluateUri({ externalId: claim.externalId })
+        path = MediationPaths.freeTelephoneMediationPage.evaluateUri({ externalId: claim.externalId })
         return new TaskList(
           'Resolving the claim', [
             new TaskListItem(
