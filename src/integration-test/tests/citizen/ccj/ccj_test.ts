@@ -8,51 +8,36 @@ import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
 
 const userSteps: UserSteps = new UserSteps()
 const ccjSteps: CountyCourtJudgementSteps = new CountyCourtJudgementSteps()
+let email
+let claimantType
+let defendantType
+let claimData
+let claimRef
 
-Feature('CCJ')
+Feature('Default CCJ E2E')
 
-Scenario('Request judgment as an individual with no defendant email and pay by instalments @citizen @quick', { retries: 3 },
-  async (I: I) => {
-    const email: string = userSteps.getClaimantEmail()
-    const claimantType: PartyType = PartyType.INDIVIDUAL
-    const defendantType: PartyType = PartyType.INDIVIDUAL
-    const hasDefendantEmail = false
-    const claimData = createClaimData(claimantType, defendantType, hasDefendantEmail, InterestType.NO_INTEREST)
-    const claimRef: string = await I.createClaim(claimData, email)
+Before(async (I: I) => {
+  email = await I.getClaimantEmail()
+  claimantType = PartyType.INDIVIDUAL
+  defendantType = PartyType.INDIVIDUAL
 
-    userSteps.login(email)
-    ccjSteps.requestCCJ(claimRef, defendantType)
-    ccjSteps.ccjDefendantToPayByInstalments()
-    ccjSteps.checkCCJFactsAreTrueAndSubmit(claimantType, claimData.defendants[0], defendantType)
-    I.see('County Court Judgment requested', 'h1.bold-large')
-  })
+  claimData = await createClaimData(I, claimantType, defendantType, true, InterestType.NO_INTEREST)
+  claimRef = await I.createClaim(claimData, email)
 
-Scenario('Request judgment as a Company, pay by set date @nightly', { retries: 3 }, async (I: I) => {
-  const email: string = userSteps.getClaimantEmail()
-  const claimantType: PartyType = PartyType.COMPANY
-  const defendantType: PartyType = PartyType.COMPANY
+})
 
-  const claimData = createClaimData(claimantType, defendantType, true, InterestType.NO_INTEREST)
-  const claimRef: string = await I.createClaim(claimData, email)
-
+Scenario('Default CCJ E2E...@nightly @citizen', { retries: 3 }, async (I: I) => {
   userSteps.login(email)
-  ccjSteps.requestCCJ(claimRef, defendantType)
-  ccjSteps.ccjDefendantToPayBySetDate()
-  ccjSteps.checkCCJFactsAreTrueAndSubmit(claimantType, claimData.defendants[0], defendantType)
+  await ccjSteps.requestCCJWhenDefendantNotPaid(I, claimRef, defendantType)
+  ccjSteps.ccjDefendantToPayImmediately()
+  ccjSteps.validateCheckAndSendPageAnswers(claimantType, claimData.defendants[0], defendantType)
   I.see('County Court Judgment requested', 'h1.bold-large')
 })
 
-Scenario('Request judgment as a sole trader, pay immediately @nightly', { retries: 3 }, async (I: I) => {
-  const email: string = userSteps.getClaimantEmail()
-  const claimantType: PartyType = PartyType.SOLE_TRADER
-  const defendantType: PartyType = PartyType.ORGANISATION
-
-  const claimData = createClaimData(claimantType, defendantType, true, InterestType.NO_INTEREST)
-  const claimRef: string = await I.createClaim(claimData, email)
-
+Scenario('CCJ requested with no defendant email... @citizen @nightly', { retries: 3 }, async (I: I) => {
   userSteps.login(email)
-  ccjSteps.requestCCJ(claimRef, defendantType)
-  ccjSteps.ccjDefendantToPayImmediately()
+  await ccjSteps.requestCCJ(I, claimRef, defendantType)
+  ccjSteps.ccjDefendantToPayByInstalments()
   ccjSteps.checkCCJFactsAreTrueAndSubmit(claimantType, claimData.defendants[0], defendantType)
   I.see('County Court Judgment requested', 'h1.bold-large')
 })

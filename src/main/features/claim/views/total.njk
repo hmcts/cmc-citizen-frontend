@@ -1,6 +1,8 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, saveAndContinueButton, errorSummary %}
 {% from "feesTable.njk" import feesTable %}
+{% from "externalLink.njk" import externalLink %}
+{% from "interestCalculation.njk" import interestCalculationInfoBreakdownTable %}
 
 {% set heading = 'Total amount you’re claiming' %}
 
@@ -51,6 +53,10 @@
               <li>{{ t('If it’s unsuccessful, we’ll ask you to pay the claim fee shown on this page in full.') }}</li>
             </ol>
           {% endif %}
+          
+          {% if (interestClaimed) %}
+            {{ interestCalculationInfoBreakdownTable('How interest to date is calculated') }}
+          {% endif %}
 
           <p class="bold">{{ t('If you settle out of court') }}</p>
           <p>{{ t('We won’t refund your claim fee. You can ask the defendant to pay back your claim fee as part of the settlement.') }}</p>
@@ -74,6 +80,7 @@
           </table>
 
           <p>{{ t('You don’t have to pay a hearing fee unless the claim goes to a hearing.') }}</p>
+          <p>{{ t('There may be additional fees as your case progresses. ' + externalLink('Find out more about court fees (opens in a new tab)', 'https://www.gov.uk/government/publications/fees-in-the-civil-and-family-courts-main-fees-ex50', '', false )) | safe }}</p>
 
           {{ feesTable('How these fees are calculated', feeTableContent , showHearingFee = true) }}
 
