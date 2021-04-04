@@ -2,8 +2,6 @@ import * as express from 'express'
 
 import { Draft } from '@hmcts/draft-store-client'
 import { Paths } from 'mediation/paths'
-import { Paths as ResponsePaths } from 'response/paths'
-import { Paths as ClaimantResponsePaths } from 'claimant-response/paths'
 import { ErrorHandling } from 'main/common/errorHandling'
 import { FormValidator } from 'main/app/forms/validation/formValidator'
 import { Form } from 'main/app/forms/form'
@@ -58,7 +56,6 @@ export default express.Router()
 
         await new DraftService().save(draft, user.bearerToken)
 
-        const externalId: string = req.params.externalId
         const claim: Claim = res.locals.claim
         if (form.model.option === FreeMediationOption.YES) {
           if ((user.id === claim.defendantId && claim.claimData.defendant.isBusiness()) ||

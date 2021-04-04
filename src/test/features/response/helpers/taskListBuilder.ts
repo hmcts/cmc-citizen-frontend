@@ -422,36 +422,36 @@ describe('Defendant response task list builder', () => {
 
       context('should be enabled when', () => {
 
-        it('response is rejected with dispute', () => {
+        it('response is rejected with dispute', async () => {
           isResponseRejectedFullyWithDisputeStub.returns(true)
           isResponsePartiallyAdmitted.returns(false)
           isResponseRejectedFullyBecausePaidWhatOwed.returns(false)
 
-          const taskList: TaskList = TaskListBuilder.buildResolvingClaimSection(
+          const taskList: TaskList = await TaskListBuilder.buildResolvingClaimSection(
             new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new MediationDraft()
           )
 
           expect(taskList.tasks.find(task => task.name === mediationTaskLabel)).not.to.be.undefined
         })
 
-        it('response is rejected with already paid', () => {
+        it('response is rejected with already paid', async () => {
           isResponseRejectedFullyWithDisputeStub.returns(false)
           isResponsePartiallyAdmitted.returns(false)
           isResponseRejectedFullyBecausePaidWhatOwed.returns(true)
 
-          const taskList: TaskList = TaskListBuilder.buildResolvingClaimSection(
+          const taskList: TaskList = await TaskListBuilder.buildResolvingClaimSection(
             new ResponseDraft().deserialize(partiallyAdmittedDefenceWithWhyDoYouDisagreeCompleted), claim, new MediationDraft()
           )
 
           expect(taskList.tasks.find(task => task.name === mediationTaskLabel)).not.to.be.undefined
         })
 
-        it('response is partial admission and why do you disagree is completed', () => {
+        it('response is partial admission and why do you disagree is completed', async () => {
           isResponseRejectedFullyWithDisputeStub.returns(false)
           isResponsePartiallyAdmitted.returns(true)
           isResponseRejectedFullyBecausePaidWhatOwed.returns(false)
 
-          const taskList: TaskList = TaskListBuilder.buildResolvingClaimSection(
+          const taskList: TaskList = await TaskListBuilder.buildResolvingClaimSection(
             new ResponseDraft().deserialize(partiallyAdmittedDefenceWithWhyDoYouDisagreeCompleted), claim, new MediationDraft()
           )
 
@@ -461,12 +461,12 @@ describe('Defendant response task list builder', () => {
 
       context('should be disabled when', () => {
 
-        it('response is not rejected with dispute', () => {
+        it('response is not rejected with dispute', async () => {
           isResponseRejectedFullyWithDisputeStub.returns(false)
           isResponsePartiallyAdmitted.returns(false)
           isResponseRejectedFullyBecausePaidWhatOwed.returns(false)
 
-          const taskList: TaskList = TaskListBuilder.buildResolvingClaimSection(
+          const taskList: TaskList = await TaskListBuilder.buildResolvingClaimSection(
             new ResponseDraft().deserialize(defenceWithDisputeDraft), claim
           )
 

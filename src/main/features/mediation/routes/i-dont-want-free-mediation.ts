@@ -7,12 +7,9 @@ import { ErrorHandling } from 'main/common/errorHandling'
 import { Claim } from 'claims/models/claim'
 import { Draft } from '@hmcts/draft-store-client'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
-import { FreeMediation, FreeMediationOption } from 'main/app/forms/models/freeMediation'
-import { DraftService } from 'services/draftService'
+import { FreeMediation } from 'main/app/forms/models/freeMediation'
 import { User } from 'idam/user'
-import { FormValidator } from 'main/app/forms/validation/formValidator'
 import { Form } from 'main/app/forms/form'
-import { NoMediationReason } from 'main/features/mediation/form/models/noMediationReason'
 
 function renderView (form: Form<FreeMediation>, res: express.Response): void {
   const user: User = res.locals.user
@@ -34,8 +31,6 @@ export default express.Router()
     Paths.iDontWantFreeMediationPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const claim: Claim = res.locals.claim
-      const draft: Draft<MediationDraft> = res.locals.mediationDraft
-      const user: User = res.locals.user
       const externalId: string = req.params.externalId
 
       if (!claim.isResponseSubmitted()) {
