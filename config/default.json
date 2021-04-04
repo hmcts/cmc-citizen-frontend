@@ -98,6 +98,7 @@
     "signPostingCTSC": true,
     "autoEnrollIntoNewFeature": true,
     "dashboard_pagination_enabled": false,
+    "breathingSpace": true,
     "enhancedMediationJourney": true
   },
   "oauth": {

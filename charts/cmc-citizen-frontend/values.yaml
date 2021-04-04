@@ -49,6 +49,7 @@ nodejs:
     FEATURE_PCQ: false
     FEATURE_SIGN_POSTING_CTSC: false
     AUTO_ENROLL_INTO_NEW_FEATURE: true
+    FEATURE_BREATHING_SPACE: false
 
   keyVaults:
     cmc:
