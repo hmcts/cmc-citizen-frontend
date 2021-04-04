@@ -19,6 +19,7 @@ import { Paths as PaidInFullPaths } from 'paid-in-full/paths'
 import { Paths as MediationPaths } from 'mediation/paths'
 import { Paths as DirectionQuestionnairePaths } from 'directions-questionnaire/paths'
 import { Paths as OrdersPaths } from 'orders/paths'
+import { Paths as BreathingSpacePaths } from 'breathing-space/paths'
 import { customAccessibilityChecks, checkInputLabels, checkTaskList, checkAnswers, checkError, CustomChecks, checkRole, checkButton, checkEligibilityLinks, checkTable, checkMultipleChoice, checkClaimAmountRows } from './customChecks'
 
 import 'test/a11y/mocks'
@@ -232,6 +233,7 @@ describe('Accessibility', () => {
   }
 
   checkPaths(EligibilityPaths)
+  checkPaths(BreathingSpacePaths)
   checkPaths(ClaimIssuePaths)
   checkPaths(ClaimIssueErrorPaths)
   checkPaths(DefendantFirstContactPaths)
