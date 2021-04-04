@@ -9,6 +9,7 @@ export class MediationDraft extends DraftDocument {
   willYouTryMediation: FreeMediation
   youCanOnlyUseMediation: FreeMediation
   mediationDisagreement: FreeMediation
+  noMediationReason: FreeMediation
 
   constructor () {
     super()
@@ -32,6 +33,9 @@ export class MediationDraft extends DraftDocument {
       }
       if (input.mediationDisagreement) {
         this.mediationDisagreement = new FreeMediation(input.mediationDisagreement.option)
+      }
+      if (input.noMediationReason) {
+        this.noMediationReason = new FreeMediation(input.noMediationReason.option)
       }
     }
     return this

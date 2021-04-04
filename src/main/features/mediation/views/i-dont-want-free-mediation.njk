@@ -1,0 +1,63 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, radioGroup, linkButton, saveAndContinueButton %}
+
+{% set heading = 'I do not agree to free mediation' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <p>{{ t('You have chosen not to try free mediation. Please tell us why:') }}</p>
+      <form method="post" novalidate>
+        {{ csrfProtection(csrf) }}
+
+        {{ radioGroup(
+          form = form,
+          label = 'You have chosen not to try free mediation. Please tell us why:',
+          labelForScreenReadersOnly = true,
+          name = 'iDoNotWantMediationReason',
+          options = [
+            {
+              label: 'I have already tried to resolve the dispute with the other party, with no success',
+              value: 'alreadyTried',
+              checked: (form.valueFor('iDoNotWantMediationReason').value === 'alreadyTried')
+            },
+            {
+              label: 'I am not sure what would happen in mediation',
+              value: 'notSure',
+              checked: (form.valueFor('iDoNotWantMediationReason').value === 'notSure')
+            },
+            {
+              label: 'I do not think mediation would solve the dispute',
+              value: 'wouldNotSolve',
+              checked: (form.valueFor('iDoNotWantMediationReason').value === 'wouldNotSolve')
+            },
+            {
+              label: 'I do not want to delay getting a hearing',
+              value: 'noDelayInHearing',
+              checked: (form.valueFor('iDoNotWantMediationReason').value === 'noDelayInHearing')
+            },
+            {
+              label: 'I want a judge to make a decision on the dispute',
+              value: 'judgeToDecide',
+              checked: (form.valueFor('iDoNotWantMediationReason').value === 'judgeToDecide')
+            },
+            {
+              label: 'Another reason (please specify)',
+              value: 'other',
+              checked: (form.valueFor('iDoNotWantMediationReason').value === 'other')
+            }
+          ]
+        ) }}
+
+        <div class="form-group-related">
+          {{ linkButton('Skip this section', 'reject', 'link-button no-padding') }}
+        </div>
+        {{ saveAndContinueButton() }}
+      </form>
+      <p> {{ t('Any information you provide is used solely by HM Courts and Tribunals Service
+       to help us improve our services. Your answers have no impact on the progress or outcome
+        of your case, or on any contact you have with HM Courts and Tribunals Service.') }} </p>
+    </div>
+  </div>
+{% endblock %}
+

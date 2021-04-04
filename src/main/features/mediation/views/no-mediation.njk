@@ -1,0 +1,56 @@
+{% extends "layout.njk" %}
+
+{% from "form.njk" import saveAndContinueButton, csrfProtection, radioGroupWithHintPanel, errorSummary %}
+
+{% set heading = 'You chose not to try free mediation' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <p>{{ t('The claim will continue and you might have to go to a hearing.') }}</p>
+      <p class="heading-medium">{{ t('Advantages of free mediation') }}</p>
+
+      <p>{{ t('There are many advantages to free mediation, including:') }}</p>
+      <ul class="list list-bullet">
+        <li>{{ t('mediation can be quicker and cheaper than going to court') }}</li>
+        <li>{{ t('the mediator speaks to each side separately, you do not speak to the other party during mediation') }}</li>
+        <li>{{ t('it gives you control over how your dispute is settled, which is not possible by going to court') }}</li>
+        <li>{{ t('it’s confidential and nothing said or done during mediation can be used in court') }}</li>
+        <li>{{ t('mediation can avoid a ') }}
+            <a target="_blank" rel="noreferrer noopener" href="https://www.gov.uk/county-court-judgments-ccj-for-debt">{{  t('County Court Judgment (opens in a new tab)') }}</a>
+            {{ t(' being made against you') }}</li>
+      </ul>
+
+      <form method="post"
+            class="analytics-submit-event-trigger"
+            data-event-action="Defendant: disagree with mediation"
+            data-event-label-from="option"
+            novalidate>
+        {{ csrfProtection(csrf) }}
+
+        <p class="heading-medium">{{ t('Will you change your decision and try free mediation?') }}</p>
+        <p>{{ t('If you choose not to try mediation this cannot be changed once your response is submitted.') }}</p>
+        {{ radioGroupWithHintPanel(
+          form = form,
+          label = 'Will you change your decision and try free mediation?',
+          labelForScreenReadersOnly = true,
+          name = 'option',
+          options = [
+            {
+              label: 'Yes',
+              value: YesNoOption.YES.option,
+              checked: (form.valueFor('option') === YesNoOption.YES),
+              hint: hint
+            },
+            {
+              label: 'No',
+              value: YesNoOption.NO.option,
+              checked: (form.valueFor('option') === YesNoOption.NO)
+            }]
+        ) }}
+
+        {{ saveAndContinueButton() }}
+      </form>
+    </div>
+  </div>
+{% endblock %}

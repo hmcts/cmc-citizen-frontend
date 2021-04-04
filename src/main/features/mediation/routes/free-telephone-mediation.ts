@@ -7,21 +7,12 @@ import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { FreeMediation, FreeMediationOption } from 'forms/models/freeMediation'
 import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
-import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
-import { Paths as ClaimantResponsePaths } from 'claimant-response/paths'
-import { Paths as ResponsePaths } from 'response/paths'
 import { Claim } from 'claims/models/claim'
-
-function renderView (res: express.Response): void {
-  res.render(Paths.freeTelephoneMediationPage.associatedView, {
-    mediationPilot: ClaimFeatureToggles.isFeatureEnabledOnClaim(res.locals.claim, 'mediationPilot')
-  })
-}
 
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.freeTelephoneMediationPage.uri, (req: express.Request, res: express.Response) => {
-    renderView(res)
+    res.render(Paths.freeTelephoneMediationPage.associatedView)
   })
   .post(
     Paths.freeTelephoneMediationPage.uri,
@@ -32,27 +23,20 @@ export default express.Router()
         req.body.mediationYes ? FreeMediationOption.YES : FreeMediationOption.NO
       )
 
-      if (ClaimFeatureToggles.isFeatureEnabledOnClaim(res.locals.claim, 'mediationPilot')) {
-        if (draft.document.willYouTryMediation .option === FreeMediationOption.YES) {
-          draft.document.mediationDisagreement = undefined
-        }
-        await new DraftService().save(draft, user.bearerToken)
+      if (draft.document.willYouTryMediation.option === FreeMediationOption.YES) {
+        draft.document.mediationDisagreement = undefined
       }
+      await new DraftService().save(draft, user.bearerToken)
+
       const { externalId } = req.params
+      const claim: Claim = res.locals.claim
 
       if (req.body.mediationNo) {
-        const claim: Claim = res.locals.claim
-
-        if (ClaimFeatureToggles.isFeatureEnabledOnClaim(res.locals.claim, 'mediationPilot')) {
-          res.redirect(Paths.mediationDisagreementPage.evaluateUri({ externalId }))
-        } else if (!claim.isResponseSubmitted()) {
-          res.redirect(ResponsePaths.taskListPage.evaluateUri({ externalId: externalId }))
-        } else {
-          res.redirect(ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: externalId }))
-        }
-      } else if (ClaimFeatureToggles.isFeatureEnabledOnClaim(res.locals.claim, 'mediationPilot')) {
-        res.redirect(Paths.mediationAgreementPage.evaluateUri({ externalId }))
+        res.redirect(Paths.noMediationPage.evaluateUri({ externalId }))
+      } else if ((user.id === claim.defendantId && claim.claimData.defendant.isBusiness()) ||
+            (user.id === claim.claimantId && claim.claimData.claimant.isBusiness())) {
+        res.redirect(Paths.confirmCompanyTelephoneNumberPage.evaluateUri({ externalId: claim.externalId }))
       } else {
-        res.redirect(Paths.willYouTryMediation.evaluateUri({ externalId }))
+        res.redirect(Paths.confirmTelephoneNumberPage.evaluateUri({ externalId: claim.externalId }))
       }
     }))
