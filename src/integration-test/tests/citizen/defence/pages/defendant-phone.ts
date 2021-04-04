@@ -3,11 +3,11 @@ import I = CodeceptJS.I
 const I: I = actor()
 
 const fields = {
-  phoneNumber: 'input[id=number]'
+  phoneNumber: { css: 'input[id=number]' }
 }
 
 const buttons = {
-  submit: 'input[type=submit]'
+  submit: { css: 'input[type=submit]' }
 }
 
 export class DefendantPhonePage {

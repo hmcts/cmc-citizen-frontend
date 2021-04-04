@@ -4,13 +4,13 @@ const I: I = actor()
 
 const fields = {
   requestMoreTime: {
-    yes: 'input[id=optionyes]',
-    no: 'input[id=optionno]'
+    yes: { css: 'input[id=optionyes]' },
+    no: { css: 'input[id=optionno]' }
   }
 }
 
 const buttons = {
-  submit: 'input[type=submit]'
+  submit: { css: 'input[type=submit]' }
 }
 
 export class DefendantMoreTimeRequestPage {

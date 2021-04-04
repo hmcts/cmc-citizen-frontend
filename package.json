@@ -28,7 +28,7 @@
     "test:crossbrowser": "./bin/run-crossbrowser-tests.sh",
     "test:crossbrowser-verbose": "TS_NODE_TRANSPILE_ONLY=true codeceptjs run-multiple ${BROWSER_GROUP:-'--all'} --verbose --config saucelabs.conf.js --grep @crossbrowser --reporter mocha-multi",
     "list-supported-browsers": "node -e 'Object.keys(require(\"@hmcts/cmc-supported-browsers\").supportedBrowsers).forEach(key => console.log(key))'",
-    "sonar-scan": "sonar-scanner -Dsonar.projectName='CMC :: Citizen Frontend' -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.exclusions=src/main/routes/webchat.ts,src/main/public/**,src/main/app/mocks/mockPayClient.ts,src/main/features/claim/routes/pay.ts -Dsonar.javascript.lcov.reportPaths=coverage-report/lcov.info",
+    "sonar-scan": "sonar-scanner -Dsonar.projectName='CMC :: Citizen Frontend' -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.exclusions=src/main/routes/webchat.ts,src/main/app/claims/models/claim.ts,src/main/public/**,src/main/app/mocks/mockPayClient.ts,src/main/features/claim/routes/pay.ts -Dsonar.javascript.lcov.reportPaths=coverage-report/lcov.info",
     "test:file": "TS_NODE_TRANSPILE_ONLY=true NODE_ENV=mocha LOG_LEVEL=OFF mocha --opts mocha.opts --watch --watch-extensions ts"
   },
   "dependencies": {
@@ -56,7 +56,7 @@
     "@types/nunjucks": "^3.1.4",
     "@types/request-promise-native": "^1.0.16",
     "@types/shortid": "^0.0.29",
-    "applicationinsights": "^1.8.7",
+    "applicationinsights": "^1.8.10",
     "body-parser": "^1.19.0",
     "bootstrap-datepicker": "1.9.0",
     "build-url": "^2.0.0",
@@ -70,10 +70,12 @@
     "fs": "0.0.2",
     "fs-extra": "^9.1.0",
     "govuk-elements-sass": "^3.1.3",
-    "govuk-frontend": "^3.10.1",
+    "govuk-frontend": "^3.11.0",
     "govuk_template_jinja": "0.26.0",
     "gulp": "^4.0.2",
     "helmet": "^4.4.1",
+    "hpkp": "^2.0.1",
+    "nocache": "^2.1.0",
     "http-status-codes": "^1.4.0",
     "i18next": "^18.0.0",
     "i18next-conv": "^9.2.0",
@@ -83,7 +85,7 @@
     "js-base64": "^2.5.1",
     "launchdarkly-node-server-sdk": "^5.11.3",
     "ldclient-node": "^5.7.4",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "mime": "^2.4.6",
     "moment": "^2.29.1",
     "moment-precise-range-plugin": "^1.3.0",
@@ -102,11 +104,12 @@
     "tsconfig-paths": "^3.9.0",
     "tslint-microsoft-contrib": "^6.2.0",
     "typescript": "^3.9.8",
-    "uuid": "^3.4.0"
+    "uuid": "^3.4.0",
+    "webdriverio": "^7.0.3"
   },
   "devDependencies": {
     "@hmcts/cmc-supported-browsers": "^1.0.1",
-    "@types/chai": "^4.2.12",
+    "@types/chai": "^4.2.15",
     "@types/chai-as-promised": "^7.1.2",
     "@types/chai-spies": "^1.0.3",
     "@types/jsonwebtoken": "^8.3.7",
@@ -126,7 +129,7 @@
     "gulp-replace": "^1.0.0",
     "gulp-sass": "^4.0.2",
     "html_codesniffer": "2.4.1",
-    "husky": "^4.3.6",
+    "husky": "^5.1.3",
     "jsdom": "^16.4.0",
     "jsonwebtoken": "^8.5.1",
     "mocha": "^6.2.2",
@@ -170,9 +173,18 @@
     "all": true
   },
   "resolutions": {
-    "**/download": "8.0.0",
-    "sass-lint/eslint": "5.0.0",
-    "bootstrap-datepicker/jquery": "3.5.0"
+    "**/download": "^8.0.0",
+    "sass-lint/eslint": "^5.0.0",
+    "bootstrap-datepicker/jquery": "^3.5.0",
+    "minimist": "^1.2.5",
+    "lodash": "^4.17.21",
+    "yargs-parser": "^20.2.7",
+    "ini": "^1.3.6",
+    "kind-of": "^6.0.3",
+    "axios": "^0.21.1",
+    "bl": "^1.2.3",
+    "node-fetch": "^2.6.1",
+    "y18n": "^5.0.5"
   },
   "husky": {
     "hooks": {

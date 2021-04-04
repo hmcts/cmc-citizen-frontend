@@ -44,8 +44,7 @@ export class ContentSecurityPolicy {
         objectSrc: [self],
         frameAncestors: ['\'self\'']
       },
-      browserSniff: true,
-      setAllHeaders: true
+      reportOnly: true
     }))
   }
 }
