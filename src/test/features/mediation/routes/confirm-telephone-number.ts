@@ -39,7 +39,7 @@ describe('Free mediation: confirm your telephone number page', () => {
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
       verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
 
-      it.only('should return 500 and render error page when cannot retrieve claim', async () => {
+      it('should return 500 and render error page when cannot retrieve claim', async () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
         await request(app)
@@ -47,7 +47,7 @@ describe('Free mediation: confirm your telephone number page', () => {
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
-      it.only('should render page when everything is fine and no defendant phone number is provided', async () => {
+      it('should render page when everything is fine and no defendant phone number is provided', async () => {
         draftStoreServiceMock.resolveFind('mediation')
         draftStoreServiceMock.resolveFind('response')
         claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId()
@@ -57,7 +57,7 @@ describe('Free mediation: confirm your telephone number page', () => {
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('Can the mediation service use'))
       })
-      it.only('should render page when everything is fine and defendant phone number is not provided', async () => {
+      it('should render page when everything is fine and defendant phone number is not provided', async () => {
         draftStoreServiceMock.resolveFind('mediation')
         draftStoreServiceMock.resolveFind('response', { defendantDetails: { phone: { number: undefined } } })
         claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId()
@@ -83,7 +83,7 @@ describe('Free mediation: confirm your telephone number page', () => {
       verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
 
       context('when response not submitted', () => {
-        it.only('should return 500 and render error page when cannot retrieve claim', async () => {
+        it('should return 500 and render error page when cannot retrieve claim', async () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
           await request(app)
@@ -94,7 +94,7 @@ describe('Free mediation: confirm your telephone number page', () => {
       })
 
       context('when form is valid', () => {
-        it.only('should return 500 and render error page when cannot save draft', async () => {
+        it('should return 500 and render error page when cannot save draft', async () => {
           draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveFind('response')
           draftStoreServiceMock.rejectUpdate()
@@ -107,7 +107,7 @@ describe('Free mediation: confirm your telephone number page', () => {
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
-        it.only('should redirect to defendant task list when defendant says yes', async () => {
+        it('should redirect to defendant task list when defendant says yes', async () => {
           draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveFind('response')
           draftStoreServiceMock.resolveUpdate()
@@ -122,7 +122,7 @@ describe('Free mediation: confirm your telephone number page', () => {
                 .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
         })
 
-        it.only('should redirect to response task list when No was chosen and a phone number is given', async () => {
+        it('should redirect to response task list when No was chosen and a phone number is given', async () => {
           draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveFind('response')
           draftStoreServiceMock.resolveUpdate()
