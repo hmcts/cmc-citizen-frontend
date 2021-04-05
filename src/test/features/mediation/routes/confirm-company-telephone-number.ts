@@ -48,7 +48,7 @@ describe('Free mediation: confirm company telephone number page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
-        it.only('should render page when everything is fine', async () => {
+        it('should render page when everything is fine', async () => {
           draftStoreServiceMock.resolveFind('mediation', { canWeUseCompany: undefined })
           draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
           claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
