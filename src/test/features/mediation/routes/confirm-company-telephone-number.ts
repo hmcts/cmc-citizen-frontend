@@ -49,17 +49,6 @@ describe('Free mediation: confirm company telephone number page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
-        it('should render page when everything is fine', async () => {
-          draftStoreServiceMock.resolveFind('mediation', { canWeUseCompany: undefined })
-          draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
-          claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
-
-          await request(app)
-            .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Mary Richards the right person for the mediation service to call'))
-        })
-
       })
     })
 
@@ -108,20 +97,6 @@ describe('Free mediation: confirm company telephone number page', () => {
 
       })
       context('when form is valid', () => {
-        it('should redirect to defendant task list when defendant says yes', async () => {
-          draftStoreServiceMock.resolveFind('mediation')
-          draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
-          draftStoreServiceMock.resolveUpdate()
-          claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
-
-          await request(app)
-            .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .send({ option: FreeMediationOption.YES, mediationPhoneNumberConfirmation: '07777777777' })
-            .expect(res => expect(res).to.be.redirect
-              .toLocation(ResponsePaths.taskListPage
-                .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
-        })
 
         it('should show validation error when defendant says yes with no phone number', async () => {
           draftStoreServiceMock.resolveFind('mediation')
