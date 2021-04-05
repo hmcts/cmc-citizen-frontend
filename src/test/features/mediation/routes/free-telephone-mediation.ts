@@ -25,7 +25,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = MediationPaths.freeTelephoneMediationPage.evaluateUri({ externalId })
 
-describe('Mediation: how mediation works page', () => {
+describe('Mediation: free telephne mediation page', () => {
   attachDefaultHooks(app)
 
   describe('on GET for defendant', () => {

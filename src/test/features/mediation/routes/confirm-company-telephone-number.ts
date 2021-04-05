@@ -7,7 +7,6 @@ import 'test/routes/expectations'
 import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
 
 import { Paths as MediationPaths } from 'mediation/paths'
-import { Paths as ResponsePaths } from 'response/paths'
 
 import { app } from 'main/app'
 
@@ -49,6 +48,17 @@ describe('Free mediation: confirm company telephone number page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
+        it.only('should render page when everything is fine', async () => {
+          draftStoreServiceMock.resolveFind('mediation', { canWeUseCompany: undefined })
+          draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
+          claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Is Mary Richards the right person for the mediation service to call?'))
+        })
+
       })
     })
 
@@ -68,7 +78,7 @@ describe('Free mediation: confirm company telephone number page', () => {
         await request(app)
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Enter this person’s phone number, including extension if required'))
+          .expect(res => expect(res).to.be.successful.withText('Who should the mediation service call?'))
       })
     })
   })
@@ -97,38 +107,6 @@ describe('Free mediation: confirm company telephone number page', () => {
 
       })
       context('when form is valid', () => {
-
-        it('should show validation error when defendant says yes with no phone number', async () => {
-          draftStoreServiceMock.resolveFind('mediation')
-          draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
-          claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
-
-          await request(app)
-            .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .send({ option: FreeMediationOption.YES, mediationPhoneNumberConfirmation: undefined })
-            .expect(res => expect(res).to.be.successful.withText('div class="error-summary"'))
-        })
-
-        it('should redirect to response task list when no was chosen and a phone number and a contact is given', async () => {
-          draftStoreServiceMock.resolveFind('mediation')
-          draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
-          draftStoreServiceMock.resolveUpdate()
-          claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
-
-          await request(app)
-            .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .send({
-              option: FreeMediationOption.NO,
-              mediationPhoneNumber: '07777777777',
-              mediationContactPerson: 'Mary Richards'
-            })
-            .expect(res => expect(res).to.be.redirect
-              .toLocation(ResponsePaths.taskListPage
-                .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
-        })
-
         it('should show validation error when defendant says no with no phone number', async () => {
           draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
