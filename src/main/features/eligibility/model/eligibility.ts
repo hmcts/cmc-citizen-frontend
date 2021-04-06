@@ -143,9 +143,7 @@ export class Eligibility {
       this.singleDefendant === YesNoOption.NO &&
       this.governmentDepartment === YesNoOption.NO &&
       this.claimIsForTenancyDeposit === YesNoOption.NO &&
-      this.infoAboutHwFeligibility === YesNoOption.YES ||
-      this.infoAboutHwFeligibility === YesNoOption.NO ||
-      this.infoAboutHwFeligibility === undefined
+      (this.infoAboutHwFeligibility === YesNoOption.YES || this.infoAboutHwFeligibility === YesNoOption.NO || this.infoAboutHwFeligibility === undefined)
   }
 
   helpWithFeeEligible (): boolean {
