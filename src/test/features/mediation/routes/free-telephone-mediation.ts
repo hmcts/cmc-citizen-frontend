@@ -15,7 +15,6 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
-import { FreeMediationOption } from 'forms/models/freeMediation'
 import {
   verifyRedirectForGetWhenAlreadyPaidInFull,
   verifyRedirectForPostWhenAlreadyPaidInFull
@@ -122,86 +121,6 @@ describe('Mediation: free telephne mediation page', () => {
           .send({ mediationYes: 'yes' })
           .expect(res => expect(res).to.be.redirect
             .toLocation(MediationPaths.confirmTelephoneNumberPage.evaluateUri({ externalId })))
-      })
-
-      context('when mediation pilot is enabled', () => {
-        const mediationPilotOverride = {
-          totalAmountTillToday: 200,
-          features: [...claimStoreServiceMock.sampleClaimObj.features, 'mediationPilot']
-        }
-
-        it('should redirect to the mediation agreement page when everything is fine for the defendant', async () => {
-          checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId(mediationPilotOverride)
-          draftStoreServiceMock.resolveFind('mediation')
-          draftStoreServiceMock.resolveFind('response')
-          draftStoreServiceMock.resolveUpdate()
-
-          await request(app)
-            .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .send({ mediationYes: FreeMediationOption.YES })
-            .expect(res => expect(res).to.be.redirect
-              .toLocation(MediationPaths.mediationAgreementPage.evaluateUri({ externalId })))
-        })
-
-        it('should redirect to mediation disagreement when defendant says no to mediation', async () => {
-          checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId(mediationPilotOverride)
-          draftStoreServiceMock.resolveFind('mediation')
-          draftStoreServiceMock.resolveFind('response')
-          draftStoreServiceMock.resolveUpdate()
-
-          await request(app)
-            .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .send({ mediationNo: FreeMediationOption.NO })
-            .expect(res => expect(res).to.be.redirect
-              .toLocation(MediationPaths.mediationDisagreementPage.evaluateUri({ externalId })))
-        })
-      })
-    })
-
-    context('when user authorised as claimant', () => {
-      beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.submitterId, 'citizen')
-      })
-
-      checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
-
-      context('when mediation pilot is enabled', () => {
-        const mediationPilotOverride = {
-          totalAmountTillToday: 200,
-          features: [...claimStoreServiceMock.sampleClaimObj.features, 'mediationPilot']
-        }
-
-        it('should redirect to the mediation agreement page when everything is fine for the claimant', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId(mediationPilotOverride)
-          draftStoreServiceMock.resolveFind('mediation')
-          draftStoreServiceMock.resolveFind('response')
-          draftStoreServiceMock.resolveUpdate()
-
-          await request(app)
-            .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .send({ mediationYes: FreeMediationOption.YES })
-            .expect(res => expect(res).to.be.redirect
-              .toLocation(MediationPaths.mediationAgreementPage.evaluateUri({ externalId })))
-        })
-
-        it('should redirect to the task list when claimant says no to mediation', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId(mediationPilotOverride)
-          draftStoreServiceMock.resolveFind('mediation')
-          draftStoreServiceMock.resolveFind('response')
-          draftStoreServiceMock.resolveUpdate()
-
-          await request(app)
-            .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .send({ mediationNo: FreeMediationOption.NO })
-            .expect(res => expect(res).to.be.redirect
-              .toLocation(MediationPaths.mediationDisagreementPage.evaluateUri({ externalId })))
-        })
       })
     })
   })

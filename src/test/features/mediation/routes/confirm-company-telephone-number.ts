@@ -11,11 +11,9 @@ import { Paths as MediationPaths } from 'mediation/paths'
 import { app } from 'main/app'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
-import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
-import { FreeMediationOption } from 'forms/models/freeMediation'
 import {
   verifyRedirectForGetWhenAlreadyPaidInFull,
   verifyRedirectForPostWhenAlreadyPaidInFull
@@ -48,16 +46,6 @@ describe('Free mediation: confirm company telephone number page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
-        it('should render page when everything is fine', async () => {
-          draftStoreServiceMock.resolveFind('mediation', { canWeUseCompany: undefined })
-          draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
-          claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
-
-          await request(app)
-            .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Is Mary Richards the right person for the mediation service to call?'))
-        })
 
       })
     })
@@ -65,20 +53,6 @@ describe('Free mediation: confirm company telephone number page', () => {
     describe('as claimant', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.submitterId, 'citizen')
-      })
-
-      it('should render page when everything is fine', async () => {
-        draftStoreServiceMock.resolveFind('mediation', { canWeUseCompany: undefined })
-        draftStoreServiceMock.resolveFind('claimantResponse')
-        claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId({
-          ...claimStoreServiceMock.sampleClaimIssueOrgVOrgObj,
-          ...claimStoreServiceMock.sampleFullAdmissionWithPaymentBySetDateResponseObj
-        })
-
-        await request(app)
-          .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Who should the mediation service call?'))
       })
     })
   })
@@ -105,35 +79,6 @@ describe('Free mediation: confirm company telephone number page', () => {
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
-      })
-      context('when form is valid', () => {
-        it('should show validation error when defendant says no with no phone number', async () => {
-          draftStoreServiceMock.resolveFind('mediation')
-          draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
-          claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
-
-          await request(app)
-            .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .send({ option: FreeMediationOption.NO, mediationPhoneNumber: undefined })
-            .expect(res => expect(res).to.be.successful.withText('div class="error-summary"'))
-        })
-
-        it('should show validation error when defendant says no with no contact name', async () => {
-          draftStoreServiceMock.resolveFind('mediation')
-          draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
-          claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
-
-          await request(app)
-            .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .send({
-              option: FreeMediationOption.NO,
-              mediationPhoneNumber: '07777777777',
-              mediationContactPerson: undefined
-            })
-            .expect(res => expect(res).to.be.successful.withText('div class="error-summary"'))
-        })
       })
     })
     // TODO implement claimant response tests when response saving is done
