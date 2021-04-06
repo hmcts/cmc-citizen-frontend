@@ -132,7 +132,7 @@ export class Eligibility {
     return this
   }
 
-  get eligible (): boolean {
+  get eligible (): boolean { 
     return this.claimValue === ClaimValue.UNDER_10000 &&
       this.helpWithFeeEligible() &&
       this.claimantAddress === YesNoOption.YES &&
@@ -144,7 +144,8 @@ export class Eligibility {
       this.governmentDepartment === YesNoOption.NO &&
       this.claimIsForTenancyDeposit === YesNoOption.NO &&
       this.infoAboutHwFeligibility === YesNoOption.YES ||
-      this.infoAboutHwFeligibility === YesNoOption.NO
+      this.infoAboutHwFeligibility === YesNoOption.NO ||
+      this.infoAboutHwFeligibility === undefined
   }
 
   helpWithFeeEligible (): boolean {
