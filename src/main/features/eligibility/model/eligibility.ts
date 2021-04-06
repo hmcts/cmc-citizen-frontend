@@ -132,7 +132,7 @@ export class Eligibility {
     return this
   }
 
-  get eligible (): boolean { 
+  get eligible (): boolean {
     return this.claimValue === ClaimValue.UNDER_10000 &&
       this.helpWithFeeEligible() &&
       this.claimantAddress === YesNoOption.YES &&
