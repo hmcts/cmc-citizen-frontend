@@ -19,7 +19,7 @@ import { CanWeUseCompany } from 'mediation/form/models/CanWeUseCompany'
 import { CompanyDetails } from 'forms/models/companyDetails'
 
 function renderView (form: Form<CanWeUseCompany>, res: express.Response): void {
-  res.render(Paths.canWeUseCompanyPage.associatedView, {
+  res.render(Paths.confirmCompanyTelephoneNumberPage.associatedView, {
     form: form,
     contactName: getContactName(res)
   })
@@ -47,17 +47,15 @@ function getContactName (res: express.Response) {
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.canWeUseCompanyPage.uri, (req: express.Request, res: express.Response): void => {
+  .get(Paths.confirmCompanyTelephoneNumberPage.uri, (req: express.Request, res: express.Response): void => {
     const draft: Draft<MediationDraft> = res.locals.mediationDraft
-
     if (!draft.document.canWeUseCompany) {
       draft.document.canWeUseCompany = CanWeUseCompany.fromObject({ mediationPhoneNumberConfirmation: getPhoneNumber(res) })
     }
-
     renderView(new Form(draft.document.canWeUseCompany), res)
   })
   .post(
-    Paths.canWeUseCompanyPage.uri,
+    Paths.confirmCompanyTelephoneNumberPage.uri,
     FormValidator.requestHandler(CanWeUseCompany, CanWeUseCompany.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const claim: Claim = res.locals.claim
@@ -77,7 +75,6 @@ export default express.Router()
           draft.document.canWeUseCompany.mediationPhoneNumberConfirmation = undefined
         }
         await new DraftService().save(draft, user.bearerToken)
-
         if (!claim.isResponseSubmitted()) {
           res.redirect(ResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }))
         } else {
