@@ -96,4 +96,31 @@ describe('Mediation: free telephne mediation page', () => {
       })
     })
   })
+
+  describe('on POST', () => {
+    const method = 'post'
+    checkAuthorizationGuards(app, method, pagePath)
+
+    context('when user authorised as defendant', () => {
+      beforeEach(() => {
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
+      })
+
+      verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
+
+      it('should redirect to will you try mediation page when everything is fine for the defendant', async () => {
+        checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+        draftStoreServiceMock.resolveFind('mediation')
+        draftStoreServiceMock.resolveFind('response')
+
+        await request(app)
+          .post(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({ mediationYes: 'yes' })
+          .expect(res => expect(res).to.be.redirect
+            .toLocation(MediationPaths.confirmTelephoneNumberPage.evaluateUri({ externalId })))
+      })
+    })
+  })
 })
