@@ -20,6 +20,18 @@ export const interestData = {
   interestDate: interestDateData
 }
 
+export const breatingSpaceData = {
+  breathingSpaceEnteredDate: moment({ year: 2021, month: 3, day: 1 }),
+  breathingSpaceEnteredbyInsolvencyTeamDate: moment({ year: 2021, month: 3, day: 1 }),
+  breathingSpaceEndDate: moment({ year: 2022, month: 1, day: 1 }),
+  breathingSpaceLiftedDate: moment({ year: 2022, month: 1, day: 1 }),
+  breathingSpaceLiftedbyInsolvencyTeamDate: moment({ year: 2022, month: 1, day: 1 }),
+  breathingSpaceReferenceNumber: 'BS-1234567890',
+  breathingSpaceLiftedFlag: 'NO',
+  breathingSpaceType: 'STANDARD_BS_ENTERED',
+  breathingSpaceExternalId: ''
+}
+
 export const claimData = {
   externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
   claimants: [{ ...individual, email: undefined }],
@@ -45,6 +57,7 @@ export const claimData = {
     ],
     type: 'breakdown'
   },
+  breathingSpace: {},
   interest: interestData as Interest,
   reason: 'Because he did...',
   feeAmountInPennies: 1000000,
