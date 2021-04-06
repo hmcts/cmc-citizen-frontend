@@ -6,6 +6,7 @@ import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
 import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
 
+import { FreeMediationOption } from 'forms/models/freeMediation'
 import { Paths as MediationPaths } from 'mediation/paths'
 
 import { app } from 'main/app'
@@ -123,24 +124,9 @@ describe('Mediation: free telephne mediation page', () => {
             .toLocation(MediationPaths.confirmTelephoneNumberPage.evaluateUri({ externalId })))
       })
 
-      it('should redirect to Confirm company telephone number page when everything is fine for the defendant (comapny)', async () => {
-        draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
-        claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
-        checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
-        draftStoreServiceMock.resolveFind('mediation')
-        draftStoreServiceMock.resolveUpdate()
-
-        await request(app)
-          .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
-          .send({ mediationYes: FreeMediationOption.YES })
-          .expect(res => expect(res).to.be.redirect
-            .toLocation(MediationPaths.confirmCompanyTelephoneNumberPage.evaluateUri({ externalId })))
-      })
-
       it('should redirect to no mediation when defendant says no to mediation', async () => {
         checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId(mediationPilotOverride)
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         draftStoreServiceMock.resolveFind('mediation')
         draftStoreServiceMock.resolveFind('response')
         draftStoreServiceMock.resolveUpdate()
@@ -176,24 +162,9 @@ describe('Mediation: free telephne mediation page', () => {
             .toLocation(MediationPaths.confirmTelephoneNumberPage.evaluateUri({ externalId })))
       })
 
-      it('should redirect to Confirm company telephone number page when everything is fine for the Claimant (comapny)', async () => {
-        draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
-        claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
-        checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
-        draftStoreServiceMock.resolveFind('mediation')
-        draftStoreServiceMock.resolveUpdate()
-
-        await request(app)
-          .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
-          .send({ mediationYes: FreeMediationOption.YES })
-          .expect(res => expect(res).to.be.redirect
-            .toLocation(MediationPaths.confirmCompanyTelephoneNumberPage.evaluateUri({ externalId })))
-      })
-
       it('should redirect to no mediation when claimant says no to mediation', async () => {
         checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId(mediationPilotOverride)
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         draftStoreServiceMock.resolveFind('mediation')
         draftStoreServiceMock.resolveFind('response')
         draftStoreServiceMock.resolveUpdate()
