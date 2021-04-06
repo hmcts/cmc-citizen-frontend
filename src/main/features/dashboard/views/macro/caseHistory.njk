@@ -163,6 +163,11 @@
   businessQueueClaimantClaimDetails
 %}
 
+{% from "./claimStatus/breathingSpace.njk" import
+  enterBreathingSpaceForClaimantClaimDetails,
+  liftingBreathingSpaceForClaimantClaimDetails
+%}
+
 {% macro caseHistoryForClaimantClaimDetails(claim, csrf, mediationDeadline, reconsiderationDeadline, isReviewOrderEligible, respondToReviewOrderDeadline, judgePilot) %}
   {% for state in claim.stateHistory %}
     {% if state.status === ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE and claim.state !== 'CLOSED_HWF' %}
@@ -317,6 +322,14 @@
       {{ intentionToProceedPastDeadlineForClaimantClaimDetails(claim) }}
     {% endif %}
   {% endfor %}
+  {% if breathingSpace and claim.state !== 'HWF_APPLICATION_PENDING' and claim.state !== 'TRANSFER_TO_CCBC' and claim.state !== 'SETTLED' and claim.state !== 'PROCEEDS_IN_CASE_MAN' and claim.state !== 'CLOSED_HWF' and claim.state !== 'BUSINESS_QUEUE' and claim.state !== 'TRANSFERRED' and claim.state !== 'AWAITING_RESPONSE_HWF' %}
+    {% if claim.claimData.breathingSpace.breathingSpaceType === undefined %}
+      {{ enterBreathingSpaceForClaimantClaimDetails(claim.externalId) }}
+    {% endif %}
+    {% if claim.claimData.breathingSpace.breathingSpaceType %}
+      {{ liftingBreathingSpaceForClaimantClaimDetails(claim.externalId) }}
+    {% endif %}
+  {% endif %}
 {% endmacro %}
 
 {% macro caseHistoryForDefendantClaimDetails(claim, reconsiderationDeadline, isReviewOrderEligible, respondToReviewOrderDeadline, judgePilot) %}
