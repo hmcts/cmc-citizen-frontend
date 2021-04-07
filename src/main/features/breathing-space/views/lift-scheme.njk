@@ -27,8 +27,8 @@
             <tr class="claims default mobile-table">
               <td class="bold">{{ t('Date lifted') }}</td>
               <td> 
-                {% if breathingSpaceLiftedbyInsolvencyTeamDate %}
-                  {{ breathingSpaceLiftedbyInsolvencyTeamDate }}
+                {% if form.model.respiteLiftDate !=='Invalid date' %}
+                  {{ form.model.respiteLiftDate }}
                 {% endif %}
               </td>
               <td class="change-answer change-link-column">
