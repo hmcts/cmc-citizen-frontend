@@ -354,7 +354,7 @@ describe('ClaimStoreClient', () => {
           .reply(HttpStatus.INTERNAL_SERVER_ERROR, 'An unexpected error occurred')
       }
 
-      it.only('should fail while saving the Breathing space', async () => {
+      it('should fail while saving the Breathing space', async () => {
         mockInternalServerErrorforSaveBreathingSpaceOnAllAttempts()
         try {
           let draft: DraftClaim = new DraftClaim()
