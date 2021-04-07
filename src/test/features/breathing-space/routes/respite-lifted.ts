@@ -38,7 +38,7 @@ describe('Enter breathing space: Lift date page', () => {
         await request(app)
           .post(BreathingSpacePaths.bsLiftPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ respiteLiftDate: { day: date.date(), month: date.month() + 2, year: date.year() + 1} })
+          .send({ respiteLiftDate: { day: date.date(), month: date.month() + 2, year: date.year() + 1 } })
           .expect(res => expect(res).to.be.successful.withText('There was a problem'))
       })
 
