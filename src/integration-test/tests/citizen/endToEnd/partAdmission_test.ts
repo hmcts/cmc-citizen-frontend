@@ -38,7 +38,7 @@ Scenario(' Company Rejected Part Admit Offer (Company Vs Company) @nightly @admi
   claimantResponseSteps.reject(testData, claimantResponseTestData)
   checkAndSendPage.verifyFactsForPartAdmitRejection()
   checkAndSendPage.checkFactsTrueAndSubmit(testData.defenceType)
-  I.see('You agreed to try to resolve the claim using mediation')
+  I.see('You agreed to try free mediation')
   confirmationPage.clickGoToYourAccount()
   I.see(testData.claimRef)
 })
