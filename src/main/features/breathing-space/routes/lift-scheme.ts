@@ -18,7 +18,11 @@ function renderView (form: Form<BreathingSpaceLiftDate>, res: express.Response, 
 /*  tslint:disable:no-default-export */
 export default express.Router()
     .get(Paths.bsLiftCheckAnswersPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      renderView(new Form(new BreathingSpaceLiftDate(res.app.locals.breathingSpaceLiftedbyInsolvencyTeamDate.toMoment().format('DD MMMM YYYY'))), res, next)
+      if (res.app.locals.breathingSpaceLiftedbyInsolvencyTeamDate) {
+        renderView(new Form(new BreathingSpaceLiftDate(res.app.locals.breathingSpaceLiftedbyInsolvencyTeamDate.toMoment().format('DD MMMM YYYY'))), res, next)
+      } else {
+        renderView(new Form(new BreathingSpaceLiftDate()), res, next)
+      }
     })
     .post(
       Paths.bsLiftCheckAnswersPage.uri,

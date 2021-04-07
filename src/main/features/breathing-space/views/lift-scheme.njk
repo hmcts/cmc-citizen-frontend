@@ -27,7 +27,7 @@
             <tr class="claims default mobile-table">
               <td class="bold">{{ t('Date lifted') }}</td>
               <td> 
-                {% if form.model.respiteLiftDate !=='Invalid date' %}
+                {% if form.model.respiteLiftDate !== 'Invalid date' and form.model.respiteLiftDate !== undefined %}
                   {{ form.model.respiteLiftDate }}
                 {% endif %}
               </td>
