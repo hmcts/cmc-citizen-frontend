@@ -22,8 +22,16 @@ describe('Breathing Space: Lift check-answer page', () => {
     })
 
     context('Breathing Space Lift check your answer', () => {
+      it('should render page when everything is fine', function (done) {
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+       request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('Are you sure you want to lift the debt respite scheme?'))
+        done()
+      })
+
       it('should render the page with all the values', function (done) {
-        this.timeout(0)
         idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
         const date: Moment = MomentFactory.currentDate().subtract(1, 'year')
         request(app)
@@ -31,6 +39,7 @@ describe('Breathing Space: Lift check-answer page', () => {
           .set('Cookie', `${cookieName}=ABC`)
           .send({ respiteLiftDate: { day: date.date(), month: date.month() - 1, year: date.year() } })
           .expect(res => expect(res).to.be.successful.withText('Are you sure you want to lift the debt respite scheme?'))
+          .expect(res => expect(res).to.be.successful)
         done()
       })
     })

@@ -28,20 +28,14 @@ export default express.Router()
       Paths.bsLiftCheckAnswersPage.uri,
       FormValidator.requestHandler(BreathingSpaceLiftDate),
       ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-        const form: Form<BreathingSpaceLiftDate> = req.body
         let draft: DraftClaim = new DraftClaim()
         draft.breathingSpace.breathingSpaceLiftedFlag = 'YES'
         draft.breathingSpace.breathingSpaceExternalId = res.app.locals.breathingSpaceExternalId
         draft.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate = res.app.locals.breathingSpaceLiftedbyInsolvencyTeamDate
-
-        if (form.hasErrors()) {
-          renderView(form, res, next)
-        } else {
-          try {
-            await new ClaimStoreClient().saveBreatingSpace(draft, res.locals.user)
-            res.redirect(DashboardPaths.claimantPage.uri.replace(':externalId', res.app.locals.breathingSpaceExternalId))
-          } catch {
-            res.redirect(DashboardPaths.claimantPage.uri.replace(':externalId', res.app.locals.breathingSpaceExternalId))
-          }
+        try {
+          await new ClaimStoreClient().saveBreatingSpace(draft, res.locals.user)
+          res.redirect(DashboardPaths.claimantPage.uri.replace(':externalId', res.app.locals.breathingSpaceExternalId))
+        } catch {
+          res.redirect(DashboardPaths.claimantPage.uri.replace(':externalId', res.app.locals.breathingSpaceExternalId))
         }
-      }))
+    }))
