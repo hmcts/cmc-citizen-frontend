@@ -24,7 +24,7 @@ describe('Breathing Space: Lift check-answer page', () => {
     context('Breathing Space Lift check your answer', () => {
       it('should render page when everything is fine', function (done) {
         idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-       request(app)
+        request(app)
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('Are you sure you want to lift the debt respite scheme?'))

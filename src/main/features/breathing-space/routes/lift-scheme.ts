@@ -38,4 +38,4 @@ export default express.Router()
         } catch {
           res.redirect(DashboardPaths.claimantPage.uri.replace(':externalId', res.app.locals.breathingSpaceExternalId))
         }
-    }))
+      }))
