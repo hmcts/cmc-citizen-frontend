@@ -100,16 +100,30 @@ export class ClaimStoreClient {
   saveBreatingSpace (draft: DraftClaim, claimant: User): Promise<Claim> {
     let endDate = ''
     let StartDate = ''
+    let endDateByInsolvencyTeam = ''
 
-    if (draft.breathingSpace.breathingSpaceEndDate.day !== undefined) {
-      endDate = moment(draft.breathingSpace.breathingSpaceEndDate).subtract(1,'M').format('YYYY-MM-DD')
+    if (draft.breathingSpace.breathingSpaceEndDate !== undefined) {
+      if (draft.breathingSpace.breathingSpaceEndDate.day !== undefined) {
+        endDate = moment(draft.breathingSpace.breathingSpaceEndDate).subtract(1, 'M').format('YYYY-MM-DD')
+      }
     } else {
       endDate = moment('9999-09-09').format('YYYY-MM-DD')
     }
-    if (draft.breathingSpace.breathingSpaceEnteredDate.day !== undefined) {
-      StartDate = moment(draft.breathingSpace.breathingSpaceEnteredDate).subtract(1,'M').format('YYYY-MM-DD')
+
+    if (draft.breathingSpace.breathingSpaceEnteredDate !== undefined) {
+      if (draft.breathingSpace.breathingSpaceEnteredDate.day !== undefined) {
+        StartDate = moment(draft.breathingSpace.breathingSpaceEnteredDate).subtract(1, 'M').format('YYYY-MM-DD')
+      }
     } else {
       StartDate = moment('9999-09-09').format('YYYY-MM-DD')
+    }
+
+    if (draft.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate !== undefined) {
+      if (draft.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate.day !== undefined) {
+        endDateByInsolvencyTeam = moment(draft.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate).subtract(1, 'M').format('YYYY-MM-DD')
+      }
+    } else {
+      endDateByInsolvencyTeam = moment('9999-09-09').format('YYYY-MM-DD')
     }
 
     return this.request
@@ -119,7 +133,8 @@ export class ClaimStoreClient {
           'bs_expected_end_date': endDate,
           'bs_reference_number': draft.breathingSpace.breathingSpaceReferenceNumber.toString(),
           'bs_type': draft.breathingSpace.breathingSpaceType.toString(),
-          'bs_lifted_flag': 'NO'
+          'bs_lifted_flag': draft.breathingSpace.breathingSpaceLiftedFlag.toString(),
+          'bsLiftedDateByInsolvencyTeam': endDateByInsolvencyTeam
         },
         headers: {
           Authorization: `Bearer ${claimant.bearerToken}`

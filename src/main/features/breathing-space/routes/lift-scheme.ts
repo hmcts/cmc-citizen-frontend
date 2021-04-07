@@ -20,7 +20,7 @@ function renderView (form: Form<BreathingSpace>, res: express.Response, next: ex
   res.render(Paths.bsLiftCheckAnswersPage.associatedView, {
     form: form,
     breathingSpaceExternalId: res.app.locals.breathingSpaceExternalId,
-    breathingSpaceLiftedbyInsolvencyTeamDate: bsEndDate,
+    breathingSpaceLiftedbyInsolvencyTeamDate: bsEndDate
   })
 }
 
@@ -37,7 +37,7 @@ export default express.Router()
         let draft: DraftClaim = new DraftClaim()
         draft.breathingSpace.breathingSpaceLiftedFlag = 'YES'
         draft.breathingSpace.breathingSpaceExternalId = res.app.locals.breathingSpaceExternalId
-        draft.breathingSpace.breathingSpaceEndDate = res.app.locals.breathingSpaceLiftedbyInsolvencyTeamDate
+        draft.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate = res.app.locals.breathingSpaceLiftedbyInsolvencyTeamDate
 
         if (form.hasErrors()) {
           renderView(form, res, next)
