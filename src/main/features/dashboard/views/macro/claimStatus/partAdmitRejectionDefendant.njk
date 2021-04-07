@@ -49,7 +49,7 @@
         <p>{{ t('{{ claimantName }} has said no to trying mediation.',
         { claimantName: claim.claimData.claimant.name }) }}</p>
       {% endif %}    
-      <p>{{ t('They believe you owee them the full {{ amount }} claimed.', { amount: claim.totalAmountTillToday | numeral }) }}</p>
+      <p>{{ t('They believe you owe them the full {{ amount }} claimed.', { amount: claim.totalAmountTillToday | numeral }) }}</p>
       <p>{{ t('You might have to go to a hearing. We’ll contact you if we set a hearing date to tell you how to prepare.') }}</p>
       {% if claim.directionsQuestionnaireDeadline %}
         <p>{{ t('You need to ' + internalLink('complete a directions questionnaire form ',
