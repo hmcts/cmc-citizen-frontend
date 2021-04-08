@@ -27,26 +27,6 @@ Before(async (I: I) => {
   helperSteps.linkClaimToDefendant(defendantEmail)
   helperSteps.startResponseFromDashboard(claimRef)
 
-
-Scenario(' Company Rejected Part Admit Offer (Company Vs Company) @business @admissions', { retries: 3 }, async (I: I) => {
-  testData.paymentOption = PaymentOption.IMMEDIATELY
-  testData.defenceType = DefenceType.PART_ADMISSION
-  testData.defendantClaimsToHavePaidInFull = false
-  const claimantResponseTestData = new ClaimantResponseTestData()
-  claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage = true
-  // as defendant
-  await helperSteps.finishResponse(testData, false)
-  I.click('Sign out')
-  // as claimant
-  userSteps.login(testData.claimantEmail)
-  claimantResponseSteps.viewClaimFromDashboard(testData.claimRef)
-  claimantResponseSteps.respondToOffer('View and respond')
-  claimantResponseSteps.reject(testData, claimantResponseTestData)
-  checkAndSendPage.verifyFactsForPartAdmitRejection()
-  checkAndSendPage.checkFactsTrueAndSubmit(testData.defenceType)
-  I.see('You agreed to try to resolve the claim using mediation')
-  confirmationPage.clickGoToYourAccount()
-  I.see(testData.claimRef)
 })
 
 if (process.env.FEATURE_ADMISSIONS === 'true') {
