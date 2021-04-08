@@ -36,7 +36,6 @@ export class CountyCourtJudgementCheckAndSendPage {
         I.see(defendant.lastName)
         break
       case PartyType.SOLE_TRADER:
-        I.see(defendant.title)
         I.see(defendant.firstName)
         I.see(defendant.lastName)
         break

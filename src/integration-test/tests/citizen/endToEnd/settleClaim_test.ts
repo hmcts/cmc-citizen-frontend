@@ -7,6 +7,7 @@ import { Helper } from './steps/helper'
 import { UserSteps } from '../home/steps/user'
 import { ClaimantResponseSteps } from '../claimantResponse/steps/claimant-reponse'
 import { ClaimantConfirmation } from '../claimantResponse/pages/claimant-confirmation'
+import { DefenceType } from '../../../data/defence-type'
 const helperSteps: Helper = new Helper()
 const userSteps: UserSteps = new UserSteps()
 const claimantResponseSteps: ClaimantResponseSteps = new ClaimantResponseSteps()
@@ -71,4 +72,18 @@ Scenario('Settle Claim(Pay Immediately) @citizen @nightly', { retries: 3 }, asyn
   confirmationPage.clickGoToYourAccount()
   I.see(testData.claimRef)
   I.see('This claim is settled.')
+})
+
+Scenario('Settle Claim (Part Admit) @nightly', { retries: 3 }, async (I: I) => {
+  testData.defenceType = DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID
+  await helperSteps.finishResponse(testData)
+  I.click('My account')
+  I.click(testData.claimRef)
+  I.click('Sign out')
+  userSteps.login(testData.claimantEmail)
+  claimantResponseSteps.viewClaimFromDashboard(testData.claimRef)
+  I.see(testData.claimRef)
+  I.click('View and respond')
+  claimantResponseSteps.acceptFullDefencePaidFullAmount(testData)
+  I.see('The claim is now settled.')
 })
