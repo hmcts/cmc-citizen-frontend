@@ -56,7 +56,7 @@ export default express.Router()
         draft.breathingSpace.breathingSpaceType = res.app.locals.breathingSpaceType
         draft.breathingSpace.breathingSpaceEnteredDate = res.app.locals.breathingSpaceEnteredDate
         draft.breathingSpace.breathingSpaceEndDate = res.app.locals.breathingSpaceEndDate
-        draft.breathingSpace.breathingSpaceLiftedFlag = 'NO'
+        draft.breathingSpace.breathingSpaceLiftedFlag = 'No'
 
         if (form.hasErrors()) {
           renderView(form, res, next)

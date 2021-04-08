@@ -29,7 +29,7 @@ export default express.Router()
       FormValidator.requestHandler(BreathingSpaceLiftDate),
       ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
         let draft: DraftClaim = new DraftClaim()
-        draft.breathingSpace.breathingSpaceLiftedFlag = 'YES'
+        draft.breathingSpace.breathingSpaceLiftedFlag = 'Yes'
         draft.breathingSpace.breathingSpaceExternalId = res.app.locals.breathingSpaceExternalId
         draft.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate = res.app.locals.breathingSpaceLiftedbyInsolvencyTeamDate
         try {
