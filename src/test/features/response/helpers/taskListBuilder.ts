@@ -407,22 +407,26 @@ describe('Defendant response task list builder', () => {
       let isResponseRejectedFullyWithDisputeStub: sinon.SinonStub
       let isResponsePartiallyAdmitted: sinon.SinonStub
       let isResponseRejectedFullyBecausePaidWhatOwed: sinon.SinonStub
+      let isEnhancedMediationJourneyEnabledStub: sinon.SinonStub
 
       beforeEach(() => {
         isResponseRejectedFullyWithDisputeStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyWithDispute')
         isResponsePartiallyAdmitted = sinon.stub(ResponseDraft.prototype, 'isResponsePartiallyAdmitted')
         isResponseRejectedFullyBecausePaidWhatOwed = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyBecausePaidWhatOwed')
+        isEnhancedMediationJourneyEnabledStub = sinon.stub(FeatureToggles.prototype, 'isEnhancedMediationJourneyEnabled')
       })
 
       afterEach(() => {
         isResponseRejectedFullyWithDisputeStub.restore()
         isResponsePartiallyAdmitted.restore()
         isResponseRejectedFullyBecausePaidWhatOwed.restore()
+        isEnhancedMediationJourneyEnabledStub.restore()
       })
 
       context('should be enabled when', () => {
 
         it('response is rejected with dispute', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           isResponseRejectedFullyWithDisputeStub.returns(true)
           isResponsePartiallyAdmitted.returns(false)
           isResponseRejectedFullyBecausePaidWhatOwed.returns(false)
@@ -435,6 +439,7 @@ describe('Defendant response task list builder', () => {
         })
 
         it('response is rejected with already paid', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           isResponseRejectedFullyWithDisputeStub.returns(false)
           isResponsePartiallyAdmitted.returns(false)
           isResponseRejectedFullyBecausePaidWhatOwed.returns(true)
@@ -447,6 +452,7 @@ describe('Defendant response task list builder', () => {
         })
 
         it('response is partial admission and why do you disagree is completed', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           isResponseRejectedFullyWithDisputeStub.returns(false)
           isResponsePartiallyAdmitted.returns(true)
           isResponseRejectedFullyBecausePaidWhatOwed.returns(false)
@@ -847,18 +853,22 @@ describe('Defendant response task list builder', () => {
     })
   })
 
-  describe('buildRemainingTasks', () => {
+  describe('buildRemainingTasks when enhanced mediation journey is disabled', () => {
     let isResponseRejectedFullyWithDisputeStub: sinon.SinonStub
+    let isEnhancedMediationJourneyEnabledStub: sinon.SinonStub
 
     beforeEach(() => {
       isResponseRejectedFullyWithDisputeStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyWithDispute')
+      isEnhancedMediationJourneyEnabledStub = sinon.stub(FeatureToggles.prototype, 'isEnhancedMediationJourneyEnabled')
     })
 
     afterEach(() => {
       isResponseRejectedFullyWithDisputeStub.restore()
+      isEnhancedMediationJourneyEnabledStub.restore()
     })
 
     it('Should return "Free telephone mediation" when not completed for fully reject', async () => {
+      isEnhancedMediationJourneyEnabledStub.returns(false)
       claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
       isResponseRejectedFullyWithDisputeStub.returns(true)
 
@@ -867,6 +877,40 @@ describe('Defendant response task list builder', () => {
     })
 
     it('Should not return "Free telephone mediation" when not fully reject', async () => {
+      isEnhancedMediationJourneyEnabledStub.returns(false)
+      claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
+      isResponseRejectedFullyWithDisputeStub.returns(false)
+
+      const tasks: TaskListItem[] = await TaskListBuilder.buildRemainingTasks(new ResponseDraft(), claim, new MediationDraft(), new DirectionsQuestionnaireDraft())
+      expect(tasks.map(task => task.name)).not.to.contain(mediationTaskLabel)
+    })
+  })
+
+  describe('buildRemainingTasks when enhanced mediation journey is enable', () => {
+    let isResponseRejectedFullyWithDisputeStub: sinon.SinonStub
+    let isEnhancedMediationJourneyEnabledStub: sinon.SinonStub
+
+    beforeEach(() => {
+      isResponseRejectedFullyWithDisputeStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyWithDispute')
+      isEnhancedMediationJourneyEnabledStub = sinon.stub(FeatureToggles.prototype, 'isEnhancedMediationJourneyEnabled')
+    })
+
+    afterEach(() => {
+      isResponseRejectedFullyWithDisputeStub.restore()
+      isEnhancedMediationJourneyEnabledStub.restore()
+    })
+
+    it('Should return "Free telephone mediation" when response rejected with dispute', async () => {
+      isEnhancedMediationJourneyEnabledStub.returns(true)
+      claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
+      isResponseRejectedFullyWithDisputeStub.returns(true)
+
+      const tasks: TaskListItem[] = await TaskListBuilder.buildRemainingTasks(new ResponseDraft(), claim, new MediationDraft(), new DirectionsQuestionnaireDraft())
+      expect(tasks.map(task => task.name)).to.contain(mediationTaskLabel)
+    })
+
+    it('Should not return "Free telephone mediation" when response yet to be rejected', async () => {
+      isEnhancedMediationJourneyEnabledStub.returns(true)
       claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
       isResponseRejectedFullyWithDisputeStub.returns(false)
 
