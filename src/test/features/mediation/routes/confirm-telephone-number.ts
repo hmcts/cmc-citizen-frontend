@@ -32,7 +32,7 @@ describe('Free mediation: confirm your telephone number page', () => {
     const method = 'get'
     checkAuthorizationGuards(app, method, pagePath)
 
-    context('when user authorised', () => {
+    context('when defendant authorised', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
@@ -47,7 +47,8 @@ describe('Free mediation: confirm your telephone number page', () => {
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
-      it('should render page when everything is fine and no defendant phone number is provided', async () => {
+
+      it('should render page when everything is fine and defendant phone number is provided', async () => {
         draftStoreServiceMock.resolveFind('mediation')
         draftStoreServiceMock.resolveFind('response')
         claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId()
@@ -66,6 +67,33 @@ describe('Free mediation: confirm your telephone number page', () => {
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('Enter a phone number'))
+      })
+    })
+
+    context('when claimant authorised', () => {
+      beforeEach(() => {
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.submitterId, 'citizen')
+      })
+      checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+
+      it('should return 500 and render error page when cannot retrieve claim', async () => {
+        claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
+
+        await request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.serverError.withText('Error'))
+      })
+
+      it('should render page when everything is fine and no claimant phone number is provided', async () => {
+        draftStoreServiceMock.resolveFind('mediation')
+        draftStoreServiceMock.resolveFind('claimantResponse')
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleDefendantResponseObj)
+
+        await request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('Can the mediation service use'))
       })
     })
   })
