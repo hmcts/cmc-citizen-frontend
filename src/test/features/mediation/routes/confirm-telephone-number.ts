@@ -171,7 +171,6 @@ describe('Free mediation: confirm your telephone number page', () => {
       })
     })
 
-
     context('when claimant authorised', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.submitterId, 'citizen')
