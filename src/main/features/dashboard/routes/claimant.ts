@@ -36,16 +36,21 @@ export default express.Router()
       const respondToReviewOrderDeadline: Moment = claim ? await claim.respondToReviewOrderDeadline() : undefined
 
       if (claim.claimData.breathingSpace) {
-        if (claim.claimData.breathingSpace.breathingSpaceEndDate)
+        if (claim.claimData.breathingSpace.breathingSpaceEndDate) {
           res.app.locals.breathingSpaceEndDate = claim.claimData.breathingSpace.breathingSpaceEndDate
-        if (claim.claimData.breathingSpace.breathingSpaceEnteredbyInsolvencyTeamDate)
+        }
+        if (claim.claimData.breathingSpace.breathingSpaceEnteredbyInsolvencyTeamDate) {
           res.app.locals.breathingSpaceEnteredDate = claim.claimData.breathingSpace.breathingSpaceEnteredbyInsolvencyTeamDate
-        if (claim.claimData.breathingSpace.breathingSpaceReferenceNumber)
+        }
+        if (claim.claimData.breathingSpace.breathingSpaceReferenceNumber) {
           res.app.locals.breathingSpaceReferenceNumber = claim.claimData.breathingSpace.breathingSpaceReferenceNumber
-        if (claim.claimData.breathingSpace.breathingSpaceType)
+        }
+        if (claim.claimData.breathingSpace.breathingSpaceType) {
           res.app.locals.breathingSpaceType = claim.claimData.breathingSpace.breathingSpaceType
-        if (claim.claimData.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate)
+        }
+        if (claim.claimData.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate) {
           res.app.locals.breathingSpaceLiftedbyInsolvencyTeamDate = claim.claimData.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate
+        }
       }
 
       if (claim && claim.claimantId !== res.locals.user.id) {

@@ -99,52 +99,52 @@ export class ClaimStoreClient {
 
   saveBreatingSpace (draft: DraftClaim, claimant: User): Promise<Claim> {
     try {
-    let endDate = moment('9999-09-09').format('YYYY-MM-DD')
-    let StartDate = moment('9999-09-09').format('YYYY-MM-DD')
-    let endDateByInsolvencyTeam = moment('9999-09-09').format('YYYY-MM-DD')
+      let endDate = moment('9999-09-09').format('YYYY-MM-DD')
+      let StartDate = moment('9999-09-09').format('YYYY-MM-DD')
+      let endDateByInsolvencyTeam = moment('9999-09-09').format('YYYY-MM-DD')
 
-    if (draft.breathingSpace.breathingSpaceEndDate !== undefined && draft.breathingSpace.breathingSpaceEndDate !== null ) {
-      if (draft.breathingSpace.breathingSpaceEndDate.day !== undefined) {
-        endDate = moment(draft.breathingSpace.breathingSpaceEndDate).subtract(1, 'M').format('YYYY-MM-DD')
-      }
-    }
-
-    if (draft.breathingSpace.breathingSpaceEnteredDate !== undefined && draft.breathingSpace.breathingSpaceEnteredDate !== null ) {
-      if (draft.breathingSpace.breathingSpaceEnteredDate.day !== undefined) {
-        StartDate = moment(draft.breathingSpace.breathingSpaceEnteredDate).subtract(1, 'M').format('YYYY-MM-DD')
-      }
-    }
-
-    if (draft.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate !== undefined && draft.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate !== null ) {
-      if (draft.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate.day !== undefined) {
-        endDateByInsolvencyTeam = moment(draft.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate).subtract(1, 'M').format('YYYY-MM-DD')
-      }
-    }
-
-    return this.request
-      .post(`${claimStoreApiUrl}/${draft.breathingSpace.breathingSpaceExternalId.toString()}/breathingSpace`, {
-        body: {
-          'bs_entered_date_by_insolvency_team': StartDate,
-          'bs_expected_end_date': endDate,
-          'bs_reference_number': draft.breathingSpace.breathingSpaceReferenceNumber.toString(),
-          'bs_type': draft.breathingSpace.breathingSpaceType.toString(),
-          'bs_lifted_flag': draft.breathingSpace.breathingSpaceLiftedFlag.toString(),
-          'bs_lifted_date_by_insolvency_team': endDateByInsolvencyTeam
-        },
-        headers: {
-          Authorization: `Bearer ${claimant.bearerToken}`
+      if (draft.breathingSpace.breathingSpaceEndDate !== undefined && draft.breathingSpace.breathingSpaceEndDate !== null) {
+        if (draft.breathingSpace.breathingSpaceEndDate.day !== undefined) {
+          endDate = moment(draft.breathingSpace.breathingSpaceEndDate).subtract(1, 'M').format('YYYY-MM-DD')
         }
-      })
-      .then(claim => new Claim().deserialize(claim))
-      .catch(err => {
-        if (err.statusCode === HttpStatus.CONFLICT) {
-          logger.warn(`Claim ${draft.externalId} appears to have been saved successfully on initial timed out attempt, retrieving the saved instance`)
-          return this.retrieveByExternalId(draft.externalId, claimant)
+      }
+
+      if (draft.breathingSpace.breathingSpaceEnteredDate !== undefined && draft.breathingSpace.breathingSpaceEnteredDate !== null) {
+        if (draft.breathingSpace.breathingSpaceEnteredDate.day !== undefined) {
+          StartDate = moment(draft.breathingSpace.breathingSpaceEnteredDate).subtract(1, 'M').format('YYYY-MM-DD')
         }
-        throw err
-      })
-    } catch (error){
-        return error
+      }
+
+      if (draft.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate !== undefined && draft.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate !== null) {
+        if (draft.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate.day !== undefined) {
+          endDateByInsolvencyTeam = moment(draft.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate).subtract(1, 'M').format('YYYY-MM-DD')
+        }
+      }
+
+      return this.request
+        .post(`${claimStoreApiUrl}/${draft.breathingSpace.breathingSpaceExternalId.toString()}/breathingSpace`, {
+          body: {
+            'bs_entered_date_by_insolvency_team': StartDate,
+            'bs_expected_end_date': endDate,
+            'bs_reference_number': draft.breathingSpace.breathingSpaceReferenceNumber.toString(),
+            'bs_type': draft.breathingSpace.breathingSpaceType.toString(),
+            'bs_lifted_flag': draft.breathingSpace.breathingSpaceLiftedFlag.toString(),
+            'bs_lifted_date_by_insolvency_team': endDateByInsolvencyTeam
+          },
+          headers: {
+            Authorization: `Bearer ${claimant.bearerToken}`
+          }
+        })
+        .then(claim => new Claim().deserialize(claim))
+        .catch(err => {
+          if (err.statusCode === HttpStatus.CONFLICT) {
+            logger.warn(`Claim ${draft.externalId} appears to have been saved successfully on initial timed out attempt, retrieving the saved instance`)
+            return this.retrieveByExternalId(draft.externalId, claimant)
+          }
+          throw err
+        })
+    } catch (error) {
+      return error
     }
   }
 
