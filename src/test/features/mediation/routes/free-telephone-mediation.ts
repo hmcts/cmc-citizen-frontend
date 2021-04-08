@@ -125,6 +125,21 @@ describe('Mediation: free telephne mediation page', () => {
             .toLocation(MediationPaths.confirmTelephoneNumberPage.evaluateUri({ externalId })))
       })
 
+      it('should redirect to Confirm company telephone number page when everything is fine for the defendant (comapny)', async () => {
+        checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+        claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
+        draftStoreServiceMock.resolveFind('mediation')
+        draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
+        draftStoreServiceMock.resolveUpdate()
+
+        await request(app)
+          .post(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({ mediationYes: 'yes' })
+          .expect(res => expect(res).to.be.redirect
+            .toLocation(MediationPaths.confirmCompanyTelephoneNumberPage.evaluateUri({ externalId })))
+      })
+
       it('should redirect to no mediation when defendant says no to mediation', async () => {
         checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
@@ -161,6 +176,21 @@ describe('Mediation: free telephne mediation page', () => {
           .send({ mediationYes: 'yes' })
           .expect(res => expect(res).to.be.redirect
             .toLocation(MediationPaths.confirmTelephoneNumberPage.evaluateUri({ externalId })))
+      })
+
+      it('should redirect to Confirm company telephone number page when everything is fine for the claimant (comapny)', async () => {
+        checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+        claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
+        draftStoreServiceMock.resolveFind('mediation')
+        draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
+        draftStoreServiceMock.resolveUpdate()
+
+        await request(app)
+          .post(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({ mediationYes: 'yes' })
+          .expect(res => expect(res).to.be.redirect
+            .toLocation(MediationPaths.confirmCompanyTelephoneNumberPage.evaluateUri({ externalId })))
       })
 
       it('should redirect to no mediation when claimant says no to mediation', async () => {
