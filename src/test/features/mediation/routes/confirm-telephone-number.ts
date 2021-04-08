@@ -8,6 +8,7 @@ import { checkAuthorizationGuards } from 'test/common/checks/authorization-check
 
 import { Paths as MediationPaths } from 'mediation/paths'
 import { Paths as ResponsePaths } from 'response/paths'
+import { Paths as ClaimantResponsePaths } from 'claimant-response/paths'
 
 import { app } from 'main/app'
 
@@ -169,6 +170,90 @@ describe('Free mediation: confirm your telephone number page', () => {
         })
       })
     })
-    // TODO implement claimant response tests when response saving is done
+
+
+    context('when claimant authorised', () => {
+      beforeEach(() => {
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.submitterId, 'citizen')
+      })
+
+      checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+
+      context('when response not submitted', () => {
+        it('should return 500 and render error page when cannot retrieve claim', async () => {
+          claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.serverError.withText('Error'))
+        })
+      })
+
+      context('when form is invalid', () => {
+        it('should throw error when No was chosen and a phone number is not provided given', async () => {
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('claimantResponse')
+          claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId(claimStoreServiceMock.sampleDefendantResponseObj)
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({
+              option: FreeMediationOption.NO,
+              mediationPhoneNumber: ''
+            })
+            .expect(res => expect(res).to.be.successful.withText('Please enter a phone number'))
+        })
+      }
+
+      context('when form is valid', () => {
+        it('should return 500 and render error page when cannot save draft', async () => {
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('claimantResponse')
+          draftStoreServiceMock.rejectUpdate()
+          claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId(claimStoreServiceMock.sampleDefendantResponseObj)
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({ option: FreeMediationOption.YES, mediationPhoneNumber: undefined })
+            .expect(res => expect(res).to.be.serverError.withText('Error'))
+        })
+
+        it('should redirect to claimant task list when claimant says yes', async () => {
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('claimantResponse')
+          draftStoreServiceMock.resolveUpdate()
+          claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId(claimStoreServiceMock.sampleDefendantResponseObj)
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({ option: FreeMediationOption.YES })
+            .expect(res => expect(res).to.be.redirect
+              .toLocation(ClaimantResponsePaths.taskListPage
+                .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+        })
+
+        it('should redirect to response task list when No was chosen and a phone number is given', async () => {
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('claimantResponse')
+          draftStoreServiceMock.resolveUpdate()
+          claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId(claimStoreServiceMock.sampleDefendantResponseObj)
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({
+              option: FreeMediationOption.NO,
+              mediationPhoneNumber: '07777777777'
+            })
+            .expect(res => expect(res).to.be.redirect
+              .toLocation(ClaimantResponsePaths.taskListPage
+                .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+        })
+      })
+    })
   })
 })
