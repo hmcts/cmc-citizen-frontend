@@ -35,7 +35,7 @@ export default express.Router()
 
       const respondToReviewOrderDeadline: Moment = claim ? await claim.respondToReviewOrderDeadline() : undefined
 
-      if (claim.claimData.breathingSpace) {
+      if (externalId !== draftExternalId && claim.claimData.breathingSpace) {
         if (claim.claimData.breathingSpace.breathingSpaceEndDate) {
           res.app.locals.breathingSpaceEndDate = claim.claimData.breathingSpace.breathingSpaceEndDate
         }
