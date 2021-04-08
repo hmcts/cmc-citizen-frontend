@@ -205,7 +205,7 @@ describe('Free mediation: confirm your telephone number page', () => {
             })
             .expect(res => expect(res).to.be.successful.withText('Please enter a phone number'))
         })
-      }
+      })
 
       context('when form is valid', () => {
         it('should return 500 and render error page when cannot save draft', async () => {
