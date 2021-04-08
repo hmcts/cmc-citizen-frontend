@@ -7,7 +7,6 @@ import 'test/routes/expectations'
 import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
 
 import { Paths as MediationPaths } from 'mediation/paths'
-
 import { app } from 'main/app'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
@@ -24,6 +23,7 @@ import {
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = MediationPaths.noMediationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 const pageHeading = 'You chose not to try free mediation'
+const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
 describe('Free mediation: no mediation page', () => {
   attachDefaultHooks(app)
@@ -113,8 +113,52 @@ describe('Free mediation: no mediation page', () => {
               .send({ option: FreeMediationOption.YES })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
+
+          it('should redirect to confirm telephone number page when everything is fine', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveUpdate()
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ option: FreeMediationOption.YES })
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(MediationPaths.confirmTelephoneNumberPage.evaluateUri({ externalId })))
+          })
+
+          it('should redirect to I dont want to try mediation page when No was chosen and no response is available', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveUpdate()
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ option: FreeMediationOption.NO })
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(MediationPaths.iDontWantFreeMediationPage.evaluateUri({ externalId })))
+          })
+
+          it('should redirect to confirm company telephone number page when Yes was chosen', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
+            draftStoreServiceMock.resolveUpdate()
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ option: FreeMediationOption.YES })
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(MediationPaths.confirmCompanyTelephoneNumberPage.evaluateUri({ externalId })))
+          })
         })
       })
     })
+
+    //TODO: claimant test cases to be added
   })
 })
