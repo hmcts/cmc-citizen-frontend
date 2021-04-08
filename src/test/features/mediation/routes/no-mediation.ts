@@ -159,6 +159,6 @@ describe('Free mediation: no mediation page', () => {
       })
     })
 
-    //TODO: claimant test cases to be added
+    // TODO claimant test cases to be added
   })
 })
