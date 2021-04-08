@@ -323,10 +323,10 @@
     {% endif %}
   {% endfor %}
   {% if breathingSpace and claim.state !== 'HWF_APPLICATION_PENDING' and claim.state !== 'TRANSFER_TO_CCBC' and claim.state !== 'SETTLED' and claim.state !== 'PROCEEDS_IN_CASE_MAN' and claim.state !== 'CLOSED_HWF' and claim.state !== 'BUSINESS_QUEUE' and claim.state !== 'TRANSFERRED' and claim.state !== 'AWAITING_RESPONSE_HWF' %}
-    {% if claim.claimData.breathingSpace.breathingSpaceType === undefined %}
+    {% if claim.claimData.breathingSpace.breathingSpaceType === undefined and claim.claimData.breathingSpace.breathingSpaceLiftedFlag !== 'YES' %}
       {{ enterBreathingSpaceForClaimantClaimDetails(claim.externalId) }}
     {% endif %}
-    {% if claim.claimData.breathingSpace.breathingSpaceType %}
+    {% if claim.claimData.breathingSpace.breathingSpaceType and claim.claimData.breathingSpace.breathingSpaceLiftedFlag !== 'YES' %}
       {{ liftingBreathingSpaceForClaimantClaimDetails(claim.externalId) }}
     {% endif %}
   {% endif %}
