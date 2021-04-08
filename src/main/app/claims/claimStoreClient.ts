@@ -98,11 +98,12 @@ export class ClaimStoreClient {
   }
 
   saveBreatingSpace (draft: DraftClaim, claimant: User): Promise<Claim> {
+    try {
     let endDate = ''
     let StartDate = ''
     let endDateByInsolvencyTeam = ''
 
-    if (draft.breathingSpace.breathingSpaceEndDate !== undefined) {
+    if (draft.breathingSpace.breathingSpaceEndDate !== undefined && draft.breathingSpace.breathingSpaceEndDate !== null ) {
       if (draft.breathingSpace.breathingSpaceEndDate.day !== undefined) {
         endDate = moment(draft.breathingSpace.breathingSpaceEndDate).subtract(1, 'M').format('YYYY-MM-DD')
       }
@@ -110,7 +111,7 @@ export class ClaimStoreClient {
       endDate = moment('9999-09-09').format('YYYY-MM-DD')
     }
 
-    if (draft.breathingSpace.breathingSpaceEnteredDate !== undefined) {
+    if (draft.breathingSpace.breathingSpaceEnteredDate !== undefined && draft.breathingSpace.breathingSpaceEnteredDate !== null ) {
       if (draft.breathingSpace.breathingSpaceEnteredDate.day !== undefined) {
         StartDate = moment(draft.breathingSpace.breathingSpaceEnteredDate).subtract(1, 'M').format('YYYY-MM-DD')
       }
@@ -118,7 +119,7 @@ export class ClaimStoreClient {
       StartDate = moment('9999-09-09').format('YYYY-MM-DD')
     }
 
-    if (draft.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate !== undefined) {
+    if (draft.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate !== undefined && draft.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate !== null ) {
       if (draft.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate.day !== undefined) {
         endDateByInsolvencyTeam = moment(draft.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate).subtract(1, 'M').format('YYYY-MM-DD')
       }
@@ -148,6 +149,9 @@ export class ClaimStoreClient {
         }
         throw err
       })
+    } catch (error){
+      return error
+    }
   }
 
   updateHelpWithFeesClaim (draft: Draft<DraftClaim>, claimant: User, ...features: string[]): Promise<Claim> {

@@ -32,6 +32,12 @@ export default express.Router()
         draft.breathingSpace.breathingSpaceLiftedFlag = 'Yes'
         draft.breathingSpace.breathingSpaceExternalId = res.app.locals.breathingSpaceExternalId
         draft.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate = res.app.locals.breathingSpaceLiftedbyInsolvencyTeamDate
+
+        draft.breathingSpace.breathingSpaceReferenceNumber = res.app.locals.breathingSpaceReferenceNumber
+        draft.breathingSpace.breathingSpaceType = res.app.locals.breathingSpaceType
+        draft.breathingSpace.breathingSpaceEnteredDate = res.app.locals.breathingSpaceEnteredDate
+        draft.breathingSpace.breathingSpaceEndDate = res.app.locals.breathingSpaceEndDate
+
         try {
           await new ClaimStoreClient().saveBreatingSpace(draft, res.locals.user)
           res.redirect(DashboardPaths.claimantPage.uri.replace(':externalId', res.app.locals.breathingSpaceExternalId))
