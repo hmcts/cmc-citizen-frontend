@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, radioGroup, linkButton, saveAndContinueButton %}
+{% from "form.njk" import csrfProtection, textArea, radioOption, linkButton, saveAndContinueButton, errorSummary %}
 
 {% set heading = 'I do not agree to free mediation' %}
 
@@ -7,54 +7,70 @@
   <div class="grid-row">
     <div class="column-two-thirds">
       <p>{{ t('You have chosen not to try free mediation. Please tell us why:') }}</p>
-      <form method="post" novalidate>
+      <form
+        method="post"
+        class="analytics-submit-event-trigger"
+        data-event-action="Providing mediation reason"
+        data-event-label-from="option"
+        novalidate>
+
         {{ csrfProtection(csrf) }}
+        {% set error = form.errorFor('iDoNotWantMediationReason') %}
 
-        {{ radioGroup(
-          form = form,
-          label = 'You have chosen not to try free mediation. Please tell us why:',
-          labelForScreenReadersOnly = true,
-          name = 'iDoNotWantMediationReason',
-          options = [
-            {
-              label: 'I have already tried to resolve the dispute with the other party, with no success',
-              value: 'alreadyTried',
-              checked: (form.valueFor('iDoNotWantMediationReason').value === 'alreadyTried')
-            },
-            {
-              label: 'I am not sure what would happen in mediation',
-              value: 'notSure',
-              checked: (form.valueFor('iDoNotWantMediationReason').value === 'notSure')
-            },
-            {
-              label: 'I do not think mediation would solve the dispute',
-              value: 'wouldNotSolve',
-              checked: (form.valueFor('iDoNotWantMediationReason').value === 'wouldNotSolve')
-            },
-            {
-              label: 'I do not want to delay getting a hearing',
-              value: 'noDelayInHearing',
-              checked: (form.valueFor('iDoNotWantMediationReason').value === 'noDelayInHearing')
-            },
-            {
-              label: 'I want a judge to make a decision on the dispute',
-              value: 'judgeToDecide',
-              checked: (form.valueFor('iDoNotWantMediationReason').value === 'judgeToDecide')
-            },
-            {
-              label: 'Another reason (please specify)',
-              value: 'other',
-              checked: (form.valueFor('iDoNotWantMediationReason').value === 'other')
-            }
-          ]
-        ) }}
+        <div class="form-group {% if error %} form-group-error {% endif %}">
+          <fieldset id="iDoNotWantMediationReason[label]">
+            <legend class="visually-hidden">{{ t(heading) }}</legend>
+            {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
+              {{ radioOption(
+                form = form,
+                name = 'iDoNotWantMediationReason',
+                value = 'alreadyTried',
+                label = 'I have already tried to resolve the dispute with the other party, with no success',
+                checked = form.valueFor('iDoNotWantMediationReason') == 'alreadyTried'
+              ) }}
+              {{ radioOption(
+                form = form,
+                name = 'iDoNotWantMediationReason',
+                value = 'notSure',
+                label = 'I am not sure what would happen in mediation',
+                checked = form.valueFor('iDoNotWantMediationReason') == 'notSure'
+              ) }}
+              {{ radioOption(
+                form = form,
+                name = 'iDoNotWantMediationReason',
+                value = 'noDelayInHearing',
+                label = 'I do not want to delay getting a hearing',
+                checked = form.valueFor('iDoNotWantMediationReason') == 'noDelayInHearing'
+              ) }}
+              {{ radioOption(
+                form = form,
+                name = 'iDoNotWantMediationReason',
+                value = 'judgeToDecide',
+                label = 'I want a judge to make a decision on the dispute',
+                checked = form.valueFor('iDoNotWantMediationReason') == 'noDelayInHearing'
+              ) }}
+              {{ radioOption(
+                form = form,
+                name = 'iDoNotWantMediationReason',
+                value = 'other',
+                label = 'Another reason (please specify)',
+                checked = form.valueFor('iDoNotWantMediationReason') == 'other'
+              ) }}
+            <div class="form-group panel panel-border-narrow js-hidden " id="iDoNotWantMediationReason-other" aria-hidden="false">
+              {{ otherReasons(form) }}
+            </div>
+          </fieldset>
+        </div>
 
-        <div class="form-group-related">
+        <div class="form-group">
           {{ linkButton('Skip this section', 'reject', 'link-button no-padding') }}
         </div>
+
         {{ saveAndContinueButton() }}
+
       </form>
-      <p> {{ t('Any information you provide is used solely by HM Courts and Tribunals Service
+
+      <p class="font-xsmall"> {{ t('Any information you provide is used solely by HM Courts and Tribunals Service
        to help us improve our services. Your answers have no impact on the progress or outcome
         of your case, or on any contact you have with HM Courts and Tribunals Service.') }} </p>
     </div>
