@@ -37,7 +37,7 @@
           </td>
           <td>
             {% if breathingSpaceEnteredDate %}
-              {{ breathingSpaceEnteredDate }}
+              {{ breathingSpaceEnteredDate | date }}
             {% endif %}
           </td>
           <td class="change-answer change-link-column">
@@ -62,7 +62,7 @@
           </td>
           <td> 
             {% if breathingSpaceEndDate %}
-              {{ breathingSpaceEndDate }}
+              {{ breathingSpaceEndDate | date }}
             {% endif %}
           </td>
           <td class="change-answer change-link-column">

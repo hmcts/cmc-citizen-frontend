@@ -5,17 +5,26 @@ import { BreathingSpaceReferenceNumber } from 'features/breathing-space/models/b
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { ErrorHandling } from 'shared/errorHandling'
+import { DraftClaim } from 'drafts/models/draftClaim'
+import { DraftService } from 'services/draftService'
+import { Draft } from '@hmcts/draft-store-client'
+
+let breathingSpaceExternalId = null
 
 function renderView (form: Form<BreathingSpaceReferenceNumber>, res: express.Response, next: express.NextFunction) {
   res.render(Paths.referencNumberPage.associatedView, {
-    form: form
+    form: form,
+    breathingSpaceExternalId: breathingSpaceExternalId
   })
 }
 
 /* tslint:disable:no-default-export */
 export default express.Router()
 .get(Paths.referencNumberPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-  renderView(new Form(new BreathingSpaceReferenceNumber(res.app.locals.breathingSpaceReferenceNumber)), res, next)
+  const drafts = await new DraftService().find('bs', '100', res.locals.user.bearerToken, (value) => value)
+  let draft: Draft<DraftClaim> = drafts[drafts.length - 1]
+  breathingSpaceExternalId = draft.document.breathingSpace.breathingSpaceExternalId
+  renderView(new Form(new BreathingSpaceReferenceNumber(draft.document.breathingSpace.breathingSpaceReferenceNumber)), res, next)
 })
 .post(
   Paths.referencNumberPage.uri,
@@ -26,8 +35,11 @@ export default express.Router()
     if (form.hasErrors()) {
       renderView(form, res, next)
     } else {
-      res.app.locals.breathingSpaceReferenceNumber = form.model.bsNumber
-
+      const drafts = await new DraftService().find('bs', '100', res.locals.user.bearerToken, (value) => value)
+      let draft: Draft<DraftClaim> = drafts[drafts.length - 1]
+      const user: User = res.locals.user
+      draft.document.breathingSpace.breathingSpaceReferenceNumber = form.model.bsNumber
+      await new DraftService().save(draft, user.bearerToken)
       res.redirect(Paths.bsStartDatePage.uri)
     }
   }))

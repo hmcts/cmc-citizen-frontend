@@ -17,7 +17,8 @@ export default express.Router()
       let draft: Draft<DraftClaim> = drafts[drafts.length - 1]
       res.render(Paths.bsLiftCheckAnswersPage.associatedView,
         {
-          breatingSpaceLiftedData: draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate
+          breatingSpaceLiftedData: draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate,
+          breathingSpaceExternalId: draft.document.breathingSpace.breathingSpaceExternalId
         })
     })
     .post(
@@ -39,6 +40,7 @@ export default express.Router()
 
         try {
           await new ClaimStoreClient().saveBreatingSpace(draft, res.locals.user)
+          await new DraftService().delete(draftBS.id, res.locals.user.bearerToken)
           res.redirect(DashboardPaths.claimantPage.uri.replace(':externalId', draft.breathingSpace.breathingSpaceExternalId))
         } catch (error) {
           await new DraftService().delete(draftBS.id, res.locals.user.bearerToken)

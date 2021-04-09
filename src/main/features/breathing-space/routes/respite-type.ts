@@ -7,6 +7,9 @@ import { ErrorHandling } from 'shared/errorHandling'
 import { MomentFactory } from 'shared/momentFactory'
 import { Moment } from 'moment'
 import { BreathingType } from '../models/bsType'
+import { DraftClaim } from 'drafts/models/draftClaim'
+import { DraftService } from 'services/draftService'
+import { Draft } from '@hmcts/draft-store-client'
 
 function renderView (form: Form<BreathingType>, res: express.Response, next: express.NextFunction) {
   const pastDate: Moment = MomentFactory.currentDate().subtract(1, 'day')
@@ -19,7 +22,9 @@ function renderView (form: Form<BreathingType>, res: express.Response, next: exp
 /* tslint:disable:no-default-export */
 export default express.Router()
     .get(Paths.bsTypePage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      renderView(new Form(new BreathingType(res.app.locals.breathingSpaceType)), res, next)
+      const drafts = await new DraftService().find('bs', '100', res.locals.user.bearerToken, (value) => value)
+      let draft: Draft<DraftClaim> = drafts[drafts.length - 1]
+      renderView(new Form(new BreathingType(draft.document.breathingSpace.breathingSpaceType)), res, next)
     })
     .post(
         Paths.bsTypePage.uri,
@@ -30,7 +35,11 @@ export default express.Router()
           if (form.hasErrors()) {
             renderView(form, res, next)
           } else {
-            res.app.locals.breathingSpaceType = form.model.option
+            const drafts = await new DraftService().find('bs', '100', res.locals.user.bearerToken, (value) => value)
+            let draft: Draft<DraftClaim> = drafts[drafts.length - 1]
+            const user: User = res.locals.user
+            draft.document.breathingSpace.breathingSpaceType = form.model.option
+            await new DraftService().save(draft, user.bearerToken)
             res.redirect(Paths.bsEndDatePage.uri)
           }
         }))

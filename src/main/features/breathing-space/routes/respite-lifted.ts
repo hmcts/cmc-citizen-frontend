@@ -48,7 +48,6 @@ export default express.Router()
             const user: User = res.locals.user
             draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate = MomentFactory.parse(form.model.respiteLiftDate.toMoment().format())
             await new DraftService().save(draft, user.bearerToken)
-            res.app.locals.breathingSpaceLiftedbyInsolvencyTeamDate = form.model.respiteLiftDate
             res.redirect(Paths.bsLiftCheckAnswersPage.uri)
           }
         }))
