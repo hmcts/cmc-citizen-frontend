@@ -169,7 +169,7 @@ describe('Settlement dashboard statuses dashboard', () => {
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
-        done()    
+        done()
       })
 
       it(defendantContext.party, async () => {

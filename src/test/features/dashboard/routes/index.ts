@@ -190,7 +190,7 @@ describe('Dashboard route page', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it.only('should return 500 and render error page when cannot retrieve pagination info', function (done) {
+      it('should return 500 and render error page when cannot retrieve pagination info', function (done) {
         draftStoreServiceMock.resolveFind('claim')
         claimStoreServiceMock.resolveRejectPaginationInfo('HTTP Error')
 
