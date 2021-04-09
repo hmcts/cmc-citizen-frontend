@@ -6,6 +6,9 @@ import { Paths } from 'breathing-space/paths'
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
 import { RouterFinder } from 'shared/router/routerFinder'
 import { OAuthHelper } from 'idam/oAuthHelper'
+import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
+import { DraftService } from 'services/draftService'
+import { DraftClaim } from 'drafts/models/draftClaim'
 
 function breathingSpaceRequestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -26,6 +29,11 @@ export class Feature {
     }
 
     app.all(/^\/breathing-space.*$/, breathingSpaceRequestHandler())
+    
+    app.all('/breathing-space/respite-lifted*',
+      DraftMiddleware.requestHandler(new DraftService(), 'bs', 100, (value: any): DraftClaim => {
+        return new DraftClaim().deserialize(value)
+      }))
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
   }
 }

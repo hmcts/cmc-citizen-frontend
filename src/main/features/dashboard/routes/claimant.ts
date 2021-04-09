@@ -11,6 +11,10 @@ import { User } from 'idam/user'
 import { ForbiddenError } from 'errors'
 import { Moment } from 'moment'
 import { DirectionOrder } from 'claims/models/directionOrder'
+import { DraftClaim } from 'drafts/models/draftClaim'
+import { DraftService } from 'services/draftService'
+import { Draft } from '@hmcts/draft-store-client'
+import { prepareClaimDraft } from 'drafts/draft-data/claimDraft'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 const draftExternalId = 'draft'
@@ -35,23 +39,18 @@ export default express.Router()
 
       const respondToReviewOrderDeadline: Moment = claim ? await claim.respondToReviewOrderDeadline() : undefined
 
-      if (externalId !== draftExternalId && claim.claimData.breathingSpace) {
-        if (claim.claimData.breathingSpace.breathingSpaceEndDate) {
-          res.app.locals.breathingSpaceEndDate = claim.claimData.breathingSpace.breathingSpaceEndDate
-        }
-        if (claim.claimData.breathingSpace.breathingSpaceEnteredbyInsolvencyTeamDate) {
-          res.app.locals.breathingSpaceEnteredDate = claim.claimData.breathingSpace.breathingSpaceEnteredbyInsolvencyTeamDate
-        }
-        if (claim.claimData.breathingSpace.breathingSpaceReferenceNumber) {
-          res.app.locals.breathingSpaceReferenceNumber = claim.claimData.breathingSpace.breathingSpaceReferenceNumber
-        }
-        if (claim.claimData.breathingSpace.breathingSpaceType) {
-          res.app.locals.breathingSpaceType = claim.claimData.breathingSpace.breathingSpaceType
-        }
-        if (claim.claimData.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate) {
-          res.app.locals.breathingSpaceLiftedbyInsolvencyTeamDate = claim.claimData.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate
-        }
+      let draft: Draft<DraftClaim> = res.locals.bsDraft
+      const user: User = res.locals.user
+      const drafts = await new DraftService().find('bs', '100', user.bearerToken, (value) => value)
+      drafts.forEach(async draft1 => {
+        await new DraftService().delete(draft1.id, user.bearerToken)
+      })
+      draft.document = new DraftClaim().deserialize(prepareClaimDraft(user.email, false))
+      draft.document.breathingSpace = claim.claimData.breathingSpace
+      if (draft.document.breathingSpace) {
+        draft.document.breathingSpace.breathingSpaceExternalId = externalId
       }
+      await new DraftService().save(draft, user.bearerToken)
 
       if (claim && claim.claimantId !== res.locals.user.id) {
         throw new ForbiddenError()
