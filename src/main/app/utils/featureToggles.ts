@@ -56,6 +56,10 @@ export class FeatureToggles {
     return this.launchDarklyClient.serviceVariation('dashboard_pagination_enabled', toBoolean(config.get<boolean>(`featureToggles.dashboard_pagination_enabled`)))
   }
 
+  async isEnhancedMediationJourneyEnabled (): Promise<boolean> {
+    return this.launchDarklyClient.serviceVariation('enhancedMediationJourney', toBoolean(config.get<boolean>(`featureToggles.enhancedMediationJourney`)))
+  }
+
   async isBreathingSpaceEnabled (): Promise<boolean> {
     return this.launchDarklyClient.serviceVariation('breathing-space', toBoolean(config.get<boolean>(`featureToggles.breathingSpace`)))
   }
