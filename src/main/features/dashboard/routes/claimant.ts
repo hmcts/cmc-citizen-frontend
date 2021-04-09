@@ -32,6 +32,11 @@ export default express.Router()
       const judgePilot: boolean = claim ? claim.features !== undefined && claim.features.includes('judgePilotEligible') : false
 
       const respondToReviewOrderDeadline: Moment = claim ? await claim.respondToReviewOrderDeadline() : undefined
+      res.app.locals.breathingSpaceExternalId = externalId
+      res.app.locals.breathingSpaceEndDate = null
+      res.app.locals.breathingSpaceEnteredDate = null
+      res.app.locals.breathingSpaceReferenceNumber = ''
+      res.app.locals.breathingSpaceType = null
 
       let draft: Draft<DraftClaim> = res.locals.bsDraft
       const user: User = res.locals.user
