@@ -1,8 +1,6 @@
 import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
-
-import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
 import { Paths as BreathingSpacePaths } from 'breathing-space/paths'
 
@@ -14,7 +12,6 @@ import { MomentFactory } from 'shared/momentFactory'
 const cookieName: string = config.get<string>('session.cookieName')
 
 describe('Enter breathing space: Respite start date page', () => {
-  attachDefaultHooks(app)
 
   describe('on GET', () => {
     it('should render page when everything is fine', function (done) {

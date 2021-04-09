@@ -2,8 +2,6 @@
 import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
-
-// import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
 import { Paths as BreathingSpacePaths } from 'breathing-space/paths'
 

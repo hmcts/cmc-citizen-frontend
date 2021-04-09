@@ -11,7 +11,6 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as draftStoreMock from 'test/http-mocks/draft-store'
 import * as data from 'test/data/entity/settlement'
-import { attachDefaultHooks } from 'test/routes/hooks'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -150,7 +149,6 @@ function testData () {
 }
 
 describe('Settlement dashboard statuses dashboard', () => {
-  attachDefaultHooks(app)
 
   testData().forEach(data => {
     context(data.status, () => {
