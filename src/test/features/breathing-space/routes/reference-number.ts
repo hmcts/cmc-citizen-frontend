@@ -56,15 +56,16 @@ describe('Breathing space: reference number page page', () => {
         done()
       })
 
-      it('should redirect to start date page when form is valid and number is provided', async () => {
+      it('should redirect to start date page when form is valid and number is provided', function (done) {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveUpdate()
 
-        await request(app)
+        request(app)
           .post(BreathingSpacePaths.referencNumberPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ bsNumber: '07000000000' })
           .expect(res => expect(res).to.be.redirect.toLocation(BreathingSpacePaths.bsStartDatePage.uri))
+        done()
       })
     })
   })
