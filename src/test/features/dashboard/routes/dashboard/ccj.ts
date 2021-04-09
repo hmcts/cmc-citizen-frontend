@@ -1,6 +1,8 @@
 import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
+
+import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
 
 import { Paths } from 'dashboard/paths'
@@ -424,6 +426,7 @@ const testData = [
 ]
 
 describe('Dashboard page ccj dashboard', () => {
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', Paths.dashboardPage.uri)
