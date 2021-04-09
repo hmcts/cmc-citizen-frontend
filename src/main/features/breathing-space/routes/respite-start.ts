@@ -12,10 +12,13 @@ import { DraftService } from 'services/draftService'
 import { Draft } from '@hmcts/draft-store-client'
 import { LocalDate } from 'forms/models/localDate'
 
+let breathingSpaceExternalId = null
+
 function renderView (form: Form<BreathingSpaceRespiteStart>, res: express.Response, next: express.NextFunction) {
   const pastDate: Moment = MomentFactory.currentDate().subtract(1, 'day')
   res.render(Paths.bsStartDatePage.associatedView, {
     form: form,
+    breathingSpaceExternalId: breathingSpaceExternalId,
     pastDate: pastDate
   })
 }
@@ -25,6 +28,7 @@ export default express.Router()
     .get(Paths.bsStartDatePage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const drafts = await new DraftService().find('bs', '100', res.locals.user.bearerToken, (value) => value)
       let draft: Draft<DraftClaim> = drafts[drafts.length - 1]
+      breathingSpaceExternalId = draft.document.breathingSpace.breathingSpaceExternalId
       if (draft.document.breathingSpace.breathingSpaceEnteredbyInsolvencyTeamDate) {
         let bsLiftDate: Date = new Date(draft.document.breathingSpace.breathingSpaceEnteredbyInsolvencyTeamDate.toLocaleString())
         let bsLiftDateSplit = bsLiftDate.toLocaleDateString().split('/')

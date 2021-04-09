@@ -10,7 +10,7 @@
     <p>{{ t('More information about the {{ bs }}',
     { bs: externalLink('debt respite scheme', 'https://www.gov.uk/government/publications/debt-respite-scheme-breathing-space-guidance/debt-respite-scheme-breathing-space-guidance-for-creditors') }) | safe }}</p>
     <p>{{ internalLink(t('Notify us about the debt respite scheme'),
-        BreathingSpacePaths.referencNumberPage.uri,
+        '/breathing-space/' + externalId + '/reference-number',
         'button button-secondary') | safe }}</p>
   </div>
 {% endmacro %}
@@ -23,7 +23,7 @@
     <p>{{ t('More information about the {{ bs }}',
     { bs: externalLink('debt respite scheme', 'https://www.gov.uk/government/publications/debt-respite-scheme-breathing-space-guidance/debt-respite-scheme-breathing-space-guidance-for-creditors') }) | safe }}</p>
     <p>{{ internalLink(t('Lift the debt respite scheme'),
-        BreathingSpacePaths.bsLiftPage.uri,
+        '/breathing-space/' + externalId + '/respite-lifted',
         'button button-secondary') | safe }}</p>
   </div>
 {% endmacro %}

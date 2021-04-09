@@ -120,7 +120,7 @@ export class ClaimStoreClient {
           body: {
             'bs_entered_date_by_insolvency_team': StartDate,
             'bs_expected_end_date': endDate,
-            'bs_reference_number': draft.breathingSpace.breathingSpaceReferenceNumber.toString(),
+            'bs_reference_number': draft.breathingSpace.breathingSpaceReferenceNumber !== undefined ? draft.breathingSpace.breathingSpaceReferenceNumber.toString() : '',
             'bs_type': draft.breathingSpace.breathingSpaceType.toString(),
             'bs_lifted_flag': draft.breathingSpace.breathingSpaceLiftedFlag.toString(),
             'bs_lifted_date_by_insolvency_team': endDateByInsolvencyTeam

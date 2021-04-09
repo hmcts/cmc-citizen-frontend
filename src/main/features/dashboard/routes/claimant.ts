@@ -11,11 +11,6 @@ import { User } from 'idam/user'
 import { ForbiddenError } from 'errors'
 import { Moment } from 'moment'
 import { DirectionOrder } from 'claims/models/directionOrder'
-import { DraftClaim } from 'drafts/models/draftClaim'
-import { DraftService } from 'services/draftService'
-import { Draft } from '@hmcts/draft-store-client'
-import { prepareClaimDraft } from 'drafts/draft-data/claimDraft'
-import { BreathingSpace } from 'features/claim/form/models/breathingSpace'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 const draftExternalId = 'draft'
@@ -32,27 +27,6 @@ export default express.Router()
       const judgePilot: boolean = claim ? claim.features !== undefined && claim.features.includes('judgePilotEligible') : false
 
       const respondToReviewOrderDeadline: Moment = claim ? await claim.respondToReviewOrderDeadline() : undefined
-      res.app.locals.breathingSpaceExternalId = externalId
-      res.app.locals.breathingSpaceEndDate = null
-      res.app.locals.breathingSpaceEnteredDate = null
-      res.app.locals.breathingSpaceReferenceNumber = ''
-      res.app.locals.breathingSpaceType = null
-
-      let draft: Draft<DraftClaim> = res.locals.bsDraft
-      const user: User = res.locals.user
-      const drafts = await new DraftService().find('bs', '100', user.bearerToken, (value) => value)
-      drafts.forEach(async bsDraft => {
-        await new DraftService().delete(bsDraft.id, user.bearerToken)
-      })
-      draft.document = new DraftClaim().deserialize(prepareClaimDraft(user.email, false))
-      draft.document.breathingSpace = claim.claimData.breathingSpace
-      if (draft.document.breathingSpace) {
-        draft.document.breathingSpace.breathingSpaceExternalId = externalId
-      } else {
-        draft.document.breathingSpace = new BreathingSpace()
-        draft.document.breathingSpace.breathingSpaceExternalId = externalId
-      }
-      await new DraftService().save(draft, user.bearerToken)
 
       if (claim && claim.claimantId !== res.locals.user.id) {
         throw new ForbiddenError()
