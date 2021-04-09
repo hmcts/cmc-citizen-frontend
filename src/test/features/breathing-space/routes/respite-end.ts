@@ -17,13 +17,14 @@ describe('Enter breathing space: Respite end date page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    it('should render page when everything is fine', async () => {
+    it('should render page when everything is fine', function (done) {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
 
-      await request(app)
+      request(app)
         .get(BreathingSpacePaths.bsEndDatePage.uri)
         .set('Cookie', `${cookieName}=ABC`)
         .expect(res => expect(res).to.be.successful.withText('Expected end date'))
+      done()
     })
   })
 

@@ -49,7 +49,6 @@ export default express.Router()
       Paths.bsCheckAnswersPage.uri,
       FormValidator.requestHandler(BreathingSpace),
       ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-        const form: Form<BreathingSpace> = req.body
         const drafts = await new DraftService().find('bs', '100', res.locals.user.bearerToken, (value) => value)
         let draftBS: Draft<DraftClaim> = drafts[drafts.length - 1]
 
@@ -60,17 +59,12 @@ export default express.Router()
         draft.breathingSpace.breathingSpaceEnteredDate = draftBS.document.breathingSpace.breathingSpaceEnteredbyInsolvencyTeamDate
         draft.breathingSpace.breathingSpaceEndDate = draftBS.document.breathingSpace.breathingSpaceEndDate
         draft.breathingSpace.breathingSpaceLiftedFlag = 'No'
-
-        if (form.hasErrors()) {
-          renderView(form, res, next)
-        } else {
-          try {
-            await new ClaimStoreClient().saveBreatingSpace(draft, res.locals.user)
-            await new DraftService().delete(draftBS.id, res.locals.user.bearerToken)
-            res.redirect(DashboardPaths.claimantPage.uri.replace(':externalId', draft.breathingSpace.breathingSpaceExternalId))
-          } catch {
-            await new DraftService().delete(draftBS.id, res.locals.user.bearerToken)
-            res.redirect(DashboardPaths.claimantPage.uri.replace(':externalId', draft.breathingSpace.breathingSpaceExternalId))
-          }
+        try {
+          await new ClaimStoreClient().saveBreatingSpace(draft, res.locals.user)
+          await new DraftService().delete(draftBS.id, res.locals.user.bearerToken)
+          res.redirect(DashboardPaths.claimantPage.uri.replace(':externalId', draft.breathingSpace.breathingSpaceExternalId))
+        } catch {
+          await new DraftService().delete(draftBS.id, res.locals.user.bearerToken)
+          res.redirect(DashboardPaths.claimantPage.uri.replace(':externalId', draft.breathingSpace.breathingSpaceExternalId))
         }
       }))

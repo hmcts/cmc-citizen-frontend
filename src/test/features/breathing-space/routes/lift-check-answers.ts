@@ -52,15 +52,16 @@ describe('Breathing Space: Lift check-answer page', () => {
         idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
 
-      context('when response submitted', () => {
-        it('should redirect to dashboard-claimant details page', async () => {
+      context('when submitted', () => {
+        it('should redirect to dashboard-claimant details page', function (done) {
           idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
 
-          await request(app)
+          request(app)
             .post(pagePath)
             .send({ breathingSpaceLiftedbyInsolvencyTeamDate: '2021-01-01', breathingSpaceExternalId: 'bbb89313-7e4c-4124-8899-34389312033a' })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).has.redirect)
+          done()
         })
       })
     })

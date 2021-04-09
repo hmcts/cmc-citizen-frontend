@@ -18,12 +18,13 @@ const headerText: string = 'Reference number must not be more than 16 characters
 describe('Breathing space: reference number page page', () => {
 
   describe('on GET', () => {
-    it('should render page when everything is fine', async () => {
+    it('should render page when everything is fine', function (done) {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-      await request(app)
+      request(app)
         .get(BreathingSpacePaths.referencNumberPage.uri)
         .set('Cookie', `${cookieName}=ABC`)
         .expect(res => expect(res).to.be.successful.withText('Do you have a Debt Respite Scheme reference number?'))
+      done()
     })
   })
 
@@ -43,15 +44,16 @@ describe('Breathing space: reference number page page', () => {
           .expect(res => expect(res).to.be.successful.withText(headerText, 'div class="error-summary"'))
       })
 
-      it('should redirect to Start date page when form is valid and nothing is submitted', async () => {
+      it('should redirect to Start date page when form is valid and nothing is submitted', function (done) {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveUpdate()
 
-        await request(app)
+        request(app)
           .post(BreathingSpacePaths.referencNumberPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ bsNumber: '' })
           .expect(res => expect(res).to.be.redirect.toLocation(BreathingSpacePaths.bsStartDatePage.uri))
+        done()
       })
 
       it('should redirect to start date page when form is valid and number is provided', async () => {

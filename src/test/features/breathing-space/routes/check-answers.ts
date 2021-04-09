@@ -23,22 +23,24 @@ describe('Breathing Space: check-answer page', () => {
       })
 
       context('Breathing Space check your answer', () => {
-        it('should render page when everything is fine', async () => {
+        it('should render page when everything is fine', function (done) {
           idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-          await request(app)
+          request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Check your answers before submitting'))
+          done()
         })
 
-        it('should render the page with all the values', async () => {
+        it('should render the page with all the values', function (done) {
           idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-          await request(app)
+          request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .send({ breathingSpaceType: 'STANDARD_BS_ENTERED', bsEndDate: '2025-01-01', breathingSpaceEndDate: '2021-01-01', breathingSpaceExternalId: 'bbb89313-7e4c-4124-8899-34389312033a', breathingSpaceReferenceNumber: 'BS-1234567890' })
             .expect(res => expect(res).to.be.successful.withText('Check your answers before submitting'))
             .expect(res => expect(res).to.be.successful.withText('Mental health crisis moratorium'))
+          done()
         })
       })
     })
@@ -51,15 +53,16 @@ describe('Breathing Space: check-answer page', () => {
         idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
 
-      context('when response not submitted', () => {
-        it('should redirect to dashboard-claimant details page', async () => {
+      context('when not submitted', () => {
+        it('should redirect to dashboard-claimant details page', function (done) {
           idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
 
-          await request(app)
+          request(app)
             .post(pagePath)
             .send({ breathingSpaceType: 'STANDARD_BS_ENTERED' })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).has.redirect)
+          done()
         })
       })
     })

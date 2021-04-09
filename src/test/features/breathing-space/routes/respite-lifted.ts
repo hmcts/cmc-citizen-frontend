@@ -13,17 +13,18 @@ import { MomentFactory } from 'shared/momentFactory'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
-describe('Enter breathing space: Lift date page', () => {
+describe('Lift breathing space: Lift date page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    it('should render page when everything is fine', async () => {
+    it('should render page when everything is fine', function (done) {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
 
-      await request(app)
+      request(app)
         .get(BreathingSpacePaths.bsLiftPage.uri)
         .set('Cookie', `${cookieName}=ABC`)
         .expect(res => expect(res).to.be.successful.withText('Date for lifting debt respite scheme (breathing space)'))
+      done()
     })
   })
 
