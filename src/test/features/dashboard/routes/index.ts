@@ -190,14 +190,15 @@ describe('Dashboard route page', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should return 500 and render error page when cannot retrieve pagination info', async () => {
+      it.only('should return 500 and render error page when cannot retrieve pagination info', function (done) {
         draftStoreServiceMock.resolveFind('claim')
         claimStoreServiceMock.resolveRejectPaginationInfo('HTTP Error')
 
-        await request(app)
+        request(app)
           .get(Paths.dashboardPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
+        done()
       })
 
       it('should return 500 and render error page when cannot retrieve claims', async () => {

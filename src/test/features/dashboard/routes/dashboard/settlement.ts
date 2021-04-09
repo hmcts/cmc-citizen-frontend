@@ -160,15 +160,16 @@ describe('Settlement dashboard statuses dashboard', () => {
         claimStoreServiceMock.resolveRetrievePaginationInfoEmptyList()
       })
 
-      it(claimantContext.party, async () => {
+      it(claimantContext.party, function (done) {
         claimantContext.ownMock(data.claim)
         claimantContext.otherMock()
         idamServiceMock.resolveRetrieveUserFor(claimantContext.id, 'citizen')
 
-        await request(app)
+        request(app)
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
+        done()    
       })
 
       it(defendantContext.party, async () => {
