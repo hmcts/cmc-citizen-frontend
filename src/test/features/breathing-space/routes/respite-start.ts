@@ -17,7 +17,7 @@ describe('Enter breathing space: Respite start date page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    it('should render page when everything is fine', function (done)  {
+    it('should render page when everything is fine', function (done) {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
 
       request(app)
