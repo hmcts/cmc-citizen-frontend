@@ -26,9 +26,9 @@ export default express.Router()
       const drafts = await new DraftService().find('bs', '100', res.locals.user.bearerToken, (value) => value)
       let draft: Draft<DraftClaim> = drafts[drafts.length - 1]
       if (draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate) {
-        let bsLiftDate: Date =  new Date(draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate.toLocaleString())
+        let bsLiftDate: Date = new Date(draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate.toLocaleString())
         let bsLiftDateSplit = bsLiftDate.toLocaleDateString().split('/')
-        let bsLD: LocalDate = new LocalDate(parseInt(bsLiftDateSplit[2]),parseInt(bsLiftDateSplit[0]), parseInt(bsLiftDateSplit[1]))
+        let bsLD: LocalDate = new LocalDate(parseInt(bsLiftDateSplit[2], 10),parseInt(bsLiftDateSplit[0], 10), parseInt(bsLiftDateSplit[1], 10))
         renderView(new Form(new BreathingSpaceLiftDate(bsLD)), res, next)
       } else {
         renderView(new Form(new BreathingSpaceLiftDate()), res, next)

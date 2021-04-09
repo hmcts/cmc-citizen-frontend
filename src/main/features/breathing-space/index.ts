@@ -29,7 +29,7 @@ export class Feature {
     }
 
     app.all(/^\/breathing-space.*$/, breathingSpaceRequestHandler())
-    
+
     app.all('/breathing-space/respite-lifted*',
       DraftMiddleware.requestHandler(new DraftService(), 'bs', 100, (value: any): DraftClaim => {
         return new DraftClaim().deserialize(value)

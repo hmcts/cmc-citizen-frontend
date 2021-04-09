@@ -42,8 +42,8 @@ export default express.Router()
       let draft: Draft<DraftClaim> = res.locals.bsDraft
       const user: User = res.locals.user
       const drafts = await new DraftService().find('bs', '100', user.bearerToken, (value) => value)
-      drafts.forEach(async draft1 => {
-        await new DraftService().delete(draft1.id, user.bearerToken)
+      drafts.forEach(async bsDraft => {
+        await new DraftService().delete(bsDraft.id, user.bearerToken)
       })
       draft.document = new DraftClaim().deserialize(prepareClaimDraft(user.email, false))
       draft.document.breathingSpace = claim.claimData.breathingSpace
