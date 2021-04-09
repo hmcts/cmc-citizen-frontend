@@ -77,3 +77,7 @@
   </div>
 {% endblock %}
 
+{% macro otherReasons(form) %}
+  {{ textArea(label = 'Enter your reason here', form = form, name = 'otherReason', inputClass = 'form-control-3-4') }}
+{% endmacro %}
+
