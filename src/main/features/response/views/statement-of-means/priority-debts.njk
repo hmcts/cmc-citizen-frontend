@@ -32,7 +32,7 @@
 
 
         {{ linkButton('Recalculate total monthly repayments', 'action[calculateMonthlyIncome]', 'button button-secondary calculate-monthly-income-expense') }}
-        <p class="heading-small calculation-outcome-container">
+        <p class="heading-small calculation-outcome-container" role="status" aria-live="polite">
           {{ t('Total monthly repayments:') }} £<span class="total-monthly-income-expense"> {{ totalMonthlyIncomeExpense | default('0.00') }} </span>
         </p>
         {{ saveAndContinueButton() }}
@@ -47,7 +47,7 @@
   {% set checkboxName = name + 'Declared' %}
 
   {% call expandableCheckboxOption(form = form, name = checkboxName, value = 'true', checked = (form.valueFor(checkboxName) or (form.valueFor(name) and form.valueFor(name).populated)), label = label) %}
-    {{ incomeExpenseSource(form = form, name = name, sourceLabel = 'Source of income', amountLabel = 'Repayment amount', amountHint = 'Only include the amount you’re paying to clear previously missed regular payments', scheduleLabel = 'Repaid every') }}
+    {{ incomeExpenseSource(form = form, name = name, sourceLabel = 'Source of income', amountLabel = 'Repayment amount', amountHint = 'Only include the amount you’re paying to clear previously missed regular payments', scheduleLabel = 'Repaid every', page = 'priority-debts') }}
     {{ linkButton(name = 'action[resetDebt][' + name + ']', label = 'Reset this debt', class = 'link-button js-hidden') }}
   {% endcall %}
 {% endmacro %}

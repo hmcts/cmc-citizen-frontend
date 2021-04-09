@@ -1,0 +1,52 @@
+{% macro offlineResponseForClaimantDashboard(claim) %}
+  {% if(claim.proceedOfflineReason === ProceedOfflineReason.APPLICATION_BY_CLAIMANT) %}
+    {{ t('You applied to change the claim') }}
+  {% else %}
+    {{ t('The defendant applied to change something about the claim') }}
+  {% endif %}
+{% endmacro %}
+
+{% macro offlineResponseForClaimantClaimDetails(claim) %}
+  <div class="status-block">
+    {% if(claim.proceedOfflineReason === ProceedOfflineReason.APPLICATION_BY_CLAIMANT) %}
+      <h2 class="heading-medium">{{ t('Wait for us to contact you by post') }}</h2>
+      <h3 class="heading-small">{{ t('You applied by post to change something about the claim') }}</h3>
+      <p>{{ t('You might have to go to a hearing.') }}</p>
+      <p>{{ t('We’ll contact you by post to tell you what to do next.') }}</p>
+      <p>{{ t('Your online account won’t be updated - any further updates will be by post.') }}</p>
+    {% else %}
+      <h2
+        class="heading-medium">{{ t('{{ defendantName }} applied by post to change something about the claim',{defendantName: claim.claimData.defendant.name}) }}</h2>
+      <p>{{ t('We’ll post you a copy of their application. This will explain what you need to do next.') }}</p>
+      <p>{{ t('Your online account won’t be updated - any further updates will be by post.') }}</p>
+    {% endif %}
+  </div>
+{% endmacro %}
+
+{% macro offlineResponseForDefendantDashboard(claim) %}
+  {% if(claim.proceedOfflineReason === ProceedOfflineReason.APPLICATION_BY_DEFENDANT) %}
+    {{ t('You applied to change the claim') }}
+  {% else %}
+    {{ t('The claimant applied to change something about the claim') }}
+  {% endif %}
+{% endmacro %}
+
+{% macro offlineResponseForDefendantClaimDetails(claim) %}
+  <div class="status-block">
+    {% if(claim.proceedOfflineReason === ProceedOfflineReason.APPLICATION_BY_DEFENDANT) %}
+
+      <h2 class="heading-medium">{{ t('You applied by post to change something about the claim') }}</h2>
+      <p>{{ t('You might have to go to a hearing.') }}</p>
+      <p>{{ t('We’ll contact you by post to tell you what to do next.') }}</p>
+      <p>{{ t('Your online account won’t be updated - any further updates will be by post.') }}</p>
+
+    {% else %}
+      <h2 class="heading-medium">{{ t('Wait for us to contact you by post') }}</h2>
+      <h3
+        class="heading-small">{{ t('{{ claimantName }} applied by post to change something about the claim',{claimantName: claim.claimData.claimant.name}) }}</h3>
+      <p>{{ t('We’ll post you a copy of their application. This will explain what you need to do next.') }}</p>
+      <p>{{ t('Your online account won’t be updated - any further updates will be by post.') }}</p>
+    {% endif %}
+  </div>
+{% endmacro %}
+

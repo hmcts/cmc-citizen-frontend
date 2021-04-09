@@ -2,13 +2,17 @@
   "featureToggles": {
     "testingSupport": true,
     "newFeaturesConsent": true,
-    "admissions": true,
     "returnErrorToUser": true,
     "mediation": true,
     "mediationPilot": true,
     "directionsQuestionnaire": true,
     "newDashboardStatus": false,
-    "inversionOfControl": true
+    "warningBanner": false,
+    "inversionOfControl": true,
+    "helpWithFees": false,
+    "autoEnrollIntoNewFeature": true,
+    "dashboard_pagination_enabled": false,
+    "breathingSpace": true
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"

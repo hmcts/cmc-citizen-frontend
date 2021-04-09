@@ -25,14 +25,20 @@
       <p>{{ t('Your online account won’t be updated - any further updates will be by post.') }}</p>
       <h3 class="heading-small">{{ t('Use this address') }}</h3>
       <p>{{ t('The defendant should have sent you the details - send them to:') }}</p>
-
-      <div class="keep-formatting panel">{{ t('Civil Money Claims') }}
-        {{ t('St. Katharine`s House') }}
-        {{ t('21-27 St. Katharine`s Street') }}
-        {{ t('Northampton') }}
-        {{ t('NN1 2LH') }}
-      </div>
-
+      {% if signPosting %}
+        <div class="keep-formatting panel">{{ t('HMCTS CMC') }}
+          {{ t('PO Box 12747') }}
+          {{ t('Harlow') }}
+          {{ t('CM20 9RA') }}
+        </div>
+      {% else %}
+        <div class="keep-formatting panel">{{ t('Civil Money Claims') }}
+          {{ t('St. Katharine`s House') }}
+          {{ t('21-27 St. Katharine`s Street') }}
+          {{ t('Northampton') }}
+          {{ t('NN1 2LH') }}
+         </div>
+      {% endif %}
       <p>{{ t('Or email them to {{ supportEmailAddress }}', { supportEmailAddress: supportEmailAddress }) }}</p>
       <h4 class="heading-small">{{ t('If the court believes the defendant can afford your plan') }}</h4>
       <p>{{ t('A County Court Judgment (CCJ) will be issued. This requires the defendant to pay according to the

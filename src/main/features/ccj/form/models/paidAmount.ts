@@ -37,7 +37,7 @@ export class PaidAmount {
       const amount: number = toNumberOrUndefined(value.amount)
       const claimedAmount: number = toNumberOrUndefined(value.claimedAmount)
       const option: PaidAmountOption = PaidAmountOption.all()
-        .filter(option => option.value === value.option)
+        .filter(amountOption => amountOption.value === value.option)
         .pop()
       return new PaidAmount(option, amount, claimedAmount)
     } else {

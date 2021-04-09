@@ -3,9 +3,9 @@ import I = CodeceptJS.I
 const I: I = actor()
 
 const fields = {
-  type: 'rows[0][type]',
-  description: 'rows[0][description]',
-  comment: 'comment'
+  type: { css: 'select[name="rows[0][type]"]' },
+  description: { css: 'textarea[name="rows[0][description]"]' },
+  comment: '#comment'
 }
 
 const buttons = {
@@ -15,7 +15,10 @@ const buttons = {
 export class DefendantEvidencePage {
 
   enterEvidenceRow (type: string, description: string, comment: string): void {
+    I.waitForElement(fields.type)
+    I.waitIfOnSafari()
     I.selectOption(fields.type, type)
+    I.waitForVisible(fields.description)
     I.fillField(fields.description, description)
     I.fillField(fields.comment, comment)
 

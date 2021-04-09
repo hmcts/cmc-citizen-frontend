@@ -149,12 +149,16 @@ function testData () {
   ]
 }
 
-describe('Settlement dashboard statuses', () => {
+describe('Settlement dashboard statuses dashboard', () => {
   attachDefaultHooks(app)
 
   testData().forEach(data => {
     context(data.status, () => {
-      beforeEach(() => draftStoreMock.resolveFindNoDraftFound())
+      beforeEach(() => {
+        draftStoreMock.resolveFindNoDraftFound()
+        claimStoreServiceMock.resolveRetrievePaginationInfoEmptyList()
+        claimStoreServiceMock.resolveRetrievePaginationInfoEmptyList()
+      })
 
       it(claimantContext.party, async () => {
         claimantContext.ownMock(data.claim)

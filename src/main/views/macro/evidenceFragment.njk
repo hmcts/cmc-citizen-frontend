@@ -17,7 +17,7 @@
     <select name="rows[{{ index }}][type]" id="rows[{{ index }}][type]"
       class="form-control-select {% if typeErrorExist %}form-control-error{% endif %}" >
 
-      <option value="">{{ t('-- Please make a selection --') }}</option>
+      <option value="" selected="selected">{{ t('-- Please make a selection --') }}</option>
       {% for row in EvidenceType.all() %}
         <option value="{{ row.value }}" {% if typeValue === row.value %}selected{% endif %}>{{ row.displayValue }}</option>
       {% endfor %}

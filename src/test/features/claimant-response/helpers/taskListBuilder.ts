@@ -685,7 +685,7 @@ describe('Claimant response task list builder', () => {
           }
         }
       })
-      claim.features = ['admissions', 'directionsQuestionnaire']
+      claim.features = ['directionsQuestionnaire']
 
       const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
         draft, claim, new DirectionsQuestionnaireDraft()
@@ -710,7 +710,7 @@ describe('Claimant response task list builder', () => {
           }
         }
       })
-      claim.features = ['admissions', 'directionsQuestionnaire']
+      claim.features = ['directionsQuestionnaire']
 
       const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
         draft, claim, new DirectionsQuestionnaireDraft()
@@ -735,7 +735,7 @@ describe('Claimant response task list builder', () => {
           }
         }
       })
-      claim.features = ['admissions', 'directionsQuestionnaire']
+      claim.features = ['directionsQuestionnaire']
       claim.response.freeMediation = YesNoOption.YES
 
       const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(

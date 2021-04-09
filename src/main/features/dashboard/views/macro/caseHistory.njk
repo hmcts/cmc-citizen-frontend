@@ -41,6 +41,7 @@
 
 {% from "./claimStatus/orders.njk" import
   directionsOrderIssued,
+  bespokeDirectionsOrderIssued,
   reviewRequester,
   reviewReceiver %}
 
@@ -136,9 +137,40 @@
   paperResponseForDefendantClaimDetails
 %}
 
+{% from "./claimStatus/offlineResponse.njk" import
+  offlineResponseForDefendantClaimDetails,
+  offlineResponseForClaimantClaimDetails %}
+
+{% from "./claimStatus/claimTransferred.njk" import
+  claimTransferredDefendantClaimDetails,
+  claimTransferredClaimantClaimDetails
+%}
+
+{% from "./claimStatus/helpWithFees.njk" import
+  helpWithFeesValidationClaimStatus, 
+  invalidHelpWithFeesValidationClaimStatus, 
+  rejectedHelpWithFeesValidationClaimStatus,
+  helpWithFeesRequiredmoreInfoClaimStatus,
+  helpWithFeesPartRemettedClaimStatus,
+  helpWithFeesClosed,
+  helpWithFeesIntrestRecalculateStatus,
+  helpWithFeesFullRemettedClaimStatus,
+  helpWithFeesUpdateNumber
+%}
+
+{% from "./claimStatus/businessQueue.njk" import
+  businessQueueDefendantClaimDetails,
+  businessQueueClaimantClaimDetails
+%}
+
+{% from "./claimStatus/breathingSpace.njk" import
+  enterBreathingSpaceForClaimantClaimDetails,
+  liftingBreathingSpaceForClaimantClaimDetails
+%}
+
 {% macro caseHistoryForClaimantClaimDetails(claim, csrf, mediationDeadline, reconsiderationDeadline, isReviewOrderEligible, respondToReviewOrderDeadline, judgePilot) %}
   {% for state in claim.stateHistory %}
-    {% if state.status === ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE %}
+    {% if state.status === ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE and claim.state !== 'CLOSED_HWF' %}
       {{ paidInFullClaimantClaimDetails(claim.externalId) }}
     {% elif state.status === ClaimStatus.PAID_IN_FULL %}
       {{ paidInFullClaimantClaimSettledDetails(claim) }}
@@ -146,16 +178,44 @@
       {{ paidInFullCCJCancelledClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED %}
       {{ paidInFullCCJSatisfiedClaimantClaimDetails(claim) }}
+    {% elif (state.status === ClaimStatus.NO_RESPONSE or state.status === ClaimStatus.ELIGIBLE_FOR_CCJ) and claim.helpWithFeesNumber and claim.state === 'HWF_APPLICATION_PENDING' and claim.lastEventTriggeredForHwfCase === 'RecalculateInterest' %}
+      {{ helpWithFeesIntrestRecalculateStatus(claim) }}
+    {% elif (state.status === ClaimStatus.NO_RESPONSE or state.status === ClaimStatus.ELIGIBLE_FOR_CCJ) and claim.helpWithFeesNumber and claim.state === 'AWAITING_RESPONSE_HWF' and claim.lastEventTriggeredForHwfCase === 'RecalculateInterest' %}
+      {{ helpWithFeesIntrestRecalculateStatus(claim) }}
+    {% elif (state.status === ClaimStatus.NO_RESPONSE or state.status === ClaimStatus.ELIGIBLE_FOR_CCJ) and claim.helpWithFeesNumber and claim.state === 'AWAITING_RESPONSE_HWF' and claim.claimData.hwfFeeDetailsSummary !== undefined and (claim.lastEventTriggeredForHwfCase === 'FullRemissionHWFRejected' or claim.lastEventTriggeredForHwfCase === 'NoRemissionHWF') %}
+      {{ rejectedHelpWithFeesValidationClaimStatus(claim) }}
+    {% elif (state.status === ClaimStatus.NO_RESPONSE or state.status === ClaimStatus.ELIGIBLE_FOR_CCJ) and claim.helpWithFeesNumber and claim.state === 'AWAITING_RESPONSE_HWF' and claim.lastEventTriggeredForHwfCase === 'MoreInfoRequiredForHWF' %}
+      {{ helpWithFeesRequiredmoreInfoClaimStatus(claim) }}
+    {% elif (state.status === ClaimStatus.NO_RESPONSE or state.status === ClaimStatus.ELIGIBLE_FOR_CCJ) and claim.helpWithFeesNumber and claim.state === 'HWF_APPLICATION_PENDING' and claim.lastEventTriggeredForHwfCase === 'MoreInfoRequiredForHWF' %}
+      {{ helpWithFeesRequiredmoreInfoClaimStatus(claim) }}
+    {% elif (state.status === ClaimStatus.NO_RESPONSE or state.status === ClaimStatus.ELIGIBLE_FOR_CCJ) and claim.helpWithFeesNumber and claim.state === 'AWAITING_RESPONSE_HWF' and claim.claimData.feeRemitted !== undefined and claim.lastEventTriggeredForHwfCase === 'HWFPartRemission' %}
+      {{ helpWithFeesPartRemettedClaimStatus(claim) }}
+    {% elif (state.status === ClaimStatus.NO_RESPONSE or state.status === ClaimStatus.ELIGIBLE_FOR_CCJ) and claim.helpWithFeesNumber and claim.state === 'AWAITING_RESPONSE_HWF' and claim.claimData.feeRemitted !== undefined and claim.lastEventTriggeredForHwfCase === 'HWFFullRemision' %}
+      {{ helpWithFeesFullRemettedClaimStatus(claim) }}
+    {% elif (state.status === ClaimStatus.NO_RESPONSE or state.status === ClaimStatus.ELIGIBLE_FOR_CCJ) and claim.helpWithFeesNumber and claim.lastEventTriggeredForHwfCase === 'UpdateHWFNumber' %}
+      {{ helpWithFeesUpdateNumber(claim) }}
+    {% elif (state.status === ClaimStatus.NO_RESPONSE or state.status === ClaimStatus.ELIGIBLE_FOR_CCJ) and claim.helpWithFeesNumber and claim.state === 'CLOSED_HWF' %}
+      {{ helpWithFeesClosed(claim) }}
+    {% elif (state.status === ClaimStatus.NO_RESPONSE or state.status === ClaimStatus.ELIGIBLE_FOR_CCJ) and claim.helpWithFeesNumber and claim.state === 'AWAITING_RESPONSE_HWF' and claim.lastEventTriggeredForHwfCase === 'InvalidHWFReference' %}
+      {{ invalidHelpWithFeesValidationClaimStatus(claim) }}
+    {% elif (state.status === ClaimStatus.NO_RESPONSE or state.status === ClaimStatus.ELIGIBLE_FOR_CCJ) and claim.helpWithFeesNumber and claim.state === 'HWF_APPLICATION_PENDING' %}
+      {{ helpWithFeesValidationClaimStatus(claim) }}
     {% elif state.status === ClaimStatus.NO_RESPONSE %}
       {{ noResponseForClaimantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.TRANSFERRED %}
+      {{ claimTransferredClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.MORE_TIME_REQUESTED %}
       {{ moreTimeRequestedForClaimantClaimDetails(claim) }}
-    {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
+    {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ and claim.state !== 'HWF_APPLICATION_PENDING' and claim.state !== 'AWAITING_RESPONSE_HWF'%}
       {% if not claim.isFullAdmissionPastPaymentDate %}
         {{ ccjEligibleForClaimantClaimDetails(claim, csrf) }}
       {% endif %}
     {% elif state.status === ClaimStatus.DEFENDANT_PAPER_RESPONSE %}
       {{ paperResponseForClaimantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.PROCEED_OFFLINE %}
+      {{ offlineResponseForClaimantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.BUSINESS_QUEUE %}
+      {{ businessQueueClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE %}
       {{ claimFullAdmissionPayImmediatelyPastDeadlineForClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_PART_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE %}
@@ -249,6 +309,8 @@
       {{ claimRejectedWithDQsForClaimantClaimDetails(claim, mediationDeadline) }}
     {% elif state.status === ClaimStatus.ORDER_DRAWN %}
       {{ directionsOrderIssued(claim, MadeBy.CLAIMANT.value, reconsiderationDeadline, isReviewOrderEligible, judgePilot) }}
+    {% elif state.status === ClaimStatus.BESPOKE_ORDER_DRAWN %}
+      {{ bespokeDirectionsOrderIssued(claim) }}
     {% elif state.status === ClaimStatus.REVIEW_ORDER_REQUESTED %}
       {% if claim.reviewOrder.requestedBy === MadeBy.CLAIMANT.value %}
         {{ reviewRequester(claim, respondToReviewOrderDeadline) }}
@@ -260,6 +322,14 @@
       {{ intentionToProceedPastDeadlineForClaimantClaimDetails(claim) }}
     {% endif %}
   {% endfor %}
+  {% if breathingSpace and claim.state !== 'HWF_APPLICATION_PENDING' and claim.state !== 'TRANSFER_TO_CCBC' and claim.state !== 'SETTLED' and claim.state !== 'PROCEEDS_IN_CASE_MAN' and claim.state !== 'CLOSED_HWF' and claim.state !== 'BUSINESS_QUEUE' and claim.state !== 'TRANSFERRED' and claim.state !== 'AWAITING_RESPONSE_HWF' %}
+    {% if claim.claimData.breathingSpace.breathingSpaceType === undefined %}
+      {{ enterBreathingSpaceForClaimantClaimDetails(claim.externalId) }}
+    {% endif %}
+    {% if claim.claimData.breathingSpace.breathingSpaceType %}
+      {{ liftingBreathingSpaceForClaimantClaimDetails(claim.externalId) }}
+    {% endif %}
+  {% endif %}
 {% endmacro %}
 
 {% macro caseHistoryForDefendantClaimDetails(claim, reconsiderationDeadline, isReviewOrderEligible, respondToReviewOrderDeadline, judgePilot) %}
@@ -274,10 +344,16 @@
       {{ paidInFullCCJSatisfiedDefendantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.MORE_TIME_REQUESTED %}
       {{ moreTimeRequestedForDefendantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.TRANSFERRED %}
+      {{ claimTransferredDefendantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
       {{ ccjEligibleForDefendantClaimDetails(claim, csrf) }}
     {% elif state.status === ClaimStatus.DEFENDANT_PAPER_RESPONSE %}
       {{ paperResponseForDefendantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.PROCEED_OFFLINE %}
+      {{ offlineResponseForDefendantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.BUSINESS_QUEUE %}
+      {{ businessQueueDefendantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ %}
       {{ admissionByCCJDefendantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.CCJ_AFTER_SETTLEMENT_BREACHED or
@@ -381,6 +457,8 @@
       {{ directionsOrderIssued(claim, MadeBy.DEFENDANT.value, reconsiderationDeadline, isReviewOrderEligible, judgePilot) }}
     {% elif state.status === ClaimStatus.ORDER_DRAWN %}
       {{ directionsOrderIssued(claim, MadeBy.DEFENDANT.value, reconsiderationDeadline, isReviewOrderEligible, judgePilot) }}
+    {% elif state.status === ClaimStatus.BESPOKE_ORDER_DRAWN %}
+      {{ bespokeDirectionsOrderIssued(claim) }}
     {% elif state.status === ClaimStatus.INTENTION_TO_PROCEED_DEADLINE_PASSED %}
       {{ intentionToProceedPastDeadlineForDefendantClaimDetails(claim) }}
     {% endif %}

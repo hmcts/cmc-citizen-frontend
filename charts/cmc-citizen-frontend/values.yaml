@@ -2,9 +2,20 @@ nodejs:
   image: hmctspublic.azurecr.io/cmc/citizen-frontend:latest
   applicationPort: 3000
   memoryRequests: 512Mi
+  cpuRequests: 1000m
   memoryLimits: 1024Mi
-  cpuLimits: 1
+  cpuLimits: 2500m
+  devmemoryRequests: 512Mi
+  devcpuRequests: 1000m
+  devmemoryLimits: 1024Mi
+  devcpuLimits: 2500m
+  readinessDelay: 130  # claim-store will start much slower
+  livenessDelay: 130  # claim-store will start much slower
   aadIdentityName: money-claims
+  autoscaling:        # Default is false
+    enabled: true 
+    maxReplicas: 5    # Required setting
+    targetCPUUtilizationPercentage: 80 # Default is 80% target CPU utilization
   environment:
     NODE_ENV: production
     REFORM_TEAM: cmc
@@ -12,7 +23,6 @@ nodejs:
 
     IDAM_API_URL: https://idam-api.{{ .Values.global.environment }}.platform.hmcts.net
     IDAM_AUTHENTICATION_WEB_URL: https://idam-web-public.{{ .Values.global.environment }}.platform.hmcts.net
-    FEATURE_TOGGLES_API_URL: http://rpe-feature-toggle-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
     IDAM_S2S_AUTH: http://rpe-service-auth-provider-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
     PAY_URL: http://payment-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
     PAY_RETURN_URL: https://moneyclaims.{{ .Values.global.environment }}.platform.hmcts.net
@@ -36,6 +46,11 @@ nodejs:
     FEATURE_MEDIATION_PILOT: true
     FEATURE_DIRECTIONS_QUESTIONNAIRE: true
     FEATURE_INVERSION_OF_CONTROL: true
+    FEATURE_PCQ: false
+    FEATURE_SIGN_POSTING_CTSC: false
+    AUTO_ENROLL_INTO_NEW_FEATURE: true
+    FEATURE_BREATHING_SPACE: false
+
   keyVaults:
     cmc:
       secrets:
@@ -54,10 +69,9 @@ nodejs:
         - cmc-webchat-button-service-closed
         - postcode-lookup-api-key
         - launchDarkly-sdk-key
+        - pcq-token-key
 
 idam-pr:
-  enabled: false
-rpe-feature-toggle-api:
   enabled: false
 postgresql:
   enabled: false

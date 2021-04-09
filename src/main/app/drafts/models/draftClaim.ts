@@ -19,6 +19,8 @@ import { InterestEndDate } from 'claim/form/models/interestEndDate'
 import { InterestTotal } from 'claim/form/models/interestTotal'
 import { InterestContinueClaiming } from 'claim/form/models/interestContinueClaiming'
 import { InterestHowMuch } from 'claim/form/models/interestHowMuch'
+import { HelpWithFees } from 'claim/form/models/helpWithFees'
+import { BreathingSpace } from 'features/claim/form/models/breathingSpace'
 
 export class DraftClaim extends DraftDocument {
 
@@ -36,12 +38,15 @@ export class DraftClaim extends DraftDocument {
   interestTotal: InterestTotal = new InterestTotal()
   interestContinueClaiming: InterestContinueClaiming = new InterestContinueClaiming()
   interestHowMuch: InterestHowMuch = new InterestHowMuch()
+  helpWithFees: HelpWithFees = new HelpWithFees()
   reason: Reason = new Reason()
   readResolveDispute: boolean = false
   readCompletingClaim: boolean = false
   qualifiedStatementOfTruth?: QualifiedStatementOfTruth
   timeline: ClaimantTimeline = new ClaimantTimeline()
   evidence: Evidence = new Evidence()
+  feeAmountInPennies: number = 0
+  breathingSpace: BreathingSpace = new BreathingSpace()
 
   deserialize (input: any): DraftClaim {
     if (input) {
@@ -57,9 +62,13 @@ export class DraftClaim extends DraftDocument {
       this.interestTotal = new InterestTotal().deserialize(input.interestTotal)
       this.interestContinueClaiming = new InterestContinueClaiming().deserialize(input.interestContinueClaiming)
       this.interestHowMuch = new InterestHowMuch().deserialize(input.interestHowMuch)
+      if (input.helpWithFees) {
+        this.helpWithFees = new HelpWithFees().deserialize(input.helpWithFees)
+      }
       this.amount = new ClaimAmountBreakdown().deserialize(input.amount)
       this.reason = new Reason().deserialize(input.reason)
       this.readResolveDispute = input.readResolveDispute
+      this.feeAmountInPennies = input.feeAmountInPennies
       this.readCompletingClaim = input.readCompletingClaim
       if (input.qualifiedStatementOfTruth) {
         this.qualifiedStatementOfTruth = new QualifiedStatementOfTruth().deserialize(input.qualifiedStatementOfTruth)

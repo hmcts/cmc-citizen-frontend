@@ -7,6 +7,7 @@ export class NotEligibleReason {
   static readonly MULTIPLE_CLAIMANTS: string = 'multiple-claimants'
   static readonly MULTIPLE_DEFENDANTS: string = 'multiple-defendants'
   static readonly HELP_WITH_FEES: string = 'help-with-fees'
+  static readonly HELP_WITH_FEES_REFERENCE: string = 'help-with-fees-reference'
   static readonly CLAIMANT_ADDRESS: string = 'claimant-address'
   static readonly DEFENDANT_ADDRESS: string = 'defendant-address'
   static readonly GOVERNMENT_DEPARTMENT: string = 'government-department'

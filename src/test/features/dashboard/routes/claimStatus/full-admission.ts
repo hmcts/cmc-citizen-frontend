@@ -645,7 +645,7 @@ function testData () {
 const claimPagePath = Paths.claimantPage.evaluateUri({ externalId: fullAdmissionClaim.externalId })
 const defendantPagePath = Paths.defendantPage.evaluateUri({ externalId: fullAdmissionClaim.externalId })
 
-describe('Dashboard page', () => {
+describe('Dashboard page full admission claim status', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {

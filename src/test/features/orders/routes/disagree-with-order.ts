@@ -46,7 +46,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
         })
         it('should render page when everything is fine', async () => {
           draftStoreServiceMock.resolveFind('orders')
-          claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId({ features: 'admissions,directionsQuestionnaire' })
+          claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId({ features: 'directionsQuestionnaire' })
 
           await request(app)
             .get(pagePath)
@@ -82,7 +82,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
           it('should return 500 and render error page when cannot save draft', async () => {
             draftStoreServiceMock.resolveFind('orders')
             draftStoreServiceMock.rejectSave()
-            claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId({ features: 'admissions,directionsQuestionnaire' })
+            claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId({ features: 'directionsQuestionnaire' })
 
             await request(app)
               .post(pagePath)
@@ -94,7 +94,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
           it('should redirect to the dashboard when nothing is entered', async () => {
             draftStoreServiceMock.resolveFind('orders')
             draftStoreServiceMock.resolveSave()
-            claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId({ features: 'admissions,directionsQuestionnaire' })
+            claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId({ features: 'directionsQuestionnaire' })
             claimStoreServiceMock.resolveSaveOrder()
             draftStoreServiceMock.resolveFind('orders')
             draftStoreServiceMock.resolveDelete()
@@ -110,7 +110,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
           it('should redirect to the dashboard when everything is fine', async () => {
             draftStoreServiceMock.resolveFind('orders')
             draftStoreServiceMock.resolveSave()
-            claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId({ features: 'admissions,directionsQuestionnaire' })
+            claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId({ features: 'directionsQuestionnaire' })
             claimStoreServiceMock.resolveSaveOrder()
             draftStoreServiceMock.resolveFind('orders')
             draftStoreServiceMock.resolveDelete()

@@ -19,6 +19,15 @@ function renderPage (res: express.Response, form: Form<SupportRequired>) {
 export default express.Router()
   .get(Paths.supportPage.uri, (req: express.Request, res: express.Response) => {
     const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
+    if (draft.document.supportRequired.languageInterpreted === 'None') {
+      draft.document.supportRequired.languageInterpreted = ''
+    }
+    if (draft.document.supportRequired.signLanguageInterpreted === 'None') {
+      draft.document.supportRequired.signLanguageInterpreted = ''
+    }
+    if (draft.document.supportRequired.otherSupport === 'None') {
+      draft.document.supportRequired.otherSupport = ''
+    }
     renderPage(res, new Form<SupportRequired>(draft.document.supportRequired))
   })
   .post(Paths.supportPage.uri, FormValidator.requestHandler(SupportRequired, SupportRequired.fromObject),

@@ -18,18 +18,18 @@
 {% macro paymentIntentionFragment(amount, paymentIntention) %}
   {% if paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
     {% if amount %}
-      <p>{{ t('They’ve offered to pay you {{ amount }} by {{ paymentDate }}.', { amount: amount | numeral, paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
+      <p>{{ t('They’ve offered to pay you {{ amount }} by {{ paymentDate }}. This is the total amount you’ll be paid, including the claim fee and interest if applicable.', { amount: amount | numeral, paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
     {% else %}
       <p>{{ t('They’ve offered to pay you this by {{ paymentDate }}.', { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
     {% endif %}
   {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
     {% if amount %}
-      <p>{{ t('They’ve offered to pay you {{ amount }} in instalments.', { amount: amount | numeral }) }}</p>
+      <p>{{ t('They’ve offered to pay you {{ amount }} in instalments. This is the total amount you’ll be paid, including the claim fee and interest if applicable.', { amount: amount | numeral }) }}</p>
     {% else %}
       <p>{{ t('They’ve offered to pay you this in instalments.') }}</p>
     {% endif %}
   {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
-    <p>{{ t('They’ve offered to pay you {{ amount }} immediately.', { amount: amount | numeral }) }}</p>
+    <p>{{ t('They’ve offered to pay you {{ amount }} immediately. This is the total amount you’ll be paid, including the claim fee and interest if applicable.', { amount: amount | numeral }) }}</p>
   {% endif %}
 {% endmacro %}
 
@@ -51,22 +51,26 @@
 
 {% macro fullResponseFragment() %}
   {% if dqsEnabled %}
-    {% set label = 'Download their full response and hearing requirements' %}
+    {% set label = 'Download their full response and hearing requirements (PDF)' %}
   {% else %}
-    {% set label = 'Download their full response' %}
+    {% set label = 'Download their full response (PDF)' %}
   {% endif %}
 
   <div class="form-group">
     <h3 class="heading-small">{{ t('Full response') }}</h3>
-    <p>{{ internalLink(t(label), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId })) }}
-    {{ t('(PDF)') }}</p>
+    <p>{{ internalLink(t(label), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId })) }}</p>
   </div>
 {% endmacro %}
 
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE and not alreadyPaid %}
+      {% if claim.response.responseMethod == domain.ResponseMethod.OCON_FORM %}
+        <p>{{ t('{{ defendantName }} has rejected the claim. They responded on paper.', { defendantName: defendantName }) }}</p>
+        <p>{{ t('To see what they said, ') }}{{ internalLink(t('download their response and hearing requirements (PDF)'),
+            ResponsePaths.scannedResponseForm.evaluateUri({ externalId: claim.externalId })) }}
+        </p>
+      {% elif claim.response.responseType === domain.ResponseType.FULL_DEFENCE and not alreadyPaid %}
         <p>{{ t('{{ defendantName }} has rejected the claim.', { defendantName: defendantName }) }}</p>
 
         <h2 class="heading-medium">{{ t('Their defence') }}</h2>
@@ -114,7 +118,7 @@
           {{ paymentInformationFragment(paymentDeclaration = claim.response.paymentDeclaration) }}
         {% endif %}
       {% elif claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
-        <p>{{ t('{{ defendantName }} admits they owe all the money you’ve claimed.', { defendantName: defendantName }) }}</p>
+        <p>{{ t('{{ defendantName }} admits they owe all the money you’ve claimed. This is the total amount you’ll be paid, including the claim fee and interest if applicable', { defendantName: defendantName }) }}</p>
         <p>
           {{ paymentIntentionFragment(
             amount = undefined,

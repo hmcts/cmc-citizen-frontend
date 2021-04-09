@@ -1,69 +1,106 @@
-require("ts-node/register");
-require("tsconfig-paths/register");
+require('ts-node/register')
+require('tsconfig-paths/register')
 
-const supportedBrowsers = require('@hmcts/cmc-supported-browsers').supportedBrowsers
+const supportedBrowsers = require('./src/integration-test/crossbrowser/supportedBrowsers.js');
+const claimantEmail = `civilmoneyclaims+claimant-${require('randomstring').generate(7).toLowerCase()}@gmail.com`
+const defendantEmail = `civilmoneyclaims+defendant-${require('randomstring').generate(7).toLowerCase()}@gmail.com`
+const { bootstrapAll } = require('./src/integration-test/bootstrap/bootstrap')
+const { teardownAll } = require('./src/integration-test/bootstrap/teardown')
+const waitForTimeout = parseInt(process.env.WAIT_FOR_TIMEOUT) || 45000;
+const smartWait = parseInt(process.env.SMART_WAIT) || 30000;
+const browser = process.env.BROWSER_GROUP || 'chrome';
+const outputDir = './functional-output'
+const defaultSauceOptions = {
+  username: process.env.SAUCE_USERNAME,
+  accessKey: process.env.SAUCE_ACCESS_KEY,
+  tunnelIdentifier: process.env.TUNNEL_IDENTIFIER || 'reformtunnel',
+  acceptSslCerts: true,
+  windowSize: '1600x900',
+  tags: ['cmc']
+};
 
-const browser = requiredValue(process.env.SAUCELABS_BROWSER, 'SAUCELABS_BROWSER')
-const saucelabsTunnelIdentifier = requiredValue(process.env.SAUCELABS_TUNNEL_IDENTIFIER, 'SAUCELABS_TUNNEL_IDENTIFIER')
-const saucelabsUsername = requiredValue(process.env.SAUCE_USERNAME, 'SAUCELABS_USERNAME')
-const saucelabsAccessKey = requiredValue(process.env.SAUCE_ACCESS_KEY, 'SAUCELABS_ACCESS_KEY')
-
-function requiredValue (envVariableValue, variableName) {
-  if (envVariableValue && envVariableValue.trim().length > 0) {
-    return envVariableValue.trim()
-  } else {
-    throw new Error(`${variableName} is a required environment variable, but wasn't set`)
-  }
+function merge (intoObject, fromObject) {
+  return Object.assign({}, intoObject, fromObject);
 }
 
-function setupDesiredCapabilitiesFor (browser, saucelabsTunnelName) {
-  let desiredCapability = supportedBrowsers[browser]
-  desiredCapability.tunnelIdentifier = saucelabsTunnelName
-  desiredCapability.tags = ['cmc']
-  return desiredCapability
-}
-
-exports.config = {
-  name: 'integration-tests',
-  bootstrap: './src/integration-test/bootstrap/bootstrap.ts',
-  tests: './src/integration-test/tests/**/*_test.*',
-  output: './output',
-  timeout: 10000,
-  multiple: {
-    parallel: {
-      chunks: parseInt(process.env.CHUNKS || '3')
+function getBrowserConfig(browserGroup) {
+  const browserConfig = [];
+  for (const candidateBrowser in supportedBrowsers[browserGroup]) {
+    if (candidateBrowser) {
+      const candidateCapabilities = supportedBrowsers[browserGroup][candidateBrowser];
+      candidateCapabilities['sauce:options'] = merge(
+        defaultSauceOptions, candidateCapabilities['sauce:options']
+      );
+      browserConfig.push({
+        browser: candidateCapabilities.browserName,
+        capabilities: candidateCapabilities
+      });
+    } else {
+      console.error('ERROR: supportedBrowsers is empty or incorrectly defined');
     }
+  }
+  return browserConfig;
+}
+
+const setupConfig = {
+  name: 'integration-tests',
+  async bootstrapAll() {
+    await bootstrapAll(claimantEmail, defendantEmail)
   },
+  async teardownAll() {
+    await teardownAll(claimantEmail, defendantEmail)
+  },
+  tests: './src/integration-test/tests/**/*_test.*',
+  output: `${process.cwd()}/${outputDir}`,
   helpers: {
     WebDriver: {
       url: process.env.CITIZEN_APP_URL || 'https://localhost:3000',
-      browser: supportedBrowsers[browser].browserName,
-      waitForTimeout: 30000,
-      windowSize: '1600x900',
-      uniqueScreenshotNames: true,
-      timeouts: {
-        script: 30000,
-        pageLoad: 30000,
-        'page load': 30000
-      },
+      browser,
+      smartWait,
+      waitForTimeout,
+      cssSelectorsEnabled: 'true',
       host: 'ondemand.eu-central-1.saucelabs.com',
       port: 80,
       region: 'eu',
-      user: process.env.SAUCE_USERNAME,
-      key: process.env.SAUCE_ACCESS_KEY,
-      desiredCapabilities: setupDesiredCapabilitiesFor(browser, saucelabsTunnelIdentifier)
+      capabilities: {}
     },
     IdamHelper: {
-      require: './src/integration-test/helpers/idamHelper'
+      require: './src/integration-test/helpers/idamHelper',
+      claimantEmail,
+      defendantEmail
     },
     ClaimStoreHelper: {
-      require: './src/integration-test/helpers/claimStoreHelper'
+      require: './src/integration-test/helpers/claimStoreHelper',
+      claimantEmail,
+      defendantEmail
     },
     PageHelper: {
       require: './src/integration-test/helpers/pageHelper'
     },
+    PcqHelper: {
+      require: './src/integration-test/helpers/pcqHelper'
+    },
+    hwfHelper: {
+      require: './src/integration-test/helpers/hwfHelper'
+    },
     SaucelabsReporter: {
       require: './src/integration-test/helpers/saucelabsReporter'
+    },
+    SauceLabsBrowserHelper: {
+      require: './src/integration-test/helpers/SauceLabsBrowserHelper.js'
+    },
+    Mochawesome: {
+      uniqueScreenshotNames: 'true'
+    }
+  },
+  plugins: {
+    retryFailedStep: {
+      enabled: true,
+      retries: 2
+    },
+    autoDelay: {
+      enabled: true,
+      delayAfter: 2000
     }
   },
   mocha: {
@@ -75,22 +112,38 @@ exports.config = {
         }
       },
       'mocha-junit-reporter': {
-        stdout: `./output/${browser}-citizen-mocha-junit-reporter-stdout.log`,
+        stdout: `${outputDir}/${browser}-citizen-mocha-junit-reporter-stdout.log`,
         options: {
-          mochaFile: `./output/${browser}-citizen-e2e-result.xml`,
+          mochaFile: `${outputDir}/${browser}-citizen-e2e-result.xml`,
           reportTitle: `Citizen cross browser E2E results for: ${browser}`,
           inlineAssets: true
         }
       },
-      'mochawesome': {
-        stdout: `./output/${browser}-citizen-mochawesome-stdout.log`,
+      mochawesome: {
+        stdout: `${outputDir}/${browser}-citizen-mochawesome-stdout.log`,
         options: {
-          reportDir: 'output',
+          reportDir: outputDir,
           reportFilename: `${browser}-citizen-e2e-result`,
           inlineAssets: true,
           reportTitle: `${browser} citizen E2E tests result`
         }
       }
     }
+  },
+  multiple: {
+    microsoft: {
+      browsers: getBrowserConfig('microsoft')
+    },
+    chrome: {
+      browsers: getBrowserConfig('chrome')
+    },
+    firefox: {
+      browsers: getBrowserConfig('firefox')
+    },
+    safari: {
+      browsers: getBrowserConfig('safari')
+    }
   }
-}
+};
+
+exports.config = setupConfig;

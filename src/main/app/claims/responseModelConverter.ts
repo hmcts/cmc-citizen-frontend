@@ -70,6 +70,7 @@ import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/dir
 import { DirectionsQuestionnaire } from 'claims/models/directions-questionnaire/directionsQuestionnaire'
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
+import { ResponseMethod } from 'claims/models/response/responseMethod'
 
 export class ResponseModelConverter {
 
@@ -93,6 +94,7 @@ export class ResponseModelConverter {
   private static convertFullDefence (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): FullDefenceResponse {
     return {
       responseType: ResponseType.FULL_DEFENCE,
+      responseMethod: ResponseMethod.DIGITAL,
       defendant: this.convertPartyDetails(draft.defendantDetails),
       defenceType: this.inferDefenceType(draft),
       defence: draft.defence.text,
@@ -121,6 +123,7 @@ export class ResponseModelConverter {
   private static convertFullDefenceAsPartialAdmission (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): PartialAdmissionResponse {
     return {
       responseType: ResponseType.PART_ADMISSION,
+      responseMethod: ResponseMethod.DIGITAL,
       amount: draft.rejectAllOfClaim.howMuchHaveYouPaid.amount,
       paymentDeclaration: {
         paidDate: draft.rejectAllOfClaim.howMuchHaveYouPaid.date.asString(),
@@ -148,6 +151,7 @@ export class ResponseModelConverter {
   private static convertFullAdmission (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft): FullAdmissionResponse {
     return {
       responseType: ResponseType.FULL_ADMISSION,
+      responseMethod: ResponseMethod.DIGITAL,
       freeMediation: FreeMediationUtil.getFreeMediation(mediationDraft),
       mediationPhoneNumber: FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft, draft),
       mediationContactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft, draft),
@@ -168,6 +172,7 @@ export class ResponseModelConverter {
 
     return {
       responseType: ResponseType.PART_ADMISSION,
+      responseMethod: ResponseMethod.DIGITAL,
       amount: amount,
       paymentDeclaration: draft.partialAdmission.howMuchHaveYouPaid.date
         && draft.partialAdmission.howMuchHaveYouPaid.text
@@ -357,7 +362,9 @@ export class ResponseModelConverter {
     if (defendant.partyDetails.name) {
       party.name = defendant.partyDetails.name
     }
-
+    if (defendant.partyDetails.pcqId) {
+      party.pcqId = defendant.partyDetails.pcqId
+    }
     if (defendant.email) {
       party.email = defendant.email.address
     }
@@ -556,7 +563,7 @@ export class ResponseModelConverter {
       })
     }
     if (income.otherSources && income.anyOtherIncomePopulated) {
-      income.otherSources.map(source => {
+      income.otherSources.forEach(source => {
         incomes.push({
           type: IncomeType.OTHER,
           frequency: source.schedule.value as PaymentFrequency,
@@ -680,7 +687,7 @@ export class ResponseModelConverter {
     }
 
     if (monthlyExpenses.other && monthlyExpenses.anyOtherPopulated) {
-      monthlyExpenses.other.map(source => {
+      monthlyExpenses.other.forEach(source => {
         expenses.push({
           type: ExpenseType.OTHER,
           frequency: source.schedule.value as PaymentFrequency,

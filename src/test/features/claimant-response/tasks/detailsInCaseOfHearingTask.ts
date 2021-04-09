@@ -23,7 +23,7 @@ describe('Details In case of hearing task', () => {
     const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
 
     const claim: Claim = new Claim().deserialize({
-      ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
     })
 
     expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft, claim)).to.be.false
@@ -33,7 +33,7 @@ describe('Details In case of hearing task', () => {
     const draft = new DraftClaimantResponse()
     const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
     const claim: Claim = new Claim().deserialize({
-      ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
     })
     directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({
       exceptionalCircumstances: { option: 'no' },
@@ -47,7 +47,7 @@ describe('Details In case of hearing task', () => {
     const draft = new DraftClaimantResponse()
     const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
     const claim: Claim = new Claim().deserialize({
-      ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
     })
     directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({
       exceptionalCircumstances: { option: 'no' },
@@ -67,7 +67,7 @@ describe('Details In case of hearing task', () => {
 
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
     const claim: Claim = new Claim().deserialize({
-      ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
     })
 
     expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft, claim)).to.be.false
@@ -77,7 +77,7 @@ describe('Details In case of hearing task', () => {
     const draft = new DraftClaimantResponse()
     const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
     const claim: Claim = new Claim().deserialize({
-      ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
     })
     directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({
       exceptionalCircumstances: { option: 'no' },
@@ -94,7 +94,7 @@ describe('Details In case of hearing task', () => {
     const draft = new DraftClaimantResponse()
     const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
     const claim: Claim = new Claim().deserialize({
-      ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
     })
     directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({
       exceptionalCircumstances: { option: 'no' },
@@ -112,7 +112,7 @@ describe('Details In case of hearing task', () => {
     const draft = new DraftClaimantResponse()
     const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
     const claim: Claim = new Claim().deserialize({
-      ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
     })
     directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({
       exceptionalCircumstances: { option: 'no' },
@@ -134,7 +134,7 @@ describe('Details In case of hearing task', () => {
     const draft = new DraftClaimantResponse()
     const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
     const claim: Claim = new Claim().deserialize({
-      ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
     })
     directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({
       exceptionalCircumstances: { option: 'no' },
@@ -156,7 +156,7 @@ describe('Details In case of hearing task', () => {
     const draft = new DraftClaimantResponse()
     const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
     const claim: Claim = new Claim().deserialize({
-      ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
     })
     directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({
       exceptionalCircumstances: { option: 'no' },
@@ -175,7 +175,7 @@ describe('Details In case of hearing task', () => {
     const draft = new DraftClaimantResponse()
     const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
     const claim: Claim = new Claim().deserialize({
-      ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
     })
     directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({
       exceptionalCircumstances: { option: 'no' },
@@ -194,7 +194,7 @@ describe('Details In case of hearing task', () => {
     const draft = new DraftClaimantResponse()
     const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
     const claim: Claim = new Claim().deserialize({
-      ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
     })
     directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({
       exceptionalCircumstances: { option: 'no' },
@@ -217,7 +217,7 @@ describe('Details In case of hearing task', () => {
     const draft = new DraftClaimantResponse()
     const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
     const claim: Claim = new Claim().deserialize({
-      ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
     })
     directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({
       exceptionalCircumstances: { option: 'no' },
@@ -240,7 +240,7 @@ describe('Details In case of hearing task', () => {
     const draft = new DraftClaimantResponse()
     const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
     const claim: Claim = new Claim().deserialize({
-      ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
     })
     directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({
       exceptionalCircumstances: { option: 'no' },
@@ -268,7 +268,7 @@ describe('Details In case of hearing task', () => {
     const draft = new DraftClaimantResponse()
     const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
     const claim: Claim = new Claim().deserialize({
-      ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
     })
     directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({
       exceptionalCircumstances: { option: 'no' },
@@ -304,7 +304,7 @@ describe('Details In case of hearing task', () => {
     const draft = new DraftClaimantResponse()
     const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
     const claim: Claim = new Claim().deserialize({
-      ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
     })
     directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({
       exceptionalCircumstances: { option: 'no' },
@@ -342,7 +342,7 @@ describe('Details In case of hearing task', () => {
     const draft = new DraftClaimantResponse()
     const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
     const claim: Claim = new Claim().deserialize({
-      ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
     })
     directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({
       exceptionalCircumstances: { option: 'no' },
@@ -382,7 +382,7 @@ describe('Details In case of hearing task', () => {
     const draft = new DraftClaimantResponse()
     const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
     const claim: Claim = new Claim().deserialize({
-      ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
     })
     directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({
       exceptionalCircumstances: { option: 'no' },
@@ -422,7 +422,7 @@ describe('Details In case of hearing task', () => {
     const draft = new DraftClaimantResponse()
     const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
     const claim: Claim = new Claim().deserialize({
-      ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
     })
     directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({
       exceptionalCircumstances: { option: 'no' },

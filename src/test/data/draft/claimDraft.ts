@@ -26,6 +26,7 @@ export const claimDraft = {
     helpWithFees: YesNoOption.NO,
     claimIsForTenancyDeposit: YesNoOption.NO
   },
+  breathingSpace: {},
   claimant: {
     payment: {
       reference: '123',
@@ -94,5 +95,13 @@ export const claimDraft = {
   },
   evidence: {
     rows: []
+  }
+}
+
+export const claimDraftHelpWithFees = {
+  ...claimDraft,
+  helpWithFees: {
+    declared: YesNoOption.YES,
+    helpWithFeesNumber: '89674523'
   }
 }

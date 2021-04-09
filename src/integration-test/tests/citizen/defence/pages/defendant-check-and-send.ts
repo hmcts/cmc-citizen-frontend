@@ -4,14 +4,14 @@ import { DefenceType } from 'integration-test/data/defence-type'
 const I: I = actor()
 
 const fields = {
-  checkboxFactsTrue: 'input#signedtrue',
-  checkboxHearingRequirementsTrue: 'input#directionsQuestionnaireSignedtrue',
-  signerName: 'input[id=signerName]',
-  signerRole: 'input[id=signerRole]'
+  checkboxFactsTrue: { css: 'input#signedtrue' },
+  checkboxHearingRequirementsTrue: { css: 'input#directionsQuestionnaireSignedtrue' },
+  signerName: { css: 'input[id=signerName]' },
+  signerRole: { css: 'input[id=signerRole]' }
 }
 
 const buttons = {
-  submit: 'input[type=submit]'
+  submit: { css: 'input[type=submit]' }
 }
 
 export class DefendantCheckAndSendPage {
@@ -31,7 +31,7 @@ export class DefendantCheckAndSendPage {
   }
 
   verifyFactsPartialResponseClaimAmountTooMuch (): void {
-    I.see('I reject part of the claim')
+    I.waitForText('I reject part of the claim')
     I.see('The claim amount is too much')
     I.see('How much money do you believe you owe?')
     I.see('Why this is what you owe?')
@@ -41,7 +41,7 @@ export class DefendantCheckAndSendPage {
   }
 
   verifyFactsPartialResponseIBelieveIPaidWhatIOwe (): void {
-    I.see('I reject part of the claim')
+    I.waitForText('I reject part of the claim')
     I.see('I’ve paid what I believe I owe')
     I.see('How much have you paid the claimant?')
     I.see('When did you pay this amount?')

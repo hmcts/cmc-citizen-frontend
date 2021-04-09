@@ -20,7 +20,7 @@
 
       <ul class="list list-number">
         <li>
-          {{ t('Complete <a href="{{ link }}" download="download" target="_blank">defence and counterclaim form N9B</a> entering these details:',
+          {{ t('Complete <a href="{{ link }}" download="download" rel="noreferrer noopener" target="_blank">defence and counterclaim form N9B</a> entering these details:',
           { link : [asset_paths["pdf"] + '/OCON9B.pdf']}) | safe }}
           <ul class="list list-bullet">
             <li>{{ t('Claim number') }} {{ claim.claimNumber }}</li>

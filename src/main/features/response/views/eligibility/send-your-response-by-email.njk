@@ -55,32 +55,40 @@
         <li>{{ t('Post the forms to:') }}</li>
       </ul>
 
-      <div class="keep-formatting panel">{{ t('Civil Money Claims') }}
-        {{ t('St. Katharine`s House') }}
-        {{ t('21-27 St. Katharine`s Street') }}
-        {{ t('Northampton') }}
-        {{ t('NN1 2LH') }}
-      </div>
+      {% if signPosting %}
+        <div class="keep-formatting panel">{{ t('HMCTS CMC') }}
+          {{ t('PO Box 12747') }}
+          {{ t('Harlow') }}
+          {{ t('CM20 9RA') }}
+        </div>
+      {% else %}
+        <div class="keep-formatting panel">{{ t('Civil Money Claims') }}
+          {{ t('St. Katharine`s House') }}
+          {{ t('21-27 St. Katharine`s Street') }}
+          {{ t('Northampton') }}
+          {{ t('NN1 2LH') }}
+         </div>
+      {% endif %}
 
       <p>{{ t('You can also email completed forms to {{ supportEmailAddress }}', { supportEmailAddress: supportEmailAddress }) }}</p>
 
       <h2 class="heading-medium">{{ t('Download and complete the form') }}</h2>
 
       {% if draft.response.type === ResponseType.FULL_ADMISSION %}
-       <p>{{ t(externalLink('Download the admission form', asset_paths["pdf"] + '/OCON9A.pdf') + ' (PDF, 102 KB).') | safe }}</p>
+       <p>{{ t(externalLink('Download the admission form (PDF, 102 KB)', asset_paths["pdf"] + '/OCON9A.pdf') + '.') | safe }}</p>
       {% endif %}
 
       {% if draft.response.type === ResponseType.PART_ADMISSION %}
-        <p>{{ t(externalLink('Download admission form', asset_paths["pdf"] + '/OCON9A.pdf') + ' (PDF, 102 KB).') | safe }}</p>
-        <p>{{ t(externalLink('Download defence form', asset_paths["pdf"] + '/OCON9B.pdf') + ' (PDF, 76 KB).') | safe }}</p>
+        <p>{{ t(externalLink('Download admission form (PDF, 102 KB)', asset_paths["pdf"] + '/OCON9A.pdf') + '.') | safe }}</p>
+        <p>{{ t(externalLink('Download defence form (PDF, 76 KB)', asset_paths["pdf"] + '/OCON9B.pdf') + '.') | safe }}</p>
       {% endif %}
 
       {% if draft.response.type === ResponseType.DEFENCE %}
         {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM %}
-          <p>{{ t(externalLink('Download defence and counterclaim form ', asset_paths["pdf"] + '/OCON9B.pdf') + ' (PDF, 76 KB).') | safe }}</p>
+          <p>{{ t(externalLink('Download defence and counterclaim form (PDF, 368 KB)', asset_paths["pdf"] + '/N9B.pdf') + '.') | safe }}</p>
         {% elseif draft.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID %}
-          <p>{{ t(externalLink('Download admission form', asset_paths["pdf"] + '/OCON9A.pdf') + ' (PDF, 102 KB).') | safe }}</p>
-          <p>{{ t(externalLink('Download defence form', asset_paths["pdf"] + '/OCON9B.pdf') + ' (PDF, 76 KB).') | safe }}</p>
+          <p>{{ t(externalLink('Download admission form (PDF, 102 KB)', asset_paths["pdf"] + '/OCON9A.pdf') + '.') | safe }}</p>
+          <p>{{ t(externalLink('Download defence form (PDF, 76 KB)', asset_paths["pdf"] + '/OCON9B.pdf') + '.') | safe }}</p>
         {% endif %}
       {% endif %}
 

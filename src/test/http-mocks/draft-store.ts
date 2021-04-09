@@ -108,6 +108,11 @@ const commonClaimObject = {
   interestEndDate: {
     option: InterestEndDateOption.SETTLED_OR_JUDGMENT
   } as InterestEndDate,
+  helpWithFees: {
+    declared: {
+      option: 'no'
+    }
+  },
   reason: {
     reason: 'Valid reason'
   } as Reason,
@@ -220,6 +225,26 @@ const commonCompanyClaimant = {
   }
 }
 
+const commonCompanyDefendant = {
+  defendant: {
+    partyDetails: {
+      type: 'company',
+      name: 'Monsters Inc.',
+      contactPerson: 'Sully',
+      address: {
+        line1: 'Apartment 99',
+        line2: '',
+        line3: '',
+        city: 'London',
+        postcode: 'SE28 0JE'
+      } as Address,
+      hasCorrespondenceAddress: false
+    } as CompanyDetails,
+    email: { address: 'example@example.com' },
+    phone: { number: '07799889988' }
+  } as Defendant
+}
+
 export const aboveAllowedAmountWithInterest = {
   amount: {
     rows: [
@@ -292,6 +317,12 @@ export const sampleCompanyClaimDraftObj = {
   ...commonClaimObject,
   ...commonCompanyClaimant,
   ...commonIndividualDefendant
+} as DraftClaim
+
+export const sampleCompanyAsDefendantClaimDraftObj = {
+  ...commonClaimObject,
+  ...commonCompanyClaimant,
+  ...commonCompanyDefendant
 } as DraftClaim
 
 const commonIndividualResponsePartial = {
@@ -713,6 +744,235 @@ export const sampleDirectionsQuestionnaireDraftObj = {
   }
 }
 
+export const sampleDirectionsQuestionnaireNearestCourtDraftObj = {
+  selfWitness: {
+    option: {
+      option: 'yes'
+    }
+  },
+  otherWitnesses: {
+    otherWitnesses: {
+      option: 'yes'
+    },
+    howMany: 1
+  },
+  hearingLocation: {
+    courtName: 'Birmingham District Probate Registry',
+    courtPostCode: undefined,
+    courtAccepted: { option: 'yes' },
+    alternativeOption: 'nearestCourtSelected'
+  },
+  exceptionalCircumstances: {
+    exceptionalCircumstances: { option: 'yes' },
+    reason: 'Poorly pet owl'
+  },
+  availability: {
+    hasUnavailableDates: true,
+    unavailableDates: [
+      { year: 2020, month: 1, day: 4 },
+      { year: 2020, month: 2, day: 8 }
+    ]
+  },
+  supportRequired: {
+    languageSelected: true,
+    languageInterpreted: 'Klingon',
+    signLanguageSelected: true,
+    signLanguageInterpreted: 'Makaton',
+    hearingLoopSelected: true,
+    disabledAccessSelected: true,
+    otherSupportSelected: true,
+    otherSupport: 'Life advice'
+  },
+  expertRequired: {
+    option: {
+      option: 'yes'
+    }
+  },
+  expertReports: {
+    declared: true,
+    rows: [
+      {
+        expertName: 'Prof. McGonagall',
+        reportDate: { year: 2018, month: 1, day: 10 }
+      },
+      {
+        expertName: 'Mr Rubeus Hagrid',
+        reportDate: { year: 2019, month: 2, day: 27 }
+      }
+    ]
+  },
+  permissionForExpert: {
+    option: {
+      option: 'yes'
+    }
+  },
+  expertEvidence: {
+    expertEvidence: {
+      option: 'yes'
+    },
+    whatToExamine: 'Photographs'
+  },
+  whyExpertIsNeeded: {
+    explanation: 'for expert opinion'
+  }
+}
+
+export const sampleDirectionsQuestionnaireDraftAltCourtObj = {
+  selfWitness: {
+    option: {
+      option: 'yes'
+    }
+  },
+  otherWitnesses: {
+    otherWitnesses: {
+      option: 'yes'
+    },
+    howMany: 1
+  },
+  hearingLocation: {
+    courtName: 'Birmingham District Probate Registry',
+    courtPostcode: 'AB1 2CD',
+    courtAccepted: { option: 'yes' },
+    alternativeOption: 'search',
+    alternativeCourtName: 'Birmingham District Probate Registry',
+    alternativePostcode: 'AB1 2CD'
+  },
+  exceptionalCircumstances: {
+    exceptionalCircumstances: { option: 'yes' },
+    reason: 'Poorly pet owl'
+  },
+  availability: {
+    hasUnavailableDates: true,
+    unavailableDates: [
+      { year: 2020, month: 1, day: 4 },
+      { year: 2020, month: 2, day: 8 }
+    ]
+  },
+  supportRequired: {
+    languageSelected: true,
+    languageInterpreted: 'Klingon',
+    signLanguageSelected: true,
+    signLanguageInterpreted: 'Makaton',
+    hearingLoopSelected: true,
+    disabledAccessSelected: true,
+    otherSupportSelected: true,
+    otherSupport: 'Life advice'
+  },
+  expertRequired: {
+    option: {
+      option: 'yes'
+    }
+  },
+  expertReports: {
+    declared: true,
+    rows: [
+      {
+        expertName: 'Prof. McGonagall',
+        reportDate: { year: 2018, month: 1, day: 10 }
+      },
+      {
+        expertName: 'Mr Rubeus Hagrid',
+        reportDate: { year: 2019, month: 2, day: 27 }
+      }
+    ]
+  },
+  permissionForExpert: {
+    option: {
+      option: 'yes'
+    }
+  },
+  expertEvidence: {
+    expertEvidence: {
+      option: 'yes'
+    },
+    whatToExamine: 'Photographs'
+  },
+  whyExpertIsNeeded: {
+    explanation: 'for expert opinion'
+  }
+}
+
+export const sampleDirectionsQuestionnaireDraftWithNameObj = {
+  selfWitness: {
+    option: {
+      option: 'yes'
+    }
+  },
+  otherWitnesses: {
+    otherWitnesses: {
+      option: 'yes'
+    },
+    howMany: 1
+  },
+  hearingLocation: {
+    courtName: 'Birmingham District Probate Registry',
+    courtPostcode: 'AB1 2CD',
+    courtAccepted: { option: 'yes' },
+    alternativeOption: 'name',
+    alternativeCourtName: 'Birmingham District Probate Registry',
+    alternativePostcode: 'AB1 2CD',
+    alternativeCourtSelected: undefined,
+    courtDetails: undefined,
+    searchParam: undefined,
+    nearestCourt: undefined,
+    searchLoop: undefined,
+    searchType: undefined
+  },
+  exceptionalCircumstances: {
+    exceptionalCircumstances: { option: 'yes' },
+    reason: 'Poorly pet owl'
+  },
+  availability: {
+    hasUnavailableDates: true,
+    unavailableDates: [
+      { year: 2020, month: 1, day: 4 },
+      { year: 2020, month: 2, day: 8 }
+    ]
+  },
+  supportRequired: {
+    languageSelected: true,
+    languageInterpreted: 'Klingon',
+    signLanguageSelected: true,
+    signLanguageInterpreted: 'Makaton',
+    hearingLoopSelected: true,
+    disabledAccessSelected: true,
+    otherSupportSelected: true,
+    otherSupport: 'Life advice'
+  },
+  expertRequired: {
+    option: {
+      option: 'yes'
+    }
+  },
+  expertReports: {
+    declared: true,
+    rows: [
+      {
+        expertName: 'Prof. McGonagall',
+        reportDate: { year: 2018, month: 1, day: 10 }
+      },
+      {
+        expertName: 'Mr Rubeus Hagrid',
+        reportDate: { year: 2019, month: 2, day: 27 }
+      }
+    ]
+  },
+  permissionForExpert: {
+    option: {
+      option: 'yes'
+    }
+  },
+  expertEvidence: {
+    expertEvidence: {
+      option: 'yes'
+    },
+    whatToExamine: 'Photographs'
+  },
+  whyExpertIsNeeded: {
+    explanation: 'for expert opinion'
+  }
+}
+
 export const sampleOrdersDraftObj = {
   externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
   disagreeReason: { reason: 'I want a judge to review it' }
@@ -730,6 +990,9 @@ export function resolveFind (draftType: string, draftOverride?: object): mock.Sc
       break
     case 'claim:company':
       documentDocument = { ...sampleCompanyClaimDraftObj, ...draftOverride }
+      break
+    case 'claim:companyAsDefendant':
+      documentDocument = { ...sampleCompanyAsDefendantClaimDraftObj, ...draftOverride }
       break
     case 'response':
       documentDocument = { ...sampleResponseDraftObj, ...draftOverride }
@@ -757,6 +1020,15 @@ export function resolveFind (draftType: string, draftOverride?: object): mock.Sc
       break
     case 'directionsQuestionnaire':
       documentDocument = { ...sampleDirectionsQuestionnaireDraftObj, ...draftOverride }
+      break
+    case 'directionsQuestionnaire:altCourt':
+      documentDocument = { ...sampleDirectionsQuestionnaireDraftAltCourtObj, ...draftOverride }
+      break
+    case 'directionsQuestionnaire:name':
+      documentDocument = { ...sampleDirectionsQuestionnaireDraftWithNameObj, ...draftOverride }
+      break
+    case 'directionsQuestionnaire:nearestCourt':
+      documentDocument = { ...sampleDirectionsQuestionnaireNearestCourtDraftObj, ...draftOverride }
       break
     case 'orders':
       documentDocument = { ...sampleOrdersDraftObj, ...draftOverride }

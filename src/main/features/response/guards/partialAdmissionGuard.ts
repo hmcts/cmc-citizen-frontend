@@ -7,7 +7,6 @@ import { Claim } from 'claims/models/claim'
 import { Draft } from '@hmcts/draft-store-client'
 import { Paths } from 'response/paths'
 import { ResponseDraft } from 'response/draft/responseDraft'
-import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 
 const logger = Logger.getLogger('response/guards/responseGuard')
 
@@ -17,9 +16,8 @@ export class PartialAdmissionGuard {
 
     function isRequestAllowed (res: express.Response): boolean {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
-      const claim: Claim = res.locals.claim
 
-      return ClaimFeatureToggles.isFeatureEnabledOnClaim(claim) && draft.document.isResponsePartiallyAdmitted()
+      return draft.document.isResponsePartiallyAdmitted()
     }
 
     function accessDeniedCallback (req: express.Request, res: express.Response): void {

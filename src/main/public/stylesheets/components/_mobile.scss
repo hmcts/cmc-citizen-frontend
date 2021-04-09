@@ -1,6 +1,13 @@
-.mobile-show,
 .mobile-table-status {
   display: none;
+}
+
+.mobile-show {
+  display: none;
+
+  &.visually-hidden {
+    display: block;
+  }
 }
 
 @include media (mobile) {
@@ -10,6 +17,17 @@
 
   .mobile-show {
     display: block;
+  }
+
+  .mobile-show {
+    &.visually-hidden {
+      clip: initial;
+      height: auto;
+      margin: 0;
+      position: initial;
+      width: auto;
+    }
+
   }
 
   .mobile-table-status {

@@ -13,6 +13,8 @@ export class AmountHelper {
       return settledAmount
     } else if (settledAmount) {
       return settledAmount + claim.claimData.feeAmountInPennies / 100
+    } else if (claim.response.responseType === ResponseType.PART_ADMISSION) {
+      return Math.max(claim.response.amount , 0)
     }
     return claim.totalAmountTillToday
   }
@@ -21,7 +23,7 @@ export class AmountHelper {
     const settledForLessThanClaimAmount = AmountHelper.isSettledForLessThanClaim(claim, draft)
 
     if (settledForLessThanClaimAmount) {
-      return (claim.response as PartialAdmissionResponse).amount
+      return Math.max((claim.response as PartialAdmissionResponse).amount - claim.claimData.feeAmountInPennies / 100, 0)
     }
     return undefined
   }

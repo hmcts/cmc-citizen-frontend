@@ -23,6 +23,7 @@ import { OrganisationDetailsPage } from 'integration-test/tests/citizen/claim/pa
 import { PartyTypePage } from 'integration-test/tests/citizen/claim/pages/party-type'
 import { EligibilitySteps } from 'integration-test/tests/citizen/claim/steps/eligibility'
 import { InterestSteps } from 'integration-test/tests/citizen/claim/steps/interest'
+import { HwfSteps } from 'integration-test/tests/citizen/claim/steps/help-with-fees'
 import { PaymentSteps } from 'integration-test/tests/citizen/claim/steps/payment'
 import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
 import { ClaimantTimelinePage } from 'integration-test/tests/citizen/claim/pages/claimant-timeline'
@@ -55,6 +56,7 @@ const userSteps: UserSteps = new UserSteps()
 const interestSteps: InterestSteps = new InterestSteps()
 const eligibilitySteps: EligibilitySteps = new EligibilitySteps()
 const paymentSteps: PaymentSteps = new PaymentSteps()
+const hwfSteps: HwfSteps = new HwfSteps()
 
 export class ClaimSteps {
 
@@ -106,8 +108,8 @@ export class ClaimSteps {
     citizenPhonePage.enterPhone(claimant.phone)
   }
 
-  enterTheirDetails (defendantType: PartyType, enterDefendantEmail: boolean = true, byLookup: boolean = false): void {
-    const defendant = createDefendant(defendantType, enterDefendantEmail)
+  async enterTheirDetails (I: I, defendantType: PartyType, enterDefendantEmail: boolean = true, byLookup: boolean = false): Promise<void> {
+    const defendant = await createDefendant(I, defendantType, enterDefendantEmail)
 
     let manualEntryLink = true
     switch (defendantType) {
@@ -186,8 +188,8 @@ export class ClaimSteps {
     claimantEvidencePage.enterEvidenceRow('CONTRACTS_AND_AGREEMENTS', 'ok')
   }
 
-  checkClaimFactsAreTrueAndSubmit (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true): void {
-    claimantCheckAndSendPage.verifyCheckAndSendAnswers(claimantType, defendantType, enterDefendantEmail)
+  async checkClaimFactsAreTrueAndSubmit (I: I, claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true): Promise<void> {
+    await claimantCheckAndSendPage.verifyCheckAndSendAnswers(I, claimantType, defendantType, enterDefendantEmail)
 
     if (claimantType === PartyType.COMPANY || claimantType === PartyType.ORGANISATION) {
       claimantCheckAndSendPage.signStatementOfTruthAndSubmit('Jonny', 'Director')
@@ -196,7 +198,7 @@ export class ClaimSteps {
     }
   }
 
-  makeAClaimAndSubmitStatementOfTruth (email: string, claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true) {
+  async makeAClaimAndSubmitStatementOfTruth (I: I, email: string, claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true) {
     userSteps.login(email)
     if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
       testingSupport.deleteClaimDraft()
@@ -209,23 +211,28 @@ export class ClaimSteps {
     userSteps.selectYourDetails()
     this.enterMyDetails(claimantType)
     userSteps.selectTheirDetails()
-    this.enterTheirDetails(defendantType, enterDefendantEmail)
+    await this.enterTheirDetails(I, defendantType, enterDefendantEmail)
     userSteps.selectClaimAmount()
     this.enterTestDataClaimAmount()
     this.claimantTotalAmountPageRead()
     interestSteps.enterDefaultInterest()
+    const isHwfEnabled = await I.checkHWF()
+    if (isHwfEnabled) {
+      hwfSteps.noHWF()
+    }
     I.see('Total amount you’re claiming')
     I.see(AmountHelper.formatMoney(claimAmount.getClaimTotal()), 'table.table-form > tbody > tr:nth-of-type(1) >td.numeric.last > span')
     I.see(AmountHelper.formatMoney(claimAmount.getTotal()), 'table.table-form > tfoot > tr > td.numeric.last > span')
     interestSteps.skipClaimantInterestTotalPage()
     this.enterClaimDetails()
+    I.bypassPCQ()
     userSteps.selectCheckAndSubmitYourClaim()
-    this.checkClaimFactsAreTrueAndSubmit(claimantType, defendantType, enterDefendantEmail)
+    await this.checkClaimFactsAreTrueAndSubmit(I, claimantType, defendantType, enterDefendantEmail)
   }
 
-  makeAClaimAndSubmit (email: string, claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true): Promise<string> {
-    this.makeAClaimAndSubmitStatementOfTruth(email, claimantType, defendantType, enterDefendantEmail)
-    paymentSteps.payWithWorkingCard()
+  async makeAClaimAndSubmit (I: I, email: string, claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true): Promise<string> {
+    await this.makeAClaimAndSubmitStatementOfTruth(I, email, claimantType, defendantType, enterDefendantEmail)
+    await paymentSteps.payWithWorkingCard(I)
     I.waitForText('Claim submitted')
     return claimantClaimConfirmedPage.getClaimReference()
   }
@@ -238,9 +245,9 @@ export class ClaimSteps {
     newFeaturesPage.optIn()
   }
 
-  makeAClaimAndNavigateUpToPayment () {
+  async makeAClaimAndNavigateUpToPayment (I: I) {
     const claimant = createClaimant(PartyType.INDIVIDUAL)
-    const defendant = createDefendant(PartyType.INDIVIDUAL, true)
+    const defendant = await createDefendant(I, PartyType.INDIVIDUAL, true)
 
     userSteps.loginWithPreRegisteredUser(SMOKE_TEST_CITIZEN_USERNAME, SMOKE_TEST_USER_PASSWORD)
     if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
@@ -277,12 +284,17 @@ export class ClaimSteps {
     this.claimantTotalAmountPageRead()
     I.see('Do you want to claim interest?')
     interestSteps.enterDefaultInterest()
+    const isHwfEnabled = await I.checkHWF()
+    if (isHwfEnabled) {
+      hwfSteps.noHWF()
+    }
     I.see('Total amount you’re claiming')
     I.see('£25')
     I.see(AmountHelper.formatMoney(claimAmount.getClaimTotal()), 'table.table-form > tbody > tr:nth-of-type(1) >td.numeric.last > span')
     I.see(AmountHelper.formatMoney(claimAmount.getTotal()), 'table.table-form > tfoot > tr > td.numeric.last > span')
     interestSteps.skipClaimantInterestTotalPage()
     this.enterClaimDetails()
+    I.bypassPCQ()
     userSteps.selectCheckAndSubmitYourClaim()
     I.see('John Smith')
     I.see('10, DALBERG')
@@ -290,7 +302,7 @@ export class ClaimSteps {
     I.see('SW2 1AN')
     I.see('07700000001')
     I.see(claimReason)
-    claimantCheckAndSendPage.verifyDefendantCheckAndSendAnswers(PartyType.INDIVIDUAL, true)
+    await claimantCheckAndSendPage.verifyDefendantCheckAndSendAnswers(I, PartyType.INDIVIDUAL, true)
     claimantCheckAndSendPage.verifyClaimAmount()
 
     if (!process.env.CITIZEN_APP_URL.includes('sprod')) {
@@ -299,7 +311,7 @@ export class ClaimSteps {
     }
   }
 
-  completeStartOfClaimJourney (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true) {
+  async completeStartOfClaimJourney (I: I, claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true) {
     userSteps.selectResolvingThisDispute()
     this.resolveDispute()
     userSteps.selectCompletingYourClaim()
@@ -307,7 +319,7 @@ export class ClaimSteps {
     userSteps.selectYourDetails()
     this.enterMyDetails(claimantType)
     userSteps.selectTheirDetails()
-    this.enterTheirDetails(defendantType, enterDefendantEmail, true)
+    await this.enterTheirDetails(I, defendantType, enterDefendantEmail, true)
     userSteps.selectClaimAmount()
     I.see('Claim amount')
     this.enterClaimAmount(10, 20.50, 50)
@@ -323,4 +335,133 @@ export class ClaimSteps {
     this.enterClaimEvidence()
   }
 
+  async makeAHwfClaimAndNavigateUpToPayment (I: I) {
+    const claimant = createClaimant(PartyType.INDIVIDUAL)
+    const defendant = await createDefendant(I, PartyType.INDIVIDUAL, true)
+    claimantCheckAndSendPage.open('')
+    // userSteps.loginWithPreRegisteredUser(SMOKE_TEST_CITIZEN_USERNAME, SMOKE_TEST_USER_PASSWORD)
+    if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
+      testingSupport.deleteClaimDraft()
+    }
+    this.completeEligibility()
+    userSteps.selectResolvingThisDispute()
+    this.resolveDispute()
+    userSteps.selectCompletingYourClaim()
+    this.readCompletingYourClaim()
+    userSteps.selectYourDetails()
+    partyTypePage.selectIndividual()
+    individualDetailsPage.enterName(claimant.name)
+    individualDetailsPage.lookupAddress(postcodeLookupQuery)
+    individualDetailsPage.enterAddress(claimant.address, false)
+    individualDetailsPage.submit()
+    citizenDOBPage.enterDOB(claimant.dateOfBirth)
+    citizenPhonePage.enterPhone(claimant.phone)
+    userSteps.selectTheirDetails()
+    partyTypePage.selectIndividual()
+    individualDetailsPage.enterTitle(defendant.title)
+    individualDetailsPage.enterFirstName(defendant.firstName)
+    individualDetailsPage.enterLastName(defendant.lastName)
+    individualDetailsPage.lookupAddress(postcodeLookupQuery)
+    individualDetailsPage.enterAddress(defendant.address, false)
+    individualDetailsPage.submit()
+    citizenEmailPage.enterEmail(defendant.email)
+    citizenPhonePage.enterPhone(claimant.phone)
+    userSteps.selectClaimAmount()
+    I.see('Claim amount')
+    this.enterClaimAmount(10, 20.50, 50)
+    I.see('£80.50')
+    this.claimantTotalAmountPageRead()
+    I.see('Do you want to claim interest?')
+    interestSteps.enterDefaultInterest()
+    const isHwfEnabled = await I.checkHWF()
+    if (isHwfEnabled) {
+      hwfSteps.complete()
+    }
+    I.see('Total amount you’re claiming')
+    I.see('£25')
+    I.see(AmountHelper.formatMoney(claimAmount.getClaimTotal()), 'table.table-form > tbody > tr:nth-of-type(1) >td.numeric.last > span')
+    I.see(AmountHelper.formatMoney(claimAmount.getTotal()), 'table.table-form > tfoot > tr > td.numeric.last > span')
+    interestSteps.skipClaimantInterestTotalPage()
+    this.enterClaimDetails()
+    I.bypassPCQ()
+    userSteps.selectCheckAndSubmitYourClaim()
+    I.see('John Smith')
+    I.see('10, DALBERG')
+    I.see('LONDON')
+    I.see('SW2 1AN')
+    I.see('07700000001')
+    I.see(claimReason)
+    await claimantCheckAndSendPage.verifyDefendantCheckAndSendAnswers(I, PartyType.INDIVIDUAL, true)
+    claimantCheckAndSendPage.verifyClaimAmount()
+  }
+  async makeAHwfClaimAndSubmit (I: I) {
+    const claimant = createClaimant(PartyType.INDIVIDUAL)
+    const defendant = await createDefendant(I, PartyType.INDIVIDUAL, true)
+    claimantCheckAndSendPage.open('')
+    const claimantEmail = await I.getClaimantEmail()
+    userSteps.login(claimantEmail)
+    if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
+      testingSupport.deleteClaimDraft()
+    }
+    this.completeEligibility()
+    userSteps.selectResolvingThisDispute()
+    this.resolveDispute()
+    userSteps.selectCompletingYourClaim()
+    this.readCompletingYourClaim()
+    userSteps.selectYourDetails()
+    partyTypePage.selectIndividual()
+    individualDetailsPage.enterName(claimant.name)
+    individualDetailsPage.lookupAddress(postcodeLookupQuery)
+    individualDetailsPage.enterAddress(claimant.address, false)
+    individualDetailsPage.submit()
+    citizenDOBPage.enterDOB(claimant.dateOfBirth)
+    citizenPhonePage.enterPhone(claimant.phone)
+    userSteps.selectTheirDetails()
+    partyTypePage.selectIndividual()
+    individualDetailsPage.enterTitle(defendant.title)
+    individualDetailsPage.enterFirstName(defendant.firstName)
+    individualDetailsPage.enterLastName(defendant.lastName)
+    individualDetailsPage.lookupAddress(postcodeLookupQuery)
+    individualDetailsPage.enterAddress(defendant.address, false)
+    individualDetailsPage.submit()
+    citizenEmailPage.enterEmail(defendant.email)
+    citizenPhonePage.enterPhone(claimant.phone)
+    userSteps.selectClaimAmount()
+    I.see('Claim amount')
+    this.enterClaimAmount(10, 20.50, 50)
+    I.see('£80.50')
+    this.claimantTotalAmountPageRead()
+    I.see('Do you want to claim interest?')
+    interestSteps.enterDefaultInterest()
+    const isHwfEnabled = await I.checkHWF()
+    if (isHwfEnabled) {
+      hwfSteps.complete()
+    }
+    I.see('Total amount you’re claiming')
+    I.see('£25')
+    I.see(AmountHelper.formatMoney(claimAmount.getClaimTotal()), 'table.table-form > tbody > tr:nth-of-type(1) >td.numeric.last > span')
+    I.see(AmountHelper.formatMoney(claimAmount.getTotal()), 'table.table-form > tfoot > tr > td.numeric.last > span')
+    interestSteps.skipClaimantInterestTotalPage()
+    this.enterClaimDetails()
+    I.bypassPCQ()
+    userSteps.selectCheckAndSubmitYourClaim()
+    I.see('John Smith')
+    I.see('10, DALBERG')
+    I.see('LONDON')
+    I.see('SW2 1AN')
+    I.see('07700000001')
+    I.see(claimReason)
+    await claimantCheckAndSendPage.verifyDefendantCheckAndSendAnswers(I, PartyType.INDIVIDUAL, true)
+    claimantCheckAndSendPage.verifyClaimAmount()
+    if (isHwfEnabled) {
+      I.see('HWF1234567')
+    }
+    if (!process.env.CITIZEN_APP_URL.includes('sprod')) {
+      claimantCheckAndSendPage.checkFactsTrueAndSubmit()
+
+      // Commented below due to CCD events are in readyonly in AAT. This code needs to be enabled post formal release of the Help with Fees
+/*       I.waitForText('Claim submitted')
+      claimantClaimConfirmedPage.getClaimReference() */
+    }
+  }
 }

@@ -4,6 +4,8 @@
 
 {% from "form.njk" import poundInput, textArea, saveAndContinueButton, csrfProtection, errorSummary %}
 {% from "date.njk" import dateInput %}
+{% set label = "<p>" + t('The total amount claimed is {{ totalAmount }}. This includes the claim fee and any interest.',
+          { totalAmount: totalAmount | numeral }) + "</p>" %}
 
 {% block content %}
   <div class="grid-row">
@@ -13,10 +15,7 @@
 
         {{ csrfProtection(csrf) }}
 
-        <p>{{ t('The total amount claimed is {{ totalAmount }}. This includes the claim fee and any interest.',
-          { totalAmount: totalAmount | numeral }) }}</p>
-
-        {{ poundInput(name = 'amount', form = form, bold = true) }}
+        {{ poundInput(name = 'amount', form = form, bold = true, labelHTML = label) }}
 
         <input type="hidden" name="totalAmount" value="{{ totalAmount }}">
 

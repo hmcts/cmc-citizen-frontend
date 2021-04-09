@@ -36,6 +36,8 @@ import {
 import { DefenceType } from 'claims/models/response/defenceType'
 import { MediationOutcome } from 'claims/models/mediationOutcome'
 import { YesNoOption } from 'models/yesNoOption'
+import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
+import { ResponseMethod } from 'claims/models/response/responseMethod'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -104,12 +106,41 @@ function testData () {
         response: {
           ...baseResponseData,
           ...baseDefenceData,
-          freeMediation: FreeMediationOption.YES
+          freeMediation: FreeMediationOption.YES,
+          responseMethod: ResponseMethod.OFFLINE
         },
         paperResponse: YesNoOption.YES.option
       },
       claimantAssertions: ['The claim will continue by post'],
       defendantAssertions: ['The claim will continue by post']
+    },
+    {
+      status: 'Full defence - claimant asked to proceed offline',
+      claim: fullDefenceClaim(),
+      claimOverride: {
+        response: {
+          ...baseResponseData,
+          ...baseDefenceData,
+          freeMediation: FreeMediationOption.YES
+        },
+        proceedOfflineReason: ProceedOfflineReason.APPLICATION_BY_CLAIMANT
+      },
+      claimantAssertions: ['You applied to change the claim'],
+      defendantAssertions: ['The claimant applied to change something about the claim']
+    },
+    {
+      status: 'Full defence - defendant asked to proceed offline',
+      claim: fullDefenceClaim(),
+      claimOverride: {
+        response: {
+          ...baseResponseData,
+          ...baseDefenceData,
+          freeMediation: FreeMediationOption.YES
+        },
+        proceedOfflineReason: ProceedOfflineReason.APPLICATION_BY_DEFENDANT
+      },
+      claimantAssertions: ['The defendant applied to change something about the claim'],
+      defendantAssertions: ['You applied to change the claim']
     },
     {
       status: 'Full defence - defendant dispute all of the claim and reject mediation',
@@ -306,7 +337,7 @@ function testData () {
   ]
 }
 
-describe('Dashboard page', () => {
+describe('Dashboard page full defence dashboard', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
@@ -315,6 +346,8 @@ describe('Dashboard page', () => {
     context('when user authorised', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+        claimStoreServiceMock.resolveRetrievePaginationInfoEmptyList()
+        claimStoreServiceMock.resolveRetrievePaginationInfoEmptyList()
       })
 
       context('Dashboard Status', () => {

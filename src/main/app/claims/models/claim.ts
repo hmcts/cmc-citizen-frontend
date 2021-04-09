@@ -31,6 +31,15 @@ import { DirectionOrder } from 'claims/models/directionOrder'
 import { ReviewOrder } from 'claims/models/reviewOrder'
 import { MediationOutcome } from 'claims/models/mediationOutcome'
 import { YesNoOption } from 'models/yesNoOption'
+import { ResponseMethod } from 'claims/models/response/responseMethod'
+import { ClaimDocument } from 'claims/models/claimDocument'
+import { TransferContents } from 'claims/models/transferContents'
+import * as _ from 'lodash'
+import { ClaimDocumentType } from 'common/claimDocumentType'
+import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
+import * as config from 'config'
+import { ScannedDocumentType } from 'common/scannedDocumentType'
+import { MoneyConverter } from 'fees/moneyConverter'
 
 interface State {
   status: ClaimStatus
@@ -43,9 +52,9 @@ export class Claim {
   state: string
   defendantId: string
   claimNumber: string
-  responseDeadline: Moment
+  responseDeadline?: Moment
   createdAt: Moment
-  issuedOn: Moment
+  issuedOn?: Moment
   claimData: ClaimData
   moreTimeRequested: boolean
   respondedAt: Moment
@@ -59,6 +68,7 @@ export class Claim {
   settlementReachedAt: Moment
   claimantResponse: ClaimantResponse
   claimantRespondedAt: Moment
+  totalClaimAmount?: number
   totalAmountTillToday: number
   totalAmountTillDateOfIssue: number
   totalInterest: number
@@ -75,6 +85,15 @@ export class Claim {
   mediationOutcome: string
   pilotCourt: YesNoOption
   paperResponse: YesNoOption
+  claimDocuments?: ClaimDocument[]
+  proceedOfflineReason: string
+  proceedViaPaperResponse: boolean
+  transferContent?: TransferContents
+  isOconResponse: boolean
+  directionOrderType: string
+  helpWithFeesNumber?: string
+  helpWithFessBalanceClaimFee?: number
+  lastEventTriggeredForHwfCase?: string
 
   get defendantOffer (): Offer {
     if (!this.settlement) {
@@ -113,8 +132,17 @@ export class Claim {
     if (!this.directionOrder) {
       return undefined
     }
+    return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, 7)
+  }
 
-    return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, 19)
+  async respondToOnlineOconReconsiderationDeadline (): Promise<Moment> {
+    if (!this.directionOrder) {
+      return undefined
+    }
+    if (this.isOconFormResponse()) {
+      return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, config.get<number>('reconsiderationDeadLine.oconNumberOfDays'))
+    }
+    return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, config.get<number>('reconsiderationDeadLine.onlineNumberOfDays'))
   }
 
   get remainingDays (): number {
@@ -157,16 +185,24 @@ export class Claim {
   get status (): ClaimStatus {
     if (this.moneyReceivedOn && this.countyCourtJudgmentRequestedAt && this.isCCJPaidWithinMonth()) {
       return ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED
+    } else if (this.hasBeenTransferred()) {
+      return ClaimStatus.TRANSFERRED
     } else if (this.moneyReceivedOn && this.countyCourtJudgmentRequestedAt) {
       return ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
+    } else if (this.hasBeenMovedToCCBC()) {
+      return ClaimStatus.BUSINESS_QUEUE
     } else if (this.hasOrderBeenDrawn()) {
       if (this.reviewOrder) {
         return ClaimStatus.REVIEW_ORDER_REQUESTED
       } else {
         return ClaimStatus.ORDER_DRAWN
       }
-    } else if (this.paperResponse && this.paperResponse === YesNoOption.YES) {
+    } else if (this.hasBespokeOrderBeenDrawn()) {
+      return ClaimStatus.BESPOKE_ORDER_DRAWN
+    } else if (this.isOfflineResponse()) {
       return ClaimStatus.DEFENDANT_PAPER_RESPONSE
+    } else if (this.checkProceedOfflineReason()) {
+      return ClaimStatus.PROCEED_OFFLINE
     } else if (this.moneyReceivedOn) {
       return ClaimStatus.PAID_IN_FULL
     } else if (this.countyCourtJudgmentRequestedAt) {
@@ -237,6 +273,10 @@ export class Claim {
       return ClaimStatus.CLAIMANT_RESPONSE_SUBMITTED
     } else if (this.moreTimeRequested) {
       return ClaimStatus.MORE_TIME_REQUESTED
+    } else if (this.state === 'BUSINESS_QUEUE') {
+      return ClaimStatus.BUSINESS_QUEUE
+    } else if (this.state === 'TRANSFERRED') {
+      return ClaimStatus.TRANSFERRED
     } else if (!this.response) {
       return ClaimStatus.NO_RESPONSE
     } else {
@@ -299,14 +339,33 @@ export class Claim {
       this.externalId = input.externalId
       this.defendantId = input.defendantId
       this.state = input.state
-      this.claimNumber = input.referenceNumber
       this.createdAt = MomentFactory.parse(input.createdAt)
-      this.responseDeadline = MomentFactory.parse(input.responseDeadline)
-      this.issuedOn = MomentFactory.parse(input.issuedOn)
       this.claimData = new ClaimData().deserialize(input.claim)
       this.moreTimeRequested = input.moreTimeRequested
+      if (this.claimData.feeRemitted !== undefined && this.claimData.feeAmountInPennies !== undefined) {
+        this.helpWithFessBalanceClaimFee = MoneyConverter.convertPenniesToPounds(this.claimData.feeAmountInPennies)
+      }
+
+      if ((input.state === 'HWF_APPLICATION_PENDING' || input.state === 'AWAITING_RESPONSE_HWF' || input.state === 'CLOSED_HWF') && input.claim.helpWithFeesNumber !== undefined) {
+        this.helpWithFeesNumber = input.claim.helpWithFeesNumber
+      } else {
+        this.helpWithFeesNumber = null
+      }
+      if (input.issuedOn) {
+        this.issuedOn = MomentFactory.parse(input.issuedOn)
+      } else if ((input.state === 'HWF_APPLICATION_PENDING' || input.state === 'AWAITING_RESPONSE_HWF' || input.state === 'CLOSED_HWF') && input.issuedOn === undefined && input.claim.helpWithFeesNumber !== undefined) {
+        this.issuedOn = MomentFactory.currentDate()
+      }
+      if (input.responseDeadline) {
+        this.responseDeadline = MomentFactory.parse(input.responseDeadline)
+      } else if ((input.state === 'HWF_APPLICATION_PENDING' || input.state === 'AWAITING_RESPONSE_HWF' || input.state === 'CLOSED_HWF') && input.responseDeadline === undefined && input.claim.helpWithFeesNumber !== undefined) {
+        this.responseDeadline = MomentFactory.currentDate().add(19, 'day')
+      }
       if (input.respondedAt) {
         this.respondedAt = MomentFactory.parse(input.respondedAt)
+      }
+      if (input.referenceNumber) {
+        this.claimNumber = input.referenceNumber
       }
       if (input.defendantEmail) {
         this.defendantEmail = input.defendantEmail
@@ -334,10 +393,20 @@ export class Claim {
       if (input.claimantRespondedAt) {
         this.claimantRespondedAt = MomentFactory.parse(input.claimantRespondedAt)
       }
+      if ((input.state === 'HWF_APPLICATION_PENDING' || input.state === 'AWAITING_RESPONSE_HWF' || input.state === 'CLOSED_HWF') && input.responseDeadline === undefined && input.claim.helpWithFeesNumber !== undefined && input.totalAmountTillDateOfIssue === undefined) {
+        this.totalAmountTillDateOfIssue = input.totalAmountTillToday
+      } else {
+        this.totalAmountTillDateOfIssue = input.totalAmountTillDateOfIssue
+      }
       this.totalAmountTillToday = input.totalAmountTillToday
-      this.totalAmountTillDateOfIssue = input.totalAmountTillDateOfIssue
+      this.totalClaimAmount = input.totalClaimAmount
       this.totalInterest = input.totalInterest
       this.features = input.features
+
+      if (input.lastEventTriggeredForHwfCase) {
+        this.lastEventTriggeredForHwfCase = input.lastEventTriggeredForHwfCase
+      }
+
       if (input.directionsQuestionnaireDeadline) {
         this.directionsQuestionnaireDeadline = MomentFactory.parse(input.directionsQuestionnaireDeadline)
       }
@@ -368,15 +437,54 @@ export class Claim {
         this.pilotCourt = YesNoOption.fromObject(input.pilotCourt)
       }
 
+      if (input.transferContent) {
+        this.transferContent = new TransferContents().deserialize(input.transferContent)
+      }
+
       if (input.paperResponse) {
         this.paperResponse = YesNoOption.fromObject(input.paperResponse)
       }
-    }
 
-    return this
+      if (input.claimDocumentCollection && input.claimDocumentCollection.claimDocuments) {
+        this.claimDocuments = input.claimDocumentCollection.claimDocuments.filter(value => ClaimDocumentType[value.documentType] !== undefined).map((value) => {
+          return new ClaimDocument().deserialize(value)
+        })
+      }
+
+      if (input.claimDocumentCollection && input.claimDocumentCollection.scannedDocuments) {
+        const scannedDocuments: ClaimDocument[] = input.claimDocumentCollection.scannedDocuments
+          .filter(value => ScannedDocumentType[(value.documentType + '_' + value.subtype).toUpperCase()] !== undefined)
+          .map((value) => {
+            this.proceedViaPaperResponse = this.proceedViaPaperResponse || ScannedDocumentType.PAPER_RESPONSE_FORMS.includes(value.subtype)
+            return new ClaimDocument().deserializeScannedDocument(value)
+          })
+
+        if (this.claimDocuments) {
+          this.claimDocuments.push(...scannedDocuments)
+        } else {
+          this.claimDocuments = scannedDocuments
+        }
+      }
+
+      if (this.claimDocuments) {
+        this.claimDocuments = _.sortBy(this.claimDocuments, [function (o) {
+          return o.createdDatetime
+        }]).reverse()
+      }
+      if (input.proceedOfflineReason) {
+        this.proceedOfflineReason = input.proceedOfflineReason
+      }
+
+      this.isOconResponse = this.isOconFormResponse()
+
+      if (input.directionOrderType) {
+        this.directionOrderType = input.directionOrderType
+      }
+      return this
+    }
   }
 
-  isAdmissionsResponse (): boolean {
+  public isAdmissionsResponse (): boolean {
     return (this.response.responseType === ResponseType.FULL_ADMISSION
       || this.response.responseType === ResponseType.PART_ADMISSION)
   }
@@ -448,7 +556,15 @@ export class Claim {
       return false
     }
 
+    if (this.hasBeenMovedToCCBC()) {
+      return false
+    }
+
     if (this.mediationOutcome !== undefined && this.mediationOutcome === MediationOutcome.SUCCEEDED) {
+      return false
+    }
+
+    if (this.hasBeenTransferred()) {
       return false
     }
 
@@ -640,7 +756,7 @@ export class Claim {
       && this.claimantResponse.type === ClaimantResponseType.REJECTION
       && ((this.response.responseType === ResponseType.FULL_DEFENCE && this.response.defenceType === DefenceType.ALREADY_PAID)
         || this.response.responseType === ResponseType.PART_ADMISSION)
-      && this.response.paymentDeclaration !== undefined
+      && (this.response.paymentDeclaration !== undefined || this.isOconFormResponse())
   }
 
   private hasClaimantRejectedDefendantDefence (): boolean {
@@ -679,6 +795,10 @@ export class Claim {
     return !!this.directionOrder
   }
 
+  private hasBespokeOrderBeenDrawn (): boolean {
+    return this.directionOrderType === 'BESPOKE'
+  }
+
   public isIntentionToProceedEligible (): boolean {
     const dateIntentionToProceedWasReleased: Moment = MomentFactory.parse('2019-09-09').hour(15).minute(12)
     return this.createdAt.isAfter(dateIntentionToProceedWasReleased)
@@ -687,5 +807,25 @@ export class Claim {
   private hasIntentionToProceedDeadlinePassed (): boolean {
     return !this.claimantResponse && this.response && this.response.responseType === ResponseType.FULL_DEFENCE && MomentFactory.currentDateTime().isAfter(this.intentionToProceedDeadline.clone().hour(16)) &&
       this.isIntentionToProceedEligible()
+  }
+
+  private isOconFormResponse (): boolean {
+    return this.response !== undefined && this.response.responseMethod === ResponseMethod.OCON_FORM
+  }
+
+  private isOfflineResponse (): boolean {
+    return this.response !== undefined && this.response.responseMethod === ResponseMethod.OFFLINE
+  }
+
+  private checkProceedOfflineReason (): boolean {
+    return (this.proceedOfflineReason && (this.proceedOfflineReason === ProceedOfflineReason.APPLICATION_BY_DEFENDANT || this.proceedOfflineReason === ProceedOfflineReason.APPLICATION_BY_CLAIMANT))
+  }
+
+  private hasBeenMovedToCCBC (): boolean {
+    return this.state === 'BUSINESS_QUEUE'
+  }
+
+  private hasBeenTransferred (): boolean {
+    return this.state === 'TRANSFERRED'
   }
 }

@@ -6,7 +6,11 @@
 
 {% set claimantFullName = claim.claimData.claimant.name %}
 {% set theirReason = claim.claimData.reason %}
-
+{% set labelContent =  '<p class="bold-small">' + t("Briefly explain why you disagree with the claim") + '</p>' +
+'<p>' + t('If you fail to dispute any part of the claim the court may assume you admit it.') + '</p>' +
+'<p>' + t('You should also say if you accept any parts of the claim.') + '</p>' +
+'<p>' + t('Don’t give us a detailed timeline - we’ll ask for that separately.') + '</p>'
+%}
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
@@ -17,15 +21,7 @@
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
 
-        <p class="bold-small">{{ t('Briefly explain why you disagree with the claim') }}</p>
-
-        <p>{{ t('If you fail to dispute any part of the claim the court may assume you admit it.') }}</p>
-
-        <p>{{ t('You should also say if you accept any parts of the claim.') }}</p>
-
-        <p>{{ t('Don’t give us a detailed timeline - we’ll ask for that separately.') }}</p>
-
-        {{ textArea(name = 'text', form = form, rows = 10) }}
+        {{ textArea(name = 'text', form = form, rows = 10, labelHTML = labelContent) }}
 
         <div class="panel panel-border-wide">
           <p>

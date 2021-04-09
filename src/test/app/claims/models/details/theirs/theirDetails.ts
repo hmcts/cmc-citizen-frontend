@@ -122,6 +122,24 @@ describe('TheirData', () => {
         })
         expect(theirDetails.title).to.equal('testTitle')
       })
+
+      it('should return correspondence address', () => {
+        const theirDetails = new TheirDetails().deserialize({
+          type: 'individual',
+          serviceAddress: {
+            line1: 'Aldgate',
+            line2: 'Leman Street',
+            line3: 'Floor 007',
+            city: 'London',
+            postcode: 'E1 8FA'
+          }
+        })
+        expect(theirDetails.correspondenceAddress.city).to.equal('London')
+        expect(theirDetails.correspondenceAddress.line1).to.equal('Aldgate')
+        expect(theirDetails.correspondenceAddress.line2).to.equal('Leman Street')
+        expect(theirDetails.correspondenceAddress.postcode).to.equal('E1 8FA')
+      })
+
     })
   })
 })

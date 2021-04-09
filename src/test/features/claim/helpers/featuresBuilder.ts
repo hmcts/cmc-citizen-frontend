@@ -9,11 +9,14 @@ import { app } from 'main/app'
 import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { anything, instance, mock, reset, when } from 'ts-mockito'
+import { FeatureToggles } from 'utils/featureToggles'
+import * as sinon from 'sinon'
 
 const mockLaunchDarklyClient: LaunchDarklyClient = mock(LaunchDarklyClient)
 const featuresBuilder = new FeaturesBuilder(new ClaimStoreClient(), instance(mockLaunchDarklyClient))
 
-const user = new User('1', 'user@example.com', 'John', 'Smith', [], 'citizen', '')
+const user = new User('1', 'user@example.com', 'John', 'Smith', ['cmc-new-features-consent-given'], 'citizen', '')
+const userWithoutConsent = new User('1', 'user@example.com', 'John', 'Smith', ['cmc-new-features-consent-not-given'], 'citizen', '')
 
 const MIN_THRESHOLD = Math.min(
   FeaturesBuilder.JUDGE_PILOT_THRESHOLD,
@@ -24,37 +27,33 @@ const MIN_THRESHOLD = Math.min(
 
 function enableFeatures (...features: string[]) {
   FEATURES.map(feature => feature.toggle)
-    .forEach(toggle => when(mockLaunchDarklyClient.variation(anything(), anything(), toggle))
+    .forEach(toggle => when(mockLaunchDarklyClient.userVariation(anything(), anything(), toggle, anything()))
       .thenResolve(Promise.resolve(features.indexOf(toggle) >= 0)))
 }
 
 describe('FeaturesBuilder', () => {
   attachDefaultHooks(app)
+  let isAutoEnrollIntoNewFeatureEnabledStub: sinon.SinonStub
 
   beforeEach(() => {
-    claimStoreServiceMock.resolveRetrieveUserRoles()
+    claimStoreServiceMock.resolveRetrieveUserRoles(user.roles[0])
+    isAutoEnrollIntoNewFeatureEnabledStub = sinon.stub(FeatureToggles.prototype, 'isAutoEnrollIntoNewFeatureEnabled')
   })
 
   afterEach(() => {
     reset(mockLaunchDarklyClient)
-  })
-
-  describe('Admissions Feature', () => {
-    it('should add admissions to features if flag is set', async () => {
-      enableFeatures('admissions')
-      const features = await featuresBuilder.features(1, user)
-      expect(features).to.equal('admissions')
-    })
+    isAutoEnrollIntoNewFeatureEnabledStub.restore()
   })
 
   describe('Directions Questionnaire Feature', () => {
     it(`should add dq to features if flag is set and amount <= ${FeaturesBuilder.ONLINE_DQ_THRESHOLD}`, async () => {
-      enableFeatures('directions_questionnaire')
+      isAutoEnrollIntoNewFeatureEnabledStub.returns(true)
       const features = await featuresBuilder.features(FeaturesBuilder.ONLINE_DQ_THRESHOLD, user)
-      expect(features).to.equal('directionsQuestionnaire')
+      expect(features).to.equal('judgePilotEligible, directionsQuestionnaire')
     })
 
     it(`should not add dq to features if amount > ${FeaturesBuilder.ONLINE_DQ_THRESHOLD}`, async () => {
+      isAutoEnrollIntoNewFeatureEnabledStub.returns(true)
       const featuresBuilder = new FeaturesBuilder(new ClaimStoreClient(), instance(mockLaunchDarklyClient))
       const features = await featuresBuilder.features(FeaturesBuilder.ONLINE_DQ_THRESHOLD + 0.01, user)
       expect(features).to.be.undefined
@@ -64,44 +63,92 @@ describe('FeaturesBuilder', () => {
 
   describe('Mediation Pilot Feature', () => {
     it(`should add mediation pilot to features if amount <= ${FeaturesBuilder.MEDIATION_PILOT_AMOUNT} and flag is set`, async () => {
-      enableFeatures('mediation_pilot')
+      isAutoEnrollIntoNewFeatureEnabledStub.returns(true)
       const features = await featuresBuilder.features(FeaturesBuilder.MEDIATION_PILOT_AMOUNT, user)
-      expect(features).to.equal('mediationPilot')
+      expect(features).to.equal('mediationPilot, judgePilotEligible, directionsQuestionnaire')
     })
 
     it(`should not add mediation pilot to features if amount > ${FeaturesBuilder.MEDIATION_PILOT_AMOUNT}`, async () => {
+      isAutoEnrollIntoNewFeatureEnabledStub.returns(true)
       const features = await featuresBuilder.features(FeaturesBuilder.MEDIATION_PILOT_AMOUNT + 0.01, user)
-      expect(features).to.be.undefined
+      expect(features).to.be.equal('judgePilotEligible, directionsQuestionnaire')
     })
   })
 
   describe('Legal advisor Pilot Feature', () => {
     it(`should add legal advisor eligible to features if amount <= ${FeaturesBuilder.LA_PILOT_THRESHOLD} and flag is set`, async () => {
+      isAutoEnrollIntoNewFeatureEnabledStub.returns(true)
       enableFeatures('legal_advisor_pilot')
       const features = await featuresBuilder.features(FeaturesBuilder.LA_PILOT_THRESHOLD, user)
-      expect(features).to.equal('LAPilotEligible')
+      expect(features).to.equal('mediationPilot, LAPilotEligible, directionsQuestionnaire')
     })
 
     it(`should not add legal advisor eligible to features if amount > ${FeaturesBuilder.LA_PILOT_THRESHOLD}`, async () => {
-      const features = await featuresBuilder.features(FeaturesBuilder.LA_PILOT_THRESHOLD, user)
-      expect(features).to.be.undefined
+      isAutoEnrollIntoNewFeatureEnabledStub.returns(true)
+      const features = await featuresBuilder.features(FeaturesBuilder.LA_PILOT_THRESHOLD + 1, user)
+      expect(features).to.equal('mediationPilot, judgePilotEligible, directionsQuestionnaire')
     })
   })
 
   describe('Judge Pilot Feature', () => {
     it(`should add judge pilot eligible to features if amount <= ${FeaturesBuilder.JUDGE_PILOT_THRESHOLD} and flag is set`, async () => {
+      isAutoEnrollIntoNewFeatureEnabledStub.returns(true)
       enableFeatures('judge_pilot')
       const features = await featuresBuilder.features(FeaturesBuilder.JUDGE_PILOT_THRESHOLD, user)
-      expect(features).to.equal('judgePilotEligible')
+      expect(features).to.equal('judgePilotEligible, directionsQuestionnaire')
     })
 
     it(`should not add judge pilot eligible to features if amount > ${FeaturesBuilder.JUDGE_PILOT_THRESHOLD}`, async () => {
-      const features = await featuresBuilder.features(FeaturesBuilder.JUDGE_PILOT_THRESHOLD, user)
+      isAutoEnrollIntoNewFeatureEnabledStub.returns(true)
+      const features = await featuresBuilder.features(FeaturesBuilder.JUDGE_PILOT_THRESHOLD + 1, user)
       expect(features).to.be.undefined
     })
   })
 
   it(`should add legal advisor, dqOnline and mediation pilot to features if principal amount <= ${MIN_THRESHOLD} and flags are set`, async () => {
+    isAutoEnrollIntoNewFeatureEnabledStub.returns(true)
+    enableFeatures('legal_advisor_pilot', 'directions_questionnaire', 'mediation_pilot')
+    const features = await featuresBuilder.features(MIN_THRESHOLD, user)
+    expect(features).to.equal('mediationPilot, LAPilotEligible, directionsQuestionnaire')
+  })
+
+  it(`should not add judge pilot if legal advisor pilot is eligible`, async () => {
+    isAutoEnrollIntoNewFeatureEnabledStub.returns(true)
+    const features = await featuresBuilder.features(FeaturesBuilder.LA_PILOT_THRESHOLD, user)
+    expect(features).to.equal('mediationPilot, LAPilotEligible, directionsQuestionnaire')
+  })
+})
+
+describe('Auto Enroll into new feature scenario', () => {
+  attachDefaultHooks(app)
+  let isAutoEnrollIntoNewFeatureEnabledStub: sinon.SinonStub
+
+  beforeEach(() => {
+    isAutoEnrollIntoNewFeatureEnabledStub = sinon.stub(FeatureToggles.prototype, 'isAutoEnrollIntoNewFeatureEnabled')
+  })
+
+  afterEach(() => {
+    isAutoEnrollIntoNewFeatureEnabledStub.restore()
+  })
+
+  it(`should return undefined when auto enroll toggle is set to false and roles do not contain consent given`, async () => {
+    claimStoreServiceMock.resolveRetrieveUserRoles('not-a-consent-role')
+    isAutoEnrollIntoNewFeatureEnabledStub.returns(false)
+    const features = await featuresBuilder.features(FeaturesBuilder.ONLINE_DQ_THRESHOLD, userWithoutConsent)
+    expect(features).to.equal(undefined)
+  })
+
+  it(`should return undefined when auto enroll toggle is set to true and roles do not contain consent given`, async () => {
+    claimStoreServiceMock.resolveRetrieveUserRoles('not-a-consent-role')
+    isAutoEnrollIntoNewFeatureEnabledStub.returns(true)
+    enableFeatures('legal_advisor_pilot', 'directions_questionnaire', 'mediation_pilot')
+    const features = await featuresBuilder.features(MIN_THRESHOLD, user)
+    expect(features).to.equal('mediationPilot, LAPilotEligible, directionsQuestionnaire')
+  })
+
+  it(`should return defined roles when auto enroll toggle is set to false and user has given consent to new feature`, async () => {
+    claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
+    isAutoEnrollIntoNewFeatureEnabledStub.returns(false)
     enableFeatures('legal_advisor_pilot', 'directions_questionnaire', 'mediation_pilot')
     const features = await featuresBuilder.features(MIN_THRESHOLD, user)
     expect(features).to.equal('mediationPilot, LAPilotEligible, directionsQuestionnaire')

@@ -23,6 +23,7 @@ describe('Eligibility', () => {
           YesNoOption.YES,
           YesNoOption.YES,
           YesNoOption.YES,
+          YesNoOption.YES,
           DefendantAgeOption.YES,
           ClaimType.PERSONAL_CLAIM,
           YesNoOption.YES,
@@ -39,6 +40,7 @@ describe('Eligibility', () => {
         new Eligibility(
           ClaimValue.UNDER_10000,
           YesNoOption.NO,
+          YesNoOption.YES,
           YesNoOption.YES,
           YesNoOption.YES,
           YesNoOption.YES,
@@ -64,6 +66,7 @@ describe('Eligibility', () => {
         YesNoOption.YES,
         YesNoOption.YES,
         YesNoOption.YES,
+        YesNoOption.YES,
         DefendantAgeOption.COMPANY_OR_ORGANISATION,
         ClaimType.PERSONAL_CLAIM,
         YesNoOption.NO,
@@ -80,6 +83,7 @@ describe('Eligibility', () => {
       const eligibility = new Eligibility(
         ClaimValue.UNDER_10000,
         YesNoOption.NO,
+        YesNoOption.YES,
         YesNoOption.YES,
         YesNoOption.YES,
         YesNoOption.YES,

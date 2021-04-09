@@ -3,7 +3,6 @@ import * as express from 'express'
 import { AbstractPaymentDatePage } from 'shared/components/payment-intention/payment-date'
 import { AbstractModelAccessor } from 'shared/components/model-accessor'
 import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
-import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 
 import { ResponseDraft } from 'response/draft/responseDraft'
 
@@ -36,4 +35,4 @@ class PaymentDatePage extends AbstractPaymentDatePage<ResponseDraft> {
 
 /* tslint:disable:no-default-export */
 export default new PaymentDatePage()
-  .buildRouter(partialAdmissionPath, OptInFeatureToggleGuard.featureEnabledGuard('admissions'))
+  .buildRouter(partialAdmissionPath)

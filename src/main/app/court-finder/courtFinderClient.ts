@@ -9,6 +9,7 @@ import { CourtDetails } from 'court-finder-client/courtDetails'
 
 export class CourtFinderClient {
   private readonly postCodeSearchUrl
+  private readonly nameSearchUrl
   constructor (
     private readonly apiUrl: string = `${config.get<string>('claim-store.url')}`,
     private readonly request: requestDefault.RequestAPI<requestPromise.RequestPromise,
@@ -16,6 +17,7 @@ export class CourtFinderClient {
       requestDefault.RequiredUriUrl> = requestPromise
   ) {
     this.postCodeSearchUrl = `${this.apiUrl}/court-finder/search-postcode/`
+    this.nameSearchUrl = `${this.apiUrl}/court-finder/search-name/`
   }
 
   public findMoneyClaimCourtsByPostcode (postcode: string): Promise<CourtFinderResponse> {
@@ -24,6 +26,14 @@ export class CourtFinderClient {
     }
 
     return this.performRequest(this.postCodeSearchUrl + `${postcode}`)
+  }
+
+  public findMoneyClaimCourtsByName (name: string): Promise<CourtFinderResponse> {
+    if (!name) {
+      return Promise.reject('Missing court name')
+    }
+
+    return this.performRequest(this.nameSearchUrl + `${name}`)
   }
 
   public getCourtDetails (slug: string): Promise<CourtDetailsResponse> {

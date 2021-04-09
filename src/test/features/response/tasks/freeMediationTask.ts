@@ -12,7 +12,7 @@ import { FeatureToggles } from 'utils/featureToggles'
 
 describe('Free mediation task', () => {
   const claim: Claim = new Claim().deserialize({
-    ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+    ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
   })
 
   it('should not be completed when free mediation object is undefined', () => {

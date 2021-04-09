@@ -76,16 +76,29 @@ export class SupportRequired {
 
   deserialize (input?: any): SupportRequired {
     if (input) {
+
       this.languageSelected = input.languageSelected
-      this.languageInterpreted = input.languageInterpreted
+      if (!this.languageSelected) {
+        this.languageInterpreted = 'None'
+      } else {
+        this.languageInterpreted = input.languageInterpreted
+      }
       this.signLanguageSelected = input.signLanguageSelected
-      this.signLanguageInterpreted = input.signLanguageInterpreted
+      if (!this.signLanguageSelected) {
+        this.signLanguageInterpreted = 'None'
+      } else {
+        this.signLanguageInterpreted = input.signLanguageInterpreted
+      }
       this.hearingLoopSelected = input.hearingLoopSelected
       this.disabledAccessSelected = input.disabledAccessSelected
       this.otherSupportSelected = input.otherSupportSelected
       this.otherSupport = input.otherSupport
+      if (!this.otherSupportSelected) {
+        this.otherSupport = 'None'
+      } else {
+        this.otherSupport = input.otherSupport
+      }
     }
-
     return this
   }
 }

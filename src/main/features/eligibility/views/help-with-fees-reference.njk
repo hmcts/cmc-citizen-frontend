@@ -1,0 +1,51 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, radioGroup, errorSummary, textInput, saveAndContinueButton %}
+{% from "externalLink.njk" import externalLink %}
+
+{% set heading = 'Do you have a Help With Fees reference number?' %}
+{% set additionalInformation = t('You’ll only have one if you’ve already applied for Help with Fees in respect of this claim.') %}
+
+{% block content %}
+
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <p>{{ additionalInformation }}</p>
+
+      {% set name = 'helpWithFeesReference' %}
+
+      <form novalidate method="post" class="analytics-submit-event-trigger"
+            data-event-action="Eligibility: Select Help With Fees reference number option"
+            data-event-label-from="{{ name }}">
+        {{ csrfProtection(csrf) }}
+
+        {{
+        radioGroup(
+          label = heading,
+          name = name,
+          options = [
+            {'label': 'Yes', value: YesNoOption.YES.option, checked: (form.valueFor(name) === YesNoOption.YES)},
+            {'label': 'No', value: YesNoOption.NO.option, checked: (form.valueFor(name) === YesNoOption.NO)}
+          ],
+          form = form,
+          isInline = true,
+          labelForScreenReadersOnly = true
+          )
+        }}
+
+        <div class="form-group panel panel-border-narrow js-hidden" id="helpWithFeesReference-no" aria-hidden="false">
+        <h3 class="heading-small">{{ t('Decide whether to apply for Help with Fees') }}</h3>
+        <p> {{ t(externalLink('Apply for Help with Fees (opens in a new tab)', 'https://www.gov.uk/get-help-with-court-fees', '', false ) + ' and make a claim using a Help with Fees number. If you need to use the paper Help with Fees application rather than the online version then you will not be able to use Online Civil Money Claims to issue your claim.') | safe }} </p>
+        <p> {{ t('You may be asked by the court to email evidence in support of your application before your claim is issued.') }} </p>
+        <p> {{ t('When you apply for Help with Fees you will be asked for the number on your court or tribunal form. Please note that this is N1.') }} </p>
+        <p> {{ t('Make a note of the Help with Fees number when you make an application.') }} </p>
+        <p> {{ t('You will need this number to make your claim when you are returned to this service.') }} </p>
+          
+        </div>
+
+        {{ saveAndContinueButton() }}
+
+      </form>
+    </div>
+  </div>
+
+{% endblock %}

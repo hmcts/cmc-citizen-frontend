@@ -139,24 +139,18 @@ describe('Defendant: reject all - ' + header, () => {
             .expect(res => expect(res).to.be.successful.withText(header, 'div class="error-summary"'))
         })
 
-        testValidPost(-1, true,
+        testValidPost(-1,
           FullRejectionPaths.youHavePaidLessPage.evaluateUri({ externalId: externalId }))
-        testValidPost(-1, false,
-          Paths.sendYourResponseByEmailPage.evaluateUri({ externalId: externalId }))
-        testValidPost(0, true,
+        testValidPost(0,
           Paths.taskListPage.evaluateUri({ externalId: externalId }))
-        testValidPost(0, false,
-          Paths.sendYourResponseByEmailPage.evaluateUri({ externalId: externalId }))
-        testValidPost(1, true,
+        testValidPost(1,
           Paths.taskListPage.evaluateUri({ externalId: externalId }))
-        testValidPost(1, false,
-          Paths.sendYourResponseByEmailPage.evaluateUri({ externalId: externalId }))
       })
     })
   })
 })
 
-function testValidPost (paidDifference: number, admissionsEnabled: boolean, redirect: string) {
+function testValidPost (paidDifference: number, redirect: string) {
   let difference: string
   if (paidDifference < 0) {
     difference = `£${Math.abs(paidDifference)} less than`
@@ -165,7 +159,7 @@ function testValidPost (paidDifference: number, admissionsEnabled: boolean, redi
   } else {
     difference = 'the same as'
   }
-  const admissionsOverride = admissionsEnabled ? {} : { features: undefined }
+  const admissionsOverride = { features: undefined }
 
   it(`when form is valid having paid ${difference} the claimed amount`, async () => {
     claimStoreServiceMock.resolveRetrieveClaimByExternalId({

@@ -17,8 +17,7 @@
           <span class="bold">{{ claim.settlementReachedAt | date }}</span>
         </div>
         <div class="receipt-download-container">
-          {{ internalLink(t('Download settlement agreement'), OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId })) }}
-          {{ t('(PDF)') }}
+          {{ internalLink(t('Download settlement agreement (PDF)'), OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId })) }}
         </div>
       </div>
 

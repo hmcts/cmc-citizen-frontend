@@ -1,5 +1,6 @@
 import * as express from 'express'
 import { Claim } from 'claims/models/claim'
+import * as Cookies from 'cookies'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { ErrorPaths } from 'first-contact/paths'
 import { User } from 'idam/user'
@@ -16,6 +17,7 @@ export class ClaimReferenceMatchesGuard {
       const reference = ClaimReferenceMatchesGuard.getClaimRef(req)
 
       const user: User = res.locals.user
+      new Cookies(req, res).set('lid', user.id)
       const claim: Claim = await claimStoreClient.retrieveByLetterHolderId(user.id, user.bearerToken)
       res.locals.claim = claim
 

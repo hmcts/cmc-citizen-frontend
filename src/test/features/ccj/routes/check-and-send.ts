@@ -80,6 +80,17 @@ describe('CCJ: check and send page', () => {
             .expect(res => expect(res).to.be.successful.withoutText('/ccj/payment-options', '/ccj/date-of-birth'))
         })
 
+        it('should render page when everything is fine when settlement is broken with setDate', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithFullAdmissionAndSettlementBySetDate(claimStoreServiceMock.settlementBySetDateAndSettlementReachedAt)
+          draftStoreServiceMock.resolveFind('ccj')
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Check your answers', 'By a set date'))
+            .expect(res => expect(res).to.be.successful.withoutText('/ccj/payment-options'))
+        })
+
         it('should render page with admitted amount when part admission response has been accepted', async () => {
           let claimWithAdmission = {
             ...claimStoreServiceMock.sampleClaimObj,

@@ -5,6 +5,7 @@ import {
   defenceWithAmountClaimedAlreadyPaidData,
   defenceWithDisputeData,
   partialAdmissionAlreadyPaidData,
+  partialAdmissionAlreadyPaidLessData,
   fullAdmissionWithImmediatePaymentData,
   partialAdmissionWithImmediatePaymentData
 } from 'test/data/entity/responseData'
@@ -66,6 +67,96 @@ describe('directionsQuestionnaireHelper', () => {
     const claimantResponseDraft: DraftClaimantResponse = new DraftClaimantResponse().deserialize({
       accepted: {
         accepted: {
+          option: YesNoOption.NO
+        }
+      }
+    })
+    if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+      expect(DirectionsQuestionnaireHelper.isDirectionsQuestionnaireEligible(claimantResponseDraft, claim)).to.equal(true)
+    }
+  })
+
+  it('Should return true if response is part admission with paid less and there is no payment intention and claimant rejects the defence', () => {
+    const claim: Claim = new Claim().deserialize(
+      {
+        ...sampleClaimObj,
+        response: partialAdmissionAlreadyPaidLessData,
+        features: ['directionsQuestionnaire']
+      }
+    )
+    const claimantResponseDraft: DraftClaimantResponse = new DraftClaimantResponse().deserialize({
+      accepted: {
+        accepted: {
+          option: YesNoOption.NO
+        }
+      }
+    })
+    if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+      expect(DirectionsQuestionnaireHelper.isDirectionsQuestionnaireEligible(claimantResponseDraft, claim)).to.equal(true)
+    }
+  })
+
+  it('Should return true if response is part admission and part recieved and there is no payment intention and claimant rejects the defence', () => {
+    const claim: Claim = new Claim().deserialize(
+      {
+        ...sampleClaimObj,
+        response: partialAdmissionAlreadyPaidLessData,
+        features: ['directionsQuestionnaire']
+      }
+    )
+    const claimantResponseDraft: DraftClaimantResponse = new DraftClaimantResponse().deserialize({
+      accepted: {
+        accepted: {
+          option: YesNoOption.NO
+        }
+      },
+      partPaymentReceived: {
+        received: {
+          option: YesNoOption.NO
+        }
+      }
+    })
+    if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+      expect(DirectionsQuestionnaireHelper.isDirectionsQuestionnaireEligible(claimantResponseDraft, claim)).to.equal(true)
+    }
+  })
+
+  it('Should return false if response is part admission and part recieved and there is no payment intention and claimant rejects the defence', () => {
+    const claim: Claim = new Claim().deserialize(
+      {
+        ...sampleClaimObj,
+        response: partialAdmissionAlreadyPaidLessData,
+        features: ['directionsQuestionnaire']
+      }
+    )
+    const claimantResponseDraft: DraftClaimantResponse = new DraftClaimantResponse().deserialize({
+      accepted: {
+        accepted: {
+          option: YesNoOption.YES
+        }
+      },
+      partPaymentReceived: {
+        received: {
+          option: YesNoOption.YES
+        }
+      }
+    })
+    if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+      expect(DirectionsQuestionnaireHelper.isDirectionsQuestionnaireEligible(claimantResponseDraft, claim)).to.equal(false)
+    }
+  })
+
+  it('Should return true if response is part recieved with paid less and there is no payment intention and claimant rejects the defence', () => {
+    const claim: Claim = new Claim().deserialize(
+      {
+        ...sampleClaimObj,
+        response: partialAdmissionAlreadyPaidLessData,
+        features: ['directionsQuestionnaire']
+      }
+    )
+    const claimantResponseDraft: DraftClaimantResponse = new DraftClaimantResponse().deserialize({
+      partPaymentReceived: {
+        received: {
           option: YesNoOption.NO
         }
       }

@@ -21,3 +21,11 @@ export default express.Router()
       const pdf: Buffer = await documentsClient.getClaimIssueReceiptPDF(claim.externalId, res.locals.user.bearerToken)
       DownloadUtils.downloadPDF(res, pdf, `${claim.claimNumber}-claim-form-claimant-copy`)
     }))
+
+  .get(Paths.draftReceiptReceiver.uri,
+    ClaimMiddleware.retrieveByExternalId,
+    ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
+      const { externalId } = req.params
+      const pdf: Buffer = await documentsClient.getDraftClaimReceiptPDF(externalId, res.locals.user.bearerToken)
+      DownloadUtils.downloadPDF(res, pdf, `draft-claim-${externalId}`)
+    }))

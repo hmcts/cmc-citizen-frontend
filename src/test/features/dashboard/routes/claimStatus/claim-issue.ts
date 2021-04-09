@@ -32,6 +32,24 @@ const testData = [
     ]
   },
   {
+    status: 'Claim issued with HWF reference',
+    claim: claimStoreServiceMock.sampleHwfClaimIssueObj,
+    claimOverride: {
+      responseDeadline: MomentFactory.currentDate().add(1, 'days'),
+      ccdCaseId: '1594112140470504',
+      helpWithFeesNumber: true
+    },
+    claimantAssertions: ['1594-1121-4047-0504',
+      'We’re checking your Help with Fees application',
+      'We’ll email you the result within 5 days.',
+      'If you qualify for the whole court fee to be paid'
+    ],
+    defendantAssertions: ['000MC050', 'You haven’t responded to this claim',
+      'You need to respond before 4pm on ',
+      'Respond to claim'
+    ]
+  },
+  {
     status: 'Requested more time',
     claim: claimStoreServiceMock.sampleClaimIssueObj,
     claimOverride: {

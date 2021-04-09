@@ -18,6 +18,7 @@ import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/dir
 import { OrdersDraft } from 'orders/draft/ordersDraft'
 import { OrdersConverter } from 'claims/ordersConverter'
 import { ReviewOrder } from 'claims/models/reviewOrder'
+import moment = require('moment')
 
 export const claimApiBaseUrl: string = `${config.get<string>('claim-store.url')}`
 export const claimStoreApiUrl: string = `${claimApiBaseUrl}/claims`
@@ -75,6 +76,80 @@ export class ClaimStoreClient {
         } else {
           throw err
         }
+      })
+  }
+
+  saveHelpWithFeesClaim (draft: Draft<DraftClaim>, claimant: User, ...features: string[]): Promise<Claim> {
+    const convertedDraftClaim = ClaimModelConverter.convert(draft.document)
+
+    return this.request
+      .post(`${claimStoreApiUrl}/${claimant.id}/hwf`, {
+        body: convertedDraftClaim,
+        headers: buildCaseSubmissionHeaders(claimant, features)
+      })
+      .then(claim => new Claim().deserialize(claim))
+      .catch(err => {
+        if (err.statusCode === HttpStatus.CONFLICT) {
+          logger.warn(`Claim ${draft.document.externalId} appears to have been saved successfully on initial timed out attempt, retrieving the saved instance`)
+          return this.retrieveByExternalId(draft.document.externalId, claimant)
+        }
+        throw err
+      })
+  }
+
+  saveBreatingSpace (draft: DraftClaim, claimant: User): Promise<Claim> {
+    let endDate = ''
+    let StartDate = ''
+
+    if (draft.breathingSpace.breathingSpaceEndDate.day !== undefined) {
+      endDate = moment(draft.breathingSpace.breathingSpaceEndDate).subtract(1,'M').format('YYYY-MM-DD')
+    } else {
+      endDate = moment('9999-09-09').format('YYYY-MM-DD')
+    }
+    if (draft.breathingSpace.breathingSpaceEnteredDate.day !== undefined) {
+      StartDate = moment(draft.breathingSpace.breathingSpaceEnteredDate).subtract(1,'M').format('YYYY-MM-DD')
+    } else {
+      StartDate = moment('9999-09-09').format('YYYY-MM-DD')
+    }
+
+    return this.request
+      .post(`${claimStoreApiUrl}/${claimant.id}/${draft.breathingSpace.breathingSpaceExternalId.toString()}/breathingSpace`, {
+        body: {
+          'bs_entered_date_by_insolvency_team': StartDate,
+          'bs_expected_end_date': endDate,
+          'bs_reference_number': draft.breathingSpace.breathingSpaceReferenceNumber.toString(),
+          'bs_type': draft.breathingSpace.breathingSpaceType.toString(),
+          'bs_lifted_flag': 'NO'
+        },
+        headers: {
+          Authorization: `Bearer ${claimant.bearerToken}`
+        }
+      })
+      .then(claim => new Claim().deserialize(claim))
+      .catch(err => {
+        if (err.statusCode === HttpStatus.CONFLICT) {
+          logger.warn(`Claim ${draft.externalId} appears to have been saved successfully on initial timed out attempt, retrieving the saved instance`)
+          return this.retrieveByExternalId(draft.externalId, claimant)
+        }
+        throw err
+      })
+  }
+
+  updateHelpWithFeesClaim (draft: Draft<DraftClaim>, claimant: User, ...features: string[]): Promise<Claim> {
+    const convertedDraftClaim = ClaimModelConverter.convert(draft.document)
+
+    return this.request
+      .put(`${claimStoreApiUrl}/resume-hwf`, {
+        body: convertedDraftClaim,
+        headers: buildCaseSubmissionHeaders(claimant, features)
+      })
+      .then(claim => new Claim().deserialize(claim))
+      .catch(err => {
+        if (err.statusCode === HttpStatus.CONFLICT) {
+          logger.warn(`Claim ${draft.document.externalId} appears to have been saved successfully on initial timed out attempt, retrieving the saved instance`)
+          return this.retrieveByExternalId(draft.document.externalId, claimant)
+        }
+        throw err
       })
   }
 
@@ -157,18 +232,22 @@ export class ClaimStoreClient {
     }
 
     return requestPromiseApi(options)
-      .then(claim => {
-        return new Claim().deserialize(claim)
+      .then(newClaim => {
+        return new Claim().deserialize(newClaim)
       })
   }
 
-  retrieveByClaimantId (user: User): Promise<Claim[]> {
+  retrieveByClaimantId (user: User, pageNo: number): Promise<Claim[]> {
     if (!user) {
       return Promise.reject(new Error('User is required'))
     }
 
+    if (pageNo === undefined) {
+      pageNo = 0
+    }
+
     return this.request
-      .get(`${claimStoreApiUrl}/claimant/${user.id}`, {
+      .get(`${claimStoreApiUrl}/claimant/${user.id}?pageNo=${pageNo}`, {
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
         }
@@ -218,13 +297,17 @@ export class ClaimStoreClient {
       })
   }
 
-  retrieveByDefendantId (user: User): Promise<Claim[]> {
+  retrieveByDefendantId (user: User, pageNo: number): Promise<Claim[]> {
     if (!user) {
       return Promise.reject('User is required')
     }
 
+    if (pageNo === undefined) {
+      pageNo = 0
+    }
+
     return this.request
-      .get(`${claimStoreApiUrl}/defendant/${user.id}`, {
+      .get(`${claimStoreApiUrl}/defendant/${user.id}?pageNo=${pageNo}`, {
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
         }
@@ -232,15 +315,15 @@ export class ClaimStoreClient {
       .then((claims: object[]) => claims.map(claim => new Claim().deserialize(claim)))
   }
 
-  linkDefendant (user: User): Promise<void> {
+  linkDefendant (user: User, letterHolderId: string): Promise<void> {
     const options = {
       method: 'PUT',
       uri: `${claimStoreApiUrl}/defendant/link`,
       headers: {
-        Authorization: `Bearer ${user.bearerToken}`
+        Authorization: `Bearer ${user.bearerToken}`,
+        LetterHolderID: letterHolderId
       }
     }
-
     return requestPromiseApi(options).then(function () {
       return Promise.resolve()
     })
@@ -332,5 +415,21 @@ export class ClaimStoreClient {
     return requestPromiseApi(options).then(function () {
       return Promise.resolve()
     })
+  }
+
+  retrievePaginationInfo (user: User, type: string): Promise<string[]> {
+    if (!user) {
+      return Promise.reject('User is required')
+    }
+
+    return this.request
+      .get(`${claimStoreApiUrl}/pagination-metadata?userType=${type}`, {
+        headers: {
+          Authorization: `Bearer ${user.bearerToken}`
+        }
+      })
+      .then(response => {
+        return response
+      })
   }
 }

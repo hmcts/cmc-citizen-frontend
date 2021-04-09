@@ -17,7 +17,7 @@ describe('AmountHelper', () => {
       draft = new DraftClaimantResponse().deserialize({})
 
       it('should return "totalAmountTillToday"', () => {
-        expect(AmountHelper.calculateTotalAmount(claim, draft)).to.equal(claim.totalAmountTillToday)
+        expect(AmountHelper.calculateTotalAmount(claim, draft)).to.equal((claim.response as PartialAdmissionResponse).amount)
       })
     })
 
@@ -25,7 +25,7 @@ describe('AmountHelper', () => {
       claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj })
 
       it('should return "totalAmountTillToday" when the claimant did not settle', () => {
-        expect(AmountHelper.calculateTotalAmount(claim, draft)).to.equal(claim.totalAmountTillToday)
+        expect(AmountHelper.calculateTotalAmount(claim, draft)).to.equal((claim.response as PartialAdmissionResponse).amount)
       })
       it('should return settlement amount and claim fee when the claimant settled for a lower amount', () => {
         draft = new DraftClaimantResponse().deserialize(
@@ -38,7 +38,7 @@ describe('AmountHelper', () => {
           }
         )
 
-        expect(AmountHelper.calculateTotalAmount(claim, draft)).to.equal((claim.response as PartialAdmissionResponse).amount + claim.claimData.feeAmountInPennies / 100)
+        expect(AmountHelper.calculateTotalAmount(claim, draft)).to.equal((claim.response as PartialAdmissionResponse).amount)
       })
     })
   })
@@ -71,7 +71,7 @@ describe('AmountHelper', () => {
           }
         )
         expect(AmountHelper.calculateAmountSettledFor(claim, draft))
-          .to.equal((claim.response as PartialAdmissionResponse).amount)
+          .to.equal((claim.response as PartialAdmissionResponse).amount - claim.claimData.feeAmountInPennies / 100)
       })
     })
   })

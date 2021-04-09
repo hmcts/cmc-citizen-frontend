@@ -4,6 +4,8 @@ import * as toBoolean from 'to-boolean'
 
 import { Paths } from 'claim/paths'
 import { Form } from 'forms/form'
+import { Claim } from 'claims/models/claim'
+import { ClaimState } from 'claims/models/claimState'
 import { FormValidator } from 'forms/validation/formValidator'
 import { StatementOfTruth } from 'forms/models/statementOfTruth'
 import { FeesClient } from 'fees/feesClient'
@@ -23,6 +25,20 @@ import { QualifiedStatementOfTruth } from 'forms/models/qualifiedStatementOfTrut
 import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { Draft } from '@hmcts/draft-store-client'
+import { FeatureToggles } from 'utils/featureToggles'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
+import { YesNoOption } from 'models/yesNoOption'
+import { FeaturesBuilder } from 'claim/helpers/featuresBuilder'
+import { ClaimStoreClient } from 'claims/claimStoreClient'
+import { noRetryRequest } from 'client/request'
+import { Logger } from '@hmcts/nodejs-logging'
+import { MoneyConverter } from 'fees/moneyConverter'
+
+const logger = Logger.getLogger('claims/claimStoreClient')
+const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
+const claimStoreClient: ClaimStoreClient = new ClaimStoreClient(noRetryRequest)
+const launchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
+const featuresBuilder: FeaturesBuilder = new FeaturesBuilder(claimStoreClient, launchDarklyClient)
 
 async function getClaimAmountTotal (draft: DraftClaim): Promise<TotalAmount> {
   const interest: number = await draftInterestAmount(draft)
@@ -111,7 +127,14 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response, next: 
   const draft: Draft<DraftClaim> = res.locals.claimDraft
 
   getClaimAmountTotal(draft.document)
-    .then((interestTotal: TotalAmount) => {
+    .then(async (interestTotal: TotalAmount) => {
+      const helpWithFeesFeature: boolean = await featureToggles.isHelpWithFeesEnabled()
+      if (helpWithFeesFeature
+      && draft.document.helpWithFees && draft.document.helpWithFees.declared.option === YesNoOption.YES.option) {
+        draft.document.feeAmountInPennies = MoneyConverter.convertPoundsToPennies(interestTotal.feeAmount)
+        const user: User = res.locals.user
+        await new DraftService().save(draft, user.bearerToken)
+      }
       res.render(Paths.checkAndSendPage.associatedView, {
         draftClaim: draft.document,
         claimAmountTotal: interestTotal,
@@ -123,11 +146,41 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response, next: 
         claimantPartyDetailsPageUri: getClaimantPartyDetailsPageUri(draft.document.claimant.partyDetails),
         defendantPartyDetailsPageUri: getDefendantPartyDetailsPageUri(draft.document.defendant.partyDetails),
         paths: Paths,
-        form: form
+        form,
+        helpWithFeesFeature
       })
     }).catch(next)
 }
 
+async function handleHelpwWithFees (draft: Draft<DraftClaim>, user: User): Promise<boolean> {
+  const features = await featuresBuilder.features(draft.document.amount.totalAmount(), user)
+
+  // retrieve claim to check if the claimant initiated payment
+  const existingClaim: void | Claim = await claimStoreClient.retrieveByExternalId(draft.document.externalId, user)
+  .catch((e) => {
+    logger.warn(`Unable to decide if payment has been initiated. ${e}`)
+  })
+
+  let helpWithFeesClaim: void | Claim
+  // if payment was initiated then use 'updateHelpWithFeesClaim'(put request) else use 'saveHelpWithFeesClaim' (post request)
+  if (existingClaim && ClaimState[existingClaim.state] === ClaimState.AWAITING_CITIZEN_PAYMENT) {
+    helpWithFeesClaim = await claimStoreClient.updateHelpWithFeesClaim(draft, user, features)
+    .catch((e) => {
+      logger.warn(`Help With Fees Claim ${draft.document.externalId} update was unsuccessful. ${e}`)
+    })
+  } else {
+    helpWithFeesClaim = await claimStoreClient.saveHelpWithFeesClaim(draft, user, features)
+    .catch((e) => {
+      logger.warn(`Help With Fees Claim ${draft.document.externalId} appears to have not been saved. ${e}`)
+    })
+  }
+  // finally if helpwWithFeesClaim is successfully updated/saved then consider it as successful
+  if (helpWithFeesClaim) {
+    return true
+  }
+  // else unsuccessful
+  return false
+}
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.checkAndSendPage.uri, AllClaimTasksCompletedGuard.requestHandler, (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -144,16 +197,36 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res, next)
       } else {
+        const draft: Draft<DraftClaim> = res.locals.claimDraft
+        const user: User = res.locals.user
         if (form.model.type === SignatureType.QUALIFIED) {
-          const draft: Draft<DraftClaim> = res.locals.claimDraft
-          const user: User = res.locals.user
           draft.document.qualifiedStatementOfTruth = form.model as QualifiedStatementOfTruth
           await new DraftService().save(draft, user.bearerToken)
         }
-        if (toBoolean(config.get('featureToggles.inversionOfControl'))) {
-          res.redirect(Paths.initiatePaymentController.uri)
+
+        // help with fees
+        if (await featureToggles.isHelpWithFeesEnabled()
+          && draft.document.helpWithFees && draft.document.helpWithFees.declared.option === YesNoOption.YES.option) {
+
+          // handle helpWithFees
+          const helpWithFeesSuccessful = await handleHelpwWithFees(draft, user)
+
+          // if successful delete draft else redirect to tasklist page
+          if (helpWithFeesSuccessful) {
+            await new DraftService().delete(draft.id, user.bearerToken)
+            // redirect to confirmation page
+            res.redirect(Paths.confirmationPage.evaluateUri({ externalId: draft.document.externalId }))
+          } else {
+            logger.warn(`Helpw With Fees Claim ${draft.document.externalId} update/save was unsuccessful so redirecting to tasklist page`)
+            res.redirect(Paths.taskListPage.uri)
+          }
+
         } else {
-          res.redirect(Paths.startPaymentReceiver.uri)
+          if (toBoolean(config.get('featureToggles.inversionOfControl'))) {
+            res.redirect(Paths.initiatePaymentController.uri)
+          } else {
+            res.redirect(Paths.startPaymentReceiver.uri)
+          }
         }
       }
     })

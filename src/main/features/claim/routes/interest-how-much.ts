@@ -10,6 +10,11 @@ import { Draft } from '@hmcts/draft-store-client'
 import { InterestHowMuch } from 'claim/form/models/interestHowMuch'
 import { InterestRateOption } from 'claim/form/models/interestRateOption'
 
+import { FeatureToggles } from 'utils/featureToggles'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
+
+const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
+
 function renderView (form: Form<InterestHowMuch>, res: express.Response): void {
   res.render(Paths.interestHowMuchPage.associatedView, { form: form })
 }
@@ -40,6 +45,10 @@ export default express.Router()
         draft.document.interestHowMuch = form.model
         await new DraftService().save(draft, user.bearerToken)
 
-        res.redirect(Paths.totalPage.uri)
+        if (await featureToggles.isHelpWithFeesEnabled()) {
+          res.redirect(Paths.helpWithFeesPage.uri)
+        } else {
+          res.redirect(Paths.totalPage.uri)
+        }
       }
     }))

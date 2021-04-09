@@ -8,6 +8,10 @@ import { DraftClaim } from 'drafts/models/draftClaim'
 import { User } from 'idam/user'
 import { Draft } from '@hmcts/draft-store-client'
 import { InterestEndDate } from 'claim/form/models/interestEndDate'
+import { FeatureToggles } from 'utils/featureToggles'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
+
+const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
 
 function renderView (form: Form<InterestEndDate>, res: express.Response): void {
   res.render(Paths.interestEndDatePage.associatedView, {
@@ -37,6 +41,10 @@ export default express.Router()
         draft.document.interestEndDate = form.model
         await new DraftService().save(draft, user.bearerToken)
 
-        res.redirect(Paths.totalPage.uri)
+        if (await featureToggles.isHelpWithFeesEnabled()) {
+          res.redirect(Paths.helpWithFeesPage.uri)
+        } else {
+          res.redirect(Paths.totalPage.uri)
+        }
       }
     }))

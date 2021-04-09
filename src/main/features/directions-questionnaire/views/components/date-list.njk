@@ -18,7 +18,8 @@
               index: 'date-' + loop.index0
             }),
             'add-another-delete-link link',
-            id = 'add-another-delete-link-' + loop.index0) }}
+            id = 'add-another-delete-link-' + loop.index0,
+            ariaLabel = 'Remove ' + date | dateWithDayAtFront) }}
         </dd>
       </div>
     {% endfor %}

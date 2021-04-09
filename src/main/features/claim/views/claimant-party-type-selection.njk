@@ -10,10 +10,11 @@
         <form method="POST" novalidate>
           {{ csrfProtection(csrf) }}
 
+
           {{
             radioGroup(
               form = form,
-              label = 'About you and this claim',
+              label = 'I’m claiming as',
               labelForScreenReadersOnly = true,
               name = 'type',
               options = [

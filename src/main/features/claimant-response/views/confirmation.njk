@@ -48,7 +48,7 @@
         </p>
         {% if directionsQuestionnaireEnabled %}
           <p class="receipt-download-container">
-            {{ internalLink(t('Download your hearing requirements '), DirectionsQuestionnairePaths.claimantHearingRequirementsReceiver.evaluateUri({ externalId: claim.externalId }) )}}{{ t('(PDF)') }}
+            {{ internalLink(t('Download your hearing requirements (PDF)'), DirectionsQuestionnairePaths.claimantHearingRequirementsReceiver.evaluateUri({ externalId: claim.externalId }) )}}
           </p>
         {% endif %}
 

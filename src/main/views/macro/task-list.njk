@@ -18,6 +18,30 @@
   </div>
 {% endmacro %}
 
+{% macro taskList(list, serialNumber) %}
+  <ol class="app-task-list">
+    <li>
+      {{ taskListHeading(list.name, true, serialNumber) }}
+      <ul class="app-task-list__items">
+      {% for task in list.tasks %}
+        {% set describedBy = task.name | lower | replace(' ', '-') %}
+        <li class="app-task-list__item">
+          <span class="app-task-list__task-name">
+            <a href="{{ task.startPageUrl }}" aria-describedby="{{ describedBy }}">
+                {{ t(task.name) }}
+            </a>
+          </span>
+          <strong class="govuk-tag app-task-list__tag {{ 'govuk-tag--grey' if task.completed !== true}}" id="{{ describedBy }}">
+            {{ t('{{ status }}', { status: 'COMPLETE' if task.completed else 'INCOMPLETE' }) }}
+          </strong>
+        </li>
+      {% endfor %}
+      </ul>
+    </li>
+  </ol>
+  
+{% endmacro %}
+
 {% macro disabledTask(taskName) %}
   <div class="task">
     <span class="task-name">
@@ -26,6 +50,33 @@
   </div>
 {% endmacro %}
 
-{% macro taskListHeading(heading) %}
-  <h2 class="task-list-heading">{{ t(heading) }}</h2>
+{% macro taskListHeading(heading, gdsStyle, serialNumber) %}
+  {% if gdsStyle === true %}
+    <h2 class="app-task-list__section">
+      <span class="app-task-list__section-number">
+        {{ t(serialNumber + '. ') }}
+      </span>
+      {{ t(heading) }}
+    </h2>
+  {% else %}
+    <h2 class="task-list-heading">{{ t(heading) }}</h2>
+  {% endif %}
+  
+{% endmacro %}
+
+
+{% macro taskStatus(status = null) %}
+  {% if status %}
+    <h2 class="govuk-heading-s govuk-!-margin-bottom-2">
+      {{ t("Application {{ status }}",{ status: 'complete' if (status.total === status.completed) else 'incomplete'} )}}
+    </h2>
+    <p class="govuk-body">
+      {{ t('You have completed {{ status.completed }} of {{ status.total }} sections',{status: status}) }}
+    </p>
+    <p class="govuk-body govuk-!-margin-bottom-7">
+      {{ t('After you have completed all the actions you will be taken to a page where you can check your answers before submitting.') }}
+    </p>
+  {% else %}
+    {{ t('Please provide a valid status')}}
+  {% endif %}
 {% endmacro %}

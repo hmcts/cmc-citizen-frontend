@@ -146,14 +146,14 @@ export class DefenceSteps {
   }
 
   addTimeLineOfEvents (timeline: Timeline): void {
-    I.see('Add your timeline of events')
+    I.waitForText('Add your timeline of events')
     defendantTimelineOfEventsPage.enterTimelineEvent(0, timeline.events[0].date, timeline.events[0].description)
     defendantTimelineOfEventsPage.enterTimelineEvent(1, timeline.events[1].date, timeline.events[1].description)
     defendantTimelineOfEventsPage.submitForm()
   }
 
   enterEvidence (description: string, comment: string): void {
-    I.see('List your evidence')
+    I.waitForText('List your evidence')
     defendantEvidencePage.enterEvidenceRow('CONTRACTS_AND_AGREEMENTS', description, comment)
   }
 
@@ -263,8 +263,8 @@ export class DefenceSteps {
     defendantSteps.selectTaskFreeMediation(defendantType)
   }
 
-  askForHearingRequirements (defendantType: PartyType = PartyType.INDIVIDUAL): void {
-    defendantSteps.selectTaskHearingRequirements(defendantType)
+  async askForHearingRequirements (defendantType: PartyType = PartyType.INDIVIDUAL): Promise<void> {
+    await defendantSteps.selectTaskHearingRequirements(defendantType)
   }
 
   verifyCheckAndSendPageCorrespondsTo (defenceType: DefenceType): void {
@@ -287,7 +287,7 @@ export class DefenceSteps {
     }
   }
 
-  makeDefenceAndSubmit (
+  async makeDefenceAndSubmit (
     defendantParty: Party,
     defendantEmail: string,
     defendantType: PartyType,
@@ -295,12 +295,12 @@ export class DefenceSteps {
     isRequestMoreTimeToRespond: boolean = true,
     isClaimAlreadyPaid: boolean = true,
     expectPhonePage: boolean = false
-  ): void {
-    I.see('Confirm your details')
+): Promise<void> {
+    I.waitForText('Confirm your details')
     I.see('Decide if you need more time to respond')
     I.see('Choose a response')
     this.confirmYourDetails(defendantParty, expectPhonePage)
-    I.see('COMPLETE')
+    I.waitForText('COMPLETE')
 
     if (isRequestMoreTimeToRespond) {
       this.requestMoreTimeToRespond()
@@ -311,7 +311,7 @@ export class DefenceSteps {
     switch (defenceType) {
       case DefenceType.FULL_REJECTION_WITH_DISPUTE:
         this.rejectAllOfClaimAsDisputeClaim()
-        I.see('Tell us why you disagree with the claim')
+        I.waitForText('Tell us why you disagree with the claim')
         this.submitDefenceText('I fully dispute this claim')
         this.addTimeLineOfEvents({
           events: [{ date: 'may', description: 'ok' } as TimelineEvent, {
@@ -321,34 +321,38 @@ export class DefenceSteps {
         } as Timeline)
         this.enterEvidence('description', 'comment')
         this.askForMediation(defendantType)
-        this.askForHearingRequirements(defendantType)
+        await this.askForHearingRequirements(defendantType)
         defendantSteps.selectCheckAndSubmitYourDefence()
+        await I.bypassPCQ()
         break
       case DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID:
         this.enterWhenDidYouPay(defence)
         this.askForMediation(defendantType)
-        this.askForHearingRequirements(defendantType)
+        await this.askForHearingRequirements(defendantType)
         defendantSteps.selectCheckAndSubmitYourDefence()
+        await I.bypassPCQ()
         I.see('When did you pay this amount?')
         I.see('How did you pay this amount?')
         break
       case DefenceType.PART_ADMISSION_NONE_PAID:
         this.admitPartOfTheClaim(defence)
         this.askForMediation(defendantType)
-        this.askForHearingRequirements(defendantType)
+        await this.askForHearingRequirements(defendantType)
         if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
           defendantTaskListPage.selectShareYourFinancialDetailsTask()
           sendCompanyDetailsPage.continue()
         }
 
         defendantSteps.selectCheckAndSubmitYourDefence()
+        await I.bypassPCQ()
         I.see('How much money do you admit you owe?')
         break
       case DefenceType.PART_ADMISSION:
         this.admitPartOfTheClaimAlreadyPaid(defence, isClaimAlreadyPaid)
         this.askForMediation(defendantType)
-        this.askForHearingRequirements(defendantType)
+        await this.askForHearingRequirements(defendantType)
         defendantSteps.selectCheckAndSubmitYourDefence()
+        await I.bypassPCQ()
         if (isClaimAlreadyPaid) {
           I.see('How much money have you paid?')
         } else {
@@ -359,7 +363,7 @@ export class DefenceSteps {
         throw new Error('Unknown DefenceType')
     }
     this.checkAndSendAndSubmit(defendantType, defenceType)
-    I.see('You’ve submitted your response')
+    I.waitForText('You’ve submitted your response')
   }
 
   makeFullAdmission (
@@ -367,7 +371,8 @@ export class DefenceSteps {
     defendantType: PartyType,
     paymentOption: PaymentOption,
     claimantName: string,
-    statementOfMeansFullDataSet: boolean = true
+    statementOfMeansFullDataSet: boolean = true,
+    respondToPCQ?: boolean
   ): void {
     this.confirmYourDetails(defendantParty)
 
@@ -402,6 +407,7 @@ export class DefenceSteps {
     }
 
     defendantSteps.selectCheckAndSubmitYourDefence()
+    I.bypassPCQ()
     this.checkAndSendAndSubmit(defendantType, DefenceType.FULL_ADMISSION)
 
     I.see('You’ve submitted your response')
@@ -430,7 +436,7 @@ export class DefenceSteps {
     defendantDefenceTypePage.admitPartOfMoneyClaim()
   }
 
-  partialPaymentMade (defendantType: PartyType): void {
+  async partialPaymentMade (defendantType: PartyType): Promise<void> {
     I.see('Have you paid the claimant the amount you admit you owe?')
     haveYouPaidTheClaimantPage.selectYesOption()
     defendantSteps.selectTaskHowMuchHaveYouPaid()
@@ -443,13 +449,14 @@ export class DefenceSteps {
     this.addTimeLineOfEvents(defence.timeline)
     this.enterEvidence('description', 'They do not have evidence')
     this.askForMediation(defendantType)
-    this.askForHearingRequirements(defendantType)
+    await this.askForHearingRequirements(defendantType)
     defendantSteps.selectCheckAndSubmitYourDefence()
+    await I.bypassPCQ()
     this.checkAndSendAndSubmit(defendantType, DefenceType.PART_ADMISSION)
     I.see('You’ve submitted your response')
   }
 
-  partialPaymentNotMade (defendantType: PartyType, paymentOption: PaymentOption): void {
+  async partialPaymentNotMade (defendantType: PartyType, paymentOption: PaymentOption): Promise<void> {
     I.see('Have you paid the claimant the amount you admit you owe?')
     haveYouPaidTheClaimantPage.selectNoOption()
     defendantTaskListPage.selectTaskHowMuchMoneyBelieveYouOwe()
@@ -484,8 +491,9 @@ export class DefenceSteps {
     }
     defendantTaskListPage.selectTaskFreeMediation()
     mediationSteps.rejectMediation()
-    this.askForHearingRequirements(defendantType)
+    await this.askForHearingRequirements(defendantType)
     defendantTaskListPage.selectTaskCheckAndSendYourResponse()
+    await I.bypassPCQ()
     this.checkAndSendAndSubmit(defendantType, DefenceType.PART_ADMISSION_NONE_PAID)
     I.see('You’ve submitted your response')
   }
@@ -506,20 +514,20 @@ export class DefenceSteps {
       case DefenceType.FULL_REJECTION_WITH_COUNTER_CLAIM:
         this.admitAllOfClaimAndMakeCounterClaim()
         I.see('Download the defence and counterclaim form.')
+        I.see('Post your response')
+        I.see(claimRef)
+        I.see(claimant.name)
+        I.see(defendant.title)
+        I.see(defendant.firstName)
+        I.see(defendant.lastName)
         break
       case DefenceType.FULL_REJECTION_BECAUSE_ALREADY_PAID_LESS_THAN_CLAIMED_AMOUNT:
         this.chooseLessThenAmountClaimedOption()
-        I.see('Download the admission form and the defence form')
+        I.see('You’ve paid less than the total claim amount')
+        I.click('Continue')
         break
       default:
         throw new Error('Unknown DefenceType')
     }
-
-    I.see('Post your response')
-    I.see(claimRef)
-    I.see(claimant.name)
-    I.see(defendant.title)
-    I.see(defendant.firstName)
-    I.see(defendant.lastName)
   }
 }

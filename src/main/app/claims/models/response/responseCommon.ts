@@ -10,6 +10,7 @@ import { Company } from 'claims/models/details/yours/company'
 import { Organisation } from 'claims/models/details/yours/organisation'
 
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
+import { ResponseMethod } from 'claims/models/response/responseMethod'
 
 export interface ResponseCommon {
   responseType: ResponseType
@@ -19,12 +20,14 @@ export interface ResponseCommon {
   mediationPhoneNumber?: string
   mediationContactPerson?: string
   statementOfTruth?: StatementOfTruth
+  responseMethod?: ResponseMethod
 }
 
 export namespace ResponseCommon {
   export function deserialize (input: any): ResponseCommon {
     return {
       responseType: input.responseType,
+      responseMethod: input.responseMethod,
       defendant: deserializeDefendantDetails(input.defendant),
       freeMediation: input.freeMediation,
       mediationPhoneNumber: input.mediationPhoneNumber,

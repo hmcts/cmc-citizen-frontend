@@ -11,13 +11,15 @@ import { Income, IncomeType } from 'claims/models/response/statement-of-means/in
 import { Expense, ExpenseType } from 'claims/models/response/statement-of-means/expense'
 import { PaymentFrequency } from 'claims/models/response/core/paymentFrequency'
 import { DisabilityStatus } from 'claims/models/response/statement-of-means/disabilityStatus'
+import { ResponseMethod } from 'claims/models/response/responseMethod'
 
 export const baseResponseData = {
   defendant: individual,
   moreTimeNeeded: 'no',
   freeMediation: 'no',
   mediationPhoneNumber: undefined,
-  mediationContactPerson: undefined
+  mediationContactPerson: undefined,
+  responseMethod: ResponseMethod.DIGITAL
 }
 
 const baseCompanyResponseData = {
@@ -195,6 +197,18 @@ export const partialAdmissionAlreadyPaidData = {
   ...basePartialEvidencesAndTimeLines,
   amount: 3000,
   defence: 'i have paid more than enough',
+  paymentDeclaration: {
+    paidDate: '2050-12-31',
+    explanation: 'i have already paid enough'
+  }
+}
+
+export const partialAdmissionAlreadyPaidLessData = {
+  ...baseResponseData,
+  ...basePartialAdmissionData,
+  ...basePartialEvidencesAndTimeLines,
+  amount: 100,
+  defence: 'i have paid enough',
   paymentDeclaration: {
     paidDate: '2050-12-31',
     explanation: 'i have already paid enough'

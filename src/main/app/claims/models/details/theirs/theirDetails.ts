@@ -5,6 +5,7 @@ export class TheirDetails {
   type: string
   name: string
   address: Address
+  correspondenceAddress: Address
   email?: string
   phone?: string
   title?: string
@@ -29,6 +30,9 @@ export class TheirDetails {
       this.name = input.name
       if (input.address) {
         this.address = new Address().deserialize(input.address)
+      }
+      if (input.serviceAddress) {
+        this.correspondenceAddress = new Address().deserialize(input.serviceAddress)
       }
       if (input.title) {
         this.title = input.title

@@ -43,7 +43,8 @@ import * as data from 'test/data/entity/settlement'
 import { FeatureToggles } from 'utils/featureToggles'
 import { MediationOutcome } from 'claims/models/mediationOutcome'
 import { defenceClaimData } from 'test/data/entity/claimData'
-import { YesNoOption } from 'models/yesNoOption'
+import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
+import { ClaimDocument } from 'claims/models/claimDocument'
 
 describe('Claim', () => {
   describe('eligibleForCCJ', () => {
@@ -173,9 +174,32 @@ describe('Claim', () => {
     })
 
     it('should return DEFENDANT_PAPER_RESPONSE when a paper response received', () => {
-      claim.paperResponse = YesNoOption.YES
+      claim.respondedAt = moment()
+      claim.response = {
+        responseType: ResponseType.FULL_DEFENCE,
+        defenceType: DefenceType.DISPUTE,
+        responseMethod: 'OFFLINE'
+      }
 
       expect(claim.status).to.be.equal(ClaimStatus.DEFENDANT_PAPER_RESPONSE)
+    })
+
+    it('should return PROCEED_OFFLINE when a proceed offline response received', () => {
+      claim.proceedOfflineReason = ProceedOfflineReason.APPLICATION_BY_DEFENDANT
+
+      expect(claim.status).to.be.equal(ClaimStatus.PROCEED_OFFLINE)
+    })
+
+    it('should return PROCEED_OFFLINE when a proceed offline response received', () => {
+      claim.proceedOfflineReason = ProceedOfflineReason.APPLICATION_BY_CLAIMANT
+
+      expect(claim.status).to.be.equal(ClaimStatus.PROCEED_OFFLINE)
+    })
+
+    it('should return PROCEED_OFFLINE when a proceed offline response received', () => {
+      claim.proceedOfflineReason = ProceedOfflineReason.OTHER
+
+      expect(claim.status).to.be.equal(ClaimStatus.NO_RESPONSE)
     });
 
     [true, false].forEach(isMoreTimeRequested => {
@@ -415,7 +439,7 @@ describe('Claim', () => {
       claim.response = {
         responseType: ResponseType.PART_ADMISSION
       }
-      claim.features = ['admissions', 'directionsQuestionnaire']
+      claim.features = ['directionsQuestionnaire']
       expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION_DQ)
     })
 
@@ -593,7 +617,7 @@ describe('Claim', () => {
     if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
       it('should contain the claim status DEFENDANT_REJECTS_WITH_DQS only when defendant reject with DQs', () => {
         claim.respondedAt = moment()
-        claim.features = ['admissions', 'directionsQuestionnaire']
+        claim.features = ['directionsQuestionnaire']
         claim.response = {
           paymentIntention: null,
           responseType: 'FULL_DEFENCE',
@@ -606,7 +630,7 @@ describe('Claim', () => {
 
       it('should contain the claim status ORDER_DRAWN only when the legal advisor has drawn the order', () => {
         claim.respondedAt = moment()
-        claim.features = ['admissions', 'directionsQuestionnaire']
+        claim.features = ['directionsQuestionnaire']
         claim.response = {
           paymentIntention: null,
           responseType: 'FULL_DEFENCE',
@@ -643,6 +667,20 @@ describe('Claim', () => {
 
         expect(claim.stateHistory).to.have.lengthOf(2)
         expect(claim.stateHistory[0].status).to.equal(ClaimStatus.ORDER_DRAWN)
+      })
+
+      it('should contain the claim status  BESPOKE_ORDER_DRAWN when judge has drawn the bespoke order', () => {
+        claim.respondedAt = moment()
+        claim.features = ['directionsQuestionnaire']
+        claim.response = {
+          paymentIntention: null,
+          responseType: 'FULL_DEFENCE',
+          freeMediation: 'no'
+        }
+        claim.directionOrderType = 'BESPOKE'
+
+        expect(claim.stateHistory).to.have.lengthOf(2)
+        expect(claim.stateHistory[0].status).to.equal(ClaimStatus.BESPOKE_ORDER_DRAWN)
       })
     }
 
@@ -735,6 +773,29 @@ describe('Claim', () => {
     })
   })
 
+  describe('Help With fees', () => {
+
+    it('should return HWF number when the claim is submited with HWF', () => {
+      const claimWithHwf = new Claim().deserialize(claimStoreMock.sampleHwfClaimIssueObj)
+      expect(claimWithHwf.helpWithFeesNumber).to.be.eq('hwf123')
+    })
+
+    it('should return todays data for issued-on', () => {
+      const claimWithHwf = new Claim().deserialize(claimStoreMock.sampleHwfClaimIssueObj)
+      expect(claimWithHwf.issuedOn.toISOString()).to.be.eq(MomentFactory.currentDate().toISOString())
+    })
+
+    it('should return response dead line', () => {
+      const claimWithHwf = new Claim().deserialize(claimStoreMock.sampleHwfClaimIssueObj)
+      expect(claimWithHwf.responseDeadline).to.be.not.null
+    })
+
+    it('should return total Amount Till Date Of Issue', () => {
+      const claimWithHwf = new Claim().deserialize(claimStoreMock.sampleHwfClaimIssueObj)
+      expect(claimWithHwf.totalAmountTillDateOfIssue).to.be.eq(claimWithHwf.totalAmountTillToday)
+    })
+  })
+
   describe('respondToResponseDeadline', () => {
 
     it('should add 33 days to the response deadline', () => {
@@ -768,6 +829,81 @@ describe('Claim', () => {
       const claim = new Claim()
       const mediationDeadline = await claim.respondToMediationDeadline()
       expect(mediationDeadline).to.be.undefined
+    })
+  })
+
+  describe('respondToReconsiderationDeadline', () => {
+
+    it('should return post reconsideration deadline date ', () => {
+      const claim = new Claim()
+      claim.directionOrder = {
+        createdOn: MomentFactory.currentDate()
+      }
+      claimStoreMock.mockNextWorkingDay(MomentFactory.parse('2020-08-27'))
+      claim.respondToReconsiderationDeadline().then(
+        res => {
+          expect(res.format('YYYY-MM-DD'))
+          .to.equal(MomentFactory.parse('2020-08-27').format('YYYY-MM-DD'))
+        })
+    })
+
+    it('should return undefined if direction order is not created', async () => {
+      const claim = new Claim()
+      const directionOrderDeadline = await claim.respondToReconsiderationDeadline()
+      expect(directionOrderDeadline).to.be.undefined
+    })
+  })
+
+  describe('respondToOnlineOconReconsiderationDeadline', () => {
+    let claim
+
+    beforeEach(() => {
+      claim = new Claim()
+      claim.responseDeadline = MomentFactory.currentDate()
+      claim.intentionToProceedDeadline = MomentFactory.currentDate()
+      claim.createdAt = MomentFactory.parse('2020-11-24').hour(15).minute(12)
+      claim.respondedAt = moment()
+      claim.response = {
+        responseType: ResponseType.FULL_DEFENCE,
+        defenceType: DefenceType.DISPUTE,
+        responseMethod: 'OCON_FORM'
+      }
+    })
+
+    it('should return ocon reconsideration deadline date ', () => {
+      claim.directionOrder = {
+        createdOn: MomentFactory.parse('2020-11-24')
+      }
+      claimStoreMock.mockNextWorkingDay(MomentFactory.parse('2020-12-07'))
+
+      claim.respondToOnlineOconReconsiderationDeadline().then(
+        res => {
+          expect(res.format('YYYY-MM-DD'))
+          .to.equal(MomentFactory.parse('2020-12-07').format('YYYY-MM-DD'))
+        })
+    })
+
+    it('should return digital reconsideration deadline date ', () => {
+      claim.directionOrder = {
+        createdOn: MomentFactory.parse('2020-11-24')
+      }
+      claim.response = {
+        responseType: ResponseType.FULL_DEFENCE,
+        defenceType: DefenceType.DISPUTE,
+        responseMethod: 'DIGITAL'
+      }
+      claimStoreMock.mockNextWorkingDay(MomentFactory.parse('2020-12-01'))
+      claim.respondToOnlineOconReconsiderationDeadline().then(
+        res => {
+          expect(res.format('YYYY-MM-DD'))
+          .to.equal(MomentFactory.parse('2020-12-01').format('YYYY-MM-DD'))
+        })
+    })
+
+    it('should return undefined if direction order is not created', async () => {
+      const claim = new Claim()
+      const directionOrderDeadline = await claim.respondToOnlineOconReconsiderationDeadline()
+      expect(directionOrderDeadline).to.be.undefined
     })
   })
 
@@ -977,7 +1113,7 @@ describe('Claim', () => {
     if (FeatureToggles.isEnabled('mediation')) {
       it('should contain CLAIMANT_REJECTED_DEFENDANT_DEFENCE status when claimant has reject defence and DQs is enabled', () => {
         claim.respondedAt = moment()
-        claim.features = ['admissions', 'directionsQuestionnaire']
+        claim.features = ['directionsQuestionnaire']
         claim.response = {
           responseType: ResponseType.FULL_DEFENCE,
           defenceType: DefenceType.DISPUTE
@@ -1003,6 +1139,13 @@ describe('Claim', () => {
       expect(claim.stateHistory).to.have.lengthOf(2)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ)
       expect(claim.stateHistory[1].status).to.equal(ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE)
+    })
+
+    it('should contain CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ status when claimant has reject defence and DQs is not enabled', () => {
+      claim.respondedAt = moment()
+      claim.state = 'BUSINESS_QUEUE'
+      expect(claim.stateHistory).to.have.lengthOf(1)
+      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.BUSINESS_QUEUE)
     })
   })
 
@@ -1044,6 +1187,33 @@ describe('Claim', () => {
     })
   })
 
+  describe('handoffToCCBC', () => {
+    let claim
+
+    beforeEach(() => {
+      claim = new Claim()
+      claim.state = 'BUSINESS_QUEUE'
+      claim.responseDeadline = MomentFactory.currentDate()
+    })
+
+    it('should return ClaimStatus.BUSINESS_QUEUE ', () => {
+      expect(claim.status).to.be.equal(ClaimStatus.BUSINESS_QUEUE)
+    })
+  })
+
+  describe('isTransferred', () => {
+    let claim
+
+    beforeEach(() => {
+      claim = new Claim()
+      claim.state = 'TRANSFERRED'
+      claim.responseDeadline = MomentFactory.currentDate()
+    })
+
+    it('should return ClaimStatus.TRANSFERRED ', () => {
+      expect(claim.status).to.be.equal(ClaimStatus.TRANSFERRED)
+    })
+  })
 })
 
 function prepareSettlement (paymentIntention: PaymentIntention, party: MadeBy): Settlement {
@@ -1177,3 +1347,46 @@ function prepareSettlementWithCounterSignatureWithDatePassed (paymentIntention: 
   }
   return new Settlement().deserialize(settlement)
 }
+
+describe('OconFormResponse', () => {
+  let claim
+
+  beforeEach(() => {
+    claim = new Claim()
+    claim.responseDeadline = MomentFactory.currentDate()
+    claim.intentionToProceedDeadline = MomentFactory.currentDate()
+    claim.createdAt = MomentFactory.parse('2019-09-09').hour(15).minute(12)
+    claim.respondedAt = moment()
+    claim.createdAt = MomentFactory.parse('2018-09-09').hour(15).minute(12)
+    claim.response = {
+      responseType: ResponseType.FULL_DEFENCE,
+      defenceType: DefenceType.DISPUTE,
+      responseMethod: 'OCON_FORM'
+    }
+  })
+
+  it('should return ClaimStatus.DEFENDANT_OCON_FORM_RESPONSE ', () => {
+    expect(claim.status).to.be.equal(ClaimStatus.RESPONSE_SUBMITTED)
+  })
+})
+
+describe('ScannedDocument', () => {
+  it('should return Claim Documents including Scanned Document', () => {
+    const claimWithResponse = new Claim().deserialize({ ...claimStoreMock.sampleClaimIssueObj, ...claimStoreMock.sampleClaimDocuments })
+    const claimDocs: ClaimDocument[] = claimWithResponse.claimDocuments
+    expect(2).to.be.eq(claimDocs.length)
+  })
+  it('should return Claim Documents including Scanned Document', () => {
+    claimStoreMock.sampleClaimDocuments.claimDocumentCollection.claimDocuments = undefined
+    const claimWithResponse = new Claim().deserialize({ ...claimStoreMock.sampleClaimIssueObj, ...claimStoreMock.sampleClaimDocuments })
+    const claimDocs: ClaimDocument[] = claimWithResponse.claimDocuments
+    expect(1).to.be.eq(claimDocs.length)
+  })
+})
+
+describe('HwF fees details', () => {
+  const claim = new Claim().deserialize({ ...claimStoreMock.sampleClaimIssueObj })
+  it('should return helpWithFessBalanceClaimFee', () => {
+    expect(claim.helpWithFessBalanceClaimFee).to.equal(25)
+  })
+})

@@ -70,7 +70,7 @@ describe('Mediation: Free mediation page', () => {
         it('should render page with automatic registration details when everything is fine and auto-registered', async () => {
           const claim: Claim = new Claim().deserialize({
             ...claimStoreServiceMock.sampleClaimIssueObj,
-            features: ['admissions', 'mediationPilot']
+            features: ['mediationPilot']
           })
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
           draftStoreServiceMock.resolveFind('mediation')
@@ -128,7 +128,7 @@ describe('Mediation: Free mediation page', () => {
         it('should render page with automatic registration details when everything is fine and auto-registered', async () => {
           const claim: Claim = new Claim().deserialize({
             ...claimStoreServiceMock.sampleClaimIssueObj,
-            features: ['admissions', 'mediationPilot']
+            features: ['mediationPilot']
           })
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
           draftStoreServiceMock.resolveFind('mediation')

@@ -1,0 +1,9 @@
+// Older version of design system (govuk-elements-sass & govuk_elements - ) is no longer being maintained. So, use of latest GOV.UK Design system(govuk-frontend - https://design-system.service.gov.uk/) is now a must.
+// For now, we plan to slowly upgrade the existing UI to use latest standards.
+// So, for this to work we have to make sure both the versions co-exist for some time untill UI is completely upgrated to latest GDS(GOV.UK Design System) styles.
+// The below code resolves font-sizing issues noticed when new GOV.uk Design system(govuk-frontend) is used alongside of older version (govuk-elements-sass)
+
+html,
+body {
+  font-size: 100%;
+}

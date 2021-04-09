@@ -2,10 +2,12 @@ import { ClaimData } from 'claims/models/claimData'
 import { expect } from 'chai'
 import { Interest } from 'claims/models/interest'
 import { InterestDate } from 'claims/models/interestDate'
-import { interestData, interestDateData } from 'test/data/entity/claimData'
+import { breatingSpaceData, interestData, interestDateData } from 'test/data/entity/claimData'
+import { BreathingSpace } from 'features/claim/form/models/breathingSpace'
 
 const CLAIM_INTEREST = new Interest().deserialize(interestData)
 const CLAIM_INTEREST_DATE = new InterestDate().deserialize(interestDateData)
+const BREATHING_SPACE_DATA = new BreathingSpace().deserialize(breatingSpaceData)
 
 describe('ClaimData', () => {
   describe('deserialize', () => {
@@ -63,6 +65,47 @@ describe('ClaimData', () => {
           interestDate: undefined
         })
       })
+
+      it('should return helpWithFeesNumber and helpWithFeesType if provided', () => {
+        const claimData = new ClaimData().deserialize({
+          helpWithFeesNumber: '259023',
+          helpWithFeesType: 'ClaimIssue'
+        })
+
+        expect(claimData.helpWithFeesNumber).to.equal('259023')
+        expect(claimData.helpWithFeesType).to.equal('ClaimIssue')
+      })
+
+      it('should return helpWithFeesNumber and helpWithFeesType if provided', () => {
+        const claimData = new ClaimData().deserialize({})
+
+        // using to.equal to resolve typescript error
+        expect(claimData.helpWithFeesNumber).to.equal(undefined)
+        expect(claimData.helpWithFeesType).to.equal(undefined)
+      })
+    })
+  })
+})
+
+describe('ClaimData', () => {
+  describe('deserialize', () => {
+    describe('breathingSpace', () => {
+
+      it('should return breathingSpaceReferenceNumber, bsType and other values if provided', () => {
+        const actual: BreathingSpace = new BreathingSpace().deserialize(BREATHING_SPACE_DATA)
+        let expected: 'BS-1234567890'
+        let expectdType: 'STANDARD_BS_ENTERED'
+
+        expect(actual.breathingSpaceReferenceNumber).to.be.eq(expected)
+        expect(actual.breathingSpaceType).to.be.eq(expectdType)
+      })
+
+      it('should return undefined if undefined is provided', () => {
+        const actual: BreathingSpace = new BreathingSpace().deserialize(undefined)
+
+        expect(actual).to.be.eq(undefined)
+      })
+
     })
   })
 })

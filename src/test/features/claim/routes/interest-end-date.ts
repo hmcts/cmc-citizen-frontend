@@ -64,7 +64,7 @@ describe('Claim issue: interest end date page', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should redirect to total page when form is valid, submission date selected and everything is fine', async () => {
+      it('should redirect to help with fees page when form is valid, submission date selected and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveUpdate()
 
@@ -72,10 +72,10 @@ describe('Claim issue: interest end date page', () => {
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ option: InterestEndDateOption.SUBMISSION })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.totalPage.uri))
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.helpWithFeesPage.uri))
       })
 
-      it('should redirect to total page when form is valid, settled or judgment is selected and everything is fine', async () => {
+      it('should redirect to help with fees page when form is valid, settled or judgment is selected and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveUpdate()
 
@@ -83,7 +83,7 @@ describe('Claim issue: interest end date page', () => {
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ option: InterestEndDateOption.SETTLED_OR_JUDGMENT })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.totalPage.uri))
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.helpWithFeesPage.uri))
       })
     })
   })

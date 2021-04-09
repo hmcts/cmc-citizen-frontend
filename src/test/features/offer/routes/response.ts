@@ -44,6 +44,14 @@ describe('defendant response page', () => {
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('Do you accept the offer?'))
       })
+
+      it('should redirect to claimant dashboard uri', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId()
+        await request(app)
+          .get(responsePage)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.redirect)
+      })
     })
 
     describe('on POST', () => {
@@ -92,6 +100,18 @@ describe('defendant response page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send(formData)
               .expect(res => expect(res).to.be.redirect.toLocation(rejectedOfferPage))
+          })
+
+          it('should thorw error when neither accepted or rejected', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            const formData = {
+              option: StatementType.OFFER.value
+            }
+            await request(app)
+              .post(responsePage)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send(formData)
+              .expect(res => expect(res).to.be.serverError.withText('not supported'))
           })
         })
 

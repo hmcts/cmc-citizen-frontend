@@ -4,23 +4,28 @@ import { NotEligibleReason } from 'eligibility/notEligibleReason'
 import { EligibilityPage } from 'eligibility/eligibilityPage'
 import { ClaimType } from 'eligibility/model/claimType'
 import { EligibilityCheck, eligible, notEligible } from 'eligibility/model/eligibilityCheck'
+import { RoutablePath } from 'shared/router/routablePath'
 
 class ClaimTypeEligibilityPage extends EligibilityPage<ClaimType> {
   constructor () {
-    super(Paths.claimTypePage, Paths.claimantAddressPage, 'claimType')
+    super(Paths.claimTypePage, 'claimType')
   }
 
-  checkEligibility (value: ClaimType): EligibilityCheck {
+  checkEligibility (value: ClaimType): Promise<EligibilityCheck> {
     switch (value) {
       case ClaimType.PERSONAL_CLAIM:
-        return eligible()
+        return Promise.resolve(eligible())
       case ClaimType.MULTIPLE_CLAIM:
-        return notEligible(NotEligibleReason.MULTIPLE_CLAIMANTS)
+        return Promise.resolve(notEligible(NotEligibleReason.MULTIPLE_CLAIMANTS))
       case ClaimType.REPRESENTATIVE_CLAIM:
-        return notEligible(NotEligibleReason.CLAIM_ON_BEHALF)
+        return Promise.resolve(notEligible(NotEligibleReason.CLAIM_ON_BEHALF))
       default:
-        throw new Error(`Unexpected ClaimType: ${value.option}`)
+        return Promise.reject(`Unexpected ClaimType: ${value.option}`)
     }
+  }
+
+  async nextPagePath (): Promise<RoutablePath> {
+    return Promise.resolve(Paths.claimantAddressPage)
   }
 }
 

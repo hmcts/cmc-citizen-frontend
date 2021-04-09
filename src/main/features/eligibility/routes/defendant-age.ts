@@ -4,23 +4,28 @@ import { EligibilityPage } from 'eligibility/eligibilityPage'
 import { EligibilityCheck, eligible, notEligible } from 'eligibility/model/eligibilityCheck'
 import { NotEligibleReason } from 'eligibility/notEligibleReason'
 import { DefendantAgeOption } from 'eligibility/model/defendantAgeOption'
+import { RoutablePath } from 'shared/router/routablePath'
 
 class DefendantAgeEligibilityPage extends EligibilityPage<DefendantAgeOption> {
   constructor () {
-    super(Paths.defendantAgePage, Paths.over18Page, 'defendantAge')
+    super(Paths.defendantAgePage, 'defendantAge')
   }
 
-  checkEligibility (value: DefendantAgeOption): EligibilityCheck {
+  checkEligibility (value: DefendantAgeOption): Promise<EligibilityCheck> {
     switch (value) {
       case DefendantAgeOption.YES:
-        return eligible()
+        return Promise.resolve(eligible())
       case DefendantAgeOption.COMPANY_OR_ORGANISATION:
-        return eligible()
+        return Promise.resolve(eligible())
       case DefendantAgeOption.NO:
-        return notEligible(NotEligibleReason.UNDER_18_DEFENDANT)
+        return Promise.resolve(notEligible(NotEligibleReason.UNDER_18_DEFENDANT))
       default:
-        throw new Error(`Unexpected claim value: ${value.option}`)
+        return Promise.reject(`Unexpected claim value: ${value.option}`)
     }
+  }
+
+  async nextPagePath (): Promise<RoutablePath> {
+    return Promise.resolve(Paths.over18Page)
   }
 }
 

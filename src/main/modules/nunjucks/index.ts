@@ -38,6 +38,7 @@ import { ClaimStatus } from 'claims/models/claimStatus'
 import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 import { Paths as AppPaths } from 'paths'
 import { Paths as DashboardPaths } from 'features/dashboard/paths'
+import { Paths as EligibilityPaths } from 'eligibility/paths'
 import { Paths as CCJPaths } from 'features/ccj/paths'
 import { Paths as StatePaidPaths } from 'features/paid-in-full/paths'
 import { Paths as ClaimantResponsePaths } from 'features/claimant-response/paths'
@@ -46,6 +47,7 @@ import { Paths as MediationPaths } from 'mediation/paths'
 import { Paths as DirectionsQuestionnairePaths } from 'features/directions-questionnaire/paths'
 import { Paths as OrdersPaths } from 'features/orders/paths'
 import { Paths as TestingSupportPaths } from 'testing-support/paths'
+import { Paths as ClaimPaths } from 'features/claim/paths'
 import { FullRejectionPaths, PartAdmissionPaths, Paths as ResponsePaths } from 'features/response/paths'
 import { HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
@@ -71,6 +73,7 @@ import { FreeMediationOption } from 'main/app/forms/models/freeMediation'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { ResponseType as DomainResponseType } from 'claims/models/response/responseType'
 import { FeaturesBuilder } from 'claim/helpers/featuresBuilder'
+import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -108,6 +111,7 @@ export class Nunjucks {
     })
 
     app.use((req, res, next) => {
+      res.removeHeader('Server')
       res.locals.pagePath = req.path
       next()
     })
@@ -141,6 +145,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('featureToggles', this.convertPropertiesToBoolean(config.get('featureToggles')))
     nunjucksEnv.addGlobal('RejectAllOfClaimOption', RejectAllOfClaimOption)
     nunjucksEnv.addGlobal('AlreadyPaid', AlreadyPaid)
+    nunjucksEnv.addGlobal('ProceedOfflineReason', ProceedOfflineReason)
     nunjucksEnv.addGlobal('DefendantPaymentType', DefendantPaymentType)
     nunjucksEnv.addGlobal('DefendantPaymentOption', DefendantPaymentOption)
     nunjucksEnv.addGlobal('PaymentType', PaymentType)
@@ -167,8 +172,10 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('ClaimStatus', ClaimStatus)
 
     nunjucksEnv.addGlobal('AppPaths', AppPaths)
+    nunjucksEnv.addGlobal('ClaimPaths', ClaimPaths)
     nunjucksEnv.addGlobal('ClaimantResponsePaths', ClaimantResponsePaths)
     nunjucksEnv.addGlobal('DashboardPaths', DashboardPaths)
+    nunjucksEnv.addGlobal('EligibilityPaths', EligibilityPaths)
     nunjucksEnv.addGlobal('CCJPaths', CCJPaths)
     nunjucksEnv.addGlobal('StatePaidPaths', StatePaidPaths)
     nunjucksEnv.addGlobal('ResponsePaths', ResponsePaths)

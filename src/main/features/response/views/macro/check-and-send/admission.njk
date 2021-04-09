@@ -1,69 +1,62 @@
 {% from "table.njk" import tableStart, tableEnd, row %}
-
-{% macro whenWillYouPayRow(value, url) %}
-  {{
-    row(
-      label = 'When will you pay',
-      value = value,
-      changeLink = url,
-      bold = true
-    )
-  }}
-{% endmacro %}
-
+{% from "party/details.njk" import partyDetailRow %}
 {% macro notImmediatePayment(type, paymentDate, paymentPlan, explanation, Paths = {}, externalId, statementOfMeansIsApplicable) %}
-  {{ tableStart('whenWillYouPay', 'When you’ll pay') }}
-  {% set whenWillYouPayLabel = t(type.option.displayValue) | capitalize %}
+  <h2 class="govuk-heading-m">{{ t("When you’ll pay") }}</h2>
+  <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+    {% set whenWillYouPayLabel = t(type.option.displayValue) | capitalize %}
 
-  {% if type.isOfType(DefendantPaymentType.BY_SET_DATE) %}
-    {%
-      set whenWillYouPayLabel = t('{{ whenWillYouPayLabel }}: {{ date }}', {
-      whenWillYouPayLabel: whenWillYouPayLabel, date: paymentDate.date.toMoment() | date})
-    %}
-  {% endif %}
-
-  {{
-    whenWillYouPayRow(
-      value = whenWillYouPayLabel,
-      url = Paths.paymentOptionPage.evaluateUri({ externalId: externalId })
-    )
-  }}
-
-  {% if type.isOfType(DefendantPaymentType.INSTALMENTS) %}
+    {% if type.isOfType(DefendantPaymentType.BY_SET_DATE) %}
+      {%
+        set whenWillYouPayLabel = t('{{ whenWillYouPayLabel }}: {{ date }}', {
+        whenWillYouPayLabel: whenWillYouPayLabel, date: paymentDate.date.toMoment() | date})
+      %}
+    {% endif %}
     {{
-      row(
-        label = 'Regular payments of',
-        value = paymentPlan.instalmentAmount | numeral,
-        changeLink = Paths.paymentPlanPage.evaluateUri({ externalId: externalId }),
-        bold = true, bottomBorder = false
-      )
-    }}
-    {{
-      row(
-        label = 'Frequency of payments',
-        value = t(paymentPlan.paymentSchedule.displayValue),
-        bold = true,
-        bottomBorder = false
-      )
-    }}
-    {{
-      row(
-        label = 'Make the first payment on',
-        value = paymentPlan.firstPaymentDate.toMoment() | date,
+      partyDetailRow(
+        label = 'When will you pay',
+        value = whenWillYouPayLabel,
+        changeLink = Paths.paymentOptionPage.evaluateUri({ externalId: externalId }),
         bold = true
       )
     }}
-  {% endif %}
 
-  {% if statementOfMeansIsApplicable %}
-    {{
-      row(
-        label = 'Briefly explain why you can’t pay immediately',
-        value = explanation,
-        changeLink = StatementOfMeansPaths.explanationPage.evaluateUri({ externalId: externalId }),
-        bold = true
-      )
-    }}
-  {% endif %}
-  {{ tableEnd() }}
+    {% if type.isOfType(DefendantPaymentType.INSTALMENTS) %}
+      {{
+        partyDetailRow(
+          label = 'Regular payments of',
+          value = paymentPlan.instalmentAmount | numeral,
+          changeLink = Paths.paymentPlanPage.evaluateUri({ externalId: externalId }),
+          bold = true, bottomBorder = false
+        )
+      }}
+      {{
+        partyDetailRow(
+          label = 'Frequency of payments',
+          value = t(paymentPlan.paymentSchedule.displayValue),
+          bold = true,
+          changeLink = Paths.paymentPlanPage.evaluateUri({ externalId: externalId }),
+          bottomBorder = false
+        )
+      }}
+      {{
+        partyDetailRow(
+          label = 'Make the first payment on',
+          value = paymentPlan.firstPaymentDate.toMoment() | date,
+          changeLink = Paths.paymentPlanPage.evaluateUri({ externalId: externalId }),
+          bold = true
+        )
+      }}
+    {% endif %}
+
+    {% if statementOfMeansIsApplicable %}
+      {{
+        partyDetailRow(
+          label = 'Briefly explain why you can’t pay immediately',
+          value = explanation,
+          changeLink = StatementOfMeansPaths.explanationPage.evaluateUri({ externalId: externalId }),
+          bold = true
+        )
+      }}
+    {% endif %}
+  </dl>
 {% endmacro %}

@@ -101,7 +101,7 @@ describe('Claimant response: view defendant response page', () => {
       it('should render full defence with hearing requirements', async () => {
         const fullDefenceWithDQsEnabledData = {
           ...fullDefenceData,
-          features : ['admissions', 'directionsQuestionnaire']
+          features : ['directionsQuestionnaire']
         }
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(fullDefenceWithDQsEnabledData)
         draftStoreServiceMock.resolveFind('claimantResponse')
@@ -116,7 +116,7 @@ describe('Claimant response: view defendant response page', () => {
       it('should render part admission with hearing requirements', async () => {
         const partAdmissionWithDQsEnabledData = {
           ...partialAdmissionWithPaymentBySetDate,
-          features : ['admissions', 'directionsQuestionnaire']
+          features : ['directionsQuestionnaire']
         }
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(partAdmissionWithDQsEnabledData)
         draftStoreServiceMock.resolveFind('claimantResponse')

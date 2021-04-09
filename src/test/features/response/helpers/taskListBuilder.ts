@@ -478,7 +478,7 @@ describe('Defendant response task list builder', () => {
 
   describe('"Your hearing requirements"', () => {
     beforeEach(() => {
-      claim.features = ['admissions', 'directionsQuestionnaire']
+      claim.features = ['directionsQuestionnaire']
     })
 
     describe('response is partial admission', () => {

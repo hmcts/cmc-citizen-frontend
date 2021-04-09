@@ -20,6 +20,8 @@ src/main/public/webchat/javascript/hmcts-*.js
 src/main/public/webchat/css/*.css
 src/main/public/stylesheets/lib/*
 src/main/public/apple-touch-icon.png
+src/main/public/assets/**/*
+src/main/common/components/imported/**/*
 
 node-rpm-packaging/
 mochawesome-report/
