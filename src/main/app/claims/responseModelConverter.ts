@@ -109,6 +109,7 @@ export class ResponseModelConverter {
       freeMediation: FreeMediationUtil.getFreeMediation(mediationDraft),
       mediationPhoneNumber: FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft, draft),
       mediationContactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft, draft),
+      noMediationReason: FreeMediationUtil.getNoMediationReason(mediationDraft),
       paymentDeclaration: draft.isResponseRejectedFullyBecausePaidWhatOwed() ? new PaymentDeclaration(
         draft.rejectAllOfClaim.howMuchHaveYouPaid.date.asString(),
         draft.rejectAllOfClaim.howMuchHaveYouPaid.amount,
@@ -141,6 +142,7 @@ export class ResponseModelConverter {
       freeMediation: FreeMediationUtil.getFreeMediation(mediationDraft),
       mediationPhoneNumber: FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft, draft),
       mediationContactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft, draft),
+      noMediationReason: FreeMediationUtil.getNoMediationReason(mediationDraft),
       defendant: this.convertPartyDetails(draft.defendantDetails),
       statementOfTruth: this.convertStatementOfTruth(draft),
       directionsQuestionnaire: (FeatureToggles.isEnabled('directionsQuestionnaire') &&
@@ -155,6 +157,7 @@ export class ResponseModelConverter {
       freeMediation: FreeMediationUtil.getFreeMediation(mediationDraft),
       mediationPhoneNumber: FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft, draft),
       mediationContactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft, draft),
+      noMediationReason: FreeMediationUtil.getNoMediationReason(mediationDraft),
       defendant: this.convertPartyDetails(draft.defendantDetails),
       paymentIntention: this.convertPaymentIntention(draft.fullAdmission.paymentIntention),
       statementOfMeans: this.convertStatementOfMeans(draft),
@@ -194,6 +197,7 @@ export class ResponseModelConverter {
       freeMediation: FreeMediationUtil.getFreeMediation(mediationDraft),
       mediationPhoneNumber: FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft, draft),
       mediationContactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft, draft),
+      noMediationReason: FreeMediationUtil.getNoMediationReason(mediationDraft),
       statementOfMeans: this.convertStatementOfMeans(draft),
       statementOfTruth: this.convertStatementOfTruth(draft),
       directionsQuestionnaire: (FeatureToggles.isEnabled('directionsQuestionnaire') &&

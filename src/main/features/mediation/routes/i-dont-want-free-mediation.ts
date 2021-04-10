@@ -38,7 +38,7 @@ function reDirectTo (res: express.Response, externalId: string) {
 export default express.Router()
   .get(Paths.iDontWantFreeMediationPage.uri, (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const draft: Draft<MediationDraft> = res.locals.mediationDraft
-    renderView(new Form(draft.document.iDoNotWantMediationReason), res)
+    renderView(new Form(draft.document.noMediationReason), res)
   })
   .post(
     Paths.iDontWantFreeMediationPage.uri,
@@ -56,7 +56,7 @@ export default express.Router()
           const draft: Draft<MediationDraft> = res.locals.mediationDraft
           const user: User = res.locals.user
 
-          draft.document.iDoNotWantMediationReason = form.model
+          draft.document.noMediationReason = form.model
           await new DraftService().save(draft, user.bearerToken)
 
           reDirectTo(res, externalId)

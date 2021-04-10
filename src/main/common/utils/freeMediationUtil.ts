@@ -61,4 +61,14 @@ export class FreeMediationUtil {
     }
     return undefined
   }
+
+  static getNoMediationReason (mediationDraft: MediationDraft): string {
+    if (mediationDraft.noMediationReason.otherReason) {
+      return mediationDraft.noMediationReason.otherReason
+    } else if (mediationDraft.noMediationReason.iDoNotWantMediationReason) {
+      return mediationDraft.noMediationReason.iDoNotWantMediationReason
+    } else {
+      return undefined
+    }
+  }
 }
