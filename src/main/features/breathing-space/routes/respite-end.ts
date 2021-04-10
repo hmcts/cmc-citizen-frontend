@@ -23,8 +23,7 @@ function renderView (form: Form<BreathingSpaceRespiteEnd>, res: express.Response
 /* tslint:disable:no-default-export */
 export default express.Router()
     .get(Paths.bsEndDatePage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const drafts = await new DraftService().find('bs', '100', res.locals.user.bearerToken, (value) => value)
-      let draft: Draft<DraftClaim> = drafts[drafts.length - 1]
+      let draft: Draft<DraftClaim> = res.locals.Draft
       if (draft.document.breathingSpace.breathingSpaceEndDate) {
         let bsLiftDate: Date = new Date(draft.document.breathingSpace.breathingSpaceEndDate.toLocaleString())
         let bsLiftDateSplit = bsLiftDate.toLocaleDateString().split('/')
@@ -42,8 +41,7 @@ export default express.Router()
           if ((form.model.respiteEnd.day || form.model.respiteEnd.month || form.model.respiteEnd.year) && form.hasErrors()) {
             renderView(form, res, next)
           } else {
-            const drafts = await new DraftService().find('bs', '100', res.locals.user.bearerToken, (value) => value)
-            let draft: Draft<DraftClaim> = drafts[drafts.length - 1]
+            let draft: Draft<DraftClaim> = res.locals.Draft
             const user: User = res.locals.user
             draft.document.breathingSpace.breathingSpaceEndDate = MomentFactory.parse(form.model.respiteEnd.toMoment().format())
             await new DraftService().save(draft, user.bearerToken)

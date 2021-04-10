@@ -41,17 +41,14 @@ function renderView (form: Form<BreathingSpace>, res: express.Response, next: ex
 /*  tslint:disable:no-default-export */
 export default express.Router()
     .get(Paths.bsCheckAnswersPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const drafts = await new DraftService().find('bs', '100', res.locals.user.bearerToken, (value) => value)
-      let draft: Draft<DraftClaim> = drafts[drafts.length - 1]
+      let draft: Draft<DraftClaim> = res.locals.Draft
       renderView(new Form(draft.document.breathingSpace), res, next)
     })
     .post(
       Paths.bsCheckAnswersPage.uri,
       FormValidator.requestHandler(BreathingSpace),
       ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-        const drafts = await new DraftService().find('bs', '100', res.locals.user.bearerToken, (value) => value)
-        let draftBS: Draft<DraftClaim> = drafts[drafts.length - 1]
-
+        let draftBS: Draft<DraftClaim> = res.locals.Draft
         let draft: DraftClaim = new DraftClaim()
         draft.breathingSpace.breathingSpaceReferenceNumber = draftBS.document.breathingSpace.breathingSpaceReferenceNumber
         draft.breathingSpace.breathingSpaceExternalId = draftBS.document.breathingSpace.breathingSpaceExternalId

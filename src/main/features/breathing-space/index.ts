@@ -29,11 +29,16 @@ export class Feature {
     }
 
     app.all(/^\/breathing-space.*$/, breathingSpaceRequestHandler())
-
     app.all('/breathing-space*',
       DraftMiddleware.requestHandler(new DraftService(), 'bs', 100, (value: any): DraftClaim => {
         return new DraftClaim().deserialize(value)
-      }))
+      }),
+      async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+        const drafts = await new DraftService().find('bs', '100', res.locals.user.bearerToken, (value) => value)
+        res.locals.Draft = drafts[drafts.length - 1]
+        next()
+      }
+    )
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
   }
 }
