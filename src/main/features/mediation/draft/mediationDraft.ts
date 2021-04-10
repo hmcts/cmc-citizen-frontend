@@ -2,6 +2,7 @@ import { DraftDocument } from '@hmcts/cmc-draft-store-middleware'
 import { FreeMediation } from 'forms/models/freeMediation'
 import { CanWeUse } from 'mediation/form/models/CanWeUse'
 import { CanWeUseCompany } from 'mediation/form/models/CanWeUseCompany'
+import { NoMediationReason } from 'mediation/form/models/NoMediationReason'
 
 export class MediationDraft extends DraftDocument {
   canWeUse: CanWeUse
@@ -9,7 +10,7 @@ export class MediationDraft extends DraftDocument {
   willYouTryMediation: FreeMediation
   youCanOnlyUseMediation: FreeMediation
   mediationDisagreement: FreeMediation
-  noMediationReason: FreeMediation
+  iDoNotWantMediationReason: NoMediationReason
 
   constructor () {
     super()
@@ -34,8 +35,8 @@ export class MediationDraft extends DraftDocument {
       if (input.mediationDisagreement) {
         this.mediationDisagreement = new FreeMediation(input.mediationDisagreement.option)
       }
-      if (input.noMediationReason) {
-        this.noMediationReason = new FreeMediation(input.noMediationReason.option)
+      if (input.iDoNotWantMediationReason) {
+        this.iDoNotWantMediationReason = new NoMediationReason().deserialize(input.iDoNotWantMediationReason.value)
       }
     }
     return this

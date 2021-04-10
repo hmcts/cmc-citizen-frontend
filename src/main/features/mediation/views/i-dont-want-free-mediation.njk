@@ -38,6 +38,13 @@
               {{ radioOption(
                 form = form,
                 name = 'iDoNotWantMediationReason',
+                value = 'wouldNotSolve',
+                label = 'I do not think mediation would solve the dispute',
+                checked = form.valueFor('iDoNotWantMediationReason') == 'wouldNotSolve'
+              ) }}
+              {{ radioOption(
+                form = form,
+                name = 'iDoNotWantMediationReason',
                 value = 'noDelayInHearing',
                 label = 'I do not want to delay getting a hearing',
                 checked = form.valueFor('iDoNotWantMediationReason') == 'noDelayInHearing'
@@ -47,7 +54,7 @@
                 name = 'iDoNotWantMediationReason',
                 value = 'judgeToDecide',
                 label = 'I want a judge to make a decision on the dispute',
-                checked = form.valueFor('iDoNotWantMediationReason') == 'noDelayInHearing'
+                checked = form.valueFor('iDoNotWantMediationReason') == 'judgeToDecide'
               ) }}
               {{ radioOption(
                 form = form,
