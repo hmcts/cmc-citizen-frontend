@@ -62,6 +62,7 @@ export class DashboardFeature {
       DraftMiddleware.requestHandler(new DraftService(), 'claim', 100, (value: any): DraftClaim => {
         return new DraftClaim().deserialize(value)
       }))
+
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
   }
 }
