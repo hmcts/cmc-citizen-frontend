@@ -63,6 +63,5 @@ export class DashboardFeature {
         return new DraftClaim().deserialize(value)
       }))
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
-    app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
   }
 }
