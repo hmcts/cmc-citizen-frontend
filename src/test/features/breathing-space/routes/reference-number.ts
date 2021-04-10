@@ -20,7 +20,6 @@ describe('Breathing space: reference number page page', () => {
   describe('on GET', () => {
     it('should render page when everything is fine', function (done) {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-      draftStoreServiceMock.resolveFind('bs')
       request(app)
         .get(bsNumberPagePath)
         .set('Cookie', `${cookieName}=ABC`)
