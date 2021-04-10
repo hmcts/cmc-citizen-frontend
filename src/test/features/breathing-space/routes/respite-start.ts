@@ -1,8 +1,6 @@
 import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
-
-import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
 import { Paths as BreathingSpacePaths } from 'breathing-space/paths'
 
@@ -14,7 +12,6 @@ import { MomentFactory } from 'shared/momentFactory'
 const cookieName: string = config.get<string>('session.cookieName')
 
 describe('Enter breathing space: Respite start date page', () => {
-  attachDefaultHooks(app)
 
   describe('on GET', () => {
     it('should render page when everything is fine', function (done) {
@@ -34,55 +31,61 @@ describe('Enter breathing space: Respite start date page', () => {
         idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       })
 
-      it('should render page with error when date is greater than or equal to today', async () => {
+      it('should render page with error when date is greater than or equal to today', function (done) {
         const date: Moment = MomentFactory.currentDate().subtract(1, 'year')
-        await request(app)
+        request(app)
           .post(BreathingSpacePaths.bsStartDatePage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ respiteStart: { day: date.date() + 1, month: date.month() + 2, year: date.year() + 1 } })
           .expect(res => expect(res).to.be.successful.withText('There was a problem'))
+        done()
       })
 
-      it('should redirect to type page when form is valid and everything is fine', async () => {
+      it('should redirect to type page when form is valid and everything is fine', function (done) {
         const date: Moment = MomentFactory.currentDate().subtract(1, 'year')
 
-        await request(app)
+        request(app)
           .post(BreathingSpacePaths.bsStartDatePage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ respiteStart: { day: '31', month: '12', year: date.year() - 1 } })
           .expect(res => expect(res).to.be.redirect.toLocation(BreathingSpacePaths.bsTypePage.uri))
+        done()
       })
 
-      it('should redirect to type page when form is valid (without date) and everything is fine', async () => {
-        await request(app)
+      it('should redirect to type page when form is valid (without date) and everything is fine', function (done) {
+        request(app)
           .post(BreathingSpacePaths.bsStartDatePage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ respiteStart: { day: '', month: '', year: '' } })
           .expect(res => expect(res).to.be.redirect.toLocation(BreathingSpacePaths.bsTypePage.uri))
+        done()
       })
 
-      it('should render page with error when invalid day is provided', async () => {
-        await request(app)
+      it('should render page with error when invalid day is provided', function (done) {
+        request(app)
           .post(BreathingSpacePaths.bsStartDatePage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ respiteStart: { day: '33', month: '', year: '2021' } })
           .expect(res => expect(res).to.be.successful.withText('Please enter a valid date', 'There was a problem'))
+        done()
       })
 
-      it('should render page with error when invalid month is provided', async () => {
-        await request(app)
+      it('should render page with error when invalid month is provided', function (done) {
+        request(app)
           .post(BreathingSpacePaths.bsStartDatePage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ respiteStart: { day: '3', month: '18', year: '2021' } })
           .expect(res => expect(res).to.be.successful.withText('Please enter a valid date', 'There was a problem'))
+        done()
       })
 
-      it('should render page with error when invalid day is provided', async () => {
-        await request(app)
+      it('should render page with error when invalid day is provided', function (done) {
+        request(app)
           .post(BreathingSpacePaths.bsStartDatePage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ respiteStart: { day: '3', month: '3', year: '12345' } })
           .expect(res => expect(res).to.be.successful.withText('Please enter a valid date', 'There was a problem'))
+        done()
       })
     })
   })
