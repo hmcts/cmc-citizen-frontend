@@ -3,7 +3,6 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 
-// import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
 import { Paths as BreathingSpacePaths } from 'breathing-space/paths'
 
@@ -11,9 +10,11 @@ import { app } from 'main/app'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
+import { sampleClaimDraftObj } from 'test/http-mocks/draft-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const headerText: string = 'Reference number must not be more than 16 characters'
+const bsNumberPagePath = BreathingSpacePaths.referencNumberPage.evaluateUri({ externalId: sampleClaimDraftObj.externalId })
 
 describe('Breathing space: reference number page page', () => {
 
@@ -21,7 +22,7 @@ describe('Breathing space: reference number page page', () => {
     it('should render page when everything is fine', function (done) {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       request(app)
-        .get(BreathingSpacePaths.referencNumberPage.uri)
+        .get(bsNumberPagePath)
         .set('Cookie', `${cookieName}=ABC`)
         .expect(res => expect(res).to.be.successful.withText('Do you have a Debt Respite Scheme reference number?'))
       done()
@@ -38,7 +39,7 @@ describe('Breathing space: reference number page page', () => {
         draftStoreServiceMock.resolveFind('claim')
 
         await request(app)
-          .post(BreathingSpacePaths.referencNumberPage.uri)
+          .post(bsNumberPagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ bsNumber: 'BS-12345678909876' })
           .expect(res => expect(res).to.be.successful.withText(headerText, 'div class="error-summary"'))
@@ -49,7 +50,7 @@ describe('Breathing space: reference number page page', () => {
         draftStoreServiceMock.resolveUpdate()
 
         request(app)
-          .post(BreathingSpacePaths.referencNumberPage.uri)
+          .post(bsNumberPagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ bsNumber: '' })
           .expect(res => expect(res).to.be.redirect.toLocation(BreathingSpacePaths.bsStartDatePage.uri))
@@ -61,7 +62,7 @@ describe('Breathing space: reference number page page', () => {
         draftStoreServiceMock.resolveUpdate()
 
         request(app)
-          .post(BreathingSpacePaths.referencNumberPage.uri)
+          .post(bsNumberPagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ bsNumber: '07000000000' })
           .expect(res => expect(res).to.be.redirect.toLocation(BreathingSpacePaths.bsStartDatePage.uri))
