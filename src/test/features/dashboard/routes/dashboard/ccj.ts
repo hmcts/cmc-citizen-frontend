@@ -461,13 +461,14 @@ describe('Dashboard page ccj dashboard', () => {
           })
 
           testData.forEach(data => {
-            it(`should render dashboard: ${data.status}`, async () => {
+            it(`should render dashboard: ${data.status}`, function (done) {
               draftStoreServiceMock.resolveFindNoDraftFound()
               claimStoreServiceMock.resolveRetrieveByDefendantId(data.claim.referenceNumber, '1', data.claim, data.claimOverride)
-              await request(app)
+              request(app)
                 .get(Paths.dashboardPage.uri)
                 .set('Cookie', `${cookieName}=ABC`)
                 .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
+              done()
             })
           })
         })
