@@ -10,11 +10,10 @@ import { app } from 'main/app'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
-import { sampleClaimDraftObj } from 'test/http-mocks/draft-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const headerText: string = 'Reference number must not be more than 16 characters'
-const bsNumberPagePath = BreathingSpacePaths.referencNumberPage.evaluateUri({ externalId: sampleClaimDraftObj.externalId })
+const bsNumberPagePath = BreathingSpacePaths.referencNumberPage.evaluateUri({ externalId: draftStoreServiceMock.sampleClaimDraftObj.externalId })
 
 describe('Breathing space: reference number page page', () => {
 
