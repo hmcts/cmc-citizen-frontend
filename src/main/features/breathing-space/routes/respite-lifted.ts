@@ -30,24 +30,17 @@ function renderView (form: Form<BreathingSpaceLiftDate>, res: express.Response, 
 export default express.Router()
     .get(Paths.bsLiftPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const { externalId } = req.params
-      const claim = externalId !== undefined ? await claimStoreClient.retrieveByExternalId(externalId, res.locals.user) : undefined
-      const drafts = await new DraftService().find('bs', '100', res.locals.user.bearerToken, (value) => value)
-
-      let bsDraft: Draft<DraftClaim> = res.locals.bsDraft
-      if (drafts.length > 1) {
-        drafts.forEach(async draftBs => {
-          await new DraftService().delete(draftBs.id, res.locals.user.bearerToken)
-        })
-      } else if (drafts.length === 0) {
-        bsDraft.document = new DraftClaim().deserialize(prepareClaimDraft(res.locals.user.email, false))
-        bsDraft.document.breathingSpace = claim.claimData.breathingSpace
-        bsDraft.document.breathingSpace.breathingSpaceExternalId = externalId
-        await new DraftService().save(bsDraft, res.locals.user.bearerToken)
+      let draft: Draft<DraftClaim> = res.locals.Draft
+      breathingSpaceExternalId = externalId
+      
+      if (draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate === undefined) {
+        const claim = externalId !== undefined ? await claimStoreClient.retrieveByExternalId(externalId, res.locals.user) : undefined
+        draft.document = new DraftClaim().deserialize(prepareClaimDraft(res.locals.user.email, false))
+        draft.document.breathingSpace = claim.claimData.breathingSpace
       }
-
-      const bsDrafts = await new DraftService().find('bs', '100', res.locals.user.bearerToken, (value) => value)
-      let draft: Draft<DraftClaim> = bsDrafts[bsDrafts.length - 1]
-      breathingSpaceExternalId = draft.document.breathingSpace.breathingSpaceExternalId.toString()
+      
+      draft.document.breathingSpace.breathingSpaceExternalId = externalId
+      await new DraftService().save(draft, res.locals.user.bearerToken)
       if (draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate) {
         let bsLiftDate: Date = new Date(draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate.toLocaleString())
         let bsLiftDateSplit = bsLiftDate.toLocaleDateString().split('/')
@@ -65,8 +58,7 @@ export default express.Router()
           if ((form.model.respiteLiftDate.day || form.model.respiteLiftDate.month || form.model.respiteLiftDate.year) && form.hasErrors()) {
             renderView(form, res, next)
           } else {
-            const drafts = await new DraftService().find('bs', '100', res.locals.user.bearerToken, (value) => value)
-            let draft: Draft<DraftClaim> = drafts[drafts.length - 1]
+            let draft: Draft<DraftClaim> = res.locals.Draft
             const user: User = res.locals.user
             draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate = MomentFactory.parse(form.model.respiteLiftDate.toMoment().format())
             await new DraftService().save(draft, user.bearerToken)

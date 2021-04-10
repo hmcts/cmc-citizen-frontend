@@ -24,6 +24,11 @@ export default express.Router()
 .get(Paths.referencNumberPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
   const { externalId } = req.params
   let bsDraft: Draft<DraftClaim> = res.locals.Draft
+
+  if (bsDraft.document.breathingSpace === undefined) {
+    bsDraft.document = new DraftClaim().deserialize(prepareClaimDraft(res.locals.user.email, false))
+  }
+
   bsDraft.document = new DraftClaim().deserialize(prepareClaimDraft(res.locals.user.email, false))
   bsDraft.document.breathingSpace.breathingSpaceExternalId = externalId
   breathingSpaceExternalId = externalId

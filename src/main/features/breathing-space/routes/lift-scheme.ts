@@ -13,8 +13,7 @@ import { Draft } from '@hmcts/draft-store-client'
 /*  tslint:disable:no-default-export */
 export default express.Router()
     .get(Paths.bsLiftCheckAnswersPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const drafts = await new DraftService().find('bs', '100', res.locals.user.bearerToken, (value) => value)
-      let draft: Draft<DraftClaim> = drafts[drafts.length - 1]
+      let draft: Draft<DraftClaim> = res.locals.Draft
       res.render(Paths.bsLiftCheckAnswersPage.associatedView,
         {
           breatingSpaceLiftedData: draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate,
@@ -25,9 +24,7 @@ export default express.Router()
       Paths.bsLiftCheckAnswersPage.uri,
       FormValidator.requestHandler(BreathingSpaceLiftDate),
       ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-        const drafts = await new DraftService().find('bs', '100', res.locals.user.bearerToken, (value) => value)
-        let draftBS: Draft<DraftClaim> = drafts[drafts.length - 1]
-
+        let draftBS: Draft<DraftClaim> = res.locals.Draft
         let draft: DraftClaim = new DraftClaim()
         draft.breathingSpace.breathingSpaceLiftedFlag = 'Yes'
         draft.breathingSpace.breathingSpaceExternalId = draftBS.document.breathingSpace.breathingSpaceExternalId
