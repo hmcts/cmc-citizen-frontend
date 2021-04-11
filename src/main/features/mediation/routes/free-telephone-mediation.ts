@@ -25,6 +25,7 @@ export default express.Router()
 
       if (draft.document.willYouTryMediation.option === FreeMediationOption.YES) {
         draft.document.mediationDisagreement = undefined
+        draft.document.noMediationReason = undefined
       }
       await new DraftService().save(draft, user.bearerToken)
 
@@ -35,8 +36,8 @@ export default express.Router()
         res.redirect(Paths.noMediationPage.evaluateUri({ externalId }))
       } else if ((user.id === claim.defendantId && claim.claimData.defendant.isBusiness()) ||
             (user.id === claim.claimantId && claim.claimData.claimant.isBusiness())) {
-        res.redirect(Paths.confirmCompanyTelephoneNumberPage.evaluateUri({ externalId: claim.externalId }))
+        res.redirect(Paths.canWeUseCompanyPage.evaluateUri({ externalId: claim.externalId }))
       } else {
-        res.redirect(Paths.confirmTelephoneNumberPage.evaluateUri({ externalId: claim.externalId }))
+        res.redirect(Paths.canWeUsePage.evaluateUri({ externalId: claim.externalId }))
       }
     }))
