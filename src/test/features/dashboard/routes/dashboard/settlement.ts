@@ -151,7 +151,7 @@ function testData () {
 
 describe('Settlement dashboard statuses dashboard', () => {
   attachDefaultHooks(app)
-  
+
   testData().forEach(data => {
     context(data.status, () => {
       beforeEach(() => {
