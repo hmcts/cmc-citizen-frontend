@@ -23,7 +23,7 @@ import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 async function renderView (form: Form<CanWeUseCompany>, res: express.Response): Promise<void> {
   const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
   let enhancedMediationJourney: boolean = false
-  
+
   if (await featureToggles.isEnhancedMediationJourneyEnabled()) {
     enhancedMediationJourney = true
   }
