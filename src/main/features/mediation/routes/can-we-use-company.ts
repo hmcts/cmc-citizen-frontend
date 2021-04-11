@@ -74,7 +74,7 @@ export default express.Router()
       const form: Form<CanWeUseCompany> = req.body
 
       if (form.hasErrors()) {
-        renderView(form, res)
+        await renderView(form, res)
       } else {
         const draft: Draft<MediationDraft> = res.locals.mediationDraft
         const user: User = res.locals.user

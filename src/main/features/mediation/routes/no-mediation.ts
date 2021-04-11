@@ -60,9 +60,9 @@ export default express.Router()
         if (form.model.option === FreeMediationOption.YES) {
           if ((user.id === claim.defendantId && claim.claimData.defendant.isBusiness()) ||
                 (user.id === claim.claimantId && claim.claimData.claimant.isBusiness())) {
-            res.redirect(Paths.confirmCompanyTelephoneNumberPage.evaluateUri({ externalId: claim.externalId }))
+            res.redirect(Paths.canWeUseCompanyPage.evaluateUri({ externalId: claim.externalId }))
           } else {
-            res.redirect(Paths.confirmTelephoneNumberPage.evaluateUri({ externalId: claim.externalId }))
+            res.redirect(Paths.canWeUsePage.evaluateUri({ externalId: claim.externalId }))
           }
         } else {
           res.redirect(Paths.iDontWantFreeMediationPage.evaluateUri({ externalId: claim.externalId }))
