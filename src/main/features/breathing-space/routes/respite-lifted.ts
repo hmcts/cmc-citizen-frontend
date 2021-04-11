@@ -32,20 +32,23 @@ export default express.Router()
       const { externalId } = req.params
       let draft: Draft<DraftClaim> = res.locals.Draft
       breathingSpaceExternalId = externalId
-      
-      if (draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate === undefined) {
-        const claim = externalId !== undefined ? await claimStoreClient.retrieveByExternalId(externalId, res.locals.user) : undefined
-        draft.document = new DraftClaim().deserialize(prepareClaimDraft(res.locals.user.email, false))
-        draft.document.breathingSpace = claim.claimData.breathingSpace
-      }
-      
-      draft.document.breathingSpace.breathingSpaceExternalId = externalId
-      await new DraftService().save(draft, res.locals.user.bearerToken)
-      if (draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate) {
-        let bsLiftDate: Date = new Date(draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate.toLocaleString())
-        let bsLiftDateSplit = bsLiftDate.toLocaleDateString().split('/')
-        let bsLiftDateBy: LocalDate = new LocalDate(parseInt(bsLiftDateSplit[2], 10),parseInt(bsLiftDateSplit[0], 10), parseInt(bsLiftDateSplit[1], 10))
-        renderView(new Form(new BreathingSpaceLiftDate(bsLiftDateBy)), res, next)
+      if (draft.document.breathingSpace !== undefined) {
+        if (draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate === undefined) {
+          const claim = externalId !== undefined ? await claimStoreClient.retrieveByExternalId(externalId, res.locals.user) : undefined
+          draft.document = new DraftClaim().deserialize(prepareClaimDraft(res.locals.user.email, false))
+          draft.document.breathingSpace = claim.claimData.breathingSpace
+        }
+
+        draft.document.breathingSpace.breathingSpaceExternalId = externalId
+        await new DraftService().save(draft, res.locals.user.bearerToken)
+        if (draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate) {
+          let bsLiftDate: Date = new Date(draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate.toLocaleString())
+          let bsLiftDateSplit = bsLiftDate.toLocaleDateString().split('/')
+          let bsLiftDateBy: LocalDate = new LocalDate(parseInt(bsLiftDateSplit[2], 10),parseInt(bsLiftDateSplit[0], 10), parseInt(bsLiftDateSplit[1], 10))
+          renderView(new Form(new BreathingSpaceLiftDate(bsLiftDateBy)), res, next)
+        } else {
+          renderView(new Form(new BreathingSpaceLiftDate()), res, next)
+        }
       } else {
         renderView(new Form(new BreathingSpaceLiftDate()), res, next)
       }
@@ -60,8 +63,10 @@ export default express.Router()
           } else {
             let draft: Draft<DraftClaim> = res.locals.Draft
             const user: User = res.locals.user
-            draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate = MomentFactory.parse(form.model.respiteLiftDate.toMoment().format())
-            await new DraftService().save(draft, user.bearerToken)
+            if (draft.document.breathingSpace !== undefined) {
+              draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate = MomentFactory.parse(form.model.respiteLiftDate.toMoment().format())
+              await new DraftService().save(draft, user.bearerToken)
+            }
             res.redirect(Paths.bsLiftCheckAnswersPage.uri)
           }
         }))

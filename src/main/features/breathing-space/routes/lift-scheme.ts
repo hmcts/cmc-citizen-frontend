@@ -16,8 +16,8 @@ export default express.Router()
       let draft: Draft<DraftClaim> = res.locals.Draft
       res.render(Paths.bsLiftCheckAnswersPage.associatedView,
         {
-          breatingSpaceLiftedData: draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate,
-          breathingSpaceExternalId: draft.document.breathingSpace.breathingSpaceExternalId
+          breatingSpaceLiftedData: draft.document.breathingSpace !== undefined ? draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate : undefined,
+          breathingSpaceExternalId: draft.document.breathingSpace !== undefined ? draft.document.breathingSpace.breathingSpaceExternalId : undefined
         })
     })
     .post(
@@ -26,16 +26,14 @@ export default express.Router()
       ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
         let draftBS: Draft<DraftClaim> = res.locals.Draft
         let draft: DraftClaim = new DraftClaim()
-        draft.breathingSpace.breathingSpaceLiftedFlag = 'Yes'
-        draft.breathingSpace.breathingSpaceExternalId = draftBS.document.breathingSpace.breathingSpaceExternalId
-        draft.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate = draftBS.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate
-
-        draft.breathingSpace.breathingSpaceReferenceNumber = draftBS.document.breathingSpace.breathingSpaceReferenceNumber
-        draft.breathingSpace.breathingSpaceType = draftBS.document.breathingSpace.breathingSpaceType
-        draft.breathingSpace.breathingSpaceEnteredDate = draftBS.document.breathingSpace.breathingSpaceEnteredDate
-        draft.breathingSpace.breathingSpaceEndDate = draftBS.document.breathingSpace.breathingSpaceEndDate
-
         try {
+          draft.breathingSpace.breathingSpaceLiftedFlag = 'Yes'
+          draft.breathingSpace.breathingSpaceExternalId = draftBS.document.breathingSpace.breathingSpaceExternalId
+          draft.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate = draftBS.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate
+          draft.breathingSpace.breathingSpaceReferenceNumber = draftBS.document.breathingSpace.breathingSpaceReferenceNumber
+          draft.breathingSpace.breathingSpaceType = draftBS.document.breathingSpace.breathingSpaceType
+          draft.breathingSpace.breathingSpaceEnteredDate = draftBS.document.breathingSpace.breathingSpaceEnteredDate
+          draft.breathingSpace.breathingSpaceEndDate = draftBS.document.breathingSpace.breathingSpaceEndDate
           await new ClaimStoreClient().saveBreatingSpace(draft, res.locals.user)
           await new DraftService().delete(draftBS.id, res.locals.user.bearerToken)
           res.redirect(DashboardPaths.claimantPage.uri.replace(':externalId', draft.breathingSpace.breathingSpaceExternalId))

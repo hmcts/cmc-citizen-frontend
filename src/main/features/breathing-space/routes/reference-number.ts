@@ -25,11 +25,13 @@ export default express.Router()
   const { externalId } = req.params
   let bsDraft: Draft<DraftClaim> = res.locals.Draft
 
-  if (bsDraft.document.breathingSpace === undefined) {
+  if (bsDraft.document.breathingSpace.breathingSpaceReferenceNumber === undefined &&
+    bsDraft.document.breathingSpace.breathingSpaceEnteredbyInsolvencyTeamDate === undefined &&
+    bsDraft.document.breathingSpace.breathingSpaceType === undefined &&
+    bsDraft.document.breathingSpace.breathingSpaceEndDate === undefined) {
     bsDraft.document = new DraftClaim().deserialize(prepareClaimDraft(res.locals.user.email, false))
   }
 
-  bsDraft.document = new DraftClaim().deserialize(prepareClaimDraft(res.locals.user.email, false))
   bsDraft.document.breathingSpace.breathingSpaceExternalId = externalId
   breathingSpaceExternalId = externalId
   await new DraftService().save(bsDraft, res.locals.user.bearerToken)
@@ -46,8 +48,10 @@ export default express.Router()
     } else {
       let draft: Draft<DraftClaim> = res.locals.Draft
       const user: User = res.locals.user
-      draft.document.breathingSpace.breathingSpaceReferenceNumber = form.model.bsNumber
-      await new DraftService().save(draft, user.bearerToken)
+      if (draft.document.breathingSpace !== undefined) {
+        draft.document.breathingSpace.breathingSpaceReferenceNumber = form.model.bsNumber
+        await new DraftService().save(draft, user.bearerToken)
+      }
       res.redirect(Paths.bsStartDatePage.uri)
     }
   }))

@@ -985,6 +985,9 @@ export function resolveFind (draftType: string, draftOverride?: object): mock.Sc
     case 'claim':
       documentDocument = { ...sampleClaimDraftObj, ...draftOverride }
       break
+    case 'bs':
+      documentDocument = { ...sampleClaimDraftObj, ...draftOverride }
+      break
     case 'claim:ioc':
       documentDocument = { ...sampleClaimDraftObjIOC, ...draftOverride }
       break

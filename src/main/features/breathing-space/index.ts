@@ -34,8 +34,12 @@ export class Feature {
         return new DraftClaim().deserialize(value)
       }),
       async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-        const drafts = await new DraftService().find('bs', '100', res.locals.user.bearerToken, (value) => value)
-        res.locals.Draft = drafts[drafts.length - 1]
+        if (res.locals.bsDraft.document.breathingSpace !== undefined) {
+          const drafts = await new DraftService().find('bs', '100', res.locals.user.bearerToken, (value) => value)
+          res.locals.Draft = drafts.length !== 0 ? drafts[drafts.length - 1] : res.locals.bsDraft
+        } else {
+          res.locals.Draft = res.locals.bsDraft
+        }
         next()
       }
     )

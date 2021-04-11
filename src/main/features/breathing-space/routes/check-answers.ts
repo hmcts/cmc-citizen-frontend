@@ -15,25 +15,27 @@ function renderView (form: Form<BreathingSpace>, res: express.Response, next: ex
   let bsType: any
   let bsEnteredDate: any
   let bsEndDate: any
-  if (form.model.breathingSpaceType === 'STANDARD_BS_ENTERED') {
-    bsType = 'Standard breathing space'
-  } else {
-    bsType = 'Mental health crisis moratorium'
-  }
-  if (form.model.breathingSpaceEndDate) {
-    bsEndDate = form.model.breathingSpaceEndDate
-  }
+  let bsExternalId: any
+  let bsReferenceNumber: any
 
-  if (form.model.breathingSpaceType) {
-    bsEnteredDate = form.model.breathingSpaceEnteredbyInsolvencyTeamDate
+  if (form.model) {
+    if (form.model.breathingSpaceType === 'STANDARD_BS_ENTERED') {
+      bsType = 'Standard breathing space'
+    } else {
+      bsType = 'Mental health crisis moratorium'
+    }
+    bsEndDate = form.model.breathingSpaceEndDate !== undefined ? form.model.breathingSpaceEndDate : undefined
+    bsEnteredDate = form.model.breathingSpaceEnteredbyInsolvencyTeamDate !== undefined ? form.model.breathingSpaceEnteredbyInsolvencyTeamDate : undefined
+    bsExternalId = form.model.breathingSpaceExternalId !== undefined ? form.model.breathingSpaceExternalId : undefined
+    bsReferenceNumber = form.model.breathingSpaceReferenceNumber !== undefined ? form.model.breathingSpaceReferenceNumber : undefined
   }
 
   res.render(Paths.bsCheckAnswersPage.associatedView, {
     form: form,
-    breathingSpaceExternalId: form.model.breathingSpaceExternalId,
+    breathingSpaceExternalId: bsExternalId,
     breathingSpaceEndDate: bsEndDate,
     breathingSpaceEnteredDate: bsEnteredDate,
-    breathingSpaceReferenceNumber: form.model.breathingSpaceReferenceNumber,
+    breathingSpaceReferenceNumber: bsReferenceNumber,
     breathingSpaceType: bsType
   })
 }
@@ -50,13 +52,13 @@ export default express.Router()
       ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
         let draftBS: Draft<DraftClaim> = res.locals.Draft
         let draft: DraftClaim = new DraftClaim()
-        draft.breathingSpace.breathingSpaceReferenceNumber = draftBS.document.breathingSpace.breathingSpaceReferenceNumber
-        draft.breathingSpace.breathingSpaceExternalId = draftBS.document.breathingSpace.breathingSpaceExternalId
-        draft.breathingSpace.breathingSpaceType = draftBS.document.breathingSpace.breathingSpaceType
-        draft.breathingSpace.breathingSpaceEnteredDate = draftBS.document.breathingSpace.breathingSpaceEnteredbyInsolvencyTeamDate
-        draft.breathingSpace.breathingSpaceEndDate = draftBS.document.breathingSpace.breathingSpaceEndDate
-        draft.breathingSpace.breathingSpaceLiftedFlag = 'No'
         try {
+          draft.breathingSpace.breathingSpaceReferenceNumber = draftBS.document.breathingSpace.breathingSpaceReferenceNumber
+          draft.breathingSpace.breathingSpaceExternalId = draftBS.document.breathingSpace.breathingSpaceExternalId
+          draft.breathingSpace.breathingSpaceType = draftBS.document.breathingSpace.breathingSpaceType
+          draft.breathingSpace.breathingSpaceEnteredDate = draftBS.document.breathingSpace.breathingSpaceEnteredbyInsolvencyTeamDate
+          draft.breathingSpace.breathingSpaceEndDate = draftBS.document.breathingSpace.breathingSpaceEndDate
+          draft.breathingSpace.breathingSpaceLiftedFlag = 'No'
           await new ClaimStoreClient().saveBreatingSpace(draft, res.locals.user)
           await new DraftService().delete(draftBS.id, res.locals.user.bearerToken)
           res.redirect(DashboardPaths.claimantPage.uri.replace(':externalId', draft.breathingSpace.breathingSpaceExternalId))

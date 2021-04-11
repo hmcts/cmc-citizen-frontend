@@ -2,6 +2,7 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 
+import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
 
 import { Paths } from 'dashboard/paths'
@@ -425,6 +426,7 @@ const testData = [
 ]
 
 describe('Dashboard page ccj dashboard', () => {
+  attachDefaultHooks(app)
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', Paths.dashboardPage.uri)
@@ -443,14 +445,13 @@ describe('Dashboard page ccj dashboard', () => {
           })
 
           testData.forEach(data => {
-            it(`should render dashboard: ${data.status}`, function (done) {
+            it(`should render dashboard: ${data.status}`, async () => {
               draftStoreServiceMock.resolveFindNoDraftFound()
               claimStoreServiceMock.resolveRetrieveByClaimantId(data.claim, data.claimOverride)
-              request(app)
+              await request(app)
                 .get(Paths.dashboardPage.uri)
                 .set('Cookie', `${cookieName}=ABC`)
                 .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
-              done()
             })
           })
         })
@@ -461,14 +462,13 @@ describe('Dashboard page ccj dashboard', () => {
           })
 
           testData.forEach(data => {
-            it(`should render dashboard: ${data.status}`, function (done) {
+            it(`should render dashboard: ${data.status}`, async () => {
               draftStoreServiceMock.resolveFindNoDraftFound()
               claimStoreServiceMock.resolveRetrieveByDefendantId(data.claim.referenceNumber, '1', data.claim, data.claimOverride)
-              request(app)
+              await request(app)
                 .get(Paths.dashboardPage.uri)
                 .set('Cookie', `${cookieName}=ABC`)
                 .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
-              done()
             })
           })
         })
