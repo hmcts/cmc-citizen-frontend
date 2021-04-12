@@ -126,4 +126,55 @@ describe('FreeMediationUtil', () => {
       expect(FreeMediationUtil.getMediationPhoneNumber(claim, draft, responseDraft)).to.be.deep.eq(expectedValue)
     })
   })
+
+  context('getNoMediationReason should return expected value when', () => {
+
+    it('User selects a valid no mediation reason', () => {
+      const myExternalId: String = 'b17af4d2-273f-4999-9895-bce382fa24c8'
+      const draft: MediationDraft = new MediationDraft().deserialize({
+        externalId: myExternalId,
+        youCanOnlyUseMediation: {
+          option: FreeMediationOption.YES
+        },
+        canWeUseCompany: {
+          option: FreeMediationOption.YES,
+          mediationPhoneNumberConfirmation: '07777777788',
+          mediationContactPerson: 'Mary Richards'
+        },
+        willYouTryMediation: {
+          option: FreeMediationOption.YES
+        },
+        noMediationReason: {
+          iDoNotWantMediationReason: 'ALREADY_TRIED',
+          otherReason: undefined
+        }
+      })
+      const expectedValue: string = 'ALREADY_TRIED'
+      expect(FreeMediationUtil.getNoMediationReason(draft)).to.deep.equal(expectedValue)
+    })
+
+    it('User selects other as no mediation reason', () => {
+      const myExternalId: String = 'b17af4d2-273f-4999-9895-bce382fa24c8'
+      const draft: MediationDraft = new MediationDraft().deserialize({
+        externalId: myExternalId,
+        youCanOnlyUseMediation: {
+          option: FreeMediationOption.YES
+        },
+        canWeUseCompany: {
+          option: FreeMediationOption.YES,
+          mediationPhoneNumberConfirmation: '07777777788',
+          mediationContactPerson: 'Mary Richards'
+        },
+        willYouTryMediation: {
+          option: FreeMediationOption.YES
+        },
+        noMediationReason: {
+          iDoNotWantMediationReason: 'OTHER',
+          otherReason: 'Not interested'
+        }
+      })
+      const expectedValue: string = 'Not interested'
+      expect(FreeMediationUtil.getNoMediationReason(draft)).to.deep.equal(expectedValue)
+    })
+  })
 })
