@@ -14,10 +14,17 @@ import { Draft } from '@hmcts/draft-store-client'
 export default express.Router()
     .get(Paths.bsLiftCheckAnswersPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       let draft: Draft<DraftClaim> = res.locals.Draft
+      let breatingSpaceLiftedData: any
+      let breathingSpaceExternalId: any
+      if (draft.document.breathingSpace !== undefined) {
+        breatingSpaceLiftedData = draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate ? draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate : undefined,
+        breathingSpaceExternalId = draft.document.breathingSpace.breathingSpaceExternalId !== undefined ? draft.document.breathingSpace.breathingSpaceExternalId : undefined
+      }
+
       res.render(Paths.bsLiftCheckAnswersPage.associatedView,
         {
-          breatingSpaceLiftedData: draft.document.breathingSpace !== undefined ? draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate : undefined,
-          breathingSpaceExternalId: draft.document.breathingSpace !== undefined ? draft.document.breathingSpace.breathingSpaceExternalId : undefined
+          breatingSpaceLiftedData: breatingSpaceLiftedData,
+          breathingSpaceExternalId: breathingSpaceExternalId
         })
     })
     .post(
