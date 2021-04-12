@@ -57,7 +57,7 @@ export class FeatureToggles {
   }
 
   async isEnhancedMediationJourneyEnabled (): Promise<boolean> {
-    return this.launchDarklyClient.serviceVariation('enhancedMediationJourney', toBoolean(config.get<boolean>(`featureToggles.enhancedMediationJourney`)))
+    return this.launchDarklyClient.serviceVariation('enhanced-mediation-journey', toBoolean(config.get<boolean>(`featureToggles.enhancedMediationJourney`)))
   }
 
   async isBreathingSpaceEnabled (): Promise<boolean> {
