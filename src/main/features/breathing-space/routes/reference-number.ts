@@ -8,7 +8,6 @@ import { ErrorHandling } from 'shared/errorHandling'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { DraftService } from 'services/draftService'
 import { Draft } from '@hmcts/draft-store-client'
-import { prepareClaimDraft } from 'drafts/draft-data/claimDraft'
 
 let breathingSpaceExternalId = null
 
@@ -29,12 +28,11 @@ export default express.Router()
     bsDraft.document.breathingSpace.breathingSpaceEnteredbyInsolvencyTeamDate === undefined &&
     bsDraft.document.breathingSpace.breathingSpaceType === undefined &&
     bsDraft.document.breathingSpace.breathingSpaceEndDate === undefined) {
-    bsDraft.document = new DraftClaim().deserialize(prepareClaimDraft(res.locals.user.email, false))
+    bsDraft.document.breathingSpace.breathingSpaceExternalId = externalId
+    await new DraftService().save(bsDraft, res.locals.user.bearerToken)
   }
 
-  bsDraft.document.breathingSpace.breathingSpaceExternalId = externalId
   breathingSpaceExternalId = externalId
-  await new DraftService().save(bsDraft, res.locals.user.bearerToken)
   renderView(new Form(new BreathingSpaceReferenceNumber(bsDraft.document.breathingSpace.breathingSpaceReferenceNumber)), res, next)
 })
 .post(

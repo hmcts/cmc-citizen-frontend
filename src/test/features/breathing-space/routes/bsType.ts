@@ -42,6 +42,7 @@ describe('Breathing Space: BS Type selection page', () => {
 
       it('should redirect to bs-end-date page when type selected ', async () => {
         draftStoreServiceMock.resolveFind('bs')
+        draftStoreServiceMock.resolveUpdate()
 
         await request(app)
           .post(BreathingSpacePaths.bsTypePage.uri)
@@ -52,6 +53,7 @@ describe('Breathing Space: BS Type selection page', () => {
 
       it('should redirect to bs-end-date page when type selected', async () => {
         draftStoreServiceMock.resolveFind('bs')
+        draftStoreServiceMock.resolveUpdate()
 
         await request(app)
           .post(BreathingSpacePaths.bsTypePage.uri)

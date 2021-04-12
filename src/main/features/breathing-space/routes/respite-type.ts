@@ -36,10 +36,8 @@ export default express.Router()
           } else {
             let draft: Draft<DraftClaim> = res.locals.Draft
             const user: User = res.locals.user
-            if (draft.document.breathingSpace !== undefined) {
-              draft.document.breathingSpace.breathingSpaceType = form.model.option
-              await new DraftService().save(draft, user.bearerToken)
-            }
+            draft.document.breathingSpace.breathingSpaceType = form.model.option
+            await new DraftService().save(draft, user.bearerToken)
             res.redirect(Paths.bsEndDatePage.uri)
           }
         }))

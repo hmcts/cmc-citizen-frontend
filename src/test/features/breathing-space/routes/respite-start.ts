@@ -40,6 +40,7 @@ describe('Enter breathing space: Respite start date page', () => {
       it('should render page with error when date is greater than or equal to today', async () => {
         const date: Moment = MomentFactory.currentDate().subtract(1, 'year')
         draftStoreServiceMock.resolveFind('bs')
+
         await request(app)
           .post(BreathingSpacePaths.bsStartDatePage.uri)
           .set('Cookie', `${cookieName}=ABC`)
@@ -50,6 +51,7 @@ describe('Enter breathing space: Respite start date page', () => {
       it('should redirect to type page when form is valid and everything is fine', async () => {
         const date: Moment = MomentFactory.currentDate().subtract(1, 'year')
         draftStoreServiceMock.resolveFind('bs')
+        draftStoreServiceMock.resolveUpdate()
 
         await request(app)
           .post(BreathingSpacePaths.bsStartDatePage.uri)
@@ -60,6 +62,7 @@ describe('Enter breathing space: Respite start date page', () => {
 
       it('should redirect to type page when form is valid (without date) and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('bs')
+        draftStoreServiceMock.resolveUpdate()
         await request(app)
           .post(BreathingSpacePaths.bsStartDatePage.uri)
           .set('Cookie', `${cookieName}=ABC`)
@@ -85,7 +88,7 @@ describe('Enter breathing space: Respite start date page', () => {
           .expect(res => expect(res).to.be.successful.withText('Please enter a valid date', 'There was a problem'))
       })
 
-      it('should render page with error when invalid day is provided', async () => {
+      it('should render page with error when invalid year is provided', async () => {
         draftStoreServiceMock.resolveFind('bs')
         await request(app)
           .post(BreathingSpacePaths.bsStartDatePage.uri)

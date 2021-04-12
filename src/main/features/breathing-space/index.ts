@@ -9,6 +9,9 @@ import { OAuthHelper } from 'idam/oAuthHelper'
 import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
 import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
+import { Draft } from '@hmcts/draft-store-client'
+import { prepareClaimDraft } from 'drafts/draft-data/claimDraft'
+import { BreathingSpace } from 'features/claim/form/models/breathingSpace'
 
 function breathingSpaceRequestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -38,7 +41,9 @@ export class Feature {
           const drafts = await new DraftService().find('bs', '100', res.locals.user.bearerToken, (value) => value)
           res.locals.Draft = drafts.length !== 0 ? drafts[drafts.length - 1] : res.locals.bsDraft
         } else {
-          res.locals.Draft = res.locals.bsDraft
+          let draft: Draft<DraftClaim> = res.locals.bsDraft
+          draft.document.breathingSpace = new BreathingSpace()
+          res.locals.Draft = draft
         }
         next()
       }

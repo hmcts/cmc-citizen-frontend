@@ -18,17 +18,15 @@ function renderView (form: Form<BreathingSpace>, res: express.Response, next: ex
   let bsExternalId: any
   let bsReferenceNumber: any
 
-  if (form.model) {
-    if (form.model.breathingSpaceType === 'STANDARD_BS_ENTERED') {
-      bsType = 'Standard breathing space'
-    } else {
-      bsType = 'Mental health crisis moratorium'
-    }
-    bsEndDate = form.model.breathingSpaceEndDate !== undefined ? form.model.breathingSpaceEndDate : undefined
-    bsEnteredDate = form.model.breathingSpaceEnteredbyInsolvencyTeamDate !== undefined ? form.model.breathingSpaceEnteredbyInsolvencyTeamDate : undefined
-    bsExternalId = form.model.breathingSpaceExternalId !== undefined ? form.model.breathingSpaceExternalId : undefined
-    bsReferenceNumber = form.model.breathingSpaceReferenceNumber !== undefined ? form.model.breathingSpaceReferenceNumber : undefined
+  if (form.model.breathingSpaceType === 'STANDARD_BS_ENTERED') {
+    bsType = 'Standard breathing space'
+  } else {
+    bsType = 'Mental health crisis moratorium'
   }
+  bsEndDate = form.model.breathingSpaceEndDate !== undefined ? form.model.breathingSpaceEndDate : undefined    
+  bsEnteredDate = form.model.breathingSpaceEnteredbyInsolvencyTeamDate !== undefined ? form.model.breathingSpaceEnteredbyInsolvencyTeamDate : undefined
+  bsExternalId = form.model.breathingSpaceExternalId !== undefined ? form.model.breathingSpaceExternalId : undefined
+  bsReferenceNumber = form.model.breathingSpaceReferenceNumber !== undefined ? form.model.breathingSpaceReferenceNumber : undefined
 
   res.render(Paths.bsCheckAnswersPage.associatedView, {
     form: form,

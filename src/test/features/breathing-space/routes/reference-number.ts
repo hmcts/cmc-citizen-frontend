@@ -49,6 +49,7 @@ describe('Breathing space: reference number page page', () => {
 
       it('should redirect to Start date page when form is valid and nothing is submitted', async () => {
         draftStoreServiceMock.resolveFind('bs')
+        draftStoreServiceMock.resolveUpdate()
 
         await request(app)
           .post(bsNumberPagePath)
@@ -59,6 +60,7 @@ describe('Breathing space: reference number page page', () => {
 
       it('should redirect to start date page when form is valid and number is provided', async () => {
         draftStoreServiceMock.resolveFind('bs')
+        draftStoreServiceMock.resolveUpdate()
 
         await request(app)
           .post(bsNumberPagePath)

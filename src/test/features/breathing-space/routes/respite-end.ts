@@ -49,6 +49,7 @@ describe('Enter breathing space: Respite end date page', () => {
 
       it('should redirect to check answer page when form is valid and everything is fine', async () => {
         const date: Moment = MomentFactory.currentDate().subtract(1, 'year')
+        draftStoreServiceMock.resolveUpdate()
 
         await request(app)
           .post(BreathingSpacePaths.bsEndDatePage.uri)
@@ -58,6 +59,7 @@ describe('Enter breathing space: Respite end date page', () => {
       })
 
       it('should redirect to check answer page when form is valid (without date) and everything is fine', async () => {
+        draftStoreServiceMock.resolveUpdate()
 
         await request(app)
           .post(BreathingSpacePaths.bsEndDatePage.uri)

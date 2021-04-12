@@ -27,16 +27,12 @@ function renderView (form: Form<BreathingSpaceRespiteStart>, res: express.Respon
 export default express.Router()
     .get(Paths.bsStartDatePage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       let draft: Draft<DraftClaim> = res.locals.Draft
-      breathingSpaceExternalId = draft.document.breathingSpace !== undefined ? draft.document.breathingSpace.breathingSpaceExternalId : undefined
-      if (draft.document.breathingSpace) {
-        if (draft.document.breathingSpace.breathingSpaceEnteredbyInsolvencyTeamDate) {
-          let bsLiftDate: Date = new Date(draft.document.breathingSpace.breathingSpaceEnteredbyInsolvencyTeamDate.toLocaleString())
-          let bsLiftDateSplit = bsLiftDate.toLocaleDateString().split('/')
-          let bsStartDate: LocalDate = new LocalDate(parseInt(bsLiftDateSplit[2], 10),parseInt(bsLiftDateSplit[0], 10), parseInt(bsLiftDateSplit[1], 10))
-          renderView(new Form(new BreathingSpaceRespiteStart(bsStartDate)), res, next)
-        } else {
-          renderView(new Form(new BreathingSpaceRespiteStart()), res, next)
-        }
+      breathingSpaceExternalId = draft.document.breathingSpace.breathingSpaceExternalId !== undefined ? draft.document.breathingSpace.breathingSpaceExternalId : undefined
+      if (draft.document.breathingSpace.breathingSpaceEnteredbyInsolvencyTeamDate) {
+        let bsLiftDate: Date = new Date(draft.document.breathingSpace.breathingSpaceEnteredbyInsolvencyTeamDate.toLocaleString())
+        let bsLiftDateSplit = bsLiftDate.toLocaleDateString().split('/')
+        let bsStartDate: LocalDate = new LocalDate(parseInt(bsLiftDateSplit[2], 10),parseInt(bsLiftDateSplit[0], 10), parseInt(bsLiftDateSplit[1], 10))
+        renderView(new Form(new BreathingSpaceRespiteStart(bsStartDate)), res, next)
       } else {
         renderView(new Form(new BreathingSpaceRespiteStart()), res, next)
       }

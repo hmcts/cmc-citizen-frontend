@@ -11,8 +11,8 @@ import { DraftClaim } from 'drafts/models/draftClaim'
 import { DraftService } from 'services/draftService'
 import { Draft } from '@hmcts/draft-store-client'
 import { LocalDate } from 'forms/models/localDate'
-import { prepareClaimDraft } from 'drafts/draft-data/claimDraft'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
+import { BreathingSpace } from 'features/claim/form/models/breathingSpace'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 let breathingSpaceExternalId = null
@@ -32,27 +32,22 @@ export default express.Router()
       const { externalId } = req.params
       let draft: Draft<DraftClaim> = res.locals.Draft
       breathingSpaceExternalId = externalId
-      if (draft.document.breathingSpace !== undefined) {
-        if (draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate === undefined) {
-          const claim = externalId !== undefined ? await claimStoreClient.retrieveByExternalId(externalId, res.locals.user) : undefined
-          draft.document = new DraftClaim().deserialize(prepareClaimDraft(res.locals.user.email, false))
-          draft.document.breathingSpace = claim.claimData.breathingSpace
-        }
-
+      if (draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate === undefined) {
+        const claim = externalId !== undefined ? await claimStoreClient.retrieveByExternalId(externalId, res.locals.user) : undefined
+        // draft.document.breathingSpace = new BreathingSpace().deserialize()
+        draft.document.breathingSpace = claim.claimData.breathingSpace !== undefined ? claim.claimData.breathingSpace : new BreathingSpace()
         draft.document.breathingSpace.breathingSpaceExternalId = externalId
         await new DraftService().save(draft, res.locals.user.bearerToken)
-        if (draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate) {
-          let bsLiftDate: Date = new Date(draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate.toLocaleString())
-          let bsLiftDateSplit = bsLiftDate.toLocaleDateString().split('/')
-          let bsLiftDateBy: LocalDate = new LocalDate(parseInt(bsLiftDateSplit[2], 10),parseInt(bsLiftDateSplit[0], 10), parseInt(bsLiftDateSplit[1], 10))
-          renderView(new Form(new BreathingSpaceLiftDate(bsLiftDateBy)), res, next)
-        } else {
-          renderView(new Form(new BreathingSpaceLiftDate()), res, next)
-        }
+      }
+      if (draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate) {
+        let bsLiftDate: Date = new Date(draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate.toLocaleString())
+        let bsLiftDateSplit = bsLiftDate.toLocaleDateString().split('/')
+        let bsLiftDateBy: LocalDate = new LocalDate(parseInt(bsLiftDateSplit[2], 10),parseInt(bsLiftDateSplit[0], 10), parseInt(bsLiftDateSplit[1], 10))
+        renderView(new Form(new BreathingSpaceLiftDate(bsLiftDateBy)), res, next)
       } else {
         renderView(new Form(new BreathingSpaceLiftDate()), res, next)
       }
-    })
+  })
     .post(
         Paths.bsLiftPage.uri,
         FormValidator.requestHandler(BreathingSpaceLiftDate, BreathingSpaceLiftDate.fromObject),
