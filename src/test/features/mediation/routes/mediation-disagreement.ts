@@ -23,6 +23,9 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
+import * as sinon from 'sinon'
+import { FeatureToggles } from 'utils/featureToggles'
+
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = MediationPaths.mediationDisagreementPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 const pageHeading = 'You chose not to try free mediation'
@@ -69,10 +72,16 @@ describe('Free mediation: mediation disagreement page', () => {
   describe('on POST', () => {
     const method = 'post'
     checkAuthorizationGuards(app, method, pagePath)
+    let isEnhancedMediationJourneyEnabledStub: sinon.SinonStub
 
     context('when defendant authorised', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
+        isEnhancedMediationJourneyEnabledStub = sinon.stub(FeatureToggles.prototype, 'isEnhancedMediationJourneyEnabled')
+      })
+
+      afterEach(() => {
+        isEnhancedMediationJourneyEnabledStub.restore()
       })
 
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
@@ -147,6 +156,7 @@ describe('Free mediation: mediation disagreement page', () => {
           })
 
           it('should redirect to mediation agreement page when Yes was chosen', async () => {
+            isEnhancedMediationJourneyEnabledStub.returns(false)
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveFind('response')
@@ -167,11 +177,17 @@ describe('Free mediation: mediation disagreement page', () => {
     context('when claimant authorised', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.submitterId, 'citizen')
+        isEnhancedMediationJourneyEnabledStub = sinon.stub(FeatureToggles.prototype, 'isEnhancedMediationJourneyEnabled')
+      })
+
+      afterEach(() => {
+        isEnhancedMediationJourneyEnabledStub.restore()
       })
 
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
 
       it('should redirect to claimant response task list when No was chosen and there is a response', async () => {
+        isEnhancedMediationJourneyEnabledStub.returns(false)
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleDefendantResponseObj)
         draftStoreServiceMock.resolveFind('mediation')
         draftStoreServiceMock.resolveFind('response')
