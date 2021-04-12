@@ -177,28 +177,27 @@ describe('Free mediation: can we use phone number page', () => {
 
         it('should show validation error when defendant says no with no phone number', async () => {
           isEnhancedMediationJourneyEnabledStub.returns(false)
-          draftStoreServiceMock.resolveFind('mediation')
-          draftStoreServiceMock.resolveFind('response')
           claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId()
 
           await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .send({ option: FreeMediationOption.NO, mediationPhoneNumber: undefined })
-            .expect(res => expect(res).to.be.successful.withText('div class="error-summary"'))
+            .send({
+              option: FreeMediationOption.NO,
+              mediationPhoneNumber: undefined
+            })
+            .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
         it('should show validation error when defendant says no with no phone number and enhanced mediation journey is enabled', async () => {
           isEnhancedMediationJourneyEnabledStub.returns(true)
-          draftStoreServiceMock.resolveFind('mediation')
-          draftStoreServiceMock.resolveFind('response')
           claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId()
 
           await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .send({ option: FreeMediationOption.NO, mediationPhoneNumber: undefined })
-            .expect(res => expect(res).to.be.successful.withText('div class="error-summary"'))
+            .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
       })
     })
