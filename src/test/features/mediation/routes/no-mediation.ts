@@ -125,7 +125,7 @@ describe('Free mediation: no mediation page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ option: FreeMediationOption.YES })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(MediationPaths.confirmTelephoneNumberPage.evaluateUri({ externalId })))
+                .toLocation(MediationPaths.canWeUsePage.evaluateUri({ externalId })))
           })
 
           it('should redirect to I dont want to try mediation page when No was chosen and no response is available', async () => {
@@ -153,7 +153,7 @@ describe('Free mediation: no mediation page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ option: FreeMediationOption.YES })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(MediationPaths.confirmCompanyTelephoneNumberPage.evaluateUri({ externalId })))
+                .toLocation(MediationPaths.canWeUseCompanyPage.evaluateUri({ externalId })))
           })
         })
       })

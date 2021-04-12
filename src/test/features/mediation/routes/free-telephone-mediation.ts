@@ -122,7 +122,7 @@ describe('Mediation: free telephne mediation page', () => {
           .set('Cookie', `${cookieName}=ABC`)
           .send({ mediationYes: 'yes' })
           .expect(res => expect(res).to.be.redirect
-            .toLocation(MediationPaths.confirmTelephoneNumberPage.evaluateUri({ externalId })))
+            .toLocation(MediationPaths.canWeUsePage.evaluateUri({ externalId })))
       })
 
       it('should redirect to Confirm company telephone number page when everything is fine for the defendant (comapny)', async () => {
@@ -137,7 +137,7 @@ describe('Mediation: free telephne mediation page', () => {
           .set('Cookie', `${cookieName}=ABC`)
           .send({ mediationYes: 'yes' })
           .expect(res => expect(res).to.be.redirect
-            .toLocation(MediationPaths.confirmCompanyTelephoneNumberPage.evaluateUri({ externalId })))
+            .toLocation(MediationPaths.canWeUseCompanyPage.evaluateUri({ externalId })))
       })
 
       it('should redirect to no mediation when defendant says no to mediation', async () => {
@@ -175,7 +175,7 @@ describe('Mediation: free telephne mediation page', () => {
           .set('Cookie', `${cookieName}=ABC`)
           .send({ mediationYes: 'yes' })
           .expect(res => expect(res).to.be.redirect
-            .toLocation(MediationPaths.confirmTelephoneNumberPage.evaluateUri({ externalId })))
+            .toLocation(MediationPaths.canWeUsePage.evaluateUri({ externalId })))
       })
 
       it('should redirect to Confirm company telephone number page when everything is fine for the claimant (comapny)', async () => {
@@ -190,7 +190,7 @@ describe('Mediation: free telephne mediation page', () => {
           .set('Cookie', `${cookieName}=ABC`)
           .send({ mediationYes: 'yes' })
           .expect(res => expect(res).to.be.redirect
-            .toLocation(MediationPaths.confirmCompanyTelephoneNumberPage.evaluateUri({ externalId })))
+            .toLocation(MediationPaths.canWeUseCompanyPage.evaluateUri({ externalId })))
       })
 
       it('should redirect to no mediation when claimant says no to mediation', async () => {

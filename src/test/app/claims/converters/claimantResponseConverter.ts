@@ -104,6 +104,7 @@ describe('claimant response converter', () => {
           'reason': 'Rejection reason is..',
           'freeMediation': 'no',
           'mediationContactPerson': undefined,
+          'noMediationReason': undefined,
           'mediationPhoneNumber': undefined
         })
       })
@@ -117,6 +118,7 @@ describe('claimant response converter', () => {
           'freeMediation': 'yes',
           'mediationContactPerson': undefined,
           'mediationPhoneNumber': '07777777788',
+          'noMediationReason': undefined,
           'reason': 'Rejection reason is..'
         })
 
@@ -131,6 +133,7 @@ describe('claimant response converter', () => {
           'freeMediation': 'yes',
           'mediationContactPerson': undefined,
           'mediationPhoneNumber': '07777777788',
+          'noMediationReason': undefined,
           'reason': 'rejected'
         })
       })
@@ -152,6 +155,7 @@ describe('claimant response converter', () => {
           'freeMediation': 'yes',
           'mediationContactPerson': undefined,
           'mediationPhoneNumber': '07777777788',
+          'noMediationReason': undefined,
           'reason': 'Rejection reason is..'
         })
       })
@@ -168,6 +172,7 @@ describe('claimant response converter', () => {
           'freeMediation': 'yes',
           'mediationContactPerson': undefined,
           'mediationPhoneNumber': '07777777788',
+          'noMediationReason': undefined,
           'paymentReceived': 'yes',
           'settleForAmount': 'no',
           'reason': 'OBJECTION!'
@@ -182,7 +187,8 @@ describe('claimant response converter', () => {
           'type': 'REJECTION',
           'freeMediation': 'yes',
           'mediationContactPerson': undefined,
-          'mediationPhoneNumber': '07777777788'
+          'mediationPhoneNumber': '07777777788',
+          'noMediationReason': undefined
         })
       })
 
@@ -196,6 +202,7 @@ describe('claimant response converter', () => {
           'freeMediation': 'yes',
           'mediationContactPerson': undefined,
           'mediationPhoneNumber': '07777777788',
+          'noMediationReason': undefined,
           'paymentReceived': 'no'
         })
       })

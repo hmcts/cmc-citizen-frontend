@@ -353,7 +353,8 @@ describe('ResponseModelConverter', () => {
       const mediationResponseData = {
         freeMediation: 'yes',
         mediationPhoneNumber: '07777777777',
-        mediationContactPerson: 'Mary Richards'
+        mediationContactPerson: 'Mary Richards',
+        noMediationReason: undefined
       }
       context('full defence conversion', () => {
         [
@@ -406,7 +407,8 @@ describe('ResponseModelConverter', () => {
             canWeUseCompany: {
               option: FreeMediationOption.YES,
               mediationPhoneNumberConfirmation: '07777777788',
-              mediationContactPerson: 'Mary Richards'
+              mediationContactPerson: 'Mary Richards',
+              noMediationReason: undefined
             }
           })
           const responseDraft = prepareResponseDraft({
@@ -417,7 +419,8 @@ describe('ResponseModelConverter', () => {
             ...{
               freeMediation: 'yes',
               mediationPhoneNumber: '07777777788',
-              mediationContactPerson: 'Company Smith'
+              mediationContactPerson: 'Company Smith',
+              noMediationReason: undefined
             },
             ...directionsQuestionnaireResponseData
           }, company)
@@ -934,7 +937,8 @@ describe('ResponseModelConverter', () => {
       const mediationResponseData = {
         freeMediation: 'yes',
         mediationPhoneNumber: '07777777777',
-        mediationContactPerson: 'Mary Richards'
+        mediationContactPerson: 'Mary Richards',
+        noMediationReason: undefined
       }
       context('full defence conversion', () => {
         [
@@ -982,7 +986,8 @@ describe('ResponseModelConverter', () => {
             canWeUseCompany: {
               option: FreeMediationOption.YES,
               mediationPhoneNumberConfirmation: '07777777788',
-              mediationContactPerson: 'Mary Richards'
+              mediationContactPerson: 'Mary Richards',
+              noMediationReason: undefined
             }
           })
           const responseDraft = prepareResponseDraft({
@@ -993,7 +998,8 @@ describe('ResponseModelConverter', () => {
             ...{
               freeMediation: 'yes',
               mediationPhoneNumber: '07777777788',
-              mediationContactPerson: 'Company Smith'
+              mediationContactPerson: 'Company Smith',
+              noMediationReason: undefined
             }
           }, company)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
@@ -1251,7 +1257,8 @@ describe('ResponseModelConverter', () => {
             ...{
               freeMediation: 'no',
               mediationContactPerson: undefined,
-              mediationPhoneNumber: '0700000000'
+              mediationPhoneNumber: '0700000000',
+              noMediationReason: undefined
             }
           }, individual)
           const mediationDraft = new MediationDraft().deserialize({
