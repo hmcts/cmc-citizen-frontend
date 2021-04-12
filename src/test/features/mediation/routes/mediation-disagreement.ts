@@ -301,22 +301,6 @@ describe('Free mediation: mediation disagreement page', () => {
             .toLocation(MediationPaths.canWeUsePage
               .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
       })
-
-      it('should redirect to can we use company page when Yes was chosen and there is a response by business', async () => {
-        isEnhancedMediationJourneyEnabledStub.returns(true)
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleDefendantResponseObj)
-        draftStoreServiceMock.resolveFind('mediation')
-        draftStoreServiceMock.resolveFind('response')
-        draftStoreServiceMock.resolveUpdate()
-
-        await request(app)
-          .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
-          .send({ option: FreeMediationOption.YES })
-          .expect(res => expect(res).to.be.redirect
-            .toLocation(MediationPaths.canWeUseCompanyPage
-              .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
-      })
     })
   })
 })
