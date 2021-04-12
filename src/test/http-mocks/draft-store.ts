@@ -71,7 +71,8 @@ const commonClaimObject = {
     claimType: ClaimType.PERSONAL_CLAIM,
     singleDefendant: YesNoOption.NO,
     governmentDepartment: YesNoOption.NO,
-    claimIsForTenancyDeposit: YesNoOption.NO
+    claimIsForTenancyDeposit: YesNoOption.NO,
+    infoAboutHwFeligibility: YesNoOption.YES
   } as Eligibility,
   readResolveDispute: true,
   readCompletingClaim: true,
@@ -983,6 +984,9 @@ export function resolveFind (draftType: string, draftOverride?: object): mock.Sc
 
   switch (draftType) {
     case 'claim':
+      documentDocument = { ...sampleClaimDraftObj, ...draftOverride }
+      break
+    case 'bs':
       documentDocument = { ...sampleClaimDraftObj, ...draftOverride }
       break
     case 'claim:ioc':

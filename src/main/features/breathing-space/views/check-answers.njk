@@ -29,7 +29,8 @@
         {% endif %}
         </td>
         <td class="change-answer change-link-column">
-          <a href="reference-number" aria-label="Breathing Space reference number">{{ t('Change') }} <span class="visuallyhidden">{{ 'Breathing Space reference number' | lower }}</span></a>
+          {% set url = '/breathing-space/' + breathingSpaceExternalId + '/reference-number'%}
+          <a href={{ url }} aria-label="Breathing Space reference number">{{ t('Change') }} <span class="visuallyhidden">{{ 'Breathing Space reference number' | lower }}</span></a>
         </td>
         </tr><tr class="claims default mobile-table">
           <td class="bold">
@@ -37,7 +38,7 @@
           </td>
           <td>
             {% if breathingSpaceEnteredDate %}
-              {{ breathingSpaceEnteredDate }}
+              {{ breathingSpaceEnteredDate | date }}
             {% endif %}
           </td>
           <td class="change-answer change-link-column">
@@ -62,7 +63,7 @@
           </td>
           <td> 
             {% if breathingSpaceEndDate %}
-              {{ breathingSpaceEndDate }}
+              {{ breathingSpaceEndDate | date }}
             {% endif %}
           </td>
           <td class="change-answer change-link-column">

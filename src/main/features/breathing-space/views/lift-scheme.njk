@@ -10,7 +10,7 @@
 {% from "party/details.njk" import partyDetailsSummaryFragment, partyDetail, partyDetailRow %}
 
 {% set heading = 'Lift the debt respite scheme (Breathing Space)' %}
-{% set govukBackLinkHref = 'respite-lifted' %}
+{% set govukBackLinkHref = '/breathing-space/' + breathingSpaceExternalId + '/respite-lifted' %}
 
 {% block content %}
 <div class="grid-row">
@@ -27,12 +27,13 @@
             <tr class="claims default mobile-table">
               <td class="bold">{{ t('Date lifted') }}</td>
               <td> 
-                {% if form.model.respiteLiftDate !== 'Invalid date' and form.model.respiteLiftDate !== undefined %}
-                  {{ form.model.respiteLiftDate }}
+                {% if breatingSpaceLiftedData !== 'Invalid date' and breatingSpaceLiftedData !== undefined %}
+                  {{ breatingSpaceLiftedData | date }}
                 {% endif %}
               </td>
               <td class="change-answer change-link-column">
-                <a href="respite-lifted" aria-label="Breathing Space date lifted">{{ t('Change') }} <span class="visuallyhidden">{{ 'Breathing Space date lifted' | lower }}</span></a>
+              {% set url = '/breathing-space/' + breathingSpaceExternalId + '/respite-lifted'%}
+                <a href={{ url }} aria-label="Breathing Space date lifted">{{ t('Change') }} <span class="visuallyhidden">{{ 'Breathing Space date lifted' | lower }}</span></a>
               </td>
             </tr>
           </tbody>

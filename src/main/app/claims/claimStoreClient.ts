@@ -104,21 +104,15 @@ export class ClaimStoreClient {
       let endDateByInsolvencyTeam = moment('9999-09-09').format('YYYY-MM-DD')
 
       if (draft.breathingSpace.breathingSpaceEndDate !== undefined && draft.breathingSpace.breathingSpaceEndDate !== null) {
-        if (draft.breathingSpace.breathingSpaceEndDate.day !== undefined) {
-          endDate = moment(draft.breathingSpace.breathingSpaceEndDate).subtract(1, 'M').format('YYYY-MM-DD')
-        }
+        endDate = moment(draft.breathingSpace.breathingSpaceEndDate).format('YYYY-MM-DD')
       }
 
       if (draft.breathingSpace.breathingSpaceEnteredDate !== undefined && draft.breathingSpace.breathingSpaceEnteredDate !== null) {
-        if (draft.breathingSpace.breathingSpaceEnteredDate.day !== undefined) {
-          StartDate = moment(draft.breathingSpace.breathingSpaceEnteredDate).subtract(1, 'M').format('YYYY-MM-DD')
-        }
+        StartDate = moment(draft.breathingSpace.breathingSpaceEnteredDate).format('YYYY-MM-DD')
       }
 
       if (draft.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate !== undefined && draft.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate !== null) {
-        if (draft.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate.day !== undefined) {
-          endDateByInsolvencyTeam = moment(draft.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate).subtract(1, 'M').format('YYYY-MM-DD')
-        }
+        endDateByInsolvencyTeam = moment(draft.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate).format('YYYY-MM-DD')
       }
 
       return this.request
@@ -126,7 +120,7 @@ export class ClaimStoreClient {
           body: {
             'bs_entered_date_by_insolvency_team': StartDate,
             'bs_expected_end_date': endDate,
-            'bs_reference_number': draft.breathingSpace.breathingSpaceReferenceNumber.toString(),
+            'bs_reference_number': draft.breathingSpace.breathingSpaceReferenceNumber !== undefined ? draft.breathingSpace.breathingSpaceReferenceNumber.toString() : '',
             'bs_type': draft.breathingSpace.breathingSpaceType.toString(),
             'bs_lifted_flag': draft.breathingSpace.breathingSpaceLiftedFlag.toString(),
             'bs_lifted_date_by_insolvency_team': endDateByInsolvencyTeam
