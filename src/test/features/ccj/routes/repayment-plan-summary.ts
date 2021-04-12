@@ -130,7 +130,7 @@ describe('CCJ - repayment plan summary page', () => {
             .expect(res => expect(res).to.be.successful.withText('£3,000'))
         })
       })
-    
+
       context('When defendant response is full admission', async () => {
         it('should render correctly when repayment option is IMMEDIATELY', async () => {
 
