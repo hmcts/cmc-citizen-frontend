@@ -6,7 +6,7 @@ export class NoMediationReasonOptions {
   static readonly JUDGE_TO_DECIDE = 'judgeToDecide'
   static readonly OTHER = 'other'
 
-  readonly value: String
+  readonly value: string
 
   constructor (value: string) {
     this.value = value
