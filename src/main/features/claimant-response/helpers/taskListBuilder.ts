@@ -94,12 +94,12 @@ export class TaskListBuilder extends TaskStatus {
         (draft.partPaymentReceived && draft.partPaymentReceived.received.option === YesNoOption.NO)) {
         if (await featureToggles.isEnhancedMediationJourneyEnabled()) {
           const path = MediationPaths.freeTelephoneMediationPage.evaluateUri({ externalId: claim.externalId })
-            tasks.push(
-              new TaskListItem(
-                'Free telephone mediation',
-                path,
-                FreeMediationTask.isCompleted(mediationDraft, claim)
-              ))
+          tasks.push(
+            new TaskListItem(
+              'Free telephone mediation',
+              path,
+              FreeMediationTask.isCompleted(mediationDraft, claim)
+            ))
         } else {
           if (FeatureToggles.isEnabled('mediation')) {
             const path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
@@ -129,7 +129,7 @@ export class TaskListBuilder extends TaskStatus {
   static async buildHowYouWantToRespondSection (draft: DraftClaimantResponse, claim: Claim, mediationDraft: MediationDraft): Promise<TaskList> {
 
     if (StatesPaidHelper.isResponseAlreadyPaid(claim)) {
-      return await this.buildStatesPaidHowYouWantToRespondSection(draft, claim, mediationDraft)
+      return this.buildStatesPaidHowYouWantToRespondSection(draft, claim, mediationDraft)
     }
 
     const externalId: string = claim.externalId
