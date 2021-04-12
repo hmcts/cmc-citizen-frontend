@@ -10,7 +10,6 @@ import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
 import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { Draft } from '@hmcts/draft-store-client'
-import { prepareClaimDraft } from 'drafts/draft-data/claimDraft'
 import { BreathingSpace } from 'features/claim/form/models/breathingSpace'
 
 function breathingSpaceRequestHandler (): express.RequestHandler {
