@@ -15,14 +15,13 @@ import { Claim } from 'claims/models/claim'
 import { FeatureToggles } from 'utils/featureToggles'
 import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
-async function isEnhancedMediationJourneyEnabled() {
+async function isEnhancedMediationJourneyEnabled () {
   const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
-  
   if (await featureToggles.isEnhancedMediationJourneyEnabled()) {
     return true
   }
 
-  return false;
+  return false
 }
 
 async function renderView (form: Form<FreeMediation>, res: express.Response) {
