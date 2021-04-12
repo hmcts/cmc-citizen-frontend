@@ -286,7 +286,7 @@ describe('Free mediation: mediation disagreement page', () => {
               .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
       })
 
-      it('should redirect to can we use page when No was chosen and there is a response', async () => {
+      it('should redirect to can we use page when Yes was chosen and there is a response', async () => {
         isEnhancedMediationJourneyEnabledStub.returns(true)
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleDefendantResponseObj)
         draftStoreServiceMock.resolveFind('mediation')
@@ -296,13 +296,13 @@ describe('Free mediation: mediation disagreement page', () => {
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ option: FreeMediationOption.NO })
+          .send({ option: FreeMediationOption.YES })
           .expect(res => expect(res).to.be.redirect
             .toLocation(MediationPaths.canWeUsePage
               .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
       })
 
-      it('should redirect to can we use company page when No was chosen and there is a response by business', async () => {
+      it('should redirect to can we use company page when Yes was chosen and there is a response by business', async () => {
         isEnhancedMediationJourneyEnabledStub.returns(true)
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleDefendantResponseObj)
         draftStoreServiceMock.resolveFind('mediation')
@@ -312,9 +312,9 @@ describe('Free mediation: mediation disagreement page', () => {
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ option: FreeMediationOption.NO })
+          .send({ option: FreeMediationOption.YES })
           .expect(res => expect(res).to.be.redirect
-            .toLocation(MediationPaths.canWeUsePage
+            .toLocation(MediationPaths.canWeUseCompanyPage
               .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
       })
     })
