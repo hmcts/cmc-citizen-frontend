@@ -21,10 +21,14 @@ describe('Breathing space: reference number page page', () => {
 
   describe('on GET', () => {
     it('should render page when everything is fine', async () => {
+      checkAuthorizationGuards(app, 'get', bsNumberPagePath)
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+      draftStoreServiceMock.resolveFind('bs')
+      draftStoreServiceMock.resolveUpdate()
       request(app)
         .get(bsNumberPagePath)
         .set('Cookie', `${cookieName}=ABC`)
+        .send({ bsNumber: '07000000000' })
         .expect(res => expect(res).to.be.successful.withText('Do you have a Debt Respite Scheme reference number?'))
     })
   })

@@ -17,7 +17,7 @@ export default express.Router()
       let breatingSpaceLiftedData: any
       let breathingSpaceExternalId: any
       if (draft.document.breathingSpace !== undefined) {
-        breatingSpaceLiftedData = draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate ? draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate : undefined,
+        breatingSpaceLiftedData = draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate ? draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate : undefined
         breathingSpaceExternalId = draft.document.breathingSpace.breathingSpaceExternalId !== undefined ? draft.document.breathingSpace.breathingSpaceExternalId : undefined
       }
       res.render(Paths.bsLiftCheckAnswersPage.associatedView,
