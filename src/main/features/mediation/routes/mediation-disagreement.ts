@@ -76,28 +76,36 @@ export default express.Router()
         const externalId: string = req.params.externalId
         const enhancedMediationJourney = await isEnhancedMediationJourneyEnabled()
 
-        if (enhancedMediationJourney) {
-          if (form.model.option === FreeMediationOption.YES) {
-            if ((user.id === claim.defendantId && claim.claimData.defendant.isBusiness()) ||
-                  (user.id === claim.claimantId && claim.claimData.claimant.isBusiness())) {
-              res.redirect(Paths.canWeUseCompanyPage.evaluateUri({ externalId: claim.externalId }))
-            } else {
-              res.redirect(Paths.canWeUsePage.evaluateUri({ externalId: claim.externalId }))
-            }
-          } else {
-            res.redirect(Paths.iDontWantFreeMediationPage.evaluateUri({ externalId: claim.externalId }))
-          }
-        } else {
-          if (form.model.option === FreeMediationOption.YES) {
-            res.redirect(Paths.mediationAgreementPage.evaluateUri({ externalId: externalId }))
-          } else {
-            if (!claim.isResponseSubmitted()) {
-              res.redirect(ResponsePaths.taskListPage.evaluateUri({ externalId: externalId }))
-            } else {
-              res.redirect(ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: externalId }))
-            }
-          }
-        }
+        directTo(enhancedMediationJourney, form, user, claim, res, externalId)
       }
     })
   )
+
+function directTo (enhancedMediationJourney: boolean, form: Form<FreeMediation>, user: User, claim: Claim, res: express.Response, externalId: string) {
+  if (enhancedMediationJourney) {
+    if (form.model.option === FreeMediationOption.YES) {
+      if (isBusinessUser(user, claim)) {
+        res.redirect(Paths.canWeUseCompanyPage.evaluateUri({ externalId: claim.externalId }))
+      } else {
+        res.redirect(Paths.canWeUsePage.evaluateUri({ externalId: claim.externalId }))
+      }
+    } else {
+      res.redirect(Paths.iDontWantFreeMediationPage.evaluateUri({ externalId: claim.externalId }))
+    }
+  } else {
+    if (form.model.option === FreeMediationOption.YES) {
+      res.redirect(Paths.mediationAgreementPage.evaluateUri({ externalId: externalId }))
+    } else {
+      if (!claim.isResponseSubmitted()) {
+        res.redirect(ResponsePaths.taskListPage.evaluateUri({ externalId: externalId }))
+      } else {
+        res.redirect(ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: externalId }))
+      }
+    }
+  }
+}
+
+function isBusinessUser (user: User, claim: Claim) {
+  return (user.id === claim.defendantId && claim.claimData.defendant.isBusiness()) ||
+    (user.id === claim.claimantId && claim.claimData.claimant.isBusiness())
+}
