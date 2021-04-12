@@ -11,17 +11,17 @@ import { app } from 'main/app'
 
 import { YesNoOption } from 'models/yesNoOption'
 
-const pagePath: string = Paths.helpWithFeesPage.uri
-const pageRedirect: string = Paths.eligiblePage.uri
-const expectedTextOnPage: string = 'Do you need help paying your court fee?'
+const pagePath: string = Paths.infoAboutHwFeligibilityPage.uri
+const pageRedirect: string = Paths.helpWithFeesPage.uri
+const expectedTextOnPage: string = 'Some useful information about Help with Fees'
 
-describe('Claim eligibility: help with fees page', () => {
+describe('Claim eligibility: information about help with fees', () => {
   attachDefaultHooks(app)
 
   context('on GET', () => {
     checkAuthorizationMiddleware(app, 'get', pagePath)
 
-    it("should render page with 'Do you need help paying your court fee?' ", async () => {
+    it("should render page with 'Some useful information about Help with Fees' ", async () => {
 
       await request(app)
         .get(pagePath)
@@ -39,20 +39,20 @@ describe('Claim eligibility: help with fees page', () => {
         .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage, 'div class="error-summary"'))
     })
 
-    it('should redirect to eligible page when NO is submitted', async () => {
+    it("should display the 'help with fees page' page when NO is submitted", async () => {
 
       await request(app)
         .post(pagePath)
-        .send({ helpWithFees: YesNoOption.NO.option })
+        .send({ infoAboutHwFeligibility: YesNoOption.NO.option })
         .expect(res => expect(res).to.be.redirect.toLocation(pageRedirect))
     })
 
-    it('should redirect to eligible page when YES is submitted', async () => {
+    it("should display the 'apply for help with fees' page when YES is submitted", async () => {
 
       await request(app)
         .post(pagePath)
-        .send({ helpWithFees: YesNoOption.YES.option })
-        .expect(res => expect(res).to.be.redirect.toLocation(Paths.infoAboutHwFeligibilityPage.uri))
+        .send({ infoAboutHwFeligibility: YesNoOption.YES.option })
+        .expect(res => expect(res).to.be.redirect.toLocation(Paths.applyForHelpWithFeesPage.uri))
     })
   })
 })

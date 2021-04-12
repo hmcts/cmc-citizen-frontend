@@ -28,7 +28,8 @@ describe('Eligibility', () => {
           ClaimType.PERSONAL_CLAIM,
           YesNoOption.YES,
           undefined,
-          YesNoOption.NO
+          YesNoOption.NO,
+          YesNoOption.YES
         )
       )
       expect(errors).to.have.length(1)
@@ -48,7 +49,8 @@ describe('Eligibility', () => {
           ClaimType.PERSONAL_CLAIM,
           YesNoOption.NO,
           YesNoOption.NO,
-          YesNoOption.NO
+          YesNoOption.NO,
+          YesNoOption.YES
         )
       )
 
@@ -71,7 +73,8 @@ describe('Eligibility', () => {
         ClaimType.PERSONAL_CLAIM,
         YesNoOption.NO,
         YesNoOption.NO,
-        YesNoOption.NO
+        YesNoOption.NO,
+        YesNoOption.YES
       )
 
       expect(eligibility.eligible).to.be.true
