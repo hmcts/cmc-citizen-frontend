@@ -96,36 +96,40 @@ export class TaskListBuilder extends TaskStatus {
 
   private static async buildMediationTaskWhilePartPaymentAcceptedList (claim: Claim, draft: DraftClaimantResponse, tasks: TaskListItem[], mediationDraft: MediationDraft) {
     if (claim.response.freeMediation === YesNoOption.YES) {
-      const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
       if ((draft.accepted && draft.accepted.accepted.option === YesNoOption.NO) ||
         (draft.partPaymentReceived && draft.partPaymentReceived.received.option === YesNoOption.NO)) {
-        if (await featureToggles.isEnhancedMediationJourneyEnabled()) {
-          const path = MediationPaths.freeTelephoneMediationPage.evaluateUri({ externalId: claim.externalId })
-          tasks.push(
-            new TaskListItem(
-              'Free telephone mediation',
-              path,
-              FreeMediationTask.isCompleted(mediationDraft, claim)
-            ))
-        } else {
-          if (FeatureToggles.isEnabled('mediation')) {
-            const path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
-            tasks.push(
-              new TaskListItem(
-                'Free telephone mediation',
-                path,
-                FreeMediationTask.isCompleted(mediationDraft, claim)
-              ))
-          } else {
-            const path = MediationPaths.tryFreeMediationPage.evaluateUri({ externalId: claim.externalId })
-            tasks.push(
-              new TaskListItem(
-                'Free telephone mediation',
-                path,
-                FreeMediationTask.isCompleted(mediationDraft, claim)
-              ))
-          }
-        }
+        await TaskListBuilder.buildMediationJourney(claim, tasks, mediationDraft)
+      }
+    }
+  }
+
+  private static async buildMediationJourney(claim: Claim, tasks: TaskListItem[], mediationDraft: MediationDraft) {
+    const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
+    if (await featureToggles.isEnhancedMediationJourneyEnabled()) {
+      const path = MediationPaths.freeTelephoneMediationPage.evaluateUri({ externalId: claim.externalId })
+      tasks.push(
+        new TaskListItem(
+          'Free telephone mediation',
+          path,
+          FreeMediationTask.isCompleted(mediationDraft, claim)
+        ))
+    } else {
+      if (FeatureToggles.isEnabled('mediation')) {
+        const path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+        tasks.push(
+          new TaskListItem(
+            'Free telephone mediation',
+            path,
+            FreeMediationTask.isCompleted(mediationDraft, claim)
+          ))
+      } else {
+        const path = MediationPaths.tryFreeMediationPage.evaluateUri({ externalId: claim.externalId })
+        tasks.push(
+          new TaskListItem(
+            'Free telephone mediation',
+            path,
+            FreeMediationTask.isCompleted(mediationDraft, claim)
+          ))
       }
     }
   }
@@ -149,23 +153,7 @@ export class TaskListBuilder extends TaskStatus {
       )
 
       if (claim.response.freeMediation === YesNoOption.YES && draft.intentionToProceed && draft.intentionToProceed.proceed.option === YesNoOption.YES) {
-        if (FeatureToggles.isEnabled('mediation')) {
-          const path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
-          tasks.push(
-            new TaskListItem(
-              'Free telephone mediation',
-              path,
-              FreeMediationTask.isCompleted(mediationDraft, claim)
-            ))
-        } else {
-          const path = MediationPaths.tryFreeMediationPage.evaluateUri({ externalId: claim.externalId })
-          tasks.push(
-            new TaskListItem(
-              'Free telephone mediation',
-              path,
-              FreeMediationTask.isCompleted(mediationDraft, claim)
-            ))
-        }
+        await TaskListBuilder.buildMediationJourney(claim, tasks, mediationDraft)
       }
     } else if (claim.response.responseType === ResponseType.PART_ADMISSION && claim.response.paymentIntention !== undefined) {
       tasks.push(
@@ -224,34 +212,7 @@ export class TaskListBuilder extends TaskStatus {
     if (claim.response.freeMediation === YesNoOption.YES
       && ((draft.settleAdmitted && draft.settleAdmitted.admitted.option === YesNoOption.NO)
         || (draft.intentionToProceed && draft.intentionToProceed.proceed.option === YesNoOption.YES))) {
-      const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
-      if (await featureToggles.isEnhancedMediationJourneyEnabled()) {
-        const path = MediationPaths.freeTelephoneMediationPage.evaluateUri({ externalId: claim.externalId })
-        tasks.push(
-          new TaskListItem(
-            'Free telephone mediation',
-            path,
-            FreeMediationTask.isCompleted(mediationDraft, claim)
-          ))
-      } else {
-        if (FeatureToggles.isEnabled('mediation')) {
-          const path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
-          tasks.push(
-            new TaskListItem(
-              'Free telephone mediation',
-              path,
-              FreeMediationTask.isCompleted(mediationDraft, claim)
-            ))
-        } else {
-          const path = MediationPaths.tryFreeMediationPage.evaluateUri({ externalId: claim.externalId })
-          tasks.push(
-            new TaskListItem(
-              'Free telephone mediation',
-              path,
-              FreeMediationTask.isCompleted(mediationDraft, claim)
-            ))
-        }
-      }
+      await TaskListBuilder.buildMediationJourney(claim, tasks, mediationDraft)
     }
   }
 

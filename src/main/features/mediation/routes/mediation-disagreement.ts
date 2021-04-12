@@ -76,22 +76,14 @@ export default express.Router()
         const externalId: string = req.params.externalId
         const enhancedMediationJourney = await isEnhancedMediationJourneyEnabled()
 
-        directTo(enhancedMediationJourney, form, user, claim, res, externalId)
+        handleMediationJourney(enhancedMediationJourney, form, user, claim, res, externalId)
       }
     })
   )
 
-function directTo (enhancedMediationJourney: boolean, form: Form<FreeMediation>, user: User, claim: Claim, res: express.Response, externalId: string) {
+function handleMediationJourney (enhancedMediationJourney: boolean, form: Form<FreeMediation>, user: User, claim: Claim, res: express.Response, externalId: string) {
   if (enhancedMediationJourney) {
-    if (form.model.option === FreeMediationOption.YES) {
-      if (isBusinessUser(user, claim)) {
-        res.redirect(Paths.canWeUseCompanyPage.evaluateUri({ externalId: claim.externalId }))
-      } else {
-        res.redirect(Paths.canWeUsePage.evaluateUri({ externalId: claim.externalId }))
-      }
-    } else {
-      res.redirect(Paths.iDontWantFreeMediationPage.evaluateUri({ externalId: claim.externalId }))
-    }
+    handleEnhancedMediationJourney(form, user, claim, res)
   } else {
     if (form.model.option === FreeMediationOption.YES) {
       res.redirect(Paths.mediationAgreementPage.evaluateUri({ externalId: externalId }))
@@ -102,6 +94,18 @@ function directTo (enhancedMediationJourney: boolean, form: Form<FreeMediation>,
         res.redirect(ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: externalId }))
       }
     }
+  }
+}
+
+function handleEnhancedMediationJourney(form: Form<FreeMediation>, user: User, claim: Claim, res: express.Response) {
+  if (form.model.option === FreeMediationOption.YES) {
+    if (isBusinessUser(user, claim)) {
+      res.redirect(Paths.canWeUseCompanyPage.evaluateUri({ externalId: claim.externalId }))
+    } else {
+      res.redirect(Paths.canWeUsePage.evaluateUri({ externalId: claim.externalId }))
+    }
+  } else {
+    res.redirect(Paths.iDontWantFreeMediationPage.evaluateUri({ externalId: claim.externalId }))
   }
 }
 
