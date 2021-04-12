@@ -23,7 +23,7 @@ function renderView (form: Form<BreathingSpace>, res: express.Response, next: ex
   } else {
     bsType = 'Mental health crisis moratorium'
   }
-  bsEndDate = form.model.breathingSpaceEndDate !== undefined ? form.model.breathingSpaceEndDate : undefined    
+  bsEndDate = form.model.breathingSpaceEndDate !== undefined ? form.model.breathingSpaceEndDate : undefined
   bsEnteredDate = form.model.breathingSpaceEnteredbyInsolvencyTeamDate !== undefined ? form.model.breathingSpaceEnteredbyInsolvencyTeamDate : undefined
   bsExternalId = form.model.breathingSpaceExternalId !== undefined ? form.model.breathingSpaceExternalId : undefined
   bsReferenceNumber = form.model.breathingSpaceReferenceNumber !== undefined ? form.model.breathingSpaceReferenceNumber : undefined

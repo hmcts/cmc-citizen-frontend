@@ -47,7 +47,7 @@ export default express.Router()
       } else {
         renderView(new Form(new BreathingSpaceLiftDate()), res, next)
       }
-  })
+    })
     .post(
         Paths.bsLiftPage.uri,
         FormValidator.requestHandler(BreathingSpaceLiftDate, BreathingSpaceLiftDate.fromObject),
