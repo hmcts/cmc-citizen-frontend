@@ -103,7 +103,7 @@ export class TaskListBuilder extends TaskStatus {
     }
   }
 
-  private static async buildMediationJourney(claim: Claim, tasks: TaskListItem[], mediationDraft: MediationDraft) {
+  private static async buildMediationJourney (claim: Claim, tasks: TaskListItem[], mediationDraft: MediationDraft) {
     const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
     if (await featureToggles.isEnhancedMediationJourneyEnabled()) {
       const path = MediationPaths.freeTelephoneMediationPage.evaluateUri({ externalId: claim.externalId })

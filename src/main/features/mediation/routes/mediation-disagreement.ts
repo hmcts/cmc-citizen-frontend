@@ -97,7 +97,7 @@ function handleMediationJourney (enhancedMediationJourney: boolean, form: Form<F
   }
 }
 
-function handleEnhancedMediationJourney(form: Form<FreeMediation>, user: User, claim: Claim, res: express.Response) {
+function handleEnhancedMediationJourney (form: Form<FreeMediation>, user: User, claim: Claim, res: express.Response) {
   if (form.model.option === FreeMediationOption.YES) {
     if (isBusinessUser(user, claim)) {
       res.redirect(Paths.canWeUseCompanyPage.evaluateUri({ externalId: claim.externalId }))
