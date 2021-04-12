@@ -704,6 +704,12 @@ export const settlementAndSettlementReachedAt: object = {
 
 }
 
+export const settlementBySetDateAndSettlementReachedAt: object = {
+  settlementReachedAt: '2017-07-25T22:45:51.785',
+  ...this.settlementWithSetDateAndAcceptation
+
+}
+
 export const sampleDefendantResponseObj = {
   respondedAt: '2017-07-25T22:45:51.785',
   response: {
@@ -1028,6 +1034,12 @@ export function resolveRetrieveClaimByExternalIdWithFullAdmissionAndSettlement (
   return mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/' + externalIdPattern))
     .reply(HttpStatus.OK, { ...sampleClaimObj, ...sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithReasonablePaymentSchedule, ...override })
+}
+
+export function resolveRetrieveClaimByExternalIdWithFullAdmissionAndSettlementBySetDate (override?: object): mock.Scope {
+  return mock(`${serviceBaseURL}/claims`)
+    .get(new RegExp('/' + externalIdPattern))
+    .reply(HttpStatus.OK, { ...sampleClaimObj, ...sampleFullAdmissionWithPaymentBySetDateResponseObj, ...override })
 }
 
 export function rejectRetrieveClaimByExternalId (reason: string = 'Error') {
