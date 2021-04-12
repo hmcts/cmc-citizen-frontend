@@ -54,7 +54,8 @@ export default express.Router()
           draft.breathingSpace.breathingSpaceReferenceNumber = draftBS.document.breathingSpace.breathingSpaceReferenceNumber
           draft.breathingSpace.breathingSpaceExternalId = draftBS.document.breathingSpace.breathingSpaceExternalId
           draft.breathingSpace.breathingSpaceType = draftBS.document.breathingSpace.breathingSpaceType
-          draft.breathingSpace.breathingSpaceEnteredDate = draftBS.document.breathingSpace.breathingSpaceEnteredbyInsolvencyTeamDate
+          draft.breathingSpace.breathingSpaceEnteredbyInsolvencyTeamDate = draftBS.document.breathingSpace.breathingSpaceEnteredbyInsolvencyTeamDate
+          draft.breathingSpace.breathingSpaceEnteredDate = draftBS.document.breathingSpace.breathingSpaceEnteredDate
           draft.breathingSpace.breathingSpaceEndDate = draftBS.document.breathingSpace.breathingSpaceEndDate
           draft.breathingSpace.breathingSpaceLiftedFlag = 'No'
           await new ClaimStoreClient().saveBreatingSpace(draft, res.locals.user)

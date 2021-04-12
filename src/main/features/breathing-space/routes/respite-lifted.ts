@@ -34,7 +34,6 @@ export default express.Router()
       breathingSpaceExternalId = externalId
       if (draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate === undefined) {
         const claim = externalId !== undefined ? await claimStoreClient.retrieveByExternalId(externalId, res.locals.user) : undefined
-        // draft.document.breathingSpace = new BreathingSpace().deserialize()
         draft.document.breathingSpace = claim.claimData.breathingSpace !== undefined ? claim.claimData.breathingSpace : new BreathingSpace()
         draft.document.breathingSpace.breathingSpaceExternalId = externalId
         await new DraftService().save(draft, res.locals.user.bearerToken)

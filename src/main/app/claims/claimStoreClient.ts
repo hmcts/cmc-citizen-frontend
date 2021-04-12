@@ -102,6 +102,7 @@ export class ClaimStoreClient {
       let endDate = moment('9999-09-09').format('YYYY-MM-DD')
       let StartDate = moment('9999-09-09').format('YYYY-MM-DD')
       let endDateByInsolvencyTeam = moment('9999-09-09').format('YYYY-MM-DD')
+      let startDateByInsolvencyTeam = moment('9999-09-09').format('YYYY-MM-DD')
 
       if (draft.breathingSpace.breathingSpaceEndDate !== undefined && draft.breathingSpace.breathingSpaceEndDate !== null) {
         endDate = moment(draft.breathingSpace.breathingSpaceEndDate).format('YYYY-MM-DD')
@@ -111,6 +112,10 @@ export class ClaimStoreClient {
         StartDate = moment(draft.breathingSpace.breathingSpaceEnteredDate).format('YYYY-MM-DD')
       }
 
+      if (draft.breathingSpace.breathingSpaceEnteredbyInsolvencyTeamDate !== undefined && draft.breathingSpace.breathingSpaceEnteredbyInsolvencyTeamDate !== null) {
+        startDateByInsolvencyTeam = moment(draft.breathingSpace.breathingSpaceEnteredbyInsolvencyTeamDate).format('YYYY-MM-DD')
+      }
+
       if (draft.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate !== undefined && draft.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate !== null) {
         endDateByInsolvencyTeam = moment(draft.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate).format('YYYY-MM-DD')
       }
@@ -118,7 +123,8 @@ export class ClaimStoreClient {
       return this.request
         .post(`${claimStoreApiUrl}/${draft.breathingSpace.breathingSpaceExternalId.toString()}/breathingSpace`, {
           body: {
-            'bs_entered_date_by_insolvency_team': StartDate,
+            'bs_entered_date_by_insolvency_team': startDateByInsolvencyTeam,
+            'bs_entered_date': StartDate,
             'bs_expected_end_date': endDate,
             'bs_reference_number': draft.breathingSpace.breathingSpaceReferenceNumber !== undefined ? draft.breathingSpace.breathingSpaceReferenceNumber.toString() : '',
             'bs_type': draft.breathingSpace.breathingSpaceType.toString(),
