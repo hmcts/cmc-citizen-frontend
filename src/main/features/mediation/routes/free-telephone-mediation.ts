@@ -12,7 +12,10 @@ import { Claim } from 'claims/models/claim'
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.freeTelephoneMediationPage.uri, (req: express.Request, res: express.Response) => {
-    res.render(Paths.freeTelephoneMediationPage.associatedView)
+    const user: User = res.locals.user
+    const claim: Claim = res.locals.claim
+
+    res.render(Paths.freeTelephoneMediationPage.associatedView, {defendant: user.id === claim.defendantId})
   })
   .post(
     Paths.freeTelephoneMediationPage.uri,

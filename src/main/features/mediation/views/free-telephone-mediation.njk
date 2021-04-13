@@ -11,7 +11,11 @@
       <p>{{ t('A trained, neutral mediator from HM Courts and Tribunals Service will listen to your views and help you to negotiate a settlement of your dispute.') }}</p>
       <p class="govuk-details govuk-dashboard-details__text">{{ t('Mediation can be quicker, cheaper and less stressful than going to court.') }}</p>
       <p>{{ t('Mediation is confidential, and nothing said in the mediation can be used in court proceedings if the dispute cannot be settled. The mediator speaks to each party separately, this is not a conference call.') }}</p>
-      <p>{{ t('The claimant must agree to mediation. We\'ll contact you within 28 days after the claimant\'s confirmation, to arrange a free appointment.') }}</p>
+      {% if defendant %}
+        <p>{{ t('The claimant must agree to mediation. We\'ll contact you within 28 days after the claimant\'s confirmation, to arrange a free appointment.') }}</p>
+      {% else %}
+        <p>{{ t('The defendant has already agreed to mediation. We\’ll contact you, within 28 days after your response, to arrange a free appointment.') }}</p>
+      {% endif %}
       <p>{{ t('Your mediation appointment will last for no more than an hour.') }}</p>
       <p>{{ t('Find out more about ') }}
         <a target="_blank" rel="noreferrer noopener" href="https://www.gov.uk/guidance/small-claims-mediation-service">{{  t('free telephone mediation (opens in new tab).') }}</a>
