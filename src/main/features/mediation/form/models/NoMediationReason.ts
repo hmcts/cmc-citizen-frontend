@@ -1,7 +1,5 @@
 import { IsDefined, IsIn, MaxLength, ValidateIf } from '@hmcts/class-validator'
-import { IsNotBlank } from '@hmcts/cmc-validators'
 import { CompletableTask } from 'models/task'
-import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
 import { NoMediationReasonOptions } from 'mediation/form/models/NoMediationReasonOptions'
 
 export class ValidationErrors {
