@@ -1,0 +1,46 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, radioGroup, errorSummary, textInput, saveAndContinueButton %}
+{% from "externalLink.njk" import externalLink %}
+
+{% set heading = 'Some useful information about Help with Fees' %}
+{% set additionalInformationIntro = t('Making an application for Help with Fees does not guarantee that you will get your fee covered. You may still have to pay some or all of your court fee to get the claim issued (for the court system to officially start the claim and send details to the other side). When you apply for Help with Fees, you should receive an update from us within 5 working days, giving you the result of your application.') %}
+{% set additionalInformationHelp = t('If you want to apply for Help with Fees, you will complete an online form in a new window. This will give you a reference number. Please note the number and keep it safe, as you will need it later in the claim process. (NB: if you have more than one claim going on, each claim must have a separate Help with Fees application and reference number). You can send in your claim as soon as you have the Help with Fees reference number, but the claim will not be issued until the Help with Fees application has been processed by the court. This is so that you will know what fees are covered and what you still have to pay. If you choose not to pay, the claim will not be issued. The claim will stop here unless you change your mind within 95 days.') %}
+{% set additionalInformationAdvice = t('You may be asked by the court to email evidence in support of your application before your claim is issued.') %}
+
+{% block content %}
+
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <p>{{ additionalInformationIntro }}</p>
+      <p>{{ additionalInformationHelp }}</p>
+      <p>{{ additionalInformationAdvice }}</p>
+      <h2 class="heading-medium">{{ t('Do you wish to continue to make a Help with Fees Application?') }}</h2>
+
+      {% set name = 'infoAboutHwFeligibility' %}
+
+      <form novalidate method="post" class="analytics-submit-event-trigger"
+            data-event-action="Eligibility: Select Help With Fees reference number option"
+            data-event-label-from="{{ name }}">
+        {{ csrfProtection(csrf) }}
+
+        {{
+        radioGroup(
+          label = heading,
+          name = name,
+          options = [
+            {'label': 'Yes', value: YesNoOption.YES.option, checked: (form.valueFor(name) === YesNoOption.YES)},
+            {'label': 'No', value: YesNoOption.NO.option, checked: (form.valueFor(name) === YesNoOption.NO)}
+          ],
+          form = form,
+          isInline = true,
+          labelForScreenReadersOnly = true
+          )
+        }}
+
+        {{ saveAndContinueButton() }}
+
+      </form>
+    </div>
+  </div>
+
+{% endblock %}

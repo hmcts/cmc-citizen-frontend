@@ -146,7 +146,9 @@ const excludedPaths: Paths[] = [
   OrdersPaths.reviewOrderReceiver,
   OrdersPaths.directionsOrderDocument,
   MediationPaths.mediationAgreementDocument,
-  DefendantResponsePaths.checkAndSendPage
+  DefendantResponsePaths.checkAndSendPage,
+  BreathingSpacePaths.bsLiftPage,
+  BreathingSpacePaths.referencNumberPage
 ]
 
 // checks to be done for specific pages
