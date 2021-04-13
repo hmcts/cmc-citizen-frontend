@@ -33,6 +33,7 @@ import { Claim } from 'claims/models/claim'
 import * as claimStoreMock from 'test/http-mocks/claim-store'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { FeatureToggles } from 'utils/featureToggles'
+import * as sinon from 'sinon'
 
 function createDraftClaimantResponseForFullRejection (): DraftClaimantResponse {
   const draftResponse: DraftClaimantResponse = new DraftClaimantResponse()
@@ -79,6 +80,17 @@ function createDraftClaimantResponseWithCourtDecisionType (
 
 describe('claimant response converter', () => {
   const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
+
+  let isEnhancedMediationJourneyEnabledStub: sinon.SinonStub
+
+  beforeEach(() => {
+    isEnhancedMediationJourneyEnabledStub = sinon.stub(FeatureToggles.prototype, 'isEnhancedMediationJourneyEnabled')
+  })
+
+  afterEach(() => {
+    isEnhancedMediationJourneyEnabledStub.restore()
+  })
+
   const mediationDraft = new MediationDraft().deserialize({
     youCanOnlyUseMediation: {
       option: FreeMediationOption.YES
@@ -91,14 +103,15 @@ describe('claimant response converter', () => {
 
   if (FeatureToggles.isEnabled('mediation')) {
     describe('Claimant Rejection', () => {
-      it('rejection with mediation missing ', () => {
+      it('rejection with mediation missing ', async () => {
+        isEnhancedMediationJourneyEnabledStub.returns(false)
         const mediationDraft = new MediationDraft().deserialize({
           youCanOnlyUseMediation: {
             option: FreeMediationOption.NO
           }
         })
 
-        expect(converter.convertToClaimantResponse(claim, createDraftClaimantResponseForFullRejection(), mediationDraft, false)).to.deep.eq({
+        expect(await converter.convertToClaimantResponse(claim, createDraftClaimantResponseForFullRejection(), mediationDraft, false)).to.deep.eq({
           'type': 'REJECTION',
           'amountPaid': 10,
           'reason': 'Rejection reason is..',
@@ -109,10 +122,11 @@ describe('claimant response converter', () => {
         })
       })
 
-      it('rejection with mediation', () => {
+      it('rejection with mediation', async () => {
+        isEnhancedMediationJourneyEnabledStub.returns(false)
         const draftClaimantResponse = createDraftClaimantResponseForFullRejection()
         draftClaimantResponse.freeMediation = new FreeMediation('yes')
-        expect(converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft, false)).to.deep.eq({
+        expect(await converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft, false)).to.deep.eq({
           'type': 'REJECTION',
           'amountPaid': 10,
           'freeMediation': 'yes',
@@ -124,10 +138,11 @@ describe('claimant response converter', () => {
 
       })
 
-      it('rejection with mediation with reason', () => {
+      it('rejection with mediation with reason', async () => {
+        isEnhancedMediationJourneyEnabledStub.returns(false)
         const draftClaimantResponse = createDraftClaimantResponseForFullRejection()
         draftClaimantResponse.courtDetermination.rejectionReason = new RejectionReason('rejected')
-        expect(converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft, false)).to.deep.eq({
+        expect(await converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft, false)).to.deep.eq({
           'type': 'REJECTION',
           'amountPaid': 10,
           'freeMediation': 'yes',
@@ -138,7 +153,8 @@ describe('claimant response converter', () => {
         })
       })
 
-      it('rejection with mediation with nil amount paid', () => {
+      it('rejection with mediation with nil amount paid', async () => {
+        isEnhancedMediationJourneyEnabledStub.returns(false)
         const draftClaimantResponse: DraftClaimantResponse = new DraftClaimantResponse()
         draftClaimantResponse.settleAdmitted = new SettleAdmitted(YesNoOption.NO)
         draftClaimantResponse.paidAmount = new PaidAmount(PaidAmountOption.NO, 0, 100)
@@ -149,7 +165,7 @@ describe('claimant response converter', () => {
           new RejectionReason('Rejection reason is..'),
           1000,
           DecisionType.COURT)
-        expect(converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft, false)).to.deep.eq({
+        expect(await converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft, false)).to.deep.eq({
           'type': 'REJECTION',
           'amountPaid': 0,
           'freeMediation': 'yes',
@@ -160,14 +176,15 @@ describe('claimant response converter', () => {
         })
       })
 
-      it('rejection from non acceptance of states paid', () => {
+      it('rejection from non acceptance of states paid', async () => {
+        isEnhancedMediationJourneyEnabledStub.returns(false)
         const draftClaimantResponse = new DraftClaimantResponse()
         draftClaimantResponse.accepted = new ClaimSettled(YesNoOption.NO)
         draftClaimantResponse.partPaymentReceived = new PartPaymentReceived(YesNoOption.YES)
         draftClaimantResponse.freeMediation = new FreeMediation('yes')
         draftClaimantResponse.rejectionReason = new RejectionReason('OBJECTION!')
 
-        expect(converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft, false)).to.deep.eq({
+        expect(await converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft, false)).to.deep.eq({
           'type': 'REJECTION',
           'freeMediation': 'yes',
           'mediationContactPerson': undefined,
@@ -179,11 +196,12 @@ describe('claimant response converter', () => {
         })
       })
 
-      it('rejection when intends to proceed', () => {
+      it('rejection when intends to proceed', async () => {
+        isEnhancedMediationJourneyEnabledStub.returns(false)
         const draftClaimantResponse = new DraftClaimantResponse()
         draftClaimantResponse.intentionToProceed = new IntentionToProceed(YesNoOption.YES)
 
-        expect(converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft, false)).to.deep.eq({
+        expect(await converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft, false)).to.deep.eq({
           'type': 'REJECTION',
           'freeMediation': 'yes',
           'mediationContactPerson': undefined,
@@ -192,12 +210,13 @@ describe('claimant response converter', () => {
         })
       })
 
-      it('Should convert to rejection when given a no option in part payment received', () => {
+      it('Should convert to rejection when given a no option in part payment received', async () => {
+        isEnhancedMediationJourneyEnabledStub.returns(false)
         const draftClaimantResponse = new DraftClaimantResponse()
         draftClaimantResponse.partPaymentReceived = new PartPaymentReceived(YesNoOption.NO)
         draftClaimantResponse.freeMediation = new FreeMediation('yes')
 
-        expect(converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft, false)).to.deep.eq({
+        expect(await converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft, false)).to.deep.eq({
           'type': 'REJECTION',
           'freeMediation': 'yes',
           'mediationContactPerson': undefined,
@@ -210,10 +229,11 @@ describe('claimant response converter', () => {
   }
 
   describe('Claimant Acceptance', () => {
-    it('Accept defendant offer with CCJ', () => {
+    it('Accept defendant offer with CCJ', async () => {
+      isEnhancedMediationJourneyEnabledStub.returns(false)
       const draftClaimantResponse = createDraftClaimantResponseBaseForAcceptance(null,YesNoOption.YES)
       draftClaimantResponse.formaliseRepaymentPlan = new FormaliseRepaymentPlan(FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT)
-      expect(converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft,false)).to.deep.eq({
+      expect(await converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft,false)).to.deep.eq({
         'type': 'ACCEPTATION',
         'amountPaid': 10,
         'formaliseOption': 'CCJ'
@@ -221,10 +241,11 @@ describe('claimant response converter', () => {
 
     })
 
-    it('Accept defendant offer with settlement', () => {
+    it('Accept defendant offer with settlement', async () => {
+      isEnhancedMediationJourneyEnabledStub.returns(false)
       const draftClaimantResponse = createDraftClaimantResponseBaseForAcceptance(null,YesNoOption.YES)
       draftClaimantResponse.formaliseRepaymentPlan = new FormaliseRepaymentPlan(FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT)
-      expect(converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft,false)).to.deep.eq({
+      expect(await converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft,false)).to.deep.eq({
         'type': 'ACCEPTATION',
         'amountPaid': 10,
         'formaliseOption': 'SETTLEMENT'
@@ -232,22 +253,15 @@ describe('claimant response converter', () => {
 
     })
 
-    it('Accept defendant offer with unknown formalise option', () => {
-      const draftClaimantResponse = createDraftClaimantResponseBaseForAcceptance(YesNoOption.NO,YesNoOption.YES)
-      draftClaimantResponse.courtDetermination = new CourtDetermination(null,null,null,null,DecisionType.DEFENDANT)
-      draftClaimantResponse.formaliseRepaymentPlan = new FormaliseRepaymentPlan(new FormaliseRepaymentPlanOption('xyz', 'xyz'))
-      const errMsg = 'Unknown formalise repayment option xyz'
-      expect(() => converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft,false)).to.throw(Error, errMsg)
-    })
-
-    it('Accept defendant offer but propose a counter repayment plan to pay immediately', () => {
+    it('Accept defendant offer but propose a counter repayment plan to pay immediately', async () => {
+      isEnhancedMediationJourneyEnabledStub.returns(false)
       const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(
         payImmediatelyIntent,
         DecisionType.DEFENDANT,
         FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT,
         intentionOfPaymentInFullBySetDate,
         intentionOfPaymentInFullBySetDate)
-      expect(converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft,false)).to.deep.eq(
+      expect(await converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft,false)).to.deep.eq(
         {
           'type': 'ACCEPTATION',
           'amountPaid': 10,
@@ -265,14 +279,15 @@ describe('claimant response converter', () => {
         })
     })
 
-    it('Accept defendant offer but propose a counter repayment plan to pay by set date', () => {
+    it('Accept defendant offer but propose a counter repayment plan to pay by set date', async () => {
+      isEnhancedMediationJourneyEnabledStub.returns(false)
       const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(
         payBySetDateIntent,
         DecisionType.DEFENDANT,
         FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT,
         intentionOfPaymentInFullBySetDate,
         intentionOfPaymentInFullBySetDate)
-      expect(converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft,false)).to.deep.eq(
+      expect(await converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft,false)).to.deep.eq(
         {
           'type': 'ACCEPTATION',
           'amountPaid': 10,
@@ -290,14 +305,15 @@ describe('claimant response converter', () => {
         })
     })
 
-    it('Accept defendant offer but propose a counter repayment plan to pay by instalments', () => {
+    it('Accept defendant offer but propose a counter repayment plan to pay by instalments', async () => {
+      isEnhancedMediationJourneyEnabledStub.returns(false)
       const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(
         payByInstallmentsIntent,
         DecisionType.DEFENDANT,
         FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT,
         intentionOfPaymentInFullBySetDate,
         intentionOfPaymentInFullBySetDate)
-      expect(converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft,false)).to.deep.eq(
+      expect(await converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft,false)).to.deep.eq(
         {
           'type': 'ACCEPTATION',
           'amountPaid': 10,
@@ -321,14 +337,15 @@ describe('claimant response converter', () => {
         })
     })
 
-    it('Claimant proposes immediate payment court decides pay by set date', () => {
+    it('Claimant proposes immediate payment court decides pay by set date', async () => {
+      isEnhancedMediationJourneyEnabledStub.returns(false)
       const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(
         payImmediatelyIntent,
         DecisionType.COURT,
         FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT,
         intentionOfPaymentInFullBySetDate,
         intentionOfPaymentByInstalments)
-      expect(converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft,false)).to.deep.eq(
+      expect(await converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft,false)).to.deep.eq(
         {
           'type': 'ACCEPTATION',
           'amountPaid': 10,
@@ -346,14 +363,15 @@ describe('claimant response converter', () => {
         })
     })
 
-    it('Accept court decision to pay by instalments with ccj', () => {
+    it('Accept court decision to pay by instalments with ccj', async () => {
+      isEnhancedMediationJourneyEnabledStub.returns(false)
       const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(
         payImmediatelyIntent,
         DecisionType.COURT,
         FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT,
         intentionOfPaymentByInstalments,
         intentionOfPaymentByInstalments)
-      expect(converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft,false)).to.deep.eq(
+      expect(await converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft,false)).to.deep.eq(
         {
           'type': 'ACCEPTATION',
           'amountPaid': 10,
@@ -371,14 +389,15 @@ describe('claimant response converter', () => {
         })
     })
 
-    it('Accept court decision favouring defendant payment intent', () => {
+    it('Accept court decision favouring defendant payment intent', async () => {
+      isEnhancedMediationJourneyEnabledStub.returns(false)
       const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(
         payBySetDateIntent,
         DecisionType.DEFENDANT,
         FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT,
         intentionOfPaymentByInstalments,
         intentionOfPaymentInFullBySetDate)
-      expect(converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft,false)).to.deep.eq(
+      expect(await converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft,false)).to.deep.eq(
         {
           'type': 'ACCEPTATION',
           'amountPaid': 10,
@@ -396,14 +415,15 @@ describe('claimant response converter', () => {
         })
     })
 
-    it('Accept court decision favouring claimant payment intent', () => {
+    it('Accept court decision favouring claimant payment intent', async () => {
+      isEnhancedMediationJourneyEnabledStub.returns(false)
       const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(
         payByInstallmentsIntent,
         DecisionType.CLAIMANT,
         FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT,
         intentionOfPaymentByInstalments,
         intentionOfPaymentInFullBySetDate)
-      expect(converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft,false)).to.deep.eq(
+      expect(await converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft,false)).to.deep.eq(
         {
           'type': 'ACCEPTATION',
           'amountPaid': 10,
@@ -427,7 +447,8 @@ describe('claimant response converter', () => {
         })
     })
 
-    it('Reject court decision to pay by set date and refer to judge', () => {
+    it('Reject court decision to pay by set date and refer to judge', async () => {
+      isEnhancedMediationJourneyEnabledStub.returns(false)
       const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(
         payImmediatelyIntent,
         DecisionType.COURT,
@@ -435,7 +456,7 @@ describe('claimant response converter', () => {
         intentionOfPaymentInFullBySetDate,
         intentionOfPaymentByInstalments)
       draftClaimantResponse.rejectionReason = new RejectionReason('rejected reason')
-      expect(converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft,false)).to.deep.eq(
+      expect(await converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft,false)).to.deep.eq(
         {
           'type': 'ACCEPTATION',
           'amountPaid': 10,
@@ -454,7 +475,8 @@ describe('claimant response converter', () => {
         })
     })
 
-    it('Reject court decision to pay by instalments and refer to judge', () => {
+    it('Reject court decision to pay by instalments and refer to judge', async () => {
+      isEnhancedMediationJourneyEnabledStub.returns(false)
       const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(
         payImmediatelyIntent,
         DecisionType.COURT,
@@ -462,7 +484,7 @@ describe('claimant response converter', () => {
         intentionOfPaymentByInstalments,
         intentionOfPaymentInFullBySetDate)
       draftClaimantResponse.rejectionReason = new RejectionReason('rejected reason')
-      expect(converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft,false)).to.deep.eq(
+      expect(await converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft,false)).to.deep.eq(
         {
           'type': 'ACCEPTATION',
           'amountPaid': 10,
@@ -481,12 +503,13 @@ describe('claimant response converter', () => {
         })
     })
 
-    it('If defendant is a business and claimant rejects defendant payment plan for alternative means then refer to judge', () => {
+    it('If defendant is a business and claimant rejects defendant payment plan for alternative means then refer to judge', async () => {
+      isEnhancedMediationJourneyEnabledStub.returns(false)
       const draftClaimantResponse = createDraftClaimantResponseBaseForAcceptance(YesNoOption.YES, YesNoOption.YES)
       draftClaimantResponse.formaliseRepaymentPlan = new FormaliseRepaymentPlan(FormaliseRepaymentPlanOption.REFER_TO_JUDGE)
       draftClaimantResponse.alternatePaymentMethod = payImmediatelyIntent
       draftClaimantResponse.paidAmount = undefined
-      expect(converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft,true)).to.deep.eq(
+      expect(await converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft,true)).to.deep.eq(
         {
           'type': 'ACCEPTATION',
           'claimantPaymentIntention': {
