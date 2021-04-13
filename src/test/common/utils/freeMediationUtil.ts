@@ -201,7 +201,7 @@ describe('FreeMediationUtil', () => {
           otherReason: 'Not interested'
         }
       })
-      const expectedValue: string = 'Not interested'
+      const expectedValue: string = 'Another reason - Not interested'
       expect(FreeMediationUtil.getNoMediationReason(draft)).to.deep.equal(expectedValue)
     })
   })
