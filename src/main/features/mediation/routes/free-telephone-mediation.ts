@@ -15,7 +15,7 @@ export default express.Router()
     const user: User = res.locals.user
     const claim: Claim = res.locals.claim
 
-    res.render(Paths.freeTelephoneMediationPage.associatedView, {defendant: user.id === claim.defendantId})
+    res.render(Paths.freeTelephoneMediationPage.associatedView, { defendant: user.id === claim.defendantId })
   })
   .post(
     Paths.freeTelephoneMediationPage.uri,
