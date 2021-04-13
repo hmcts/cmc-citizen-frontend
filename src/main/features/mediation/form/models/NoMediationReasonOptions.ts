@@ -1,9 +1,9 @@
 export class NoMediationReasonOptions {
-  static readonly ALREADY_TRIED = 'alreadyTried'
-  static readonly NOT_SURE = 'notSure'
-  static readonly WOULD_NOT_SOLVE = 'wouldNotSolve'
-  static readonly NO_DELAY_IN_HEARING = 'noDelayInHearing'
-  static readonly JUDGE_TO_DECIDE = 'judgeToDecide'
+  static readonly ALREADY_TRIED = 'I have already tried to resolve the dispute with the other party, with no success'
+  static readonly NOT_SURE = 'I am not sure what would happen in mediation'
+  static readonly WOULD_NOT_SOLVE = 'I do not think mediation would solve the dispute'
+  static readonly NO_DELAY_IN_HEARING = 'I do not want to delay getting a hearing'
+  static readonly JUDGE_TO_DECIDE = 'I want a judge to make a decision on the dispute'
   static readonly OTHER = 'other'
 
   readonly value: string

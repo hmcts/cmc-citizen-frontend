@@ -70,7 +70,7 @@ export class FreeMediationUtil {
 
   static getNoMediationReason (mediationDraft: MediationDraft): string {
     if (mediationDraft.noMediationReason && mediationDraft.noMediationReason.otherReason) {
-      return mediationDraft.noMediationReason.otherReason
+      return 'Another reason - ' + mediationDraft.noMediationReason.otherReason
     } else if (mediationDraft.noMediationReason && mediationDraft.noMediationReason.iDoNotWantMediationReason) {
       return mediationDraft.noMediationReason.iDoNotWantMediationReason
     } else {

@@ -6,7 +6,7 @@ import { NoMediationReasonOptions } from 'mediation/form/models/NoMediationReaso
 
 export class ValidationErrors {
   static readonly OPTION_REQUIRED: string = 'Please select one reason'
-  static readonly TEXT_REQUIRED: string = 'Please specify the reason'
+  static readonly TEXT_TOO_LONG: string = 'Reason must be 500 characters or fewer'
 }
 
 export class NoMediationReason implements CompletableTask {
@@ -15,9 +15,7 @@ export class NoMediationReason implements CompletableTask {
   iDoNotWantMediationReason?: string
 
   @ValidateIf(o => o.iDoNotWantMediationReason === NoMediationReasonOptions.OTHER)
-  @IsDefined({ message: ValidationErrors.TEXT_REQUIRED })
-  @IsNotBlank({ message: ValidationErrors.TEXT_REQUIRED })
-  @MaxLength(500, { message: CommonValidationErrors.TEXT_TOO_LONG })
+  @MaxLength(500, { message: ValidationErrors.TEXT_TOO_LONG })
   otherReason?: string
 
   constructor (iDoNotWantMediationReason?: string, otherReason?: string) {
