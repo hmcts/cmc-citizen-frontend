@@ -111,7 +111,7 @@ export class TaskListBuilder extends TaskStatus {
         new TaskListItem(
           'Free telephone mediation',
           path,
-          FreeMediationTask.isCompleted(mediationDraft, claim)
+          await FreeMediationTask.isCompleted(mediationDraft, claim)
         ))
     } else {
       if (FeatureToggles.isEnabled('mediation')) {
@@ -120,7 +120,7 @@ export class TaskListBuilder extends TaskStatus {
           new TaskListItem(
             'Free telephone mediation',
             path,
-            FreeMediationTask.isCompleted(mediationDraft, claim)
+            await FreeMediationTask.isCompleted(mediationDraft, claim)
           ))
       } else {
         const path = MediationPaths.tryFreeMediationPage.evaluateUri({ externalId: claim.externalId })
@@ -128,7 +128,7 @@ export class TaskListBuilder extends TaskStatus {
           new TaskListItem(
             'Free telephone mediation',
             path,
-            FreeMediationTask.isCompleted(mediationDraft, claim)
+            await FreeMediationTask.isCompleted(mediationDraft, claim)
           ))
       }
     }

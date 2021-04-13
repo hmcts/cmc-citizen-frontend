@@ -152,7 +152,7 @@ describe('Mediation: free telephne mediation page', () => {
           .set('Cookie', `${cookieName}=ABC`)
           .send({ mediationNo: FreeMediationOption.NO })
           .expect(res => expect(res).to.be.redirect
-            .toLocation(MediationPaths.noMediationPage.evaluateUri({ externalId })))
+            .toLocation(MediationPaths.mediationDisagreementPage.evaluateUri({ externalId })))
       })
     })
 
@@ -205,7 +205,7 @@ describe('Mediation: free telephne mediation page', () => {
           .set('Cookie', `${cookieName}=ABC`)
           .send({ mediationNo: FreeMediationOption.NO })
           .expect(res => expect(res).to.be.redirect
-            .toLocation(MediationPaths.noMediationPage.evaluateUri({ externalId })))
+            .toLocation(MediationPaths.mediationDisagreementPage.evaluateUri({ externalId })))
       })
     })
   })

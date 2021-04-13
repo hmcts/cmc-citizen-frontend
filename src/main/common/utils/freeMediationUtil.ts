@@ -5,19 +5,25 @@ import { Claim } from 'main/app/claims/models/claim'
 import { FreeMediationOption } from 'main/app/forms/models/freeMediation'
 import { CompanyDetails } from 'forms/models/companyDetails'
 import { FeatureToggles } from 'utils/featureToggles'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
 export class FreeMediationUtil {
 
-  static getFreeMediation (mediationDraft: MediationDraft): YesNoOption {
-    if (!FeatureToggles.isEnabled('mediation') && mediationDraft.willYouTryMediation) {
+  static async getFreeMediation (mediationDraft: MediationDraft): Promise<YesNoOption> {
+    const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
+    if (await featureToggles.isEnhancedMediationJourneyEnabled()) {
       return mediationDraft.willYouTryMediation.option as YesNoOption
     } else {
-      const freeMediation = mediationDraft.youCanOnlyUseMediation
-
-      if (!freeMediation || !freeMediation.option) {
-        return YesNoOption.NO
+      if (!FeatureToggles.isEnabled('mediation') && mediationDraft.willYouTryMediation) {
+        return mediationDraft.willYouTryMediation.option as YesNoOption
       } else {
-        return freeMediation.option as YesNoOption
+        const freeMediation = mediationDraft.youCanOnlyUseMediation
+
+        if (!freeMediation || !freeMediation.option) {
+          return YesNoOption.NO
+        } else {
+          return freeMediation.option as YesNoOption
+        }
       }
     }
   }

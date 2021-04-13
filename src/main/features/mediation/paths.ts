@@ -15,6 +15,5 @@ export class Paths {
   static readonly mediationAgreementDocument = new RoutablePath(`${mediationPath}/agreement`)
 
   static readonly freeTelephoneMediationPage = new RoutablePath(`${mediationPath}/free-telephone-mediation`)
-  static readonly noMediationPage = new RoutablePath(`${mediationPath}/no-mediation`)
   static readonly iDontWantFreeMediationPage = new RoutablePath(`${mediationPath}/i-dont-want-free-mediation`)
 }

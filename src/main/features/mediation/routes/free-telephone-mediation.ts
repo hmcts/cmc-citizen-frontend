@@ -33,7 +33,7 @@ export default express.Router()
       const claim: Claim = res.locals.claim
 
       if (req.body.mediationNo) {
-        res.redirect(Paths.noMediationPage.evaluateUri({ externalId }))
+        res.redirect(Paths.mediationDisagreementPage.evaluateUri({ externalId }))
       } else if ((user.id === claim.defendantId && claim.claimData.defendant.isBusiness()) ||
             (user.id === claim.claimantId && claim.claimData.claimant.isBusiness())) {
         res.redirect(Paths.canWeUseCompanyPage.evaluateUri({ externalId: claim.externalId }))

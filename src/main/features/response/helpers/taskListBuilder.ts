@@ -248,7 +248,7 @@ export class TaskListBuilder extends TaskStatus {
             new TaskListItem(
               'Free telephone mediation',
               path,
-              FreeMediationTask.isCompleted(mediationDraft, claim)
+              await FreeMediationTask.isCompleted(mediationDraft, claim)
             )
           ]
         )
@@ -260,7 +260,7 @@ export class TaskListBuilder extends TaskStatus {
               new TaskListItem(
                 'Free telephone mediation',
                 path,
-                FreeMediationTask.isCompleted(mediationDraft, claim)
+                await FreeMediationTask.isCompleted(mediationDraft, claim)
               )
             ]
           )
@@ -271,7 +271,7 @@ export class TaskListBuilder extends TaskStatus {
               new TaskListItem(
                 'Free telephone mediation',
                 path,
-                FreeMediationTask.isCompleted(mediationDraft, claim)
+                await FreeMediationTask.isCompleted(mediationDraft, claim)
               )
             ]
           )

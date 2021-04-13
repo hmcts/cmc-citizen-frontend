@@ -19,13 +19,13 @@ import { DirectionsQuestionnaireHelper } from 'claimant-response/helpers/directi
 
 export class ClaimantResponseConverter {
 
-  public static convertToClaimantResponse (
+  public static async convertToClaimantResponse (
     claim: Claim,
     draftClaimantResponse: DraftClaimantResponse,
     mediationDraft: MediationDraft,
     isDefendantBusiness: boolean,
     directionsQuestionnaireDraft?: DirectionsQuestionnaireDraft
-  ): ClaimantResponse {
+  ): Promise<ClaimantResponse> {
     if (!this.isResponseAcceptance(draftClaimantResponse)) {
       let reject: ResponseRejection = new ResponseRejection()
 
@@ -33,7 +33,7 @@ export class ClaimantResponseConverter {
         reject.amountPaid = draftClaimantResponse.paidAmount.amount
       }
 
-      reject.freeMediation = FreeMediationUtil.getFreeMediation(mediationDraft)
+      reject.freeMediation = await FreeMediationUtil.getFreeMediation(mediationDraft)
       reject.mediationPhoneNumber = FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft)
       reject.mediationContactPerson = FreeMediationUtil.getMediationContactPerson(claim, mediationDraft)
       reject.noMediationReason = FreeMediationUtil.getNoMediationReason(mediationDraft)
