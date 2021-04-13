@@ -43,7 +43,7 @@ function renderView (form: Form<BreathingSpace>, res: express.Response, next: ex
 /*  tslint:disable:no-default-export */
 export default express.Router()
     .get(Paths.bsCheckAnswersPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      renderView(new Form(new BreathingSpace()), res, next)
+      renderView(new Form(new BreathingSpace()), res, next) 
     })
     .post(
       Paths.bsCheckAnswersPage.uri,
