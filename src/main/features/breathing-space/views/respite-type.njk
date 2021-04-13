@@ -1,6 +1,10 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, radioGroup, saveAndContinueButton, errorSummary %}
+{% block additional_head %}
+  <link rel="stylesheet" href="{{ asset_paths['style'] }}/govuk-frontend/all.css"/>
+{% endblock %}
 
+{% set govukBackLinkHref = 'respite-start' %}
 {% set heading = 'What type is it?' %}
 
 {% block content %}
