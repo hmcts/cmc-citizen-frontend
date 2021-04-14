@@ -1,8 +1,12 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, errorSummary, submitButton, input %}
 {% from "components/free-mediation/howFreeMediationWorks.njk" import howMediationWorks %}
+{% block additional_head %}
+  <link rel="stylesheet" href="{{ asset_paths['style'] }}/govuk-frontend/all.css"/>
+{% endblock %}
 
 {% set heading = 'Do you have a Debt Respite Scheme reference number?' %}
+{% set govukBackLinkHref = '/dashboard/' + breathingSpaceExternalId + '/claimant' %}
 
 {% block content %}
   <div class="grid-row">
