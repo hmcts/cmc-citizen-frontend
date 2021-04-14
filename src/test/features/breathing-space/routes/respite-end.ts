@@ -1,8 +1,6 @@
 import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
-
-import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
 import { Paths as BreathingSpacePaths } from 'breathing-space/paths'
 import { app } from 'main/app'
@@ -10,15 +8,19 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import { Moment } from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
+import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
+import { attachDefaultHooks } from 'test/routes/hooks'
+import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
 describe('Enter breathing space: Respite end date page', () => {
-  attachDefaultHooks(app)
 
   describe('on GET', () => {
+    attachDefaultHooks(app)
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+      draftStoreServiceMock.resolveFind('bs')
 
       await request(app)
         .get(BreathingSpacePaths.bsEndDatePage.uri)
@@ -28,9 +30,12 @@ describe('Enter breathing space: Respite end date page', () => {
   })
 
   describe('on POST', () => {
+    attachDefaultHooks(app)
+    checkAuthorizationGuards(app, 'post', BreathingSpacePaths.bsEndDatePage.uri)
     describe('for authorized user', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+        draftStoreServiceMock.resolveFind('bs')
       })
 
       it('should render page with error when date is less than or equal to today', async () => {
@@ -44,6 +49,7 @@ describe('Enter breathing space: Respite end date page', () => {
 
       it('should redirect to check answer page when form is valid and everything is fine', async () => {
         const date: Moment = MomentFactory.currentDate().subtract(1, 'year')
+        draftStoreServiceMock.resolveUpdate()
 
         await request(app)
           .post(BreathingSpacePaths.bsEndDatePage.uri)
@@ -53,6 +59,7 @@ describe('Enter breathing space: Respite end date page', () => {
       })
 
       it('should redirect to check answer page when form is valid (without date) and everything is fine', async () => {
+        draftStoreServiceMock.resolveUpdate()
 
         await request(app)
           .post(BreathingSpacePaths.bsEndDatePage.uri)
