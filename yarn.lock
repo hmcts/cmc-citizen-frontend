@@ -1359,10 +1359,10 @@ aws4@^1.6.0, aws4@^1.8.0:
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.8.0.tgz#f0e003d9ca9e7f59c7a508945d7b2ef9a04a542f"
   integrity sha512-ReZxvNHIOv88FlT7rxcXIIC0fPt4KZqZbOlivyWtXLt8ESx84zd3kMC6iK5jVeS2qt+g7ftS7ye4fi06X5rtRQ==
 
-axe-core@^3.1.2:
-  version "3.3.2"
-  resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-3.3.2.tgz#7baf3c55a5cf1621534a2c38735f5a1bf2f7e1a8"
-  integrity sha512-lRdxsRt7yNhqpcXQk1ao1BL73OZDzmFCWOG0mC4tGR/r14ohH2payjHwCMQjHGbBKm924eDlmG7utAGHiX/A6g==
+axe-core@^3.5.1:
+  version "3.5.5"
+  resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-3.5.5.tgz#84315073b53fa3c0c51676c588d59da09a192227"
+  integrity sha512-5P0QZ6J5xGikH780pghEdbEKijCTrruK9KxtPZCFWUpef0f6GipO+xEZ5GKCb020mmqgbiNO6TcA55CriL784Q==
 
 axios@^0.19.1, axios@^0.21.1:
   version "0.21.1"
@@ -2157,17 +2157,17 @@ commander@^2.12.1, commander@^2.19.0, commander@^2.20.3, commander@^2.8.1, comma
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
   integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
 
-commander@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/commander/-/commander-3.0.2.tgz#6837c3fb677ad9933d1cfba42dd14d5117d6b39e"
-  integrity sha512-Gar0ASD4BDyKC4hl4DwHqDrmvjoxWKZigVnAbn5H1owvm4CxCPdb0HQDehwNYMJpla5+M2tPmPARzhtYuwpHow==
-
 commander@~2.8.1:
   version "2.8.1"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.8.1.tgz#06be367febfda0c330aa1e2a072d3dc9762425d4"
   integrity sha1-Br42f+v9oMMwqh4qBy09yXYkJdQ=
   dependencies:
     graceful-readlink ">= 1.0.0"
+
+commander@~3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-3.0.2.tgz#6837c3fb677ad9933d1cfba42dd14d5117d6b39e"
+  integrity sha512-Gar0ASD4BDyKC4hl4DwHqDrmvjoxWKZigVnAbn5H1owvm4CxCPdb0HQDehwNYMJpla5+M2tPmPARzhtYuwpHow==
 
 commondir@^1.0.1:
   version "1.0.1"
@@ -4499,7 +4499,7 @@ html-escaper@^2.0.0:
   resolved "https://registry.yarnpkg.com/html-escaper/-/html-escaper-2.0.0.tgz#71e87f931de3fe09e56661ab9a29aadec707b491"
   integrity sha512-a4u9BeERWGu/S8JiWEAQcdrg9v4QArtP9keViQjGMdff20fBdd8waotXaNmODqBe6uZ3Nafi7K/ho4gCQHV3Ig==
 
-html_codesniffer@2.4.1, html_codesniffer@^2.4.1:
+html_codesniffer@2.4.1, html_codesniffer@~2.4.1:
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/html_codesniffer/-/html_codesniffer-2.4.1.tgz#c1ea1412360e44079b82eb2b06c816c5933aac9e"
   integrity sha512-7g4Z8+7agJFi7XJGu2r0onIqA7ig9b26vFEvUE6DgtFJlJzy1ELYEKzzd5Xwam4xjHiHQ/w8yHO7KTGNcXnwzg==
@@ -6518,7 +6518,7 @@ node-sha1@0.0.1:
   resolved "https://registry.yarnpkg.com/node-sha1/-/node-sha1-0.0.1.tgz#5662fc799f1c3c95d93e3015dd048065514985d3"
   integrity sha1-VmL8eZ8cPJXZPjAV3QSAZVFJhdM=
 
-node.extend@^2.0.2:
+node.extend@~2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/node.extend/-/node.extend-2.0.2.tgz#b4404525494acc99740f3703c496b7d5182cc6cc"
   integrity sha512-pDT4Dchl94/+kkgdwyS2PauDFjZG0Hk0IcHIB+LkW27HLDtdoeMxHTxZh39DYbPP8UflWXWj9JcdDozF+YDOpQ==
@@ -6957,7 +6957,7 @@ p-map@^3.0.0:
   dependencies:
     aggregate-error "^3.0.0"
 
-p-timeout@^2.0.1:
+p-timeout@^2.0.1, p-timeout@~2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/p-timeout/-/p-timeout-2.0.1.tgz#d8dd1979595d2dc0139e1fe46b8b646cb3cdf038"
   integrity sha512-88em58dDVB/KzPEx1X0N3LwFfYZPyDc4B6eF38M1rk9VTZMbxXXgjugz8mmwpS9Ox4BDZ+t6t3QP5+/gazweIA==
@@ -6969,54 +6969,54 @@ p-try@^2.0.0:
   resolved "https://registry.yarnpkg.com/p-try/-/p-try-2.2.0.tgz#cb2868540e313d61de58fafbe35ce9004d5540e6"
   integrity sha512-R4nPAVTAU0B9D35/Gk3uJf/7XYbQcyohSKdvAxIRSNghFl4e71hVoGnBNQz9cWaXxO2I10KTC+3jMdvvoKw6dQ==
 
-pa11y-reporter-cli@^1.0.1:
+pa11y-reporter-cli@~1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/pa11y-reporter-cli/-/pa11y-reporter-cli-1.0.1.tgz#a3d47c98d328e1709f419abf322013ef9bdbf4e3"
   integrity sha512-k+XPl5pBU2R1J6iagGv/GpN/dP7z2cX9WXqO0ALpBwHlHN3ZSukcHCOhuLMmkOZNvufwsvobaF5mnaZxT70YyA==
   dependencies:
     chalk "^2.1.0"
 
-pa11y-reporter-csv@^1.0.0:
+pa11y-reporter-csv@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/pa11y-reporter-csv/-/pa11y-reporter-csv-1.0.0.tgz#c19a99e41c14d82669a1dfd907ada7269d423b98"
   integrity sha512-S2gFgbAvONBzAVsVbF8zsYabszrzj7SKhQxrEbw19zF0OFI8wCWn8dFywujYYkg674rmyjweSxSdD+kHTcx4qA==
 
-pa11y-reporter-json@^1.0.0:
+pa11y-reporter-json@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/pa11y-reporter-json/-/pa11y-reporter-json-1.0.0.tgz#5762959eeea89cc451a2e1160aa0526280ebfe29"
   integrity sha512-EdLrzh1hyZ8DudCSSrcakgtsHDiSsYNsWLSoEAo1JnFTIK8hYpD7vL+xgd0u+LXDxz9wLLFnckdubpklaRpl/w==
   dependencies:
     bfj "^4.2.3"
 
-pa11y-runner-axe@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/pa11y-runner-axe/-/pa11y-runner-axe-1.0.1.tgz#851aecab1b16828a4a4e58d0adf28661582773a6"
-  integrity sha512-TZls/tSpiQfCbgRg7t+5O0R6/PrOHBCZXX+/dT4QemarTef0TzQqHz8az8sbC9IpDFAY+X2pGJW5becaXiIuWw==
+pa11y-runner-axe@~1.0.1:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/pa11y-runner-axe/-/pa11y-runner-axe-1.0.2.tgz#3cdd8e6ff8fba40e7466ad603ac5df38c1475927"
+  integrity sha512-HMw5kQZz16vS5Bhe067esgeuULNzFYP4ixOFAHxOurwGDptlyc2OqH6zfUuK4szB9tbgb5F23v3qz9hCbkGRpw==
   dependencies:
-    axe-core "^3.1.2"
+    axe-core "^3.5.1"
 
-pa11y-runner-htmlcs@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/pa11y-runner-htmlcs/-/pa11y-runner-htmlcs-1.2.0.tgz#e880d7813f11267b631b9f1b8a72032e73090755"
-  integrity sha512-uf0wEsoeRfyALXVcZeDadV7ot7pE6JZ3EZwbspwmyXW30ahjCClAfE/FtaNo1y2Mlxx5J9ui1sW2YzhHXocV5g==
+pa11y-runner-htmlcs@~1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/pa11y-runner-htmlcs/-/pa11y-runner-htmlcs-1.2.1.tgz#cbbeb105ed11b4fafbfb43e20bf4d655efc378aa"
+  integrity sha512-flatSp6moEbqzny18b2IEoDXEWj6xJbJrszdBjUAPQBCN11QRW+SZ0U4uFnxNTLPpXs30N/a9IlH4vYiRr2nPg==
   dependencies:
-    html_codesniffer "^2.4.1"
+    html_codesniffer "~2.4.1"
 
-pa11y@^5.2.0:
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/pa11y/-/pa11y-5.3.0.tgz#b3c628a3163cb281906e39a1be300d6c7a13c29d"
-  integrity sha512-g1cVpmRQQXClTZYbx4JC+FqCu6AfM9K3px2TPb2NY9JrorxYiInOKQCa9eF6URjY//bDkQmkn65rTWmbwTC07A==
+pa11y@^5.3.1:
+  version "5.3.1"
+  resolved "https://registry.yarnpkg.com/pa11y/-/pa11y-5.3.1.tgz#589c65189c506ae3122c98b57ba9d5ed29bd2bed"
+  integrity sha512-hRxe9mYUqwODrlIXiTKUrlJX8zgrJZG84s0IrJnvvI8reO6n4RtiF20juTaGukjuHtH8p3tgFh+i2gPcRZSyUg==
   dependencies:
-    commander "^3.0.2"
-    node.extend "^2.0.2"
-    p-timeout "^2.0.1"
-    pa11y-reporter-cli "^1.0.1"
-    pa11y-reporter-csv "^1.0.0"
-    pa11y-reporter-json "^1.0.0"
-    pa11y-runner-axe "^1.0.1"
-    pa11y-runner-htmlcs "^1.2.0"
-    puppeteer "^1.13.0"
-    semver "^5.6.0"
+    commander "~3.0.2"
+    node.extend "~2.0.2"
+    p-timeout "~2.0.1"
+    pa11y-reporter-cli "~1.0.1"
+    pa11y-reporter-csv "~1.0.0"
+    pa11y-reporter-json "~1.0.0"
+    pa11y-runner-axe "~1.0.1"
+    pa11y-runner-htmlcs "~1.2.1"
+    puppeteer "~1.19.0"
+    semver "~5.7.0"
 
 package-hash@^4.0.0:
   version "4.0.0"
@@ -7431,10 +7431,10 @@ puppeteer-core@^7.1.0:
     unbzip2-stream "^1.3.3"
     ws "^7.2.3"
 
-puppeteer@^1.13.0:
-  version "1.20.0"
-  resolved "https://registry.yarnpkg.com/puppeteer/-/puppeteer-1.20.0.tgz#e3d267786f74e1d87cf2d15acc59177f471bbe38"
-  integrity sha512-bt48RDBy2eIwZPrkgbcwHtb51mj2nKvHOPMaSH2IsWiv7lOG9k9zhaRzpDZafrk05ajMc3cu+lSQYYOfH2DkVQ==
+puppeteer@~1.19.0:
+  version "1.19.0"
+  resolved "https://registry.yarnpkg.com/puppeteer/-/puppeteer-1.19.0.tgz#e3b7b448c2c97933517078d7a2c53687361bebea"
+  integrity sha512-2S6E6ygpoqcECaagDbBopoSOPDv0pAZvTbnBgUY+6hq0/XDFDOLEMNlHF/SKJlzcaZ9ckiKjKDuueWI3FN/WXw==
   dependencies:
     debug "^4.1.0"
     extract-zip "^1.6.6"
@@ -8198,7 +8198,7 @@ semver-greatest-satisfied-range@^1.1.0:
   dependencies:
     sver-compat "^1.5.0"
 
-"semver@2 || 3 || 4 || 5", semver@^5.3.0, semver@^5.4.1, semver@^5.5.0, semver@^5.5.1, semver@^5.6.0, semver@^5.7.0, semver@^5.7.1:
+"semver@2 || 3 || 4 || 5", semver@^5.3.0, semver@^5.4.1, semver@^5.5.0, semver@^5.5.1, semver@^5.6.0, semver@^5.7.0, semver@^5.7.1, semver@~5.7.0:
   version "5.7.1"
   resolved "https://registry.yarnpkg.com/semver/-/semver-5.7.1.tgz#a954f931aeba508d307bbf069eff0c01c96116f7"
   integrity sha512-sauaDf/PZdVgrLTNYHRtpXa1iRiKcaebiKQ1BJdpQlWH2lCvexQdX55snPFyK7QzpudqbCI0qXFfOasHdyNDGQ==
