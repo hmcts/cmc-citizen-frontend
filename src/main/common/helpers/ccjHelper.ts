@@ -36,7 +36,7 @@ export function isFullAdmissionAcceptation (claim: Claim): boolean {
 export function totalRemainingToPay (claim: Claim): number {
   let total: number = amountSettledFor(claim) + claimFeeInPennies(claim) / 100 - claim.amountPaid()
 
-  if (claim.countyCourtJudgment && claim.countyCourtJudgment.paidAmount) {
+  if (!claim.amountPaid() && claim.countyCourtJudgment && claim.countyCourtJudgment.paidAmount) {
     total -= claim.countyCourtJudgment.paidAmount
   }
 
