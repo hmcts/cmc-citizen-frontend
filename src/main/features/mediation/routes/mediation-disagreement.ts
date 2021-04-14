@@ -67,6 +67,7 @@ export default express.Router()
           draft.document.canWeUse = undefined
           draft.document.canWeUseCompany = undefined
         } else {
+          draft.document.noMediationReason = undefined
           draft.document.willYouTryMediation = form.model
         }
 

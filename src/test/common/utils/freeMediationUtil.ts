@@ -170,7 +170,7 @@ describe('FreeMediationUtil', () => {
           mediationContactPerson: 'Mary Richards'
         },
         willYouTryMediation: {
-          option: FreeMediationOption.YES
+          option: FreeMediationOption.NO
         },
         noMediationReason: {
           iDoNotWantMediationReason: 'ALREADY_TRIED',
@@ -194,7 +194,7 @@ describe('FreeMediationUtil', () => {
           mediationContactPerson: 'Mary Richards'
         },
         willYouTryMediation: {
-          option: FreeMediationOption.YES
+          option: FreeMediationOption.NO
         },
         noMediationReason: {
           iDoNotWantMediationReason: 'OTHER',
