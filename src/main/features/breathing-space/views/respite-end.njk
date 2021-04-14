@@ -1,7 +1,11 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, textInput, saveAndContinueButton, errorSummary %}
 {% from "date.njk" import dateInput %}
+{% block additional_head %}
+  <link rel="stylesheet" href="{{ asset_paths['style'] }}/govuk-frontend/all.css"/>
+{% endblock %}
 
+{% set govukBackLinkHref = 'respite-type' %}
 {% set heading = 'Expected end date' %}
 
 {% block content %}

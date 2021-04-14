@@ -1,0 +1,54 @@
+{% extends "layout.njk" %}
+{% from "internalLink.njk" import internalLink %}
+{% block additional_head %}
+  <link rel="stylesheet" href="{{ asset_paths['style'] }}/govuk-frontend/all.css"/>
+{% endblock %}
+
+{% from "table.njk" import tableStart, tableEnd, row %}
+{% from "form.njk" import csrfProtection, submitButton, errorSummary %}
+{% from "statementOfTruth.njk" import statementOfTruthUpdated %}
+{% from "party/details.njk" import partyDetailsSummaryFragment, partyDetail, partyDetailRow %}
+
+{% set heading = 'Lift the debt respite scheme (Breathing Space)' %}
+{% set govukBackLinkHref = '/breathing-space/' + breathingSpaceExternalId + '/respite-lifted' %}
+
+{% block content %}
+<div class="grid-row">
+  <div class="column-two-thirds">
+     <form novalidate method="post">
+       {{ csrfProtection(csrf) }}
+       <table class="check-your-answers govuk-!-margin-bottom-9">
+         <tbody class="claim-dashboard">
+           <tr class="claims default mobile-table">
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr class="claims default mobile-table">
+              <td class="bold">{{ t('Date lifted') }}</td>
+              <td> 
+                {% if breatingSpaceLiftedData !== 'Invalid date' and breatingSpaceLiftedData !== undefined %}
+                  {{ breatingSpaceLiftedData | date }}
+                {% endif %}
+              </td>
+              <td class="change-answer change-link-column">
+              {% set url = '/breathing-space/' + breathingSpaceExternalId + '/respite-lifted'%}
+                <a href={{ url }} aria-label="Breathing Space date lifted">{{ t('Change') }} <span class="visuallyhidden">{{ 'Breathing Space date lifted' | lower }}</span></a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      <div class="form-group">
+        <h1 class="heading-medium">{{ t('Are you sure you want to lift the debt respite scheme?') }}</h1>
+        <p>{{ t('Once the debt respite scheme is lifted you will not be able to change this.') }}</p>
+      </div>
+      <div class="form-group">
+        {{ submitButton('Submit') }}
+      </div>
+      <div class="form-group">
+        {{ internalLink('Cancel', '/dashboard/' + breathingSpaceExternalId + '/claimant') }}
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

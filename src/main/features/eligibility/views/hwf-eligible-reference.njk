@@ -1,0 +1,18 @@
+{% extends "layout.njk" %}
+{% from "internalLink.njk" import internalLink %}
+{% from "externalLink.njk" import externalLink %}
+
+{% set heading = 'You can use this service' %}
+
+{% block content %}
+
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <p>{{ t('Based on your answers you can make a money claim using this service.') }}</p>
+        <p>{{ t('Remember that you will not know about the fee until we have processed your Help with Fees application. Your claim will only be issued after Help with Fees is confirmed, or the fee is paid.') }}</p>
+
+      {{ internalLink(t('Continue'), nextPage, 'button analytics-click-event-trigger', dataEventLabel='Eligibility: You can use this service') }}
+    </div>
+  </div>
+
+{% endblock %}
