@@ -12,7 +12,11 @@ export class FreeMediationUtil {
   static async getFreeMediation (mediationDraft: MediationDraft): Promise<YesNoOption> {
     const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
     if (await featureToggles.isEnhancedMediationJourneyEnabled()) {
-      return mediationDraft.willYouTryMediation.option as YesNoOption
+      if(mediationDraft.willYouTryMediation) {
+        return mediationDraft.willYouTryMediation.option as YesNoOption
+      } else {
+        return YesNoOption.NO
+      }
     } else {
       if (!FeatureToggles.isEnabled('mediation') && mediationDraft.willYouTryMediation) {
         return mediationDraft.willYouTryMediation.option as YesNoOption

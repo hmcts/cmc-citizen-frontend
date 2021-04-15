@@ -62,6 +62,7 @@ describe('FreeMediationUtil', () => {
         const myExternalId: String = 'b17af4d2-273f-4999-9895-bce382fa24c8'
         const draft: MediationDraft = new MediationDraft().deserialize({
           externalId: myExternalId,
+          willYouTryMediation: undefined,
           youCanOnlyUseMediation: undefined
         })
         const expectedValue: YesNoOption = YesNoOption.NO

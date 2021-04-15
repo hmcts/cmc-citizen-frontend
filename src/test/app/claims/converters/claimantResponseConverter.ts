@@ -92,6 +92,9 @@ describe('claimant response converter', () => {
   })
 
   const mediationDraft = new MediationDraft().deserialize({
+    willYouTryMediation: {
+      option: FreeMediationOption.YES
+    },
     youCanOnlyUseMediation: {
       option: FreeMediationOption.YES
     },
