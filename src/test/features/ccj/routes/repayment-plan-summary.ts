@@ -140,7 +140,6 @@ describe('CCJ - repayment plan summary page', () => {
             },
             respondedAt: MomentFactory.currentDateTime(),
             countyCourtJudgmentRequestedAt: '2017-10-10T22:45:51.785',
-            paidAmount: 2,
             countyCourtJudgment: {
               defendantDateOfBirth: '1990-11-01',
               paidAmount: 2,
