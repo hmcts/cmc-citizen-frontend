@@ -90,7 +90,7 @@ export class MediationSteps {
       freeTelephoneMediationPage.chooseDisagree()
       mediationDisagreementPage.chooseYes()
       canWeUsePage.chooseYes()
-    } if (process.env.FEATURE_MEDIATION === 'true') {
+    } else if (process.env.FEATURE_MEDIATION === 'true') {
       freeMediationPage.clickHowFreeMediationWorks()
       howMediationWorksPage.chooseContinue()
       willYouTryMediationPage.chooseYes()
