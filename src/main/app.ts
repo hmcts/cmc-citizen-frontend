@@ -62,6 +62,7 @@ app.use(/^\/(?!js|img|pdf|stylesheets).*$/, async (req, res, next) => {
   app.settings.nunjucksEnv.globals.signPosting = await featureToggles.isSignPostingEnabled()
   app.settings.nunjucksEnv.globals.helpWithFeesFeature = await featureToggles.isHelpWithFeesEnabled()
   app.settings.nunjucksEnv.globals.breathingSpace = await featureToggles.isBreathingSpaceEnabled()
+  app.settings.nunjucksEnv.globals.enhancedMediationJourney = await featureToggles.isEnhancedMediationJourneyEnabled()
   next()
 })
 
