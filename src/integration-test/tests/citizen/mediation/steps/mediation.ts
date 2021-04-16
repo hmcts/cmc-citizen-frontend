@@ -44,7 +44,7 @@ export class MediationSteps {
   acceptMediationAsCompanyPhoneNumberProvided (): void {
     if(process.env.ENHANCED_MEDIATION_JOURNEY === 'true') {
       freeTelephoneMediationPage.chooseContinue()
-      canWeUsePage.chooseYes()
+      canWeUseCompanyPage.chooseYes()
     } else if (process.env.FEATURE_MEDIATION === 'true') {
       freeMediationPage.clickHowFreeMediationWorks()
       howMediationWorksPage.chooseContinue()
