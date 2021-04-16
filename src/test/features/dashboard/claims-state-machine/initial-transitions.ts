@@ -34,15 +34,6 @@ describe('State Machine for the dashboard status before response', () => {
     })
   })
 
-  // describe('given the HWF claim which is under review', () => {
-  //   it('should extract the correct state for the claim issued', () => {
-  //     const claim: Claim = new Claim().deserialize({ ...sampleHwfClaimIssueObj, state: 'AWAITING_RESPONSE_HWF', lastEventTriggeredForHwfCase : 'RecalculateInterest' })
-  //     let claimState = initialTransitions(claim)
-  //     claimState.findState(claimState)
-  //     expect(claimState.state).to.equal('help-with-fess-intrest-recalculated')
-  //   })
-  // })
-
   describe('given the HWF claim which is under review', () => {
     it('should extract the correct state for the claim issued', () => {
       const claim: Claim = new Claim().deserialize({ ...sampleHwfClaimIssueObj, state: 'AWAITING_RESPONSE_HWF', lastEventTriggeredForHwfCase : 'HWFPartRemission' })

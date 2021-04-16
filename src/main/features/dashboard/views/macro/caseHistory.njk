@@ -177,10 +177,6 @@
       {{ paidInFullCCJCancelledClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED %}
       {{ paidInFullCCJSatisfiedClaimantClaimDetails(claim) }}
-    {# {% elif (state.status === ClaimStatus.NO_RESPONSE or state.status === ClaimStatus.ELIGIBLE_FOR_CCJ) and claim.helpWithFeesNumber and claim.state === 'HWF_APPLICATION_PENDING' and claim.lastEventTriggeredForHwfCase === 'RecalculateInterest' %}
-      {{ helpWithFeesIntrestRecalculateStatus(claim) }}
-    {% elif (state.status === ClaimStatus.NO_RESPONSE or state.status === ClaimStatus.ELIGIBLE_FOR_CCJ) and claim.helpWithFeesNumber and claim.state === 'AWAITING_RESPONSE_HWF' and claim.lastEventTriggeredForHwfCase === 'RecalculateInterest' %}
-      {{ helpWithFeesIntrestRecalculateStatus(claim) }} #}
     {% elif (state.status === ClaimStatus.NO_RESPONSE or state.status === ClaimStatus.ELIGIBLE_FOR_CCJ) and claim.helpWithFeesNumber and claim.state === 'AWAITING_RESPONSE_HWF' and claim.claimData.hwfFeeDetailsSummary !== undefined and (claim.lastEventTriggeredForHwfCase === 'FullRemissionHWFRejected' or claim.lastEventTriggeredForHwfCase === 'NoRemissionHWF') %}
       {{ rejectedHelpWithFeesValidationClaimStatus(claim) }}
     {% elif (state.status === ClaimStatus.NO_RESPONSE or state.status === ClaimStatus.ELIGIBLE_FOR_CCJ) and claim.helpWithFeesNumber and claim.state === 'AWAITING_RESPONSE_HWF' and claim.lastEventTriggeredForHwfCase === 'MoreInfoRequiredForHWF' %}

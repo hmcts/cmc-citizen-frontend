@@ -45,11 +45,6 @@ export function initialTransitions (claim: Claim): StateMachine {
         from: [InitialStates.INIT, InitialStates.NO_RESPONSE],
         to: InitialStates.HWF_APPLICATION_PENDING
       },
-      // {
-      //   name: 'checkHwfIntrestReCalculate',
-      //   from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.HWF_AWAITING_RESPONSE_HWF],
-      //   to: InitialStates.HWF_Intrest_Recalculate
-      // },
       {
         name: 'checkHwfFeesReject',
         from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.HWF_AWAITING_RESPONSE_HWF],
