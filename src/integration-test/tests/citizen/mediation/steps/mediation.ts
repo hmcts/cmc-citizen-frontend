@@ -10,9 +10,6 @@ import { FreeTelephoneMediationPage } from 'integration-test/tests/citizen/media
 import { MediationDisagreementPage } from 'integration-test/tests/citizen/mediation/pages/mediation-disagreement'
 import { IDontWantFreeMediationPage } from 'integration-test/tests/citizen/mediation/pages/i-dont-want-free-mediation'
 
-import { FeatureToggles } from 'utils/featureToggles'
-import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
-
 const freeMediationPage: FreeMediationPage = new FreeMediationPage()
 const howMediationWorksPage: HowMediationWorksPage = new HowMediationWorksPage()
 const willYouTryMediationPage: WillYouTryMediationPage = new WillYouTryMediationPage()
@@ -26,13 +23,10 @@ const freeTelephoneMediationPage: FreeTelephoneMediationPage = new FreeTelephone
 const mediationDisagreementPage: MediationDisagreementPage = new MediationDisagreementPage()
 const iDontWantFreeMediationPage: IDontWantFreeMediationPage = new IDontWantFreeMediationPage()
 
-const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
-
 export class MediationSteps {
 
-  async acceptMediationAsIndividualPhoneNumberProvidedIsUsed (): Promise<void> {
-    const enhancedMediationJourney = await featureToggles.isEnhancedMediationJourneyEnabled()
-    if (enhancedMediationJourney) {
+  acceptMediationAsIndividualPhoneNumberProvidedIsUsed (): void {
+    if (process.env.ENHANCED_MEDIATION_JOURNEY === 'true') {
       freeTelephoneMediationPage.chooseContinue()
       canWeUsePage.chooseYes()
     } else if (process.env.FEATURE_MEDIATION === 'true') {
@@ -46,9 +40,8 @@ export class MediationSteps {
     }
   }
 
-  async acceptMediationAsCompanyPhoneNumberProvided (): Promise<void> {
-    const enhancedMediationJourney = await featureToggles.isEnhancedMediationJourneyEnabled()
-    if (enhancedMediationJourney) {
+  acceptMediationAsCompanyPhoneNumberProvided (): void {
+    if (process.env.ENHANCED_MEDIATION_JOURNEY === 'true') {
       freeTelephoneMediationPage.chooseContinue()
       canWeUseCompanyPage.chooseYes()
     } else if (process.env.FEATURE_MEDIATION === 'true') {
@@ -62,9 +55,8 @@ export class MediationSteps {
     }
   }
 
-  async rejectMediation (): Promise<void> {
-    const enhancedMediationJourney = await featureToggles.isEnhancedMediationJourneyEnabled()
-    if (enhancedMediationJourney) {
+  rejectMediation (): void {
+    if (process.env.ENHANCED_MEDIATION_JOURNEY === 'true') {
       freeTelephoneMediationPage.chooseDisagree()
       mediationDisagreementPage.chooseNo()
       iDontWantFreeMediationPage.chooseSkip()
@@ -77,9 +69,8 @@ export class MediationSteps {
     }
   }
 
-  async rejectMediationByDisagreeing (): Promise<void> {
-    const enhancedMediationJourney = await featureToggles.isEnhancedMediationJourneyEnabled()
-    if (enhancedMediationJourney) {
+  rejectMediationByDisagreeing (): void {
+    if (process.env.ENHANCED_MEDIATION_JOURNEY === 'true') {
       freeTelephoneMediationPage.chooseDisagree()
       mediationDisagreementPage.chooseNo()
       iDontWantFreeMediationPage.chooseSkip()
@@ -94,9 +85,8 @@ export class MediationSteps {
     }
   }
 
-  async acceptMediationAfterDisagreeing (): Promise<void> {
-    const enhancedMediationJourney = await featureToggles.isEnhancedMediationJourneyEnabled()
-    if (enhancedMediationJourney) {
+  acceptMediationAfterDisagreeing (): void {
+    if (process.env.ENHANCED_MEDIATION_JOURNEY === 'true') {
       freeTelephoneMediationPage.chooseDisagree()
       mediationDisagreementPage.chooseYes()
       canWeUsePage.chooseYes()
