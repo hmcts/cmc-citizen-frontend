@@ -6,7 +6,6 @@ import { CheckYourAnswersBeforeSubmittingPage } from 'integration-test/tests/cit
 import { DateForLiftingBsPage } from 'integration-test/tests/citizen/breathing-space/pages/date-for-lifting-bs'
 import { LiftBsCheckYourAnswersPage } from 'integration-test/tests/citizen/breathing-space/pages/lift-bs-check-your-answers'
 
-
 const doYouHaveBsReferenceNumberPage: DoYouHaveBsReferenceNumberPage = new DoYouHaveBsReferenceNumberPage()
 const whenDidBsStartPage: WhenDidBsStartPage = new WhenDidBsStartPage()
 const whatTypeBsPage: WhatTypeBsPage = new WhatTypeBsPage()

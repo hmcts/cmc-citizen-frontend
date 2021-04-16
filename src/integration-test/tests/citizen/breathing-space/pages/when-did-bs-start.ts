@@ -13,7 +13,6 @@ const buttons = {
   submit: { css: 'input[type=submit]' }
 }
 
-
 export class WhenDidBsStartPage {
 
   enterBsStartDate (dob: string): void {

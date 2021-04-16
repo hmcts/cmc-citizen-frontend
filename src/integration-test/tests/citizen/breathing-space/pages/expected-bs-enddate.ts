@@ -13,7 +13,6 @@ const buttons = {
   submit: { css: 'input[type=submit]' }
 }
 
-
 export class ExpectedBsEndDatePage {
 
   expectedEndDate (dob: string): void {
