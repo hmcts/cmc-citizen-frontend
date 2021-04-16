@@ -23,11 +23,10 @@ const freeTelephoneMediationPage: FreeTelephoneMediationPage = new FreeTelephone
 const mediationDisagreementPage: MediationDisagreementPage = new MediationDisagreementPage()
 const iDontWantFreeMediationPage: IDontWantFreeMediationPage = new IDontWantFreeMediationPage()
 
-
 export class MediationSteps {
 
   acceptMediationAsIndividualPhoneNumberProvidedIsUsed (): void {
-    if(process.env.ENHANCED_MEDIATION_JOURNEY === 'true') {
+    if (process.env.ENHANCED_MEDIATION_JOURNEY === 'true') {
       freeTelephoneMediationPage.chooseContinue()
       canWeUsePage.chooseYes()
     } else if (process.env.FEATURE_MEDIATION === 'true') {
@@ -42,7 +41,7 @@ export class MediationSteps {
   }
 
   acceptMediationAsCompanyPhoneNumberProvided (): void {
-    if(process.env.ENHANCED_MEDIATION_JOURNEY === 'true') {
+    if (process.env.ENHANCED_MEDIATION_JOURNEY === 'true') {
       freeTelephoneMediationPage.chooseContinue()
       canWeUseCompanyPage.chooseYes()
     } else if (process.env.FEATURE_MEDIATION === 'true') {
@@ -57,7 +56,7 @@ export class MediationSteps {
   }
 
   rejectMediation (): void {
-    if(process.env.ENHANCED_MEDIATION_JOURNEY === 'true') {
+    if (process.env.ENHANCED_MEDIATION_JOURNEY === 'true') {
       freeTelephoneMediationPage.chooseDisagree()
       mediationDisagreementPage.chooseNo()
       iDontWantFreeMediationPage.chooseSkip()
@@ -71,11 +70,11 @@ export class MediationSteps {
   }
 
   rejectMediationByDisagreeing (): void {
-    if(process.env.ENHANCED_MEDIATION_JOURNEY === 'true') {
+    if (process.env.ENHANCED_MEDIATION_JOURNEY === 'true') {
       freeTelephoneMediationPage.chooseDisagree()
       mediationDisagreementPage.chooseNo()
       iDontWantFreeMediationPage.chooseSkip()
-    } else if  (process.env.FEATURE_MEDIATION === 'true') {
+    } else if (process.env.FEATURE_MEDIATION === 'true') {
       freeMediationPage.clickHowFreeMediationWorks()
       howMediationWorksPage.chooseContinue()
       willYouTryMediationPage.chooseYes()
@@ -87,7 +86,7 @@ export class MediationSteps {
   }
 
   acceptMediationAfterDisagreeing (): void {
-    if(process.env.ENHANCED_MEDIATION_JOURNEY === 'true') {
+    if (process.env.ENHANCED_MEDIATION_JOURNEY === 'true') {
       freeTelephoneMediationPage.chooseDisagree()
       mediationDisagreementPage.chooseYes()
       canWeUsePage.chooseYes()
