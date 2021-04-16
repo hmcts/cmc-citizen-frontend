@@ -1,4 +1,5 @@
 import { PartyType } from 'integration-test/data/party-type'
+import { InterestType } from 'integration-test/data/interest-type'
 import { createClaimData } from 'integration-test/data/test-data'
 import { BreathingSpaceSteps } from 'integration-test/tests/citizen/breathing-space/steps/breathingspace'
 import I = CodeceptJS.I
@@ -7,13 +8,24 @@ import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
 
 const userSteps: UserSteps = new UserSteps()
 const breathingSpaceSteps: BreathingSpaceSteps = new BreathingSpaceSteps()
+let email
+let claimantType
+let defendantType
+let claimData
+let claimRef
 
-Feature('Enter and Lift BreathingSpace')
+Feature('citizen frontend claimant journey for Breathing space')
 
-Scenario('I can as a claimant Enter and lift the Breathing Space @smoke', { retries: 3 }, async (I: I) => {
-  const email: string = await I.getClaimantEmail()
-  const claimData: ClaimData = await createClaimData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
-  const claimRef: string = await I.createClaim(claimData, email)
+Before(async (I: I) => {
+  email = await I.getClaimantEmail()
+  claimantType = PartyType.INDIVIDUAL
+  defendantType = PartyType.ORGANISATION
+  claimData = await createClaimData(I, claimantType, defendantType, true, InterestType.NO_INTEREST)
+  claimRef = await I.createClaim(claimData, email)
+
+})
+
+Scenario('Claimant can enter and lift the Breathing space @smoke', { retries: 3 }, async (I: I) => {
   userSteps.login(email)
   I.waitForOpenClaim(claimRef)
   I.click('My account')
@@ -25,5 +37,6 @@ Scenario('I can as a claimant Enter and lift the Breathing Space @smoke', { retr
   breathingSpaceSteps.enterBreathingSpace()
   I.see('Lift the debt respite scheme')
   I.click('Lift the debt respite scheme')
+  breathingSpaceSteps.liftBreathingSpace()
 
 })
