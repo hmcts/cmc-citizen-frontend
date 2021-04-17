@@ -9,6 +9,7 @@ import { ContinueWithoutMediationPage } from 'integration-test/tests/citizen/med
 import { FreeTelephoneMediationPage } from 'integration-test/tests/citizen/mediation/pages/free-telephone-mediation'
 import { MediationDisagreementPage } from 'integration-test/tests/citizen/mediation/pages/mediation-disagreement'
 import { IDontWantFreeMediationPage } from 'integration-test/tests/citizen/mediation/pages/i-dont-want-free-mediation'
+import { MediationHelper } from 'integration-test/helpers/mediationHelper'
 
 const freeMediationPage: FreeMediationPage = new FreeMediationPage()
 const howMediationWorksPage: HowMediationWorksPage = new HowMediationWorksPage()
@@ -26,7 +27,7 @@ const iDontWantFreeMediationPage: IDontWantFreeMediationPage = new IDontWantFree
 export class MediationSteps {
 
   acceptMediationAsIndividualPhoneNumberProvidedIsUsed (): void {
-    if (process.env.ENHANCED_MEDIATION_JOURNEY === 'true') {
+    if (MediationHelper.checkEnhancedMediationJourney()) {
       freeTelephoneMediationPage.chooseContinue()
       canWeUsePage.chooseYes()
     } else if (process.env.FEATURE_MEDIATION === 'true') {
@@ -41,7 +42,7 @@ export class MediationSteps {
   }
 
   acceptMediationAsCompanyPhoneNumberProvided (): void {
-    if (process.env.ENHANCED_MEDIATION_JOURNEY === 'true') {
+    if (MediationHelper.checkEnhancedMediationJourney()) {
       freeTelephoneMediationPage.chooseContinue()
       canWeUseCompanyPage.chooseYes()
     } else if (process.env.FEATURE_MEDIATION === 'true') {
@@ -56,7 +57,7 @@ export class MediationSteps {
   }
 
   rejectMediation (): void {
-    if (process.env.ENHANCED_MEDIATION_JOURNEY === 'true') {
+    if (MediationHelper.checkEnhancedMediationJourney()) {
       freeTelephoneMediationPage.chooseDisagree()
       mediationDisagreementPage.chooseNo()
       iDontWantFreeMediationPage.chooseSkip()
@@ -70,7 +71,7 @@ export class MediationSteps {
   }
 
   rejectMediationByDisagreeing (): void {
-    if (process.env.ENHANCED_MEDIATION_JOURNEY === 'true') {
+    if (MediationHelper.checkEnhancedMediationJourney()) {
       freeTelephoneMediationPage.chooseDisagree()
       mediationDisagreementPage.chooseNo()
       iDontWantFreeMediationPage.chooseSkip()
@@ -86,7 +87,7 @@ export class MediationSteps {
   }
 
   acceptMediationAfterDisagreeing (): void {
-    if (process.env.ENHANCED_MEDIATION_JOURNEY === 'true') {
+    if (MediationHelper.checkEnhancedMediationJourney()) {
       freeTelephoneMediationPage.chooseDisagree()
       mediationDisagreementPage.chooseYes()
       canWeUsePage.chooseYes()
