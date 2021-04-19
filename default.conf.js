@@ -59,9 +59,6 @@ exports.config = {
     hwfHelper: {
       require: './src/integration-test/helpers/hwfHelper'
     },
-    MediationHelper: {
-      require: './src/integration-test/helpers/mediationHelper'
-    },
     Mochawesome: {
       uniqueScreenshotNames: 'true'
     }

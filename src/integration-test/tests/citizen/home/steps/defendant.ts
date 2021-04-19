@@ -1,14 +1,10 @@
 import { DefendantTaskListPage } from 'integration-test/tests/citizen/defence/pages/defendant-task-list'
 import { MediationSteps } from 'integration-test/tests/citizen/mediation/steps/mediation'
-import { EnhancedMediationSteps } from 'integration-test/tests/citizen/mediation/steps/enhancedMediation'
 import { PartyType } from 'integration-test/data/party-type'
 import { DirectionsQuestionnaireSteps } from 'integration-test/tests/citizen/directionsQuestionnaire/steps/directionsQuestionnaireSteps'
-import I = CodeceptJS.I
 
-const I: I = actor()
 const defendantTaskListPage: DefendantTaskListPage = new DefendantTaskListPage()
 const mediationSteps: MediationSteps = new MediationSteps()
-const enhancedMediationSteps: EnhancedMediationSteps = new EnhancedMediationSteps()
 const directionsQuestionnaireSteps: DirectionsQuestionnaireSteps = new DirectionsQuestionnaireSteps()
 
 export class DefendantSteps {
@@ -61,21 +57,12 @@ export class DefendantSteps {
     defendantTaskListPage.selectTaskCheckAndSendYourResponse()
   }
 
-  async selectTaskFreeMediation (I: I, defendantType: PartyType): Promise<void> {
+  selectTaskFreeMediation (defendantType: PartyType): void {
     defendantTaskListPage.selectTaskFreeMediation()
-    const isEnhacedMediationJourneyEnabled = await I.checkEnhancedMediationJourney()
-    if (isEnhacedMediationJourneyEnabled) {
-      if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
-        enhancedMediationSteps.acceptEnhancedMediationAsCompanyPhoneNumberProvided()
-      } else {
-        enhancedMediationSteps.acceptEnhancedMediationAsIndividualPhoneNumberProvidedIsUsed()
-      }
+    if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
+      mediationSteps.acceptMediationAsCompanyPhoneNumberProvided()
     } else {
-      if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
-        mediationSteps.acceptMediationAsCompanyPhoneNumberProvided()
-      } else {
-        mediationSteps.acceptMediationAsIndividualPhoneNumberProvidedIsUsed()
-      }
+      mediationSteps.acceptMediationAsIndividualPhoneNumberProvidedIsUsed()
     }
   }
 

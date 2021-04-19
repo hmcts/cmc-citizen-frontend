@@ -6,6 +6,9 @@ import { CanWeUsePage } from 'integration-test/tests/citizen/mediation/pages/can
 import { CanWeUseCompanyPage } from 'integration-test/tests/citizen/mediation/pages/can-we-use-company'
 import { TryFreeMediationPage } from 'integration-test/tests/citizen/mediation/pages/try-free-mediation'
 import { ContinueWithoutMediationPage } from 'integration-test/tests/citizen/mediation/pages/continue-without-mediation'
+import { FreeTelephoneMediationPage } from 'integration-test/tests/citizen/mediation/pages/free-telephone-mediation'
+import { MediationDisagreementPage } from 'integration-test/tests/citizen/mediation/pages/mediation-disagreement'
+import { IDontWantFreeMediationPage } from 'integration-test/tests/citizen/mediation/pages/i-dont-want-free-mediation'
 
 const freeMediationPage: FreeMediationPage = new FreeMediationPage()
 const howMediationWorksPage: HowMediationWorksPage = new HowMediationWorksPage()
@@ -16,10 +19,17 @@ const canWeUseCompanyPage: CanWeUseCompanyPage = new CanWeUseCompanyPage()
 const tryFreeMediationPage: TryFreeMediationPage = new TryFreeMediationPage()
 const continueWithoutMediationPage: ContinueWithoutMediationPage = new ContinueWithoutMediationPage()
 
+const freeTelephoneMediationPage: FreeTelephoneMediationPage = new FreeTelephoneMediationPage()
+const mediationDisagreementPage: MediationDisagreementPage = new MediationDisagreementPage()
+const iDontWantFreeMediationPage: IDontWantFreeMediationPage = new IDontWantFreeMediationPage()
+
 export class MediationSteps {
 
   acceptMediationAsIndividualPhoneNumberProvidedIsUsed (): void {
-    if (process.env.FEATURE_MEDIATION === 'true') {
+    if (process.env.ENHANCED_MEDIATION_JOURNEY === 'true') {
+      freeTelephoneMediationPage.chooseContinue()
+      canWeUsePage.chooseYes()
+    } else if (process.env.FEATURE_MEDIATION === 'true') {
       freeMediationPage.clickHowFreeMediationWorks()
       howMediationWorksPage.chooseContinue()
       willYouTryMediationPage.chooseYes()
@@ -31,7 +41,10 @@ export class MediationSteps {
   }
 
   acceptMediationAsCompanyPhoneNumberProvided (): void {
-    if (process.env.FEATURE_MEDIATION === 'true') {
+    if (process.env.ENHANCED_MEDIATION_JOURNEY === 'true') {
+      freeTelephoneMediationPage.chooseContinue()
+      canWeUseCompanyPage.chooseYes()
+    } else if (process.env.FEATURE_MEDIATION === 'true') {
       freeMediationPage.clickHowFreeMediationWorks()
       howMediationWorksPage.chooseContinue()
       willYouTryMediationPage.chooseYes()
@@ -43,7 +56,11 @@ export class MediationSteps {
   }
 
   rejectMediation (): void {
-    if (process.env.FEATURE_MEDIATION === 'true') {
+    if (process.env.ENHANCED_MEDIATION_JOURNEY === 'true') {
+      freeTelephoneMediationPage.chooseDisagree()
+      mediationDisagreementPage.chooseNo()
+      iDontWantFreeMediationPage.chooseSkip()
+    } else if (process.env.FEATURE_MEDIATION === 'true') {
       freeMediationPage.clickHowFreeMediationWorks()
       howMediationWorksPage.chooseContinue()
       willYouTryMediationPage.chooseNo()
@@ -53,7 +70,11 @@ export class MediationSteps {
   }
 
   rejectMediationByDisagreeing (): void {
-    if (process.env.FEATURE_MEDIATION === 'true') {
+    if (process.env.ENHANCED_MEDIATION_JOURNEY === 'true') {
+      freeTelephoneMediationPage.chooseDisagree()
+      mediationDisagreementPage.chooseNo()
+      iDontWantFreeMediationPage.chooseSkip()
+    } else if (process.env.FEATURE_MEDIATION === 'true') {
       freeMediationPage.clickHowFreeMediationWorks()
       howMediationWorksPage.chooseContinue()
       willYouTryMediationPage.chooseYes()
@@ -65,7 +86,11 @@ export class MediationSteps {
   }
 
   acceptMediationAfterDisagreeing (): void {
-    if (process.env.FEATURE_MEDIATION === 'true') {
+    if (process.env.ENHANCED_MEDIATION_JOURNEY === 'true') {
+      freeTelephoneMediationPage.chooseDisagree()
+      mediationDisagreementPage.chooseYes()
+      canWeUsePage.chooseYes()
+    } else if (process.env.FEATURE_MEDIATION === 'true') {
       freeMediationPage.clickHowFreeMediationWorks()
       howMediationWorksPage.chooseContinue()
       willYouTryMediationPage.chooseYes()
