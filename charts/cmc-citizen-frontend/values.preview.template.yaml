@@ -65,7 +65,8 @@ idam-pr:
 cmc-claim-store:
   enabled: true
   java:
-    image: hmctspublic.azurecr.io/cmc/claim-store:latest
+    imagePullPolicy: Always
+    image: hmctspublic.azurecr.io/cmc/claim-store:pr-2275
     releaseNameOverride: ${SERVICE_NAME}-claim-store
     ingressHost: claim-store-${SERVICE_FQDN}
     imagePullPolicy: Always
