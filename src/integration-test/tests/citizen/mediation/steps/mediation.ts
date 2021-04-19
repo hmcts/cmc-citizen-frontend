@@ -18,8 +18,7 @@ const continueWithoutMediationPage: ContinueWithoutMediationPage = new ContinueW
 
 export class MediationSteps {
 
-  acceptMediationAsIndividualPhoneNumberProvidedIsUsed (): void {
-    if (process.env.FEATURE_MEDIATION === 'true') {
+  acceptMediationAsIndividualPhoneNumberProvidedIsUsed (): void { if (process.env.FEATURE_MEDIATION === 'true') {
       freeMediationPage.clickHowFreeMediationWorks()
       howMediationWorksPage.chooseContinue()
       willYouTryMediationPage.chooseYes()

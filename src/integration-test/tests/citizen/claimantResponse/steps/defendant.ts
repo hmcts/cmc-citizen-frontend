@@ -57,7 +57,7 @@ export class DefendantResponseSteps {
     } else {
       mediationSteps.rejectMediation()
     }
-
+    
     defendantTaskListPage.selectTaskHearingRequirements()
     await directionsQuestionnaireSteps.acceptDirectionsQuestionnaireYesJourney()
     defendantSteps.selectCheckAndSubmitYourDefence()
