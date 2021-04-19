@@ -13,8 +13,7 @@ export class FreeMediationTask {
   }
 
   static isEnhancedWillYouTryMediationCompleted (mediationDraft: MediationDraft): boolean {
-    return (mediationDraft.willYouTryMediation && (mediationDraft.willYouTryMediation.option === FreeMediationOption.NO
-      || mediationDraft.willYouTryMediation.option === FreeMediationOption.YES))
+    return !!mediationDraft.willYouTryMediation
   }
 
   static isYouCanOnlyUseMediationCompleted (mediationDraft: MediationDraft): boolean {
