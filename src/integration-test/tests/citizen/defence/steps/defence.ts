@@ -33,6 +33,7 @@ import { AlreadyPaidPage } from 'integration-test/tests/citizen/defence/pages/st
 import { DefendantHaveYouPaidTheClaimantTheAmountYouAdmitYouOwePage } from 'integration-test/tests/citizen/defence/pages/defendant-have-you-paid-the-claimant-the-amount-you-admit-you-owe'
 import { DefendantHowMuchYouOwePage } from 'integration-test/tests/citizen/defence/pages/defendant-how-much-you-owe'
 import { MediationSteps } from 'integration-test/tests/citizen/mediation/steps/mediation'
+import { EnhancedMediationSteps } from 'integration-test/tests/citizen/mediation/steps/enhancedMediation'
 import { DefendantPhonePage } from 'integration-test/tests/citizen/defence/pages/defendant-phone'
 import I = CodeceptJS.I
 
@@ -69,6 +70,7 @@ const haveYouPaidTheClaimantPage: DefendantHaveYouPaidTheClaimantTheAmountYouAdm
 const defendantHowMuchYouOwePage: DefendantHowMuchYouOwePage = new DefendantHowMuchYouOwePage()
 const updatedAddress = { line1: 'ABC Street', line2: 'A cool place', city: 'Bristol', postcode: 'BS1 5TL' }
 const mediationSteps: MediationSteps = new MediationSteps()
+const enhancedMediationSteps: EnhancedMediationSteps = new EnhancedMediationSteps()
 
 const defendantRepaymentPlan: PaymentPlan = {
   equalInstalment: 20.00,
@@ -260,7 +262,7 @@ export class DefenceSteps {
   }
 
   askForMediation (defendantType: PartyType = PartyType.INDIVIDUAL): void {
-    defendantSteps.selectTaskFreeMediation(defendantType)
+    defendantSteps.selectTaskFreeMediation(I, defendantType)
   }
 
   async askForHearingRequirements (defendantType: PartyType = PartyType.INDIVIDUAL): Promise<void> {
@@ -490,7 +492,12 @@ export class DefenceSteps {
         throw new Error(`Unknown payment option: ${paymentOption}`)
     }
     defendantTaskListPage.selectTaskFreeMediation()
-    mediationSteps.rejectMediation()
+    const isEnhacedMediationJourneyEnabled = await I.checkEnhancedMediationJourney()
+    if (isEnhacedMediationJourneyEnabled) {
+      enhancedMediationSteps.rejectEnhancedMediation()
+    } else {
+      mediationSteps.rejectMediation()
+    }
     await this.askForHearingRequirements(defendantType)
     defendantTaskListPage.selectTaskCheckAndSendYourResponse()
     await I.bypassPCQ()

@@ -19,6 +19,7 @@ declare namespace CodeceptJS {
     handelHelpWithFees: () => Promise<any>
     rejectHWF: () => any
     checkHWF: () => Promise<boolean>
+    checkEnhancedMediationJourney: () => Promise<boolean>
   }
 }
 

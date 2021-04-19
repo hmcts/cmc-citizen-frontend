@@ -11,6 +11,7 @@ import { DefendantWhyDoYouDisagreePage } from 'integration-test/tests/citizen/de
 import { ClaimantResponseTestData } from 'integration-test/tests/citizen/claimantResponse/data/ClaimantResponseTestData'
 import { EndToEndTestData } from 'integration-test/tests/citizen/endToEnd/data/EndToEndTestData'
 import { MediationSteps } from 'integration-test/tests/citizen/mediation/steps/mediation'
+import { EnhancedMediationSteps } from 'integration-test/tests/citizen/mediation/steps/enhancedMediation'
 import { DefendantTaskListPage } from 'integration-test/tests/citizen/defence/pages/defendant-task-list'
 import { DirectionsQuestionnaireSteps } from 'integration-test/tests/citizen/directionsQuestionnaire/steps/directionsQuestionnaireSteps'
 
@@ -23,6 +24,7 @@ const howMuchHaveYouPaidPage: DefendantHowMuchHaveYouPaidPage = new DefendantHow
 const youHavePaidLessPage: DefendantYouHavePaidLessPage = new DefendantYouHavePaidLessPage()
 const whyYouDisagreePage: DefendantWhyDoYouDisagreePage = new DefendantWhyDoYouDisagreePage()
 const mediationSteps: MediationSteps = new MediationSteps()
+const enhancedMediationSteps: EnhancedMediationSteps = new EnhancedMediationSteps()
 const directionsQuestionnaireSteps: DirectionsQuestionnaireSteps = new DirectionsQuestionnaireSteps()
 const defendantTaskListPage: DefendantTaskListPage = new DefendantTaskListPage()
 
@@ -49,7 +51,13 @@ export class DefendantResponseSteps {
       claimantResponseTestData.pageSpecificValues.evidencePageEnterEvidenceRow.comment
     )
     defendantTaskListPage.selectTaskFreeMediation()
-    mediationSteps.rejectMediation()
+    const isEnhacedMediationJourneyEnabled = await I.checkEnhancedMediationJourney()
+    if (isEnhacedMediationJourneyEnabled) {
+      enhancedMediationSteps.rejectEnhancedMediation()
+    } else {
+      mediationSteps.rejectMediation()
+    }
+    
     defendantTaskListPage.selectTaskHearingRequirements()
     await directionsQuestionnaireSteps.acceptDirectionsQuestionnaireYesJourney()
     defendantSteps.selectCheckAndSubmitYourDefence()
@@ -89,7 +97,12 @@ export class DefendantResponseSteps {
       )
     }
     defendantTaskListPage.selectTaskFreeMediation()
-    mediationSteps.rejectMediationByDisagreeing()
+    const isEnhacedMediationJourneyEnabled = await I.checkEnhancedMediationJourney()
+    if (isEnhacedMediationJourneyEnabled) {
+      enhancedMediationSteps.rejectEnhancedMediation()
+    } else {
+      mediationSteps.rejectMediation()
+    }
     defendantTaskListPage.selectTaskHearingRequirements()
     await directionsQuestionnaireSteps.acceptDirectionsQuestionnaireYesJourney()
     defendantSteps.selectCheckAndSubmitYourDefence()
