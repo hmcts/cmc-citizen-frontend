@@ -20,5 +20,3 @@ class MediationHelper extends codecept_helper {
     }
   }
 }
-
-module.exports = MediationHelper
