@@ -3,7 +3,7 @@
 
 // eslint-disable-next-line no-unused-vars
 class MediationHelper extends codecept_helper {
-  static checkEnhancedMediationJourney () {
+  async checkEnhancedMediationJourney () {
     const helper = this.helpers['WebDriver'];
     const heading = await helper.grabTextFrom('h1');
     console.log(heading);
