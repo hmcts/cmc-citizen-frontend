@@ -9,6 +9,8 @@ import { ContinueWithoutMediationPage } from 'integration-test/tests/citizen/med
 import { FreeTelephoneMediationPage } from 'integration-test/tests/citizen/mediation/pages/free-telephone-mediation'
 import { MediationDisagreementPage } from 'integration-test/tests/citizen/mediation/pages/mediation-disagreement'
 import { IDontWantFreeMediationPage } from 'integration-test/tests/citizen/mediation/pages/i-dont-want-free-mediation'
+import { FeatureToggles } from 'integration-test/utils/featureToggles'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
 const freeMediationPage: FreeMediationPage = new FreeMediationPage()
 const howMediationWorksPage: HowMediationWorksPage = new HowMediationWorksPage()
@@ -24,9 +26,9 @@ const mediationDisagreementPage: MediationDisagreementPage = new MediationDisagr
 const iDontWantFreeMediationPage: IDontWantFreeMediationPage = new IDontWantFreeMediationPage()
 
 export class MediationSteps {
-
-  acceptMediationAsIndividualPhoneNumberProvidedIsUsed (): void {
-    if (process.env.ENHANCED_MEDIATION_JOURNEY === 'true') {
+  async acceptMediationAsIndividualPhoneNumberProvidedIsUsed (): Promise<void> {
+    let featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
+    if (await featureToggles.isEnhancedMediationJourneyEnabled()) {
       freeTelephoneMediationPage.chooseContinue()
       canWeUsePage.chooseYes()
     } else if (process.env.FEATURE_MEDIATION === 'true') {
@@ -40,8 +42,9 @@ export class MediationSteps {
     }
   }
 
-  acceptMediationAsCompanyPhoneNumberProvided (): void {
-    if (process.env.ENHANCED_MEDIATION_JOURNEY === 'true') {
+  async acceptMediationAsCompanyPhoneNumberProvided (): Promise<void> {
+    let featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
+    if (await featureToggles.isEnhancedMediationJourneyEnabled()) {
       freeTelephoneMediationPage.chooseContinue()
       canWeUseCompanyPage.chooseYes()
     } else if (process.env.FEATURE_MEDIATION === 'true') {
@@ -55,8 +58,9 @@ export class MediationSteps {
     }
   }
 
-  rejectMediation (): void {
-    if (process.env.ENHANCED_MEDIATION_JOURNEY === 'true') {
+  async rejectMediation (): Promise<void> {
+    let featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
+    if (await featureToggles.isEnhancedMediationJourneyEnabled()) {
       freeTelephoneMediationPage.chooseDisagree()
       mediationDisagreementPage.chooseNo()
       iDontWantFreeMediationPage.chooseSkip()
@@ -69,8 +73,9 @@ export class MediationSteps {
     }
   }
 
-  rejectMediationByDisagreeing (): void {
-    if (process.env.ENHANCED_MEDIATION_JOURNEY === 'true') {
+  async rejectMediationByDisagreeing (): Promise<void> {
+    let featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
+    if (await featureToggles.isEnhancedMediationJourneyEnabled()) {
       freeTelephoneMediationPage.chooseDisagree()
       mediationDisagreementPage.chooseNo()
       iDontWantFreeMediationPage.chooseSkip()
@@ -85,8 +90,9 @@ export class MediationSteps {
     }
   }
 
-  acceptMediationAfterDisagreeing (): void {
-    if (process.env.ENHANCED_MEDIATION_JOURNEY === 'true') {
+  async acceptMediationAfterDisagreeing (): Promise<void> {
+    let featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
+    if (await featureToggles.isEnhancedMediationJourneyEnabled()) {
       freeTelephoneMediationPage.chooseDisagree()
       mediationDisagreementPage.chooseYes()
       canWeUsePage.chooseYes()
