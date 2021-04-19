@@ -49,7 +49,7 @@ export class DefendantResponseSteps {
       claimantResponseTestData.pageSpecificValues.evidencePageEnterEvidenceRow.comment
     )
     defendantTaskListPage.selectTaskFreeMediation()
-    await mediationSteps.rejectMediation()
+    mediationSteps.rejectMediation()
     defendantTaskListPage.selectTaskHearingRequirements()
     await directionsQuestionnaireSteps.acceptDirectionsQuestionnaireYesJourney()
     defendantSteps.selectCheckAndSubmitYourDefence()
@@ -89,7 +89,7 @@ export class DefendantResponseSteps {
       )
     }
     defendantTaskListPage.selectTaskFreeMediation()
-    await mediationSteps.rejectMediationByDisagreeing()
+    mediationSteps.rejectMediationByDisagreeing()
     defendantTaskListPage.selectTaskHearingRequirements()
     await directionsQuestionnaireSteps.acceptDirectionsQuestionnaireYesJourney()
     defendantSteps.selectCheckAndSubmitYourDefence()

@@ -57,12 +57,12 @@ export class DefendantSteps {
     defendantTaskListPage.selectTaskCheckAndSendYourResponse()
   }
 
-  async selectTaskFreeMediation (defendantType: PartyType): Promise<void> {
+  selectTaskFreeMediation (defendantType: PartyType): void {
     defendantTaskListPage.selectTaskFreeMediation()
     if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
-      await mediationSteps.acceptMediationAsCompanyPhoneNumberProvided()
+      mediationSteps.acceptMediationAsCompanyPhoneNumberProvided()
     } else {
-      await mediationSteps.acceptMediationAsIndividualPhoneNumberProvidedIsUsed()
+      mediationSteps.acceptMediationAsIndividualPhoneNumberProvidedIsUsed()
     }
   }
 

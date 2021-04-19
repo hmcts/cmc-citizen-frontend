@@ -123,10 +123,10 @@ export class ClaimantResponseSteps {
     I.click(buttonText)
   }
 
-  async reject (
+  reject (
     testData: EndToEndTestData,
     claimantResponseTestData: ClaimantResponseTestData
-  ): Promise<void> {
+  ): void {
     taskListPage.selectTaskViewDefendantResponse()
     viewDefendantsResponsePage.submit()
     if (claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage) {
@@ -138,7 +138,7 @@ export class ClaimantResponseSteps {
       settleAdmittedPage.selectAdmittedNo()
     }
     taskListPage.selectTaskFreeMediation()
-    await mediationSteps.acceptMediationAfterDisagreeing()
+    mediationSteps.acceptMediationAfterDisagreeing()
     taskListPage.selectTaskHearingRequirements()
     directionsQuestionnaireSteps.acceptDirectionsQuestionnaireNoJourneyAsClaimant()
     taskListPage.selectTaskCheckandSubmitYourResponse()
@@ -169,9 +169,9 @@ export class ClaimantResponseSteps {
     I.see('You didn’t proceed with the claim')
   }
 
-  async finishClaimantResponse (): Promise<void> {
+  finishClaimantResponse (): void {
     taskListPage.selectTaskFreeMediation()
-    await mediationSteps.acceptMediationAfterDisagreeing()
+    mediationSteps.acceptMediationAfterDisagreeing()
     taskListPage.selectTaskHearingRequirements()
     directionsQuestionnaireSteps.acceptDirectionsQuestionnaireNoJourneyAsClaimant()
     taskListPage.selectTaskCheckandSubmitYourResponse()
