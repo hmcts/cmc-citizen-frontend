@@ -72,8 +72,11 @@ export class FreeMediationUtil {
     return undefined
   }
 
-  static getNoMediationReason (mediationDraft: MediationDraft): string {
-    if (mediationDraft.willYouTryMediation && mediationDraft.willYouTryMediation.option === FreeMediationOption.NO) {
+  static async getNoMediationReason (mediationDraft: MediationDraft): Promise<string> {
+    const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
+    if (await featureToggles.isEnhancedMediationJourneyEnabled()
+      && mediationDraft.willYouTryMediation
+      && mediationDraft.willYouTryMediation.option === FreeMediationOption.NO) {
       if (mediationDraft.noMediationReason && mediationDraft.noMediationReason.otherReason) {
         return 'Another reason - ' + mediationDraft.noMediationReason.otherReason
       } else if (mediationDraft.noMediationReason && mediationDraft.noMediationReason.iDoNotWantMediationReason) {

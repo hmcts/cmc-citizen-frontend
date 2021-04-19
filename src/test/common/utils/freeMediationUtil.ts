@@ -158,7 +158,16 @@ describe('FreeMediationUtil', () => {
 
   context('getNoMediationReason should return expected value when', () => {
 
-    it('User selects a valid no mediation reason', () => {
+    beforeEach(() => {
+      isEnhancedMediationJourneyEnabledStub = sinon.stub(FeatureToggles.prototype, 'isEnhancedMediationJourneyEnabled')
+    })
+
+    afterEach(() => {
+      isEnhancedMediationJourneyEnabledStub.restore()
+    })
+
+    it('User selects a valid no mediation reason', async () => {
+      isEnhancedMediationJourneyEnabledStub.returns(true)
       const myExternalId: String = 'b17af4d2-273f-4999-9895-bce382fa24c8'
       const draft: MediationDraft = new MediationDraft().deserialize({
         externalId: myExternalId,
@@ -179,10 +188,11 @@ describe('FreeMediationUtil', () => {
         }
       })
       const expectedValue: string = 'ALREADY_TRIED'
-      expect(FreeMediationUtil.getNoMediationReason(draft)).to.deep.equal(expectedValue)
+      expect(await FreeMediationUtil.getNoMediationReason(draft)).to.deep.equal(expectedValue)
     })
 
-    it('User selects other as no mediation reason', () => {
+    it('User selects other as no mediation reason', async () => {
+      isEnhancedMediationJourneyEnabledStub.returns(true)
       const myExternalId: String = 'b17af4d2-273f-4999-9895-bce382fa24c8'
       const draft: MediationDraft = new MediationDraft().deserialize({
         externalId: myExternalId,
@@ -203,7 +213,23 @@ describe('FreeMediationUtil', () => {
         }
       })
       const expectedValue: string = 'Another reason - Not interested'
-      expect(FreeMediationUtil.getNoMediationReason(draft)).to.deep.equal(expectedValue)
+      expect(await FreeMediationUtil.getNoMediationReason(draft)).to.deep.equal(expectedValue)
+    })
+
+    it('no mediation reason should be returned when the toggle is off', async () => {
+      isEnhancedMediationJourneyEnabledStub.returns(false)
+      const myExternalId: String = 'b17af4d2-273f-4999-9895-bce382fa24c8'
+      const draft: MediationDraft = new MediationDraft().deserialize({
+        externalId: myExternalId,
+        willYouTryMediation: {
+          option: FreeMediationOption.NO
+        },
+        noMediationReason: {
+          iDoNotWantMediationReason: 'OTHER',
+          otherReason: 'Not interested'
+        }
+      })
+      expect(await FreeMediationUtil.getNoMediationReason(draft)).to.be.undefined
     })
   })
 })

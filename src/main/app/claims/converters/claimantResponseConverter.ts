@@ -36,7 +36,7 @@ export class ClaimantResponseConverter {
       reject.freeMediation = await FreeMediationUtil.getFreeMediation(mediationDraft)
       reject.mediationPhoneNumber = FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft)
       reject.mediationContactPerson = FreeMediationUtil.getMediationContactPerson(claim, mediationDraft)
-      reject.noMediationReason = FreeMediationUtil.getNoMediationReason(mediationDraft)
+      reject.noMediationReason = await FreeMediationUtil.getNoMediationReason(mediationDraft)
 
       if (draftClaimantResponse.courtDetermination && draftClaimantResponse.courtDetermination.rejectionReason) {
         reject.reason = draftClaimantResponse.courtDetermination.rejectionReason.text
