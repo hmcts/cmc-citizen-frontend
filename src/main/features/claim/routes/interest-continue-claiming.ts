@@ -12,6 +12,10 @@ import { User } from 'idam/user'
 import { Draft } from '@hmcts/draft-store-client'
 import { InterestContinueClaiming } from 'claim/form/models/interestContinueClaiming'
 import { YesNoOption } from 'models/yesNoOption'
+import { FeatureToggles } from 'utils/featureToggles'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
+
+const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
 
 function renderView (form: Form<InterestContinueClaiming>, res: express.Response): void {
   res.render(Paths.interestContinueClaimingPage.associatedView, { form: form })
@@ -45,7 +49,11 @@ export default express.Router()
         await new DraftService().save(draft, user.bearerToken)
 
         if (form.model.option === YesNoOption.NO) {
-          res.redirect(Paths.totalPage.uri)
+          if (await featureToggles.isHelpWithFeesEnabled()) {
+            res.redirect(Paths.helpWithFeesPage.uri)
+          } else {
+            res.redirect(Paths.totalPage.uri)
+          }
         } else {
           res.redirect(Paths.interestHowMuchPage.uri)
         }

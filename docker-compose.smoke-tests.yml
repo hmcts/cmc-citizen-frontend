@@ -20,6 +20,8 @@ services:
         - FEATURE_TESTING_SUPPORT
         - FEATURE_INVERSION_OF_CONTROL
         - FEATURE_PCQ
+        - FEATURE_HELP_WITH_FEES
+        - FEATURE_BREATHING_SPACE
       volumes:
         - ./smoke-output:/usr/src/app/output
     remote-webdriver:

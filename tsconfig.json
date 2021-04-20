@@ -133,6 +133,9 @@
       ],
       "orders/*": [
         "main/features/orders/*"
+      ],
+      "breathing-space/*": [
+        "main/features/breathing-space/*"
       ]
     },
     "typeRoots": [

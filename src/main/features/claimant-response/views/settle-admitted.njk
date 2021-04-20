@@ -20,6 +20,7 @@
           <fieldset id="admitted[label]">
             <legend
               class="visually-hidden">{{ t('Do you want to settle the claim for the {{ settleAmount }} the defendant admitted?', { settleAmount: claim.response.amount | numeral }) }}</legend>
+            <p> {{ t('This is the total amount you’ll be paid, including the claim fee and interest if applicable.') }} </p>
             {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
             {% if hasPaymentIntention %}
               {% set hintText = 'You can agree to their repayment plan or suggest your own.' %}

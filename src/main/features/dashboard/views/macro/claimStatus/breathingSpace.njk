@@ -1,0 +1,29 @@
+{% from "form.njk" import csrfProtection, submitButton %}
+{% from "internalLink.njk" import internalLink %}
+{% from "externalLink.njk" import externalLink %}
+
+{% macro enterBreathingSpaceForClaimantClaimDetails(externalId) %}
+  <div class="status-block">
+    {% set defendantName = claim.claimData.defendant.name %}
+    <h2 class="heading-medium">{{ t('Notify us about the debt respite scheme (breathing space)') }}</h2>
+    <p>{{ t('Do you need to notify us that the defendant has entered the debt respite scheme (breathing space)?') }}</p>
+    <p>{{ t('More information about the {{ bs }}',
+    { bs: externalLink('debt respite scheme', 'https://www.gov.uk/government/publications/debt-respite-scheme-breathing-space-guidance/debt-respite-scheme-breathing-space-guidance-for-creditors') }) | safe }}</p>
+    <p>{{ internalLink(t('Notify us about the debt respite scheme'),
+        '/breathing-space/' + externalId + '/reference-number',
+        'button button-secondary') | safe }}</p>
+  </div>
+{% endmacro %}
+
+{% macro liftingBreathingSpaceForClaimantClaimDetails(externalId) %}
+  <div class="status-block">
+    {% set defendantName = claim.claimData.defendant.name %}
+    <h2 class="heading-medium">{{ t('Lift the debt respite scheme (Breathing Space)') }}</h2>
+    <p>{{ t('Do you want to lift the debt respite scheme (breathing space)?') }}</p>
+    <p>{{ t('More information about the {{ bs }}',
+    { bs: externalLink('debt respite scheme', 'https://www.gov.uk/government/publications/debt-respite-scheme-breathing-space-guidance/debt-respite-scheme-breathing-space-guidance-for-creditors') }) | safe }}</p>
+    <p>{{ internalLink(t('Lift the debt respite scheme'),
+        '/breathing-space/' + externalId + '/respite-lifted',
+        'button button-secondary') | safe }}</p>
+  </div>
+{% endmacro %}

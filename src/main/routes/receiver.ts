@@ -92,34 +92,20 @@ async function retrieveRedirectForLandingPage (req: express.Request, res: expres
   if (eligibility.eligible) {
     return ClaimPaths.taskListPage.uri
   }
-
   const user: User = res.locals.user
   let noClaimIssued: boolean = true
-  let noDraftClaims: boolean = true
-  let noDraftResponses: boolean = true
   let noClaimReceived: boolean = true
-  const dashboardPaginationEnabled: boolean = await featureToggles.isDashboardPaginationEnabled()
-
-  if (dashboardPaginationEnabled) {
-    user.roles.some(role => {
-      if (role.startsWith('letter-') && role !== 'letter-holder' && !role.endsWith('loa1')) {
-        return noClaimReceived = false
-      }
-    })
-    if (noClaimReceived) {
-      noClaimIssued = (await claimStoreClient.retrieveByClaimantId(user)).length === 0
-      if (noClaimIssued) {
-        noClaimReceived = (await claimStoreClient.retrieveByDefendantId(user)).length === 0
-        noDraftClaims = (await draftService.find('claim', '100', user.bearerToken, value => value)).length === 0
-        noDraftResponses = (await draftService.find('response', '100', user.bearerToken, value => value)).length === 0
-      }
-    }
+  if (await featureToggles.isDashboardPaginationEnabled()) {
+    logger.info('Receiver: Dashboard feature is enabled')
+    noClaimIssued = (await claimStoreClient.retrieveByClaimantId(user, 1)).length === 0
+    noClaimReceived = (await claimStoreClient.retrieveByDefendantId(user, 1)).length === 0
   } else {
-    noClaimIssued = (await claimStoreClient.retrieveByClaimantId(user)).length === 0
-    noClaimReceived = (await claimStoreClient.retrieveByDefendantId(user)).length === 0
-    noDraftClaims = (await draftService.find('claim', '100', user.bearerToken, value => value)).length === 0
-    noDraftResponses = (await draftService.find('response', '100', user.bearerToken, value => value)).length === 0
+    logger.info('Receiver: Dashboard feature is not enabled')
+    noClaimIssued = (await claimStoreClient.retrieveByClaimantId(user, undefined)).length === 0
+    noClaimReceived = (await claimStoreClient.retrieveByDefendantId(user, undefined)).length === 0
   }
+  const noDraftClaims: boolean = (await draftService.find('claim', '100', user.bearerToken, value => value)).length === 0
+  const noDraftResponses: boolean = (await draftService.find('response', '100', user.bearerToken, value => value)).length === 0
 
   if (noClaimReceived && noClaimIssued && noDraftClaims && noDraftResponses) {
     return EligibilityPaths.startPage.uri
@@ -160,7 +146,7 @@ export default express.Router()
           cookies.set(stateCookieName, req.query.state)
           return res.redirect(FirstContactPaths.claimSummaryPage.uri)
         } else {
-          if (featureToggles.isDashboardPaginationEnabled) {
+          if (await featureToggles.isDashboardPaginationEnabled()) {
             if (cookies.get('lid') && cookies.get('lid') !== undefined && cookies.get('lid') !== '') {
               await claimStoreClient.linkDefendant(user, cookies.get('lid'))
             }

@@ -77,7 +77,7 @@ describe('Claim issue: interest page', () => {
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.interestTypePage.uri))
       })
 
-      it('should redirect to total page when form is valid, no is selected and everything is fine', async () => {
+      it('should redirect to help with fees page when form is valid, no is selected and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveUpdate()
 
@@ -85,7 +85,7 @@ describe('Claim issue: interest page', () => {
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ option: YesNoOption.NO.option })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.totalPage.uri))
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.helpWithFeesPage.uri))
       })
     })
   })

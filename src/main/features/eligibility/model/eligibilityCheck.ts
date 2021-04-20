@@ -20,3 +20,11 @@ export function notEligible (reason: string, notEligiblePage: RoutablePath = Pat
     notEligiblePage: notEligiblePage
   }
 }
+
+export function hwfEligible (reason: string, notEligiblePage: RoutablePath = Paths.hwfEligiblePage): EligibilityCheck {
+  return {
+    eligible: false,
+    notEligibleReason: reason,
+    notEligiblePage: notEligiblePage
+  }
+}

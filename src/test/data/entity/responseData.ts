@@ -203,6 +203,18 @@ export const partialAdmissionAlreadyPaidData = {
   }
 }
 
+export const partialAdmissionAlreadyPaidLessData = {
+  ...baseResponseData,
+  ...basePartialAdmissionData,
+  ...basePartialEvidencesAndTimeLines,
+  amount: 100,
+  defence: 'i have paid enough',
+  paymentDeclaration: {
+    paidDate: '2050-12-31',
+    explanation: 'i have already paid enough'
+  }
+}
+
 export const fullAdmissionWithPaymentBySetDateData = {
   ...baseResponseData,
   ...baseFullAdmissionData,

@@ -3,11 +3,11 @@ import I = CodeceptJS.I
 const I: I = actor()
 
 const fields = {
-  claimReference: 'input#reference'
+  claimReference: { css: 'input#reference' }
 }
 
 const buttons = {
-  submit: 'input[type=submit]'
+  submit: { css: 'input[type=submit]' }
 }
 
 export class DefendantEnterClaimReferencePage {

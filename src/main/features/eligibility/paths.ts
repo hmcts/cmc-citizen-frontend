@@ -5,6 +5,8 @@ export class Paths {
   static readonly claimValuePage = new RoutablePath('/eligibility/claim-value')
   static readonly helpWithFeesPage = new RoutablePath('/eligibility/help-with-fees')
   static readonly helpWithFeesReferencePage = new RoutablePath('/eligibility/help-with-fees-reference')
+  static readonly infoAboutHwFeligibilityPage = new RoutablePath('/eligibility/information-about-help-with-fees')
+  static readonly applyForHelpWithFeesPage = new RoutablePath('/eligibility/apply-for-help-with-fees')
   static readonly singleDefendantPage = new RoutablePath('/eligibility/single-defendant')
   static readonly claimTypePage = new RoutablePath('/eligibility/claim-type')
   static readonly claimantAddressPage = new RoutablePath('/eligibility/claimant-address')
@@ -14,6 +16,8 @@ export class Paths {
   static readonly governmentDepartmentPage = new RoutablePath('/eligibility/government-department')
   static readonly claimIsForTenancyDepositPage = new RoutablePath('/eligibility/claim-is-for-tenancy-deposit')
   static readonly eligiblePage = new RoutablePath('/eligibility/eligible')
+  static readonly hwfEligiblePage = new RoutablePath('/eligibility/hwf-eligible')
+  static readonly hwfEligibleReferencePage = new RoutablePath('/eligibility/hwf-eligible-reference')
   static readonly notEligiblePage = new RoutablePath('/eligibility/not-eligible')
   static readonly mcolEligibilityPage = new RoutablePath('/eligibility/mcol-eligibility')
 }

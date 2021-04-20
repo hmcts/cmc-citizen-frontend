@@ -11,11 +11,11 @@ import { NewFeaturesConsentGuard } from 'claim/guards/newFeaturesConsentGuard'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.taskListPage.uri, NewFeaturesConsentGuard.requestHandler(), (req: express.Request, res: express.Response) => {
+  .get(Paths.taskListPage.uri, NewFeaturesConsentGuard.requestHandler(), async (req: express.Request, res: express.Response) => {
     const draft: Draft<DraftClaim> = res.locals.claimDraft
 
     const beforeYouStartSection: TaskList = TaskListBuilder.buildBeforeYouStartSection(draft.document)
-    const prepareYourClaimSection: TaskList = TaskListBuilder.buildPrepareYourClaimSection(draft.document)
+    const prepareYourClaimSection: TaskList = await TaskListBuilder.buildPrepareYourClaimSection(draft.document)
     const submitSection: TaskList = TaskListBuilder.buildSubmitSection()
     const status = TaskListBuilder.getTaskStatus([beforeYouStartSection, prepareYourClaimSection, submitSection])
 

@@ -10,9 +10,9 @@ const logger = Logger.getLogger('claim/guards/allTasksCompletedGuard')
 
 export class AllClaimTasksCompletedGuard {
 
-  static requestHandler (req: express.Request, res: express.Response, next: express.NextFunction): void {
+  static async requestHandler (req: express.Request, res: express.Response, next: express.NextFunction) {
     const draft: Draft<DraftClaim> = res.locals.claimDraft
-    const allTasksCompleted: boolean = TaskListBuilder.buildRemainingTasks(draft.document).length === 0
+    const allTasksCompleted: boolean = (await TaskListBuilder.buildRemainingTasks(draft.document)).length === 0
 
     if (allTasksCompleted) {
       return next()

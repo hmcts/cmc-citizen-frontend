@@ -94,11 +94,12 @@
     "AntennawebChat": true,
     "inversionOfControl": true,
     "warningBanner": false,
-    "helpWithFees": false,
+    "helpWithFees": true,
     "pcq":true,
-    "signPostingCTSC": false,
+    "signPostingCTSC": true,
     "autoEnrollIntoNewFeature": true,
-    "dashboard_pagination_enabled": true
+    "dashboard_pagination_enabled": false,
+    "breathingSpace": true
   },
   "oauth": {
     "clientId": "cmc_citizen"
@@ -109,9 +110,9 @@
   "appInsights": {
     "roleName": "citizen-frontend"
   },
-  "reviewOrderDeadLine": {
-    "changeDate": "2020-07-27T11:00:00-00:00",
-    "numberOfDays": 7
+  "reconsiderationDeadLine": {
+    "onlineNumberOfDays": 7,
+    "oconNumberOfDays": 12
   },
   "secrets": {
     "cmc": {
@@ -122,7 +123,7 @@
       "citizen-oauth-client-secret": "12345678",
       "os-postcode-lookup-api-key": "AAAAAAA",
       "encryptionKey": "not-a-real-32-bit-encryption-key",
-      "AppInsightsInstrumentationKey": "APPINSIGHTS_INSTRUMENTATIONKEY",
+      "AppInsightsInstrumentationKey": "app_insights_instrumental_key",
       "cmc-webchat-id": "17284281475d5519274e25a3.69472655",
       "cmc-webchat-tenant": "aG1jdHNzdGFnaW5nMDE",
       "cmc-webchat-button-no-agents": "7732814745cac6f4603c4d1.53357933",
@@ -137,6 +138,6 @@
   },
   "pcq":
   {
-    "url":"http://localhost:4000"
+    "url":"http://localhost:4001"
   }
 }

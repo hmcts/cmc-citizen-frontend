@@ -7,12 +7,12 @@ import { DraftClaim } from 'drafts/models/draftClaim'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.incompleteSubmissionPage.uri, (req: express.Request, res: express.Response) => {
+  .get(Paths.incompleteSubmissionPage.uri, async (req: express.Request, res: express.Response) => {
     const draft: Draft<DraftClaim> = res.locals.claimDraft
     res.render(Paths.incompleteSubmissionPage.associatedView,
       {
         taskListUri: Paths.taskListPage.uri,
-        tasks: TaskListBuilder.buildRemainingTasks(draft.document)
+        tasks: await TaskListBuilder.buildRemainingTasks(draft.document)
       }
     )
   })

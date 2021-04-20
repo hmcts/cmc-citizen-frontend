@@ -54,7 +54,11 @@
     {% endfor %}
   {% elseif(claim) %}
     <p>
-    {{ internalLink('Download claim (PDF)', ClaimPaths.documentPage.evaluateUri({ externalId: claim.externalId, documentURI: 'claim-receipt' })) }}
+    {% if claim.state !== 'HWF_APPLICATION_PENDING' and claim.state !== 'AWAITING_RESPONSE_HWF' %}
+      {{ internalLink('Download claim (PDF)', ClaimPaths.documentPage.evaluateUri({ externalId: claim.externalId, documentURI: 'claim-receipt' })) }}
+     {% else %}
+      {{ internalLink(t('Download claim (PDF)'), ClaimPaths.draftReceiptReceiver.evaluateUri({ externalId: claim.externalId})) }}
+    {% endif %}
     <br>
     <span style="color:grey; font-size: 15px">
       Created: {{ claim.createdAt.format('LL') }}
@@ -70,8 +74,21 @@
         {% if claim.claimNumber %}
           <h2 class="heading-medium no-bottom-margin">{{ claim.claimData.claimant.name }}
             v {{ claim.claimData.defendant.name }}</h2>
+        {% elseif claim.ccdCaseId %}
+          <h2 class="heading-medium no-bottom-margin">{{ claim.claimData.claimant.name }}
+            v {{ claim.claimData.defendant.name }}</h2>
         {% endif %}
-        <span class="font-xsmall">{{ t('Claim number:') }} {{ claim.claimNumber if claim else 'Draft' }}</span>
+        {% if claim.helpWithFeesNumber %}
+                <span class="font-xsmall">{{ t('Claim number:') }}
+                  {% set dash = joiner("-") %}
+                  {% for batch in claim.ccdCaseId | string | batch(4) -%}
+                      {{ dash() }}{% for items in batch -%}{{ items }}
+                      {%- endfor %}
+                  {%- endfor %}
+                </span>
+                {% else %}
+                  <span class="font-xsmall">{{ t('Claim number:') }} {{ claim.claimNumber if claim else 'Draft' }}</span>
+                {% endif %}
       </div>
       {{ govukTabs({
         classes: 'tab-section',

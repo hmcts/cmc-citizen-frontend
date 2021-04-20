@@ -71,7 +71,8 @@ const commonClaimObject = {
     claimType: ClaimType.PERSONAL_CLAIM,
     singleDefendant: YesNoOption.NO,
     governmentDepartment: YesNoOption.NO,
-    claimIsForTenancyDeposit: YesNoOption.NO
+    claimIsForTenancyDeposit: YesNoOption.NO,
+    infoAboutHwFeligibility: YesNoOption.YES
   } as Eligibility,
   readResolveDispute: true,
   readCompletingClaim: true,
@@ -108,6 +109,11 @@ const commonClaimObject = {
   interestEndDate: {
     option: InterestEndDateOption.SETTLED_OR_JUDGMENT
   } as InterestEndDate,
+  helpWithFees: {
+    declared: {
+      option: 'no'
+    }
+  },
   reason: {
     reason: 'Valid reason'
   } as Reason,
@@ -978,6 +984,9 @@ export function resolveFind (draftType: string, draftOverride?: object): mock.Sc
 
   switch (draftType) {
     case 'claim':
+      documentDocument = { ...sampleClaimDraftObj, ...draftOverride }
+      break
+    case 'bs':
       documentDocument = { ...sampleClaimDraftObj, ...draftOverride }
       break
     case 'claim:ioc':

@@ -56,6 +56,25 @@ describe('Dashboard - defendant page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.forbidden)
         })
+
+        it('should render page with proper status message when claim is in Business Queue state and paper response is reviewed: N9 form', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId({ state: 'BUSINESS_QUEUE', claimDocumentCollection: claimStoreServiceMock.paperResponseForm })
+
+          await request(app)
+            .get(defendantPage)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('We have received forms relating to your claim', 'Your claim will now continue offline', 'County Court Business Centre will contact you by post within 10 days to tell you what happens next'))
+        })
+
+        it('should render page with proper status message when claim is in Business Queue and there is no paper response review', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId({ state: 'BUSINESS_QUEUE' })
+
+          await request(app)
+            .get(defendantPage)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('We’ve sent this case to the County Court Business Centre', 'Your online account won’t be updated - any further updates will be by post.', 'If you need to send any forms, letters or documents about the claim, send them to this address'))
+        })
+
       })
     })
   })

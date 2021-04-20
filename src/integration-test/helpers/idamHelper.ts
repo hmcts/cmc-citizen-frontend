@@ -1,20 +1,15 @@
-import { IdamClient } from 'integration-test/helpers/clients/idamClient'
+/* tslint:disable:no-console */
 
 class IdamHelper extends codecept_helper {
 
-  createCitizenUser (): Promise<string> {
-    return this.createRandomUser('citizen')
+  getClaimantEmail (): string {
+    // @ts-ignore
+    return this.config.claimantEmail
   }
 
-  private async createRandomUser (userRoleCode: string): Promise<string> {
-    const email: string = this.generateRandomEmailAddress()
-    await IdamClient.createUser(email, userRoleCode)
-
-    return email
-  }
-
-  private generateRandomEmailAddress (): string {
-    return `civilmoneyclaims+automatedtest-${require('randomstring').generate(7)}@gmail.com`
+  getDefendantEmail (): string {
+    // @ts-ignore
+    return this.config.defendantEmail
   }
 }
 

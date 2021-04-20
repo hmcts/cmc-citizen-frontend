@@ -19,22 +19,24 @@ export class Helper {
   }
 
   startResponseFromDashboard (claimRef: string): void {
+    const text = 'Respond to claim'
+    I.waitForText(claimRef)
     I.click(claimRef)
-    I.click('Respond to claim')
+    I.waitForText(text)
+    I.click(text)
   }
 
-  finishResponse (
+  async finishResponse (
     testData: EndToEndTestData,
     isRequestMoreTimeToRespond: boolean = true,
     expectPhonePage: boolean = false
-  ): void {
+  ): Promise<void> {
     if (testData.defenceType === undefined) {
       testData.defenceType = DefenceType.FULL_REJECTION_WITH_DISPUTE
     }
     defenceSteps.loginAsDefendant(testData.defendantEmail)
-    I.click(testData.claimRef)
-    I.click('Respond to claim')
-    defenceSteps.makeDefenceAndSubmit(
+    this.startResponseFromDashboard(testData.claimRef)
+    await defenceSteps.makeDefenceAndSubmit(
       testData.defendant,
       testData.defendantEmail,
       testData.defendantPartyType,

@@ -148,7 +148,7 @@ export class IdamClient {
     return request(options).then(function (response) {
       return response
     }).then(function (response) {
-      const code: any = url.parse(response.headers.location, true).query.code
+      const code: any = new url.URL(response.headers.location)
       return IdamClient.exchangeCode(code).then(function (response) {
         return response
       })

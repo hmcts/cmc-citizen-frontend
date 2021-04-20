@@ -52,6 +52,8 @@ export default express.Router()
           draft.document.youCanOnlyUseMediation = undefined
           draft.document.canWeUse = undefined
           draft.document.canWeUseCompany = undefined
+        } else {
+          draft.document.willYouTryMediation = form.model
         }
 
         await new DraftService().save(draft, user.bearerToken)

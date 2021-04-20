@@ -40,6 +40,10 @@ export class DocumentsClient {
     return this.getPDF(claimExternalId, 'MEDIATION_AGREEMENT', bearerToken)
   }
 
+  getDraftClaimReceiptPDF (claimExternalId: string, bearerToken: string): Promise<Buffer> {
+    return this.getPDF(claimExternalId, 'draftClaimReceipt', bearerToken)
+  }
+
   getPDF (claimExternalId: string, documentTemplate: string, bearerToken: string): Promise<Buffer> {
     if (StringUtils.isBlank(claimExternalId)) {
       throw new Error('Claim external ID cannot be blank')

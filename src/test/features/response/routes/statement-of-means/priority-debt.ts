@@ -194,6 +194,24 @@ describe('Defendant response: priority-debt', () => {
             .expect(res => expect(res).to.be.successful.withoutText('1000'))
         })
       })
+
+      describe('on any other action rather reset this debt', () => {
+        it('should not reset the debt', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
+
+          await request(app)
+            .post(pagePath)
+            .send({
+              gas: { amount: '1000', schedule: IncomeExpenseSchedule.WEEK.value },
+              action: { doNotResetDebt: { 'gas': 'Do not reset this debt' } }
+            })
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('gas[amount]"'))
+            .expect(res => expect(res).to.be.successful.withText('1000'))
+        })
+      })
     })
 
   })

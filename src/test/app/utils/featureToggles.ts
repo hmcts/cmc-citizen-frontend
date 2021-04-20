@@ -96,4 +96,14 @@ describe('FeatureToggles', () => {
       expect(result).to.equal(actual)
     })
   })
+
+  describe('isBreathingSpaceEnabled', () => {
+    it('should return toggle if pagination toggle exists', async () => {
+      const mockLaunchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
+      const featureToggles = new FeatureToggles(mockLaunchDarklyClient)
+      let actual = toBoolean(config.get<boolean>(`featureToggles.breathingSpace`))
+      let result = await featureToggles.isBreathingSpaceEnabled()
+      expect(result).to.equal(actual)
+    })
+  })
 })

@@ -68,7 +68,7 @@ describe('Claim issue: interest date page', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should redirect to total page when form is valid, submission date selected and everything is fine', async () => {
+      it('should redirect to help with fees page when form is valid, submission date selected and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveUpdate()
 
@@ -76,7 +76,7 @@ describe('Claim issue: interest date page', () => {
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ type: InterestDateType.SUBMISSION })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.totalPage.uri))
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.helpWithFeesPage.uri))
       })
 
       it('should redirect to interest start date page when form is valid, custom date selected and everything is fine', async () => {

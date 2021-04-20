@@ -48,7 +48,7 @@ export class Backend {
       converter
         .gettextToI18next(language, data)
         .then(translation => callback(null, JSON.parse(translation)))
-        .catch(err => callback(err, null))
+        .catch(error => callback(error, null))
     })
   }
 }

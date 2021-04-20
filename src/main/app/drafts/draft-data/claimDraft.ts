@@ -1,9 +1,11 @@
 import * as uuid from 'uuid'
 import { PartyType } from 'common/partyType'
+import { YesNoOption } from 'models/yesNoOption'
 
-export function prepareClaimDraft (userEmailAddress: string) {
+export function prepareClaimDraft (userEmailAddress: string, helpWithFees: boolean) {
   return {
     externalId: uuid(),
+    breathingSpace: {},
     claimant: {
       payment: {},
       phone: {
@@ -126,6 +128,7 @@ export function prepareClaimDraft (userEmailAddress: string) {
         {}
       ]
     },
-    eligibility: true
+    eligibility: true,
+    helpWithFees: helpWithFees ? { declared: YesNoOption.NO } : undefined
   }
 }

@@ -12,8 +12,8 @@ export class DefendantTimelineEventsPage {
   enterTimelineEvent (eventNum: number, date: string, description: string): void {
     const fieldDate: string = fields.date.replace('x', eventNum.toString())
     const fieldDescription: string = fields.description.replace('y', eventNum.toString())
-    I.fillField(fieldDate, date)
-    I.fillField(fieldDescription, description)
+    I.fillField({ css: fieldDate }, date)
+    I.fillField({ css: fieldDescription }, description)
   }
 
   submitForm (): void {

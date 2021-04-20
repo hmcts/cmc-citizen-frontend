@@ -45,6 +45,7 @@ import { MediationOutcome } from 'claims/models/mediationOutcome'
 import { defenceClaimData } from 'test/data/entity/claimData'
 import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
 import { ClaimDocument } from 'claims/models/claimDocument'
+import { BreathingSpace } from 'features/claim/form/models/breathingSpace'
 
 describe('Claim', () => {
   describe('eligibleForCCJ', () => {
@@ -53,17 +54,42 @@ describe('Claim', () => {
     context('response deadline has passed', () => {
       before('setup', () => {
         claim.countyCourtJudgmentRequestedAt = undefined
+        claim.claimData = new ClaimData()
         claim.responseDeadline = MomentFactory.currentDate().subtract(1, 'day')
       })
 
-      it('should return true when claim not responded to', () => {
-        expect(claim.eligibleForCCJ).to.be.true
+      it('should return false when claim not responded to', () => {
+        expect(claim.eligibleForCCJ).to.be.false
       })
 
       it('should return false when claim responded to', () => {
         claim.respondedAt = MomentFactory.currentDateTime()
         expect(claim.eligibleForCCJ).to.be.false
       })
+
+      it('should return false when breathing space entered', () => {
+        claim.claimData = new ClaimData().deserialize({
+          breathingSpace: new BreathingSpace().deserialize({
+            bs_entered_date: moment('2021-03-28')
+          })
+        })
+        expect(claim.eligibleForCCJ).to.be.false
+      })
+
+      it('should return false when breathing space lifted', () => {
+        claim.claimData = new ClaimData().deserialize({
+          breathingSpace: new BreathingSpace().deserialize({
+            bs_entered_date: moment('2021-03-28'),
+            bs_lifted_date: moment('2021-05-28')
+          })
+        })
+        expect(claim.eligibleForCCJ).to.be.false
+      })
+
+      it('should return false when breathing space undefined', () => {
+        expect(claim.eligibleForCCJ).to.be.false
+      })
+
     })
 
     context('defendant still has time to respond', () => {
@@ -773,6 +799,29 @@ describe('Claim', () => {
     })
   })
 
+  describe('Help With fees', () => {
+
+    it('should return HWF number when the claim is submited with HWF', () => {
+      const claimWithHwf = new Claim().deserialize(claimStoreMock.sampleHwfClaimIssueObj)
+      expect(claimWithHwf.helpWithFeesNumber).to.be.eq('hwf123')
+    })
+
+    it('should return todays data for issued-on', () => {
+      const claimWithHwf = new Claim().deserialize(claimStoreMock.sampleHwfClaimIssueObj)
+      expect(claimWithHwf.issuedOn.toISOString()).to.be.eq(MomentFactory.currentDate().toISOString())
+    })
+
+    it('should return response dead line', () => {
+      const claimWithHwf = new Claim().deserialize(claimStoreMock.sampleHwfClaimIssueObj)
+      expect(claimWithHwf.responseDeadline).to.be.not.null
+    })
+
+    it('should return total Amount Till Date Of Issue', () => {
+      const claimWithHwf = new Claim().deserialize(claimStoreMock.sampleHwfClaimIssueObj)
+      expect(claimWithHwf.totalAmountTillDateOfIssue).to.be.eq(claimWithHwf.totalAmountTillToday)
+    })
+  })
+
   describe('respondToResponseDeadline', () => {
 
     it('should add 33 days to the response deadline', () => {
@@ -810,23 +859,11 @@ describe('Claim', () => {
   })
 
   describe('respondToReconsiderationDeadline', () => {
-    it('should return pre reconsideration deadline date', () => {
-      const claim = new Claim()
-      claim.directionOrder = {
-        createdOn: MomentFactory.parse('2019-06-07')
-      }
-      claimStoreMock.mockNextWorkingDay(MomentFactory.parse('2019-06-07'))
-      claim.respondToReconsiderationDeadline().then(
-        res => {
-          expect(res.format('YYYY-MM-DD'))
-        .to.equal(MomentFactory.parse('2019-06-07').format('YYYY-MM-DD'))
-        })
-    })
 
     it('should return post reconsideration deadline date ', () => {
       const claim = new Claim()
       claim.directionOrder = {
-        createdOn: MomentFactory.currentDate().add(30,'days')
+        createdOn: MomentFactory.currentDate()
       }
       claimStoreMock.mockNextWorkingDay(MomentFactory.parse('2020-08-27'))
       claim.respondToReconsiderationDeadline().then(
@@ -839,6 +876,59 @@ describe('Claim', () => {
     it('should return undefined if direction order is not created', async () => {
       const claim = new Claim()
       const directionOrderDeadline = await claim.respondToReconsiderationDeadline()
+      expect(directionOrderDeadline).to.be.undefined
+    })
+  })
+
+  describe('respondToOnlineOconReconsiderationDeadline', () => {
+    let claim
+
+    beforeEach(() => {
+      claim = new Claim()
+      claim.responseDeadline = MomentFactory.currentDate()
+      claim.intentionToProceedDeadline = MomentFactory.currentDate()
+      claim.createdAt = MomentFactory.parse('2020-11-24').hour(15).minute(12)
+      claim.respondedAt = moment()
+      claim.response = {
+        responseType: ResponseType.FULL_DEFENCE,
+        defenceType: DefenceType.DISPUTE,
+        responseMethod: 'OCON_FORM'
+      }
+    })
+
+    it('should return ocon reconsideration deadline date ', () => {
+      claim.directionOrder = {
+        createdOn: MomentFactory.parse('2020-11-24')
+      }
+      claimStoreMock.mockNextWorkingDay(MomentFactory.parse('2020-12-07'))
+
+      claim.respondToOnlineOconReconsiderationDeadline().then(
+        res => {
+          expect(res.format('YYYY-MM-DD'))
+          .to.equal(MomentFactory.parse('2020-12-07').format('YYYY-MM-DD'))
+        })
+    })
+
+    it('should return digital reconsideration deadline date ', () => {
+      claim.directionOrder = {
+        createdOn: MomentFactory.parse('2020-11-24')
+      }
+      claim.response = {
+        responseType: ResponseType.FULL_DEFENCE,
+        defenceType: DefenceType.DISPUTE,
+        responseMethod: 'DIGITAL'
+      }
+      claimStoreMock.mockNextWorkingDay(MomentFactory.parse('2020-12-01'))
+      claim.respondToOnlineOconReconsiderationDeadline().then(
+        res => {
+          expect(res.format('YYYY-MM-DD'))
+          .to.equal(MomentFactory.parse('2020-12-01').format('YYYY-MM-DD'))
+        })
+    })
+
+    it('should return undefined if direction order is not created', async () => {
+      const claim = new Claim()
+      const directionOrderDeadline = await claim.respondToOnlineOconReconsiderationDeadline()
       expect(directionOrderDeadline).to.be.undefined
     })
   })
@@ -1317,5 +1407,12 @@ describe('ScannedDocument', () => {
     const claimWithResponse = new Claim().deserialize({ ...claimStoreMock.sampleClaimIssueObj, ...claimStoreMock.sampleClaimDocuments })
     const claimDocs: ClaimDocument[] = claimWithResponse.claimDocuments
     expect(1).to.be.eq(claimDocs.length)
+  })
+})
+
+describe('HwF fees details', () => {
+  const claim = new Claim().deserialize({ ...claimStoreMock.sampleClaimIssueObj })
+  it('should return helpWithFessBalanceClaimFee', () => {
+    expect(claim.helpWithFessBalanceClaimFee).to.equal(25)
   })
 })
