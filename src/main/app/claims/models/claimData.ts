@@ -85,20 +85,40 @@ export class ClaimData {
       // `interestDate` prior migration completion can be provided in `claimData`
       // in which case we still handle it for backward compatibility reasons.
       //
-      this.interest.interestDate = input.interestDate ? new InterestDate().deserialize(input.interestDate) : undefined
-      this.statementOfTruth = input.statementOfTruth ? new StatementOfTruth().deserialize(input.statementOfTruth) : undefined
+      if (input.interestDate) {
+        this.interest.interestDate = new InterestDate().deserialize(input.interestDate)
+      }
+
+      if (input.statementOfTruth) {
+        this.statementOfTruth = new StatementOfTruth().deserialize(input.statementOfTruth)
+      }
 
       // help with fees
-      this.helpWithFeesNumber = input.helpWithFeesNumber ? input.helpWithFeesNumber : undefined
+      if (input.helpWithFeesNumber) {
+        this.helpWithFeesNumber = input.helpWithFeesNumber
+      }
       // help with fees type
-      this.helpWithFeesType = input.helpWithFeesType ? 'ClaimIssue' : undefined
-      this.hwfFeeDetailsSummary = input.hwfFeeDetailsSummary ? input.hwfFeeDetailsSummary : undefined
-      this.hwfMandatoryDetails = input.hwfMandatoryDetails ? input.hwfMandatoryDetails : undefined
-      this.moreInfoDetails = input.moreInfoDetails ? input.moreInfoDetails : undefined
-      this.feeRemitted = input.feeRemitted ? MoneyConverter.convertPenniesToPounds(input.feeRemitted) : undefined
-      this.hwfMoreInfoNeededDocuments = input.hwfMoreInfoNeededDocuments ? input.hwfMoreInfoNeededDocuments : undefined
-
-      this.hwfDocumentsToBeSentBefore = input.hwfDocumentsToBeSentBefore ? MomentFactory.parse(input.hwfDocumentsToBeSentBefore) : undefined
+      if (input.helpWithFeesType) {
+        this.helpWithFeesType = 'ClaimIssue'
+      }
+      if (input.hwfFeeDetailsSummary) {
+        this.hwfFeeDetailsSummary = input.hwfFeeDetailsSummary
+      }
+      if (input.hwfMandatoryDetails) {
+        this.hwfMandatoryDetails = input.hwfMandatoryDetails
+      }
+      if (input.moreInfoDetails) {
+        this.moreInfoDetails = input.moreInfoDetails
+      }
+      if (input.feeRemitted) {
+        this.feeRemitted = MoneyConverter.convertPenniesToPounds(input.feeRemitted)
+      }
+      if (input.hwfMoreInfoNeededDocuments) {
+        this.hwfMoreInfoNeededDocuments = input.hwfMoreInfoNeededDocuments
+      }
+      if (input.hwfDocumentsToBeSentBefore) {
+        this.hwfDocumentsToBeSentBefore = MomentFactory.parse(input.hwfDocumentsToBeSentBefore)
+      }
     }
     return this
   }
