@@ -220,7 +220,7 @@ export class ClaimModelConverter {
         if (draftClaim.interestContinueClaiming.option === YesNoOption.YES) {
           draftClaim.interestHowMuch.type === InterestRateOption.STANDARD ? interest.rate = getStandardInterestRate() :
           interest.specificDailyAmount = draftClaim.interestHowMuch.dailyAmount
-      }
+        }
       }
       interest.interestDate = this.convertInterestDate(draftClaim)
     }
