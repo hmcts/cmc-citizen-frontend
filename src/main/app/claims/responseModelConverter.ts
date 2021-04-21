@@ -72,6 +72,7 @@ import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
 import { ResponseMethod } from 'claims/models/response/responseMethod'
 import { Partner } from './models/response/statement-of-means/partner'
+import { Unemployment } from './models/response/statement-of-means/employment'
 
 export class ResponseModelConverter {
 
