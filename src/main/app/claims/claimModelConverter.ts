@@ -218,9 +218,9 @@ export class ClaimModelConverter {
         interest.interestBreakdown = interestBreakdown
         interest.type = ClaimInterestType.BREAKDOWN
         if (draftClaim.interestContinueClaiming.option === YesNoOption.YES) {
-          draftClaim.interestHowMuch.type === InterestRateOption.STANDARD ? interest.rate = getStandardInterestRate() : 
+          draftClaim.interestHowMuch.type === InterestRateOption.STANDARD ? interest.rate = getStandardInterestRate() :
           interest.specificDailyAmount = draftClaim.interestHowMuch.dailyAmount
-          }
+      }
       }
       interest.interestDate = this.convertInterestDate(draftClaim)
     }

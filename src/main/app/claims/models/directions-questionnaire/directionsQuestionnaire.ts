@@ -102,7 +102,7 @@ export namespace DirectionsQuestionnaire {
         reasonForExpertAdvice: directionsQuestionnaire.whyExpertIsNeeded.explanation
       } : undefined
   }
- 
+
   export function fromObject (directionsQuestionnaire: DirectionsQuestionnaire): DirectionsQuestionnaire {
     if (!directionsQuestionnaire) {
       return undefined
