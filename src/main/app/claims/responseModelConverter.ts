@@ -71,8 +71,6 @@ import { DirectionsQuestionnaire } from 'claims/models/directions-questionnaire/
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
 import { ResponseMethod } from 'claims/models/response/responseMethod'
-import { Employment, Unemployment } from './models/response/statement-of-means/employment'
-import { SelfEmployment } from 'features/response/form/models/statement-of-means/selfEmployment'
 import { Partner } from './models/response/statement-of-means/partner'
 
 export class ResponseModelConverter {

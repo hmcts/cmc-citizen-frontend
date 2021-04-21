@@ -8,8 +8,6 @@ import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/dir
 import { UnavailableDate } from 'claims/models/directions-questionnaire/unavailableDate'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { LocalDate } from 'forms/models/localDate'
-import { ExpertReports } from 'features/directions-questionnaire/forms/models/expertReports'
-import { Direction } from 'readline'
 
 export interface DirectionsQuestionnaire {
   requireSupport?: RequireSupport,
