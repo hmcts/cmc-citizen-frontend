@@ -35,7 +35,6 @@ import {
 import { company, individual, organisation, soleTrader, individualDefendant } from 'test/data/entity/party'
 import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { Claim } from 'claims/models/claim'
-import { CohabitingOption } from 'response/form/models/statement-of-means/cohabiting'
 import * as claimStoreMock from 'test/http-mocks/claim-store'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import {
@@ -639,22 +638,6 @@ describe('ResponseModelConverter', () => {
 
           expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
-        })
-
-        it.only('should convert partial admission paid by set date with cohibition option', () => {
-          const responseDraft = prepareResponseDraft({
-            ...partialAdmissionWithPaymentByInstalmentsDraft,
-            ...sampleMediationDraftObj,
-            statementOfMeans: { ...statementOfMeansWithAllFieldsDraft }
-          }, individualDetails)
-          responseDraft.statementOfMeans.cohabiting.option = CohabitingOption.YES
-
-          const claim: Claim = new Claim().deserialize({
-            ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
-          })
-
-         const converted = ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)
-         expect(converted.statementOfMeans.partner.disability).to.equal('NO')
         })
 
         it('should convert partial admission paid by instalments', () => {

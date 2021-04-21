@@ -79,7 +79,7 @@ describe('ClaimModelConverter', () => {
       claimDraft.interestType.option = InterestTypeOption.BREAKDOWN
       claimDraft.interestContinueClaiming.option = YesNoOption.YES
       claimDraft.interestHowMuch.type = InterestRateOption.STANDARD
-      
+
       const converted = ClaimModelConverter.convert(claimDraft)
       expect(converted.interest.type).to.equal('breakdown')
     })
