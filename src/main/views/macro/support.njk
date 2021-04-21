@@ -22,7 +22,7 @@
             Language="English"
             Service="OCMC"
             page-name="Money Claims"
-            route-point-identifier="Default" work-flow-type lease-time="24" priority="5" secure-connections="true">
+            route-point-identifier="Default" work-flow-type lease-time="24" priority="5" secure-connections="true" metrics-polling-interval="15">
         </web-chat>
       </p>
     {% endif %}
@@ -69,6 +69,7 @@
 {% endmacro %}
 
 {% macro supportWidgetContactus(label = 'Email') %}
+    {{ _antennawebChatWidget() }}
     {{ _emailWidget('contactocmc@justice.gov.uk') }}
     {{ _phoneWidget('0300 123 7050') }}
     {{ _holidayWidget() }}

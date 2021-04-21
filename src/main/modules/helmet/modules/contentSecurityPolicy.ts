@@ -25,7 +25,9 @@ export class ContentSecurityPolicy {
         defaultSrc: [none],
         fontSrc: [self, 'data:'],
         scriptSrc: scriptSrc,
+        scriptSrcElem: scriptSrc,
         connectSrc: connectSrc,
+        reportUri: '/report-violation',
         mediaSrc: ['\'self\''],
         frameSrc: [
           'vcc-eu4.8x8.com',
@@ -46,7 +48,7 @@ export class ContentSecurityPolicy {
         objectSrc: [self],
         frameAncestors: ['\'self\'']
       },
-      reportOnly: true
+      reportOnly: false
     }))
   }
 }
