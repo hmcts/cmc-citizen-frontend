@@ -26,6 +26,8 @@ import {
 } from 'test/data/entity/party'
 import { YesNoOption } from 'models/yesNoOption'
 import { Interest } from 'claim/form/models/interest'
+import { InterestRateOption } from 'claim/form/models/interestRateOption'
+import { InterestTypeOption } from 'claim/form/models/interestType'
 import { Individual } from 'claims/models/details/theirs/individual'
 
 function prepareClaimDraft (claimantPartyDetails: object, defendantPartyDetails: object, helpWithFeesEnabled?: boolean): DraftClaim {
@@ -64,12 +66,22 @@ describe('ClaimModelConverter', () => {
   ].forEach(entry => {
     const [[claimantPartyDetails, claimantParty], [defendantPartyDetails, defendantParty]] = entry
 
-    it(`should convert claim issued by ${claimantParty.type} against ${defendantParty.type}`, () => {
+    it(`should convert claim issued by ${claimantParty.type} against ${defendantParty.type} with same interest rate`, () => {
       const claimDraft = prepareClaimDraft(claimantPartyDetails, defendantPartyDetails)
       const claimData = prepareClaimData(claimantParty, defendantParty)
 
       expect(convertObjectLiteralToJSON(ClaimModelConverter.convert(claimDraft)))
         .to.deep.equal(convertObjectLiteralToJSON(claimData))
+    })
+
+    it(`should convert claim issued by ${claimantParty.type} against ${defendantParty.type} with interest rate breakdown`, () => {
+      const claimDraft = prepareClaimDraft(claimantPartyDetails, defendantPartyDetails)
+      claimDraft.interestType.option = InterestTypeOption.BREAKDOWN
+      claimDraft.interestContinueClaiming.option = YesNoOption.YES
+      claimDraft.interestHowMuch.type = InterestRateOption.STANDARD
+      
+      const converted = ClaimModelConverter.convert(claimDraft)
+      expect(converted.interest.type).to.equal('breakdown')
     })
   })
 

@@ -210,7 +210,7 @@ export class ClaimModelConverter {
       if (draftClaim.interestType.option === InterestTypeOption.SAME_RATE) {
         interest.type = draftClaim.interestRate.type
         interest.rate = draftClaim.interestRate.rate
-        interest.reason = draftClaim.interestRate.type === InterestRateOption.DIFFERENT ? draftClaim.interestRate.reason : undefined
+        interest.reason = draftClaim.interestRate.type === InterestRateOption.DIFFERENT && draftClaim.interestRate.reason
       } else {
         const interestBreakdown = new InterestBreakdown()
         interestBreakdown.totalAmount = draftClaim.interestTotal.amount
