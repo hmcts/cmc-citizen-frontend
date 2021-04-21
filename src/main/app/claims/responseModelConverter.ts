@@ -6,7 +6,7 @@ import {
 } from 'shared/components/payment-intention/model/paymentOption'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 import { BankAccountType } from 'claims/models/response/statement-of-means/bankAccount'
-import { AgeGroupType, Child } from 'claims/models/response/statement-of-means/dependant'
+import { AgeGroupType, Child, Dependant } from 'claims/models/response/statement-of-means/dependant'
 import { ResidenceType } from 'claims/models/response/statement-of-means/residence'
 import { Moment } from 'moment'
 import { ResponseDraft } from 'response/draft/responseDraft'
@@ -71,6 +71,9 @@ import { DirectionsQuestionnaire } from 'claims/models/directions-questionnaire/
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
 import { ResponseMethod } from 'claims/models/response/responseMethod'
+import { Employment, Unemployment } from './models/response/statement-of-means/employment'
+import { SelfEmployment } from 'features/response/form/models/statement-of-means/selfEmployment'
+import { Partner } from './models/response/statement-of-means/partner'
 
 export class ResponseModelConverter {
 
@@ -214,26 +217,9 @@ export class ResponseModelConverter {
         type: draft.statementOfMeans.residence.type.value as ResidenceType,
         otherDetail: draft.statementOfMeans.residence.housingDetails
       },
-      dependant: draft.statementOfMeans.dependants.declared || draft.statementOfMeans.otherDependants.declared ? {
-        children: draft.statementOfMeans.dependants.declared ? this.convertStatementOfMeansChildren(draft) : undefined,
-        otherDependants: draft.statementOfMeans.otherDependants && draft.statementOfMeans.otherDependants.declared ? {
-          numberOfPeople: draft.statementOfMeans.otherDependants.numberOfPeople.value,
-          details: draft.statementOfMeans.otherDependants.numberOfPeople.details || undefined,
-          anyDisabled: draft.statementOfMeans.otherDependantsDisability && draft.statementOfMeans.otherDependantsDisability.option === OtherDependantsDisabilityOption.YES
-        } : undefined,
-        anyDisabledChildren: draft.statementOfMeans.dependantsDisability && draft.statementOfMeans.dependantsDisability.option === DependantsDisabilityOption.YES
-      } : undefined,
-      partner: draft.statementOfMeans.cohabiting.option === CohabitingOption.YES ? {
-        over18: draft.statementOfMeans.partnerAge.option === PartnerAgeOption.YES,
-        disability: this.inferPartnerDisabilityType(draft),
-        pensioner: draft.statementOfMeans.partnerPension ? draft.statementOfMeans.partnerPension.option === PartnerPensionOption.YES : undefined
-      } : undefined,
-      disability: !draft.statementOfMeans.disability.option || draft.statementOfMeans.disability.option === DisabilityOption.NO
-        ? DisabilityStatus.NO
-        : (!draft.statementOfMeans.severeDisability.option || draft.statementOfMeans.severeDisability.option === SevereDisabilityOption.NO
-            ? DisabilityStatus.YES
-            : DisabilityStatus.SEVERE
-        ),
+      dependant: this.getDependantFromDraftStatement(draft),
+      partner: this.getPartnerFromDraftStatement(draft),
+      disability: this.checkDisabilityFromDraftStatement(draft),
       employment: {
         employers: draft.statementOfMeans.employment.employed ? draft.statementOfMeans.employers.getPopulatedRowsOnly().map((employer: EmployerRow) => {
           return {
@@ -249,14 +235,7 @@ export class ResponseModelConverter {
             reason: draft.statementOfMeans.onTaxPayments.reason
           } : undefined
         } : undefined,
-        unemployment: !draft.statementOfMeans.employment.employed && !draft.statementOfMeans.employment.selfEmployed ? {
-          unemployed: draft.statementOfMeans.unemployment.option === UnemploymentType.UNEMPLOYED ? {
-            numberOfMonths: draft.statementOfMeans.unemployment.unemploymentDetails.months,
-            numberOfYears: draft.statementOfMeans.unemployment.unemploymentDetails.years
-          } : undefined,
-          retired: draft.statementOfMeans.unemployment.option === UnemploymentType.RETIRED,
-          other: draft.statementOfMeans.unemployment.option === UnemploymentType.OTHER ? draft.statementOfMeans.unemployment.otherDetails.details : undefined
-        } : undefined
+        unemployment: this.checkUnemploymentFromDraftStatement(draft)
       },
       debts: draft.statementOfMeans.debts.declared ? draft.statementOfMeans.debts.getPopulatedRowsOnly().map((debt: DebtRow) => {
         return {
@@ -278,6 +257,46 @@ export class ResponseModelConverter {
       carer: draft.statementOfMeans.carer.option === CarerOption.YES,
       priorityDebts: this.convertPriorityDebts(draft.statementOfMeans.priorityDebt)
     }
+  }
+
+  private static getDependantFromDraftStatement(draft: ResponseDraft): Dependant {
+    return draft.statementOfMeans.dependants.declared || draft.statementOfMeans.otherDependants.declared ? {
+      children: draft.statementOfMeans.dependants.declared ? this.convertStatementOfMeansChildren(draft) : undefined,
+      otherDependants: draft.statementOfMeans.otherDependants && draft.statementOfMeans.otherDependants.declared ? {
+        numberOfPeople: draft.statementOfMeans.otherDependants.numberOfPeople.value,
+        details: draft.statementOfMeans.otherDependants.numberOfPeople.details || undefined,
+        anyDisabled: draft.statementOfMeans.otherDependantsDisability && draft.statementOfMeans.otherDependantsDisability.option === OtherDependantsDisabilityOption.YES
+      } : undefined,
+      anyDisabledChildren: draft.statementOfMeans.dependantsDisability && draft.statementOfMeans.dependantsDisability.option === DependantsDisabilityOption.YES
+    } : undefined
+  }
+
+  private static getPartnerFromDraftStatement(draft: ResponseDraft): Partner {
+    return draft.statementOfMeans.cohabiting.option === CohabitingOption.YES ? {
+      over18: draft.statementOfMeans.partnerAge.option === PartnerAgeOption.YES,
+      disability: this.inferPartnerDisabilityType(draft),
+      pensioner: draft.statementOfMeans.partnerPension ? draft.statementOfMeans.partnerPension.option === PartnerPensionOption.YES : undefined
+    } : undefined
+  }
+
+  private static checkDisabilityFromDraftStatement(draft: ResponseDraft): DisabilityStatus {
+    return !draft.statementOfMeans.disability.option || draft.statementOfMeans.disability.option === DisabilityOption.NO
+    ? DisabilityStatus.NO
+    : (!draft.statementOfMeans.severeDisability.option || draft.statementOfMeans.severeDisability.option === SevereDisabilityOption.NO
+        ? DisabilityStatus.YES
+        : DisabilityStatus.SEVERE
+    )
+  }
+
+  private static checkUnemploymentFromDraftStatement(draft: ResponseDraft): Unemployment {
+    return !draft.statementOfMeans.employment.employed && !draft.statementOfMeans.employment.selfEmployed ? {
+      unemployed: draft.statementOfMeans.unemployment.option === UnemploymentType.UNEMPLOYED ? {
+        numberOfMonths: draft.statementOfMeans.unemployment.unemploymentDetails.months,
+        numberOfYears: draft.statementOfMeans.unemployment.unemploymentDetails.years
+      } : undefined,
+      retired: draft.statementOfMeans.unemployment.option === UnemploymentType.RETIRED,
+      other: draft.statementOfMeans.unemployment.option === UnemploymentType.OTHER ? draft.statementOfMeans.unemployment.otherDetails.details : undefined
+    } : undefined
   }
 
   private static convertStatementOfTruth (draft: ResponseDraft): StatementOfTruth {

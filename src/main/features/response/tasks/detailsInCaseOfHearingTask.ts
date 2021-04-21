@@ -26,11 +26,15 @@ export class DetailsInCaseOfHearingTask {
         }
       }
     }
-    return !(directionsQuestionnaireDraft.selfWitness.option === undefined ||
-      !directionsQuestionnaireDraft.otherWitnesses.isCompleted() ||
-      !directionsQuestionnaireDraft.availability.isCompleted() ||
-      (directionsQuestionnaireDraft.supportRequired.otherSupportSelected && !directionsQuestionnaireDraft.supportRequired.otherSupport.length) ||
-      (directionsQuestionnaireDraft.supportRequired.languageSelected && !directionsQuestionnaireDraft.supportRequired.languageInterpreted.length) ||
-      (directionsQuestionnaireDraft.supportRequired.signLanguageSelected && !directionsQuestionnaireDraft.supportRequired.signLanguageInterpreted.length))
+    return getDetailsForHearingTask(directionsQuestionnaireDraft)
   }
+}
+
+function getDetailsForHearingTask(directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): boolean {
+  return !(directionsQuestionnaireDraft.selfWitness.option === undefined ||
+    !directionsQuestionnaireDraft.otherWitnesses.isCompleted() ||
+    !directionsQuestionnaireDraft.availability.isCompleted() ||
+    (directionsQuestionnaireDraft.supportRequired.otherSupportSelected && !directionsQuestionnaireDraft.supportRequired.otherSupport.length) ||
+    (directionsQuestionnaireDraft.supportRequired.languageSelected && !directionsQuestionnaireDraft.supportRequired.languageInterpreted.length) ||
+    (directionsQuestionnaireDraft.supportRequired.signLanguageSelected && !directionsQuestionnaireDraft.supportRequired.signLanguageInterpreted.length))
 }
