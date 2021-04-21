@@ -30,7 +30,7 @@ export class DetailsInCaseOfHearingTask {
   }
 }
 
-function getDetailsForHearingTask(directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): boolean {
+function getDetailsForHearingTask (directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): boolean {
   return !(directionsQuestionnaireDraft.selfWitness.option === undefined ||
     !directionsQuestionnaireDraft.otherWitnesses.isCompleted() ||
     !directionsQuestionnaireDraft.availability.isCompleted() ||

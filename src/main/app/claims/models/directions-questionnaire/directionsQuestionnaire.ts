@@ -65,7 +65,7 @@ export namespace DirectionsQuestionnaire {
     }
   }
 
-  function getRequireSupport(directionsQuestionnaire: DirectionsQuestionnaireDraft): RequireSupport {
+  function getRequireSupport (directionsQuestionnaire: DirectionsQuestionnaireDraft): RequireSupport {
     return directionsQuestionnaire.supportRequired && {
       languageInterpreter: directionsQuestionnaire.supportRequired.languageInterpreted,
       signLanguageInterpreter: directionsQuestionnaire.supportRequired.signLanguageInterpreted,
@@ -75,27 +75,27 @@ export namespace DirectionsQuestionnaire {
     }
   }
 
-  function getWitness(directionsQuestionnaire: DirectionsQuestionnaireDraft): Witness {
+  function getWitness (directionsQuestionnaire: DirectionsQuestionnaireDraft): Witness {
     return directionsQuestionnaire.selfWitness && {
       selfWitness: directionsQuestionnaire.selfWitness.option.option as YesNoOption,
       noOfOtherWitness: directionsQuestionnaire.otherWitnesses ? directionsQuestionnaire.otherWitnesses.howMany : undefined
     }
   }
 
-  function getUnavailableDates(directionsQuestionnaire: DirectionsQuestionnaireDraft): UnavailableDate[]{
+  function getUnavailableDates (directionsQuestionnaire: DirectionsQuestionnaireDraft): UnavailableDate[] {
     return directionsQuestionnaire.availability &&
     directionsQuestionnaire.availability.unavailableDates.map(unavailableDate => ({
       unavailableDate: unavailableDate ? LocalDate.fromObject(unavailableDate).asString() : undefined
     }))
   }
 
-  function getpermissionForExpert(directionsQuestionnaire: DirectionsQuestionnaireDraft): YesNoOption {
+  function getpermissionForExpert (directionsQuestionnaire: DirectionsQuestionnaireDraft): YesNoOption {
     return directionsQuestionnaire.permissionForExpert &&
     directionsQuestionnaire.permissionForExpert.option ?
     directionsQuestionnaire.permissionForExpert.option.option as YesNoOption : undefined
   }
 
-  function getExpertRequest(directionsQuestionnaire: DirectionsQuestionnaireDraft): ExpertRequest {
+  function getExpertRequest (directionsQuestionnaire: DirectionsQuestionnaireDraft): ExpertRequest {
     return (directionsQuestionnaire.expertEvidence.expertEvidence &&
       directionsQuestionnaire.expertEvidence.expertEvidence.option === YesNoOption.YES) ? {
         expertEvidenceToExamine: directionsQuestionnaire.expertEvidence.whatToExamine,

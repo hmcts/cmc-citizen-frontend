@@ -85,7 +85,6 @@ export class ClaimData {
       // `interestDate` prior migration completion can be provided in `claimData`
       // in which case we still handle it for backward compatibility reasons.
       //
-      
       this.interest.interestDate = input.interestDate ? new InterestDate().deserialize(input.interestDate) : undefined
       this.statementOfTruth = input.statementOfTruth ? new StatementOfTruth().deserialize(input.statementOfTruth) : undefined
 
@@ -98,8 +97,8 @@ export class ClaimData {
       this.moreInfoDetails = input.moreInfoDetails ? input.moreInfoDetails : undefined
       this.feeRemitted = input.feeRemitted ? MoneyConverter.convertPenniesToPounds(input.feeRemitted) : undefined
       this.hwfMoreInfoNeededDocuments = input.hwfMoreInfoNeededDocuments ? input.hwfMoreInfoNeededDocuments : undefined
-      
-      this.hwfDocumentsToBeSentBefore = input.hwfDocumentsToBeSentBefore ?  MomentFactory.parse(input.hwfDocumentsToBeSentBefore) : undefined
+
+      this.hwfDocumentsToBeSentBefore = input.hwfDocumentsToBeSentBefore ? MomentFactory.parse(input.hwfDocumentsToBeSentBefore) : undefined
     }
     return this
   }

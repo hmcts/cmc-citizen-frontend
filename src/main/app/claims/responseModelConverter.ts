@@ -258,7 +258,7 @@ export class ResponseModelConverter {
     }
   }
 
-  private static getDependantFromDraftStatement(draft: ResponseDraft): Dependant {
+  private static getDependantFromDraftStatement (draft: ResponseDraft): Dependant {
     return draft.statementOfMeans.dependants.declared || draft.statementOfMeans.otherDependants.declared ? {
       children: draft.statementOfMeans.dependants.declared ? this.convertStatementOfMeansChildren(draft) : undefined,
       otherDependants: draft.statementOfMeans.otherDependants && draft.statementOfMeans.otherDependants.declared ? {
@@ -270,7 +270,7 @@ export class ResponseModelConverter {
     } : undefined
   }
 
-  private static getPartnerFromDraftStatement(draft: ResponseDraft): Partner {
+  private static getPartnerFromDraftStatement (draft: ResponseDraft): Partner {
     return draft.statementOfMeans.cohabiting.option === CohabitingOption.YES ? {
       over18: draft.statementOfMeans.partnerAge.option === PartnerAgeOption.YES,
       disability: this.inferPartnerDisabilityType(draft),
@@ -278,7 +278,7 @@ export class ResponseModelConverter {
     } : undefined
   }
 
-  private static checkDisabilityFromDraftStatement(draft: ResponseDraft): DisabilityStatus {
+  private static checkDisabilityFromDraftStatement (draft: ResponseDraft): DisabilityStatus {
     return !draft.statementOfMeans.disability.option || draft.statementOfMeans.disability.option === DisabilityOption.NO
     ? DisabilityStatus.NO
     : (!draft.statementOfMeans.severeDisability.option || draft.statementOfMeans.severeDisability.option === SevereDisabilityOption.NO
@@ -287,7 +287,7 @@ export class ResponseModelConverter {
     )
   }
 
-  private static checkUnemploymentFromDraftStatement(draft: ResponseDraft): Unemployment {
+  private static checkUnemploymentFromDraftStatement (draft: ResponseDraft): Unemployment {
     return !draft.statementOfMeans.employment.employed && !draft.statementOfMeans.employment.selfEmployed ? {
       unemployed: draft.statementOfMeans.unemployment.option === UnemploymentType.UNEMPLOYED ? {
         numberOfMonths: draft.statementOfMeans.unemployment.unemploymentDetails.months,
