@@ -94,6 +94,7 @@ cmc-claim-store:
           - launchDarkly-sdk-key
           - sendgrid-api-key
           - staff-email-legal-rep
+          - rpa-email-breathing-space
     environment:
       LOG_LEVEL: DEBUG
       DOC_ASSEMBLY_URL: http://dg-docassembly-aat.service.core-compute-aat.internal
@@ -106,6 +107,7 @@ cmc-claim-store:
       CORE_CASE_DATA_API_URL: http://${SERVICE_NAME}-ccd-data-store-api
       STAFF_NOTIFICATIONS_LEGAL_RECIPIENT: moneyclaims@justice.gov.uk
       RPA_NOTIFICATIONS_LEGALSEALEDCLAIMRECIPIENT: civilmoneyclaims+rpa-legal-claim-issued@gmail.com
+      RPA_NOTIFICATIONS_BREATHINGSPACERECIPIENT: breathingSpace.auto@justice.gov.uk
 
 ccd:
   enabled: true
@@ -178,7 +180,7 @@ ccd:
       - civilmoneyclaims+la@gmail.com|CMC|MoneyClaimCase|readyForDirections
 
   ccd-definition-importer:
-    image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.10.1
+    image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.10.2
     environment:
       CCD_DEF_CLAIM_STORE_BASE_URL: http://${SERVICE_NAME}-claim-store
     definitionFilename: cmc-ccd.xlsx
