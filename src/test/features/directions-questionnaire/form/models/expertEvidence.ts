@@ -91,7 +91,7 @@ describe('ExpertEvidence', () => {
       const exceptionalCircumstances: ExceptionalCircumstances =
         new ExceptionalCircumstances(YesNoOption.YES, 'bank statements')
 
-      expect(exceptionalCircumstances.isDefendantCompleted()).to.be.true
+      expect(exceptionalCircumstances.isUserCompleted()).to.be.true
     })
   })
 })

@@ -83,6 +83,16 @@ describe('ClaimModelConverter', () => {
       const converted = ClaimModelConverter.convert(claimDraft)
       expect(converted.interest.type).to.equal('breakdown')
     })
+
+    it(`should convert claim issued by ${claimantParty.type} against ${defendantParty.type} with interest rate different`, () => {
+      const claimDraft = prepareClaimDraft(claimantPartyDetails, defendantPartyDetails)
+      claimDraft.interestType.option = InterestTypeOption.BREAKDOWN
+      claimDraft.interestContinueClaiming.option = YesNoOption.YES
+      claimDraft.interestHowMuch.type = InterestRateOption.DIFFERENT
+
+      const converted = ClaimModelConverter.convert(claimDraft)
+      expect(converted.interest.type).to.equal('breakdown')
+    })
   })
 
   it('should not create interestDate if no interest is selected in the draft', () => {

@@ -5,7 +5,7 @@ import { Claim } from 'claims/models/claim'
 
 export class DetailsInCaseOfHearingTask {
   static isCompleted (responseDraft: DraftClaimantResponse, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft, claim: Claim): boolean {
-    if (!claim.claimData.defendant.isBusiness() && !directionsQuestionnaireDraft.exceptionalCircumstances.isClaimantCompleted()) {
+    if (!claim.claimData.defendant.isBusiness() && !directionsQuestionnaireDraft.exceptionalCircumstances.isUserCompleted()) {
       return false
     } else if (!directionsQuestionnaireDraft.hearingLocation) {
       return false

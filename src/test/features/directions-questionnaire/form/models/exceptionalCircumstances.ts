@@ -52,22 +52,22 @@ describe('ExceptionalCircumstances', () => {
   describe('isCompleted', () => {
     it('Should be marked not completed when no option is present', () => {
       const exceptionalCircumstances: ExceptionalCircumstances = new ExceptionalCircumstances(undefined)
-      expect(exceptionalCircumstances.isDefendantCompleted()).to.be.false
+      expect(exceptionalCircumstances.isUserCompleted()).to.be.false
     })
 
     it('Should be marked complete when the no option is selected', () => {
       const exceptionalCircumstances: ExceptionalCircumstances = new ExceptionalCircumstances(YesNoOption.NO)
-      expect(exceptionalCircumstances.isDefendantCompleted()).to.be.true
+      expect(exceptionalCircumstances.isUserCompleted()).to.be.true
     })
 
     it('Should be marked not complete when the yes option is selected and no reason is entered', () => {
       const exceptionalCircumstances: ExceptionalCircumstances = new ExceptionalCircumstances(YesNoOption.YES)
-      expect(exceptionalCircumstances.isDefendantCompleted()).to.be.false
+      expect(exceptionalCircumstances.isUserCompleted()).to.be.false
     })
 
     it('Should be marked complete when the yes option is selected and reason is present', () => {
       const exceptionalCircumstances: ExceptionalCircumstances = new ExceptionalCircumstances(YesNoOption.YES, 'reason')
-      expect(exceptionalCircumstances.isDefendantCompleted()).to.be.true
+      expect(exceptionalCircumstances.isUserCompleted()).to.be.true
     })
   })
 })
