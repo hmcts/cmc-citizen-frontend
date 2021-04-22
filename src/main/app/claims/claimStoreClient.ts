@@ -38,15 +38,6 @@ function buildCaseSubmissionHeaders (claimant: User, features: string[]): object
   return headers
 }
 
-function handleErrorScenario (err: any, draft: Draft<DraftClaim>, claimant: User): Promise<Claim> {
-  if (err.statusCode === HttpStatus.CONFLICT) {
-    logger.warn(`Claim ${draft.document.externalId} appears to have been saved successfully on initial timed out attempt, retrieving the saved instance`)
-    return this.retrieveByExternalId(draft.document.externalId, claimant)
-  } else {
-    throw err
-  }
-}
-
 export class ClaimStoreClient {
   constructor (private request: RequestPromiseAPI = requestPromiseApi) {
     // Nothing to do
@@ -78,7 +69,14 @@ export class ClaimStoreClient {
       .then(claim => {
         return new Claim().deserialize(claim)
       })
-      .catch(err => handleErrorScenario(err, draft, claimant))
+      .catch((err) => {
+        if (err.statusCode === HttpStatus.CONFLICT) {
+          logger.warn(`Claim ${draft.document.externalId} appears to have been saved successfully on initial timed out attempt, retrieving the saved instance`)
+          return this.retrieveByExternalId(draft.document.externalId, claimant)
+        } else {
+          throw err
+        }
+      })
   }
 
   saveHelpWithFeesClaim (draft: Draft<DraftClaim>, claimant: User, ...features: string[]): Promise<Claim> {
@@ -90,7 +88,13 @@ export class ClaimStoreClient {
         headers: buildCaseSubmissionHeaders(claimant, features)
       })
       .then(claim => new Claim().deserialize(claim))
-      .catch(err => handleErrorScenario(err, draft, claimant))
+      .catch(err => {
+        if (err.statusCode === HttpStatus.CONFLICT) {
+          logger.warn(`Claim ${draft.document.externalId} appears to have been saved successfully on initial timed out attempt, retrieving the saved instance`)
+          return this.retrieveByExternalId(draft.document.externalId, claimant)
+        }
+        throw err
+      })
   }
 
   saveBreatingSpace (draft: DraftClaim, claimant: User): Promise<Claim> {
@@ -153,7 +157,13 @@ export class ClaimStoreClient {
         headers: buildCaseSubmissionHeaders(claimant, features)
       })
       .then(claim => new Claim().deserialize(claim))
-      .catch(err => handleErrorScenario(err, draft, claimant))
+      .catch(err => {
+        if (err.statusCode === HttpStatus.CONFLICT) {
+          logger.warn(`Claim ${draft.document.externalId} appears to have been saved successfully on initial timed out attempt, retrieving the saved instance`)
+          return this.retrieveByExternalId(draft.document.externalId, claimant)
+        }
+        throw err
+      })
   }
 
   createCitizenClaim (draft: Draft<DraftClaim>, claimant: User, ...features: string[]): Promise<Claim> {
@@ -167,7 +177,14 @@ export class ClaimStoreClient {
       .then(claim => {
         return new Claim().deserialize(claim)
       })
-      .catch(err => handleErrorScenario(err, draft, claimant))
+      .catch((err) => {
+        if (err.statusCode === HttpStatus.CONFLICT) {
+          logger.warn(`Claim ${draft.document.externalId} appears to have been saved successfully on initial timed out attempt, retrieving the saved instance`)
+          return this.retrieveByExternalId(draft.document.externalId, claimant)
+        } else {
+          throw err
+        }
+      })
   }
 
   initiatePayment (draft: Draft<DraftClaim>, claimant: User): Promise<string> {
