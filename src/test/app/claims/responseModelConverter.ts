@@ -641,7 +641,7 @@ describe('ResponseModelConverter', () => {
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it.only('should convert partial admission paid by set date with cohibition option', () => {
+        it('should convert partial admission paid by set date with cohibition option', () => {
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithPaymentByInstalmentsDraft,
             ...sampleMediationDraftObj,
