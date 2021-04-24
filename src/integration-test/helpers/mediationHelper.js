@@ -6,7 +6,9 @@ class MediationHelper extends codecept_helper {
   async checkEnhancedMediationJourney () {
     const helper = this.helpers['WebDriver'];
     const heading = await helper.grabTextFrom('h1');
+    const para = await helper.grabTextFrom('p');
     console.log(heading);
+    console.log(para);
     if (heading === 'Free telephone mediation ') {
       console.log('enhanced mediation journey is enabled');
       return true

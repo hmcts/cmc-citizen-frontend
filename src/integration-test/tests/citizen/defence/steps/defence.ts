@@ -492,12 +492,17 @@ export class DefenceSteps {
         throw new Error(`Unknown payment option: ${paymentOption}`)
     }
     defendantTaskListPage.selectTaskFreeMediation()
+    console.log('checking status')
     const isEnhacedMediationJourneyEnabled = await I.checkEnhancedMediationJourney()
+    console.log('isEnhacedMediationJourneyEnabled is returned as: ', isEnhacedMediationJourneyEnabled)
     if (isEnhacedMediationJourneyEnabled) {
+      console.log('inside enhanced journey')
       enhancedMediationSteps.rejectEnhancedMediation()
     } else {
+      console.log('outside enhanced journey')
       mediationSteps.rejectMediation()
     }
+    console.log('outside completely')
     await this.askForHearingRequirements(defendantType)
     defendantTaskListPage.selectTaskCheckAndSendYourResponse()
     await I.bypassPCQ()

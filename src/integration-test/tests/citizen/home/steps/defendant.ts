@@ -64,19 +64,23 @@ export class DefendantSteps {
   async selectTaskFreeMediation (I: I, defendantType: PartyType): Promise<void> {
     defendantTaskListPage.selectTaskFreeMediation()
     const isEnhacedMediationJourneyEnabled = await I.checkEnhancedMediationJourney()
+    console.log('isEnhacedMediationJourneyEnabled is returned as: ', isEnhacedMediationJourneyEnabled)
     if (isEnhacedMediationJourneyEnabled) {
+      console.log('inside enhanced journey')
       if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
         enhancedMediationSteps.acceptEnhancedMediationAsCompanyPhoneNumberProvided()
       } else {
         enhancedMediationSteps.acceptEnhancedMediationAsIndividualPhoneNumberProvidedIsUsed()
       }
     } else {
+      console.log('outside enhanced journey')
       if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
         mediationSteps.acceptMediationAsCompanyPhoneNumberProvided()
       } else {
         mediationSteps.acceptMediationAsIndividualPhoneNumberProvidedIsUsed()
       }
     }
+    console.log('outside completely')
   }
 
   async selectTaskHearingRequirements (defendantType: PartyType): Promise<void> {
