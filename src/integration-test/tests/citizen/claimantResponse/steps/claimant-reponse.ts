@@ -141,15 +141,11 @@ export class ClaimantResponseSteps {
     }
     taskListPage.selectTaskFreeMediation()
     const isEnhacedMediationJourneyEnabled = await I.checkEnhancedMediationJourney()
-    console.log('isEnhacedMediationJourneyEnabled is returned as: ', isEnhacedMediationJourneyEnabled)
     if (isEnhacedMediationJourneyEnabled) {
-      console.log('inside enhanced journey')
       enhancedMediationSteps.acceptEnhancedMediationAfterDisagreeing()
     } else {
-      console.log('outside enhanced journey')
       mediationSteps.acceptMediationAfterDisagreeing()
     }
-    console.log('outside completely')
     taskListPage.selectTaskHearingRequirements()
     directionsQuestionnaireSteps.acceptDirectionsQuestionnaireNoJourneyAsClaimant()
     taskListPage.selectTaskCheckandSubmitYourResponse()
