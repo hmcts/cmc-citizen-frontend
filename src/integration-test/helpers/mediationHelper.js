@@ -11,14 +11,14 @@ class MediationHelper extends codecept_helper {
     console.log(para);
     if (heading === 'Free telephone mediation ') {
       console.log('enhanced mediation journey is enabled');
-      return true
+      Promise.resolve(true)
     } else if (heading === 'Free telephone mediation') {
       console.log('enhanced mediation journey is disabled');
-      return false
+      Promise.reject(false)
     } else if (heading === 'Sorry, there is a problem with the service') {
       // silently move on.
       console.log('Error in Mediation Service');
-      return false;
+      Promise.reject(false)
     }
   }
 }
