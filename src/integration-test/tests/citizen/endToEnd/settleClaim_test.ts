@@ -40,7 +40,7 @@ Scenario('Full Admission-->Settle Claim(Pay By Installment) @citizen @nightly', 
   I.see('This claim is settled.')
 })
 
-Scenario('Full Admission-->Settle Claim(Pay By Set Date) @admissions', { retries: 3 }, async (I: I) => {
+Scenario('Full Admission-->Settle Claim(Pay By Set Date)', { retries: 3 }, async (I: I) => {
   testData.paymentOption = PaymentOption.BY_SET_DATE
   testData.claimantPaymentOption = PaymentOption.BY_SET_DATE
   const claimantResponseTestData = new UnreasonableClaimantResponseTestData()

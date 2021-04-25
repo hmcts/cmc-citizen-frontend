@@ -19,7 +19,7 @@ let testData
 Feature('Part Admission E2E')
 
 Before(async (I: I) => {
-  testData = await EndToEndTestData.prepareData(I, PartyType.COMPANY, PartyType.COMPANY)
+  testData = await EndToEndTestData.prepareData(I, PartyType.COMPANY, PartyType.INDIVIDUAL)
 })
 
 Scenario('Company Rejected Part Admit Offer (Company Vs Company) @business @admissions', { retries: 3 }, async (I: I) => {
