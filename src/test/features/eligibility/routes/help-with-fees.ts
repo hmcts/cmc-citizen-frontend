@@ -21,7 +21,7 @@ describe('Claim eligibility: help with fees page', () => {
   context('on GET', () => {
     checkAuthorizationMiddleware(app, 'get', pagePath)
 
-    it('should render page when everything is fine', async () => {
+    it("should render page with 'Do you need help paying your court fee?' ", async () => {
 
       await request(app)
         .get(pagePath)
@@ -32,14 +32,14 @@ describe('Claim eligibility: help with fees page', () => {
   context('on POST', () => {
     checkAuthorizationMiddleware(app, 'post', pagePath)
 
-    it('should render page when form is invalid and everything is fine', async () => {
+    it('should render page with error message when form is invalid', async () => {
 
       await request(app)
         .post(pagePath)
         .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage, 'div class="error-summary"'))
     })
 
-    it('should redirect to claimant address page when form is valid and everything is fine', async () => {
+    it('should redirect to eligible page when NO is submitted', async () => {
 
       await request(app)
         .post(pagePath)
@@ -47,12 +47,12 @@ describe('Claim eligibility: help with fees page', () => {
         .expect(res => expect(res).to.be.redirect.toLocation(pageRedirect))
     })
 
-    it('should redirect to not eligible page when form is valid and not eligible option selected', async () => {
+    it('should redirect to eligible page when YES is submitted', async () => {
 
       await request(app)
         .post(pagePath)
         .send({ helpWithFees: YesNoOption.YES.option })
-        .expect(res => expect(res).to.be.redirect.toLocation(Paths.helpWithFeesReferencePage.uri))
+        .expect(res => expect(res).to.be.redirect.toLocation(Paths.infoAboutHwFeligibilityPage.uri))
     })
   })
 })

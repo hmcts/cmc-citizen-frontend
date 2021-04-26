@@ -1,4 +1,5 @@
 {% from "internalLink.njk" import internalLink %}
+{% from "back-link/macro.njk" import govukBackLink %}
 {% block top_of_page %}{% endblock %}
 <!DOCTYPE html>
 <!--[if lt IE 9]><html class="lte-ie8" lang="{{ html_lang|default('en') }}"><![endif]-->
@@ -79,6 +80,14 @@
     {% if form %}
       {% from "form.njk" import errorSummary %}
       {{ errorSummary(form) }}
+    {% endif %}
+
+    {% if govukBackLinkHref %}
+      {{ govukBackLink({
+        text: "Back",
+        href: govukBackLinkHref
+        }) 
+      }}
     {% endif %}
 
     {% if heading and headingVisible %}

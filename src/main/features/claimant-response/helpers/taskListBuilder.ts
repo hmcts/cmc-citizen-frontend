@@ -29,6 +29,7 @@ import { Paths as DirectionsQuestionnairePaths } from 'directions-questionnaire/
 import { DetailsInCaseOfHearingTask } from 'claimant-response/tasks/detailsInCaseOfHearingTask'
 import { IntentionToProceedTask } from 'claimant-response/tasks/intentionToProceedTask'
 import { TaskStatus } from 'utils/taskStatus'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
 const validator: Validator = new Validator()
 
@@ -52,7 +53,7 @@ export class TaskListBuilder extends TaskStatus {
     return new TaskList('How they responded', tasks)
   }
 
-  static buildStatesPaidHowYouWantToRespondSection (draft: DraftClaimantResponse, claim: Claim, mediationDraft: MediationDraft): TaskList {
+  static async buildStatesPaidHowYouWantToRespondSection (draft: DraftClaimantResponse, claim: Claim, mediationDraft: MediationDraft): Promise<TaskList> {
     const tasks: TaskListItem[] = []
     const response: FullDefenceResponse | PartialAdmissionResponse = claim.response as FullDefenceResponse | PartialAdmissionResponse
     const externalId: string = claim.externalId
@@ -87,34 +88,53 @@ export class TaskListBuilder extends TaskStatus {
       }
     }
 
-    if (claim.response.freeMediation === YesNoOption.YES) {
-      if ((draft.accepted && draft.accepted.accepted.option === YesNoOption.NO) ||
-        (draft.partPaymentReceived && draft.partPaymentReceived.received.option === YesNoOption.NO)) {
-        if (FeatureToggles.isEnabled('mediation')) {
-          const path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
-          tasks.push(
-            new TaskListItem(
-              'Free telephone mediation',
-              path,
-              FreeMediationTask.isCompleted(mediationDraft, claim)
-            ))
-        } else {
-          const path = MediationPaths.tryFreeMediationPage.evaluateUri({ externalId: claim.externalId })
-          tasks.push(
-            new TaskListItem(
-              'Free telephone mediation',
-              path,
-              FreeMediationTask.isCompleted(mediationDraft, claim)
-            ))
-        }
-      }
-    }
+    await TaskListBuilder.buildMediationTaskWhilePartPaymentAcceptedList(claim, draft, tasks, mediationDraft)
 
     return new TaskList('Your response', tasks)
 
   }
 
-  static buildHowYouWantToRespondSection (draft: DraftClaimantResponse, claim: Claim, mediationDraft: MediationDraft): TaskList {
+  private static async buildMediationTaskWhilePartPaymentAcceptedList (claim: Claim, draft: DraftClaimantResponse, tasks: TaskListItem[], mediationDraft: MediationDraft) {
+    if (claim.response.freeMediation === YesNoOption.YES) {
+      if ((draft.accepted && draft.accepted.accepted.option === YesNoOption.NO) ||
+        (draft.partPaymentReceived && draft.partPaymentReceived.received.option === YesNoOption.NO)) {
+        await TaskListBuilder.buildMediationJourney(claim, tasks, mediationDraft)
+      }
+    }
+  }
+
+  private static async buildMediationJourney (claim: Claim, tasks: TaskListItem[], mediationDraft: MediationDraft) {
+    const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
+    if (await featureToggles.isEnhancedMediationJourneyEnabled()) {
+      const path = MediationPaths.freeTelephoneMediationPage.evaluateUri({ externalId: claim.externalId })
+      tasks.push(
+        new TaskListItem(
+          'Free telephone mediation',
+          path,
+          await FreeMediationTask.isCompleted(mediationDraft, claim)
+        ))
+    } else {
+      if (FeatureToggles.isEnabled('mediation')) {
+        const path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+        tasks.push(
+          new TaskListItem(
+            'Free telephone mediation',
+            path,
+            await FreeMediationTask.isCompleted(mediationDraft, claim)
+          ))
+      } else {
+        const path = MediationPaths.tryFreeMediationPage.evaluateUri({ externalId: claim.externalId })
+        tasks.push(
+          new TaskListItem(
+            'Free telephone mediation',
+            path,
+            await FreeMediationTask.isCompleted(mediationDraft, claim)
+          ))
+      }
+    }
+  }
+
+  static async buildHowYouWantToRespondSection (draft: DraftClaimantResponse, claim: Claim, mediationDraft: MediationDraft): Promise<TaskList> {
 
     if (StatesPaidHelper.isResponseAlreadyPaid(claim)) {
       return this.buildStatesPaidHowYouWantToRespondSection(draft, claim, mediationDraft)
@@ -133,23 +153,7 @@ export class TaskListBuilder extends TaskStatus {
       )
 
       if (claim.response.freeMediation === YesNoOption.YES && draft.intentionToProceed && draft.intentionToProceed.proceed.option === YesNoOption.YES) {
-        if (FeatureToggles.isEnabled('mediation')) {
-          const path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
-          tasks.push(
-            new TaskListItem(
-              'Free telephone mediation',
-              path,
-              FreeMediationTask.isCompleted(mediationDraft, claim)
-            ))
-        } else {
-          const path = MediationPaths.tryFreeMediationPage.evaluateUri({ externalId: claim.externalId })
-          tasks.push(
-            new TaskListItem(
-              'Free telephone mediation',
-              path,
-              FreeMediationTask.isCompleted(mediationDraft, claim)
-            ))
-        }
+        await TaskListBuilder.buildMediationJourney(claim, tasks, mediationDraft)
       }
     } else if (claim.response.responseType === ResponseType.PART_ADMISSION && claim.response.paymentIntention !== undefined) {
       tasks.push(
@@ -181,27 +185,7 @@ export class TaskListBuilder extends TaskStatus {
       this.buildSignSettlementAgreement(draft, tasks, externalId)
       this.buildRequestCountyCourtJudgment(draft, tasks, externalId)
 
-      if (claim.response.freeMediation === YesNoOption.YES
-        && ((draft.settleAdmitted && draft.settleAdmitted.admitted.option === YesNoOption.NO)
-          || (draft.intentionToProceed && draft.intentionToProceed.proceed.option === YesNoOption.YES))) {
-        if (FeatureToggles.isEnabled('mediation')) {
-          const path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
-          tasks.push(
-            new TaskListItem(
-              'Free telephone mediation',
-              path,
-              FreeMediationTask.isCompleted(mediationDraft, claim)
-            ))
-        } else {
-          const path = MediationPaths.tryFreeMediationPage.evaluateUri({ externalId: claim.externalId })
-          tasks.push(
-            new TaskListItem(
-              'Free telephone mediation',
-              path,
-              FreeMediationTask.isCompleted(mediationDraft, claim)
-            ))
-        }
-      }
+      await TaskListBuilder.buildMediationTaskListWhileIntendsToProceed(claim, draft, tasks, mediationDraft)
     } else if (claim.response.responseType === ResponseType.FULL_ADMISSION
       && claim.response.paymentIntention.paymentOption !== PaymentOption.IMMEDIATELY) {
       tasks.push(
@@ -222,6 +206,14 @@ export class TaskListBuilder extends TaskStatus {
     }
 
     return new TaskList('Choose what to do next', tasks)
+  }
+
+  private static async buildMediationTaskListWhileIntendsToProceed (claim: Claim, draft: DraftClaimantResponse, tasks: TaskListItem[], mediationDraft: MediationDraft) {
+    if (claim.response.freeMediation === YesNoOption.YES
+      && ((draft.settleAdmitted && draft.settleAdmitted.admitted.option === YesNoOption.NO)
+        || (draft.intentionToProceed && draft.intentionToProceed.proceed.option === YesNoOption.YES))) {
+      await TaskListBuilder.buildMediationJourney(claim, tasks, mediationDraft)
+    }
   }
 
   private static buildProposeAlternateRepaymentPlanTask (draft: DraftClaimantResponse, tasks: TaskListItem[], externalId: string) {
@@ -303,12 +295,12 @@ export class TaskListBuilder extends TaskStatus {
     return new TaskList('Submit', tasks)
   }
 
-  static buildRemainingTasks (draft: DraftClaimantResponse, claim: Claim, mediationDraft: MediationDraft, directionsQuestionnaireDraft?: DirectionsQuestionnaireDraft): TaskListItem[] {
+  static async buildRemainingTasks (draft: DraftClaimantResponse, claim: Claim, mediationDraft: MediationDraft, directionsQuestionnaireDraft?: DirectionsQuestionnaireDraft): Promise<TaskListItem[]> {
     const resolveDirectionsQuestionnaireTaskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(draft, claim, directionsQuestionnaireDraft)
 
     return [].concat(
       TaskListBuilder.buildDefendantResponseSection(draft, claim).tasks,
-      TaskListBuilder.buildHowYouWantToRespondSection(draft, claim, mediationDraft).tasks,
+      (await TaskListBuilder.buildHowYouWantToRespondSection(draft, claim, mediationDraft)).tasks,
       resolveDirectionsQuestionnaireTaskList !== undefined ? resolveDirectionsQuestionnaireTaskList.tasks : []
     )
       .filter(item => !item.completed)

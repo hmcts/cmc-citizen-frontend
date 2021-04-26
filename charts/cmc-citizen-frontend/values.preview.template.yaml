@@ -65,10 +65,10 @@ idam-pr:
 cmc-claim-store:
   enabled: true
   java:
-    image: hmctspublic.azurecr.io/cmc/claim-store:latest
+    imagePullPolicy: Always
+    image: hmctspublic.azurecr.io/cmc/claim-store:pr-2275
     releaseNameOverride: ${SERVICE_NAME}-claim-store
     ingressHost: claim-store-${SERVICE_FQDN}
-    imagePullPolicy: Always
     readinessDelay: 250  # ccd-stack will start much slower
     livenessDelay:  250  # ccd-stack will start much slower
     keyVaults:
@@ -94,6 +94,7 @@ cmc-claim-store:
           - launchDarkly-sdk-key
           - sendgrid-api-key
           - staff-email-legal-rep
+          - rpa-email-breathing-space
     environment:
       LOG_LEVEL: DEBUG
       DOC_ASSEMBLY_URL: http://dg-docassembly-aat.service.core-compute-aat.internal
@@ -106,6 +107,7 @@ cmc-claim-store:
       CORE_CASE_DATA_API_URL: http://${SERVICE_NAME}-ccd-data-store-api
       STAFF_NOTIFICATIONS_LEGAL_RECIPIENT: moneyclaims@justice.gov.uk
       RPA_NOTIFICATIONS_LEGALSEALEDCLAIMRECIPIENT: civilmoneyclaims+rpa-legal-claim-issued@gmail.com
+      RPA_NOTIFICATIONS_BREATHINGSPACERECIPIENT: breathingSpace.auto@justice.gov.uk
 
 ccd:
   enabled: true
