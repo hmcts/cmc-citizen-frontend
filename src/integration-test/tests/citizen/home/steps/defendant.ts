@@ -65,12 +65,14 @@ export class DefendantSteps {
     defendantTaskListPage.selectTaskFreeMediation()
     const isEnhacedMediationJourneyEnabled = await I.checkEnhancedMediationJourney()
     if (isEnhacedMediationJourneyEnabled) {
+      I.see('Continue')
       if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
         enhancedMediationSteps.acceptEnhancedMediationAsCompanyPhoneNumberProvided()
       } else {
         enhancedMediationSteps.acceptEnhancedMediationAsIndividualPhoneNumberProvidedIsUsed()
       }
     } else {
+      I.see('How free mediaiton works')
       if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
         mediationSteps.acceptMediationAsCompanyPhoneNumberProvided()
       } else {

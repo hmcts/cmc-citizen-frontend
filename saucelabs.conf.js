@@ -83,7 +83,7 @@ const setupConfig = {
     hwfHelper: {
       require: './src/integration-test/helpers/hwfHelper'
     },
-    MediationHelper: {
+    mediationHelper: {
       require: './src/integration-test/helpers/mediationHelper'
     },
     SaucelabsReporter: {

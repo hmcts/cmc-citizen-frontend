@@ -142,8 +142,10 @@ export class ClaimantResponseSteps {
     taskListPage.selectTaskFreeMediation()
     const isEnhacedMediationJourneyEnabled = await I.checkEnhancedMediationJourney()
     if (isEnhacedMediationJourneyEnabled) {
+      I.see('Continue')
       enhancedMediationSteps.acceptEnhancedMediationAfterDisagreeing()
     } else {
+      I.see('How free mediaiton works')
       mediationSteps.acceptMediationAfterDisagreeing()
     }
     taskListPage.selectTaskHearingRequirements()

@@ -494,8 +494,10 @@ export class DefenceSteps {
     defendantTaskListPage.selectTaskFreeMediation()
     const isEnhacedMediationJourneyEnabled = await I.checkEnhancedMediationJourney()
     if (isEnhacedMediationJourneyEnabled) {
+      I.see('Continue')
       enhancedMediationSteps.rejectEnhancedMediation()
     } else {
+      I.see('How free mediaiton works')
       mediationSteps.rejectMediation()
     }
     await this.askForHearingRequirements(defendantType)

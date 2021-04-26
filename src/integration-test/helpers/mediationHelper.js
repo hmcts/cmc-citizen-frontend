@@ -2,14 +2,14 @@
 /* globals codecept_helper */
 
 // eslint-disable-next-line no-unused-vars
-class MediationHelper extends codecept_helper {
+class mediationHelper extends codecept_helper {
   async checkEnhancedMediationJourney () {
     const helper = this.helpers['WebDriver'];
     const heading = await helper.grabTextFrom('h1');
     const para = await helper.grabTextFrom('p');
     console.log(heading);
     console.log(para);
-    if (heading === 'Free telephone mediation ') {
+    if (para.contains('We have automatically registered you')) {
       console.log('enhanced mediation journey is enabled');
       return true
     } else if (heading === 'Free telephone mediation') {
@@ -23,4 +23,4 @@ class MediationHelper extends codecept_helper {
   }
 }
 
-module.exports = MediationHelper
+module.exports = mediationHelper
