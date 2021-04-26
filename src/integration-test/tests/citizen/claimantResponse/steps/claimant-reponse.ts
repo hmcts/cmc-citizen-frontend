@@ -28,7 +28,9 @@ import { ClaimantPartPaymentReceivedPage } from 'integration-test/tests/citizen/
 import { ClaimantRejectionReasonPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-rejection-reason'
 import { claimAmount } from 'integration-test/data/test-data'
 import { ClaimantSettleClaimPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-settle-claim'
-import { EnhancedMediationSteps } from 'integration-test/tests/citizen/mediation/steps/enhancedMediation'
+import { CanWeUsePage } from 'integration-test/tests/citizen/mediation/pages/can-we-use'
+import { FreeTelephoneMediationPage } from 'integration-test/tests/citizen/mediation/pages/free-telephone-mediation'
+import { MediationDisagreementPage } from 'integration-test/tests/citizen/mediation/pages/mediation-disagreement'
 
 const I: I = actor()
 const taskListPage: ClaimantTaskListPage = new ClaimantTaskListPage()
@@ -53,7 +55,9 @@ const intentionToProceedSteps: ClaimantIntentionToProceedPage = new ClaimantInte
 const partPaymentReceivedPage: ClaimantPartPaymentReceivedPage = new ClaimantPartPaymentReceivedPage()
 const claimantRejectionReasonPage: ClaimantRejectionReasonPage = new ClaimantRejectionReasonPage()
 const claimantSettleClaimPage: ClaimantSettleClaimPage = new ClaimantSettleClaimPage()
-const enhancedMediationSteps: EnhancedMediationSteps = new EnhancedMediationSteps()
+const canWeUsePage: CanWeUsePage = new CanWeUsePage()
+const freeTelephoneMediationPage: FreeTelephoneMediationPage = new FreeTelephoneMediationPage()
+const mediationDisagreementPage: MediationDisagreementPage = new MediationDisagreementPage()
 
 export class ClaimantResponseSteps {
 
@@ -141,13 +145,13 @@ export class ClaimantResponseSteps {
     }
     taskListPage.selectTaskFreeMediation()
     if (await I.checkEnhancedMediationJourney()) {
-      I.see('Continue')
-      enhancedMediationSteps.acceptEnhancedMediationAfterDisagreeing()
+      freeTelephoneMediationPage.chooseDisagree()
+      mediationDisagreementPage.chooseYes()
+      canWeUsePage.chooseYes()
     } else {
       I.see('How free mediaiton works')
       mediationSteps.acceptMediationAfterDisagreeing()
     }
-    enhancedMediationSteps.acceptEnhancedMediationAfterDisagreeing()
     taskListPage.selectTaskHearingRequirements()
     directionsQuestionnaireSteps.acceptDirectionsQuestionnaireNoJourneyAsClaimant()
     taskListPage.selectTaskCheckandSubmitYourResponse()
