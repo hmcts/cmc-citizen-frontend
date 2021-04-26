@@ -59,7 +59,7 @@ export class UnreasonableClaimantResponseTestData {
   isExpectingToSeeHowTheyWantToPayPage: boolean = false
   isExpectingToSeeCourtOfferedInstalmentsPage: boolean = false
   pageSpecificValues: PageSpecificValues = {
-    paymentDatePageEnterDate: '2025-01-01',
+    paymentDatePageEnterDate: '2024-01-01',
     paymentPlanPageEnterRepaymentPlan: {
       equalInstalment: 50.00,
       firstPaymentDate: moment().add(50, 'days').toISOString(),

@@ -16,7 +16,7 @@ const buttons = {
 export class ClaimantCourtOfferedInstalmentsPage {
 
   accept (): void {
-    I.see('The defendant can’t afford your plan')
+    I.see('The defendant can’t pay by your proposed date')
     I.checkOption(fields.accept.yes)
     I.click(buttons.submit)
   }
