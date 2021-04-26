@@ -492,8 +492,7 @@ export class DefenceSteps {
         throw new Error(`Unknown payment option: ${paymentOption}`)
     }
     defendantTaskListPage.selectTaskFreeMediation()
-    const isEnhacedMediationJourneyEnabled = await I.checkEnhancedMediationJourney()
-    if (isEnhacedMediationJourneyEnabled) {
+    if (await I.checkEnhancedMediationJourney()) {
       I.see('Continue')
       enhancedMediationSteps.rejectEnhancedMediation()
     } else {

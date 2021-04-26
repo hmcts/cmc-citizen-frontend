@@ -140,8 +140,7 @@ export class ClaimantResponseSteps {
       settleAdmittedPage.selectAdmittedNo()
     }
     taskListPage.selectTaskFreeMediation()
-    const isEnhacedMediationJourneyEnabled = await I.checkEnhancedMediationJourney()
-    if (isEnhacedMediationJourneyEnabled) {
+    if (await I.checkEnhancedMediationJourney()) {
       I.see('Continue')
       enhancedMediationSteps.acceptEnhancedMediationAfterDisagreeing()
     } else {

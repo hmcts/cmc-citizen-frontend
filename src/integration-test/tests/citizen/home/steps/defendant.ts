@@ -63,8 +63,7 @@ export class DefendantSteps {
 
   async selectTaskFreeMediation (I: I, defendantType: PartyType): Promise<void> {
     defendantTaskListPage.selectTaskFreeMediation()
-    const isEnhacedMediationJourneyEnabled = await I.checkEnhancedMediationJourney()
-    if (isEnhacedMediationJourneyEnabled) {
+    if (await I.checkEnhancedMediationJourney()) {
       I.see('Continue')
       if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
         enhancedMediationSteps.acceptEnhancedMediationAsCompanyPhoneNumberProvided()
