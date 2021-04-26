@@ -9,8 +9,10 @@ class mediationHelper extends codecept_helper {
     const para = await helper.grabTextFrom('p');
     console.log(heading);
     console.log(para);
-    console.log('new journey::', para.includes('We have automatically registered you'))
-    if (para.includes('We have automatically registered you')) {
+    console.log(para[0]);
+    console.log(para[1]);
+    console.log('new journey::', para.includes('BETA This is a new service – your feedback (opens in a new window) will help us to improve it.'))
+    if (para.includes('BETA This is a new service – your feedback (opens in a new window) will help us to improve it.')) {
       console.log('enhanced mediation journey is enabled');
       return true
     } else if (heading === 'Free telephone mediation') {

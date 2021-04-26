@@ -24,7 +24,7 @@ Before(async (I: I) => {
 })
 
 if (process.env.FEATURE_ADMISSIONS === 'true') {
-  Scenario('I can as a claimant reject the defendants part admission by immediately @nightly @admissions', { retries: 3 }, async (I: I) => {
+  Scenario('I can as a claimant reject the defendants part admission by immediately @smoke-test @nightly @admissions', { retries: 3 }, async (I: I) => {
     testData.paymentOption = PaymentOption.IMMEDIATELY
     testData.defenceType = DefenceType.PART_ADMISSION
     testData.defendantClaimsToHavePaidInFull = false
