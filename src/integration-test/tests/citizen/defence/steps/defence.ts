@@ -495,10 +495,8 @@ export class DefenceSteps {
     if (await I.checkEnhancedMediationJourney()) {
       I.see('Continue')
       enhancedMediationSteps.rejectEnhancedMediation()
-    } else {
-      I.see('How free mediaiton works')
-      mediationSteps.rejectMediation()
     }
+    enhancedMediationSteps.rejectEnhancedMediation()
     await this.askForHearingRequirements(defendantType)
     defendantTaskListPage.selectTaskCheckAndSendYourResponse()
     await I.bypassPCQ()
