@@ -45,7 +45,7 @@
     <div class="status-block">
       <h2 class="heading-medium">{{ t('{{ claimantName }} has rejected your admission of {{ amount }}',
           { amount: claim.response.amount | numeral, claimantName: claim.claimData.claimant.name }) }}</h2>
-      {% if claim.response.freeMediation === FreeMediationOption.YES and claim.claimantResponse.freeMediation === FreeMediationOption.NO and enhancedMediationJourneyEnabled %}
+      {% if claim.response.freeMediation === FreeMediationOption.YES and claim.claimantResponse.freeMediation === FreeMediationOption.NO and enhancedMediationJourney %}
         <p>{{ t('{{ claimantName }} has said no to trying mediation.',
         { claimantName: claim.claimData.claimant.name }) }}</p>
       {% endif %}
@@ -72,7 +72,7 @@
     <div class="status-block">
       <h2 class="heading-medium">{{ t('{{ claimantName }} has rejected your admission of {{ amount }}',
           { amount: claim.response.amount | numeral, claimantName: claim.claimData.claimant.name }) }}</h2>
-      {% if claim.response.freeMediation === FreeMediationOption.YES and claim.claimantResponse.freeMediation === FreeMediationOption.NO and enhancedMediationJourneyEnabled %}
+      {% if claim.response.freeMediation === FreeMediationOption.YES and claim.claimantResponse.freeMediation === FreeMediationOption.NO and enhancedMediationJourney %}
         <p>{{ t('{{ claimantName }} has said no to trying mediation.',
         { claimantName: claim.claimData.claimant.name }) }}</p>
       {% endif %}     

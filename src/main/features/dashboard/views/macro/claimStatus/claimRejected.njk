@@ -94,7 +94,7 @@
     <h2 class="heading-medium">{{ t('Wait for the court to review the case') }}</h2>
     <p>{{ t('{{ claimantName }} has rejected your defence.',
         { claimantName: claim.claimData.claimant.name }) }}</p>
-    {% if enhancedMediationJourneyEnabled %}
+    {% if enhancedMediationJourney %}
     <p>{{ t('{{ claimantName }} has said no to trying mediation.',
         { claimantName: claim.claimData.claimant.name }) }}</p>
     {% endif %}
