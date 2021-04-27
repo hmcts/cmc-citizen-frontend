@@ -490,6 +490,10 @@ export class DefenceSteps {
         throw new Error(`Unknown payment option: ${paymentOption}`)
     }
     defendantTaskListPage.selectTaskFreeMediation()
+    if (await I.checkEnhancedMediationJourney()) {
+      I.see('Continue')
+      enhancedMediationSteps.rejectEnhancedMediation()
+    }
     enhancedMediationSteps.rejectEnhancedMediation()
     await this.askForHearingRequirements(defendantType)
     defendantTaskListPage.selectTaskCheckAndSendYourResponse()
