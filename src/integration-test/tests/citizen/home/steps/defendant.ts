@@ -63,8 +63,7 @@ export class DefendantSteps {
 
   async selectTaskFreeMediation (I: I, defendantType: PartyType): Promise<void> {
     defendantTaskListPage.selectTaskFreeMediation()
-    await I.checkEnhancedMediationJourney()
-      .then (isEnhacedMediationJourneyEnabled => {
+    await I.checkEnhancedMediationJourney().then(isEnhacedMediationJourneyEnabled => {
       if (isEnhacedMediationJourneyEnabled) {
         I.see('Continue')
         if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {

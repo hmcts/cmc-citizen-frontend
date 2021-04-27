@@ -140,8 +140,7 @@ export class ClaimantResponseSteps {
       settleAdmittedPage.selectAdmittedNo()
     }
     taskListPage.selectTaskFreeMediation()
-    await I.checkEnhancedMediationJourney()
-      .then (isEnhacedMediationJourneyEnabled => {
+    await I.checkEnhancedMediationJourney().then(isEnhacedMediationJourneyEnabled => {
       if (isEnhacedMediationJourneyEnabled) {
         I.see('ContinueFree telephone mediation')
         enhancedMediationSteps.acceptEnhancedMediationAfterDisagreeing()
