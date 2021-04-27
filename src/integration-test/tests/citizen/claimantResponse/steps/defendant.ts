@@ -59,7 +59,7 @@ export class DefendantResponseSteps {
         I.see('How free mediaiton works')
         mediationSteps.rejectMediation()
       }
-    })
+    }).catch(e => { return false })
     defendantTaskListPage.selectTaskHearingRequirements()
     await directionsQuestionnaireSteps.acceptDirectionsQuestionnaireYesJourney()
     defendantSteps.selectCheckAndSubmitYourDefence()
@@ -107,7 +107,7 @@ export class DefendantResponseSteps {
         I.see('How free mediaiton works')
         mediationSteps.rejectMediationByDisagreeing()
       }
-    })
+    }).catch(e => { return false })
     defendantTaskListPage.selectTaskHearingRequirements()
     await directionsQuestionnaireSteps.acceptDirectionsQuestionnaireYesJourney()
     defendantSteps.selectCheckAndSubmitYourDefence()

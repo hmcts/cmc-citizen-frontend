@@ -148,7 +148,7 @@ export class ClaimantResponseSteps {
         I.see('How free mediaiton works')
         mediationSteps.acceptMediationAfterDisagreeing()
       }
-    })
+    }).catch(e => { return false })
     taskListPage.selectTaskHearingRequirements()
     directionsQuestionnaireSteps.acceptDirectionsQuestionnaireNoJourneyAsClaimant()
     taskListPage.selectTaskCheckandSubmitYourResponse()
@@ -189,7 +189,7 @@ export class ClaimantResponseSteps {
         I.see('How free mediaiton works')
         mediationSteps.acceptMediationAfterDisagreeing()
       }
-    })
+    }).catch(e => { return false })
     taskListPage.selectTaskHearingRequirements()
     directionsQuestionnaireSteps.acceptDirectionsQuestionnaireNoJourneyAsClaimant()
     taskListPage.selectTaskCheckandSubmitYourResponse()

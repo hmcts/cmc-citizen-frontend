@@ -79,7 +79,7 @@ export class DefendantSteps {
           mediationSteps.acceptMediationAsIndividualPhoneNumberProvidedIsUsed()
         }
       }
-    })
+    }).catch(e => { return false })
   }
 
   async selectTaskHearingRequirements (defendantType: PartyType): Promise<void> {

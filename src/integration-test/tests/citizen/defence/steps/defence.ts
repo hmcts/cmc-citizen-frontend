@@ -498,7 +498,7 @@ export class DefenceSteps {
       } else {
         mediationSteps.acceptMediationAfterDisagreeing()
       }
-    })
+    }).catch(e => { return false })
     await this.askForHearingRequirements(defendantType)
     defendantTaskListPage.selectTaskCheckAndSendYourResponse()
     await I.bypassPCQ()
