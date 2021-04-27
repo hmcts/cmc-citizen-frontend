@@ -147,7 +147,6 @@ export class ClaimantResponseSteps {
       I.see('How free mediaiton works')
       mediationSteps.acceptMediationAfterDisagreeing()
     }
-    enhancedMediationSteps.acceptEnhancedMediationAfterDisagreeing()
     taskListPage.selectTaskHearingRequirements()
     directionsQuestionnaireSteps.acceptDirectionsQuestionnaireNoJourneyAsClaimant()
     taskListPage.selectTaskCheckandSubmitYourResponse()
