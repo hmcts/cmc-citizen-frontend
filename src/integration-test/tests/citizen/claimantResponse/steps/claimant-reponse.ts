@@ -21,6 +21,7 @@ import { ClaimantCourtOfferedInstalmentsPage } from 'integration-test/tests/citi
 import { ClaimantPayBySetDateAcceptedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-pay-by-set-date-accepted'
 import { ClaimantSettleAdmittedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-settle-admitted'
 import { PaidInFullPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-paid-in-full'
+import { MediationSteps } from 'integration-test/tests/citizen/mediation/steps/mediation'
 import { DirectionsQuestionnaireSteps } from 'integration-test/tests/citizen/directionsQuestionnaire/steps/directionsQuestionnaireSteps'
 import { ClaimantIntentionToProceedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-intention-to-proceed'
 import { ClaimantPartPaymentReceivedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-part-payment-received'
@@ -46,6 +47,7 @@ const payBySetDateAccepted: ClaimantPayBySetDateAcceptedPage = new ClaimantPayBy
 const viewDefendantsResponsePage: ClaimantDefendantResponsePage = new ClaimantDefendantResponsePage()
 const settleAdmittedPage: ClaimantSettleAdmittedPage = new ClaimantSettleAdmittedPage()
 const settleClaimPage: PaidInFullPage = new PaidInFullPage()
+const mediationSteps: MediationSteps = new MediationSteps()
 const directionsQuestionnaireSteps: DirectionsQuestionnaireSteps = new DirectionsQuestionnaireSteps()
 const intentionToProceedSteps: ClaimantIntentionToProceedPage = new ClaimantIntentionToProceedPage()
 const partPaymentReceivedPage: ClaimantPartPaymentReceivedPage = new ClaimantPartPaymentReceivedPage()
@@ -138,7 +140,15 @@ export class ClaimantResponseSteps {
       settleAdmittedPage.selectAdmittedNo()
     }
     taskListPage.selectTaskFreeMediation()
-    enhancedMediationSteps.acceptEnhancedMediationAfterDisagreeing()
+    await I.checkEnhancedMediationJourney().then(isEnhacedMediationJourneyEnabled => {
+      if (isEnhacedMediationJourneyEnabled) {
+        I.see('ContinueFree telephone mediation')
+        enhancedMediationSteps.acceptEnhancedMediationAfterDisagreeing()
+      } else {
+        I.see('How free mediaiton works')
+        mediationSteps.acceptMediationAfterDisagreeing()
+      }
+    }).catch(e => { return false })
     taskListPage.selectTaskHearingRequirements()
     directionsQuestionnaireSteps.acceptDirectionsQuestionnaireNoJourneyAsClaimant()
     taskListPage.selectTaskCheckandSubmitYourResponse()
@@ -171,7 +181,15 @@ export class ClaimantResponseSteps {
 
   async finishClaimantResponse (): Promise<void> {
     taskListPage.selectTaskFreeMediation()
-    enhancedMediationSteps.acceptEnhancedMediationAfterDisagreeing()
+    await I.checkEnhancedMediationJourney().then(isEnhacedMediationJourneyEnabled => {
+      if (isEnhacedMediationJourneyEnabled) {
+        I.see('ContinueFree telephone mediation')
+        enhancedMediationSteps.acceptEnhancedMediationAfterDisagreeing()
+      } else {
+        I.see('How free mediaiton works')
+        mediationSteps.acceptMediationAfterDisagreeing()
+      }
+    }).catch(e => { return false })
     taskListPage.selectTaskHearingRequirements()
     directionsQuestionnaireSteps.acceptDirectionsQuestionnaireNoJourneyAsClaimant()
     taskListPage.selectTaskCheckandSubmitYourResponse()
