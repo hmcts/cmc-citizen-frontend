@@ -25,7 +25,7 @@ Before(async (I: I) => {
 
 })
 
-Scenario('Claimant can enter and lift the Breathing space @smoke @nightly', { retries: 3 }, async (I: I) => {
+Scenario('Claimant can enter and lift the Breathing space @smoke-test @nightly', { retries: 3 }, async (I: I) => {
   userSteps.login(email)
   I.waitForOpenClaim(claimRef)
   I.click('My account')
