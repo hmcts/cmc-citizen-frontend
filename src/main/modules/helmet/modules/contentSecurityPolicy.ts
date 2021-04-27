@@ -27,7 +27,6 @@ export class ContentSecurityPolicy {
         scriptSrc: scriptSrc,
         scriptSrcElem: scriptSrc,
         connectSrc: connectSrc,
-        reportUri: '/report-violation',
         mediaSrc: ['\'self\''],
         frameSrc: [
           'vcc-eu4.8x8.com',
