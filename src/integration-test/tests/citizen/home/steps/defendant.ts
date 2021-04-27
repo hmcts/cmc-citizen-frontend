@@ -1,5 +1,4 @@
 import { DefendantTaskListPage } from 'integration-test/tests/citizen/defence/pages/defendant-task-list'
-import { MediationSteps } from 'integration-test/tests/citizen/mediation/steps/mediation'
 import { EnhancedMediationSteps } from 'integration-test/tests/citizen/mediation/steps/enhancedMediation'
 import { PartyType } from 'integration-test/data/party-type'
 import { DirectionsQuestionnaireSteps } from 'integration-test/tests/citizen/directionsQuestionnaire/steps/directionsQuestionnaireSteps'
@@ -7,7 +6,6 @@ import I = CodeceptJS.I
 
 const I: I = actor()
 const defendantTaskListPage: DefendantTaskListPage = new DefendantTaskListPage()
-const mediationSteps: MediationSteps = new MediationSteps()
 const enhancedMediationSteps: EnhancedMediationSteps = new EnhancedMediationSteps()
 const directionsQuestionnaireSteps: DirectionsQuestionnaireSteps = new DirectionsQuestionnaireSteps()
 
@@ -63,23 +61,11 @@ export class DefendantSteps {
 
   async selectTaskFreeMediation (I: I, defendantType: PartyType): Promise<void> {
     defendantTaskListPage.selectTaskFreeMediation()
-    await I.checkEnhancedMediationJourney().then(isEnhacedMediationJourneyEnabled => {
-      if (isEnhacedMediationJourneyEnabled) {
-        I.see('Continue')
-        if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
-          enhancedMediationSteps.acceptEnhancedMediationAsCompanyPhoneNumberProvided()
-        } else {
-          enhancedMediationSteps.acceptEnhancedMediationAsIndividualPhoneNumberProvidedIsUsed()
-        }
-      } else {
-        I.see('How free mediaiton works')
-        if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
-          mediationSteps.acceptMediationAsCompanyPhoneNumberProvided()
-        } else {
-          mediationSteps.acceptMediationAsIndividualPhoneNumberProvidedIsUsed()
-        }
-      }
-    }).catch(e => { return false })
+    if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
+      enhancedMediationSteps.acceptEnhancedMediationAsCompanyPhoneNumberProvided()
+    } else {
+      enhancedMediationSteps.acceptEnhancedMediationAsIndividualPhoneNumberProvidedIsUsed()
+    }
   }
 
   async selectTaskHearingRequirements (defendantType: PartyType): Promise<void> {

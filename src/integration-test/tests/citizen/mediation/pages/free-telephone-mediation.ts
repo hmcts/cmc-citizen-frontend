@@ -10,12 +10,12 @@ const buttons = {
 export class FreeTelephoneMediationPage {
 
   chooseContinue (): void {
-    I.waitForText('Free telephone mediation ')
+    I.waitForText('Free telephone mediation')
     I.click(buttons.agree)
   }
 
   chooseDisagree (): void {
-    I.waitForText('Free telephone mediation ')
+    I.waitForText('Free telephone mediation')
     I.click(buttons.disagree)
   }
 }
