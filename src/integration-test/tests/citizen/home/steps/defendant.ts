@@ -63,21 +63,24 @@ export class DefendantSteps {
 
   async selectTaskFreeMediation (I: I, defendantType: PartyType): Promise<void> {
     defendantTaskListPage.selectTaskFreeMediation()
-    if (await I.checkEnhancedMediationJourney()) {
-      I.see('Continue')
-      if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
-        enhancedMediationSteps.acceptEnhancedMediationAsCompanyPhoneNumberProvided()
+    await I.checkEnhancedMediationJourney()
+      .then (isEnhacedMediationJourneyEnabled => {
+      if (isEnhacedMediationJourneyEnabled) {
+        I.see('Continue')
+        if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
+          enhancedMediationSteps.acceptEnhancedMediationAsCompanyPhoneNumberProvided()
+        } else {
+          enhancedMediationSteps.acceptEnhancedMediationAsIndividualPhoneNumberProvidedIsUsed()
+        }
       } else {
-        enhancedMediationSteps.acceptEnhancedMediationAsIndividualPhoneNumberProvidedIsUsed()
+        I.see('How free mediaiton works')
+        if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
+          mediationSteps.acceptMediationAsCompanyPhoneNumberProvided()
+        } else {
+          mediationSteps.acceptMediationAsIndividualPhoneNumberProvidedIsUsed()
+        }
       }
-    } else {
-      I.see('How free mediaiton works')
-      if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
-        mediationSteps.acceptMediationAsCompanyPhoneNumberProvided()
-      } else {
-        mediationSteps.acceptMediationAsIndividualPhoneNumberProvidedIsUsed()
-      }
-    }
+    })
   }
 
   async selectTaskHearingRequirements (defendantType: PartyType): Promise<void> {

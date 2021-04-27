@@ -140,13 +140,16 @@ export class ClaimantResponseSteps {
       settleAdmittedPage.selectAdmittedNo()
     }
     taskListPage.selectTaskFreeMediation()
-    if (await I.checkEnhancedMediationJourney()) {
-      I.see('Continue')
-      enhancedMediationSteps.acceptEnhancedMediationAfterDisagreeing()
-    } else {
-      I.see('How free mediaiton works')
-      mediationSteps.acceptMediationAfterDisagreeing()
-    }
+    await I.checkEnhancedMediationJourney()
+      .then (isEnhacedMediationJourneyEnabled => {
+      if (isEnhacedMediationJourneyEnabled) {
+        I.see('ContinueFree telephone mediation')
+        enhancedMediationSteps.acceptEnhancedMediationAfterDisagreeing()
+      } else {
+        I.see('How free mediaiton works')
+        mediationSteps.acceptMediationAfterDisagreeing()
+      }
+    })
     taskListPage.selectTaskHearingRequirements()
     directionsQuestionnaireSteps.acceptDirectionsQuestionnaireNoJourneyAsClaimant()
     taskListPage.selectTaskCheckandSubmitYourResponse()
