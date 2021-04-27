@@ -154,14 +154,14 @@ export class ClaimantResponseSteps {
     taskListPage.selectTaskCheckandSubmitYourResponse()
   }
 
-  decideToProceed (): void {
+  async decideToProceed (): Promise<void> {
     taskListPage.selectTaskViewDefendantResponse()
     viewDefendantsResponsePage.submit()
     I.see('COMPLETE')
     I.click('Decide whether to proceed')
     I.see('Do you want to proceed with the claim?')
     intentionToProceedSteps.chooseYes()
-    this.finishClaimantResponse()
+    await this.finishClaimantResponse()
   }
 
   decideNotToProceed (): void {
@@ -179,9 +179,17 @@ export class ClaimantResponseSteps {
     I.see('You didn’t proceed with the claim')
   }
 
-  finishClaimantResponse (): void {
+  async finishClaimantResponse (): Promise<void> {
     taskListPage.selectTaskFreeMediation()
-    mediationSteps.acceptMediationAfterDisagreeing()
+    await I.checkEnhancedMediationJourney().then(isEnhacedMediationJourneyEnabled => {
+      if (isEnhacedMediationJourneyEnabled) {
+        I.see('ContinueFree telephone mediation')
+        enhancedMediationSteps.acceptEnhancedMediationAfterDisagreeing()
+      } else {
+        I.see('How free mediaiton works')
+        mediationSteps.acceptMediationAfterDisagreeing()
+      }
+    })
     taskListPage.selectTaskHearingRequirements()
     directionsQuestionnaireSteps.acceptDirectionsQuestionnaireNoJourneyAsClaimant()
     taskListPage.selectTaskCheckandSubmitYourResponse()
@@ -445,7 +453,7 @@ export class ClaimantResponseSteps {
     I.see('The claim is now settled.')
   }
 
-  rejectFullDefencePaidFullAmount (testData: EndToEndTestData): void {
+  async rejectFullDefencePaidFullAmount (testData: EndToEndTestData): Promise<void> {
     taskListPage.selectTaskViewDefendantResponse()
     I.see(`${testData.defendantName} states they paid you £${claimAmount.getTotal()}`)
     viewDefendantsResponsePage.submit()
@@ -456,7 +464,7 @@ export class ClaimantResponseSteps {
     I.see('Why did you reject their response')
     claimantRejectionReasonPage.enterReason('No money received')
     I.see('COMPLETE')
-    this.finishClaimantResponse()
+    await this.finishClaimantResponse()
     checkAndSendPage.checkFactsTrueAndSubmit(testData.defenceType)
     I.see('You’ve rejected their response')
   }

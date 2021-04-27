@@ -11,6 +11,7 @@ import { DefendantWhyDoYouDisagreePage } from 'integration-test/tests/citizen/de
 import { ClaimantResponseTestData } from 'integration-test/tests/citizen/claimantResponse/data/ClaimantResponseTestData'
 import { EndToEndTestData } from 'integration-test/tests/citizen/endToEnd/data/EndToEndTestData'
 import { MediationSteps } from 'integration-test/tests/citizen/mediation/steps/mediation'
+import { EnhancedMediationSteps } from 'integration-test/tests/citizen/mediation/steps/enhancedMediation'
 import { DefendantTaskListPage } from 'integration-test/tests/citizen/defence/pages/defendant-task-list'
 import { DirectionsQuestionnaireSteps } from 'integration-test/tests/citizen/directionsQuestionnaire/steps/directionsQuestionnaireSteps'
 
@@ -25,6 +26,7 @@ const whyYouDisagreePage: DefendantWhyDoYouDisagreePage = new DefendantWhyDoYouD
 const mediationSteps: MediationSteps = new MediationSteps()
 const directionsQuestionnaireSteps: DirectionsQuestionnaireSteps = new DirectionsQuestionnaireSteps()
 const defendantTaskListPage: DefendantTaskListPage = new DefendantTaskListPage()
+const enhancedMediationSteps: EnhancedMediationSteps = new EnhancedMediationSteps()
 
 export class DefendantResponseSteps {
 
@@ -49,7 +51,15 @@ export class DefendantResponseSteps {
       claimantResponseTestData.pageSpecificValues.evidencePageEnterEvidenceRow.comment
     )
     defendantTaskListPage.selectTaskFreeMediation()
-    mediationSteps.rejectMediation()
+    await I.checkEnhancedMediationJourney().then(isEnhacedMediationJourneyEnabled => {
+      if (isEnhacedMediationJourneyEnabled) {
+        I.see('ContinueFree telephone mediation')
+        enhancedMediationSteps.rejectEnhancedMediation()
+      } else {
+        I.see('How free mediaiton works')
+        mediationSteps.rejectMediation()
+      }
+    })
     defendantTaskListPage.selectTaskHearingRequirements()
     await directionsQuestionnaireSteps.acceptDirectionsQuestionnaireYesJourney()
     defendantSteps.selectCheckAndSubmitYourDefence()
@@ -89,7 +99,15 @@ export class DefendantResponseSteps {
       )
     }
     defendantTaskListPage.selectTaskFreeMediation()
-    mediationSteps.rejectMediationByDisagreeing()
+    await I.checkEnhancedMediationJourney().then(isEnhacedMediationJourneyEnabled => {
+      if (isEnhacedMediationJourneyEnabled) {
+        I.see('ContinueFree telephone mediation')
+        enhancedMediationSteps.rejectEnhancedMediationByDisagreeing()
+      } else {
+        I.see('How free mediaiton works')
+        mediationSteps.rejectMediationByDisagreeing()
+      }
+    })
     defendantTaskListPage.selectTaskHearingRequirements()
     await directionsQuestionnaireSteps.acceptDirectionsQuestionnaireYesJourney()
     defendantSteps.selectCheckAndSubmitYourDefence()
