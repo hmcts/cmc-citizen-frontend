@@ -36,6 +36,7 @@
     "newDashboardStatus": false,
     "inversionOfControl": true,
     "warningBanner": false,
+    "antennawebChat": true,
     "helpWithFees": true,
     "pcq": true,
     "autoEnrollIntoNewFeature": true,
