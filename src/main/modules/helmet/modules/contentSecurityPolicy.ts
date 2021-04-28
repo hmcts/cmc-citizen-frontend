@@ -25,7 +25,6 @@ export class ContentSecurityPolicy {
         defaultSrc: [none],
         fontSrc: [self, 'data:'],
         scriptSrc: scriptSrc,
-        scriptSrcElem: scriptSrc,
         connectSrc: connectSrc,
         mediaSrc: ['\'self\''],
         frameSrc: [
