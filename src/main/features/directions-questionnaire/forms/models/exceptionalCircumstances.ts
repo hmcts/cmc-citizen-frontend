@@ -48,7 +48,7 @@ export class ExceptionalCircumstances {
     return this
   }
 
-  isUserCompleted (): boolean {
+  isDefendantCompleted (): boolean {
     if (this.exceptionalCircumstances === undefined) {
       return false
     } else if (this.exceptionalCircumstances.option === YesNoOption.YES.option) {
@@ -57,4 +57,15 @@ export class ExceptionalCircumstances {
       return true
     }
   }
+
+  isClaimantCompleted (): boolean {
+    if (this.exceptionalCircumstances === undefined) {
+      return false
+    } else if (this.exceptionalCircumstances.option === YesNoOption.YES.option) {
+      return this.reason !== undefined
+    } else {
+      return true
+    }
+  }
+
 }

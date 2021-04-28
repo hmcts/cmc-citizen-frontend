@@ -5,7 +5,7 @@ import { Claim } from 'claims/models/claim'
 
 export class DetailsInCaseOfHearingTask {
   static isCompleted (responseDraft: ResponseDraft, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft, claim: Claim): boolean {
-    if (claim.claimData.defendant.isBusiness() && !directionsQuestionnaireDraft.exceptionalCircumstances.isUserCompleted()) {
+    if (claim.claimData.defendant.isBusiness() && !directionsQuestionnaireDraft.exceptionalCircumstances.isDefendantCompleted()) {
       return false
     } else if (!directionsQuestionnaireDraft.hearingLocation) {
       return false
@@ -26,15 +26,11 @@ export class DetailsInCaseOfHearingTask {
         }
       }
     }
-    return getDetailsForHearingTask(directionsQuestionnaireDraft)
+    return !(directionsQuestionnaireDraft.selfWitness.option === undefined ||
+      !directionsQuestionnaireDraft.otherWitnesses.isCompleted() ||
+      !directionsQuestionnaireDraft.availability.isCompleted() ||
+      (directionsQuestionnaireDraft.supportRequired.otherSupportSelected && !directionsQuestionnaireDraft.supportRequired.otherSupport.length) ||
+      (directionsQuestionnaireDraft.supportRequired.languageSelected && !directionsQuestionnaireDraft.supportRequired.languageInterpreted.length) ||
+      (directionsQuestionnaireDraft.supportRequired.signLanguageSelected && !directionsQuestionnaireDraft.supportRequired.signLanguageInterpreted.length))
   }
-}
-
-function getDetailsForHearingTask (directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): boolean {
-  return !(directionsQuestionnaireDraft.selfWitness.option === undefined ||
-    !directionsQuestionnaireDraft.otherWitnesses.isCompleted() ||
-    !directionsQuestionnaireDraft.availability.isCompleted() ||
-    (directionsQuestionnaireDraft.supportRequired.otherSupportSelected && !directionsQuestionnaireDraft.supportRequired.otherSupport.length) ||
-    (directionsQuestionnaireDraft.supportRequired.languageSelected && !directionsQuestionnaireDraft.supportRequired.languageInterpreted.length) ||
-    (directionsQuestionnaireDraft.supportRequired.signLanguageSelected && !directionsQuestionnaireDraft.supportRequired.signLanguageInterpreted.length))
 }
