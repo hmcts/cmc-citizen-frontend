@@ -3,7 +3,7 @@ import * as crypto from 'crypto'
 import { Logger } from '@hmcts/nodejs-logging'
 import { BaseParameters } from './models/pcqParameters'
 
-const algorithm = 'aes-256-cbc'
+const algorithm = 'aes-256-gcm'
 const logger = Logger.getLogger('pcq/tokenGenerator')
 
 export class TokenGenerator {
