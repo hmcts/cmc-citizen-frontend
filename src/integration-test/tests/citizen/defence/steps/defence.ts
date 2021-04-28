@@ -1,3 +1,5 @@
+/* tslint:disable:no-console */
+
 import { PaymentOption } from 'integration-test/data/payment-option'
 import { claimAmount, DEFAULT_PASSWORD, defence } from 'integration-test/data/test-data'
 import { DefendantCheckAndSendPage } from 'integration-test/tests/citizen/defence/pages/defendant-check-and-send'
@@ -492,13 +494,14 @@ export class DefenceSteps {
         throw new Error(`Unknown payment option: ${paymentOption}`)
     }
     defendantTaskListPage.selectTaskFreeMediation()
-    await I.checkEnhancedMediationJourney().then(isEnhacedMediationJourneyEnabled => {
-      if (isEnhacedMediationJourneyEnabled) {
-        enhancedMediationSteps.acceptEnhancedMediationAfterDisagreeing()
-      } else {
-        mediationSteps.acceptMediationAfterDisagreeing()
-      }
-    }).catch(e => { return false })
+    const isEnhacedMediationJourneyEnabled = await I.checkEnhancedMediationJourney()
+    console.log('isEnhacedMediationJourneyEnabled value retrieved, attempt 1::',isEnhacedMediationJourneyEnabled)
+    if (isEnhacedMediationJourneyEnabled) {
+      enhancedMediationSteps.acceptEnhancedMediationAfterDisagreeing()
+    } else {
+      mediationSteps.acceptMediationAfterDisagreeing()
+    }
+    console.log('isEnhacedMediationJourneyEnabled value retrieved, attempt 2::',isEnhacedMediationJourneyEnabled)
     await this.askForHearingRequirements(defendantType)
     defendantTaskListPage.selectTaskCheckAndSendYourResponse()
     await I.bypassPCQ()

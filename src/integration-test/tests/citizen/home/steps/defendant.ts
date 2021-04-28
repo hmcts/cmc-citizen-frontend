@@ -1,3 +1,5 @@
+/* tslint:disable:no-console */
+
 import { DefendantTaskListPage } from 'integration-test/tests/citizen/defence/pages/defendant-task-list'
 import { MediationSteps } from 'integration-test/tests/citizen/mediation/steps/mediation'
 import { EnhancedMediationSteps } from 'integration-test/tests/citizen/mediation/steps/enhancedMediation'
@@ -63,23 +65,22 @@ export class DefendantSteps {
 
   async selectTaskFreeMediation (I: I, defendantType: PartyType): Promise<void> {
     defendantTaskListPage.selectTaskFreeMediation()
-    await I.checkEnhancedMediationJourney().then(isEnhacedMediationJourneyEnabled => {
-      if (isEnhacedMediationJourneyEnabled) {
-        I.see('Continue')
-        if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
-          enhancedMediationSteps.acceptEnhancedMediationAsCompanyPhoneNumberProvided()
-        } else {
-          enhancedMediationSteps.acceptEnhancedMediationAsIndividualPhoneNumberProvidedIsUsed()
-        }
+    const isEnhacedMediationJourneyEnabled = await I.checkEnhancedMediationJourney()
+    console.log('isEnhacedMediationJourneyEnabled value retrieved, attempt 1::',isEnhacedMediationJourneyEnabled)
+    if (isEnhacedMediationJourneyEnabled) {
+      if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
+        enhancedMediationSteps.acceptEnhancedMediationAsCompanyPhoneNumberProvided()
       } else {
-        I.see('How free mediaiton works')
-        if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
-          mediationSteps.acceptMediationAsCompanyPhoneNumberProvided()
-        } else {
-          mediationSteps.acceptMediationAsIndividualPhoneNumberProvidedIsUsed()
-        }
+        enhancedMediationSteps.acceptEnhancedMediationAsIndividualPhoneNumberProvidedIsUsed()
       }
-    }).catch(e => { return false })
+    } else {
+      if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
+        mediationSteps.acceptMediationAsCompanyPhoneNumberProvided()
+      } else {
+        mediationSteps.acceptMediationAsIndividualPhoneNumberProvidedIsUsed()
+      }
+    }
+    console.log('isEnhacedMediationJourneyEnabled value retrieved, attempt 2::',isEnhacedMediationJourneyEnabled)
   }
 
   async selectTaskHearingRequirements (defendantType: PartyType): Promise<void> {

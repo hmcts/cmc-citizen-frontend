@@ -1,3 +1,5 @@
+/* tslint:disable:no-console */
+
 import I = CodeceptJS.I
 import { PartyType } from 'integration-test/data/party-type'
 import { DefenceSteps } from 'integration-test/tests/citizen/defence/steps/defence'
@@ -51,15 +53,14 @@ export class DefendantResponseSteps {
       claimantResponseTestData.pageSpecificValues.evidencePageEnterEvidenceRow.comment
     )
     defendantTaskListPage.selectTaskFreeMediation()
-    await I.checkEnhancedMediationJourney().then(isEnhacedMediationJourneyEnabled => {
-      if (isEnhacedMediationJourneyEnabled) {
-        I.see('ContinueFree telephone mediation')
-        enhancedMediationSteps.rejectEnhancedMediation()
-      } else {
-        I.see('How free mediaiton works')
-        mediationSteps.rejectMediation()
-      }
-    }).catch(e => { return false })
+    const isEnhacedMediationJourneyEnabled = await I.checkEnhancedMediationJourney()
+    console.log('isEnhacedMediationJourneyEnabled value retrieved, attempt 1::',isEnhacedMediationJourneyEnabled)
+    if (isEnhacedMediationJourneyEnabled) {
+      enhancedMediationSteps.acceptEnhancedMediationAfterDisagreeing()
+    } else {
+      mediationSteps.acceptMediationAfterDisagreeing()
+    }
+    console.log('isEnhacedMediationJourneyEnabled value retrieved, attempt 2::',isEnhacedMediationJourneyEnabled)
     defendantTaskListPage.selectTaskHearingRequirements()
     await directionsQuestionnaireSteps.acceptDirectionsQuestionnaireYesJourney()
     defendantSteps.selectCheckAndSubmitYourDefence()
@@ -99,15 +100,14 @@ export class DefendantResponseSteps {
       )
     }
     defendantTaskListPage.selectTaskFreeMediation()
-    await I.checkEnhancedMediationJourney().then(isEnhacedMediationJourneyEnabled => {
-      if (isEnhacedMediationJourneyEnabled) {
-        I.see('ContinueFree telephone mediation')
-        enhancedMediationSteps.rejectEnhancedMediationByDisagreeing()
-      } else {
-        I.see('How free mediaiton works')
-        mediationSteps.rejectMediationByDisagreeing()
-      }
-    }).catch(e => { return false })
+    const isEnhacedMediationJourneyEnabled = await I.checkEnhancedMediationJourney()
+    console.log('isEnhacedMediationJourneyEnabled value retrieved, attempt 1::',isEnhacedMediationJourneyEnabled)
+    if (isEnhacedMediationJourneyEnabled) {
+      enhancedMediationSteps.acceptEnhancedMediationAfterDisagreeing()
+    } else {
+      mediationSteps.acceptMediationAfterDisagreeing()
+    }
+    console.log('isEnhacedMediationJourneyEnabled value retrieved, attempt 2::',isEnhacedMediationJourneyEnabled)
     defendantTaskListPage.selectTaskHearingRequirements()
     await directionsQuestionnaireSteps.acceptDirectionsQuestionnaireYesJourney()
     defendantSteps.selectCheckAndSubmitYourDefence()
