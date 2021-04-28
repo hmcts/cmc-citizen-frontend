@@ -46,11 +46,6 @@ export function initialTransitions (claim: Claim): StateMachine {
         to: InitialStates.HWF_APPLICATION_PENDING
       },
       {
-        name: 'checkHwfIntrestReCalculate',
-        from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.HWF_AWAITING_RESPONSE_HWF],
-        to: InitialStates.HWF_Intrest_Recalculate
-      },
-      {
         name: 'checkHwfFeesReject',
         from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.HWF_AWAITING_RESPONSE_HWF],
         to: InitialStates.HWF_Rejected
@@ -107,9 +102,9 @@ export function initialTransitions (claim: Claim): StateMachine {
         return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'HWF_APPLICATION_PENDING' && (claim.lastEventTriggeredForHwfCase === 'CreateHelpWithFeesClaim' || claim.lastEventTriggeredForHwfCase === 'UpdateHWFNumber')
       },
 
-      onBeforeCheckHwfIntrestReCalculate () {
-        return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF' && claim.lastEventTriggeredForHwfCase === 'RecalculateInterest'
-      },
+      // onBeforeCheckHwfIntrestReCalculate () {
+      //   return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF' && claim.lastEventTriggeredForHwfCase === 'RecalculateInterest'
+      // },
 
       onBeforeCheckHwfFeesReject () {
         return !claim.response && claim.helpWithFeesNumber !== null && claim.state === 'AWAITING_RESPONSE_HWF' && claim.lastEventTriggeredForHwfCase === 'NoRemissionHWF'
