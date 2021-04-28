@@ -28,18 +28,36 @@ export namespace DirectionsQuestionnaire {
     }
 
     return {
-      requireSupport: getRequireSupport(directionsQuestionnaire),
+      requireSupport: directionsQuestionnaire.supportRequired && {
+        languageInterpreter: directionsQuestionnaire.supportRequired.languageInterpreted,
+        signLanguageInterpreter: directionsQuestionnaire.supportRequired.signLanguageInterpreted,
+        hearingLoop: directionsQuestionnaire.supportRequired.hearingLoopSelected ? YesNoOption.YES : YesNoOption.NO,
+        disabledAccess: directionsQuestionnaire.supportRequired.disabledAccessSelected ? YesNoOption.YES : YesNoOption.NO,
+        otherSupport: directionsQuestionnaire.supportRequired.otherSupport
+      },
       hearingLocation: toHearingLocation(directionsQuestionnaire),
-      witness: getWitness(directionsQuestionnaire),
+      witness: directionsQuestionnaire.selfWitness && {
+        selfWitness: directionsQuestionnaire.selfWitness.option.option as YesNoOption,
+        noOfOtherWitness: directionsQuestionnaire.otherWitnesses ? directionsQuestionnaire.otherWitnesses.howMany : undefined
+      },
       expertReports: (directionsQuestionnaire.expertReports && directionsQuestionnaire.expertReports.rows.length > 0) ?
         directionsQuestionnaire.expertReports.rows.map(row => ({
           expertName: row.expertName,
           expertReportDate: row.reportDate ? LocalDate.fromObject(row.reportDate).asString() : undefined
         })) : undefined,
-      unavailableDates: getUnavailableDates(directionsQuestionnaire),
+      unavailableDates: directionsQuestionnaire.availability &&
+        directionsQuestionnaire.availability.unavailableDates.map(unavailableDate => ({
+          unavailableDate: unavailableDate ? LocalDate.fromObject(unavailableDate).asString() : undefined
+        })),
       expertRequired: directionsQuestionnaire.expertRequired.option.option as YesNoOption,
-      permissionForExpert: getpermissionForExpert(directionsQuestionnaire),
-      expertRequest: getExpertRequest(directionsQuestionnaire)
+      permissionForExpert: directionsQuestionnaire.permissionForExpert &&
+        directionsQuestionnaire.permissionForExpert.option ?
+        directionsQuestionnaire.permissionForExpert.option.option as YesNoOption : undefined,
+      expertRequest: (directionsQuestionnaire.expertEvidence.expertEvidence &&
+        directionsQuestionnaire.expertEvidence.expertEvidence.option === YesNoOption.YES) ? {
+          expertEvidenceToExamine: directionsQuestionnaire.expertEvidence.whatToExamine,
+          reasonForExpertAdvice: directionsQuestionnaire.whyExpertIsNeeded.explanation
+        } : undefined
     }
   }
 
@@ -63,44 +81,6 @@ export namespace DirectionsQuestionnaire {
       exceptionalCircumstancesReason: directionsQuestionnaire.exceptionalCircumstances ?
         directionsQuestionnaire.exceptionalCircumstances.reason : undefined
     }
-  }
-
-  function getRequireSupport (directionsQuestionnaire: DirectionsQuestionnaireDraft): RequireSupport {
-    return directionsQuestionnaire.supportRequired && {
-      languageInterpreter: directionsQuestionnaire.supportRequired.languageInterpreted,
-      signLanguageInterpreter: directionsQuestionnaire.supportRequired.signLanguageInterpreted,
-      hearingLoop: directionsQuestionnaire.supportRequired.hearingLoopSelected ? YesNoOption.YES : YesNoOption.NO,
-      disabledAccess: directionsQuestionnaire.supportRequired.disabledAccessSelected ? YesNoOption.YES : YesNoOption.NO,
-      otherSupport: directionsQuestionnaire.supportRequired.otherSupport
-    }
-  }
-
-  function getWitness (directionsQuestionnaire: DirectionsQuestionnaireDraft): Witness {
-    return directionsQuestionnaire.selfWitness && {
-      selfWitness: directionsQuestionnaire.selfWitness.option.option as YesNoOption,
-      noOfOtherWitness: directionsQuestionnaire.otherWitnesses ? directionsQuestionnaire.otherWitnesses.howMany : undefined
-    }
-  }
-
-  function getUnavailableDates (directionsQuestionnaire: DirectionsQuestionnaireDraft): UnavailableDate[] {
-    return directionsQuestionnaire.availability &&
-    directionsQuestionnaire.availability.unavailableDates.map(unavailableDate => ({
-      unavailableDate: unavailableDate ? LocalDate.fromObject(unavailableDate).asString() : undefined
-    }))
-  }
-
-  function getpermissionForExpert (directionsQuestionnaire: DirectionsQuestionnaireDraft): YesNoOption {
-    return directionsQuestionnaire.permissionForExpert &&
-    directionsQuestionnaire.permissionForExpert.option ?
-    directionsQuestionnaire.permissionForExpert.option.option as YesNoOption : undefined
-  }
-
-  function getExpertRequest (directionsQuestionnaire: DirectionsQuestionnaireDraft): ExpertRequest {
-    return (directionsQuestionnaire.expertEvidence.expertEvidence &&
-      directionsQuestionnaire.expertEvidence.expertEvidence.option === YesNoOption.YES) ? {
-        expertEvidenceToExamine: directionsQuestionnaire.expertEvidence.whatToExamine,
-        reasonForExpertAdvice: directionsQuestionnaire.whyExpertIsNeeded.explanation
-      } : undefined
   }
 
   export function fromObject (directionsQuestionnaire: DirectionsQuestionnaire): DirectionsQuestionnaire {
