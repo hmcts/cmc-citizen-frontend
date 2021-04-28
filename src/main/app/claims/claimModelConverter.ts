@@ -210,7 +210,9 @@ export class ClaimModelConverter {
       if (draftClaim.interestType.option === InterestTypeOption.SAME_RATE) {
         interest.type = draftClaim.interestRate.type
         interest.rate = draftClaim.interestRate.rate
-        interest.reason = draftClaim.interestRate.type === InterestRateOption.DIFFERENT && draftClaim.interestRate.reason
+        if (draftClaim.interestRate.type === InterestRateOption.DIFFERENT) {
+          interest.reason = draftClaim.interestRate.reason
+        }
       } else {
         const interestBreakdown = new InterestBreakdown()
         interestBreakdown.totalAmount = draftClaim.interestTotal.amount
@@ -218,12 +220,16 @@ export class ClaimModelConverter {
         interest.interestBreakdown = interestBreakdown
         interest.type = ClaimInterestType.BREAKDOWN
         if (draftClaim.interestContinueClaiming.option === YesNoOption.YES) {
-          draftClaim.interestHowMuch.type === InterestRateOption.STANDARD ? interest.rate = getStandardInterestRate() :
-          interest.specificDailyAmount = draftClaim.interestHowMuch.dailyAmount
+          if (draftClaim.interestHowMuch.type === InterestRateOption.STANDARD) {
+            interest.rate = getStandardInterestRate()
+          } else {
+            interest.specificDailyAmount = draftClaim.interestHowMuch.dailyAmount
+          }
         }
       }
       interest.interestDate = this.convertInterestDate(draftClaim)
     }
+
     return interest
   }
 

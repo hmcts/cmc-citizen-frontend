@@ -35,7 +35,7 @@ export class AllowanceCalculations {
     let numberOfDependants = 0
     if (dependants.children) {
       const reducer = (total: number, children: Child) => {
-        numberOfDependants =
+        const numberOfDependants: number =
           children.ageGroupType !== AgeGroupType.BETWEEN_16_AND_19 ?
             children.numberOfChildren : children.numberOfChildrenLivingWithYou
 
