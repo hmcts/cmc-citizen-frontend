@@ -59,11 +59,12 @@ nodejs:
 
 idam-pr:
   enabled: true
+  debug: true
   redirect_uris:
     Money Claims - Citizen:
       - https://${SERVICE_FQDN}/receiver
-    xuiwebapp:
-      - https://xui-${SERVICE_FQDN}/oauth2/callback
+    XUI:
+      - http://xui-${SERVICE_FQDN}/oauth2/callback
 
 xui-webapp:
   enabled: true
@@ -79,6 +80,14 @@ xui-webapp:
       SERVICES_CCD_COMPONENT_API: http://gateway-${SERVICE_FQDN}
       SERVICES_CCD_DATA_STORE_API: http://${SERVICE_NAME}-ccd-data-store-api
       SERVICES_TERMS_AND_CONDITIONS: http://xui-terms-and-conditions-${SERVICE_FQDN}.service.core-compute-preview.internal
+      JURISDICTIONS: CMC
+      FEATURE_REDIS_ENABLED: false
+      FEATURE_APP_INSIGHTS_ENABLED: false
+      FEATURE_SECURE_COOKIE_ENABLED: false
+      FEATURE_HELMET_ENABLED: false
+      REDISCLOUD_URL: http://dummyrediscloudurl
+      UV_THREADPOOL_SIZE: 128
+      PROTOCOL: http
 
 cmc-claim-store:
   enabled: true
@@ -178,6 +187,7 @@ ccd:
       imagePullPolicy: Always
       ingressHost: gateway-${SERVICE_FQDN}
       ingressIP: ${INGRESS_IP}
+      
   ccd-case-management-web:
     idam-pr:
       cpuLimits: 50m
