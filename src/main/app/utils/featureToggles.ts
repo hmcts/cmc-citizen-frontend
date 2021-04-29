@@ -44,6 +44,10 @@ export class FeatureToggles {
     return this.launchDarklyClient.serviceVariation('pcq', toBoolean(config.get<boolean>(`featureToggles.pcq`)))
   }
 
+  async isAntennaWebChatEnabled (): Promise<boolean> {
+    return this.launchDarklyClient.serviceVariation('antenna-web-chat', toBoolean(config.get<boolean>(`featureToggles.AntennawebChat`)))
+  }
+
   async isSignPostingEnabled (): Promise<boolean> {
     return this.launchDarklyClient.serviceVariation('sign-posting-ctsc', toBoolean(config.get<boolean>(`featureToggles.signPostingCTSC`)))
   }
