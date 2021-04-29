@@ -62,10 +62,28 @@ idam-pr:
   redirect_uris:
     Money Claims - Citizen:
       - https://${SERVICE_FQDN}/receiver
+    xuiwebapp:
+      - https://xui-${SERVICE_FQDN}/oauth2/callback
+
+xui-webapp:
+  enabled: true
+  nodejs:
+    imagePullPolicy: Always
+    releaseNameOverride: ${SERVICE_NAME}-xui-webapp
+    image: hmctspublic.azurecr.io/xui/webapp:latest
+    ingressHost: xui-${SERVICE_FQDN}
+    environment:
+      HEALTH_CCD_COMPONENT_API: http://gateway-${SERVICE_FQDN}/health
+      HEALTH_CCD_DATA_API: http://${SERVICE_NAME}-ccd-data-store-api/health
+      HEALTH_TERMS_AND_CONDITIONS_API: http://xui-terms-and-conditions-${SERVICE_FQDN}.service.core-compute-preview.internal/health
+      SERVICES_CCD_COMPONENT_API: http://gateway-${SERVICE_FQDN}
+      SERVICES_CCD_DATA_STORE_API: http://${SERVICE_NAME}-ccd-data-store-api
+      SERVICES_TERMS_AND_CONDITIONS: http://xui-terms-and-conditions-${SERVICE_FQDN}.service.core-compute-preview.internal
 
 cmc-claim-store:
   enabled: true
   java:
+    imagePullPolicy: Always
     image: hmctspublic.azurecr.io/cmc/claim-store:latest
     releaseNameOverride: ${SERVICE_NAME}-claim-store
     ingressHost: claim-store-${SERVICE_FQDN}
@@ -115,9 +133,15 @@ ccd:
   ccd:
     s2s:
       enabled: false
+    apiGatewayWeb:
+      enabled: true
     postgresql:
       enabled: false
     adminWeb:
+      enabled: true
+    managementWeb:
+      enabled: true
+    elastic:
       enabled: true
 
   ingressHost: ${SERVICE_FQDN}
@@ -125,6 +149,9 @@ ccd:
   consulIP: ${CONSUL_LB_IP}
 
   global:
+    ccdApiGatewayIngress: gateway-${SERVICE_FQDN}
+    ccdCaseManagementWebIngress: case-management-web-${SERVICE_FQDN}
+    ccdDataStoreUrl: http://${SERVICE_NAME}-ccd-data-store-api
     idamApiUrl: https://idam-api.aat.platform.hmcts.net
     idamWebUrl: https://idam-web-public.aat.platform.hmcts.net
     s2sUrl: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
@@ -137,6 +164,7 @@ ccd:
 
   ccd-admin-web:
     nodejs:
+      imagePullPolicy: Always
       image: hmctspublic.azurecr.io/ccd/admin-web:latest
       ingressHost: ccd-admin-web-${SERVICE_FQDN}
       keyVaults: []
@@ -145,8 +173,32 @@ ccd:
     idam-pr:
       enabled: true
 
+  ccd-api-gateway-web:
+    nodejs:
+      imagePullPolicy: Always
+      ingressHost: gateway-${SERVICE_FQDN}
+      ingressIP: ${INGRESS_IP}
+  ccd-case-management-web:
+    idam-pr:
+      cpuLimits: 50m
+      cpuRequests: 25m
+      enabled: true
+      memoryLimits: 16Mi
+      memoryRequests: 8Mi
+      releaseNameOverride: ${SERVICE_NAME}-ccd-idam-pr
+    nodejs:
+      imagePullPolicy: Always
+      environment:
+        CCD_ACTIVITY_URL: null
+        DM_URL: https://gateway-${SERVICE_FQDN}/documents
+        DM_URL_REMOTE: https?://(gateway-${SERVICE_FQDN}:443|dm-store-aat.service.core-compute-aat.internal)/documents
+        NODE_TLS_REJECT_UNAUTHORIZED: 0
+      ingressHost: case-management-web-${SERVICE_FQDN}
+      ingressIP: ${INGRESS_IP}
+
   ccd-user-profile-api:
     java:
+      imagePullPolicy: Always
       image: hmctspublic.azurecr.io/ccd/user-profile-api:latest
       keyVaults: []
       environment:
@@ -154,6 +206,7 @@ ccd:
 
   ccd-definition-store-api:
     java:
+      imagePullPolicy: Always
       image: hmctspublic.azurecr.io/ccd/definition-store-api:latest
       imagePullPolicy: Always
       keyVaults: []
@@ -165,6 +218,7 @@ ccd:
 
   ccd-data-store-api:
     java:
+      imagePullPolicy: Always
       image: hmctspublic.azurecr.io/ccd/data-store-api:latest
       keyVaults: []
       environment:
