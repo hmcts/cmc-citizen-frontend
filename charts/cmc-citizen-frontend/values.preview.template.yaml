@@ -302,7 +302,7 @@ logstash:
   resources:
     limits:
       cpu: 500m
-      memory: 1028Mi
+      memory: 1600Mi
     requests:
       cpu: 100m
       memory: 512Mi
