@@ -142,7 +142,7 @@ export class ClaimantResponseSteps {
       settleAdmittedPage.selectAdmittedNo()
     }
     taskListPage.selectTaskFreeMediation()
-    const isEnhacedMediationJourneyEnabled = await I.checkEnhancedMediationJourney()
+    const isEnhacedMediationJourneyEnabled = I.checkEnhancedMediationJourney()
     console.log('isEnhacedMediationJourneyEnabled value retrieved, attempt 1::',isEnhacedMediationJourneyEnabled)
     if (isEnhacedMediationJourneyEnabled) {
       enhancedMediationSteps.acceptEnhancedMediationAfterDisagreeing()
@@ -182,7 +182,7 @@ export class ClaimantResponseSteps {
 
   async finishClaimantResponse (): Promise<void> {
     taskListPage.selectTaskFreeMediation()
-    const isEnhacedMediationJourneyEnabled = await I.checkEnhancedMediationJourney()
+    const isEnhacedMediationJourneyEnabled = I.checkEnhancedMediationJourney()
     console.log('isEnhacedMediationJourneyEnabled value retrieved, attempt 1::',isEnhacedMediationJourneyEnabled)
     if (isEnhacedMediationJourneyEnabled) {
       enhancedMediationSteps.acceptEnhancedMediationAfterDisagreeing()
