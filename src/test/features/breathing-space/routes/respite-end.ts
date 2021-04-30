@@ -44,7 +44,7 @@ describe('Enter breathing space: Respite end date page', () => {
           .post(BreathingSpacePaths.bsEndDatePage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ respiteEnd: { day: date.date(), month: date.month() - 1, year: date.year() } })
-          .expect(res => expect(res).to.be.successful.withText('Expected end date must not be before today', 'There was a problem'))
+          .expect(res => expect(res).to.be.successful.withText('There was a problem'))
       })
 
       it('should redirect to check answer page when form is valid and everything is fine', async () => {
