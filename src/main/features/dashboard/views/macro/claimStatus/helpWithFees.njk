@@ -93,7 +93,6 @@
   {% elif claim.claimData.interest.lastInterestCalculationDate === undefined %}
     <p>{{ t('The full claim fee shown on the dashboard is calculated as on {{ createdAt }}.', { createdAt: claim.createdAt | date }) | safe }}</p>
   {% endif %}
-  <p>{{ t('The claim fee may increase if you have claimed interest. Claim interest is calculated up to the date when the claim is sent to the defendant. This calculation can increase the total claim amount and so incur a higher claim issue fee.') }}</p>
 <p>{{ t('If there is no response in next 90 days, the claim will be closed and you will need to create a new claim.') }}</p>
 </div>
 {% endmacro %}
@@ -140,21 +139,6 @@
   {%- endfor %}
   {% endset %}
   <p>{{ t('You will need your claim reference number: {{ ccdId }}', { ccdId: hyphenatedCcdCaseId }) }}</p>
-
-  {% if claim.claimData.interest.lastInterestCalculationDate %}
-    <p>{{ t('The full claim fee shown on the dashboard is calculated as on {{ createdAt }}.', { createdAt: claim.claimData.interest.lastInterestCalculationDate | date }) | safe }}</p>
-  {% elif claim.claimData.interest.lastInterestCalculationDate === undefined %}
-    <p>{{ t('The full claim fee shown on the dashboard is calculated as on {{ createdAt }}.', { createdAt: claim.createdAt | date }) | safe }}</p>
-  {% endif %}
-</div>
-<div class="status-block">
-  <div class="govuk-details govuk-dashboard-details__text">
-    <p>{{ t('The claim fee may increase if:') }}</p>
-    <ul class="list list-bullet">
-      <li>{{ t('you have claimed interest') }}</li>
-      <li>{{ t('the Help with Fees application takes more than 5 days to progress') }}</li>
-    </ul>
-  </div>
 </div>
 {% endmacro %}
 
@@ -180,18 +164,8 @@
   {% endset %}
   <p>{{ t('You will need your claim reference number: {{ ccdId }}', { ccdId: hyphenatedCcdCaseId }) }}</p>
   <p>{{ t('Once payment has been made your claim will be issued and sent to the defendant.') }}</p>
+  <p>{{ t('If there is no response in next 90 days, the claim will be closed and you will need to create a new claim.') }}</p>
 </div>
-<div class="status-block">
-  <div class="govuk-details govuk-dashboard-details__text">
-    <p>{{ t('The claim fee may increase if:') }}</p>
-    <ul class="list list-bullet">
-      <li>{{ t('you have claimed interest') }}</li>
-      <li>{{ t('the Help with Fees application takes more than 5 days to progress') }}</li>
-    </ul>
-  </div>
-<p>{{ t('If there is no response in next 90 days, the claim will be closed and you will need to create a new claim.') }}</p>
-</div>
-
 {% endmacro %}
 
 {% macro helpWithFeesFullRemettedClaimStatus(claim) %}
@@ -212,40 +186,6 @@
   <h3 class="heading-small">{{ t('What to do next') }}</h3>
   <p>{{ t('Your Help with Fees application will be processed. Wait to hear from us.') }}</p>
 </div>
-<div class="status-block">
-  <div class="govuk-details govuk-dashboard-details__text">
-    <p>{{ t('The claim fee may increase if:') }}</p>
-    <ul class="list list-bullet">
-      <li>{{ t('you have claimed interest') }}</li>
-      <li>{{ t('the Help with Fees application takes more than 5 days to progress') }}</li>
-    </ul>
-  </div>
-</div>
-{% endmacro %}
-
-{% macro helpWithFeesIntrestRecalculateStatus(claim) %}
-<div class="status-block">
-  <h2 class="heading-medium">{{ t('Your Help with Fees application has been updated') }}</h2>
-  <p>{{ t('We have updated your Help with Fees application for the following reason:') }}</p>
-  <p>{{ t('Claim interest is calculated up to the date when the claim is sent to the defendant.') }}</p>
-  <p>{{ t('This calculation can increase the total claim amount and so incur a higher claim issue fee. The claim fee is {{ claimFees }}.', { claimFees : claim.claimData.feeAmountInPennies | pennies2pounds | numeral }) }}</p>
-  <p>{{ t('If the court asks you to pay some or all of the court fees you must pay as soon as you can.') }}</p>
-  <p>{{ t('To pay by card, phone 0300 123 7050.') }}</p>
-  {% set dash = joiner("-") %}
-  {% set hyphenatedCcdCaseId %}
-  {% for batch in claim.ccdCaseId | string | batch(4) -%}
-      {{ dash() }}{% for items in batch -%}{{ items }}
-      {%- endfor %}
-  {%- endfor %}
-  {% endset %}
-  <p>{{ t('You will need your claim reference number: {{ ccdId }}', { ccdId: hyphenatedCcdCaseId }) }}</p>
-  {% if claim.claimData.interest.lastInterestCalculationDate %}
-    <p>{{ t('The full claim fee shown on the dashboard is calculated as on {{ createdAt }}.', { createdAt: claim.claimData.interest.lastInterestCalculationDate | date }) | safe }}</p>
-  {% elif claim.claimData.interest.lastInterestCalculationDate === undefined %}
-    <p>{{ t('The full claim fee shown on the dashboard is calculated as on {{ createdAt }}.', { createdAt: claim.createdAt | date }) | safe }}</p>
-  {% endif %}
-</div>
-
 {% endmacro %}
 
 {% macro HWF_APPLICATION_PENDING() %}
@@ -270,10 +210,6 @@
 
 {% macro HWF_Full_Granted() %}
   {{ t("We've reviewed your Help with Fees application") }}
-{% endmacro %}
-
-{% macro HWF_Intrest_Recalculate() %}
-  {{ t("Your Help with Fees application has been updated") }}
 {% endmacro %}
 
 {% macro HWF_Update_Number(claim) %}

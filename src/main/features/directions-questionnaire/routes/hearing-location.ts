@@ -238,7 +238,7 @@ export default express.Router()
                 draft.document.hearingLocation.alternativeOption = AlternativeCourtOption.NEAREST_COURT_SELECTED
                 draft.document.hearingLocationSlug = nearestCourtDetails.slug
                 draft.document.hearingLocation.facilities = nearestCourtDetails.facilities
-                draft.document.hearingLocation.courtAccepted = form.model.courtAccepted
+                draft.document.hearingLocation.courtAccepted = form.model.courtAccepted === undefined ? YesNoOption.YES : form.model.courtAccepted
 
                 await new DraftService().save(draft, user.bearerToken)
               }
