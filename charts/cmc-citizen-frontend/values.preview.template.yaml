@@ -305,7 +305,7 @@ logstash:
       memory: 1600Mi
     requests:
       cpu: 100m
-      memory: 512Mi
+      memory: 1024Mi
   persistence:
     enabled: false
   volumeMounts:
