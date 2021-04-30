@@ -11,17 +11,17 @@ class mediationHelper extends codecept_helper {
     console.log(para);
     console.log(para[0]);
     console.log(para[1]);
-    console.log('new journey::', para.includes('BETA This is a new service – your feedback (opens in a new window) will help us to improve it.'))
+    console.log('new journey::', para.includes('We have automatically registered you for free telephone mediation from HM Courts and Tribunals Service.'))
     if (para[1].includes('We have automatically registered you for free telephone mediation from HM Courts and Tribunals Service.')) {
       console.log('enhanced mediation journey is enabled');
-      return Promise.resolve(true)
+      return true
     } else if (heading === 'Free telephone mediation') {
       console.log('enhanced mediation journey is disabled');
-      return Promise.resolve(false)
+      return false
     } else if (heading === 'Sorry, there is a problem with the service') {
       // silently move on.
       console.log('Error in Mediation Service');
-      return Promise.resolve(false)
+      return false
     }
   }
 }
