@@ -278,11 +278,11 @@ elasticsearch:
   esJavaOpts: "-Xmx512m -Xms512m"
   initResources:
     limits:
-      cpu: "25m"
-      memory: "128Mi"
+      cpu: "500m"
+      memory: "512Mi"
     requests:
       cpu: "25m"
-      memory: "128Mi"
+      memory: "512Mi"
   persistence:
     enabled: false
   ingress:
@@ -301,11 +301,11 @@ logstash:
   logstashJavaOpts: -Xmx1g -Xms512M
   resources:
     limits:
-      cpu: 100m
-      memory: 128Mi
+      cpu: 500m
+      memory: 512Mi
     requests:
       cpu: 100m
-      memory: 128Mi
+      memory: 512Mi
   persistence:
     enabled: false
   volumeMounts:
