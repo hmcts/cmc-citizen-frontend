@@ -276,6 +276,13 @@ elasticsearch:
   minimumMasterNodes: 1
   antiAffinity: "soft"
   esJavaOpts: "-Xmx512m -Xms512m"
+  initResources:
+    limits:
+      cpu: "25m"
+      memory: "128Mi"
+    requests:
+      cpu: "25m"
+      memory: "128Mi"
   persistence:
     enabled: false
   ingress:
@@ -292,6 +299,13 @@ logstash:
     tag: latest
     pullPolicy: Always
   logstashJavaOpts: -Xmx1g -Xms512M
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
   persistence:
     enabled: false
   volumeMounts:
