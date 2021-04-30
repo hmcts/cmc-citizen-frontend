@@ -298,7 +298,7 @@ logstash:
     repository: hmctspublic.azurecr.io/ccd/logstash
     tag: latest
     pullPolicy: Always
-  logstashJavaOpts: -Xmx1g -Xms512M
+  logstashJavaOpts: -Xmx1g -Xms1g
   resources:
     limits:
       cpu: 500m
