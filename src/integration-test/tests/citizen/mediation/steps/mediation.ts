@@ -25,13 +25,19 @@ export class MediationSteps {
     if (process.env.FEATURE_MEDIATION === 'true') {
       console.log('Feature mediation is true')
       freeMediationPage.clickHowFreeMediationWorks()
+      console.log('Clicked how free mediation works')
       howMediationWorksPage.chooseContinue()
+      console.log('Clicked continue')
       willYouTryMediationPage.chooseYes()
+      console.log('Clicked yes')
       mediationAgreementPage.chooseAgree()
+      console.log('Clicked agree')
       canWeUsePage.chooseYes()
+      console.log('Clicked Yes')
     } else {
       console.log('Feature mediation is false')
       this.legacyFreeMediationAccept()
+      console.log('Clicked legacy accept')
     }
   }
 

@@ -23,27 +23,38 @@ export class EnhancedMediationSteps {
   acceptEnhancedMediationAsCompanyPhoneNumberProvided (): void {
     console.log('inside acceptEnhancedMediationAsCompanyPhoneNumberProvided')
     freeTelephoneMediationPage.chooseContinue()
+    console.log('chose continue')
     canWeUseCompanyPage.chooseYes()
+    console.log('chose yes')
   }
 
   rejectEnhancedMediation (): void {
     console.log('inside rejectEnhancedMediation')
     freeTelephoneMediationPage.chooseDisagree()
+    console.log('chose disagree')
     mediationDisagreementPage.chooseNo()
+    console.log('chose no')
     iDontWantFreeMediationPage.chooseSkip()
+    console.log('chose skip')
   }
 
   rejectEnhancedMediationByDisagreeing (): void {
     console.log('inside rejectEnhancedMediationByDisagreeing')
     freeTelephoneMediationPage.chooseDisagree()
+    console.log('chose disagree')
     mediationDisagreementPage.chooseNo()
+    console.log('chose no')
     iDontWantFreeMediationPage.chooseSkip()
+    console.log('chose skip')
   }
 
   acceptEnhancedMediationAfterDisagreeing (): void {
     console.log('inside acceptEnhancedMediationAfterDisagreeing')
     freeTelephoneMediationPage.chooseDisagree()
+    console.log('chose disagree')
     mediationDisagreementPage.chooseYes()
+    console.log('chose yes')
     canWeUsePage.chooseYes()
+    console.log('chose yes')
   }
 }
