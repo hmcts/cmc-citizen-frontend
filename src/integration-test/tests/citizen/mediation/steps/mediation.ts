@@ -1,3 +1,5 @@
+/* tslint:disable:no-console */
+
 import { FreeMediationPage } from 'integration-test/tests/citizen/mediation/pages/free-mediation'
 import { HowMediationWorksPage } from 'integration-test/tests/citizen/mediation/pages/how-mediation-works'
 import { WillYouTryMediationPage } from 'integration-test/tests/citizen/mediation/pages/will-you-try-mediation'
@@ -19,53 +21,67 @@ const continueWithoutMediationPage: ContinueWithoutMediationPage = new ContinueW
 export class MediationSteps {
 
   acceptMediationAsIndividualPhoneNumberProvidedIsUsed (): void {
+    console.log('inside - old acceptMediationAsIndividualPhoneNumberProvidedIsUsed')
     if (process.env.FEATURE_MEDIATION === 'true') {
+      console.log('Feature mediation is true')
       freeMediationPage.clickHowFreeMediationWorks()
       howMediationWorksPage.chooseContinue()
       willYouTryMediationPage.chooseYes()
       mediationAgreementPage.chooseAgree()
       canWeUsePage.chooseYes()
     } else {
+      console.log('Feature mediation is false')
       this.legacyFreeMediationAccept()
     }
   }
 
   acceptMediationAsCompanyPhoneNumberProvided (): void {
+    console.log('inside - old acceptMediationAsCompanyPhoneNumberProvided')
     if (process.env.FEATURE_MEDIATION === 'true') {
+      console.log('Feature mediation is true')
       freeMediationPage.clickHowFreeMediationWorks()
       howMediationWorksPage.chooseContinue()
       willYouTryMediationPage.chooseYes()
       mediationAgreementPage.chooseAgree()
       canWeUseCompanyPage.chooseYes()
     } else {
+      console.log('Feature mediation is false')
       this.legacyFreeMediationAccept()
     }
   }
 
   rejectMediation (): void {
+    console.log('inside - old rejectMediation')
     if (process.env.FEATURE_MEDIATION === 'true') {
+      console.log('Feature mediation is true')
       freeMediationPage.clickHowFreeMediationWorks()
       howMediationWorksPage.chooseContinue()
       willYouTryMediationPage.chooseNo()
     } else {
+      console.log('Feature mediation is false')
       this.legacyFreeMediationReject()
     }
   }
 
   rejectMediationByDisagreeing (): void {
+    console.log('inside - old rejectMediationByDisagreeing')
     if (process.env.FEATURE_MEDIATION === 'true') {
+      console.log('Feature mediation is true')
       freeMediationPage.clickHowFreeMediationWorks()
       howMediationWorksPage.chooseContinue()
       willYouTryMediationPage.chooseYes()
       mediationAgreementPage.chooseDoNotAgree()
       continueWithoutMediationPage.chooseContinue()
     } else {
+      console.log('Feature mediation is false')
       this.legacyFreeMediationReject()
     }
   }
 
   acceptMediationAfterDisagreeing (): void {
+    console.log('inside - old acceptMediationAfterDisagreeing')
     if (process.env.FEATURE_MEDIATION === 'true') {
+      console.log('Feature mediation is true')
       freeMediationPage.clickHowFreeMediationWorks()
       howMediationWorksPage.chooseContinue()
       willYouTryMediationPage.chooseYes()
@@ -74,15 +90,18 @@ export class MediationSteps {
       mediationAgreementPage.chooseAgree()
       canWeUsePage.chooseYes()
     } else {
+      console.log('Feature mediation is false')
       this.legacyFreeMediationReject()
     }
   }
 
   legacyFreeMediationAccept (): void {
+    console.log('inside legacyFreeMediationAccept')
     tryFreeMediationPage.chooseYes()
   }
 
   legacyFreeMediationReject (): void {
+    console.log('inside legacyFreeMediationReject')
     tryFreeMediationPage.chooseNo()
   }
 }

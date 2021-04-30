@@ -497,9 +497,13 @@ export class DefenceSteps {
     const isEnhacedMediationJourneyEnabled = I.checkEnhancedMediationJourney()
     console.log('isEnhacedMediationJourneyEnabled value retrieved, attempt 1::',isEnhacedMediationJourneyEnabled)
     if (isEnhacedMediationJourneyEnabled) {
+      console.log('new journey in persuit')
       enhancedMediationSteps.acceptEnhancedMediationAfterDisagreeing()
+      console.log('new journey complete')
     } else {
+      console.log('old journey in persuit')
       mediationSteps.acceptMediationAfterDisagreeing()
+      console.log('old journey complete')
     }
     console.log('isEnhacedMediationJourneyEnabled value retrieved, attempt 2::',isEnhacedMediationJourneyEnabled)
     await this.askForHearingRequirements(defendantType)

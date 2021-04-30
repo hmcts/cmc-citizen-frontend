@@ -68,17 +68,21 @@ export class DefendantSteps {
     const isEnhacedMediationJourneyEnabled = I.checkEnhancedMediationJourney()
     console.log('isEnhacedMediationJourneyEnabled value retrieved, attempt 1::',isEnhacedMediationJourneyEnabled)
     if (isEnhacedMediationJourneyEnabled) {
+      console.log('new journey in persuit')
       if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
         enhancedMediationSteps.acceptEnhancedMediationAsCompanyPhoneNumberProvided()
       } else {
         enhancedMediationSteps.acceptEnhancedMediationAsIndividualPhoneNumberProvidedIsUsed()
       }
+      console.log('new journey complete')
     } else {
+      console.log('old journey in persuit')
       if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
         mediationSteps.acceptMediationAsCompanyPhoneNumberProvided()
       } else {
         mediationSteps.acceptMediationAsIndividualPhoneNumberProvidedIsUsed()
       }
+      console.log('old journey complete')
     }
     console.log('isEnhacedMediationJourneyEnabled value retrieved, attempt 2::',isEnhacedMediationJourneyEnabled)
   }
