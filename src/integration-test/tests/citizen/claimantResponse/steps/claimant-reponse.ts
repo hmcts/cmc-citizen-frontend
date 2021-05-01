@@ -23,14 +23,21 @@ import { ClaimantCourtOfferedInstalmentsPage } from 'integration-test/tests/citi
 import { ClaimantPayBySetDateAcceptedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-pay-by-set-date-accepted'
 import { ClaimantSettleAdmittedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-settle-admitted'
 import { PaidInFullPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-paid-in-full'
-import { MediationSteps } from 'integration-test/tests/citizen/mediation/steps/mediation'
 import { DirectionsQuestionnaireSteps } from 'integration-test/tests/citizen/directionsQuestionnaire/steps/directionsQuestionnaireSteps'
 import { ClaimantIntentionToProceedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-intention-to-proceed'
 import { ClaimantPartPaymentReceivedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-part-payment-received'
 import { ClaimantRejectionReasonPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-rejection-reason'
 import { claimAmount } from 'integration-test/data/test-data'
 import { ClaimantSettleClaimPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-settle-claim'
-import { EnhancedMediationSteps } from 'integration-test/tests/citizen/mediation/steps/enhancedMediation'
+import { FreeTelephoneMediationPage } from 'integration-test/tests/citizen/mediation/pages/free-telephone-mediation'
+import { MediationDisagreementPage } from 'integration-test/tests/citizen/mediation/pages/mediation-disagreement'
+import { FreeMediationPage } from 'integration-test/tests/citizen/mediation/pages/free-mediation'
+import { HowMediationWorksPage } from 'integration-test/tests/citizen/mediation/pages/how-mediation-works'
+import { WillYouTryMediationPage } from 'integration-test/tests/citizen/mediation/pages/will-you-try-mediation'
+import { MediationAgreementPage } from 'integration-test/tests/citizen/mediation/pages/mediation-agreement'
+import { CanWeUsePage } from 'integration-test/tests/citizen/mediation/pages/can-we-use'
+import { ContinueWithoutMediationPage } from 'integration-test/tests/citizen/mediation/pages/continue-without-mediation'
+import { TryFreeMediationPage } from 'integration-test/tests/citizen/mediation/pages/try-free-mediation'
 
 const I: I = actor()
 const taskListPage: ClaimantTaskListPage = new ClaimantTaskListPage()
@@ -49,13 +56,20 @@ const payBySetDateAccepted: ClaimantPayBySetDateAcceptedPage = new ClaimantPayBy
 const viewDefendantsResponsePage: ClaimantDefendantResponsePage = new ClaimantDefendantResponsePage()
 const settleAdmittedPage: ClaimantSettleAdmittedPage = new ClaimantSettleAdmittedPage()
 const settleClaimPage: PaidInFullPage = new PaidInFullPage()
-const mediationSteps: MediationSteps = new MediationSteps()
 const directionsQuestionnaireSteps: DirectionsQuestionnaireSteps = new DirectionsQuestionnaireSteps()
 const intentionToProceedSteps: ClaimantIntentionToProceedPage = new ClaimantIntentionToProceedPage()
 const partPaymentReceivedPage: ClaimantPartPaymentReceivedPage = new ClaimantPartPaymentReceivedPage()
 const claimantRejectionReasonPage: ClaimantRejectionReasonPage = new ClaimantRejectionReasonPage()
 const claimantSettleClaimPage: ClaimantSettleClaimPage = new ClaimantSettleClaimPage()
-const enhancedMediationSteps: EnhancedMediationSteps = new EnhancedMediationSteps()
+const freeTelephoneMediationPage: FreeTelephoneMediationPage = new FreeTelephoneMediationPage()
+const mediationDisagreementPage: MediationDisagreementPage = new MediationDisagreementPage()
+const freeMediationPage: FreeMediationPage = new FreeMediationPage()
+const howMediationWorksPage: HowMediationWorksPage = new HowMediationWorksPage()
+const willYouTryMediationPage: WillYouTryMediationPage = new WillYouTryMediationPage()
+const mediationAgreementPage: MediationAgreementPage = new MediationAgreementPage()
+const canWeUsePage: CanWeUsePage = new CanWeUsePage()
+const continueWithoutMediationPage: ContinueWithoutMediationPage = new ContinueWithoutMediationPage()
+const tryFreeMediationPage: TryFreeMediationPage = new TryFreeMediationPage()
 
 export class ClaimantResponseSteps {
 
@@ -146,11 +160,30 @@ export class ClaimantResponseSteps {
     console.log('isEnhacedMediationJourneyEnabled value retrieved, attempt 1::',isEnhacedMediationJourneyEnabled)
     if (isEnhacedMediationJourneyEnabled) {
       console.log('new journey in persuit')
-      enhancedMediationSteps.acceptEnhancedMediationAfterDisagreeing()
+      console.log('inside acceptEnhancedMediationAfterDisagreeing')
+      freeTelephoneMediationPage.chooseDisagree()
+      console.log('chose disagree')
+      mediationDisagreementPage.chooseYes()
+      console.log('chose yes')
+      canWeUsePage.chooseYes()
+      console.log('chose yes')
       console.log('new journey complete')
     } else {
       console.log('old journey in persuit')
-      mediationSteps.acceptMediationAfterDisagreeing()
+      console.log('inside - old acceptMediationAfterDisagreeing')
+      if (process.env.FEATURE_MEDIATION === 'true') {
+        console.log('Feature mediation is true')
+        freeMediationPage.clickHowFreeMediationWorks()
+        howMediationWorksPage.chooseContinue()
+        willYouTryMediationPage.chooseYes()
+        mediationAgreementPage.chooseDoNotAgree()
+        continueWithoutMediationPage.chooseGoBack()
+        mediationAgreementPage.chooseAgree()
+        canWeUsePage.chooseYes()
+      } else {
+        console.log('Feature mediation is false')
+        this.legacyFreeMediationReject()
+      }
       console.log('old journey complete')
     }
     console.log('isEnhacedMediationJourneyEnabled value retrieved, attempt 2::',isEnhacedMediationJourneyEnabled)
@@ -190,11 +223,30 @@ export class ClaimantResponseSteps {
     console.log('isEnhacedMediationJourneyEnabled value retrieved, attempt 1::',isEnhacedMediationJourneyEnabled)
     if (isEnhacedMediationJourneyEnabled) {
       console.log('new journey in persuit')
-      enhancedMediationSteps.acceptEnhancedMediationAfterDisagreeing()
+      console.log('inside acceptEnhancedMediationAfterDisagreeing')
+      freeTelephoneMediationPage.chooseDisagree()
+      console.log('chose disagree')
+      mediationDisagreementPage.chooseYes()
+      console.log('chose yes')
+      canWeUsePage.chooseYes()
+      console.log('chose yes')
       console.log('new journey complete')
     } else {
       console.log('old journey in persuit')
-      mediationSteps.acceptMediationAfterDisagreeing()
+      console.log('inside - old acceptMediationAfterDisagreeing')
+      if (process.env.FEATURE_MEDIATION === 'true') {
+        console.log('Feature mediation is true')
+        freeMediationPage.clickHowFreeMediationWorks()
+        howMediationWorksPage.chooseContinue()
+        willYouTryMediationPage.chooseYes()
+        mediationAgreementPage.chooseDoNotAgree()
+        continueWithoutMediationPage.chooseGoBack()
+        mediationAgreementPage.chooseAgree()
+        canWeUsePage.chooseYes()
+      } else {
+        console.log('Feature mediation is false')
+        this.legacyFreeMediationReject()
+      }
       console.log('old journey complete')
     }
     console.log('isEnhacedMediationJourneyEnabled value retrieved, attempt 2::',isEnhacedMediationJourneyEnabled)
@@ -476,5 +528,15 @@ export class ClaimantResponseSteps {
     await this.finishClaimantResponse()
     checkAndSendPage.checkFactsTrueAndSubmit(testData.defenceType)
     I.see('You’ve rejected their response')
+  }
+
+  legacyFreeMediationAccept (): void {
+    console.log('inside legacyFreeMediationAccept')
+    tryFreeMediationPage.chooseYes()
+  }
+
+  legacyFreeMediationReject (): void {
+    console.log('inside legacyFreeMediationReject')
+    tryFreeMediationPage.chooseNo()
   }
 }
