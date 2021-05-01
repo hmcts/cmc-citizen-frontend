@@ -301,10 +301,10 @@ logstash:
   logstashJavaOpts: -Xmx2g -Xms1g
   resources:
     limits:
-      cpu: 500m
+      cpu: 2500m
       memory: 4096Mi
     requests:
-      cpu: 100m
+      cpu: 500m
       memory: 2048Mi
   persistence:
     enabled: false
