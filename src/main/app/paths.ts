@@ -8,6 +8,7 @@ export class Paths {
   static readonly logoutReceiver = new RoutablePath('/logout', false)
   static readonly privacyPolicyPage = new RoutablePath('/privacy-policy', false)
   static readonly cookiesPage = new RoutablePath('/cookies', false)
+  static readonly cookiesDetailsPage = new RoutablePath('/cookies-details', false)
   static readonly termsAndConditionsPage = new RoutablePath('/terms-and-conditions', false)
   static readonly contactUsPage = new RoutablePath('/contact-us', false)
   static readonly accessibilityPage = new RoutablePath('/accessibility-statement', false)
