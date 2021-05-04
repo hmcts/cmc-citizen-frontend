@@ -151,7 +151,7 @@ ccd:
     managementWeb:
       enabled: true
     elastic:
-      enabled: true
+      enabled: false
 
   ingressHost: ${SERVICE_FQDN}
   ingressIP: ${INGRESS_IP}
