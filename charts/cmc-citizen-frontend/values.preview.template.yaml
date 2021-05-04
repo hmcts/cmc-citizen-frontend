@@ -149,7 +149,7 @@ ccd:
     postgresql:
       enabled: false
     adminWeb:
-      enabled: false
+      enabled: true
     managementWeb:
       enabled: true
 
