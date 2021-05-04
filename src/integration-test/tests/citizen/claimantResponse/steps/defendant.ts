@@ -10,7 +10,6 @@ import { DefendantYouHavePaidLessPage } from 'integration-test/tests/citizen/def
 import { DefendantWhyDoYouDisagreePage } from 'integration-test/tests/citizen/defence/pages/defendant-why-do-you-disagree'
 import { ClaimantResponseTestData } from 'integration-test/tests/citizen/claimantResponse/data/ClaimantResponseTestData'
 import { EndToEndTestData } from 'integration-test/tests/citizen/endToEnd/data/EndToEndTestData'
-import { MediationSteps } from 'integration-test/tests/citizen/mediation/steps/mediation'
 import { EnhancedMediationSteps } from 'integration-test/tests/citizen/mediation/steps/enhancedMediation'
 import { DefendantTaskListPage } from 'integration-test/tests/citizen/defence/pages/defendant-task-list'
 import { DirectionsQuestionnaireSteps } from 'integration-test/tests/citizen/directionsQuestionnaire/steps/directionsQuestionnaireSteps'
@@ -23,7 +22,6 @@ const evidencePage: DefendantEvidencePage = new DefendantEvidencePage()
 const howMuchHaveYouPaidPage: DefendantHowMuchHaveYouPaidPage = new DefendantHowMuchHaveYouPaidPage()
 const youHavePaidLessPage: DefendantYouHavePaidLessPage = new DefendantYouHavePaidLessPage()
 const whyYouDisagreePage: DefendantWhyDoYouDisagreePage = new DefendantWhyDoYouDisagreePage()
-const mediationSteps: MediationSteps = new MediationSteps()
 const directionsQuestionnaireSteps: DirectionsQuestionnaireSteps = new DirectionsQuestionnaireSteps()
 const defendantTaskListPage: DefendantTaskListPage = new DefendantTaskListPage()
 const enhancedMediationSteps: EnhancedMediationSteps = new EnhancedMediationSteps()
@@ -51,15 +49,7 @@ export class DefendantResponseSteps {
       claimantResponseTestData.pageSpecificValues.evidencePageEnterEvidenceRow.comment
     )
     defendantTaskListPage.selectTaskFreeMediation()
-    await I.checkEnhancedMediationJourney().then(isEnhacedMediationJourneyEnabled => {
-      if (isEnhacedMediationJourneyEnabled) {
-        I.see('ContinueFree telephone mediation')
-        enhancedMediationSteps.rejectEnhancedMediation()
-      } else {
-        I.see('How free mediaiton works')
-        mediationSteps.rejectMediation()
-      }
-    }).catch(e => { return false })
+    enhancedMediationSteps.rejectEnhancedMediation()
     defendantTaskListPage.selectTaskHearingRequirements()
     await directionsQuestionnaireSteps.acceptDirectionsQuestionnaireYesJourney()
     defendantSteps.selectCheckAndSubmitYourDefence()
@@ -99,15 +89,7 @@ export class DefendantResponseSteps {
       )
     }
     defendantTaskListPage.selectTaskFreeMediation()
-    await I.checkEnhancedMediationJourney().then(isEnhacedMediationJourneyEnabled => {
-      if (isEnhacedMediationJourneyEnabled) {
-        I.see('ContinueFree telephone mediation')
-        enhancedMediationSteps.rejectEnhancedMediationByDisagreeing()
-      } else {
-        I.see('How free mediaiton works')
-        mediationSteps.rejectMediationByDisagreeing()
-      }
-    }).catch(e => { return false })
+    enhancedMediationSteps.rejectEnhancedMediationByDisagreeing()
     defendantTaskListPage.selectTaskHearingRequirements()
     await directionsQuestionnaireSteps.acceptDirectionsQuestionnaireYesJourney()
     defendantSteps.selectCheckAndSubmitYourDefence()
