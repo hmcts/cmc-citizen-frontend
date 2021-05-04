@@ -65,7 +65,7 @@ export class DefendantSteps {
 
   async selectTaskFreeMediation (I: I, defendantType: PartyType): Promise<void> {
     defendantTaskListPage.selectTaskFreeMediation()
-    const isEnhacedMediationJourneyEnabled = await I.checkEnhancedMediationJourney()
+    const isEnhacedMediationJourneyEnabled = I.checkEnhancedMediationJourney()
     console.log('isEnhacedMediationJourneyEnabled value retrieved, attempt 1::',isEnhacedMediationJourneyEnabled)
     if (isEnhacedMediationJourneyEnabled) {
       console.log('new journey in persuit')
