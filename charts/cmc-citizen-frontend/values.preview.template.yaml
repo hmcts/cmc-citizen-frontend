@@ -150,8 +150,6 @@ ccd:
       enabled: true
     managementWeb:
       enabled: true
-    elastic:
-      enabled: false
 
   ingressHost: ${SERVICE_FQDN}
   ingressIP: ${INGRESS_IP}
@@ -224,7 +222,7 @@ ccd:
         DEFINITION_STORE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_gw,ccd_admin,xui_webapp,cmc_claim_store
         IDAM_USER_URL: https://idam-web-public.aat.platform.hmcts.net
         OIDC_ISSUER: https://forgerock-am.service.core-compute-idam-aat2.internal:8443/openam/oauth2/hmcts
-        ELASTIC_SEARCH_ENABLED: false
+        ELASTIC_SEARCH_ENABLED: true
         ELASTIC_SEARCH_HOST: ${SERVICE_NAME}-es-master
 
   ccd-data-store-api:
@@ -237,7 +235,7 @@ ccd:
         IDAM_S2S_URL: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
         IDAM_USER_URL: https://idam-web-public.aat.platform.hmcts.net
         OIDC_ISSUER: https://forgerock-am.service.core-compute-idam-aat2.internal:8443/openam/oauth2/hmcts
-        ELASTIC_SEARCH_ENABLED: false
+        ELASTIC_SEARCH_ENABLED: true
         ELASTIC_SEARCH_HOSTS: ${SERVICE_NAME}-es-master:9200
         ELASTIC_SEARCH_DATA_NODES_HOSTS:  http://${SERVICE_NAME}-es-master:9200
 
@@ -298,14 +296,14 @@ logstash:
     repository: hmctspublic.azurecr.io/ccd/logstash
     tag: latest
     pullPolicy: Always
-  logstashJavaOpts: -Xmx2g -Xms1g
+  logstashJavaOpts: -Xmx1g -Xms512m
   resources:
     limits:
       cpu: 2500m
-      memory: 4096Mi
+      memory: 1024Mi
     requests:
       cpu: 500m
-      memory: 2048Mi
+      memory: 1024Mi
   persistence:
     enabled: false
   volumeMounts:
