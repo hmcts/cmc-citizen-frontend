@@ -65,6 +65,8 @@ idam-pr:
       - https://${SERVICE_FQDN}/receiver
     XUI:
       - http://xui-${SERVICE_FQDN}/oauth2/callback
+    CCD:
+      - 'https://{{ tpl .Values.global.ccdCaseManagementWebIngress $}}/oauth2redirect'
 
 xui-webapp:
   enabled: true
@@ -147,7 +149,7 @@ ccd:
     postgresql:
       enabled: false
     adminWeb:
-      enabled: true
+      enabled: false
     managementWeb:
       enabled: true
 
@@ -162,23 +164,11 @@ ccd:
     idamApiUrl: https://idam-api.aat.platform.hmcts.net
     idamWebUrl: https://idam-web-public.aat.platform.hmcts.net
     s2sUrl: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
-    ccdAdminWebIngress: ccd-admin-web-${SERVICE_FQDN}
     ccdDefinitionStoreUrl: http://${SERVICE_NAME}-ccd-definition-store
     ccdUserProfileUrl: http://${SERVICE_NAME}-ccd-user-profile-api
     postgresUsername: hmcts
     postgresPassword: hmcts
     devMode: true
-
-  ccd-admin-web:
-    nodejs:
-      imagePullPolicy: Always
-      image: hmctspublic.azurecr.io/ccd/admin-web:latest
-      ingressHost: ccd-admin-web-${SERVICE_FQDN}
-      keyVaults: []
-      environment:
-        IDAM_OAUTH2_AW_CLIENT_SECRET: ${ADMIN_WEB_IDAM_SECRET}
-    idam-pr:
-      enabled: true
 
   ccd-api-gateway-web:
     nodejs:
@@ -187,13 +177,6 @@ ccd:
       ingressIP: ${INGRESS_IP}
       
   ccd-case-management-web:
-    idam-pr:
-      cpuLimits: 50m
-      cpuRequests: 25m
-      enabled: true
-      memoryLimits: 16Mi
-      memoryRequests: 8Mi
-      releaseNameOverride: ${SERVICE_NAME}-ccd-idam-pr
     nodejs:
       imagePullPolicy: Always
       environment:
@@ -210,7 +193,7 @@ ccd:
       image: hmctspublic.azurecr.io/ccd/user-profile-api:latest
       keyVaults: []
       environment:
-        USER_PROFILE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_definition,ccd_admin,cmc_claim_store
+        USER_PROFILE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_definition,cmc_claim_store
 
   ccd-definition-store-api:
     java:
@@ -219,11 +202,13 @@ ccd:
       keyVaults: []
       environment:
         DEFINITION_STORE_IDAM_KEY: ${DEFINITION_STORE_S2S_KEY}
-        DEFINITION_STORE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_gw,ccd_admin,xui_webapp,cmc_claim_store
+        DEFINITION_STORE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_gw,xui_webapp,cmc_claim_store
         IDAM_USER_URL: https://idam-web-public.aat.platform.hmcts.net
         OIDC_ISSUER: https://forgerock-am.service.core-compute-idam-aat2.internal:8443/openam/oauth2/hmcts
         ELASTIC_SEARCH_ENABLED: true
         ELASTIC_SEARCH_HOST: ${SERVICE_NAME}-es-master
+      ingressHost: ccd-definition-store-${SERVICE_FQDN}
+      ingressIP: ${INGRESS_IP}
 
   ccd-data-store-api:
     java:
