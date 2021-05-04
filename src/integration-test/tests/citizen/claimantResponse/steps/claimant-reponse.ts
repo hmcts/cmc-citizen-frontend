@@ -1,5 +1,3 @@
-/* tslint:disable:no-console */
-
 import I = CodeceptJS.I
 import { PaymentOption } from 'integration-test/data/payment-option'
 import { EndToEndTestData } from 'integration-test/tests/citizen/endToEnd/data/EndToEndTestData'
@@ -142,14 +140,15 @@ export class ClaimantResponseSteps {
       settleAdmittedPage.selectAdmittedNo()
     }
     taskListPage.selectTaskFreeMediation()
-    const isEnhacedMediationJourneyEnabled = await I.checkEnhancedMediationJourney()
-    console.log('isEnhacedMediationJourneyEnabled value retrieved, attempt 1::',isEnhacedMediationJourneyEnabled)
-    if (isEnhacedMediationJourneyEnabled) {
-      enhancedMediationSteps.acceptEnhancedMediationAfterDisagreeing()
-    } else {
-      mediationSteps.acceptMediationAfterDisagreeing()
-    }
-    console.log('isEnhacedMediationJourneyEnabled value retrieved, attempt 2::',isEnhacedMediationJourneyEnabled)
+    await I.checkEnhancedMediationJourney().then(isEnhacedMediationJourneyEnabled => {
+      if (isEnhacedMediationJourneyEnabled) {
+        I.see('ContinueFree telephone mediation')
+        enhancedMediationSteps.acceptEnhancedMediationAfterDisagreeing()
+      } else {
+        I.see('How free mediaiton works')
+        mediationSteps.acceptMediationAfterDisagreeing()
+      }
+    }).catch(e => { return false })
     taskListPage.selectTaskHearingRequirements()
     directionsQuestionnaireSteps.acceptDirectionsQuestionnaireNoJourneyAsClaimant()
     taskListPage.selectTaskCheckandSubmitYourResponse()
@@ -182,16 +181,16 @@ export class ClaimantResponseSteps {
 
   async finishClaimantResponse (): Promise<void> {
     taskListPage.selectTaskFreeMediation()
-    const isEnhacedMediationJourneyEnabled = await I.checkEnhancedMediationJourney()
-    console.log('isEnhacedMediationJourneyEnabled value retrieved, attempt 1::',isEnhacedMediationJourneyEnabled)
-    if (isEnhacedMediationJourneyEnabled) {
-      enhancedMediationSteps.acceptEnhancedMediationAfterDisagreeing()
-    } else {
-      mediationSteps.acceptMediationAfterDisagreeing()
-    }
-    console.log('isEnhacedMediationJourneyEnabled value retrieved, attempt 2::',isEnhacedMediationJourneyEnabled)
+    await I.checkEnhancedMediationJourney().then(isEnhacedMediationJourneyEnabled => {
+      if (isEnhacedMediationJourneyEnabled) {
+        I.see('ContinueFree telephone mediation')
+        enhancedMediationSteps.acceptEnhancedMediationAfterDisagreeing()
+      } else {
+        I.see('How free mediaiton works')
+        mediationSteps.acceptMediationAfterDisagreeing()
+      }
+    }).catch(e => { return false })
     taskListPage.selectTaskHearingRequirements()
-    console.log('isEnhacedMediationJourneyEnabled value retrieved, attempt 3::',isEnhacedMediationJourneyEnabled)
     directionsQuestionnaireSteps.acceptDirectionsQuestionnaireNoJourneyAsClaimant()
     taskListPage.selectTaskCheckandSubmitYourResponse()
   }
