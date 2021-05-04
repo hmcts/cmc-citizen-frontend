@@ -43,7 +43,7 @@ describe('Enter breathing space: Respite end date page', () => {
         await request(app)
           .post(BreathingSpacePaths.bsEndDatePage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ respiteEnd: { day: 30, month: 1, year: date.year() } })
+          .send({ respiteEnd: { day: date.date(), month: date.month() - 1, year: date.year() } })
           .expect(res => expect(res).to.be.successful.withText('Expected end date must not be before today', 'There was a problem'))
       })
 
