@@ -63,7 +63,7 @@ export class DefendantSteps {
     defendantTaskListPage.selectTaskCheckAndSendYourResponse()
   }
 
-  async selectTaskFreeMediation (I: I, defendantType: PartyType): Promise<void> {
+  async selectTaskFreeMediation (defendantType: PartyType): Promise<void> {
     defendantTaskListPage.selectTaskFreeMediation()
     const isEnhacedMediationJourneyEnabled = await I.checkEnhancedMediationJourney()
     console.log('isEnhacedMediationJourneyEnabled value retrieved, attempt 1::',isEnhacedMediationJourneyEnabled)
