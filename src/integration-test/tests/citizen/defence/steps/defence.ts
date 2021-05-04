@@ -264,7 +264,7 @@ export class DefenceSteps {
   }
 
   askForMediation (defendantType: PartyType = PartyType.INDIVIDUAL): void {
-    defendantSteps.selectTaskFreeMediation(defendantType)
+    defendantSteps.selectTaskFreeMediation(I, defendantType)
   }
 
   async askForHearingRequirements (defendantType: PartyType = PartyType.INDIVIDUAL): Promise<void> {
