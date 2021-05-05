@@ -6,6 +6,9 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
+      {% if antennawebChat %}        
+        <button class="chat-button">Talk to an Agent</button>
+      {% endif %}
       {{ supportWidgetContactus() }}
     </div>
   </div>
