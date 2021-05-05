@@ -686,7 +686,7 @@ describe('ResponseModelConverter', () => {
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert partial admission paid by set date with cohibition option', () => {
+        it('should convert partial admission paid by set date with cohibition option', async () => {
           isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithPaymentByInstalmentsDraft,
@@ -700,11 +700,11 @@ describe('ResponseModelConverter', () => {
           const claim: Claim = new Claim().deserialize({
             ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
           })
-          const converted = ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)
+          const converted = await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)
           expect(converted.statementOfTruth).to.equals(undefined)
         })
 
-        it('should convert partial admission paid by instalments', () => {
+        it('should convert partial admission paid by instalments', async () => {
           isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithPaymentByInstalmentsDraft,
