@@ -719,7 +719,7 @@ describe('ResponseModelConverter', () => {
             ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
           })
 
-          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
