@@ -166,6 +166,10 @@ ccd:
     s2sUrl: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
     ccdDefinitionStoreUrl: http://${SERVICE_NAME}-ccd-definition-store
     ccdUserProfileUrl: http://${SERVICE_NAME}-ccd-user-profile-api
+    dmStoreUrl: http://dm-store-aat.service.core-compute-aat.internal
+    draftStoreUrl: http://draft-store-service-aat.service.core-compute-aat.internal
+    paymentsUrl: http://payment-api-aat.service.core-compute-aat.internal
+    emAnnotationUrl: http://em-anno-aat.service.core-compute-aat.internal
     postgresUsername: hmcts
     postgresPassword: hmcts
     devMode: true
