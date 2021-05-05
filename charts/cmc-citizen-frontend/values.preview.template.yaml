@@ -109,6 +109,7 @@ cmc-claim-store:
       STAFF_NOTIFICATIONS_LEGAL_RECIPIENT: moneyclaims@justice.gov.uk
       RPA_NOTIFICATIONS_LEGALSEALEDCLAIMRECIPIENT: civilmoneyclaims+rpa-legal-claim-issued@gmail.com
       RPA_NOTIFICATIONS_BREATHINGSPACERECIPIENT: breathingSpace.auto@justice.gov.uk
+      MANAGEMENT_HEALTH_MAIL_ENABLED: false
 
 ccd:
   enabled: true
