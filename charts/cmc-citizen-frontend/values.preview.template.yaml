@@ -59,14 +59,13 @@ nodejs:
 
 idam-pr:
   enabled: true
-  debug: true
   redirect_uris:
     Money Claims - Citizen:
       - https://${SERVICE_FQDN}/receiver
     XUI:
-      - http://xui-${SERVICE_FQDN}/oauth2/callback
+      - https://xui-${SERVICE_FQDN}/oauth2/callback
     CCD:
-      - 'https:/case-management-web-${SERVICE_FQDN}/oauth2redirect'
+      - https:/case-management-web-${SERVICE_FQDN}/oauth2redirect
 
 xui-webapp:
   enabled: true
