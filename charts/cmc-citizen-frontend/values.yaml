@@ -81,3 +81,7 @@ ccd:
   enabled: false
 cmc-claim-store:
   enabled: false
+xui-webapp:
+  enabled: false
+elastic:
+  enabled: false 

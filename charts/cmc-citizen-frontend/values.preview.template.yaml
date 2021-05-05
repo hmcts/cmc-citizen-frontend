@@ -62,6 +62,33 @@ idam-pr:
   redirect_uris:
     Money Claims - Citizen:
       - https://${SERVICE_FQDN}/receiver
+    XUI:
+      - https://xui-${SERVICE_FQDN}/oauth2/callback
+    CCD:
+      - https:/case-management-web-${SERVICE_FQDN}/oauth2redirect
+
+xui-webapp:
+  enabled: true
+  nodejs:
+    imagePullPolicy: Always
+    releaseNameOverride: ${SERVICE_NAME}-xui-webapp
+    image: hmctspublic.azurecr.io/xui/webapp:latest
+    ingressHost: xui-${SERVICE_FQDN}
+    environment:
+      HEALTH_CCD_COMPONENT_API: http://gateway-${SERVICE_FQDN}/health
+      HEALTH_CCD_DATA_API: http://${SERVICE_NAME}-ccd-data-store-api/health
+      HEALTH_TERMS_AND_CONDITIONS_API: http://xui-terms-and-conditions-${SERVICE_FQDN}.service.core-compute-preview.internal/health
+      SERVICES_CCD_COMPONENT_API: http://gateway-${SERVICE_FQDN}
+      SERVICES_CCD_DATA_STORE_API: http://${SERVICE_NAME}-ccd-data-store-api
+      SERVICES_TERMS_AND_CONDITIONS: http://xui-terms-and-conditions-${SERVICE_FQDN}.service.core-compute-preview.internal
+      JURISDICTIONS: CMC
+      FEATURE_REDIS_ENABLED: false
+      FEATURE_APP_INSIGHTS_ENABLED: false
+      FEATURE_SECURE_COOKIE_ENABLED: false
+      FEATURE_HELMET_ENABLED: false
+      REDISCLOUD_URL: http://dummyrediscloudurl
+      UV_THREADPOOL_SIZE: 128
+      PROTOCOL: http
 
 cmc-claim-store:
   enabled: true
@@ -110,15 +137,26 @@ cmc-claim-store:
       RPA_NOTIFICATIONS_LEGALSEALEDCLAIMRECIPIENT: civilmoneyclaims+rpa-legal-claim-issued@gmail.com
       RPA_NOTIFICATIONS_BREATHINGSPACERECIPIENT: breathingSpace.auto@justice.gov.uk
       MANAGEMENT_HEALTH_MAIL_ENABLED: false
+      FEATURE_TOGGLES_SAVE_CLAIM_STATE_ENABLED: true
+      FEATURE_TOGGLES_CTSC_ENABLED: true
+      FEATURE_TOGGLES_BULK_PRINT_TRANSFER_ENABLED: true
+      FEATURE_TOGGLES_STAFF_EMAILS_ENABLED: false
+      FEATURE_TOGGLES_STAFF_EMAILS_ENABLED_FOR_LEGAL_REP: false
+      FEATURE_TOGGLES_BREATHING_SPACE: true
+      FEATURE_AUTO_CANCEL_PAYMENTS: true
 
 ccd:
   enabled: true
   ccd:
     s2s:
       enabled: false
+    apiGatewayWeb:
+      enabled: true
     postgresql:
       enabled: false
     adminWeb:
+      enabled: true
+    managementWeb:
       enabled: true
 
   ingressHost: ${SERVICE_FQDN}
@@ -126,46 +164,76 @@ ccd:
   consulIP: ${CONSUL_LB_IP}
 
   global:
+    ccdApiGatewayIngress: gateway-${SERVICE_FQDN}
+    ccdCaseManagementWebIngress: case-management-web-${SERVICE_FQDN}
+    ccdDataStoreUrl: http://${SERVICE_NAME}-ccd-data-store-api
     idamApiUrl: https://idam-api.aat.platform.hmcts.net
     idamWebUrl: https://idam-web-public.aat.platform.hmcts.net
     s2sUrl: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
-    ccdAdminWebIngress: ccd-admin-web-${SERVICE_FQDN}
     ccdDefinitionStoreUrl: http://${SERVICE_NAME}-ccd-definition-store
     ccdUserProfileUrl: http://${SERVICE_NAME}-ccd-user-profile-api
+    dmStoreUrl: http://dm-store-aat.service.core-compute-aat.internal
+    draftStoreUrl: http://draft-store-service-aat.service.core-compute-aat.internal
+    paymentsUrl: http://payment-api-aat.service.core-compute-aat.internal
+    emAnnotationUrl: http://em-anno-aat.service.core-compute-aat.internal
     postgresUsername: hmcts
     postgresPassword: hmcts
     devMode: true
 
   ccd-admin-web:
     nodejs:
+      imagePullPolicy: Always
       image: hmctspublic.azurecr.io/ccd/admin-web:latest
       ingressHost: ccd-admin-web-${SERVICE_FQDN}
       keyVaults: []
       environment:
-        IDAM_OAUTH2_AW_CLIENT_SECRET: ${ADMIN_WEB_IDAM_SECRET}
+      IDAM_OAUTH2_AW_CLIENT_SECRET: ${ADMIN_WEB_IDAM_SECRET}
     idam-pr:
       enabled: true
+  
+  ccd-api-gateway-web:
+    nodejs:
+      imagePullPolicy: Always
+      ingressHost: gateway-${SERVICE_FQDN}
+      ingressIP: ${INGRESS_IP}
+      
+  ccd-case-management-web:
+    nodejs:
+      imagePullPolicy: Always
+      environment:
+        CCD_ACTIVITY_URL: null
+        DM_URL: https://gateway-${SERVICE_FQDN}/documents
+        DM_URL_REMOTE: https?://(gateway-${SERVICE_FQDN}:443|dm-store-aat.service.core-compute-aat.internal)/documents
+        NODE_TLS_REJECT_UNAUTHORIZED: 0
+      ingressHost: case-management-web-${SERVICE_FQDN}
+      ingressIP: ${INGRESS_IP}
 
   ccd-user-profile-api:
     java:
+      imagePullPolicy: Always
       image: hmctspublic.azurecr.io/ccd/user-profile-api:latest
       keyVaults: []
       environment:
-        USER_PROFILE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_definition,ccd_admin,cmc_claim_store
+        USER_PROFILE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_definition,ccd_admin,cmc_claim_store,xui_webapp,xuiwebapp
 
   ccd-definition-store-api:
     java:
-      image: hmctspublic.azurecr.io/ccd/definition-store-api:latest
       imagePullPolicy: Always
+      image: hmctspublic.azurecr.io/ccd/definition-store-api:latest
       keyVaults: []
       environment:
         DEFINITION_STORE_IDAM_KEY: ${DEFINITION_STORE_S2S_KEY}
-        DEFINITION_STORE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_gw,ccd_admin,cmc_claim_store
+        DEFINITION_STORE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_gw,ccd_admin,xui_webapp,xuiwebapp,cmc_claim_store
         IDAM_USER_URL: https://idam-web-public.aat.platform.hmcts.net
         OIDC_ISSUER: https://forgerock-am.service.core-compute-idam-aat2.internal:8443/openam/oauth2/hmcts
+        ELASTIC_SEARCH_ENABLED: true
+        ELASTIC_SEARCH_HOST: ${SERVICE_NAME}-es-master
+      ingressHost: ccd-definition-store-${SERVICE_FQDN}
+      ingressIP: ${INGRESS_IP}
 
   ccd-data-store-api:
     java:
+      imagePullPolicy: Always
       image: hmctspublic.azurecr.io/ccd/data-store-api:latest
       keyVaults: []
       environment:
@@ -173,6 +241,9 @@ ccd:
         IDAM_S2S_URL: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
         IDAM_USER_URL: https://idam-web-public.aat.platform.hmcts.net
         OIDC_ISSUER: https://forgerock-am.service.core-compute-idam-aat2.internal:8443/openam/oauth2/hmcts
+        ELASTIC_SEARCH_ENABLED: true
+        ELASTIC_SEARCH_HOSTS: ${SERVICE_NAME}-es-master:9200
+        ELASTIC_SEARCH_DATA_NODES_HOSTS:  http://${SERVICE_NAME}-es-master:9200
 
   ccd-user-profile-importer:
     image: hmctspublic.azurecr.io/ccd/user-profile-importer:db2r9a
@@ -198,3 +269,60 @@ ccd:
       - caseworker-cmc-legaladvisor
       - caseworker-cmc-pcqextractor
       - payments
+
+elastic:
+  enabled: true
+
+elasticsearch:
+  clusterName: "es"
+  imageTag: "6.4.2"
+  replicas: 1
+  minimumMasterNodes: 1
+  antiAffinity: "soft"
+  esJavaOpts: "-Xmx512m -Xms512m"
+  initResources:
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+    requests:
+      cpu: "25m"
+      memory: "512Mi"
+  persistence:
+    enabled: false
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: traefik
+    path: /
+    hosts:
+      - es-${SERVICE_FQDN}
+
+logstash:
+  image:
+    repository: hmctspublic.azurecr.io/ccd/logstash
+    tag: latest
+    pullPolicy: Always
+  logstashJavaOpts: -Xmx1g -Xms512m
+  resources:
+    limits:
+      cpu: 2500m
+      memory: 1024Mi
+    requests:
+      cpu: 500m
+      memory: 1024Mi
+  persistence:
+    enabled: false
+  volumeMounts:
+    - name: pipeline
+      mountPath: /usr/share/logstash/files
+  elasticsearch:
+    host: ${SERVICE_NAME}-es-master
+    port: 9200
+  configTpl:
+    xpack.monitoring.enabled: "false"
+    db.url: jdbc:postgresql://${SERVICE_NAME}-postgresql:5432/data-store?ssl=disable&stringtype=unspecified
+    db.user: hmcts
+    db.pwd: hmcts
+    es.data.nodes.url: http://${SERVICE_NAME}-es-master:9200
+  livenessProbe:
+    initialDelaySeconds: 90
