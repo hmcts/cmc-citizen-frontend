@@ -123,10 +123,10 @@ export class ClaimantResponseSteps {
     I.click(buttonText)
   }
 
-  async reject (
+  reject (
     testData: EndToEndTestData,
     claimantResponseTestData: ClaimantResponseTestData
-  ): Promise<void> {
+  ): void {
     taskListPage.selectTaskViewDefendantResponse()
     viewDefendantsResponsePage.submit()
     if (claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage) {
@@ -144,14 +144,14 @@ export class ClaimantResponseSteps {
     taskListPage.selectTaskCheckandSubmitYourResponse()
   }
 
-  async decideToProceed (): Promise<void> {
+  decideToProceed (): void {
     taskListPage.selectTaskViewDefendantResponse()
     viewDefendantsResponsePage.submit()
     I.see('COMPLETE')
     I.click('Decide whether to proceed')
     I.see('Do you want to proceed with the claim?')
     intentionToProceedSteps.chooseYes()
-    await this.finishClaimantResponse()
+    this.finishClaimantResponse()
   }
 
   decideNotToProceed (): void {
@@ -169,7 +169,7 @@ export class ClaimantResponseSteps {
     I.see('You didn’t proceed with the claim')
   }
 
-  async finishClaimantResponse (): Promise<void> {
+  finishClaimantResponse (): void {
     taskListPage.selectTaskFreeMediation()
     enhancedMediationSteps.acceptEnhancedMediationAfterDisagreeing()
     taskListPage.selectTaskHearingRequirements()
@@ -435,7 +435,7 @@ export class ClaimantResponseSteps {
     I.see('The claim is now settled.')
   }
 
-  async rejectFullDefencePaidFullAmount (testData: EndToEndTestData): Promise<void> {
+  rejectFullDefencePaidFullAmount (testData: EndToEndTestData): void {
     taskListPage.selectTaskViewDefendantResponse()
     I.see(`${testData.defendantName} states they paid you £${claimAmount.getTotal()}`)
     viewDefendantsResponsePage.submit()
@@ -446,7 +446,7 @@ export class ClaimantResponseSteps {
     I.see('Why did you reject their response')
     claimantRejectionReasonPage.enterReason('No money received')
     I.see('COMPLETE')
-    await this.finishClaimantResponse()
+    this.finishClaimantResponse()
     checkAndSendPage.checkFactsTrueAndSubmit(testData.defenceType)
     I.see('You’ve rejected their response')
   }

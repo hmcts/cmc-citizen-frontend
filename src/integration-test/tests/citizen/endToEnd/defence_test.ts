@@ -35,7 +35,7 @@ Scenario('I can as an Individual make a claim against an Individual who then ful
   I.see('Decide whether to proceed')
   I.see('Mrs. Rose Smith has rejected your claim.')
   I.click('View and respond')
-  await claimantResponseSteps.rejectFullDefencePaidFullAmount(testData)
+  claimantResponseSteps.rejectFullDefencePaidFullAmount(testData)
   I.see('You’ve rejected their response')
 })
 

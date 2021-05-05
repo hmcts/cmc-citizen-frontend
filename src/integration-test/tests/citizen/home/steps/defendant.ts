@@ -2,9 +2,7 @@ import { DefendantTaskListPage } from 'integration-test/tests/citizen/defence/pa
 import { EnhancedMediationSteps } from 'integration-test/tests/citizen/mediation/steps/enhancedMediation'
 import { PartyType } from 'integration-test/data/party-type'
 import { DirectionsQuestionnaireSteps } from 'integration-test/tests/citizen/directionsQuestionnaire/steps/directionsQuestionnaireSteps'
-import I = CodeceptJS.I
 
-const I: I = actor()
 const defendantTaskListPage: DefendantTaskListPage = new DefendantTaskListPage()
 const enhancedMediationSteps: EnhancedMediationSteps = new EnhancedMediationSteps()
 const directionsQuestionnaireSteps: DirectionsQuestionnaireSteps = new DirectionsQuestionnaireSteps()
@@ -59,7 +57,7 @@ export class DefendantSteps {
     defendantTaskListPage.selectTaskCheckAndSendYourResponse()
   }
 
-  async selectTaskFreeMediation (I: I, defendantType: PartyType): Promise<void> {
+  selectTaskFreeMediation (defendantType: PartyType): void {
     defendantTaskListPage.selectTaskFreeMediation()
     if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
       enhancedMediationSteps.acceptEnhancedMediationAsCompanyPhoneNumberProvided()

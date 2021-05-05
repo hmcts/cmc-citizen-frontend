@@ -44,7 +44,7 @@ Before(async (I: I) => {
 })
 
 Scenario('Reject/Dispute all of the claim @citizen', { retries: 3 }, async (I: I) => {
-  await claimantResponseSteps.decideToProceed()
+  claimantResponseSteps.decideToProceed()
   checkAndSendPage.checkFactsTrueAndSubmit(testData.defenceType)
   I.see('You’ve rejected their response')
 })
