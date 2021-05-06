@@ -299,6 +299,10 @@ export function rejectCalculateIssueFee (reason: string = 'HTTP error'): mock.Sc
   return rejectCalculateFee(issueEvent, onlineChannel, reason)
 }
 
+export function rejectCalculateIssueFeeDefaultChannel (reason: string = 'HTTP error'): mock.Scope {
+  return rejectCalculateFee(issueEvent, defaultChannel, reason)
+}
+
 export function resolveCalculateHearingFee (): mock.Scope {
   return resolveCalculateFee(hearingEvent, defaultChannel)
 }

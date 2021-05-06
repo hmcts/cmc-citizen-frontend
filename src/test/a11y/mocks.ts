@@ -65,6 +65,8 @@ feesMock.resolveCalculateIssueFee().persist()
 feesMock.resolveCalculateHearingFee().persist()
 feesMock.resolveGetIssueFeeRangeGroup().persist()
 feesMock.resolveGetHearingFeeRangeGroup().persist()
+feesMock.rejectCalculateIssueFeeDefaultChannel().persist()
+feesMock.resolveGetIssueFeeRangeGroupDefaultChannel().persist()
 courtFinderMock.resolveFind().persist()
 courtFinderMock.resolveCourtDetails().persist()
 
