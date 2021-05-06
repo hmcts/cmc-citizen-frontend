@@ -65,7 +65,7 @@ idam-pr:
     XUI:
       - https://xui-${SERVICE_FQDN}/oauth2/callback
     CCD:
-      - https:/case-management-web-${SERVICE_FQDN}/oauth2redirect
+      - https://case-management-web-${SERVICE_FQDN}/oauth2redirect
 
 xui-webapp:
   enabled: true
