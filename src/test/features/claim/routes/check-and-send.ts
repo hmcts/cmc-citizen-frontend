@@ -91,6 +91,28 @@ describe('Claim issue: check and send page', () => {
           .expect(res => expect(res).to.be.successful.withText('Check your answers'))
       })
 
+      it('should return 500 and render error page when cannot calculate new claim fee', async () => {
+        newClaimFeesEnabledStub.returns(true)
+        draftStoreServiceMock.resolveFind('claim')
+        feesServiceMock.rejectCalculateIssueFeeDefaultChannel('HTTP error')
+
+        await request(app)
+          .get(ClaimPaths.checkAndSendPage.uri)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.serverError.withText('Error'))
+      })
+
+      it('should render page when everything is fine with new claim fee', async () => {
+        newClaimFeesEnabledStub.returns(true)
+        draftStoreServiceMock.resolveFind('claim')
+        feesServiceMock.resolveCalculateIssueFeeDefaultChannel()
+
+        await request(app)
+          .get(ClaimPaths.checkAndSendPage.uri)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('Check your answers'))
+      })
+
       it('Should validate check-and-send Page hyperlink with correct location and span', async () => {
         newClaimFeesEnabledStub.returns(false)
         draftStoreServiceMock.resolveFind('claim', {
