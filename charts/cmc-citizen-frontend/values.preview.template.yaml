@@ -65,7 +65,7 @@ idam-pr:
     XUI:
       - https://xui-${SERVICE_FQDN}/oauth2/callback
     CCD:
-      - https:/case-management-web-${SERVICE_FQDN}/oauth2redirect
+      - https://case-management-web-${SERVICE_FQDN}/oauth2redirect
 
 xui-webapp:
   enabled: true
@@ -144,6 +144,7 @@ cmc-claim-store:
       FEATURE_TOGGLES_STAFF_EMAILS_ENABLED_FOR_LEGAL_REP: false
       FEATURE_TOGGLES_BREATHING_SPACE: true
       FEATURE_AUTO_CANCEL_PAYMENTS: true
+      OIDC_ISSUER: https://forgerock-am.service.core-compute-idam-aat2.internal:8443/openam/oauth2/realms/root/realms/hmcts
 
 ccd:
   enabled: true
