@@ -12,7 +12,8 @@
     "helpWithFees": false,
     "autoEnrollIntoNewFeature": true,
     "dashboard_pagination_enabled": false,
-    "breathingSpace": true
+    "breathingSpace": true,
+    "newClaimFees": true
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"

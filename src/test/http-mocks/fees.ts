@@ -311,6 +311,10 @@ export function resolveGetIssueFeeRangeGroup (): mock.Scope {
   return resolveGetFeeRangeGroup(issueEvent, onlineChannel)
 }
 
+export function resolveGetIssueFeeRangeGroupDefaultChannel (): mock.Scope {
+  return resolveGetFeeRangeGroup(issueEvent, defaultChannel)
+}
+
 export function rejectGetIssueFeeRangeGroup (reason: string = 'HTTP error'): mock.Scope {
   return rejectGetFeeRangeGroup(issueEvent, onlineChannel, reason)
 }

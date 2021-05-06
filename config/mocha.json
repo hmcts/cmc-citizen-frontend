@@ -41,7 +41,8 @@
     "pcq": true,
     "autoEnrollIntoNewFeature": true,
     "dashboard_pagination_enabled": true,
-    "breathingSpace": true
+    "breathingSpace": true,
+    "newClaimFees": true
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"

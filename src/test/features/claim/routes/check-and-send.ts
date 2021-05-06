@@ -27,6 +27,13 @@ import {
   organisationDetails
 } from 'test/data/draft/partyDetails'
 
+import { mock, reset } from 'ts-mockito'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
+import { FeatureToggles } from 'utils/featureToggles'
+import * as sinon from 'sinon'
+
+const mockLaunchDarklyClient: LaunchDarklyClient = mock(LaunchDarklyClient)
+
 const cookieName: string = config.get<string>('session.cookieName')
 const expectedLink = ({ href= '', text= '', hiddenText= '' }) => {
   return `<a class="govuk-link" href="${href}">${text} <span class="govuk-visually-hidden">${hiddenText}</span></a>`
@@ -41,8 +48,16 @@ describe('Claim issue: check and send page', () => {
     checkEligibilityGuards(app, 'get', ClaimPaths.checkAndSendPage.uri)
 
     describe('for authorized user', () => {
+      let newClaimFeesEnabledStub: sinon.SinonStub
+
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+        newClaimFeesEnabledStub = sinon.stub(FeatureToggles.prototype, 'isNewClaimFeesEnabled')
+      })
+
+      afterEach(() => {
+        reset(mockLaunchDarklyClient)
+        newClaimFeesEnabledStub.restore()
       })
 
       it('should redirect to incomplete submission when not all tasks are completed', async () => {
@@ -55,6 +70,7 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('should return 500 and render error page when cannot calculate fee', async () => {
+        newClaimFeesEnabledStub.returns(false)
         draftStoreServiceMock.resolveFind('claim')
         feesServiceMock.rejectCalculateIssueFee('HTTP error')
 
@@ -65,6 +81,7 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('should render page when everything is fine', async () => {
+        newClaimFeesEnabledStub.returns(false)
         draftStoreServiceMock.resolveFind('claim')
         feesServiceMock.resolveCalculateIssueFee()
 
@@ -75,6 +92,7 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('Should validate check-and-send Page hyperlink with correct location and span', async () => {
+        newClaimFeesEnabledStub.returns(false)
         draftStoreServiceMock.resolveFind('claim', {
           claimant: {
             ...draftStoreServiceMock.sampleClaimDraftObj.claimant,
@@ -109,6 +127,7 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('Should validate that a claim made by individual against soleTrader and their details', async () => {
+        newClaimFeesEnabledStub.returns(false)
         draftStoreServiceMock.resolveFind('claim',
           {
             defendant: {
@@ -165,6 +184,7 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('Should validate that a claim made by soleTrader against soleTrader and their details', async () => {
+        newClaimFeesEnabledStub.returns(false)
         draftStoreServiceMock.resolveFind('claim',
           {
             claimant: {
@@ -190,6 +210,7 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('Should validate that a claim made by soleTrader against individual and their details', async () => {
+        newClaimFeesEnabledStub.returns(false)
         draftStoreServiceMock.resolveFind('claim',
           {
             claimant: {
@@ -212,6 +233,7 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('Should validate that a claim made by soleTrader against company and their details', async () => {
+        newClaimFeesEnabledStub.returns(false)
         draftStoreServiceMock.resolveFind('claim',
           {
             claimant: {
@@ -236,6 +258,7 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('Should validate that a claim made by soleTrader against organisation and their details', async () => {
+        newClaimFeesEnabledStub.returns(false)
         draftStoreServiceMock.resolveFind('claim',
           {
             claimant: {
@@ -259,6 +282,7 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('Should validate that a claim made by company against company and their details', async () => {
+        newClaimFeesEnabledStub.returns(false)
         draftStoreServiceMock.resolveFind('claim',
           {
             claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: companyDetails },
@@ -281,6 +305,7 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('Should validate that a claim made by company against individual and their details', async () => {
+        newClaimFeesEnabledStub.returns(false)
         draftStoreServiceMock.resolveFind('claim',
           { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: companyDetails } })
         feesServiceMock.resolveCalculateIssueFee()
@@ -300,6 +325,7 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('Should validate that a claim made by company against soleTrader and their details', async () => {
+        newClaimFeesEnabledStub.returns(false)
         draftStoreServiceMock.resolveFind('claim',
           {
             claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: companyDetails },
@@ -324,6 +350,7 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('Should validate that a claim made by company against organisation and their details', async () => {
+        newClaimFeesEnabledStub.returns(false)
         draftStoreServiceMock.resolveFind('claim',
           {
             claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: companyDetails },
@@ -345,6 +372,7 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('Should validate that a claim made by organisation against organisation and their details', async () => {
+        newClaimFeesEnabledStub.returns(false)
         draftStoreServiceMock.resolveFind('claim',
           {
             claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: organisationDetails },
@@ -366,6 +394,7 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('Should validate that a claim made by organisation against individual and their details', async () => {
+        newClaimFeesEnabledStub.returns(false)
         draftStoreServiceMock.resolveFind('claim',
           { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: organisationDetails } })
         feesServiceMock.resolveCalculateIssueFee()
@@ -385,6 +414,7 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('Should validate that a claim made by organisation against soleTrader and their details', async () => {
+        newClaimFeesEnabledStub.returns(false)
         draftStoreServiceMock.resolveFind('claim',
           {
             claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: organisationDetails },
@@ -409,6 +439,7 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('Should validate that a claim made by organisation against company and their details', async () => {
+        newClaimFeesEnabledStub.returns(false)
         draftStoreServiceMock.resolveFind('claim',
           {
             claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: organisationDetails },
@@ -437,8 +468,16 @@ describe('Claim issue: check and send page', () => {
     checkEligibilityGuards(app, 'post', ClaimPaths.checkAndSendPage.uri)
 
     describe('for authorized user', () => {
+      let newClaimFeesEnabledStub: sinon.SinonStub
+
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+        newClaimFeesEnabledStub = sinon.stub(FeatureToggles.prototype, 'isNewClaimFeesEnabled')
+      })
+
+      afterEach(() => {
+        reset(mockLaunchDarklyClient)
+        newClaimFeesEnabledStub.restore()
       })
 
       it('should redirect to incomplete submission when not all tasks are completed', async () => {
@@ -452,6 +491,7 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('should return 500 and render error page when form is invalid and cannot calculate fee', async () => {
+        newClaimFeesEnabledStub.returns(false)
         draftStoreServiceMock.resolveFind('claim')
         feesServiceMock.rejectCalculateIssueFee('HTTP error')
 
@@ -463,6 +503,7 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('should render page when form is invalid and everything is fine', async () => {
+        newClaimFeesEnabledStub.returns(false)
         draftStoreServiceMock.resolveFind('claim')
         feesServiceMock.resolveCalculateIssueFee()
 
