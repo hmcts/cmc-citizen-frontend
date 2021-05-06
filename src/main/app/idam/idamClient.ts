@@ -34,16 +34,16 @@ export class IdamClient {
 
   static retrieveUserFor (jwt: string): Promise<User> {
     return request.get({
-      uri: `${idamApiUrl}/details`,
+      uri: `${idamApiUrl}/o/userinfo`,
       headers: {
         Authorization: `Bearer ${jwt}`
       }
     }).then((response: any) => {
       return new User(
-        response.id.toString(),
-        response.email,
-        response.forename,
-        response.surname,
+        response.uid.toString(),
+        response.sub,
+        response.given_name,
+        response.family_name,
         response.roles,
         response.group,
         jwt
