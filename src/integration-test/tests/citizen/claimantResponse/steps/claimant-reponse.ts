@@ -420,7 +420,7 @@ export class ClaimantResponseSteps {
 
   acceptFullDefencePaidFullAmount (testData: EndToEndTestData): void {
     taskListPage.selectTaskViewDefendantResponse()
-    I.see(`${testData.defendantName} states they paid you £105.50.`)
+    I.see(`${testData.defendantName} states they paid you £115.50.`)
     viewDefendantsResponsePage.submit()
     I.see('COMPLETE')
     I.click('Accept or reject their response')
@@ -441,7 +441,7 @@ export class ClaimantResponseSteps {
     viewDefendantsResponsePage.submit()
     I.see('COMPLETE')
     I.click('Accept or reject their response')
-    I.see(`Do you agree the defendant has paid the £105.50 in full?`)
+    I.see(`Do you agree the defendant has paid the £115.50 in full?`)
     claimantSettleClaimPage.selectAcceptedNo()
     I.see('Why did you reject their response')
     claimantRejectionReasonPage.enterReason('No money received')
