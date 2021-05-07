@@ -9,8 +9,8 @@ export const defaultAuthToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOi
 
 export function resolveRetrieveUserFor (id: string, ...roles: string[]) {
   return mock(apiServiceBaseURL)
-    .get('/details')
-    .reply(HttpStatus.OK, { id: id, roles: roles, email: 'user@example.com' })
+    .get('/o/userinfo')
+    .reply(HttpStatus.OK, { uid: id, roles: roles, sub: 'user@example.com' })
 }
 
 export function resolveExchangeCode (token: string) {
@@ -43,7 +43,7 @@ export function rejectInvalidateSession (token: string = defaultAuthToken, reaso
 
 export function rejectRetrieveUserFor (reason: string) {
   return mock(apiServiceBaseURL)
-    .get('/details')
+    .get('/o/userinfo')
     .reply(HttpStatus.FORBIDDEN, reason)
 }
 

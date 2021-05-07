@@ -104,8 +104,7 @@ export class Settlement {
     }
 
     const reversePartyStatements: PartyStatement[] = this.partyStatements.reverse()
-    const partyStatement: PartyStatement = reversePartyStatements
+    return reversePartyStatements
       .find(statement => statement.type === StatementType.OFFER.value)
-    return partyStatement
   }
 }
