@@ -16,10 +16,18 @@ import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { Claim } from 'claims/models/claim'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { FreeMediationOption } from 'forms/models/freeMediation'
+import { FeatureToggles } from 'utils/featureToggles'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
-function renderView (form: Form<CanWeUse>, res: express.Response): void {
+async function renderView (form: Form<CanWeUse>, res: express.Response): Promise<void> {
+  const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
   const claim: Claim = res.locals.claim
   let phoneNumber: string
+  let enhancedMediationJourney: boolean = false
+
+  if (await featureToggles.isEnhancedMediationJourneyEnabled()) {
+    enhancedMediationJourney = true
+  }
 
   if (!claim.isResponseSubmitted()) {
     const draftResponse: Draft<ResponseDraft> = res.locals.responseDraft
@@ -29,16 +37,17 @@ function renderView (form: Form<CanWeUse>, res: express.Response): void {
   }
   res.render(Paths.canWeUsePage.associatedView, {
     form: form,
-    phoneNumber: phoneNumber
+    phoneNumber: phoneNumber,
+    enhancedMediationJourney: enhancedMediationJourney
   })
 }
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.canWeUsePage.uri, (req: express.Request, res: express.Response): void => {
+  .get(Paths.canWeUsePage.uri, async (req: express.Request, res: express.Response): Promise<void> => {
     const draft: Draft<MediationDraft> = res.locals.mediationDraft
 
-    renderView(new Form(draft.document.canWeUse), res)
+    await renderView(new Form(draft.document.canWeUse), res)
   })
   .post(
     Paths.canWeUsePage.uri,
@@ -47,7 +56,7 @@ export default express.Router()
       const form: Form<CanWeUse> = req.body
 
       if (form.hasErrors()) {
-        renderView(form, res)
+        await renderView(form, res)
       } else {
         const claim: Claim = res.locals.claim
         const draft: Draft<MediationDraft> = res.locals.mediationDraft
