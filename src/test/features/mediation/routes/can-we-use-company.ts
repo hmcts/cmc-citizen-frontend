@@ -21,6 +21,8 @@ import {
   verifyRedirectForGetWhenAlreadyPaidInFull,
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
+import * as sinon from 'sinon'
+import { FeatureToggles } from 'utils/featureToggles'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = MediationPaths.canWeUseCompanyPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -31,17 +33,24 @@ describe('Free mediation: can we use company page', () => {
   describe('on GET', () => {
     const method = 'get'
     checkAuthorizationGuards(app, method, pagePath)
+    let isEnhancedMediationJourneyEnabledStub: sinon.SinonStub
 
     describe('as defendant', () => {
 
       context('when user authorised', () => {
         beforeEach(() => {
           idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
+          isEnhancedMediationJourneyEnabledStub = sinon.stub(FeatureToggles.prototype, 'isEnhancedMediationJourneyEnabled')
+        })
+
+        afterEach(() => {
+          isEnhancedMediationJourneyEnabledStub.restore()
         })
 
         verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
 
         it('should return 500 and render error page when cannot retrieve claim', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
           await request(app)
@@ -49,7 +58,21 @@ describe('Free mediation: can we use company page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
+
         it('should render page when everything is fine', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
+          draftStoreServiceMock.resolveFind('mediation', { canWeUseCompany: undefined })
+          draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
+          claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Mary Richards the right person for the mediation service to call'))
+        })
+
+        it('should render page when everything is fine with enhancedMediationJourney', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(true)
           draftStoreServiceMock.resolveFind('mediation', { canWeUseCompany: undefined })
           draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
           claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
@@ -66,9 +89,15 @@ describe('Free mediation: can we use company page', () => {
     describe('as claimant', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.submitterId, 'citizen')
+        isEnhancedMediationJourneyEnabledStub = sinon.stub(FeatureToggles.prototype, 'isEnhancedMediationJourneyEnabled')
+      })
+
+      afterEach(() => {
+        isEnhancedMediationJourneyEnabledStub.restore()
       })
 
       it('should render page when everything is fine', async () => {
+        isEnhancedMediationJourneyEnabledStub.returns(false)
         draftStoreServiceMock.resolveFind('mediation', { canWeUseCompany: undefined })
         draftStoreServiceMock.resolveFind('claimantResponse')
         claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId({
@@ -87,10 +116,16 @@ describe('Free mediation: can we use company page', () => {
   describe('on POST', () => {
     const method = 'post'
     checkAuthorizationGuards(app, method, pagePath)
+    let isEnhancedMediationJourneyEnabledStub: sinon.SinonStub
 
     context('when defendant authorised', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
+        isEnhancedMediationJourneyEnabledStub = sinon.stub(FeatureToggles.prototype, 'isEnhancedMediationJourneyEnabled')
+      })
+
+      afterEach(() => {
+        isEnhancedMediationJourneyEnabledStub.restore()
       })
 
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
@@ -98,6 +133,7 @@ describe('Free mediation: can we use company page', () => {
 
       context('when response not submitted', () => {
         it('should return 500 and render error page when cannot retrieve claim', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
           await request(app)
@@ -109,6 +145,7 @@ describe('Free mediation: can we use company page', () => {
       })
       context('when form is valid', () => {
         it('should redirect to defendant task list when defendant says yes', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
           draftStoreServiceMock.resolveUpdate()
@@ -124,6 +161,7 @@ describe('Free mediation: can we use company page', () => {
         })
 
         it('should show validation error when defendant says yes with no phone number', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
           claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
@@ -136,6 +174,7 @@ describe('Free mediation: can we use company page', () => {
         })
 
         it('should redirect to response task list when no was chosen and a phone number and a contact is given', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
           draftStoreServiceMock.resolveUpdate()
@@ -155,6 +194,7 @@ describe('Free mediation: can we use company page', () => {
         })
 
         it('should show validation error when defendant says no with no phone number', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
           claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
@@ -167,6 +207,7 @@ describe('Free mediation: can we use company page', () => {
         })
 
         it('should show validation error when defendant says no with no contact name', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
           claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)

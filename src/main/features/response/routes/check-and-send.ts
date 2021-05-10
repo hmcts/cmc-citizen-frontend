@@ -32,7 +32,7 @@ import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
-function renderView (form: Form<StatementOfTruth>, res: express.Response): void {
+async function renderView (form: Form<StatementOfTruth>, res: express.Response): Promise<void> {
   const claim: Claim = res.locals.claim
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
   const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
@@ -51,6 +51,8 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     }
   }
   const mediationPilot: boolean = ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'mediationPilot')
+  const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
+  const enhancedMediationJourney = await featureToggles.isEnhancedMediationJourneyEnabled()
 
   res.render(Paths.checkAndSendPage.associatedView, {
     claim: claim,
@@ -68,7 +70,8 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     mediationPilot: mediationPilot,
     mediationEnabled: FeatureToggles.isEnabled('mediation'),
     timeline: getTimeline(draft),
-    evidence: getEvidence(draft)
+    evidence: getEvidence(draft),
+    enhancedMediationJourney: enhancedMediationJourney
   })
 }
 
@@ -174,7 +177,7 @@ export default express.Router()
        }
        if (redirectUri === null) {
          const StatementOfTruthClass = getStatementOfTruthClassFor(claim, draft)
-         renderView(new Form(new StatementOfTruthClass()), res)
+         await renderView(new Form(new StatementOfTruthClass()), res)
        } else {
          res.redirect(redirectUri)
        }
@@ -192,7 +195,7 @@ export default express.Router()
       const form: Form<StatementOfTruth | QualifiedStatementOfTruth> = req.body
 
       if (isStatementOfTruthRequired(draft) && form.hasErrors()) {
-        renderView(form, res)
+        await renderView(form, res)
       } else {
         const responseType = draft.document.response.type
         switch (responseType) {

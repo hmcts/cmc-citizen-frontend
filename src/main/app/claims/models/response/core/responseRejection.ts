@@ -11,6 +11,7 @@ export class ResponseRejection implements ClaimantResponse {
   freeMediation?: YesNoOption
   mediationPhoneNumber?: string
   mediationContactPerson?: string
+  noMediationReason?: string
   reason?: string
   claimantPaymentIntention?: PaymentIntention
   directionsQuestionnaire?: DirectionsQuestionnaire
