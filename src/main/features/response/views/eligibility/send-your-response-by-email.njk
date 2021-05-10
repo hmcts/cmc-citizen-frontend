@@ -108,29 +108,8 @@
           <p>
             {{ t('You`ll need to pay a court fee if you make a counterclaim.')}}
           </p>
-          <details class="notice">
-            <summary>{{ t('View claim fees') }}</summary>
 
-            <div class="panel">
-              <p>
-                {{ t('The fee is based on the amount you`re claiming, including interest.') }}
-              </p>
-              <table>
-                <thead>
-                <tr>
-                  <th scope="col">{{ t('Claim amount') }}</th>
-                  <th scope="col">{{ t('Fee') }}</th>
-                </tr>
-                </thead>
-                {% for fee in fees %}
-                  <tr>
-                    <td>{{ t('{{ from }} to {{ till }}', { from: fee.minRange | numeral, till: fee.maxRange | numeral } )}}</td>
-                    <td>{{ fee.amount | numeral | default('Not available') }}</td>
-                  </tr>
-                {% endfor %}
-              </table>
-            </div>
-          </details>
+          {{ feesTable('View claim fees', fees ) }}
         {% endif %}
       {% endif %}
 
