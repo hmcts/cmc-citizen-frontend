@@ -19,6 +19,7 @@ export interface ResponseCommon {
   freeMediation?: YesNoOption
   mediationPhoneNumber?: string
   mediationContactPerson?: string
+  noMediationReason?: string
   statementOfTruth?: StatementOfTruth
   responseMethod?: ResponseMethod
 }
@@ -32,6 +33,7 @@ export namespace ResponseCommon {
       freeMediation: input.freeMediation,
       mediationPhoneNumber: input.mediationPhoneNumber,
       mediationContactPerson: input.mediationContactPerson,
+      noMediationReason: input.noMediationReason,
       statementOfTruth: input.statementOfTruth
         ? new StatementOfTruth().deserialize(input.statementOfTruth)
         : undefined
