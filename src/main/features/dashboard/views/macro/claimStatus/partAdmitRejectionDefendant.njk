@@ -45,6 +45,10 @@
     <div class="status-block">
       <h2 class="heading-medium">{{ t('{{ claimantName }} has rejected your admission of {{ amount }}',
           { amount: claim.response.amount | numeral, claimantName: claim.claimData.claimant.name }) }}</h2>
+      {% if claim.response.freeMediation === FreeMediationOption.YES and claim.claimantResponse.freeMediation === FreeMediationOption.NO and enhancedMediationJourney %}
+        <p>{{ t('{{ claimantName }} has said no to trying mediation.',
+        { claimantName: claim.claimData.claimant.name }) }}</p>
+      {% endif %}
       <p>{{ t('They believe you owe them the full {{ amount }} claimed.', { amount: claim.totalAmountTillToday | numeral }) }}</p>
       <p>{{ t('You might have to go to a hearing. We’ll contact you if we set a hearing date to tell you how to prepare.') }}</p>
       {% if claim.directionsQuestionnaireDeadline %}
@@ -68,6 +72,10 @@
     <div class="status-block">
       <h2 class="heading-medium">{{ t('{{ claimantName }} has rejected your admission of {{ amount }}',
           { amount: claim.response.amount | numeral, claimantName: claim.claimData.claimant.name }) }}</h2>
+      {% if claim.response.freeMediation === FreeMediationOption.YES and claim.claimantResponse.freeMediation === FreeMediationOption.NO and enhancedMediationJourney %}
+        <p>{{ t('{{ claimantName }} has said no to trying mediation.',
+        { claimantName: claim.claimData.claimant.name }) }}</p>
+      {% endif %}     
       <p>{{ t('They believe you owe them the full {{ amount }} claimed.', { amount: claim.totalAmountTillToday | numeral }) }}</p>
 
       {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}

@@ -17,11 +17,21 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { FreeMediationOption } from 'forms/models/freeMediation'
 import { CanWeUseCompany } from 'mediation/form/models/CanWeUseCompany'
 import { CompanyDetails } from 'forms/models/companyDetails'
+import { FeatureToggles } from 'utils/featureToggles'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
-function renderView (form: Form<CanWeUseCompany>, res: express.Response): void {
+async function renderView (form: Form<CanWeUseCompany>, res: express.Response): Promise<void> {
+  const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
+  let enhancedMediationJourney: boolean = false
+
+  if (await featureToggles.isEnhancedMediationJourneyEnabled()) {
+    enhancedMediationJourney = true
+  }
+
   res.render(Paths.canWeUseCompanyPage.associatedView, {
     form: form,
-    contactName: getContactName(res)
+    contactName: getContactName(res),
+    enhancedMediationJourney: enhancedMediationJourney
   })
 }
 
@@ -47,14 +57,14 @@ function getContactName (res: express.Response) {
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.canWeUseCompanyPage.uri, (req: express.Request, res: express.Response): void => {
+  .get(Paths.canWeUseCompanyPage.uri, async (req: express.Request, res: express.Response): Promise<void> => {
     const draft: Draft<MediationDraft> = res.locals.mediationDraft
 
     if (!draft.document.canWeUseCompany) {
       draft.document.canWeUseCompany = CanWeUseCompany.fromObject({ mediationPhoneNumberConfirmation: getPhoneNumber(res) })
     }
 
-    renderView(new Form(draft.document.canWeUseCompany), res)
+    await renderView(new Form(draft.document.canWeUseCompany), res)
   })
   .post(
     Paths.canWeUseCompanyPage.uri,
@@ -64,7 +74,7 @@ export default express.Router()
       const form: Form<CanWeUseCompany> = req.body
 
       if (form.hasErrors()) {
-        renderView(form, res)
+        await renderView(form, res)
       } else {
         const draft: Draft<MediationDraft> = res.locals.mediationDraft
         const user: User = res.locals.user
