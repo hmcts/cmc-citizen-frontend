@@ -18,7 +18,7 @@ export default express.Router()
 
       const beforeYouStartSection = TaskListBuilder
         .buildDefendantResponseSection(draft.document, claim)
-      const howYouWantToRespondSection = TaskListBuilder
+      const howYouWantToRespondSection = await TaskListBuilder
         .buildHowYouWantToRespondSection(draft.document, claim, mediationDraft.document)
       const submitSection = TaskListBuilder
         .buildSubmitSection(draft.document, claim.externalId)

@@ -12,8 +12,21 @@ import { User } from 'main/app/idam/user'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { FreeMediation, FreeMediationOption } from 'main/app/forms/models/freeMediation'
 import { Claim } from 'claims/models/claim'
+import { FeatureToggles } from 'utils/featureToggles'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
-function renderView (form: Form<FreeMediation>, res: express.Response) {
+async function isEnhancedMediationJourneyEnabled () {
+  const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
+  if (await featureToggles.isEnhancedMediationJourneyEnabled()) {
+    return true
+  }
+
+  return false
+}
+
+async function renderView (form: Form<FreeMediation>, res: express.Response) {
+  const enhancedMediationJourney = await isEnhancedMediationJourneyEnabled()
+
   const user: User = res.locals.user
   const claim: Claim = res.locals.claim
 
@@ -22,7 +35,8 @@ function renderView (form: Form<FreeMediation>, res: express.Response) {
   res.render(Paths.mediationDisagreementPage.associatedView, {
     form: form,
     defendant: user.id === claim.defendantId,
-    hint: hint
+    hint: hint,
+    enhancedMediationJourney: enhancedMediationJourney
   })
 }
 
@@ -32,7 +46,7 @@ export default express.Router()
     Paths.mediationDisagreementPage.uri,
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<MediationDraft> = res.locals.mediationDraft
-      renderView(new Form(draft.document.mediationDisagreement), res)
+      await renderView(new Form(draft.document.mediationDisagreement), res)
     }
   )
   .post(
@@ -41,7 +55,7 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<FreeMediation> = req.body
       if (form.hasErrors()) {
-        renderView(form, res)
+        await renderView(form, res)
       } else {
         const draft: Draft<MediationDraft> = res.locals.mediationDraft
         const user: User = res.locals.user
@@ -53,23 +67,50 @@ export default express.Router()
           draft.document.canWeUse = undefined
           draft.document.canWeUseCompany = undefined
         } else {
+          draft.document.noMediationReason = undefined
           draft.document.willYouTryMediation = form.model
         }
 
         await new DraftService().save(draft, user.bearerToken)
 
+        const claim: Claim = res.locals.claim
         const externalId: string = req.params.externalId
+        const enhancedMediationJourney = await isEnhancedMediationJourneyEnabled()
 
-        if (form.model.option === FreeMediationOption.YES) {
-          res.redirect(Paths.mediationAgreementPage.evaluateUri({ externalId: externalId }))
-        } else {
-          const claim: Claim = res.locals.claim
-          if (!claim.isResponseSubmitted()) {
-            res.redirect(ResponsePaths.taskListPage.evaluateUri({ externalId: externalId }))
-          } else {
-            res.redirect(ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: externalId }))
-          }
-        }
+        handleMediationJourney(enhancedMediationJourney, form, user, claim, res, externalId)
       }
     })
   )
+
+function handleMediationJourney (enhancedMediationJourney: boolean, form: Form<FreeMediation>, user: User, claim: Claim, res: express.Response, externalId: string) {
+  if (enhancedMediationJourney) {
+    handleEnhancedMediationJourney(form, user, claim, res)
+  } else {
+    if (form.model.option === FreeMediationOption.YES) {
+      res.redirect(Paths.mediationAgreementPage.evaluateUri({ externalId: externalId }))
+    } else {
+      if (!claim.isResponseSubmitted()) {
+        res.redirect(ResponsePaths.taskListPage.evaluateUri({ externalId: externalId }))
+      } else {
+        res.redirect(ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: externalId }))
+      }
+    }
+  }
+}
+
+function handleEnhancedMediationJourney (form: Form<FreeMediation>, user: User, claim: Claim, res: express.Response) {
+  if (form.model.option === FreeMediationOption.YES) {
+    if (isBusinessUser(user, claim)) {
+      res.redirect(Paths.canWeUseCompanyPage.evaluateUri({ externalId: claim.externalId }))
+    } else {
+      res.redirect(Paths.canWeUsePage.evaluateUri({ externalId: claim.externalId }))
+    }
+  } else {
+    res.redirect(Paths.iDontWantFreeMediationPage.evaluateUri({ externalId: claim.externalId }))
+  }
+}
+
+function isBusinessUser (user: User, claim: Claim) {
+  return (user.id === claim.defendantId && claim.claimData.defendant.isBusiness()) ||
+    (user.id === claim.claimantId && claim.claimData.claimant.isBusiness())
+}
