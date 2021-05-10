@@ -29,6 +29,7 @@ import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
 import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import { Moment } from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
 function getPaymentIntention (draft: DraftClaimantResponse, claim: Claim): PaymentIntention {
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
@@ -60,7 +61,7 @@ function deserializerFunction (value: any): StatementOfTruth {
   return StatementOfTruth.fromObject(value)
 }
 
-function renderView (form: Form<StatementOfTruth>, res: express.Response): void {
+async function renderView (form: Form<StatementOfTruth>, res: express.Response): Promise<void> {
   const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
   const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
   const directionsQuestionnaireDraft: Draft<DirectionsQuestionnaireDraft> = res.locals.directionsQuestionnaireDraft
@@ -70,6 +71,9 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
   const mediationPilot: boolean = ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'mediationPilot')
   const dqsEnabled: boolean = DirectionsQuestionnaireHelper.isDirectionsQuestionnaireEligible(draft.document, claim)
   const dispute: boolean = claim.response.responseType === ResponseType.FULL_DEFENCE
+  const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
+  const enhancedMediationJourney = await featureToggles.isEnhancedMediationJourneyEnabled()
+
   let datesUnavailable: string[]
   if (dqsEnabled) {
     datesUnavailable = directionsQuestionnaireDraft.document.availability.unavailableDates.map(date => date.toMoment().format('LL'))
@@ -105,7 +109,8 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     datesUnavailable: datesUnavailable,
     dispute: dispute,
     mediationPilot: mediationPilot,
-    alternatePaymentMethodDate: alternatePaymentMethodDate
+    alternatePaymentMethodDate: alternatePaymentMethodDate,
+    enhancedMediationJourney: enhancedMediationJourney
   })
 }
 
@@ -116,7 +121,7 @@ export default express.Router()
     AllClaimantResponseTasksCompletedGuard.requestHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const form = new Form(new StatementOfTruth())
-      renderView(form, res)
+      await renderView(form, res)
     })
   )
   .post(
@@ -126,7 +131,7 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const form: Form<StatementOfTruth> = req.body
       if (form.hasErrors()) {
-        renderView(form, res)
+        await renderView(form, res)
       } else {
         const claim: Claim = res.locals.claim
         const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft

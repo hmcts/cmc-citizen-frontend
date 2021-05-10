@@ -1,10 +1,14 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, radioOption, textInput, saveAndContinueButton %}
 
+{% set heading = 'Enter a phone number' %}
+
 {% if phoneNumber %}
-  {% set heading = 'Can the mediation service use ' + phoneNumber + ' to call you?' %}
-{% else %}
-  {% set heading = 'Enter a phone number' %}
+  {% if enhancedMediationJourney %}
+    {% set heading = 'Confirm your telephone number' %}
+  {% else %}
+    {% set heading = 'Can the mediation service use ' + phoneNumber + ' to call you?' %}
+  {% endif %}
 {% endif %}
 
 {% block content %}
@@ -20,6 +24,9 @@
         {{ csrfProtection(csrf) }}
 
         {% if phoneNumber %}
+          {% if enhancedMediationJourney %}
+            <p>{{ t('Can the mediation service use ' + phoneNumber + ' to call you?')}}</p>
+          {% endif %}
           {% set error = form.errorFor('option') %}
           <div class="form-group {% if error %} form-group-error {% endif %}">
             <fieldset id="option[label]">
