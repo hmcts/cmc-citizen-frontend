@@ -19,8 +19,8 @@ export class AllClaimantResponseTasksCompletedGuard {
       const directionsQuestionnaireDraft = res.locals.directionsQuestionnaireDraft
       const claim: Claim = res.locals.claim
 
-      const allTasksCompleted: boolean = TaskListBuilder
-        .buildRemainingTasks(draft.document, claim, mediationDraft.document, directionsQuestionnaireDraft.document).length === 0
+      const allTasksCompleted: boolean = (await TaskListBuilder
+        .buildRemainingTasks(draft.document, claim, mediationDraft.document, directionsQuestionnaireDraft.document)).length === 0
 
       if (allTasksCompleted) {
         return next()

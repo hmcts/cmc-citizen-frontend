@@ -97,7 +97,6 @@ cmc-claim-store:
     image: hmctspublic.azurecr.io/cmc/claim-store:pr-2333-21f11756
     releaseNameOverride: ${SERVICE_NAME}-claim-store
     ingressHost: claim-store-${SERVICE_FQDN}
-    imagePullPolicy: Always
     readinessDelay: 250  # ccd-stack will start much slower
     livenessDelay:  250  # ccd-stack will start much slower
     keyVaults:
