@@ -5,11 +5,7 @@ import { Paths } from 'response/paths'
 import { ErrorHandling } from 'shared/errorHandling'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
-import { FeesClient } from 'fees/feesClient'
 import { FeeRange as MergableRange, FeesTableViewHelper } from 'claim/helpers/feesTableViewHelper'
-import { FeeRange } from 'fees/models/feeRange'
-
-const supportedFeeLimitInGBP: number = 10000
 
 /* tslint:disable:no-default-export */
 export default express.Router()
