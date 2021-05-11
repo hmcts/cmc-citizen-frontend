@@ -94,7 +94,7 @@ cmc-claim-store:
   enabled: true
   java:
     imagePullPolicy: Always
-    image: hmctspublic.azurecr.io/cmc/claim-store:latest
+    image: hmctspublic.azurecr.io/cmc/claim-store:pr-2342
     releaseNameOverride: ${SERVICE_NAME}-claim-store
     ingressHost: claim-store-${SERVICE_FQDN}
     readinessDelay: 250  # ccd-stack will start much slower
@@ -191,13 +191,13 @@ ccd:
       IDAM_OAUTH2_AW_CLIENT_SECRET: ${ADMIN_WEB_IDAM_SECRET}
     idam-pr:
       enabled: true
-  
+
   ccd-api-gateway-web:
     nodejs:
       imagePullPolicy: Always
       ingressHost: gateway-${SERVICE_FQDN}
       ingressIP: ${INGRESS_IP}
-      
+
   ccd-case-management-web:
     nodejs:
       imagePullPolicy: Always
