@@ -1,0 +1,41 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, linkButton %}
+
+{% set heading = 'Free telephone mediation' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <p>{{ t('We have automatically registered you for free telephone mediation from HM Courts and Tribunals Service.') }}</p>
+      <h2 class="heading-medium">{{ t('How free mediation works') }}</h2>
+      <p>{{ t('A trained, neutral mediator from HM Courts and Tribunals Service will listen to your views and help you to negotiate a settlement of your dispute.') }}</p>
+      <p class="govuk-details govuk-dashboard-details__text">{{ t('Mediation can be quicker, cheaper and less stressful than going to court.') }}</p>
+      <p>{{ t('Mediation is confidential, and nothing said in the mediation can be used in court proceedings if the dispute cannot be settled. The mediator speaks to each party separately, this is not a conference call.') }}</p>
+      {% if defendant %}
+        <p>{{ t('The claimant must agree to mediation. We\'ll contact you within 28 days after the claimant\'s confirmation, to arrange a free appointment.') }}</p>
+      {% else %}
+        <p>{{ t('The defendant has already agreed to mediation. We\’ll contact you, within 28 days after your response, to arrange a free appointment.') }}</p>
+      {% endif %}
+      <p>{{ t('Your mediation appointment will last for no more than an hour.') }}</p>
+      <p>{{ t('Find out more about ') }}
+        <a target="_blank" rel="noreferrer noopener" href="https://www.gov.uk/guidance/small-claims-mediation-service">{{  t('free telephone mediation (opens in new tab).') }}</a>
+      </p>
+
+      <h2 class="heading-medium">{{ t('Reaching a settlement') }}</h2>
+
+      <p>{{ t('If mediation is successful, you\'ll make a verbal agreement over the phone. This is legally binding which means that you must comply with it. You will be given the terms of the agreement in a document – this is called a settlement agreement.') }}</p>
+      <p>{{ t('If either party breaks the terms the other party can go to court to ask for a judgment or hearing.') }}</p>
+      <p>{{ t('If mediation fails and a court hearing is needed, what happened during the mediation appointment cannot be mentioned in court.') }}</p>
+
+      <p class="govuk-details govuk-dashboard-details__text">{{ t('You will not have to wait longer for a court hearing if you choose mediation.') }}</p>
+      <form method="post" novalidate>
+        {{ csrfProtection(csrf) }}
+
+        <div class="form-group">
+          {{ linkButton('Continue', 'mediationYes', 'link-button button block form-group') }}
+          {{ linkButton('I do not agree to free mediation', 'mediationNo', 'link-button form-group no-padding') }}
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

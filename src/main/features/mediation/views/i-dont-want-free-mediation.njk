@@ -1,0 +1,90 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, textArea, radioOption, linkButton, saveAndContinueButton, errorSummary %}
+
+{% set heading = 'I do not agree to free mediation' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <p>{{ t('You have chosen not to try free mediation. Please tell us why:') }}</p>
+      <form
+        method="post"
+        class="analytics-submit-event-trigger"
+        data-event-action="Providing mediation reason"
+        data-event-label-from="option"
+        novalidate>
+
+        {{ csrfProtection(csrf) }}
+        {% set error = form.errorFor('iDoNotWantMediationReason') %}
+
+        <div class="form-group {% if error %} form-group-error {% endif %}">
+          <fieldset id="iDoNotWantMediationReason[label]">
+            <legend class="visually-hidden">{{ t(heading) }}</legend>
+            {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
+              {{ radioOption(
+                form = form,
+                name = 'iDoNotWantMediationReason',
+                value = 'I have already tried to resolve the dispute with the other party, with no success',
+                label = 'I have already tried to resolve the dispute with the other party, with no success',
+                checked = form.valueFor('iDoNotWantMediationReason') == 'I have already tried to resolve the dispute with the other party, with no success'
+              ) }}
+              {{ radioOption(
+                form = form,
+                name = 'iDoNotWantMediationReason',
+                value = 'I am not sure what would happen in mediation',
+                label = 'I am not sure what would happen in mediation',
+                checked = form.valueFor('iDoNotWantMediationReason') == 'I am not sure what would happen in mediation'
+              ) }}
+              {{ radioOption(
+                form = form,
+                name = 'iDoNotWantMediationReason',
+                value = 'I do not think mediation would solve the dispute',
+                label = 'I do not think mediation would solve the dispute',
+                checked = form.valueFor('iDoNotWantMediationReason') == 'I do not think mediation would solve the dispute'
+              ) }}
+              {{ radioOption(
+                form = form,
+                name = 'iDoNotWantMediationReason',
+                value = 'I do not want to delay getting a hearing',
+                label = 'I do not want to delay getting a hearing',
+                checked = form.valueFor('iDoNotWantMediationReason') == 'I do not want to delay getting a hearing'
+              ) }}
+              {{ radioOption(
+                form = form,
+                name = 'iDoNotWantMediationReason',
+                value = 'I want a judge to make a decision on the dispute',
+                label = 'I want a judge to make a decision on the dispute',
+                checked = form.valueFor('iDoNotWantMediationReason') == 'I want a judge to make a decision on the dispute'
+              ) }}
+              {{ radioOption(
+                form = form,
+                name = 'iDoNotWantMediationReason',
+                value = 'other',
+                label = 'Another reason (please specify)',
+                checked = form.valueFor('iDoNotWantMediationReason') == 'other'
+              ) }}
+            <div class="form-group panel panel-border-narrow js-hidden " id="iDoNotWantMediationReason-other" aria-hidden="false">
+              {{ otherReasons(form) }}
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="form-group">
+          {{ linkButton('Skip this section', 'reject', 'link-button no-padding') }}
+        </div>
+
+        {{ saveAndContinueButton() }}
+
+      </form>
+
+      <p class="font-xsmall"> {{ t('Any information you provide is used solely by HM Courts and Tribunals Service
+       to help us improve our services. Your answers have no impact on the progress or outcome
+        of your case, or on any contact you have with HM Courts and Tribunals Service.') }} </p>
+    </div>
+  </div>
+{% endblock %}
+
+{% macro otherReasons(form) %}
+  {{ textArea(label = 'Enter your reason here', form = form, name = 'otherReason', inputClass = 'form-control-3-4') }}
+{% endmacro %}
+

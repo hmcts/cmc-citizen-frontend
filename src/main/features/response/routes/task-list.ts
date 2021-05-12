@@ -24,7 +24,7 @@ export default express.Router()
         .buildBeforeYouStartSection(draft.document, claim, MomentFactory.currentDateTime())
       const respondToClaimSection = TaskListBuilder
         .buildRespondToClaimSection(draft.document, claim)
-      const resolvingClaimSection = TaskListBuilder
+      const resolvingClaimSection = await TaskListBuilder
         .buildResolvingClaimSection(draft.document, claim, draftMediation.document)
 
       let directionsQuestionnaireSection
