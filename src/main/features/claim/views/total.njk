@@ -1,6 +1,5 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, saveAndContinueButton, errorSummary %}
-{% from "feesTable.njk" import feesTable %}
 {% from "externalLink.njk" import externalLink %}
 {% from "interestCalculation.njk" import interestCalculationInfoBreakdownTable %}
 
@@ -81,8 +80,6 @@
 
           <p>{{ t('You don’t have to pay a hearing fee unless the claim goes to a hearing.') }}</p>
           <p>{{ t('There may be additional fees as your case progresses. ' + externalLink('Find out more about court fees (opens in a new tab)', 'https://www.gov.uk/government/publications/fees-in-the-civil-and-family-courts-main-fees-ex50', '', false )) | safe }}</p>
-
-          {{ feesTable('How these fees are calculated', feeTableContent , showHearingFee = true) }}
 
         {{ saveAndContinueButton() }}
       </form>
