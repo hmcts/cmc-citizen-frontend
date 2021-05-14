@@ -60,7 +60,15 @@ export class FeatureToggles {
     return this.launchDarklyClient.serviceVariation('dashboard_pagination_enabled', toBoolean(config.get<boolean>(`featureToggles.dashboard_pagination_enabled`)))
   }
 
+  async isEnhancedMediationJourneyEnabled (): Promise<boolean> {
+    return this.launchDarklyClient.serviceVariation('enhanced-mediation-journey', toBoolean(config.get<boolean>(`featureToggles.enhancedMediationJourney`)))
+  }
+
   async isBreathingSpaceEnabled (): Promise<boolean> {
     return this.launchDarklyClient.serviceVariation('breathing-space', toBoolean(config.get<boolean>(`featureToggles.breathingSpace`)))
+  }
+
+  async isNewClaimFeesEnabled (): Promise<boolean> {
+    return this.launchDarklyClient.serviceVariation('new-claim-fees', toBoolean(config.get<boolean>(`featureToggles.newClaimFees`)))
   }
 }

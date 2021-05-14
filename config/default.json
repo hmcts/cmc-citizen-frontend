@@ -99,7 +99,9 @@
     "signPostingCTSC": true,
     "autoEnrollIntoNewFeature": true,
     "dashboard_pagination_enabled": false,
-    "breathingSpace": true
+    "breathingSpace": true,
+    "newClaimFees": true,
+    "enhancedMediationJourney": true
   },
   "oauth": {
     "clientId": "cmc_citizen"

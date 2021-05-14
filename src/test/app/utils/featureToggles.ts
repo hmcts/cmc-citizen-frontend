@@ -106,4 +106,14 @@ describe('FeatureToggles', () => {
       expect(result).to.equal(actual)
     })
   })
+
+  describe('isNewClaimFeesEnabled', () => {
+    it('should return toggle if new claim fees toggle exists', async () => {
+      const mockLaunchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
+      const featureToggles = new FeatureToggles(mockLaunchDarklyClient)
+      let actual = toBoolean(config.get<boolean>(`featureToggles.newClaimFees`))
+      let result = await featureToggles.isNewClaimFeesEnabled()
+      expect(result).to.equal(actual)
+    })
+  })
 })
