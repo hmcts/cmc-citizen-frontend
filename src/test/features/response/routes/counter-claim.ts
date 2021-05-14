@@ -19,11 +19,29 @@ import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-i
 import * as feesServiceMock from 'test/http-mocks/fees'
 import { verifyRedirectForGetWhenAlreadyPaidInFull } from 'test/app/guards/alreadyPaidInFullGuard'
 
+import { mock, reset } from 'ts-mockito'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
+import { FeatureToggles } from 'utils/featureToggles'
+import * as sinon from 'sinon'
+
+const mockLaunchDarklyClient: LaunchDarklyClient = mock(LaunchDarklyClient)
+
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = ResponsePaths.counterClaimPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 describe('Defendant response: counter claim page', () => {
   attachDefaultHooks(app)
+
+  let newClaimFeesEnabledStub: sinon.SinonStub
+
+  beforeEach(() => {
+    newClaimFeesEnabledStub = sinon.stub(FeatureToggles.prototype, 'isNewClaimFeesEnabled')
+  })
+
+  afterEach(() => {
+    reset(mockLaunchDarklyClient)
+    newClaimFeesEnabledStub.restore()
+  })
 
   describe('on GET', () => {
     const method = 'get'
@@ -48,6 +66,7 @@ describe('Defendant response: counter claim page', () => {
       })
 
       it('should render page when everything is fine', async () => {
+        newClaimFeesEnabledStub.returns(false)
         draftStoreServiceMock.resolveFind('response')
         draftStoreServiceMock.resolveFind('mediation')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()

@@ -2,8 +2,25 @@ import { expect } from 'chai'
 
 import { FeeRange, FeesTableViewHelper, FeeRangeMerge } from 'claim/helpers/feesTableViewHelper'
 import * as feesServiceMock from 'test/http-mocks/fees'
+import { mock, reset } from 'ts-mockito'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
+import { FeatureToggles } from 'utils/featureToggles'
+import * as sinon from 'sinon'
+
+const mockLaunchDarklyClient: LaunchDarklyClient = mock(LaunchDarklyClient)
 
 describe('FeesTableViewHelper', () => {
+  let newClaimFeesEnabledStub: sinon.SinonStub
+
+  beforeEach(() => {
+    newClaimFeesEnabledStub = sinon.stub(FeatureToggles.prototype, 'isNewClaimFeesEnabled')
+  })
+
+  afterEach(() => {
+    reset(mockLaunchDarklyClient)
+    newClaimFeesEnabledStub.restore()
+  })
+
   it('should throw an error when issue fees array is undefined', () => {
     expect(() => FeesTableViewHelper.merge(undefined, [])).to.throw(Error, 'Both fee sets are required for merge')
   })
@@ -158,7 +175,17 @@ describe('FeesTableViewHelper', () => {
   })
 
   it('should filter out older versions of fee and get only latest', async () => {
+    newClaimFeesEnabledStub.returns(false)
     feesServiceMock.resolveGetIssueFeeRangeGroup()
+    feesServiceMock.resolveGetHearingFeeRangeGroup()
+
+    const result: FeeRangeMerge[] = await FeesTableViewHelper.feesTableContent()
+    expect(result).to.have.lengthOf(2)
+  })
+
+  it('should filter out older versions of fee and get only new claim fees', async () => {
+    newClaimFeesEnabledStub.returns(true)
+    feesServiceMock.resolveGetIssueFeeRangeGroupDefaultChannel()
     feesServiceMock.resolveGetHearingFeeRangeGroup()
 
     const result: FeeRangeMerge[] = await FeesTableViewHelper.feesTableContent()
