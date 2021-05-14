@@ -67,4 +67,8 @@ export class FeatureToggles {
   async isBreathingSpaceEnabled (): Promise<boolean> {
     return this.launchDarklyClient.serviceVariation('breathing-space', toBoolean(config.get<boolean>(`featureToggles.breathingSpace`)))
   }
+
+  async isNewClaimFeesEnabled (): Promise<boolean> {
+    return this.launchDarklyClient.serviceVariation('new-claim-fees', toBoolean(config.get<boolean>(`featureToggles.newClaimFees`)))
+  }
 }
