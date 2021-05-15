@@ -1989,9 +1989,9 @@ cls-hooked@^4.2.2:
     emitter-listener "^1.0.1"
     semver "^5.4.1"
 
-"cmc-cookies-manager@github:hmcts/cmc-cookies-manager#2.0.2":
+"cmc-cookies-manager@github:hmcts/cmc-cookies-manager#2.0.3":
   version "1.0.6"
-  resolved "https://codeload.github.com/hmcts/cmc-cookies-manager/tar.gz/4b741518af4ae78f3c0f666a9866f02145af795c"
+  resolved "https://codeload.github.com/hmcts/cmc-cookies-manager/tar.gz/deb98eb903d5596ac80559afacca9e8c3cd45f7d"
   dependencies:
     govuk-frontend "^3.11.0"
 

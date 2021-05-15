@@ -62,7 +62,7 @@
     "build-url": "^2.0.0",
     "class-transformer": "^0.2.3",
     "classlist-polyfill": "^1.2.0",
-    "cmc-cookies-manager": "github:hmcts/cmc-cookies-manager#2.0.2",
+    "cmc-cookies-manager": "github:hmcts/cmc-cookies-manager#2.0.3",
     "config": "^3.3.3",
     "cookie-parser": "^1.4.5",
     "cookies": "^0.8.0",
