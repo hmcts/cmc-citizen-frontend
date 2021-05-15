@@ -15,6 +15,7 @@ function setCookiePreference() {
     var getSelectedValue = document.querySelector('input[name="analytics"]:checked');
     setCookie('cookies_preferences_set', true, 365)
     setCookie('cookies_policy', '{"essential":true,"usage":' + getSelectedValue.value, 365)
+    document.getElementById("cookie-preference-success").classList.remove("govuk-visually-hidden");
 }
 
 function setAcceptAllCookies() {
@@ -70,4 +71,14 @@ function checkCookie() {
     if (cookies_preferences_set == 'false') {
         document.getElementById("cm_cookie_notification").classList.remove("govuk-visually-hidden");
     }
+    // setting the radio button value based on cookie value
+    if (cookies_policy.split(',')[1].split(':')[1] == 'true')
+    {
+        $("#radio-analytics-off").attr('checked', false);
+        $("#radio-analytics-on").attr('checked', true);
+    } else {
+        $("#radio-analytics-on").attr('checked', false);
+        $("#radio-analytics-off").attr('checked', true);
+    }
+
 }
