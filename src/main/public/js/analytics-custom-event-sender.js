@@ -66,18 +66,26 @@ $(function () {
 
   // Send a google analytics event when an element that has the 'analytics-click-event-trigger' class is clicked.
   $('.analytics-click-event-trigger').on('click', function () {
-    var label = $(this).data('eventLabel')
-    sendEvent('Navigation', 'Click', label)
+    var cookies_policy = getCookie("cookies_policy");
+    if (!cookies_policy && cookies_policy.split(',')[1].split(':')[1] == 'true')
+    {
+      var label = $(this).data('eventLabel')
+      sendEvent('Navigation', 'Click', label)
+    }
   })
 
   // Send a google analytics event when a form that has the 'analytics-click-event-trigger' class is submitted.
   $('.analytics-submit-event-trigger').on('submit', function () {
-    var form = $(this)
+    var cookies_policy = getCookie("cookies_policy");
+    if (!cookies_policy && cookies_policy.split(',')[1].split(':')[1] == 'true')
+    {
+      var form = $(this)
 
-    var action = form.data('eventAction')
-    var label = findLabel(form, form.data('eventLabelFrom'))
-    if (label) {
-      sendEvent('Form', action, label)
+      var action = form.data('eventAction')
+      var label = findLabel(form, form.data('eventLabelFrom'))
+      if (label) {
+        sendEvent('Form', action, label)
+      }
     }
   })
 })
