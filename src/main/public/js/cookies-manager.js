@@ -1,5 +1,8 @@
+$(document).ready(function(){
+  checkCookie()
+});
+
 (function () {
-    checkCookie()
     if (document.getElementById('save-cookie-preferences')) {
       document.getElementById("save-cookie-preferences").onclick = function () { setCookiePreference() };
     }
@@ -21,6 +24,8 @@ function setCookiePreference() {
                                 + ',"apm:"' + getApmSelectedValue.value
                                 + '}', 365)
     document.getElementById("cookie-preference-success").classList.remove("govuk-visually-hidden");
+    manageAnalyticsCookies(getAnalyticsSelectedValue.value)
+    manageAPMCookie(getApmSelectedValue.value)
 }
 
 function setAcceptAllCookies() {
@@ -28,6 +33,7 @@ function setAcceptAllCookies() {
     setCookie('cookies_policy', '{"essential":true,"analytics":true,"apm":true}', 365)
     document.getElementById("accept-all-cookies-success").classList.remove("govuk-visually-hidden");
     document.getElementById("cm_cookie_notification").classList.add("govuk-visually-hidden");
+    manageAPMCookie('true')
 }
 
 function setRejectAllCookies() {
@@ -35,6 +41,8 @@ function setRejectAllCookies() {
     setCookie('cookies_policy', '{"essential":true,"analytics":false,"apm":false}', 365)
     document.getElementById("accept-all-cookies-success").classList.remove("govuk-visually-hidden");
     document.getElementById("cm_cookie_notification").classList.add("govuk-visually-hidden");
+    manageAnalyticsCookies(false)
+    manageAPMCookie('false')
 }
 
 function setCookie(cname, cvalue, exdays) {
@@ -42,6 +50,10 @@ function setCookie(cname, cvalue, exdays) {
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
     var expires = "expires=" + d.toUTCString();
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/; Secure=true";
+}
+
+function setAPMCookies(cname, cvalue) {
+    document.cookie = cname + "=" + cvalue + ";" + ";path=/; Secure=true";
 }
 
 function getCookie(cname) {
@@ -84,14 +96,62 @@ function checkCookie() {
     } else {
         $("#radio-analytics-on").attr('checked', false);
         $("#radio-analytics-off").attr('checked', true);
+        manageAnalyticsCookies(false)
     }
 
     if (cookies_policy.split(',')[2].split(':')[1].includes('true'))
     {
         $("#radio-apm-off").attr('checked', false);
         $("#radio-apm-on").attr('checked', true);
+        manageAPMCookie('true')
     } else {
         $("#radio-apm-on").attr('checked', false);
         $("#radio-apm-off").attr('checked', true);
+        manageAPMCookie('false')
     }
+}
+
+function manageAnalyticsCookies(cookieStatus) {
+  if(cookieStatus === false) {
+    deleteCookie('_ga')
+    deleteCookie('_gid')
+    deleteCookie('_gat')
+  }
+}
+
+function manageAPMCookie(cookieStatus) {
+    if(cookieStatus === 'true') {
+      setAPMCookies('dtCookie','on')
+      setAPMCookies('dtLatC','on')
+      setAPMCookies('dtPC','on')
+      setAPMCookies('dtSa','on')
+      setCookie('rxVisitor','on', 365)
+      setAPMCookies('rxvt','on')
+    } else {
+      deleteCookie('dtCookie')
+      deleteCookie('dtLatC')
+      deleteCookie('dtPC')
+      deleteCookie('dtSa')
+      deleteCookie('rxVisitor')
+      deleteCookie('rxvt')
+    }
+    apmPreferencesUpdated(cookieStatus)
+}
+
+function deleteCookie(cookie_name) {
+    document.cookie = cookie_name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;';
+}
+
+function apmPreferencesUpdated(cookieStatus) {
+  const dtrum = window.dtrum;
+
+  if(dtrum !== undefined) {
+    if(cookieStatus === 'true') {
+      dtrum.enable();
+      dtrum.enableSessionReplay();
+    } else {
+      dtrum.disableSessionReplay();
+      dtrum.disable();
+    }
+  }
 }
