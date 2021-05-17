@@ -8,7 +8,7 @@
   "scripts": {
     "setup": "gulp sass copy-files sass-govuk-frontend",
     "start": "node server.js",
-    "lint": "tsc --noEmit && tslint --project tsconfig.json && sass-lint -v -q -e 'src/main/common/components/imported/*'",
+    "lint": "tsc --noEmit && tslint --project tsconfig.json && sass-lint -v -q",
     "test": "echo 'unit tests are ran through GitHub actions as a mandatory step in order to save time on the main pipeline'",
     "tests": "TS_NODE_TRANSPILE_ONLY=true NODE_ENV=mocha LOG_LEVEL=OFF mocha --opts mocha.opts $(find src/test \\( -name '*.ts' \\) ! -path '*a11y*' ! -path '*/routes/*') --reporter-options reportFilename=unit,inlineAssets=true,reportTitle=citizen-frontend-unit",
     "test:routes": "TS_NODE_TRANSPILE_ONLY=true NODE_ENV=mocha LOG_LEVEL=OFF mocha --opts mocha.opts $(find src/test \\( -name '*.ts' \\) -path '*/routes/*') --timeout 10000 --reporter-options reportFilename=routes,inlineAssets=true,reportTitle=citizen-frontend-routes",
@@ -62,7 +62,7 @@
     "build-url": "^2.0.0",
     "class-transformer": "^0.2.3",
     "classlist-polyfill": "^1.2.0",
-    "cmc-cookies-manager": "github:hmcts/cmc-cookies-manager#2.2.0",
+    "cmc-cookies-manager": "github:hmcts/cmc-cookies-manager#2.3.0",
     "config": "^3.3.3",
     "cookie-parser": "^1.4.5",
     "cookies": "^0.8.0",
