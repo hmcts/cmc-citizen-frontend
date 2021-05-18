@@ -94,7 +94,7 @@ cmc-claim-store:
   enabled: true
   java:
     imagePullPolicy: Always
-    image: hmctspublic.azurecr.io/cmc/claim-store:latest
+    image: hmctspublic.azurecr.io/cmc/claim-store:pr-2366
     releaseNameOverride: ${SERVICE_NAME}-claim-store
     ingressHost: claim-store-${SERVICE_FQDN}
     readinessDelay: 250  # ccd-stack will start much slower
@@ -133,9 +133,17 @@ cmc-claim-store:
       CMC_DB_PASSWORD: hmcts
       CMC_DB_CONNECTION_OPTIONS: ''
       CORE_CASE_DATA_API_URL: http://${SERVICE_NAME}-ccd-data-store-api
-      STAFF_NOTIFICATIONS_LEGAL_RECIPIENT: moneyclaims@justice.gov.uk
-      RPA_NOTIFICATIONS_LEGALSEALEDCLAIMRECIPIENT: civilmoneyclaims+rpa-legal-claim-issued@gmail.com
-      RPA_NOTIFICATIONS_BREATHINGSPACERECIPIENT: breathingSpace.auto@justice.gov.uk
+      STAFF_NOTIFICATIONS_SENDER: noreply@mail-money-claims-nonprod.platform.hmcts.net
+      STAFF_NOTIFICATIONS_RECIPIENT: civilmoneyclaimsdemo@gmail.com
+      RPA_NOTIFICATIONS_SENDER: noreply@mail-money-claims-nonprod.platform.hmcts.net
+      STAFF_NOTIFICATIONS_LEGAL_RECIPIENT: civilmoneyclaimsdemo@gmail.com
+      RPA_NOTIFICATIONS_SEALEDCLAIMRECIPIENT: civilmoneyclaimsdemo@gmail.com
+      RPA_NOTIFICATIONS_LEGALSEALEDCLAIMRECIPIENT: civilmoneyclaimsdemo@gmail.com
+      RPA_NOTIFICATIONS_MORETIMEREQUESTEDRECIPIENT: civilmoneyclaimsdemo@gmail.com
+      RPA_NOTIFICATIONS_RESPONSERECIPIENT: civilmoneyclaimsdemo@gmail.com
+      RPA_NOTIFICATIONS_COUNTYCOURTJUDGEMENTRECIPIENT: civilmoneyclaimsdemo@gmail.com
+      RPA_NOTIFICATIONS_PAIDINFULLRECIPIENT: civilmoneyclaimsdemo@gmail.com
+      RPA_NOTIFICATIONS_BREATHINGSPACERECIPIENT: civilmoneyclaimsdemo@gmail.com
       MANAGEMENT_HEALTH_MAIL_ENABLED: false
       FEATURE_TOGGLES_SAVE_CLAIM_STATE_ENABLED: true
       FEATURE_TOGGLES_CTSC_ENABLED: true
