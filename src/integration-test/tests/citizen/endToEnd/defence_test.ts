@@ -49,7 +49,7 @@ Scenario('I can as an Individual make a claim against an Individual who then rej
   // as defendant
   await defendantResponseSteps.disputeClaimAsAlreadyPaid(I, testData, claimantResponseTestData, true)
   I.see(testData.claimRef)
-  I.see(`You told us you’ve paid £105.50. We’ve sent ${testData.claimantName} this response`)
+  I.see(`You told us you’ve paid £115.50. We’ve sent ${testData.claimantName} this response`)
   // check dashboard
   I.click('My account')
   I.see('Wait for the claimant to respond')
