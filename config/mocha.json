@@ -40,8 +40,9 @@
     "helpWithFees": true,
     "pcq": true,
     "autoEnrollIntoNewFeature": true,
-    "dashboard_pagination_enabled": true,    
+    "dashboard_pagination_enabled": true,
     "breathingSpace": true,
+    "newClaimFees": true,
     "enhancedMediationJourney": true
   },
   "appInsights": {

@@ -166,6 +166,7 @@ ccd:
 
   global:
     ccdApiGatewayIngress: gateway-${SERVICE_FQDN}
+    ccdAdminWebIngress: ccd-admin-web-${SERVICE_FQDN}
     ccdCaseManagementWebIngress: case-management-web-${SERVICE_FQDN}
     ccdDataStoreUrl: http://${SERVICE_NAME}-ccd-data-store-api
     idamApiUrl: https://idam-api.aat.platform.hmcts.net
@@ -191,13 +192,13 @@ ccd:
       IDAM_OAUTH2_AW_CLIENT_SECRET: ${ADMIN_WEB_IDAM_SECRET}
     idam-pr:
       enabled: true
-  
+
   ccd-api-gateway-web:
     nodejs:
       imagePullPolicy: Always
       ingressHost: gateway-${SERVICE_FQDN}
       ingressIP: ${INGRESS_IP}
-      
+
   ccd-case-management-web:
     nodejs:
       imagePullPolicy: Always
@@ -254,7 +255,7 @@ ccd:
       - civilmoneyclaims+la@gmail.com|CMC|MoneyClaimCase|readyForDirections
 
   ccd-definition-importer:
-    image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.10.4
+    image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.10.5
     environment:
       CCD_DEF_CLAIM_STORE_BASE_URL: http://${SERVICE_NAME}-claim-store
     definitionFilename: cmc-ccd.xlsx
