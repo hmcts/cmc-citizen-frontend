@@ -338,6 +338,7 @@ export const sampleClaimIssueObj = {
     } as Interest,
     reason: 'Because I can',
     feeAmountInPennies: 2500,
+    outstandingFeeAmountInPennies: 2500,
     feeRemitted: 25,
     timeline: { rows: [{ date: 'a', description: 'b' }] }
   },
