@@ -27,6 +27,7 @@ export class ClaimData {
   defendants: TheirDetails[]
   amount: ClaimAmountBreakdown = new ClaimAmountBreakdown()
   feeAmountInPennies: number
+  outstandingFeeAmountInPennies: number
   reason: string
   timeline: ClaimantTimeline
   evidence: Evidence
@@ -67,6 +68,7 @@ export class ClaimData {
         this.payment = Payment.deserialize(input.payment)
       }
       this.feeAmountInPennies = input.feeAmountInPennies
+      this.outstandingFeeAmountInPennies = input.outstandingFeeAmountInPennies
 
       this.amount = new ClaimAmountBreakdown().deserialize(input.amount)
 
