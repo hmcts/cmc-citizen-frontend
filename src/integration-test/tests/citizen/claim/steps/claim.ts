@@ -289,7 +289,7 @@ export class ClaimSteps {
       hwfSteps.noHWF()
     }
     I.see('Total amount you’re claiming')
-    I.see('£25')
+    I.see('£35')
     I.see(AmountHelper.formatMoney(claimAmount.getClaimTotal()), 'table.table-form > tbody > tr:nth-of-type(1) >td.numeric.last > span')
     I.see(AmountHelper.formatMoney(claimAmount.getTotal()), 'table.table-form > tfoot > tr > td.numeric.last > span')
     interestSteps.skipClaimantInterestTotalPage()
@@ -378,7 +378,7 @@ export class ClaimSteps {
       hwfSteps.complete()
     }
     I.see('Total amount you’re claiming')
-    I.see('£25')
+    I.see('£35')
     I.see(AmountHelper.formatMoney(claimAmount.getClaimTotal()), 'table.table-form > tbody > tr:nth-of-type(1) >td.numeric.last > span')
     I.see(AmountHelper.formatMoney(claimAmount.getTotal()), 'table.table-form > tfoot > tr > td.numeric.last > span')
     interestSteps.skipClaimantInterestTotalPage()
@@ -438,7 +438,7 @@ export class ClaimSteps {
       hwfSteps.complete()
     }
     I.see('Total amount you’re claiming')
-    I.see('£25')
+    I.see('£35')
     I.see(AmountHelper.formatMoney(claimAmount.getClaimTotal()), 'table.table-form > tbody > tr:nth-of-type(1) >td.numeric.last > span')
     I.see(AmountHelper.formatMoney(claimAmount.getTotal()), 'table.table-form > tfoot > tr > td.numeric.last > span')
     interestSteps.skipClaimantInterestTotalPage()

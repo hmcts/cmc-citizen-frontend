@@ -100,6 +100,7 @@
     "autoEnrollIntoNewFeature": true,
     "dashboard_pagination_enabled": false,
     "breathingSpace": true,
+    "newClaimFees": true,
     "enhancedMediationJourney": true
   },
   "oauth": {

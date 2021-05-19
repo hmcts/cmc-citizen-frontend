@@ -7,7 +7,6 @@ import { FeesClient } from 'fees/feesClient'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { ErrorHandling } from 'shared/errorHandling'
 import { Draft } from '@hmcts/draft-store-client'
-import { FeeRangeMerge, FeesTableViewHelper } from 'claim/helpers/feesTableViewHelper'
 import { YesNoOption } from 'models/yesNoOption'
 
 /* tslint:disable:no-default-export */
@@ -22,7 +21,6 @@ export default express.Router()
 
       const issueFee = await FeesClient.calculateIssueFee(claimAmount)
       const hearingFee: number = await FeesClient.calculateHearingFee(claimAmount)
-      const feeTableContent: FeeRangeMerge[] = await FeesTableViewHelper.feesTableContent()
 
       const helpWithFeesFeature: boolean = draft.document.helpWithFees && draft.document.helpWithFees.declared
         && draft.document.helpWithFees.declared.option === YesNoOption.YES.option
@@ -33,7 +31,6 @@ export default express.Router()
           interestClaimed: (draft.document.interest.option !== YesNoOption.NO),
           issueFee,
           hearingFee,
-          feeTableContent,
           helpWithFeesFeature
         })
     }))

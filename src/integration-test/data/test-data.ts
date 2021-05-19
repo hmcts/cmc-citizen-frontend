@@ -9,7 +9,7 @@ export const DEFAULT_PASSWORD = process.env.SMOKE_TEST_USER_PASSWORD
 export const SMOKE_TEST_CITIZEN_USERNAME = process.env.SMOKE_TEST_CITIZEN_USERNAME
 export const SMOKE_TEST_USER_PASSWORD = process.env.SMOKE_TEST_USER_PASSWORD
 
-export const claimFee = 25.00
+export const claimFee = 35.00
 export const fixedInterestAmount = 100
 export const dailyInterestAmount = 5
 
