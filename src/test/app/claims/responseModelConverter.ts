@@ -35,6 +35,7 @@ import {
 import { company, individual, organisation, soleTrader, individualDefendant } from 'test/data/entity/party'
 import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { Claim } from 'claims/models/claim'
+import { CohabitingOption } from 'response/form/models/statement-of-means/cohabiting'
 import * as claimStoreMock from 'test/http-mocks/claim-store'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import {
@@ -47,6 +48,7 @@ import { FreeMediationOption } from 'forms/models/freeMediation'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { CourtLocationType } from 'claims/models/directions-questionnaire/hearingLocation'
+import * as sinon from 'sinon'
 
 function prepareResponseDraft (draftTemplate: any, partyDetails: object): ResponseDraft {
   return new ResponseDraft().deserialize({
@@ -79,6 +81,7 @@ function convertObjectLiteralToJSON (value: object): object {
 describe('ResponseModelConverter', () => {
   const mediationDraft = new MediationDraft().deserialize(sampleMediationDraftObj)
   const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft().deserialize(sampleDirectionsQuestionnaireDraftObj)
+  let isEnhancedMediationJourneyEnabledStub: sinon.SinonStub
 
   const directionsQuestionnaireResponseData = {
     directionsQuestionnaire: {
@@ -131,6 +134,14 @@ describe('ResponseModelConverter', () => {
 
     if (!FeatureToggles.isEnabled('mediation')) {
 
+      beforeEach(() => {
+        isEnhancedMediationJourneyEnabledStub = sinon.stub(FeatureToggles.prototype, 'isEnhancedMediationJourneyEnabled')
+      })
+
+      afterEach(() => {
+        isEnhancedMediationJourneyEnabledStub.restore()
+      })
+
       context('full defence conversion', () => {
         [
           [individualDetails, individual],
@@ -138,29 +149,32 @@ describe('ResponseModelConverter', () => {
           [companyDetails, company],
           [organisationDetails, organisation]
         ].forEach(([partyDetails, party]) => {
-          it(`should convert defence with dispute submitted by ${partyDetails.type}`, () => {
+          it(`should convert defence with dispute submitted by ${partyDetails.type}`, async () => {
+            isEnhancedMediationJourneyEnabledStub.returns(false)
             const responseDraft = prepareResponseDraft(defenceWithDisputeDraft, partyDetails)
             const responseData = prepareResponseData({ ...defenceWithDisputeData, ...directionsQuestionnaireResponseData }, party)
             const claim: Claim = new Claim().deserialize({
               ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
             })
 
-            expect(ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize({}), directionsQuestionnaireDraft, claim)).to.deep.equal(responseData)
+            expect(await ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize({}), directionsQuestionnaireDraft, claim)).to.deep.equal(responseData)
           })
 
-          it(`should convert defence with amount claimed already paid submitted by ${partyDetails.type} to partial admission`, () => {
+          it(`should convert defence with amount claimed already paid submitted by ${partyDetails.type} to partial admission`, async () => {
+            isEnhancedMediationJourneyEnabledStub.returns(false)
             const responseDraft = prepareResponseDraft(defenceWithAmountClaimedAlreadyPaidDraft, partyDetails)
             const responseData = preparePartialResponseData({ ...partialAdmissionFromStatesPaidDefence, ...directionsQuestionnaireResponseData }, party)
             const claim: Claim = new Claim().deserialize({
               ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
             })
 
-            expect(Response.deserialize(ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize({}), directionsQuestionnaireDraft, claim)))
+            expect(Response.deserialize(await ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize({}), directionsQuestionnaireDraft, claim)))
               .to.deep.equal(Response.deserialize(responseData))
           })
         })
 
-        it('should not convert payment declaration for defence with dispute', () => {
+        it('should not convert payment declaration for defence with dispute', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...defenceWithDisputeDraft,
             whenDidYouPay: {
@@ -177,23 +191,25 @@ describe('ResponseModelConverter', () => {
             ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
           })
 
-          expect(ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize({}), directionsQuestionnaireDraft, claim)).to.deep.equal(responseData)
+          expect(await ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize({}), directionsQuestionnaireDraft, claim)).to.deep.equal(responseData)
         })
       })
 
       context('full admission conversion', () => {
-        it('should convert full admission paid immediately', () => {
+        it('should convert full admission paid immediately', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(fullAdmissionWithImmediatePaymentDraft, individualDetails)
           const responseData = prepareResponseData(fullAdmissionWithImmediatePaymentData(), individual)
           const claim: Claim = new Claim().deserialize({
             ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
           })
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize({}), directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize({}), directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert full admission paid immediately with title, firstName and lastName', () => {
+        it('should convert full admission paid immediately with title, firstName and lastName', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(
             {
               ...fullAdmissionWithImmediatePaymentDraft,
@@ -204,22 +220,24 @@ describe('ResponseModelConverter', () => {
           }, individualDefendant)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert full admission paid by set date', () => {
+        it('should convert full admission paid by set date', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(fullAdmissionWithPaymentBySetDateDraft, individualDetails)
           const responseData = prepareResponseData(fullAdmissionWithPaymentBySetDateData, individual)
           const claim: Claim = new Claim().deserialize({
             ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
           })
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize({}), directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize({}), directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert full admission paid by set date with mandatory SoM only', () => {
+        it('should convert full admission paid by set date with mandatory SoM only', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...fullAdmissionWithPaymentBySetDateDraft,
             statementOfMeans: { ...statementOfMeansWithMandatoryFieldsDraft }
@@ -232,22 +250,24 @@ describe('ResponseModelConverter', () => {
             ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
           })
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize({}), directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize({}), directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert full admission paid by instalments', () => {
+        it('should convert full admission paid by instalments', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(fullAdmissionWithPaymentByInstalmentsDraft, individualDetails)
           const responseData = prepareResponseData(fullAdmissionWithPaymentByInstalmentsData, individual)
           const claim: Claim = new Claim().deserialize({
             ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
           })
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize({}), directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize({}), directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert full admission paid by instalments with complete SoM', () => {
+        it('should convert full admission paid by instalments with complete SoM', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...fullAdmissionWithPaymentByInstalmentsDraft,
             statementOfMeans: { ...statementOfMeansWithAllFieldsDraft }
@@ -260,46 +280,50 @@ describe('ResponseModelConverter', () => {
             ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
           })
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize({}), directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize({}), directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
       })
 
       context('partial admission conversion', () => {
-        it('should convert already paid partial admission', () => {
+        it('should convert already paid partial admission', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(partialAdmissionAlreadyPaidDraft, individualDetails)
           const responseData = preparePartialResponseData({ ...partialAdmissionAlreadyPaidData, ...directionsQuestionnaireResponseData }, individual)
           const claim: Claim = new Claim().deserialize({
             ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
           })
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize({}), directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize({}), directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert partial admission paid immediately', () => {
+        it('should convert partial admission paid immediately', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(partialAdmissionWithImmediatePaymentDraft, individualDetails)
           const responseData = preparePartialResponseData({ ...partialAdmissionWithImmediatePaymentData(), ...directionsQuestionnaireResponseData }, individual)
           const claim: Claim = new Claim().deserialize({
             ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
           })
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize({}), directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize({}), directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert partial admission paid by set date', () => {
+        it('should convert partial admission paid by set date', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(partialAdmissionWithPaymentBySetDateDraft, individualDetails)
           const responseData = preparePartialResponseData({ ...partialAdmissionWithPaymentBySetDateData, ...directionsQuestionnaireResponseData }, individual)
           const claim: Claim = new Claim().deserialize({
             ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
           })
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize({}), directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize({}), directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert partial admission paid by set date with mandatory SoM only', () => {
+        it('should convert partial admission paid by set date with mandatory SoM only', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithPaymentBySetDateDraft,
             statementOfMeans: { ...statementOfMeansWithMandatoryFieldsDraft }
@@ -313,22 +337,24 @@ describe('ResponseModelConverter', () => {
             ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
           })
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize({}), directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize({}), directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert partial admission paid by instalments', () => {
+        it('should convert partial admission paid by instalments', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(partialAdmissionWithPaymentByInstalmentsDraft, individualDetails)
           const responseData = preparePartialResponseData({ ...partialAdmissionWithPaymentByInstalmentsData, ...directionsQuestionnaireResponseData }, individual)
           const claim: Claim = new Claim().deserialize({
             ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
           })
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize({}), directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize({}), directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert partial admission paid by instalments with complete SoM', () => {
+        it('should convert partial admission paid by instalments with complete SoM', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithPaymentByInstalmentsDraft,
             statementOfMeans: { ...statementOfMeansWithAllFieldsDraft }
@@ -342,7 +368,7 @@ describe('ResponseModelConverter', () => {
             ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
           })
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize({}), directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize({}), directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
       })
@@ -353,7 +379,8 @@ describe('ResponseModelConverter', () => {
       const mediationResponseData = {
         freeMediation: 'yes',
         mediationPhoneNumber: '07777777777',
-        mediationContactPerson: 'Mary Richards'
+        mediationContactPerson: 'Mary Richards',
+        noMediationReason: undefined
       }
       context('full defence conversion', () => {
         [
@@ -362,7 +389,8 @@ describe('ResponseModelConverter', () => {
           [companyDetails, company],
           [organisationDetails, organisation]
         ].forEach(([partyDetails, party]) => {
-          it(`should convert defence with dispute submitted by ${partyDetails.type}`, () => {
+
+          it(`should convert defence with dispute submitted by ${partyDetails.type}`, async () => {
             const responseDraft = prepareResponseDraft({
               ...defenceWithDisputeDraft,
               ...sampleMediationDraftObj
@@ -375,10 +403,10 @@ describe('ResponseModelConverter', () => {
             const claim: Claim = new Claim().deserialize({
               ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
             })
-            expect(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)).to.deep.equal(responseData)
+            expect(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)).to.deep.equal(responseData)
           })
 
-          it(`should convert defence with amount claimed already paid submitted by ${partyDetails.type} to partial admission`, () => {
+          it(`should convert defence with amount claimed already paid submitted by ${partyDetails.type} to partial admission`, async () => {
             const responseDraft = prepareResponseDraft({
               ...defenceWithAmountClaimedAlreadyPaidDraft,
               ...sampleMediationDraftObj
@@ -392,21 +420,24 @@ describe('ResponseModelConverter', () => {
               ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
             })
 
-            expect(Response.deserialize(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
+            expect(Response.deserialize(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
               .to.deep.equal(Response.deserialize(responseData))
           })
         })
 
-        it(`should convert company who says YES to mediation and confirm number`, () => {
-
+        it(`should convert company who says YES to mediation and confirm number`, async () => {
           const mediationDraft = new MediationDraft().deserialize({
+            willYouTryMediation: {
+              option: FreeMediationOption.YES
+            },
             youCanOnlyUseMediation: {
               option: FreeMediationOption.YES
             },
             canWeUseCompany: {
               option: FreeMediationOption.YES,
               mediationPhoneNumberConfirmation: '07777777788',
-              mediationContactPerson: 'Mary Richards'
+              mediationContactPerson: 'Mary Richards',
+              noMediationReason: undefined
             }
           })
           const responseDraft = prepareResponseDraft({
@@ -417,7 +448,8 @@ describe('ResponseModelConverter', () => {
             ...{
               freeMediation: 'yes',
               mediationPhoneNumber: '07777777788',
-              mediationContactPerson: 'Company Smith'
+              mediationContactPerson: 'Company Smith',
+              noMediationReason: undefined
             },
             ...directionsQuestionnaireResponseData
           }, company)
@@ -425,11 +457,11 @@ describe('ResponseModelConverter', () => {
             ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
           })
 
-          expect(Response.deserialize(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
+          expect(Response.deserialize(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
             .to.deep.equal(Response.deserialize(responseData))
         })
 
-        it('should not convert payment declaration for defence with dispute', () => {
+        it('should not convert payment declaration for defence with dispute', async () => {
           const responseDraft = prepareResponseDraft({
             ...defenceWithDisputeDraft,
             ...sampleMediationDraftObj,
@@ -451,12 +483,12 @@ describe('ResponseModelConverter', () => {
             ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
           })
 
-          expect(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)).to.deep.equal(responseData)
+          expect(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)).to.deep.equal(responseData)
         })
       })
 
       context('full admission conversion', () => {
-        it('should convert full admission paid immediately', () => {
+        it('should convert full admission paid immediately', async () => {
           const responseDraft = prepareResponseDraft(
             {
               ...fullAdmissionWithImmediatePaymentDraft,
@@ -470,11 +502,11 @@ describe('ResponseModelConverter', () => {
             ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
           })
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert full admission paid immediately with title, firstName and lastName', () => {
+        it('should convert full admission paid immediately with title, firstName and lastName', async () => {
           const responseDraft = prepareResponseDraft(
             {
               ...fullAdmissionWithImmediatePaymentDraft,
@@ -488,11 +520,11 @@ describe('ResponseModelConverter', () => {
             ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
           })
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert full admission paid by set date', () => {
+        it('should convert full admission paid by set date', async () => {
           const responseDraft = prepareResponseDraft({
             ...fullAdmissionWithPaymentBySetDateDraft,
             ...sampleMediationDraftObj
@@ -505,11 +537,11 @@ describe('ResponseModelConverter', () => {
             ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
           })
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert full admission paid by set date with mandatory SoM only', () => {
+        it('should convert full admission paid by set date with mandatory SoM only', async () => {
           const responseDraft = prepareResponseDraft({
             ...fullAdmissionWithPaymentBySetDateDraft,
             statementOfMeans: { ...statementOfMeansWithMandatoryFieldsDraft },
@@ -524,11 +556,11 @@ describe('ResponseModelConverter', () => {
             ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
           })
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert full admission paid by instalments', () => {
+        it('should convert full admission paid by instalments', async () => {
           const responseDraft = prepareResponseDraft({
             ...fullAdmissionWithPaymentByInstalmentsDraft,
             ...sampleMediationDraftObj
@@ -541,11 +573,11 @@ describe('ResponseModelConverter', () => {
             ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
           })
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert full admission paid by instalments with complete SoM', () => {
+        it('should convert full admission paid by instalments with complete SoM', async () => {
           const responseDraft = prepareResponseDraft({
             ...fullAdmissionWithPaymentByInstalmentsDraft,
             ...sampleMediationDraftObj,
@@ -560,13 +592,24 @@ describe('ResponseModelConverter', () => {
             ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
           })
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
       })
 
       context('partial admission conversion', () => {
-        it('should convert already paid partial admission', () => {
+        let isEnhancedMediationJourneyEnabledStub: sinon.SinonStub
+
+        beforeEach(() => {
+          isEnhancedMediationJourneyEnabledStub = sinon.stub(FeatureToggles.prototype, 'isEnhancedMediationJourneyEnabled')
+        })
+
+        afterEach(() => {
+          isEnhancedMediationJourneyEnabledStub.restore()
+        })
+
+        it('should convert already paid partial admission', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionAlreadyPaidDraft,
             ...sampleMediationDraftObj
@@ -580,11 +623,12 @@ describe('ResponseModelConverter', () => {
             ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
           })
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert partial admission paid immediately', () => {
+        it('should convert partial admission paid immediately', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithImmediatePaymentDraft,
             ...sampleMediationDraftObj
@@ -598,11 +642,12 @@ describe('ResponseModelConverter', () => {
             ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
           })
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert partial admission paid by set date', () => {
+        it('should convert partial admission paid by set date', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithPaymentBySetDateDraft,
             ...sampleMediationDraftObj
@@ -616,11 +661,12 @@ describe('ResponseModelConverter', () => {
             ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
           })
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert partial admission paid by set date with mandatory SoM only', () => {
+        it('should convert partial admission paid by set date with mandatory SoM only', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithPaymentBySetDateDraft,
             ...sampleMediationDraftObj,
@@ -636,11 +682,30 @@ describe('ResponseModelConverter', () => {
             ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
           })
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert partial admission paid by instalments', () => {
+        it('should convert partial admission paid by set date with cohibition option', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
+          const responseDraft = prepareResponseDraft({
+            ...partialAdmissionWithPaymentByInstalmentsDraft,
+            ...sampleMediationDraftObj,
+            statementOfMeans: { ...statementOfMeansWithAllFieldsDraft }
+          }, individualDetails)
+          responseDraft.statementOfMeans.cohabiting.option = CohabitingOption.YES
+          responseDraft.statementOfMeans.disability.option = YesNoOption.YES
+          responseDraft.statementOfMeans.severeDisability.option = YesNoOption.NO
+
+          const claim: Claim = new Claim().deserialize({
+            ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
+          })
+          const converted = await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)
+          expect(converted.statementOfTruth).to.equals(undefined)
+        })
+
+        it('should convert partial admission paid by instalments', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithPaymentByInstalmentsDraft,
             ...sampleMediationDraftObj
@@ -654,11 +719,12 @@ describe('ResponseModelConverter', () => {
             ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
           })
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert partial admission paid by instalments with complete SoM', () => {
+        it('should convert partial admission paid by instalments with complete SoM', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithPaymentByInstalmentsDraft,
             ...sampleMediationDraftObj,
@@ -674,11 +740,12 @@ describe('ResponseModelConverter', () => {
             ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
           })
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert partial admission with Mediation canWeUse FreeMediation to NO', () => {
+        it('should convert partial admission with Mediation canWeUse FreeMediation to NO', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithPaymentByInstalmentsDraft
           }, individualDetails)
@@ -701,11 +768,12 @@ describe('ResponseModelConverter', () => {
             ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
           })
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert partial admission with Mediation canWeUse FreeMediation to YES and response not submitted', () => {
+        it('should convert partial admission with Mediation canWeUse FreeMediation to YES and response not submitted', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithPaymentByInstalmentsDraft
           }, individualDetails)
@@ -728,7 +796,7 @@ describe('ResponseModelConverter', () => {
             ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
           })
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
       })
@@ -746,25 +814,37 @@ describe('ResponseModelConverter', () => {
           [companyDetails, company],
           [organisationDetails, organisation]
         ].forEach(([partyDetails, party]) => {
-          it(`should convert defence with dispute submitted by ${partyDetails.type}`, () => {
+          let isEnhancedMediationJourneyEnabledStub: sinon.SinonStub
+
+          beforeEach(() => {
+            isEnhancedMediationJourneyEnabledStub = sinon.stub(FeatureToggles.prototype, 'isEnhancedMediationJourneyEnabled')
+          })
+
+          afterEach(() => {
+            isEnhancedMediationJourneyEnabledStub.restore()
+          })
+
+          it(`should convert defence with dispute submitted by ${partyDetails.type}`, async () => {
             const responseDraft = prepareResponseDraft(defenceWithDisputeDraft, partyDetails)
             const responseData = prepareResponseData(defenceWithDisputeData, party)
             const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-            expect(ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize(sampleLegacyMediationDraftObj), directionsQuestionnaireDraft, claim)).to.deep.equal(responseData)
+            expect(await ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize(sampleLegacyMediationDraftObj), directionsQuestionnaireDraft, claim)).to.deep.equal(responseData)
           })
 
-          it(`should convert defence with amount claimed already paid submitted by ${partyDetails.type} to partial admission`, () => {
+          it(`should convert defence with amount claimed already paid submitted by ${partyDetails.type} to partial admission`, async () => {
+            isEnhancedMediationJourneyEnabledStub.returns(false)
             const responseDraft = prepareResponseDraft(defenceWithAmountClaimedAlreadyPaidDraft, partyDetails)
             const responseData = preparePartialResponseData(partialAdmissionFromStatesPaidDefence, party)
             const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-            expect(Response.deserialize(ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize(sampleLegacyMediationDraftObj), directionsQuestionnaireDraft, claim)))
+            expect(Response.deserialize(await ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize(sampleLegacyMediationDraftObj), directionsQuestionnaireDraft, claim)))
               .to.deep.equal(Response.deserialize(responseData))
           })
         })
 
-        it('should not convert payment declaration for defence with dispute', () => {
+        it('should not convert payment declaration for defence with dispute', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...defenceWithDisputeDraft,
             whenDidYouPay: {
@@ -779,39 +859,43 @@ describe('ResponseModelConverter', () => {
           const responseData = prepareResponseData(defenceWithDisputeData, individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-          expect(ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize(sampleLegacyMediationDraftObj), directionsQuestionnaireDraft, claim)).to.deep.equal(responseData)
+          expect(await ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize(sampleLegacyMediationDraftObj), directionsQuestionnaireDraft, claim)).to.deep.equal(responseData)
         })
       })
 
       context('full admission conversion', () => {
-        it('should convert full admission paid immediately', () => {
+        it('should convert full admission paid immediately', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(fullAdmissionWithImmediatePaymentDraft, individualDetails)
           const responseData = prepareResponseData(fullAdmissionWithImmediatePaymentData(), individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize(sampleLegacyMediationDraftObj), directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize(sampleLegacyMediationDraftObj), directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert full admission paid immediately with title, firstname and lastname', () => {
+        it('should convert full admission paid immediately with title, firstname and lastname', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(fullAdmissionWithImmediatePaymentDraft, individualSplitNameDetails)
           const responseData = prepareResponseData(fullAdmissionWithImmediatePaymentData(), individualDefendant)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize(sampleLegacyMediationDraftObj), directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize(sampleLegacyMediationDraftObj), directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert full admission paid by set date', () => {
+        it('should convert full admission paid by set date', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(fullAdmissionWithPaymentBySetDateDraft, individualDetails)
           const responseData = prepareResponseData(fullAdmissionWithPaymentBySetDateData, individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize(sampleLegacyMediationDraftObj), directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize(sampleLegacyMediationDraftObj), directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert full admission paid by set date with mandatory SoM only', () => {
+        it('should convert full admission paid by set date with mandatory SoM only', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...fullAdmissionWithPaymentBySetDateDraft,
             statementOfMeans: { ...statementOfMeansWithMandatoryFieldsDraft }
@@ -822,20 +906,22 @@ describe('ResponseModelConverter', () => {
           }, individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize(sampleLegacyMediationDraftObj), directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize(sampleLegacyMediationDraftObj), directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert full admission paid by instalments', () => {
+        it('should convert full admission paid by instalments', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(fullAdmissionWithPaymentByInstalmentsDraft, individualDetails)
           const responseData = prepareResponseData(fullAdmissionWithPaymentByInstalmentsData, individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize(sampleLegacyMediationDraftObj), directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize(sampleLegacyMediationDraftObj), directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert full admission paid by instalments with complete SoM', () => {
+        it('should convert full admission paid by instalments with complete SoM', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...fullAdmissionWithPaymentByInstalmentsDraft,
             statementOfMeans: { ...statementOfMeansWithAllFieldsDraft }
@@ -846,40 +932,44 @@ describe('ResponseModelConverter', () => {
           }, individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize(sampleLegacyMediationDraftObj), directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize(sampleLegacyMediationDraftObj), directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
       })
 
       context('partial admission conversion', () => {
-        it('should convert already paid partial admission', () => {
+        it('should convert already paid partial admission', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(partialAdmissionAlreadyPaidDraft, individualDetails)
           const responseData = preparePartialResponseData(partialAdmissionAlreadyPaidData, individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize(sampleLegacyMediationDraftObj), directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize(sampleLegacyMediationDraftObj), directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert partial admission paid immediately', () => {
+        it('should convert partial admission paid immediately', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(partialAdmissionWithImmediatePaymentDraft, individualDetails)
           const responseData = preparePartialResponseData(partialAdmissionWithImmediatePaymentData(), individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize(sampleLegacyMediationDraftObj), directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize(sampleLegacyMediationDraftObj), directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert partial admission paid by set date', () => {
+        it('should convert partial admission paid by set date', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(partialAdmissionWithPaymentBySetDateDraft, individualDetails)
           const responseData = preparePartialResponseData(partialAdmissionWithPaymentBySetDateData, individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize(sampleLegacyMediationDraftObj), directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize(sampleLegacyMediationDraftObj), directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert partial admission paid by set date with mandatory SoM only', () => {
+        it('should convert partial admission paid by set date with mandatory SoM only', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithPaymentBySetDateDraft,
             statementOfMeans: { ...statementOfMeansWithMandatoryFieldsDraft }
@@ -890,20 +980,22 @@ describe('ResponseModelConverter', () => {
           }, individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize(sampleLegacyMediationDraftObj), directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize(sampleLegacyMediationDraftObj), directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert partial admission paid by instalments', () => {
+        it('should convert partial admission paid by instalments', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(partialAdmissionWithPaymentByInstalmentsDraft, individualDetails)
           const responseData = preparePartialResponseData(partialAdmissionWithPaymentByInstalmentsData, individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize(sampleLegacyMediationDraftObj), directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize(sampleLegacyMediationDraftObj), directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert partial admission paid by instalments with complete SoM', () => {
+        it('should convert partial admission paid by instalments with complete SoM', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithPaymentByInstalmentsDraft,
             statementOfMeans: { ...statementOfMeansWithAllFieldsDraft }
@@ -914,16 +1006,17 @@ describe('ResponseModelConverter', () => {
           }, individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize(sampleLegacyMediationDraftObj), directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize(sampleLegacyMediationDraftObj), directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert partial admission already paid', () => {
+        it('should convert partial admission already paid', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(partialAdmissionAlreadyPaidDraft, individualDetails)
           const responseData = preparePartialResponseData(partialAdmissionAlreadyPaidData, individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, undefined, undefined, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, undefined, undefined, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
       })
@@ -934,7 +1027,8 @@ describe('ResponseModelConverter', () => {
       const mediationResponseData = {
         freeMediation: 'yes',
         mediationPhoneNumber: '07777777777',
-        mediationContactPerson: 'Mary Richards'
+        mediationContactPerson: 'Mary Richards',
+        noMediationReason: undefined
       }
       context('full defence conversion', () => {
         [
@@ -943,7 +1037,18 @@ describe('ResponseModelConverter', () => {
           [companyDetails, company],
           [organisationDetails, organisation]
         ].forEach(([partyDetails, party]) => {
-          it(`should convert defence with dispute submitted by ${partyDetails.type}`, () => {
+          let isEnhancedMediationJourneyEnabledStub: sinon.SinonStub
+
+          beforeEach(() => {
+            isEnhancedMediationJourneyEnabledStub = sinon.stub(FeatureToggles.prototype, 'isEnhancedMediationJourneyEnabled')
+          })
+
+          afterEach(() => {
+            isEnhancedMediationJourneyEnabledStub.restore()
+          })
+
+          it(`should convert defence with dispute submitted by ${partyDetails.type}`, async () => {
+            isEnhancedMediationJourneyEnabledStub.returns(false)
             const responseDraft = prepareResponseDraft({
               ...defenceWithDisputeDraft,
               ...sampleMediationDraftObj
@@ -954,10 +1059,11 @@ describe('ResponseModelConverter', () => {
             }, party)
             const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-            expect(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)).to.deep.equal(responseData)
+            expect(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)).to.deep.equal(responseData)
           })
 
-          it(`should convert defence with amount claimed already paid submitted by ${partyDetails.type} to partial admission`, () => {
+          it(`should convert defence with amount claimed already paid submitted by ${partyDetails.type} to partial admission`, async () => {
+            isEnhancedMediationJourneyEnabledStub.returns(false)
             const responseDraft = prepareResponseDraft({
               ...defenceWithAmountClaimedAlreadyPaidDraft,
               ...sampleMediationDraftObj
@@ -968,13 +1074,13 @@ describe('ResponseModelConverter', () => {
             }, party)
             const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-            expect(Response.deserialize(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
+            expect(Response.deserialize(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
               .to.deep.equal(Response.deserialize(responseData))
           })
         })
 
-        it(`should convert company who says YES to mediation and confirm number`, () => {
-
+        it(`should convert company who says YES to mediation and confirm number`, async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const mediationDraft = new MediationDraft().deserialize({
             youCanOnlyUseMediation: {
               option: FreeMediationOption.YES
@@ -982,7 +1088,8 @@ describe('ResponseModelConverter', () => {
             canWeUseCompany: {
               option: FreeMediationOption.YES,
               mediationPhoneNumberConfirmation: '07777777788',
-              mediationContactPerson: 'Mary Richards'
+              mediationContactPerson: 'Mary Richards',
+              noMediationReason: undefined
             }
           })
           const responseDraft = prepareResponseDraft({
@@ -993,16 +1100,18 @@ describe('ResponseModelConverter', () => {
             ...{
               freeMediation: 'yes',
               mediationPhoneNumber: '07777777788',
-              mediationContactPerson: 'Company Smith'
+              mediationContactPerson: 'Company Smith',
+              noMediationReason: undefined
             }
           }, company)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-          expect(Response.deserialize(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
+          expect(Response.deserialize(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
             .to.deep.equal(Response.deserialize(responseData))
         })
 
-        it('should not convert payment declaration for defence with dispute', () => {
+        it('should not convert payment declaration for defence with dispute', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...defenceWithDisputeDraft,
             ...sampleMediationDraftObj,
@@ -1021,12 +1130,13 @@ describe('ResponseModelConverter', () => {
           }, individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-          expect(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)).to.deep.equal(responseData)
+          expect(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)).to.deep.equal(responseData)
         })
       })
 
       context('full admission conversion', () => {
-        it('should convert full admission paid immediately', () => {
+        it('should convert full admission paid immediately', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(
             {
               ...fullAdmissionWithImmediatePaymentDraft,
@@ -1038,11 +1148,12 @@ describe('ResponseModelConverter', () => {
           }, individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert full admission with title, firstName and lastName', () => {
+        it('should convert full admission with title, firstName and lastName', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(
             {
               ...fullAdmissionWithImmediatePaymentDraft,
@@ -1054,11 +1165,12 @@ describe('ResponseModelConverter', () => {
           }, individualDefendant)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert full admission paid by set date', () => {
+        it('should convert full admission paid by set date', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...fullAdmissionWithPaymentBySetDateDraft,
             ...sampleMediationDraftObj
@@ -1069,11 +1181,12 @@ describe('ResponseModelConverter', () => {
           }, individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert full admission paid by set date with mandatory SoM only', () => {
+        it('should convert full admission paid by set date with mandatory SoM only', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...fullAdmissionWithPaymentBySetDateDraft,
             statementOfMeans: { ...statementOfMeansWithMandatoryFieldsDraft },
@@ -1086,11 +1199,12 @@ describe('ResponseModelConverter', () => {
           }, individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert full admission paid by instalments', () => {
+        it('should convert full admission paid by instalments', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...fullAdmissionWithPaymentByInstalmentsDraft,
             ...sampleMediationDraftObj
@@ -1101,11 +1215,12 @@ describe('ResponseModelConverter', () => {
           }, individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert full admission paid by instalments with complete SoM', () => {
+        it('should convert full admission paid by instalments with complete SoM', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...fullAdmissionWithPaymentByInstalmentsDraft,
             ...sampleMediationDraftObj,
@@ -1118,13 +1233,14 @@ describe('ResponseModelConverter', () => {
           }, individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
       })
 
       context('partial admission conversion', () => {
-        it('should convert already paid partial admission', () => {
+        isEnhancedMediationJourneyEnabledStub.returns(false)
+        it('should convert already paid partial admission', async () => {
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionAlreadyPaidDraft,
             ...sampleMediationDraftObj
@@ -1135,11 +1251,12 @@ describe('ResponseModelConverter', () => {
           }, individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert partial admission paid immediately', () => {
+        it('should convert partial admission paid immediately', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithImmediatePaymentDraft,
             ...sampleMediationDraftObj
@@ -1150,11 +1267,12 @@ describe('ResponseModelConverter', () => {
           }, individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert partial admission paid by set date', () => {
+        it('should convert partial admission paid by set date', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithPaymentBySetDateDraft,
             ...sampleMediationDraftObj
@@ -1165,11 +1283,12 @@ describe('ResponseModelConverter', () => {
           }, individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert partial admission paid by set date with mandatory SoM only', () => {
+        it('should convert partial admission paid by set date with mandatory SoM only', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithPaymentBySetDateDraft,
             ...sampleMediationDraftObj,
@@ -1182,11 +1301,12 @@ describe('ResponseModelConverter', () => {
           }, individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert partial admission paid by instalments', () => {
+        it('should convert partial admission paid by instalments', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithPaymentByInstalmentsDraft,
             ...sampleMediationDraftObj
@@ -1197,11 +1317,12 @@ describe('ResponseModelConverter', () => {
           }, individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert partial admission paid by instalments with complete SoM', () => {
+        it('should convert partial admission paid by instalments with complete SoM', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithPaymentByInstalmentsDraft,
             ...sampleMediationDraftObj,
@@ -1214,11 +1335,12 @@ describe('ResponseModelConverter', () => {
           }, individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert partial admission with Mediation canWeUse FreeMediation to NO', () => {
+        it('should convert partial admission with Mediation canWeUse FreeMediation to NO', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithPaymentByInstalmentsDraft
           }, individualDetails)
@@ -1238,11 +1360,12 @@ describe('ResponseModelConverter', () => {
 
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
-        it('should convert partial admission with Mediation canWeUse FreeMediation to YES and response not submitted', () => {
+        it('should convert partial admission with Mediation canWeUse FreeMediation to YES and response not submitted', async () => {
+          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithPaymentByInstalmentsDraft
           }, individualDetails)
@@ -1251,7 +1374,8 @@ describe('ResponseModelConverter', () => {
             ...{
               freeMediation: 'no',
               mediationContactPerson: undefined,
-              mediationPhoneNumber: '0700000000'
+              mediationPhoneNumber: '0700000000',
+              noMediationReason: undefined
             }
           }, individual)
           const mediationDraft = new MediationDraft().deserialize({
@@ -1262,7 +1386,7 @@ describe('ResponseModelConverter', () => {
 
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
+          expect(convertObjectLiteralToJSON(await ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
       })

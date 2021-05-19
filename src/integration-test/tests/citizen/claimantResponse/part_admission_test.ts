@@ -40,7 +40,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     claimantResponseSteps.reject(testData, claimantResponseTestData)
     checkAndSendPage.verifyFactsForPartAdmitRejection()
     checkAndSendPage.checkFactsTrueAndSubmit(testData.defenceType)
-    I.see('You agreed to try to resolve the claim using mediation')
+    I.see('You agreed to try free mediation')
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
     I.see('We’ll contact you to try to arrange a mediation appointment')

@@ -36,6 +36,7 @@ import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/dir
 import { FeatureToggles } from 'utils/featureToggles'
 import { DeadlineCalculatorClient } from 'claims/deadlineCalculatorClient'
 import { TaskStatus } from 'utils/taskStatus'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
 export class TaskListBuilder extends TaskStatus {
   static async buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim, now: moment.Moment): Promise<TaskList> {
@@ -233,33 +234,48 @@ export class TaskListBuilder extends TaskStatus {
     return new TaskList('Respond to claim', tasks)
   }
 
-  static buildResolvingClaimSection (draft: ResponseDraft, claim: Claim, mediationDraft?: MediationDraft): TaskList {
+  static async buildResolvingClaimSection (draft: ResponseDraft, claim: Claim, mediationDraft?: MediationDraft): Promise<TaskList> {
     if (draft.isResponseRejectedFullyWithDispute()
       || draft.isResponseRejectedFullyBecausePaidWhatOwed()
       || TaskListBuilder.isPartiallyAdmittedAndWhyDoYouDisagreeTaskCompleted(draft)) {
+
+      const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
       let path: string
-      if (FeatureToggles.isEnabled('mediation')) {
-        path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
-        return new TaskList(
-          'Try to resolve the claim', [
-            new TaskListItem(
-              'Free telephone mediation',
-              path,
-              FreeMediationTask.isCompleted(mediationDraft, claim)
-            )
-          ]
-        )
-      } else {
-        path = MediationPaths.tryFreeMediationPage.evaluateUri({ externalId: claim.externalId })
+      if (await featureToggles.isEnhancedMediationJourneyEnabled()) {
+        path = MediationPaths.freeTelephoneMediationPage.evaluateUri({ externalId: claim.externalId })
         return new TaskList(
           'Resolving the claim', [
             new TaskListItem(
               'Free telephone mediation',
               path,
-              FreeMediationTask.isCompleted(mediationDraft, claim)
+              await FreeMediationTask.isCompleted(mediationDraft, claim)
             )
           ]
         )
+      } else {
+        if (FeatureToggles.isEnabled('mediation')) {
+          path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+          return new TaskList(
+            'Try to resolve the claim', [
+              new TaskListItem(
+                'Free telephone mediation',
+                path,
+                await FreeMediationTask.isCompleted(mediationDraft, claim)
+              )
+            ]
+          )
+        } else {
+          path = MediationPaths.tryFreeMediationPage.evaluateUri({ externalId: claim.externalId })
+          return new TaskList(
+            'Resolving the claim', [
+              new TaskListItem(
+                'Free telephone mediation',
+                path,
+                await FreeMediationTask.isCompleted(mediationDraft, claim)
+              )
+            ]
+          )
+        }
       }
     }
 
@@ -328,7 +344,7 @@ export class TaskListBuilder extends TaskStatus {
   }
 
   static async buildRemainingTasks (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft, directionQuestionnaireDraft: DirectionsQuestionnaireDraft): Promise<TaskListItem[]> {
-    const resolvingClaimTaskList: TaskList = TaskListBuilder.buildResolvingClaimSection(draft, claim, mediationDraft)
+    const resolvingClaimTaskList: TaskList = await TaskListBuilder.buildResolvingClaimSection(draft, claim, mediationDraft)
     let resolveDirectionsQuestionnaireTaskList: TaskList
     if (FeatureToggles.isEnabled('directionsQuestionnaire') && ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire')) {
       resolveDirectionsQuestionnaireTaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(draft, claim, directionQuestionnaireDraft)

@@ -112,4 +112,14 @@ export class FeesTableViewHelper {
 
     return this.merge(supportedIssueFees, supportedHearingFees)
   }
+
+  static async claimFeesOnlyTableContent (): Promise<MergeableRange[]> {
+    const issueFeeGroup = await FeesClient.getIssueFeeRangeGroup()
+
+    const supportedIssueFees: MergeableRange[] = issueFeeGroup
+      .filter((range: ViewFeeRange) => range.minRange < supportedFeeLimitInGBP)
+      .map((range: ViewFeeRange) => new MergeableRange(range.minRange, Math.min(range.maxRange, supportedFeeLimitInGBP), range.currentVersion.flatAmount.amount))
+
+    return supportedIssueFees.sort(RangeUtils.compare)
+  }
 }

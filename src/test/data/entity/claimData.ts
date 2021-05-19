@@ -57,7 +57,17 @@ export const claimData = {
     ],
     type: 'breakdown'
   },
-  breathingSpace: {},
+  breathingSpace: {
+    breathingSpaceExternalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
+    breathingSpaceEnteredDate: { day: '31', month: '01', year: 2021 },
+    breathingSpaceEnteredbyInsolvencyTeamDate: { day: '31', month: '01', year: 2021 },
+    breathingSpaceEndDate: { day: '31', month: '12', year: 2022 },
+    breathingSpaceLiftedDate: { day: '31', month: '12', year: 2021 },
+    breathingSpaceLiftedbyInsolvencyTeamDate: { day: '31', month: '12', year: 2021 },
+    breathingSpaceReferenceNumber: 'BS123456789',
+    breathingSpaceLiftedFlag: 'No',
+    breathingSpaceType: 'STANDARD_BS_ENTERED'
+  },
   interest: interestData as Interest,
   reason: 'Because he did...',
   feeAmountInPennies: 1000000,

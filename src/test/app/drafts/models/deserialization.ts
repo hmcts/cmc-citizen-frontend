@@ -99,6 +99,9 @@ describe('DraftClaim deserialization', () => {
           helpWithFees: {
             option: YesNoOption.NO.option
           },
+          infoAboutHwFeligibility: {
+            option: YesNoOption.NO.option
+          },
           claimantAddress: {
             option: YesNoOption.YES.option
           },

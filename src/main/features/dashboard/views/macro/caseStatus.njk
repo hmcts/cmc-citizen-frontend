@@ -132,7 +132,6 @@
   HWF_More_Info,
   HWF_Part_Remitted,
   HWF_Full_Granted,
-  HWF_Intrest_Recalculate,
   HWF_Update_Number
 %}
 
@@ -154,8 +153,6 @@
     {{ HWF_Part_Remitted() }}
   {% elif (status === ClaimStatus.NO_RESPONSE or status === ClaimStatus.ELIGIBLE_FOR_CCJ) and claim.helpWithFeesNumber and claim.lastEventTriggeredForHwfCase === 'HWFFullRemision' %}
     {{ HWF_Full_Granted() }}
-  {% elif (status === ClaimStatus.NO_RESPONSE or status === ClaimStatus.ELIGIBLE_FOR_CCJ) and claim.helpWithFeesNumber and claim.lastEventTriggeredForHwfCase === 'RecalculateInterest' %}
-    {{ HWF_Intrest_Recalculate() }}
   {% elif (status === ClaimStatus.NO_RESPONSE or status === ClaimStatus.ELIGIBLE_FOR_CCJ) and claim.helpWithFeesNumber and claim.lastEventTriggeredForHwfCase === 'UpdateHWFNumber' %}
     {{ HWF_Update_Number() }}
   {% elif status === ClaimStatus.NO_RESPONSE %}

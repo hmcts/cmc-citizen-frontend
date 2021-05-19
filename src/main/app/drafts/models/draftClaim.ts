@@ -83,6 +83,7 @@ export class DraftClaim extends DraftDocument {
       }
       this.timeline = new ClaimantTimeline().deserialize(input.timeline) as ClaimantTimeline
       this.evidence = new Evidence().deserialize(input.evidence) as Evidence
+      this.breathingSpace = new BreathingSpace().deserialize(input.breathingSpace)
     }
     return this
   }

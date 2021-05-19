@@ -28,7 +28,7 @@
     "test:crossbrowser": "./bin/run-crossbrowser-tests.sh",
     "test:crossbrowser-verbose": "TS_NODE_TRANSPILE_ONLY=true codeceptjs run-multiple ${BROWSER_GROUP:-'--all'} --verbose --config saucelabs.conf.js --grep @crossbrowser --reporter mocha-multi",
     "list-supported-browsers": "node -e 'Object.keys(require(\"@hmcts/cmc-supported-browsers\").supportedBrowsers).forEach(key => console.log(key))'",
-    "sonar-scan": "sonar-scanner -Dsonar.projectName='CMC :: Citizen Frontend' -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.exclusions=src/main/routes/webchat.ts,src/main/app/claims/models/claim.ts,src/main/public/**,src/main/app/mocks/mockPayClient.ts,src/main/features/claim/routes/pay.ts -Dsonar.javascript.lcov.reportPaths=coverage-report/lcov.info",
+    "sonar-scan": "sonar-scanner -Dsonar.projectName='CMC :: Citizen Frontend' -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.exclusions=src/main/features/breathing-space/routes/reference-number.ts,src/main/routes/webchat.ts,src/main/features/dashboard/routes/claimant.ts,src/main/app/claims/models/claim.ts,src/main/public/**,src/main/app/mocks/mockPayClient.ts,src/main/features/claim/routes/pay.ts -Dsonar.javascript.lcov.reportPaths=coverage-report/lcov.info",
     "test:file": "TS_NODE_TRANSPILE_ONLY=true NODE_ENV=mocha LOG_LEVEL=OFF mocha --opts mocha.opts --watch --watch-extensions ts"
   },
   "dependencies": {
@@ -152,7 +152,7 @@
     "tslint": "^5.20.1",
     "tslint-config-standard": "^9.0.0",
     "urlencode": "^1.1.0",
-    "webdriverio": "^6.12.1"
+    "webdriverio": "^7.0.3"
   },
   "nyc": {
     "extension": [
@@ -184,7 +184,11 @@
     "axios": "^0.21.1",
     "bl": "^1.2.3",
     "node-fetch": "^2.6.1",
-    "y18n": "^5.0.5"
+    "y18n": "^5.0.5",
+    "redis": "^3.1.1",
+    "hosted-git-info": "^3.0.8",
+    "sass-lint/merge": "^2.1.1",
+    "ua-parser-js": "^0.7.24"
   },
   "husky": {
     "hooks": {

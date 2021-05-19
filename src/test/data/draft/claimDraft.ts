@@ -26,7 +26,17 @@ export const claimDraft = {
     helpWithFees: YesNoOption.NO,
     claimIsForTenancyDeposit: YesNoOption.NO
   },
-  breathingSpace: {},
+  breathingSpace: {
+    breathingSpaceExternalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
+    breathingSpaceEnteredDate: { day: '31', month: '01', year: 2021 },
+    breathingSpaceEnteredbyInsolvencyTeamDate: { day: '31', month: '01', year: 2021 },
+    breathingSpaceEndDate: { day: '31', month: '12', year: 2022 },
+    breathingSpaceLiftedDate: { day: '31', month: '12', year: 2021 },
+    breathingSpaceLiftedbyInsolvencyTeamDate: { day: '31', month: '12', year: 2021 },
+    breathingSpaceReferenceNumber: 'BS123456789',
+    breathingSpaceLiftedFlag: 'No',
+    breathingSpaceType: 'STANDARD_BS_ENTERED'
+  },
   claimant: {
     payment: {
       reference: '123',
