@@ -351,7 +351,7 @@ export class Claim {
       this.claimData = new ClaimData().deserialize(input.claim)
       this.moreTimeRequested = input.moreTimeRequested
       if (this.claimData.feeRemitted !== undefined && this.claimData.feeAmountInPennies !== undefined) {
-        this.helpWithFessBalanceClaimFee = MoneyConverter.convertPenniesToPounds(this.claimData.feeAmountInPennies)
+        this.helpWithFessBalanceClaimFee = MoneyConverter.convertPenniesToPounds(this.claimData.outstandingFeeAmountInPennies)
       }
 
       if ((input.state === 'HWF_APPLICATION_PENDING' || input.state === 'AWAITING_RESPONSE_HWF' || input.state === 'CLOSED_HWF') && input.claim.helpWithFeesNumber !== undefined) {
