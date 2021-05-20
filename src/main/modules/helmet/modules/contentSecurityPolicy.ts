@@ -13,7 +13,8 @@ export class ContentSecurityPolicy {
     const inlineJsWindowGOVUKClassName = '\'sha256-G29/qSW/JHHANtFhlrZVDZW1HOkCDRc78ggbqwwIJ2g=\''
     const additionalClassName = '\'sha256-AaA9Rn5LTFZ5vKyp3xOfFcP4YbyOjvWn2up8IKHVAKk=\''
     const scriptSrc = [inlineJsEnabledBodyClassName, additionalClassName, inlineJsWindowGOVUKClassName, self, '*.google-analytics.com', 'vcc-eu4.8x8.com','vcc-eu4b.8x8.com','www.apply-for-probate.service.gov.uk', 'https://webchat-client.ctsc.hmcts.net']
-    const connectSrc = [self, '*.gov.uk', 'https://webchat-client.ctsc.hmcts.net', 'wss://webchat.ctsc.hmcts.net', 'https://webchat.ctsc.hmcts.net']
+    const connectSrc = [self, '*.gov.uk', 'https://webchat-client.ctsc.hmcts.net', 'wss://webchat.ctsc.hmcts.net', 'https://webchat.ctsc.hmcts.net',  '*.google-analytics.com']
+    const scriptSrcElem = [self, '*.google-analytics.com']
 
     if (this.developmentMode) {
       scriptSrc.push('https://localhost:35729')
@@ -25,6 +26,7 @@ export class ContentSecurityPolicy {
         defaultSrc: [none],
         fontSrc: [self, 'data:'],
         scriptSrc: scriptSrc,
+        scriptSrcElem: scriptSrcElem,
         connectSrc: connectSrc,
         mediaSrc: ['\'self\''],
         frameSrc: [
