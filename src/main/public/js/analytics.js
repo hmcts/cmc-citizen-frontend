@@ -14,11 +14,15 @@ xhttp.onreadystatechange = function() {
 
     var cookiesPolicy = getCookie("cookies_policy");
     if (cookiesPolicy.split(',')[1].split(':')[1] === 'true') {
-      window['ga-disable'+json.gaTrackingId] = false
+      console.debug('manageAnalyticsCookies:: Yes');
+      console.debug('ga tracking id:: ' + 'ga-disable-' + json.gaTrackingId);
+      window['ga-disable-'+json.gaTrackingId] = false
       ga('create', json.gaTrackingId, 'auto');
       ga('send', 'pageview');
     } else {
-      window['ga-disable'+json.gaTrackingId] = true
+      console.debug('manageAnalyticsCookies:: no');
+      console.debug('ga tracking id:: ' + 'ga-disable-' + json.gaTrackingId);
+      window['ga-disable-'+json.gaTrackingId] = true
     }
   }
 };
