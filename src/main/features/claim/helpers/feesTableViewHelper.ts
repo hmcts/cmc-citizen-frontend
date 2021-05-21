@@ -120,6 +120,27 @@ export class FeesTableViewHelper {
       .filter((range: ViewFeeRange) => range.minRange < supportedFeeLimitInGBP)
       .map((range: ViewFeeRange) => new MergeableRange(range.minRange, Math.min(range.maxRange, supportedFeeLimitInGBP), range.currentVersion.flatAmount.amount))
 
-    return supportedIssueFees.sort(RangeUtils.compare)
+      const items: Item[] = [
+          ...supportedIssueFees.map(range => Item.createForFeeInColumn(range, 1))
+      ].sort((lhs: Item, rhs: Item) => RangeUtils.compare(lhs.range, rhs.range))
+
+      return items.reduce((feeRange: MergeableRange[], item: Item) => {
+        const increment: number = 0.01
+        const overlappedRows: MergeableRange[] = feeRange.filter((row: MergeableRange) => RangeUtils.areOverlap(item.range, row))
+        if (item.range.amount === undefined) {
+          throw new Error('Fee amount must be defined')
+        }
+        if (overlappedRows.length === 0) {
+          feeRange.push(new MergeableRange(item.range.minRange, item.range.maxRange, item.range.amount ))
+        } else {
+          overlappedRows.forEach(row => {
+            if (!RangeUtils.areSame(row, item.range)) {
+              feeRange.push(new MergeableRange(row.maxRange + increment, item.range.maxRange, item.range.amount ))
+            }
+          })
+        }
+
+        return feeRange
+      }, []).sort(RangeUtils.compare)
   }
 }
