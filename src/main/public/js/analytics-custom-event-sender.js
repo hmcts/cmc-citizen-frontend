@@ -91,7 +91,7 @@ $(function () {
       var action = form.data('eventAction')
       var label = findLabel(form, form.data('eventLabelFrom'))
       if (label) {
-        window['ga-disable'+json.gaTrackingId] = false
+        window['ga-disable-'+json.gaTrackingId] = false
         sendEvent('Form', action, label)
       }
     } else {
