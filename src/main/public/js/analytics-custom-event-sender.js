@@ -97,7 +97,7 @@ $(function () {
     } else {
       console.debug('manageAnalyticsCookies:: No');
       console.debug('ga tracking id:: ' + 'ga-disable-' + json.gaTrackingId);
-      window['ga-disable'+json.gaTrackingId] = true
+      window['ga-disable-'+json.gaTrackingId] = true
     }
   })
 
