@@ -18,12 +18,12 @@ import { PartyDetails } from 'forms/models/partyDetails'
 import { CourtDetails } from 'court-finder-client/courtDetails'
 
 function renderPage (res: express.Response, form: Form<HearingLocation>, resultPage: boolean, apiError: string) {
-  res.render(Paths.hearingLocationPage.associatedView, {
+    res.render(Paths.hearingLocationPage.associatedView, {
     form: form,
     resultPage: resultPage,
     party: getUsersRole(res.locals.claim, res.locals.user),
     error: apiError
-  })
+  }) 
 }
 
 function getDefaultPostcode (res: express.Response): string {
@@ -77,17 +77,18 @@ async function searchByPostCode(res: express.Response, form: Form<HearingLocatio
   if (court !== undefined) {
     let courtDetails: CourtDetails[] = []
     courtDetails.push(await Court.getCourtDetails(court.slug))
-    const nearestCourtDetails: CourtDetails = await Court.getCourtDetails(court.slug)
+    //const nearestCourtDetails: CourtDetails = await Court.getCourtDetails(court.slug)
     draft.document.hearingLocation.courtName = court.name
+    draft.document.hearingLocation.courtPostcode = court.address.postcode
     draft.document.hearingLocation.courtAccepted = YesNoOption.NO
     draft.document.hearingLocation.alternativeCourtName = court.name
-    
+
     renderPage(res, new Form<HearingLocation>(new HearingLocation(draft.document.hearingLocation.courtName,
           undefined, draft.document.hearingLocation.facilities, draft.document.hearingLocation.courtAccepted,
           draft.document.hearingLocation.alternativeOption, draft.document.hearingLocation.alternativeCourtName,
-          form.model.alternativePostcode, undefined, courtDetails, form.model.alternativePostcode, nearestCourtDetails, true, AlternativeCourtOption.BY_POSTCODE
+          form.model.alternativePostcode, undefined, courtDetails, form.model.alternativePostcode, undefined, true, AlternativeCourtOption.BY_POSTCODE
           )), true, apiError)
-  } else {
+    } else {
     await handlePostCodeSearchError(res, form, draft, resultPage, undefined)
   }
 }
@@ -253,7 +254,13 @@ export default express.Router()
             await locationSearch(res, form, draft, false, form.model.alternativeCourtName, '', false)
           } else if (form.model.alternativeCourtSelected === 'no' && form.model.alternativeOption === AlternativeCourtOption.BY_NAME) {
             await locationSearch(res, form, draft, true, form.model.alternativeCourtName, '', false)
-          } else {
+          } else if (form.model.courtAccepted === undefined && form.model.alternativeCourtSelected === undefined && 
+            (form.model.alternativeOption === AlternativeCourtOption.BY_POSTCODE)) {
+              await searchByPostCode(res, form, draft, false)
+            } else if (form.model.courtAccepted === undefined && form.model.alternativeCourtSelected === undefined && 
+              (form.model.alternativeOption === AlternativeCourtOption.BY_NAME)) {
+              await locationSearch(res, form, draft, false, form.model.alternativeCourtName, '', false)
+            } else {
             if (form.model.alternativeOption !== undefined
                   && form.model.alternativeOption === AlternativeCourtOption.NEAREST_COURT_SELECTED) {
               const nearestCourtDetails: CourtDetails = await getNearestCourtDetails(res)
@@ -282,13 +289,7 @@ export default express.Router()
 
                 await new DraftService().save(draft, user.bearerToken)
               }
-            } else if (form.model.courtAccepted === undefined && form.model.alternativeCourtSelected === undefined && 
-              (form.model.alternativeOption === AlternativeCourtOption.BY_POSTCODE)) {
-                await searchByPostCode(res, form, draft, false)
-              } else if (form.model.courtAccepted === undefined && form.model.alternativeCourtSelected === undefined && 
-                (form.model.alternativeOption === AlternativeCourtOption.BY_NAME)) {
-                await locationSearch(res, form, draft, false, form.model.alternativeCourtName, '', false)
-              } else {
+            }  else {
               draft.document.hearingLocation = form.model
               draft.document.hearingLocation.courtName = form.model.courtName
               draft.document.hearingLocation.courtAccepted = form.model.courtAccepted

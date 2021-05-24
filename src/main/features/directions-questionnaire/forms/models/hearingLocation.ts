@@ -16,11 +16,11 @@ export class AlternativeCourtOption {
 }
 
 export class ValidationErrors {
-  static readonly NO_ALTERNATIVE_COURT_NAME = 'Provide a valid court name'
+  static readonly NO_ALTERNATIVE_COURT_NAME = 'Enter a court or place name in England or Wales'
   static readonly SELECT_ALTERNATIVE_OPTION = 'Select an alternative court option'
-  static readonly NO_ALTERNATIVE_POSTCODE = 'Provide a valid postcode'
+  static readonly NO_ALTERNATIVE_POSTCODE = 'Enter a postcode for England or Wales'
   static readonly NO_ALTERNATIVE_POSTCODE_SUMMARY = 'Enter a valid postcode. Try again using another postcode.'
-  static readonly NO_ALTERNATIVE_COURT_NAME_SUMMARY = 'Could not find a court name to match. Try searching by postcode instead.'
+  static readonly NO_ALTERNATIVE_COURT_NAME_SUMMARY = 'Enter a court or place name in England or Wales'
 }
 
 export class HearingLocation {
