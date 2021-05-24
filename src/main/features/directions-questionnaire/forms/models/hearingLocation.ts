@@ -44,13 +44,14 @@ export class HearingLocation {
 
   @ValidateIf(o => (o.courtAccepted && o.courtAccepted.option === YesNoOption.NO.option && o.alternativeOption === 'name')
   || (o.alternativeCourtSelected && o.alternativeCourtSelected === 'no' && o.alternativeOption === 'name')
-  || !o.courtName)
+  || (!o.alternativeCourtSelected && !o.courtAccepted && o.alternativeOption === 'name'))
   @IsDefined({ message: ValidationErrors.NO_ALTERNATIVE_COURT_NAME })
   @IsNotEmpty({ message: ValidationErrors.NO_ALTERNATIVE_COURT_NAME })
   alternativeCourtName?: string
 
   @ValidateIf(o => (o.courtAccepted && o.courtAccepted.option === YesNoOption.NO.option && o.alternativeOption === 'postcode')
-  || (o.alternativeCourtSelected && o.alternativeCourtSelected === 'no' && o.alternativeOption === 'postcode'))
+  || (o.alternativeCourtSelected && o.alternativeCourtSelected === 'no' && o.alternativeOption === 'postcode')
+  || (!o.alternativeCourtSelected && !o.courtAccepted && o.alternativeOption === 'postcode'))
   @IsDefined({ message: ValidationErrors.NO_ALTERNATIVE_POSTCODE })
   @IsValidPostcode({ message: ValidationErrors.NO_ALTERNATIVE_POSTCODE })
   alternativePostcode?: string

@@ -71,6 +71,28 @@ async function postCodeSearch (res: express.Response, form: Form<HearingLocation
   }
 }
 
+async function searchByPostCode(res: express.Response, form: Form<HearingLocation>, draft: Draft<DirectionsQuestionnaireDraft>, resultPage: boolean) {
+  let apiError = ''
+  const court: Court = await Court.getNearestCourt(form.model.alternativePostcode)
+  if (court !== undefined) {
+    let courtDetails: CourtDetails[] = []
+    courtDetails.push(await Court.getCourtDetails(court.slug))
+    const nearestCourtDetails: CourtDetails = await Court.getCourtDetails(court.slug)
+    draft.document.hearingLocation.courtName = court.name
+    draft.document.hearingLocation.courtAccepted = YesNoOption.NO
+    draft.document.hearingLocation.alternativeCourtName = court.name
+    
+    renderPage(res, new Form<HearingLocation>(new HearingLocation(draft.document.hearingLocation.courtName,
+          undefined, draft.document.hearingLocation.facilities, draft.document.hearingLocation.courtAccepted,
+          draft.document.hearingLocation.alternativeOption, draft.document.hearingLocation.alternativeCourtName,
+          form.model.alternativePostcode, undefined, courtDetails, form.model.alternativePostcode, nearestCourtDetails, true, AlternativeCourtOption.BY_POSTCODE
+          )), true, apiError)
+  } else {
+    await handlePostCodeSearchError(res, form, draft, resultPage, undefined)
+  }
+}
+
+
 async function handlePostCodeSearchError (res: express.Response, form: Form<HearingLocation>, draft: Draft<DirectionsQuestionnaireDraft>, resultPage: boolean, apiError: string) {
   if ((form.model.courtAccepted === YesNoOption.NO || form.model.alternativeCourtSelected === 'no') && form.model.alternativeOption === AlternativeCourtOption.BY_POSTCODE) {
     apiError = ValidationErrors.NO_ALTERNATIVE_POSTCODE_SUMMARY
@@ -199,8 +221,10 @@ export default express.Router()
               new HearingLocation(
                 courtDetails.name, undefined, courtDetails.facilities, YesNoOption.YES
               )), false, apiError)
-        } else {
+        } else if (apiError !== '') {
           renderPage(res, new Form<HearingLocation>(new HearingLocation()), true, apiError)
+        } else {
+          renderPage(res, new Form<HearingLocation>(new HearingLocation()), false, apiError)
         }
       }
     } catch (err) {
@@ -213,7 +237,8 @@ export default express.Router()
 
       if (form.hasErrors()) {
         handleFormError(res, form, true, undefined)
-      } else if (form.model.courtAccepted === undefined && form.model.alternativeCourtSelected === undefined) {
+      } else if (form.model.courtAccepted === undefined && form.model.alternativeCourtSelected === undefined && 
+        (!form.model.alternativeOption)) {
         await handleFormError(res, form, true, ValidationErrors.SELECT_ALTERNATIVE_OPTION)
       } else {
         try {
@@ -257,7 +282,13 @@ export default express.Router()
 
                 await new DraftService().save(draft, user.bearerToken)
               }
-            } else {
+            } else if (form.model.courtAccepted === undefined && form.model.alternativeCourtSelected === undefined && 
+              (form.model.alternativeOption === AlternativeCourtOption.BY_POSTCODE)) {
+                await searchByPostCode(res, form, draft, false)
+              } else if (form.model.courtAccepted === undefined && form.model.alternativeCourtSelected === undefined && 
+                (form.model.alternativeOption === AlternativeCourtOption.BY_NAME)) {
+                await locationSearch(res, form, draft, false, form.model.alternativeCourtName, '', false)
+              } else {
               draft.document.hearingLocation = form.model
               draft.document.hearingLocation.courtName = form.model.courtName
               draft.document.hearingLocation.courtAccepted = form.model.courtAccepted
