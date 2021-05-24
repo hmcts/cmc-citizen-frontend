@@ -166,7 +166,6 @@ ccd:
 
   global:
     ccdApiGatewayIngress: gateway-${SERVICE_FQDN}
-    ccdAdminWebIngress: ccd-admin-web-${SERVICE_FQDN}
     ccdCaseManagementWebIngress: case-management-web-${SERVICE_FQDN}
     ccdDataStoreUrl: http://${SERVICE_NAME}-ccd-data-store-api
     idamApiUrl: https://idam-api.aat.platform.hmcts.net
