@@ -105,7 +105,7 @@
     "tslint-microsoft-contrib": "^6.2.0",
     "typescript": "^3.9.8",
     "uuid": "^3.4.0",
-    "webdriverio": "^7.0.3"
+    "webdriverio": "^7.6.0"
   },
   "devDependencies": {
     "@hmcts/cmc-supported-browsers": "^1.0.1",
@@ -116,11 +116,11 @@
     "@types/mocha": "*",
     "@types/sinon-chai": "^3.2.5",
     "@types/supertest": "*",
-    "chai": "^4.2.0",
+    "chai": "^4.3.4",
     "chai-as-promised": "^7.1.1",
     "codacy-coverage": "3.4.0",
-    "codeceptjs": "^2.6.11",
-    "codecov": "^3.6.5",
+    "codeceptjs": "^3.0.7",
+    "codecov": "^3.8.2",
     "debug": "^4.1.1",
     "gulp-livereload": "^4.0.2",
     "gulp-nodemon": "^2.5.0",
