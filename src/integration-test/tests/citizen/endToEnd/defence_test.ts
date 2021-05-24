@@ -39,7 +39,7 @@ Scenario('I can as an Individual make a claim against an Individual who then ful
   I.see('You’ve rejected their response')
 })
 
-Scenario('I can as an Individual make a claim against an Individual who then rejects the claim as they have paid the full amount then I accept the defence @nightly', { retries: 3 }, async (I: I) => {
+Scenario('I can as an Individual make a claim against an Individual who then rejects the claim as they have paid the full amount then I accept the defence ', { retries: 3 }, async (I: I) => {
   const claimantResponseTestData = new ClaimantResponseTestData()
   claimantResponseTestData.pageSpecificValues.howMuchHaveYouPaidPageEnterAmountPaidWithDateAndExplanation = {
     paidAmount: 105.5,
@@ -73,7 +73,7 @@ Scenario('I can as an Individual make a claim against an Individual who then rej
   I.click('Sign out')
 })
 
-Scenario('I can as an Individual make a claim against an Individual who then rejects the claim as they have paid less than the amount claimed and I then accept their defence @nightly', { retries: 3 }, async (I: I) => {
+Scenario('I can as an Individual make a claim against an Individual who then rejects the claim as they have paid less than the amount claimed and I then accept their defence ', { retries: 3 }, async (I: I) => {
   const claimantResponseTestData = new ClaimantResponseTestData()
   claimantResponseTestData.pageSpecificValues.howMuchHaveYouPaidPageEnterAmountPaidWithDateAndExplanation = {
     paidAmount: 50,

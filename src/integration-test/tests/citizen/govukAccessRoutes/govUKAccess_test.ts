@@ -19,10 +19,10 @@ Scenario('I can enter a moneyclaims reference and login to see the dashboard @ci
   accessRoutesSteps.returnToClaimMoneyClaims(claimRef, claimantEmail)
 })
 
-Scenario('I can select don’t have a claim number and choose to go to moneyclaims, login and see the dashboard @citizen @nightly', { retries: 3 }, async (I: I) => {
+Scenario('I can select don’t have a claim number and choose to go to moneyclaims, login and see the dashboard @citizen ', { retries: 3 }, async (I: I) => {
   accessRoutesSteps.dontHaveAReferenceMoneyClaims(claimantEmail)
 })
 
-// Scenario('I can enter a moneyclaims reference and get sent to enter a pin @nightly', { retries: 3 }, async (I: I) => {
+// Scenario('I can enter a moneyclaims reference and get sent to enter a pin ', { retries: 3 }, async (I: I) => {
 //   accessRoutesSteps.respondToClaimMoneyClaims(claimRef)
 // })

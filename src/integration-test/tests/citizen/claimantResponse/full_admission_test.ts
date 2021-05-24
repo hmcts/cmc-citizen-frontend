@@ -60,7 +60,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.see('You’ve signed a settlement agreement')
   })
 
-  Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of immediate payment @nightly @admissions', { retries: 3 }, async (I: I) => {
+  Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of immediate payment  @admissions', { retries: 3 }, async (I: I) => {
     testData.paymentOption = PaymentOption.BY_SET_DATE
     testData.claimantPaymentOption = PaymentOption.IMMEDIATELY
     const claimantResponseTestData = new ClaimantResponseTestData()
@@ -77,7 +77,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.see('You’ve signed a settlement agreement')
   })
 
-  Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of set date @nightly @admissions', { retries: 3 }, async (I: I) => {
+  Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of set date  @admissions', { retries: 3 }, async (I: I) => {
     testData.paymentOption = PaymentOption.BY_SET_DATE
     testData.claimantPaymentOption = PaymentOption.BY_SET_DATE
     const claimantResponseTestData = new ClaimantResponseTestData()
@@ -95,7 +95,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.see('You’ve signed a settlement agreement')
   })
 
-  Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of instalments @nightly @admissions', { retries: 3 }, async (I: I) => {
+  Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of instalments  @admissions', { retries: 3 }, async (I: I) => {
     testData.paymentOption = PaymentOption.BY_SET_DATE
     testData.claimantPaymentOption = PaymentOption.INSTALMENTS
     const claimantResponseTestData = new ClaimantResponseTestData()
@@ -160,7 +160,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
   })
 
   Scenario('Full Admission::Interlocutory judgement E2E ' +
-    '( Repayment plan → suggest counter Repayment plan → reject court determination ) @FullAdmission @citizen @nightly ', { retries: 3 }, async (I: I) => {
+    '( Repayment plan → suggest counter Repayment plan → reject court determination ) @FullAdmission @citizen  ', { retries: 3 }, async (I: I) => {
       testData.paymentOption = PaymentOption.INSTALMENTS
       testData.claimantPaymentOption = PaymentOption.INSTALMENTS
       const claimantResponseTestData = new UnreasonableClaimantResponseTestData()

@@ -36,7 +36,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     await defenceSteps.partialPaymentMade(PartyType.INDIVIDUAL)
   })
 
-  Scenario('Admit part of the claim (Pay Immediately) @nightly @admissions', { retries: 3 }, async (I: I) => {
+  Scenario('Admit part of the claim (Pay Immediately)  @admissions', { retries: 3 }, async (I: I) => {
     defenceSteps.makePartialAdmission(defendant)
     await defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.IMMEDIATELY)
   })
@@ -46,7 +46,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     await defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE)
   })
 
-  Scenario('Admit part of the claim (Pay By Instalment) @nightly @admissions', { retries: 3 }, async (I: I) => {
+  Scenario('Admit part of the claim (Pay By Instalment)  @admissions', { retries: 3 }, async (I: I) => {
     defenceSteps.makePartialAdmission(defendant)
     await defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS)
   })

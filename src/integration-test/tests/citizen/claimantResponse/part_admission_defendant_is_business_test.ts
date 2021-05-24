@@ -45,7 +45,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.see('You need to send the defendant’s financial details to the court.')
   })
 
-  Scenario('I can as a claimant accept and suggest an alternative payment intention with set date @nightly @admissions @business', { retries: 3 }, async (I: I) => {
+  Scenario('I can as a claimant accept and suggest an alternative payment intention with set date  @admissions @business', { retries: 3 }, async (I: I) => {
     testData.defenceType = DefenceType.PART_ADMISSION_NONE_PAID
     testData.paymentOption = PaymentOption.BY_SET_DATE
     // as defendant

@@ -24,7 +24,7 @@ Before(async (I: I) => {
 })
 
 if (process.env.FEATURE_ADMISSIONS === 'true') {
-  Scenario('I can as a claimant reject the defendants part admission by immediately @nightly @admissions', { retries: 3 }, async (I: I) => {
+  Scenario('I can as a claimant reject the defendants part admission by immediately  @admissions', { retries: 3 }, async (I: I) => {
     testData.paymentOption = PaymentOption.IMMEDIATELY
     testData.defenceType = DefenceType.PART_ADMISSION
     testData.defendantClaimsToHavePaidInFull = false
@@ -46,7 +46,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.see('We’ll contact you to try to arrange a mediation appointment')
   })
 
-  Scenario('I can as a claimant accept the defendants part admission by immediately with settlement agreement and accepting defendants payment method @nightly @admissions', { retries: 3 }, async (I: I) => {
+  Scenario('I can as a claimant accept the defendants part admission by immediately with settlement agreement and accepting defendants payment method  @admissions', { retries: 3 }, async (I: I) => {
 
     testData.paymentOption = PaymentOption.IMMEDIATELY
     testData.defenceType = DefenceType.PART_ADMISSION
@@ -89,7 +89,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.see('You’ve signed a settlement agreement.')
   })
 
-  Scenario('I can as a claimant accept the defendants part admission by instalments with settlement agreement and rejecting defendants payment method in favour of set date @nightly @admissions', { retries: 3 }, async (I: I) => {
+  Scenario('I can as a claimant accept the defendants part admission by instalments with settlement agreement and rejecting defendants payment method in favour of set date  @admissions', { retries: 3 }, async (I: I) => {
 
     testData.paymentOption = PaymentOption.INSTALMENTS
     testData.defenceType = DefenceType.PART_ADMISSION
@@ -112,7 +112,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.see('You’ve signed a settlement agreement.')
   })
 
-  Scenario('I can as a claimant accept the defendants part admission by instalments with settlement agreement and rejecting defendants payment method in favour of instalments @nightly @admissions', { retries: 3 }, async (I: I) => {
+  Scenario('I can as a claimant accept the defendants part admission by instalments with settlement agreement and rejecting defendants payment method in favour of instalments  @admissions', { retries: 3 }, async (I: I) => {
 
     testData.paymentOption = PaymentOption.BY_SET_DATE
     testData.defenceType = DefenceType.PART_ADMISSION
