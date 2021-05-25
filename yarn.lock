@@ -5682,17 +5682,17 @@ launchdarkly-eventsource@1.4.0:
   dependencies:
     original "^1.0.0"
 
-launchdarkly-node-server-sdk@^5.11.3:
-  version "5.14.2"
-  resolved "https://registry.yarnpkg.com/launchdarkly-node-server-sdk/-/launchdarkly-node-server-sdk-5.14.2.tgz#ab7a0f81adf1e08774b7e8cde80fb28a8de99075"
-  integrity sha512-nHcn07JOIM6XwtaAyYJR4xT8S4LHV/rr/7UiC16qNlMgNzDeJ0Q74tWrOn2Uk1J+V4AjhXZUyZTd4RwcBoFUeA==
+launchdarkly-node-server-sdk@^5.14.4:
+  version "5.14.4"
+  resolved "https://registry.yarnpkg.com/launchdarkly-node-server-sdk/-/launchdarkly-node-server-sdk-5.14.4.tgz#2d2707a7473829c01671eb43ef5543d25171bc72"
+  integrity sha512-toZl+iIWwd0xYqd1dHOgHugkWVLZLic8NiNB6sCOvKCQSNi2aBhKj/BC9lq/H1Y6Cf0xm2FC4WPsK1FWP+jSMw==
   dependencies:
     "@types/redis" "^2.8.18"
     async "^3.1.0"
     launchdarkly-eventsource "1.4.0"
     lrucache "^1.0.3"
     node-cache "^4.2.0"
-    redis "^3.0.2"
+    redis "^3.1.1"
     semver "^6.3.0"
     tunnel "0.0.6"
     uuid "^3.3.3"
@@ -7896,7 +7896,7 @@ redis-parser@^3.0.0:
   dependencies:
     redis-errors "^1.0.0"
 
-redis@^2.6.0-2, redis@^3.0.2, redis@^3.1.1:
+redis@^2.6.0-2, redis@^3.1.1:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/redis/-/redis-3.1.2.tgz#766851117e80653d23e0ed536254677ab647638c"
   integrity sha512-grn5KoZLr/qrRQVwoSkmzdbw6pwF+/rwODtrOr6vuBRiR/f3rjSTGupbF90Zpqm2oenix8Do6RV7pYEkGwlKkw==
