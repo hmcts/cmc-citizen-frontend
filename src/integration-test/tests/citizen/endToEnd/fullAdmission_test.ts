@@ -17,7 +17,7 @@ Before(async (I: I) => {
   testData = await EndToEndTestData.prepareData(I, PartyType.COMPANY, PartyType.COMPANY)
 })
 
-Scenario('Company agreed to pay all of the claim  @citizen', { retries: 3 }, async (I: I) => {
+Scenario('Company agreed to pay all of the claim @nightly @citizen', { retries: 3 }, async (I: I) => {
   testData.paymentOption = PaymentOption.IMMEDIATELY
   helperSteps.finishResponseWithFullAdmission(testData)
   I.click('Sign out')
@@ -29,7 +29,7 @@ Scenario('Company agreed to pay all of the claim  @citizen', { retries: 3 }, asy
   I.see(testData.claimRef)
 })
 
-Scenario('Self Employed Person agreed(Sole Trader Vs Individual) to pay all of the claim... ', { retries: 3 }, async (I: I) => {
+Scenario('Self Employed Person agreed(Sole Trader Vs Individual) to pay all of the claim... @nightly', { retries: 3 }, async (I: I) => {
   const testData = await EndToEndTestData.prepareData(I, PartyType.SOLE_TRADER, PartyType.INDIVIDUAL)
   testData.paymentOption = PaymentOption.IMMEDIATELY
   helperSteps.finishResponseWithFullAdmission(testData)
@@ -41,7 +41,7 @@ Scenario('Self Employed Person agreed(Sole Trader Vs Individual) to pay all of t
   I.see(testData.claimRef)
 })
 
-Scenario('Organization agreed (Organisation Vs Individual) to pay all of the claim... ', { retries: 3 }, async (I: I) => {
+Scenario('Organization agreed (Organisation Vs Individual) to pay all of the claim... @nightly', { retries: 3 }, async (I: I) => {
   const testData = await EndToEndTestData.prepareData(I, PartyType.ORGANISATION, PartyType.INDIVIDUAL)
   testData.paymentOption = PaymentOption.IMMEDIATELY
   helperSteps.finishResponseWithFullAdmission(testData)
@@ -53,7 +53,7 @@ Scenario('Organization agreed (Organisation Vs Individual) to pay all of the cla
   I.see(testData.claimRef)
 })
 
-Scenario('Defendant agreed(Individual Vs Individual) to pay all of the claim... ', { retries: 3 }, async (I: I) => {
+Scenario('Defendant agreed(Individual Vs Individual) to pay all of the claim... @nightly', { retries: 3 }, async (I: I) => {
   const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
   testData.paymentOption = PaymentOption.IMMEDIATELY
   helperSteps.finishResponseWithFullAdmission(testData)
@@ -65,7 +65,7 @@ Scenario('Defendant agreed(Individual Vs Individual) to pay all of the claim... 
   I.see(testData.claimRef)
 })
 
-Scenario('Organization agreed to pay all of the claim to sole trader... ', { retries: 3 }, async (I: I) => {
+Scenario('Organization agreed to pay all of the claim to sole trader... @nightly', { retries: 3 }, async (I: I) => {
   const testData = await EndToEndTestData.prepareData(I, PartyType.ORGANISATION, PartyType.SOLE_TRADER)
   testData.paymentOption = PaymentOption.IMMEDIATELY
   helperSteps.finishResponseWithFullAdmission(testData)
@@ -77,7 +77,7 @@ Scenario('Organization agreed to pay all of the claim to sole trader... ', { ret
   I.see(testData.claimRef)
 })
 
-Scenario('Company agreed to pay all of the claim  to individual ', { retries: 3 }, async (I: I) => {
+Scenario('Company agreed to pay all of the claim  to individual @nightly', { retries: 3 }, async (I: I) => {
   const testData = await EndToEndTestData.prepareData(I, PartyType.COMPANY, PartyType.INDIVIDUAL)
   testData.paymentOption = PaymentOption.IMMEDIATELY
   helperSteps.finishResponseWithFullAdmission(testData)

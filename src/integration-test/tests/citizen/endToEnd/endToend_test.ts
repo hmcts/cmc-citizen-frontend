@@ -13,22 +13,22 @@ Scenario('I can as an Individual make a claim against an Individual Without a de
   await helperSteps.finishResponse(testData, false, false)
 })
 
-Scenario('I can as Sole Trader make a claim against an Individual and are able to pay on the Gov Pay page ', { retries: 3 }, async (I: I) => {
+Scenario('I can as Sole Trader make a claim against an Individual and are able to pay on the Gov Pay page @nightly', { retries: 3 }, async (I: I) => {
   const testData = await EndToEndTestData.prepareData(I, PartyType.SOLE_TRADER, PartyType.INDIVIDUAL)
   await helperSteps.finishResponse(testData)
 })
 
-Scenario('I can as a Individual make a claim against a Company and are able to pay on the Gov Pay page ', { retries: 3 }, async (I: I) => {
+Scenario('I can as a Individual make a claim against a Company and are able to pay on the Gov Pay page @nightly', { retries: 3 }, async (I: I) => {
   const testData = await EndToEndTestData.prepareData(I, PartyType.COMPANY, PartyType.INDIVIDUAL)
   await helperSteps.finishResponse(testData)
 })
 
-Scenario('I can as a Company make a claim against a company and are able to pay on the Gov Pay page ', { retries: 3 }, async (I: I) => {
+Scenario('I can as a Company make a claim against a company and are able to pay on the Gov Pay page @nightly', { retries: 3 }, async (I: I) => {
   const testData = await EndToEndTestData.prepareData(I, PartyType.COMPANY, PartyType.COMPANY)
   await helperSteps.finishResponse(testData)
 })
 
-Scenario('I can as a Organisation make a claim against an Individual and are able to pay on the Gov Pay page ', { retries: 3 }, async (I: I) => {
+Scenario('I can as a Organisation make a claim against an Individual and are able to pay on the Gov Pay page @nightly', { retries: 3 }, async (I: I) => {
   const testData = await EndToEndTestData.prepareData(I, PartyType.ORGANISATION, PartyType.INDIVIDUAL)
   await helperSteps.finishResponse(testData)
 })
