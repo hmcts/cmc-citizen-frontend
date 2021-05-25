@@ -127,9 +127,6 @@ export class FeesTableViewHelper {
     return items.reduce((feeRange: MergeableRange[], item: Item) => {
       const increment: number = 0.01
       const overlappedRows: MergeableRange[] = feeRange.filter((row: MergeableRange) => RangeUtils.areOverlap(item.range, row))
-      if (item.range.amount === undefined) {
-        throw new Error('Fee amount must be defined')
-      }
       if (overlappedRows.length === 0) {
         feeRange.push(new MergeableRange(item.range.minRange, item.range.maxRange, item.range.amount))
       } else {

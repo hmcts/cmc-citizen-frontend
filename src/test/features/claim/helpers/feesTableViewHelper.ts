@@ -191,4 +191,12 @@ describe('FeesTableViewHelper', () => {
     const result: FeeRangeMerge[] = await FeesTableViewHelper.feesTableContent()
     expect(result).to.have.lengthOf(2)
   })
+
+  it('should filter out older versions of fee and get only new claim fees for counterclaim', async () => {
+    newClaimFeesEnabledStub.returns(true)
+    feesServiceMock.resolveGetIssueFeeRangeGroupDefaultChannel()
+
+    const result: FeeRange[] = await FeesTableViewHelper.claimFeesOnlyTableContent()
+    expect(result).to.have.lengthOf(2)
+  })
 })
