@@ -612,7 +612,7 @@ describe('Directions Questionnaire - hearing location', () => {
               .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', 'div class="error-summary"'))
           })
 
-          it.only('should handle exception and reder error if court finder is not functioning', async () => {
+          it('should handle exception and reder error if court finder is not functioning', async () => {
             const searchWithLocationSecondLoopFormData = { courtAccepted: undefined, courtName: 'Test court', alternativeCourtSelected: 'no', alternativeOption: 'name', alternativeCourtName: 'Birmingham', searchParam: 'Birmingham', searchLoop: true, searchType: 'name' }
 
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
