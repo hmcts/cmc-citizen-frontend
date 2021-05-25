@@ -84,8 +84,6 @@ $(function () {
     var json = JSON.parse(this.response);
     if (!cookies_policy && cookies_policy.split(',')[1].split(':')[1] === 'true')
     {
-      console.debug('manageAnalyticsCookies:: Yes');
-      console.debug('ga tracking id:: ' + 'ga-disable-' + json.gaTrackingId);
       var form = $(this)
 
       var action = form.data('eventAction')
@@ -95,8 +93,6 @@ $(function () {
         sendEvent('Form', action, label)
       }
     } else {
-      console.debug('manageAnalyticsCookies:: No');
-      console.debug('ga tracking id:: ' + 'ga-disable-' + json.gaTrackingId);
       window['ga-disable-'+json.gaTrackingId] = true
     }
   })
