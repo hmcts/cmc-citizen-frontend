@@ -350,6 +350,21 @@ describe('Directions Questionnaire - hearing location', () => {
               .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', 'div class="error-summary"'))
           })
 
+          it('should handle exception and reder error if court finder is not functioning for edgecase', async () => {
+            const searchWithPostCodeFirstLoopFormData = { courtAccepted: undefined, courtName: 'Test court', alternativeOption: 'postcode', alternativePostcode: 'AB1 2CD' }
+
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
+            draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+            draftStoreServiceMock.resolveFind('response')
+            courtFinderMock.rejectFind()
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send(searchWithPostCodeFirstLoopFormData)
+              .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', 'div class="error-summary"'))
+          })
+
           it('should render error for invalid location search when previous search was with postcode', async () => {
             const searchWithPostCodeFirstLoopFormData = { courtAccepted: 'no', courtName: 'Test court', alternativeCourtSelected: undefined, alternativeOption: 'name', alternativePostcode: '', searchParam: 'London', searchLoop: true, searchType: 'postcode' }
 
@@ -597,7 +612,7 @@ describe('Directions Questionnaire - hearing location', () => {
               .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', 'div class="error-summary"'))
           })
 
-          it('should handle exception and reder error if court finder is not functioning', async () => {
+          it.only('should handle exception and reder error if court finder is not functioning', async () => {
             const searchWithLocationSecondLoopFormData = { courtAccepted: undefined, courtName: 'Test court', alternativeCourtSelected: 'no', alternativeOption: 'name', alternativeCourtName: 'Birmingham', searchParam: 'Birmingham', searchLoop: true, searchType: 'name' }
 
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)

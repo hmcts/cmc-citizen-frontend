@@ -62,38 +62,6 @@ export async function postCodeSearch (res: express.Response, form: Form<HearingL
   }
 }
 
-export async function searchBylocationForEdgecase (res: express.Response, form: Form<HearingLocation>, draft: Draft<DirectionsQuestionnaireDraft>, resultPage: boolean,
-  searchParam: string, apiError: string, errorHandling: boolean) {
-  if (searchParam !== undefined) {
-    const courts: Court[] = await Court.getCourtsByName(searchParam)
-    if (courts) {
-      let courtDetails: CourtDetails[] = []
-      for (let court of courts) {
-        courtDetails.push(await Court.getCourtDetails(court.slug))
-      }
-      const nearestCourtDetails: CourtDetails = await getNearestCourtDetails(res)
-
-      renderPage(res, new Form<HearingLocation>(new HearingLocation(draft.document.hearingLocation.courtName,
-            undefined, draft.document.hearingLocation.facilities, draft.document.hearingLocation.courtAccepted,
-            draft.document.hearingLocation.alternativeOption, draft.document.hearingLocation.alternativeCourtName,
-            form.model.alternativePostcode, form.model.alternativeCourtSelected, courtDetails, searchParam, nearestCourtDetails, true, AlternativeCourtOption.BY_NAME
-      )), true, apiError)
-    } else {
-      if (errorHandling) {
-        renderPage(res, form, resultPage, apiError)
-      } else {
-        await handleLocationSearchError(res, form, draft, resultPage, undefined)
-      }
-    }
-  } else {
-    if (errorHandling) {
-      renderPage(res, form, resultPage, apiError)
-    } else {
-      await handleLocationSearchError(res, form, draft, resultPage, undefined)
-    }
-  }
-}
-
 export async function locationSearch (res: express.Response, form: Form<HearingLocation>, draft: Draft<DirectionsQuestionnaireDraft>, resultPage: boolean,
   searchParam: string, apiError: string, errorHandling: boolean) {
   if (searchParam !== undefined) {

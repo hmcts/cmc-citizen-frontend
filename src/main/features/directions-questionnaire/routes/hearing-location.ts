@@ -14,7 +14,7 @@ import { User } from 'idam/user'
 
 import { CourtDetails } from 'court-finder-client/courtDetails'
 import { handlePostCodeSearchError, getNearestCourtDetails, handleLocationSearchError, postCodeSearch,
-  locationSearch, searchByPostCodeForEdgecase, searchBylocationForEdgecase } from 'directions-questionnaire/helpers/hearingLocationsHelper'
+  locationSearch, searchByPostCodeForEdgecase } from 'directions-questionnaire/helpers/hearingLocationsHelper'
 
 export function renderPage (res: express.Response, form: Form<HearingLocation>, resultPage: boolean, apiError: string) {
   res.render(Paths.hearingLocationPage.associatedView, {
@@ -70,8 +70,6 @@ export default express.Router()
               new HearingLocation(
                 courtDetails.name, undefined, courtDetails.facilities, YesNoOption.YES
               )), false, apiError)
-        } else if (apiError !== '') {
-          renderPage(res, new Form<HearingLocation>(new HearingLocation()), true, apiError)
         } else {
           renderPage(res, new Form<HearingLocation>(new HearingLocation()), false, apiError)
         }
@@ -107,7 +105,7 @@ export default express.Router()
             await searchByPostCodeForEdgecase(res, form, draft, false)
           } else if (form.model.courtAccepted === undefined && form.model.alternativeCourtSelected === undefined &&
             (form.model.alternativeOption === AlternativeCourtOption.BY_NAME)) {
-            await searchBylocationForEdgecase(res, form, draft, false, form.model.alternativeCourtName, '', false)
+            await locationSearch(res, form, draft, false, form.model.alternativeCourtName, '', false)
           } else {
             if (form.model.alternativeOption !== undefined
                 && form.model.alternativeOption === AlternativeCourtOption.NEAREST_COURT_SELECTED) {
