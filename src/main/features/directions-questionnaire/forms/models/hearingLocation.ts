@@ -19,7 +19,7 @@ export class ValidationErrors {
   static readonly NO_ALTERNATIVE_COURT_NAME = 'Enter a court or place name in England or Wales'
   static readonly SELECT_ALTERNATIVE_OPTION = 'Select an alternative court option'
   static readonly NO_ALTERNATIVE_POSTCODE = 'Enter a postcode for England or Wales'
-  static readonly NO_ALTERNATIVE_POSTCODE_SUMMARY = 'Enter a valid postcode. Try again using another postcode.'
+  static readonly NO_ALTERNATIVE_POSTCODE_SUMMARY = 'Enter a postcode for England or Wales'
   static readonly NO_ALTERNATIVE_COURT_NAME_SUMMARY = 'Enter a court or place name in England or Wales'
 }
 
@@ -37,7 +37,7 @@ export class HearingLocation {
 
   courtAccepted?: YesNoOption
 
-  @ValidateIf(o => o.courtAccepted && o.courtAccepted.option === YesNoOption.NO.option)
+  @ValidateIf(o => (o.courtAccepted && o.courtAccepted.option === YesNoOption.NO.option) || (!o.alternativeCourtSelected && !o.courtAccepted))
   @IsDefined({ message: ValidationErrors.SELECT_ALTERNATIVE_OPTION })
   @IsIn(AlternativeCourtOption.all(), { message: ValidationErrors.SELECT_ALTERNATIVE_OPTION })
   alternativeOption?: string

@@ -8,8 +8,8 @@
 {% endif %}
 
 {% macro commonContent()  %}
-  <p>{{ t('Tell us your preferred location for a hearing, in case the claim goes to one.') }}</p>
-  <p>{{ t('The hearing will be held at this court unless the claimant has an exceptional reason to choose another one, for example, because of accessibility requirements.') }}</p>
+  <p>{{ t('Tell us your preferred location for a hearing, in case the claim goes to one. This must be in England or Wales.') }}</p>
+  <p>{{ t('We’ll use the location you choose unless the claimant has an exceptional reason to object, for example accessibility needs.') }}</p>
 {% endmacro %}
 
 {% macro commonContentWhenCourtDetailsNull()  %}
@@ -82,7 +82,7 @@
                 checked = form.valueFor('alternativeOption') === 'postcode', bold = true) }}
                 <div class="form-group panel panel-border-narrow js-hidden " id="alternativeOption-postcode" aria-hidden="false">
                   {{ apiErrorPostCodeField(error) }}
-                  {{ textInput(label = 'Postcode', form = form, name = 'alternativePostcode', inputClass = 'form-control-1-3') }}
+                  {{ textInput(label = 'Enter a postcode', hint = 'For example, SW1A 2AA', form = form, name = 'alternativePostcode', inputClass = 'form-control-1-3') }}
                 </div>
                 {{ radioOption(form = form, label = 'Find and select a court', name = 'alternativeOption', value = 'name', 
                 checked = form.valueFor('alternativeOption') === 'name', bold = true) }}
@@ -99,7 +99,7 @@
                 checked = form.valueFor('alternativeOption') === 'postcode', bold = true) }}
                 <div class="form-group panel panel-border-narrow js-hidden " id="alternativeOption-postcode" aria-hidden="false">
                   {{ apiErrorPostCodeField(error) }}
-                  {{ textInput(label = 'Postcode', form = form, name = 'alternativePostcode', inputClass = 'form-control-1-3') }}
+                  {{ textInput(label = 'Enter a postcode', hint = 'For example, SW1A 2AA', form = form, name = 'alternativePostcode', inputClass = 'form-control-1-3') }}
                 </div>
                 {{ radioOption(form = form, label = 'Find and select a court', name = 'alternativeOption', value = 'name', 
                 checked = form.valueFor('alternativeOption') === 'name', bold = true) }}
@@ -149,7 +149,7 @@
               checked = form.valueFor('alternativeOption') === 'postcode', bold = true) }}
               <div class="form-group panel panel-border-narrow js-hidden " id="alternativeOption-postcode" aria-hidden="false">
                {{ apiErrorPostCodeField(error) }}
-               {{ textInput(label = 'Postcode', form = form, name = 'alternativePostcode', inputClass = 'form-control-1-3') }}
+               {{ textInput(label = 'Enter a postcode', hint = 'For example, SW1A 2AA', form = form, name = 'alternativePostcode', inputClass = 'form-control-1-3') }}
               </div>
 
               {{ radioOption(form = form, label = 'Find and select a court', name = 'alternativeOption', value = 'name',

@@ -99,7 +99,7 @@ describe('Directions Questionnaire - hearing location', () => {
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
-        it('should return 500 and render error page when court finder client is not functioning', async () => {
+        it('should return 200 and render new page when court finder client is not functioning', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           draftStoreServiceMock.resolveFind('response')
@@ -108,7 +108,7 @@ describe('Directions Questionnaire - hearing location', () => {
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.serverError.withText('Error'))
+            .expect(res => expect(res).to.be.successful)
         })
 
         context('when court finder client is functioning', () => {
@@ -305,6 +305,22 @@ describe('Directions Questionnaire - hearing location', () => {
               .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to '))
           })
 
+          it('should display the search result for edge case', async () => {
+            const searchWithPostCodeFirstLoopFormData = { courtAccepted: undefined, alternativeCourtSelected: undefined, alternativeOption: 'postcode', alternativePostcode: 'AB1 2CD' }
+
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
+            draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+            draftStoreServiceMock.resolveFind('response')
+            courtFinderMock.resolveFind()
+            courtFinderMock.resolveCourtDetails()
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send(searchWithPostCodeFirstLoopFormData)
+              .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to '))
+          })
+
           it('should render error when post code is undefined', async () => {
             const searchWithPostCodeFirstLoopFormData = { courtAccepted: 'no', courtName: 'Test court', alternativeOption: 'postcode', alternativePostcode: '' }
 
@@ -372,6 +388,22 @@ describe('Directions Questionnaire - hearing location', () => {
               .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to '))
           })
 
+          it('should display the search result for valid search for edge case', async () => {
+            const searchWithPostCodeSecondLoopFormData = { courtAccepted: undefined, courtName: 'Test court', alternativeCourtSelected: undefined, alternativeOption: 'postcode', alternativePostcode: 'AB1 2CD' }
+
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
+            draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+            draftStoreServiceMock.resolveFind('response')
+            courtFinderMock.resolveFind()
+            courtFinderMock.resolveCourtDetails()
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send(searchWithPostCodeSecondLoopFormData)
+              .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to '))
+          })
+
           it('should render error for invalid post code', async () => {
             const searchWithPostCodeSecondLoopFormData = { courtAccepted: undefined, courtName: 'Test court', alternativeCourtSelected: 'no', alternativeOption: 'postcode', alternativePostcode: '', searchParam: 'AB1 2CD', searchLoop: true, searchType: 'postcode' }
 
@@ -423,14 +455,15 @@ describe('Directions Questionnaire - hearing location', () => {
               .send(searchWithPostCodeSecondLoopFormData)
               .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to ', 'div class="error-summary"'))
           })
+        })
 
-          it('should retain previous location search results when court finder is not functioning for post code search', async () => {
-            const searchWithPostCodeSecondLoopFormData = { courtAccepted: undefined, courtName: 'Test court', alternativeCourtSelected: 'no', alternativeOption: 'postcode', alternativePostcode: 'AB1 2CD', searchParam: 'London', searchLoop: true, searchType: 'name' }
+        context('when court is rejected and searched via location from first loop', () => {
+          it('should display the search result', async () => {
+            const searchWithLocationFirstLoopFormData = { courtAccepted: 'no', courtName: 'Test court', alternativeOption: 'name', alternativeCourtName: 'Brimingham' }
 
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
             draftStoreServiceMock.resolveFind('response')
-            courtFinderMock.rejectFind()
             courtFinderMock.resolveNameFind()
             courtFinderMock.resolveCourtDetails()
             courtFinderMock.resolveFind()
@@ -439,14 +472,12 @@ describe('Directions Questionnaire - hearing location', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send(searchWithPostCodeSecondLoopFormData)
-              .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to ', 'div class="error-summary"'))
+              .send(searchWithLocationFirstLoopFormData)
+              .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to '))
           })
-        })
 
-        context('when court is rejected and searched via location from first loop', () => {
-          it('should display the search result', async () => {
-            const searchWithLocationFirstLoopFormData = { courtAccepted: 'no', courtName: 'Test court', alternativeOption: 'name', alternativeCourtName: 'Brimingham' }
+          it('should display the search result during edge case scenario', async () => {
+            const searchWithLocationFirstLoopFormData = { alternativeCourtSelected: undefined, courtAccepted: undefined, courtName: 'Test court', alternativeOption: 'name', alternativeCourtName: 'Brimingham' }
 
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
@@ -500,6 +531,24 @@ describe('Directions Questionnaire - hearing location', () => {
         context('when court is rejected and searched via location from second loop', () => {
           it('should display the search result for valid search input', async () => {
             const searchWithLocationSecondLoopFormData = { courtAccepted: undefined, courtName: 'Test court', alternativeCourtSelected: 'no', alternativeOption: 'name', alternativeCourtName: 'AB1 2CD' }
+
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
+            draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+            draftStoreServiceMock.resolveFind('response')
+            courtFinderMock.resolveNameFind()
+            courtFinderMock.resolveCourtDetails()
+            courtFinderMock.resolveFind()
+            courtFinderMock.resolveCourtDetails()
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send(searchWithLocationSecondLoopFormData)
+              .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to '))
+          })
+
+          it('should display the search result for valid search input for edge case', async () => {
+            const searchWithLocationSecondLoopFormData = { courtAccepted: undefined, courtName: 'Test court', alternativeCourtSelected: undefined, alternativeOption: 'name', alternativeCourtName: 'AB1 2CD' }
 
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
