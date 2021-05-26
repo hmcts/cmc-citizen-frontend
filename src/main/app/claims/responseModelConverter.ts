@@ -74,7 +74,7 @@ import { ResponseMethod } from 'claims/models/response/responseMethod'
 
 export class ResponseModelConverter {
 
-  static convert (draft: ResponseDraft, mediationDraft: MediationDraft, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft, claim: Claim): Response {
+  static async convert (draft: ResponseDraft, mediationDraft: MediationDraft, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft, claim: Claim): Promise<Response> {
     switch (draft.response.type) {
       case FormResponseType.DEFENCE:
         if (draft.isResponseRejectedFullyBecausePaidWhatOwed()
@@ -91,7 +91,7 @@ export class ResponseModelConverter {
     }
   }
 
-  private static convertFullDefence (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): FullDefenceResponse {
+  private static async convertFullDefence (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): Promise<FullDefenceResponse> {
     return {
       responseType: ResponseType.FULL_DEFENCE,
       responseMethod: ResponseMethod.DIGITAL,
@@ -106,9 +106,10 @@ export class ResponseModelConverter {
         rows: convertEvidence(draft.evidence) as any,
         comment: draft.evidence.comment
       } as DefendantEvidence,
-      freeMediation: FreeMediationUtil.getFreeMediation(mediationDraft),
+      freeMediation: await FreeMediationUtil.getFreeMediation(mediationDraft),
       mediationPhoneNumber: FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft, draft),
       mediationContactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft, draft),
+      noMediationReason: await FreeMediationUtil.getNoMediationReason(mediationDraft),
       paymentDeclaration: draft.isResponseRejectedFullyBecausePaidWhatOwed() ? new PaymentDeclaration(
         draft.rejectAllOfClaim.howMuchHaveYouPaid.date.asString(),
         draft.rejectAllOfClaim.howMuchHaveYouPaid.amount,
@@ -120,7 +121,7 @@ export class ResponseModelConverter {
     }
   }
 
-  private static convertFullDefenceAsPartialAdmission (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): PartialAdmissionResponse {
+  private static async convertFullDefenceAsPartialAdmission (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): Promise<PartialAdmissionResponse> {
     return {
       responseType: ResponseType.PART_ADMISSION,
       responseMethod: ResponseMethod.DIGITAL,
@@ -138,9 +139,10 @@ export class ResponseModelConverter {
         rows: convertEvidence(draft.evidence) as any,
         comment: draft.evidence.comment
       } as DefendantEvidence,
-      freeMediation: FreeMediationUtil.getFreeMediation(mediationDraft),
+      freeMediation: await FreeMediationUtil.getFreeMediation(mediationDraft),
       mediationPhoneNumber: FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft, draft),
       mediationContactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft, draft),
+      noMediationReason: await FreeMediationUtil.getNoMediationReason(mediationDraft),
       defendant: this.convertPartyDetails(draft.defendantDetails),
       statementOfTruth: this.convertStatementOfTruth(draft),
       directionsQuestionnaire: (FeatureToggles.isEnabled('directionsQuestionnaire') &&
@@ -148,13 +150,14 @@ export class ResponseModelConverter {
     }
   }
 
-  private static convertFullAdmission (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft): FullAdmissionResponse {
+  private static async convertFullAdmission (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft): Promise<FullAdmissionResponse> {
     return {
       responseType: ResponseType.FULL_ADMISSION,
       responseMethod: ResponseMethod.DIGITAL,
-      freeMediation: FreeMediationUtil.getFreeMediation(mediationDraft),
+      freeMediation: await FreeMediationUtil.getFreeMediation(mediationDraft),
       mediationPhoneNumber: FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft, draft),
       mediationContactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft, draft),
+      noMediationReason: await FreeMediationUtil.getNoMediationReason(mediationDraft),
       defendant: this.convertPartyDetails(draft.defendantDetails),
       paymentIntention: this.convertPaymentIntention(draft.fullAdmission.paymentIntention),
       statementOfMeans: this.convertStatementOfMeans(draft),
@@ -162,7 +165,7 @@ export class ResponseModelConverter {
     }
   }
 
-  private static convertPartAdmission (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): PartialAdmissionResponse {
+  private static async convertPartAdmission (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): Promise<PartialAdmissionResponse> {
     let amount
     if (draft.partialAdmission.alreadyPaid.option === DraftYesNoOption.YES) {
       amount = draft.partialAdmission.howMuchHaveYouPaid.amount
@@ -191,9 +194,10 @@ export class ResponseModelConverter {
       } as DefendantEvidence,
       defendant: this.convertPartyDetails(draft.defendantDetails),
       paymentIntention: draft.partialAdmission.paymentIntention && this.convertPaymentIntention(draft.partialAdmission.paymentIntention),
-      freeMediation: FreeMediationUtil.getFreeMediation(mediationDraft),
+      freeMediation: await FreeMediationUtil.getFreeMediation(mediationDraft),
       mediationPhoneNumber: FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft, draft),
       mediationContactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft, draft),
+      noMediationReason: await FreeMediationUtil.getNoMediationReason(mediationDraft),
       statementOfMeans: this.convertStatementOfMeans(draft),
       statementOfTruth: this.convertStatementOfTruth(draft),
       directionsQuestionnaire: (FeatureToggles.isEnabled('directionsQuestionnaire') &&

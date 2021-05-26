@@ -295,8 +295,16 @@ export function resolveCalculateIssueFee (): mock.Scope {
   return resolveCalculateFee(issueEvent, onlineChannel)
 }
 
+export function resolveCalculateIssueFeeDefaultChannel (): mock.Scope {
+  return resolveCalculateFee(issueEvent, defaultChannel)
+}
+
 export function rejectCalculateIssueFee (reason: string = 'HTTP error'): mock.Scope {
   return rejectCalculateFee(issueEvent, onlineChannel, reason)
+}
+
+export function rejectCalculateIssueFeeDefaultChannel (reason: string = 'HTTP error'): mock.Scope {
+  return rejectCalculateFee(issueEvent, defaultChannel, reason)
 }
 
 export function resolveCalculateHearingFee (): mock.Scope {
@@ -311,8 +319,16 @@ export function resolveGetIssueFeeRangeGroup (): mock.Scope {
   return resolveGetFeeRangeGroup(issueEvent, onlineChannel)
 }
 
+export function resolveGetIssueFeeRangeGroupDefaultChannel (): mock.Scope {
+  return resolveGetFeeRangeGroup(issueEvent, defaultChannel)
+}
+
 export function rejectGetIssueFeeRangeGroup (reason: string = 'HTTP error'): mock.Scope {
   return rejectGetFeeRangeGroup(issueEvent, onlineChannel, reason)
+}
+
+export function rejectGetIssueFeeRangeGroupDefaultChannel (reason: string = 'HTTP error'): mock.Scope {
+  return rejectGetFeeRangeGroup(issueEvent, defaultChannel, reason)
 }
 
 export function resolveGetHearingFeeRangeGroup (): mock.Scope {
