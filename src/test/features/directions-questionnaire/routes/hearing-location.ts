@@ -351,7 +351,7 @@ describe('Directions Questionnaire - hearing location', () => {
           })
 
           it('should handle exception and reder error if court finder is not functioning for edgecase', async () => {
-            const searchWithPostCodeFirstLoopFormData = { courtAccepted: undefined, courtName: 'Test court', alternativeOption: 'postcode', alternativePostcode: 'AB1 2CD' }
+            const searchWithPostCodeFirstLoopFormData = { courtAccepted: undefined, courtName: '', alternativeOption: 'postcode', alternativePostcode: 'AB1 2CD' }
 
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
@@ -404,7 +404,7 @@ describe('Directions Questionnaire - hearing location', () => {
           })
 
           it('should display the search result for valid search for edge case', async () => {
-            const searchWithPostCodeSecondLoopFormData = { courtAccepted: undefined, courtName: 'Test court', alternativeCourtSelected: undefined, alternativeOption: 'postcode', alternativePostcode: 'AB1 2CD' }
+            const searchWithPostCodeSecondLoopFormData = { courtAccepted: undefined, courtName: '', alternativeCourtSelected: undefined, alternativeOption: 'postcode', alternativePostcode: 'AB1 2CD' }
 
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
@@ -492,7 +492,7 @@ describe('Directions Questionnaire - hearing location', () => {
           })
 
           it('should display the search result during edge case scenario', async () => {
-            const searchWithLocationFirstLoopFormData = { alternativeCourtSelected: undefined, courtAccepted: undefined, courtName: 'Test court', alternativeOption: 'name', alternativeCourtName: 'Brimingham' }
+            const searchWithLocationFirstLoopFormData = { alternativeCourtSelected: undefined, courtAccepted: undefined, courtName: '', alternativeOption: 'name', alternativeCourtName: 'Brimingham' }
 
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
@@ -563,7 +563,7 @@ describe('Directions Questionnaire - hearing location', () => {
           })
 
           it('should display the search result for valid search input for edge case', async () => {
-            const searchWithLocationSecondLoopFormData = { courtAccepted: undefined, courtName: 'Test court', alternativeCourtSelected: undefined, alternativeOption: 'name', alternativeCourtName: 'AB1 2CD' }
+            const searchWithLocationSecondLoopFormData = { courtAccepted: undefined, courtName: '', alternativeCourtSelected: undefined, alternativeOption: 'name', alternativeCourtName: 'AB1 2CD' }
 
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')

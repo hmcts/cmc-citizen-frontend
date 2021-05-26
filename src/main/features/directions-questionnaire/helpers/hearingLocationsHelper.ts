@@ -15,9 +15,9 @@ import { User } from 'idam/user'
 import { YesNoOption } from 'models/yesNoOption'
 
 export function validateFormForErrors (form: Form<HearingLocation>, apiError: string): string {
-  if (form.model.alternativeOption === AlternativeCourtOption.BY_POSTCODE) {
+  if (!apiError && form.model.alternativeOption === AlternativeCourtOption.BY_POSTCODE) {
     apiError = ValidationErrors.NO_ALTERNATIVE_POSTCODE_SUMMARY
-  } else if (form.model.alternativeOption === AlternativeCourtOption.BY_NAME) {
+  } else if (!apiError && form.model.alternativeOption === AlternativeCourtOption.BY_NAME) {
     apiError = ValidationErrors.NO_ALTERNATIVE_COURT_NAME_SUMMARY
   }
   return apiError
