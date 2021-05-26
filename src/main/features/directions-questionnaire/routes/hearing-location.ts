@@ -84,7 +84,7 @@ export default express.Router()
 
       if (form.hasErrors()) {
         handleFormError(res, form, true, undefined)
-      } else if (form.model.courtAccepted === undefined && form.model.alternativeCourtSelected === undefined && 
+      } else if (form.model.courtAccepted === undefined && form.model.alternativeCourtSelected === undefined &&
         form.model.courtName) {
         await handleFormError(res, form, true, ValidationErrors.SELECT_ALTERNATIVE_OPTION)
       } else {
