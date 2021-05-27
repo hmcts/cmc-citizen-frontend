@@ -47,7 +47,10 @@
       {{ internalLink(skip_link_message|default('Skip to main content'), '#content', 'skiplink') }}
     </div>
   </div>
-
+  <div>
+  <link href="/stylesheets/govuk-frontend-3.11.0.min.css" media="screen" rel="stylesheet" type="text/css"/>
+  {% include "../common/components/imported/cookie-manager/cookie-banner.njk" %}
+  </div>
   <div id="global-cookie-message">
     {% block cookie_message %}{% endblock %}
   </div>
