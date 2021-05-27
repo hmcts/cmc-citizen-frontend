@@ -92,8 +92,11 @@
                 </div>
               </div>
             {% else %}
-                {% set emptyResponseFromCourtFinder = true %}
+              {% if party === MadeBy.CLAIMANT %}
+                {{ commonContent() }}
+              {% else %}
                 {{ commonContentWhenCourtDetailsNull() }}
+              {% endif %}
                 <div id="courtAccepted-no">
                 {{ radioOption(form = form, label = 'Search by postcode', name = 'alternativeOption', value = 'postcode', 
                 checked = form.valueFor('alternativeOption') === 'postcode', bold = true) }}
