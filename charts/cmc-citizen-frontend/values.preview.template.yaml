@@ -64,8 +64,6 @@ idam-pr:
       - https://${SERVICE_FQDN}/receiver
     XUI:
       - https://xui-${SERVICE_FQDN}/oauth2/callback
-    CCD:
-      - https://case-management-web-${SERVICE_FQDN}/oauth2redirect
 
 xui-webapp:
   enabled: true
@@ -157,8 +155,6 @@ ccd:
       enabled: false
     adminWeb:
       enabled: true
-    managementWeb:
-      enabled: true
 
   ingressHost: ${SERVICE_FQDN}
   ingressIP: ${INGRESS_IP}
@@ -167,7 +163,6 @@ ccd:
   global:
     ccdApiGatewayIngress: gateway-${SERVICE_FQDN}
     ccdAdminWebIngress: ccd-admin-web-${SERVICE_FQDN}
-    ccdCaseManagementWebIngress: case-management-web-${SERVICE_FQDN}
     ccdDataStoreUrl: http://${SERVICE_NAME}-ccd-data-store-api
     idamApiUrl: https://idam-api.aat.platform.hmcts.net
     idamWebUrl: https://idam-web-public.aat.platform.hmcts.net
@@ -197,17 +192,6 @@ ccd:
     nodejs:
       imagePullPolicy: Always
       ingressHost: gateway-${SERVICE_FQDN}
-      ingressIP: ${INGRESS_IP}
-
-  ccd-case-management-web:
-    nodejs:
-      imagePullPolicy: Always
-      environment:
-        CCD_ACTIVITY_URL: null
-        DM_URL: https://gateway-${SERVICE_FQDN}/documents
-        DM_URL_REMOTE: https?://(gateway-${SERVICE_FQDN}:443|dm-store-aat.service.core-compute-aat.internal)/documents
-        NODE_TLS_REJECT_UNAUTHORIZED: 0
-      ingressHost: case-management-web-${SERVICE_FQDN}
       ingressIP: ${INGRESS_IP}
 
   ccd-user-profile-api:
