@@ -20,7 +20,6 @@ export default express.Router()
   .get(Paths.claimantPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
       const { externalId } = req.params
-
       const claim = externalId !== draftExternalId ? await claimStoreClient.retrieveByExternalId(externalId, res.locals.user as User) : undefined
       const mediationDeadline: Moment = claim ? await claim.respondToMediationDeadline() : undefined
       const reconsiderationDeadline: Moment = claim ? await claim.respondToReconsiderationDeadline() : undefined
@@ -28,6 +27,11 @@ export default express.Router()
       const judgePilot: boolean = claim ? claim.features !== undefined && claim.features.includes('judgePilotEligible') : false
 
       const respondToReviewOrderDeadline: Moment = claim ? await claim.respondToReviewOrderDeadline() : undefined
+      res.app.locals.breathingSpaceExternalId = externalId
+      res.app.locals.breathingSpaceEndDate = null
+      res.app.locals.breathingSpaceEnteredDate = null
+      res.app.locals.breathingSpaceReferenceNumber = ''
+      res.app.locals.breathingSpaceType = null
 
       if (claim && claim.claimantId !== res.locals.user.id) {
         throw new ForbiddenError()

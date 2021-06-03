@@ -71,6 +71,16 @@ describe('CCJ - paid amount summary page', () => {
           .expect(res => expect(res).to.be.successful.withText('Judgment amount'))
       })
 
+      it('should render page when everything is fine when settlement is broken with setDate', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithFullAdmissionAndSettlementBySetDate(claimStoreServiceMock.settlementBySetDateAndSettlementReachedAt)
+        draftStoreServiceMock.resolveFind('ccj')
+
+        await request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('Judgment amount'))
+      })
+
       it('should render page using admitted amount when defendant response is part admission', async () => {
         let claimWithAdmission = {
           ...claimStoreServiceMock.sampleClaimObj,

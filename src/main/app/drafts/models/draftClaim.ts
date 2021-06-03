@@ -20,6 +20,7 @@ import { InterestTotal } from 'claim/form/models/interestTotal'
 import { InterestContinueClaiming } from 'claim/form/models/interestContinueClaiming'
 import { InterestHowMuch } from 'claim/form/models/interestHowMuch'
 import { HelpWithFees } from 'claim/form/models/helpWithFees'
+import { BreathingSpace } from 'features/claim/form/models/breathingSpace'
 
 export class DraftClaim extends DraftDocument {
 
@@ -45,6 +46,7 @@ export class DraftClaim extends DraftDocument {
   timeline: ClaimantTimeline = new ClaimantTimeline()
   evidence: Evidence = new Evidence()
   feeAmountInPennies: number = 0
+  breathingSpace: BreathingSpace = new BreathingSpace()
 
   deserialize (input: any): DraftClaim {
     if (input) {
@@ -81,6 +83,7 @@ export class DraftClaim extends DraftDocument {
       }
       this.timeline = new ClaimantTimeline().deserialize(input.timeline) as ClaimantTimeline
       this.evidence = new Evidence().deserialize(input.evidence) as Evidence
+      this.breathingSpace = new BreathingSpace().deserialize(input.breathingSpace)
     }
     return this
   }

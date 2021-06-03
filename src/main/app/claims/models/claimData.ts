@@ -19,6 +19,7 @@ import { InterestDate } from 'claims/models/interestDate'
 import { Interest } from 'claims/models/interest'
 import { Moment } from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
+import { BreathingSpace } from 'features/claim/form/models/breathingSpace'
 
 export class ClaimData {
   externalId: string
@@ -26,6 +27,7 @@ export class ClaimData {
   defendants: TheirDetails[]
   amount: ClaimAmountBreakdown = new ClaimAmountBreakdown()
   feeAmountInPennies: number
+  outstandingFeeAmountInPennies: number
   reason: string
   timeline: ClaimantTimeline
   evidence: Evidence
@@ -40,6 +42,7 @@ export class ClaimData {
   feeRemitted?: number
   hwfDocumentsToBeSentBefore?: Moment
   hwfMoreInfoNeededDocuments?: string[]
+  breathingSpace: BreathingSpace = new BreathingSpace()
 
   get claimant (): Party {
     if (this.claimants.length === 1) {
@@ -65,6 +68,7 @@ export class ClaimData {
         this.payment = Payment.deserialize(input.payment)
       }
       this.feeAmountInPennies = input.feeAmountInPennies
+      this.outstandingFeeAmountInPennies = input.outstandingFeeAmountInPennies
 
       this.amount = new ClaimAmountBreakdown().deserialize(input.amount)
 
@@ -75,6 +79,7 @@ export class ClaimData {
       this.evidence = Evidence.fromObject(input.evidence)
       this.externalId = input.externalId
       this.interest = new Interest().deserialize(input.interest)
+      this.breathingSpace = new BreathingSpace().deserialize(input.breathingSpace)
 
       //
       // NOTE: To be removed once data model migration is completed.

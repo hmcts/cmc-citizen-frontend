@@ -17,6 +17,7 @@ const appDirectory = `./src/main/common/components/imported`
 const assetsDirectory = './src/main/public'
 const stylesheetsDirectory = `${assetsDirectory}/stylesheets`
 const webChatDirectory = `${assetsDirectory}/webchat`
+const antennaWebChatDirectory = `./src/main/public/assets`
 const govUkFronendStylesheets = `${stylesheetsDirectory}/govuk-frontend`
 
 gulp.task('sass', (done) => {
@@ -43,8 +44,36 @@ gulp.task('copy-files', (done) => {
   copyDatePickerDependencies()
   copyComponents()
   copyGovukFrontendFonts()
+  copyCookieBanner()
   done()
 })
+
+function copyCookieBanner() {
+  gulp.src([
+    `./node_modules/cmc-cookies-manager/shared-component/components/cookie-manager/**/*.js`
+  ])
+    .pipe(gulp.dest(`${assetsDirectory}/js/`))
+
+  gulp.src([
+    `./node_modules/cmc-cookies-manager/shared-component/components/cookie-manager/**/*.njk`
+  ])
+    .pipe(gulp.dest(`${appDirectory}/cookie-manager/`))
+
+  gulp.src([
+    `./node_modules/cmc-cookies-manager/shared-component/components/button/**/*.*`
+  ])
+    .pipe(gulp.dest(`${appDirectory}/button/`))
+
+  gulp.src([
+    `./node_modules/cmc-cookies-manager/shared-component/components/styles/**/*.css`,
+  ])
+    .pipe(gulp.dest(`${stylesheetsDirectory}/`))
+
+  gulp.src([
+    `./node_modules/cmc-cookies-manager/shared-component/components/cookie-banner/**/*.*`
+  ])
+    .pipe(gulp.dest(`${appDirectory}/cookie-banner/`))
+}
 
 gulp.task('sass-govuk-frontend', (done) => {
   gulp.src(govUkFrontendRoot + '/*.scss')
@@ -94,6 +123,11 @@ function copyWebChatTemplate () {
     './node_modules/@hmcts/ctsc-web-chat/assets/css/*.css'
   ])
     .pipe(gulp.dest(`${webChatDirectory}/css/`))
+
+    gulp.src([
+      'src/main/public/assets/locale/**/*.*'
+    ])
+      .pipe(gulp.dest(`${antennaWebChatDirectory}/locale/`))
 }
 
 function copyGovUkTemplate () {

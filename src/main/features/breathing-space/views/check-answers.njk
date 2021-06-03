@@ -1,0 +1,83 @@
+{% extends "layout.njk" %}
+{% block additional_head %}
+  <link rel="stylesheet" href="{{ asset_paths['style'] }}/govuk-frontend/all.css"/>
+{% endblock %}
+
+{% from "table.njk" import tableStart, tableEnd, row %}
+{% from "form.njk" import csrfProtection, submitButton, errorSummary %}
+{% from "statementOfTruth.njk" import statementOfTruthUpdated %}
+{% from "party/details.njk" import partyDetailsSummaryFragment, partyDetail, partyDetailRow %}
+
+{% set govukBackLinkHref = 'respite-end' %}
+{% set heading = 'Check your answers before submitting' %}
+
+{% block content %}
+<div class="grid-row">
+  <div class="column-two-thirds">
+    <form novalidate method="post">
+      {{ csrfProtection(csrf) }}
+    <table class="check-your-answers govuk-!-margin-bottom-9">
+    
+      <tbody class="claim-dashboard">
+        <tr class="claims default mobile-table">
+        <td class="bold">
+          {{ t('Reference number') }}
+        </td>
+        <td> 
+        {% if breathingSpaceReferenceNumber %}
+            {{ breathingSpaceReferenceNumber }}
+        {% endif %}
+        </td>
+        <td class="change-answer change-link-column">
+          {% set url = '/breathing-space/' + breathingSpaceExternalId + '/reference-number'%}
+          <a href={{ url }} aria-label="Breathing Space reference number">{{ t('Change') }} <span class="visuallyhidden">{{ 'Breathing Space reference number' | lower }}</span></a>
+        </td>
+        </tr><tr class="claims default mobile-table">
+          <td class="bold">
+            {{ t('When did it start') }}
+          </td>
+          <td>
+            {% if breathingSpaceEnteredDate %}
+              {{ breathingSpaceEnteredDate | date }}
+            {% endif %}
+          </td>
+          <td class="change-answer change-link-column">
+            <a href="respite-start" aria-label="Breathing Space start date">{{ t('Change') }} <span class="visuallyhidden">{{ 'Breathing Space start date' | lower }}</span></a>
+          </td>
+        </tr>
+        <tr class="claims default mobile-table">
+          <td class="bold">{{ t('What type is it') }} 
+          </td>
+          <td>
+            {% if breathingSpaceType %}
+              {{ breathingSpaceType}}
+            {% endif %}
+          </td>
+          <td class="change-answer change-link-column">
+            <a href="respite-type" aria-label="Breathing Space type">{{ t('Change') }} <span class="visuallyhidden">{{ 'Breathing Space type' | lower }}</span></a>
+          </td>
+        </tr>
+
+        <tr class="claims default mobile-table">
+          <td class="bold">{{ t('Expected end date') }} 
+          </td>
+          <td> 
+            {% if breathingSpaceEndDate %}
+              {{ breathingSpaceEndDate | date }}
+            {% endif %}
+          </td>
+          <td class="change-answer change-link-column">
+            <a href="respite-end" aria-label="Breathing Space end date">{{ t('Change') }} <span class="visuallyhidden">{{ 'Breathing Space end date' | lower }}</span></a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="form-group">
+        {{ submitButton('Submit') }}
+      </div>
+        
+    </form>
+  </div>
+</div>
+{% endblock %}

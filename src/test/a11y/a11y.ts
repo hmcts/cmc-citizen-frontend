@@ -19,6 +19,7 @@ import { Paths as PaidInFullPaths } from 'paid-in-full/paths'
 import { Paths as MediationPaths } from 'mediation/paths'
 import { Paths as DirectionQuestionnairePaths } from 'directions-questionnaire/paths'
 import { Paths as OrdersPaths } from 'orders/paths'
+import { Paths as BreathingSpacePaths } from 'breathing-space/paths'
 import { customAccessibilityChecks, checkInputLabels, checkTaskList, checkAnswers, checkError, CustomChecks, checkRole, checkButton, checkEligibilityLinks, checkTable, checkMultipleChoice, checkClaimAmountRows } from './customChecks'
 
 import 'test/a11y/mocks'
@@ -53,6 +54,7 @@ async function runPa11y (url: string): Promise<Issue[]> {
     ignore: [
       'WCAG2AA.Principle1.Guideline1_4.1_4_3.G18.Abs',  // Visual warning on invisible elements, so not relevant
       'WCAG2AA.Principle1.Guideline1_3.1_3_1_A.G141',  // DAC have rated Semantically Incorrect Headings as AAA, not AA
+      'WCAG2AA.Principle1.Guideline1_4.1_4_3.G18.Alpha', // DAC for This element's text or background contains transparency
       'WCAG2AA.Principle1.Guideline1_1.1_1_1.H30.2'   // CTSC Web_Chat fnding
     ],
     headers: {
@@ -145,7 +147,9 @@ const excludedPaths: Paths[] = [
   OrdersPaths.reviewOrderReceiver,
   OrdersPaths.directionsOrderDocument,
   MediationPaths.mediationAgreementDocument,
-  DefendantResponsePaths.checkAndSendPage
+  DefendantResponsePaths.checkAndSendPage,
+  BreathingSpacePaths.bsLiftPage,
+  BreathingSpacePaths.referencNumberPage
 ]
 
 // checks to be done for specific pages
@@ -232,6 +236,7 @@ describe('Accessibility', () => {
   }
 
   checkPaths(EligibilityPaths)
+  checkPaths(BreathingSpacePaths)
   checkPaths(ClaimIssuePaths)
   checkPaths(ClaimIssueErrorPaths)
   checkPaths(DefendantFirstContactPaths)

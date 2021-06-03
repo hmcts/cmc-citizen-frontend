@@ -90,14 +90,18 @@
     "legalAdvisorPilot": false,
     "judgePilot": false,
     "newDashboardStatus": false,
-    "webChat": true,
+    "webChat": false,
+    "AntennawebChat": true,
     "inversionOfControl": true,
     "warningBanner": false,
     "helpWithFees": true,
     "pcq":true,
     "signPostingCTSC": true,
     "autoEnrollIntoNewFeature": true,
-    "dashboard_pagination_enabled": false
+    "dashboard_pagination_enabled": false,
+    "breathingSpace": true,
+    "newClaimFees": true,
+    "enhancedMediationJourney": true
   },
   "oauth": {
     "clientId": "cmc_citizen"

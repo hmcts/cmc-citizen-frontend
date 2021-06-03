@@ -13,7 +13,7 @@ nodejs:
   livenessDelay: 130  # claim-store will start much slower
   aadIdentityName: money-claims
   autoscaling:        # Default is false
-    enabled: true 
+    enabled: true
     maxReplicas: 5    # Required setting
     targetCPUUtilizationPercentage: 80 # Default is 80% target CPU utilization
   environment:
@@ -47,8 +47,11 @@ nodejs:
     FEATURE_DIRECTIONS_QUESTIONNAIRE: true
     FEATURE_INVERSION_OF_CONTROL: true
     FEATURE_PCQ: false
+    FEATURE_ANTENNA_WEB_CHAT: true
     FEATURE_SIGN_POSTING_CTSC: false
     AUTO_ENROLL_INTO_NEW_FEATURE: true
+    FEATURE_BREATHING_SPACE: false
+    ENHANCED_MEDIATION_JOURNEY: false
 
   keyVaults:
     cmc:
@@ -78,3 +81,7 @@ ccd:
   enabled: false
 cmc-claim-store:
   enabled: false
+xui-webapp:
+  enabled: false
+elastic:
+  enabled: false 

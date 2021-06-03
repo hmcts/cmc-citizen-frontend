@@ -79,6 +79,7 @@
     "mediationPilot": "FEATURE_MEDIATION_PILOT",
     "directionsQuestionnaire": "FEATURE_DIRECTIONS_QUESTIONNAIRE",
     "newDashboardStatus": "FEATURE_NEW_DASHBOARD_STATUS",
+    "antennaWebChat": "FEATURE_ANTENNA_WEB_CHAT",
     "webChat": "FEATURE_WEB_CHAT",
     "inversionOfControl": "FEATURE_INVERSION_OF_CONTROL",
     "warningBanner": "FEATURE_WARNING_BANNER",
@@ -86,7 +87,10 @@
     "pcq": "FEATURE_PCQ",
     "signPostingCTSC": "FEATURE_SIGN_POSTING_CTSC",
     "autoEnrollIntoNewFeature": "AUTO_ENROLL_INTO_NEW_FEATURE",
-    "dashboard_pagination_enabled": "dashboard_pagination_enabled"
+    "dashboard_pagination_enabled": "dashboard_pagination_enabled",
+    "breathingSpace": "FEATURE_BREATHING_SPACE",
+    "newClaimFees": "FEATURE_NEW_CLAIM_FEES",
+    "enhancedMediationJourney": "ENHANCED_MEDIATION_JOURNEY"
   },
 
   "oauth": {

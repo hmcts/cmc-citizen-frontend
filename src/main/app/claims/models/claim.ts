@@ -155,7 +155,15 @@ export class Claim {
         || this.partAdmissionPayImmediatelyPastPaymentDate
         || this.hasDefendantNotSignedSettlementAgreementInTime()
         || (!this.respondedAt && isPastDeadline(MomentFactory.currentDateTime(), this.responseDeadline))
+        && this.isBreathingSpaceEntered
       )
+  }
+
+  get isBreathingSpaceEntered (): boolean {
+    if (this.claimData.breathingSpace !== undefined) {
+      return !(this.claimData.breathingSpace !== undefined && this.claimData.breathingSpace.breathingSpaceEnteredDate !== null
+        && this.claimData.breathingSpace.breathingSpaceLiftedDate === undefined)
+    } else { return true }
   }
 
   get eligibleForCCJAfterBreachedSettlementTerms (): boolean {
@@ -343,7 +351,7 @@ export class Claim {
       this.claimData = new ClaimData().deserialize(input.claim)
       this.moreTimeRequested = input.moreTimeRequested
       if (this.claimData.feeRemitted !== undefined && this.claimData.feeAmountInPennies !== undefined) {
-        this.helpWithFessBalanceClaimFee = MoneyConverter.convertPenniesToPounds(this.claimData.feeAmountInPennies)
+        this.helpWithFessBalanceClaimFee = MoneyConverter.convertPenniesToPounds(this.claimData.outstandingFeeAmountInPennies)
       }
 
       if ((input.state === 'HWF_APPLICATION_PENDING' || input.state === 'AWAITING_RESPONSE_HWF' || input.state === 'CLOSED_HWF') && input.claim.helpWithFeesNumber !== undefined) {
