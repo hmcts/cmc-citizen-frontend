@@ -203,7 +203,7 @@ describe('Directions Questionnaire - court search', () => {
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send(invalidFormData)
-              .expect(res => expect(res).to.be.successful.withText('The following courts match', 'div class="error-summary"'))
+              .expect(res => expect(res).to.be.serverError)
           })
         })
       })

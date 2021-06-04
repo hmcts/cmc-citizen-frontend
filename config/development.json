@@ -13,6 +13,7 @@
     "warningBanner": false,
     "helpWithFees": true,
     "pcq":true,
+    "AntennawebChat": false,
     "signPostingCTSC": false,
     "autoEnrollIntoNewFeature": true,
     "dashboard_pagination_enabled": false,
