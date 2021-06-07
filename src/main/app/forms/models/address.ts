@@ -20,9 +20,9 @@ export class ValidationErrors {
   static readonly CITY_NOT_VALID: string = 'The city must be no longer than $constraint1 characters'
 
   static readonly POSTCODE_REQUIRED: string = 'Enter postcode'
-  static readonly POSTCODE_NOT_VALID: string = 'Enter a valid postcode'
+  static readonly POSTCODE_NOT_VALID: string = 'Postcode must be in United Kingdom'
   static readonly ADDRESS_DROPDOWN_REQUIRED: string = 'Select an address'
-  static readonly CLAIMANT_COUNTRY_NOT_SUPPORTED = 'The country must be England, Wales, Scotland or Northern Ireland'
+  static readonly CLAIMANT_COUNTRY_NOT_SUPPORTED = 'Postcode must be in United Kingdom'
   static readonly DEFENDANT_COUNTRY_NOT_SUPPORTED = 'The country must be England or Wales'
 
 }

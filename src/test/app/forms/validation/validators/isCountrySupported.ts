@@ -36,7 +36,7 @@ describe('IsCountrySupported', () => {
           .get(mockPostcodePath)
           .reply(404)
 
-        expect(await constraint.validate('2SW1AN', validationArgs(Country.all()))).to.be.true
+        expect(await constraint.validate('2SW1AN', validationArgs(Country.all()))).to.be.false
       })
 
       it('the postcode lookup client returns an error', async () => {
