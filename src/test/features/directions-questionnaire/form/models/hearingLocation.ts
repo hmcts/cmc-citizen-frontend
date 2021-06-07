@@ -101,7 +101,7 @@ describe('HearingLocation', () => {
           it('Should reject when alternative postcode is not a valid postcode', () => {
             let hearingLocation: HearingLocation = new HearingLocation()
             hearingLocation.courtName = 'COURT'
-            hearingLocation.courtAccepted = YesNoOption.NO
+            hearingLocation.courtAccepted = undefined
             hearingLocation.alternativeOption = 'postcode'
             hearingLocation.alternativePostcode = 'not a valid postcode'
 
@@ -126,6 +126,7 @@ describe('HearingLocation', () => {
         it('Should reject when no alternative option is provided', () => {
           let hearingLocation: HearingLocation = new HearingLocation()
           hearingLocation.alternativeCourtSelected = 'no'
+          hearingLocation.alternativeOption = 'name'
           const errors = validator.validateSync(hearingLocation)
 
           expect(errors).to.not.be.empty
@@ -196,6 +197,9 @@ describe('HearingLocation', () => {
     context('When no court name is provided (alternative court is selected)', () => {
       it('Should reject when alternative court name is undefined', () => {
         let hearingLocation: HearingLocation = new HearingLocation()
+        hearingLocation.courtAccepted = YesNoOption.YES
+        hearingLocation.alternativeCourtSelected = 'no'
+        hearingLocation.alternativeOption = 'name'
         hearingLocation.alternativeCourtName = undefined
         const errors = validator.validateSync(hearingLocation)
 
@@ -205,6 +209,9 @@ describe('HearingLocation', () => {
 
       it('Should reject when alternative court name is empty', () => {
         let hearingLocation: HearingLocation = new HearingLocation()
+        hearingLocation.courtAccepted = YesNoOption.YES
+        hearingLocation.alternativeCourtSelected = 'no'
+        hearingLocation.alternativeOption = 'name'
         hearingLocation.alternativeCourtName = ''
         const errors = validator.validateSync(hearingLocation)
 
@@ -215,6 +222,7 @@ describe('HearingLocation', () => {
       it('Should accept when alternative court name is provided', () => {
         let hearingLocation: HearingLocation = new HearingLocation()
         hearingLocation.alternativeCourtName = 'court'
+        hearingLocation.alternativeCourtSelected = 'no'
         const errors = validator.validateSync(hearingLocation)
 
         expect(errors).to.be.empty
