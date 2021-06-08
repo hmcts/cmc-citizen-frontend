@@ -71,7 +71,7 @@ export class Address implements CompletableTask {
   @IsCountrySupported(Country.all(), { message: ValidationErrors.CLAIMANT_COUNTRY_NOT_SUPPORTED, groups: ['claimant'] })
   @IsCountrySupported(Country.defendantCountries(), {
     message: ValidationErrors.DEFENDANT_COUNTRY_NOT_SUPPORTED,
-    groups: ['defendant']
+    groups: ['defendant', 'response']
   })
   @IsValidPostcode({
     message: ValidationErrors.POSTCODE_NOT_VALID,
