@@ -192,7 +192,9 @@
     "merge": "^2.1.1",
     "ua-parser-js": "^0.7.24",
     "hosted-git-info": "^3.0.8",
-    "sass-lint/merge": "^2.1.1"
+    "sass-lint/merge": "^2.1.1",
+    "glob-parent": "^5.1.2",
+    "trim-newlines": "^4.0.1"
   },
   "husky": {
     "hooks": {
