@@ -154,6 +154,13 @@ describe('Address/CorrespondenceAddress', () => {
         expectValidationError(errors, ValidationErrors.POSTCODE_NOT_VALID)
       })
 
+      it('should reject postcode which is similar to UK postcode format but not a valid postcode', () => {
+        const errors = validator.validateSync(new ClassFunction('Apartment 99', '', '', 'town', 'RG10 4JE'))
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, ValidationErrors.POSTCODE_NOT_VALID)
+      })
+
       it('should reject address with invalid postcode', () => {
         const errors = validator.validateSync(new ClassFunction('Apartment 99', '', '', 'Town', 'bb1012345'))
 
