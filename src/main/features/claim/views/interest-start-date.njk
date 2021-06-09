@@ -13,7 +13,7 @@
         {{ csrfProtection(csrf) }}
 
         <div class="form-group">
-          {{ dateInput('date', form, hint = t('For example, {{ pastDate }}', { pastDate: pastDate | inputDate })) }}
+          {{ dateInput('date', form, hint = t('For example, {{ pastDate }}', { pastDate: pastDate | inputDate }), visuallyHiddenLabelValue = 'start date for claim interest') }}
           {{ textArea('Explain why you’re claiming from this date', 'reason', form, inputClass = 'full-width') }}
         </div>
 
