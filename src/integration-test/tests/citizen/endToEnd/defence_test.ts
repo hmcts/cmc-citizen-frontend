@@ -42,7 +42,7 @@ Scenario('I can as an Individual make a claim against an Individual who then ful
 Scenario('I can as an Individual make a claim against an Individual who then rejects the claim as they have paid the full amount then I accept the defence @nightly', { retries: 3 }, async (I: I) => {
   const claimantResponseTestData = new ClaimantResponseTestData()
   claimantResponseTestData.pageSpecificValues.howMuchHaveYouPaidPageEnterAmountPaidWithDateAndExplanation = {
-    paidAmount: 105.5,
+    paidAmount: 115.5,
     date: '2018-01-01',
     explanation: 'My explanation...'
   }
