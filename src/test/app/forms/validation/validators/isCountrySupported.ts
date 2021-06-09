@@ -39,6 +39,14 @@ describe('IsCountrySupported', () => {
         expect(await constraint.validate('2SW1AN', validationArgs(Country.all()))).to.be.false
       })
 
+      it('Should return false when given postcode is simillar to UK postcode but not a valid one', async () => {
+        nock(mockPostcodeServer)
+          .get(mockPostcodePath)
+          .reply(404)
+
+        expect(await constraint.validate('RG10 4JE', validationArgs(Country.all()))).to.be.false
+      })
+
       it('the postcode lookup client returns an error', async () => {
         nock(mockPostcodeServer)
           .get(mockPostcodePath)
