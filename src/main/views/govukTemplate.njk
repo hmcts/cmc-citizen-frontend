@@ -51,9 +51,6 @@
   <link href="/stylesheets/govuk-frontend-3.11.0.min.css" media="screen" rel="stylesheet" type="text/css"/>
   {% include "../common/components/imported/cookie-manager/cookie-banner.njk" %}
   </div>
-  <div id="global-cookie-message">
-    {% block cookie_message %}{% endblock %}
-  </div>
 
   <header role="banner" id="global-header" class="{% block header_class %}{% endblock %}">
     <div class="header-wrapper">
@@ -89,7 +86,7 @@
       {{ govukBackLink({
         text: "Back",
         href: govukBackLinkHref
-        }) 
+        })
       }}
     {% endif %}
 
@@ -109,7 +106,7 @@
     {% block content %}{% endblock %}
     {% block contactForHelp %}
        {% include "includes/contact-us-for-help.njk" %}
-        {% if antennawebChat %}        
+        {% if antennawebChat %}
           <button class="chat-button">Talk to an Agent</button>
         {% endif %}
     {% endblock %}
