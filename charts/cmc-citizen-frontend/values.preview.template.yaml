@@ -256,7 +256,7 @@ ccd:
 
   ccd-definition-importer:
     imagePullPolicy: Always
-    image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:pr-513
+    image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:pr-513-6a7f6781
     environment:
       CCD_DEF_CLAIM_STORE_BASE_URL: http://${SERVICE_NAME}-claim-store
     definitionFilename: cmc-ccd.xlsx
