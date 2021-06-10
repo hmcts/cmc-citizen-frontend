@@ -23,7 +23,7 @@ export class ValidationErrors {
   static readonly POSTCODE_NOT_VALID: string = 'Postcode must be in United Kingdom'
   static readonly ADDRESS_DROPDOWN_REQUIRED: string = 'Select an address'
   static readonly CLAIMANT_COUNTRY_NOT_SUPPORTED = 'Postcode must be in United Kingdom'
-  static readonly DEFENDANT_COUNTRY_NOT_SUPPORTED = 'The country must be England or Wales'
+  static readonly DEFENDANT_COUNTRY_NOT_SUPPORTED = 'Postcode must be in England or Wales'
 
 }
 

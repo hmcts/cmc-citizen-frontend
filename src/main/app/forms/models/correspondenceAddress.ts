@@ -17,9 +17,10 @@ export class ValidationErrors {
 
   static readonly POSTCODE_REQUIRED: string = 'Enter correspondence address postcode'
   static readonly POSTCODE_NOT_VALID: string = 'Postcode must be in United Kingdom'
+  static readonly DEFENDANT_POSTCODE_NOT_VALID: string = 'Postcode must be in England or Wales'
 
   static readonly CLAIMANT_COUNTRY_NOT_SUPPORTED = 'Postcode must be in United Kingdom'
-  static readonly DEFENDANT_COUNTRY_NOT_SUPPORTED = 'The country must be England or Wales'
+  static readonly DEFENDANT_COUNTRY_NOT_SUPPORTED = 'Postcode must be in England or Wales'
 
 }
 
@@ -45,7 +46,11 @@ export class CorrespondenceAddress extends Address {
   @IsNotBlank({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @IsValidPostcode({
     message: ValidationErrors.POSTCODE_NOT_VALID,
-    groups: ['claimant', 'defendant', 'response']
+    groups: ['claimant']
+  })
+  @IsValidPostcode({
+    message: ValidationErrors.DEFENDANT_POSTCODE_NOT_VALID,
+    groups: ['defendant', 'response']
   })
   @IsCountrySupported(Country.all(), { message: ValidationErrors.CLAIMANT_COUNTRY_NOT_SUPPORTED, groups: ['claimant'] })
   @IsCountrySupported(Country.defendantCountries(), {
