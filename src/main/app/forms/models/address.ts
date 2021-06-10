@@ -75,7 +75,11 @@ export class Address implements CompletableTask {
   })
   @IsValidPostcode({
     message: ValidationErrors.POSTCODE_NOT_VALID,
-    groups: ['claimant', 'defendant', 'response']
+    groups: ['claimant']
+  })
+  @IsValidPostcode({
+    message: ValidationErrors.DEFENDANT_COUNTRY_NOT_SUPPORTED,
+    groups: ['defendant', 'response']
   })
   postcode?: string
 
