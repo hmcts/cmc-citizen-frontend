@@ -32,7 +32,7 @@ export class CheckCountryConstraint implements ValidatorConstraintInterface {
     try {
       const addressInfoResponse: AddressInfoResponse = await postcodeClient.lookupByPostcode(value)
       if (!addressInfoResponse.isValid) {
-        return true
+        return false
       }
       const country = await countryClient.lookupCountry(addressInfoResponse.addresses[0].postcode)
       const countries: Country[] = args.constraints[0]
@@ -46,7 +46,7 @@ export class CheckCountryConstraint implements ValidatorConstraintInterface {
   }
 
   defaultMessage (args: ValidationArguments) {
-    return 'Country is not supported'
+    return 'Postcode must be in United Kingdom'
   }
 }
 
