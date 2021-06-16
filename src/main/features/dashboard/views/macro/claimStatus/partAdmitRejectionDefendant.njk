@@ -37,7 +37,7 @@
         <h2 class="heading-medium">{{ t('We’ll contact you to try to arrange a mediation appointment') }}</h2>
         <p>{{ t('{{ claimantName }} has rejected your defence.',
             { claimantName: claim.claimData.claimant.name }) }}</p>
-        <p>{{ t('You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.') }}</p>
+        <p>{{ t('You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.') }}</p>
         <p>{{ internalLink(t('Find out how mediation works'), DashboardPaths.howFreeMediationWorksPage.uri) }}</p>
       </div>
     {% endif %}
@@ -75,7 +75,7 @@
       {% if claim.response.freeMediation === FreeMediationOption.YES and claim.claimantResponse.freeMediation === FreeMediationOption.NO and enhancedMediationJourney %}
         <p>{{ t('{{ claimantName }} has said no to trying mediation.',
         { claimantName: claim.claimData.claimant.name }) }}</p>
-      {% endif %}     
+      {% endif %}
       <p>{{ t('They believe you owe them the full {{ amount }} claimed.', { amount: claim.totalAmountTillToday | numeral }) }}</p>
 
       {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}

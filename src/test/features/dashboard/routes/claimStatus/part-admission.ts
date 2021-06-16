@@ -748,14 +748,14 @@ function legacyClaimDetails () {
       claimantAssertions: [
         'We’ll contact you to try to arrange a mediation appointment',
         'You’ve rejected the defendant’s response.',
-        'You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.',
+        'You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.',
         'Find out how mediation works',
         'Tell us you’ve ended the claim'
       ],
       defendantAssertions: [
         'We’ll contact you to try to arrange a mediation appointment',
         partAdmissionClaim().claim.claimants[0].name + ' has rejected your defence.',
-        'You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.',
+        'You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.',
         'Find out how mediation works'
       ]
     }
@@ -826,7 +826,7 @@ const mediationDQEnabledClaimDetails = [
     claimantAssertions: [
       'We’ll contact you to try to arrange a mediation appointment',
       'You rejected the defendant’s admission of ',
-      'You’ve both agreed to try mediation. We’ll contact you to arrange a call with the mediator.',
+      'You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.',
       'Find out how mediation works'
     ],
     defendantAssertions: [

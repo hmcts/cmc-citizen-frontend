@@ -80,12 +80,12 @@ function testData () {
       },
       claimantAssertions: ['We’ll contact you to try to arrange a mediation appointment',
         'You’ve rejected the defendant’s response.',
-        'You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.',
+        'You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.',
         'Find out how mediation works'
       ],
       defendantAssertions: ['We’ll contact you to try to arrange a mediation appointment',
         'John Smith has rejected your defence.',
-        'You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.',
+        'You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.',
         'Find out how mediation works'
       ]
     },
@@ -134,12 +134,12 @@ function testData () {
       },
       claimantAssertions: [
         'You’ve rejected the defendant’s response.',
-        'You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.',
+        'You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.',
         'Find out how mediation works'
       ],
       defendantAssertions: [
         statesPaidClaim().claim.claimants[0].name + ' has rejected your defence.',
-        'You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.',
+        'You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.',
         'Find out how mediation works',
         'They’ve also sent us their hearing requirements.',
         'Download their hearing requirements'
