@@ -11,7 +11,7 @@
         {{ csrfProtection(csrf) }}
 
         {{ textInput('Claim number', 'claimNumber', form) }}
-        {{ dateInput('date', form) }}
+        {{ dateInput('date', form, visuallyHiddenLabelValue = 'deadline date') }}
 
         {{ submitButton() }}
       </form>
