@@ -10,7 +10,7 @@
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
 
-        {{ dateInput(name = 'date', form = form) }}
+        {{ dateInput(name = 'date', form = form, visuallyHiddenLabelValue = 'paid date') }}
 
         {{ textArea(label = t('How did you pay the amount claimed?'), name = 'text', form = form) }}
 

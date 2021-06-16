@@ -22,7 +22,8 @@
         <h4 class="heading-small"> {{ t('When will all parts of this offer be done?') }}</h4>
 
         {{ dateInput(form = form, name = 'completionDate',label = '',
-          hint = t('For example, {{ twoMonths }}', { twoMonths: 'now' | addDays(61) | inputDate })) }}
+          hint = t('For example, {{ twoMonths }}', { twoMonths: 'now' | addDays(61) | inputDate }),
+          visuallyHiddenLabelValue = 'offer completion date') }}
 
         <div class="panel panel-border-wide">
           <p>
