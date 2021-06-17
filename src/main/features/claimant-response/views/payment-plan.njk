@@ -72,7 +72,8 @@
       <h2 class="heading-small">{{ t('Length of repayment plan') }}</h2>
       <p id="lengthOfRepayment" class="lengthOfRepayment"> {{ paymentLength | default('-') }} </p>
 
-      {{ dateInput('firstPaymentDate', form, hint = t('This must be no sooner than {{ nextMonth }}', { nextMonth: 'now' | addDays(30) | inputDate }), label = 'Date for first instalment') }}
+      {{ dateInput('firstPaymentDate', form, hint = t('This must be no sooner than {{ nextMonth }}', { nextMonth: 'now' | addDays(30) | inputDate }), label = 'Date for first instalment',
+          visuallyHiddenLabelValue = 'first payment date') }}
 
       {{ saveAndContinueButton() }}
     </form>
