@@ -38,7 +38,7 @@
           <div id="date-picker" class="datepicker datepicker-wrapper">
             <noscript>
               <input type="hidden" name="noJS" value="true" />
-              {{ dateInput('newDate', form, hint = '') }}
+              {{ dateInput('newDate', form, hint = '', visuallyHiddenLabelValue = 'hearing date') }}
               {{ linkButton('Add', 'addDate', 'button button-secondary') }}
             </noscript>
           </div>
