@@ -51,7 +51,7 @@
     {% endif %}
   {% elseif featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
     <div class="status-block">
-      <h2 class="heading-medium">{{ t('You’ve rejected the defendant’s response.') }}</h2>
+      <h2 class="heading-medium">{{ t('You’ve rejected the defendant’s response') }}</h2>
       <p>{{ t('You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.') }}</p>
       <p><a target="_blank" rel="noreferrer noopener" href="https://www.gov.uk/guidance/small-claims-mediation-service">{{  t('Find out more about how mediation works (opens in new tab)') }}</a></p>
 
@@ -155,7 +155,7 @@
 
 {% macro statesPaidRejectionMediationYESDefendantClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-medium">{{ t('{{ claimantName }} rejected your response.',
+    <h2 class="heading-medium">{{ t('{{ claimantName }} rejected your response',
         { claimantName: claim.claimData.claimant.name }) }}</h2>
     <p>{{ t('You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.') }}</p>
     <p><a target="_blank" rel="noreferrer noopener" href="https://www.gov.uk/guidance/small-claims-mediation-service">{{  t('Find out more about how mediation works (opens in new tab)') }}</a></p>

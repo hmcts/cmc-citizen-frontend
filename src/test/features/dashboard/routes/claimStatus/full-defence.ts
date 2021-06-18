@@ -110,13 +110,13 @@ function testData () {
         ...directionsQuestionnaireDeadline()
       },
       claimantAssertions: [
-        'You’ve rejected the defendant’s response.',
+        'You’ve rejected the defendant’s response',
         'Your mediation appointment will be arranged within 28 day',
         'You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.',
         'Find out more about how mediation works (opens in new tab)'
       ],
       defendantAssertions: [
-        'John Smith rejected your response.',
+        'John Smith rejected your response',
         'Your mediation appointment will be arranged within 28 day',
         'You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.',
         'Find out more about how mediation works (opens in new tab)'
@@ -635,7 +635,7 @@ function testData () {
         'Your mediation appointment will be arranged within 28 days.'
       ],
       defendantAssertions: [
-        `${fullDefenceClaim().claim.claimants[0].name} rejected your response.`,
+        `${fullDefenceClaim().claim.claimants[0].name} rejected your response`,
         'You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.',
         'Find out more about how mediation works (opens in new tab)',
         'They’ve also sent us their hearing requirements.',
@@ -672,7 +672,7 @@ function testData () {
         'The court will review the case. We’ll email you if we set a hearing date to tell you how to prepare.'
       ],
       defendantAssertions: [
-        `${fullDefenceClaim().claim.claimants[0].name} rejected your response.`,
+        `${fullDefenceClaim().claim.claimants[0].name} rejected your response`,
         'The court will review the case. We’ll email you if we set a hearing date to tell you how to prepare.',
         'They’ve also sent us their hearing requirements.',
         'Download their hearing requirements']

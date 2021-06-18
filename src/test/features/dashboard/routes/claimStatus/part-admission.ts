@@ -746,14 +746,14 @@ function legacyClaimDetails () {
         ...directionsQuestionnaireDeadline()
       },
       claimantAssertions: [
-        'You’ve rejected the defendant’s response.',
+        'You’ve rejected the defendant’s response',
         'You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.',
         'Find out more about how mediation works (opens in new tab)',
         'Tell us you’ve ended the claim'
       ],
       defendantAssertions: [
         'Your mediation appointment will be arranged within 28 day',
-        partAdmissionClaim().claim.claimants[0].name + ' rejected your response.',
+        partAdmissionClaim().claim.claimants[0].name + ' rejected your response',
         'You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.',
         'Find out more about how mediation works (opens in new tab)'
       ]
