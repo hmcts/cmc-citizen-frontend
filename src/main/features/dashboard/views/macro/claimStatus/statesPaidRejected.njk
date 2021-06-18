@@ -24,7 +24,7 @@
   {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
     {{ t('You both agreed a settlement through mediation') }}
   {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-    {{ t('We’ll contact you to try to arrange a mediation appointment.') }}
+    {{ t('Your mediation appointment will be arranged within 28 day.') }}
   {% else %}
     {{ t('Wait for the court to review the case') }}
   {% endif %}
@@ -51,9 +51,7 @@
     {% endif %}
   {% elseif featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
     <div class="status-block">
-      <h2 class="heading-medium">{{ t('We’ll contact you to try to arrange a mediation appointment') }}</h2>
-
-      <p>{{ t('You’ve rejected the defendant’s response.') }}</p>
+      <h2 class="heading-medium">{{ t('You’ve rejected the defendant’s response.') }}</h2>
       <p>{{ t('You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.') }}</p>
       <p>{{ internalLink(t('Find out how mediation works'), DashboardPaths.howFreeMediationWorksPage.uri) }}</p>
 
@@ -96,7 +94,7 @@
       claimantName: claim.claimData.claimant.name,
       amount: amount | numeral}) }}
   {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-    {{ t('We’ll contact you to try to arrange a mediation appointment') }}
+    {{ t('Your mediation appointment will be arranged within 28 day') }}
   {% else %}
     {{ t('Wait for the court to review the case') }}
   {% endif %}
@@ -124,7 +122,7 @@
 
     <h2 class="heading-small">{{ t('Wait for the court to review the case') }}</h2>
     {% if mediation %}
-      <p>{{ t('We’ll contact you to try to arrange a mediation appointment') }}</p>
+      <p>{{ t('Your mediation appointment will be arranged within 28 day') }}</p>
     {% else %}
       <p>{{ t('{{ claimantName }} has rejected your admission of {{ amount }}', { claimantName: claim.claimData.claimant.name, amount: amount | numeral}) }}<p>
       {% if enhancedMediationJourney %}
@@ -157,9 +155,8 @@
 
 {% macro statesPaidRejectionMediationYESDefendantClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-medium">{{ t('We’ll contact you to try to arrange a mediation appointment') }}</h2>
-    <p>{{ t('{{ claimantName }} has rejected your defence.',
-        { claimantName: claim.claimData.claimant.name }) }}</p>
+    <h2 class="heading-medium">{{ t('{{ claimantName }} has rejected your response.',
+        { claimantName: claim.claimData.claimant.name }) }}</h2>
     <p>{{ t('You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.') }}</p>
     <p>{{ internalLink(t('Find out how mediation works'), DashboardPaths.howFreeMediationWorksPage.uri) }}</p>
     {{ downloadClaimantDQs(claim) }}

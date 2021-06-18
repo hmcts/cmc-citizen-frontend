@@ -62,7 +62,7 @@
 {% endmacro %}
 
 {% macro claimRejectedDefendantDefenceFreeMediationYESForDefendantDashboard(claim) %}
-  {{ t('We’ll contact you to try to arrange a mediation appointment') }}
+  {{ t('Your mediation appointment will be arranged within 28 day') }}
 {% endmacro %}
 
 {% macro claimantAcceptedDefendantDefenceDefendantDashboard(claim) %}
@@ -92,7 +92,7 @@
 {% macro claimRejectedDefendantDefenceFreeMediationNOForDefendantDetails(claim) %}
   <div class="status-block">
     <h2 class="heading-medium">{{ t('Wait for the court to review the case') }}</h2>
-    <p>{{ t('{{ claimantName }} has rejected your defence.',
+    <p>{{ t('{{ claimantName }} has rejected your response.',
         { claimantName: claim.claimData.claimant.name }) }}</p>
     {% if enhancedMediationJourney %}
     <p>{{ t('{{ claimantName }} has said no to trying mediation.',
@@ -105,9 +105,8 @@
 
 {% macro claimRejectedDefendantDefenceFreeMediationYESForDefendantDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-medium">{{ t('We’ll contact you to try to arrange a mediation appointment') }}</h2>
-    <p>{{ t('{{ claimantName }} has rejected your defence.',
-        { claimantName: claim.claimData.claimant.name }) }}</p>
+    <h2 class="heading-medium">{{ t('{{ claimantName }} has rejected your response.',
+        { claimantName: claim.claimData.claimant.name }) }}</h2>
     <p>{{ t('You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.') }}</p>
     <p>{{ internalLink( t('Find out how mediation works'), DashboardPaths.howFreeMediationWorksPage.uri) }}</p>
     {{ downloadClaimantDQs(claim) }}
@@ -179,7 +178,7 @@
 
 {% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDashboard(claim) %}
   {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-    {{ t('We’ll contact you to try to arrange a mediation appointment') }}
+    {{ t('Your mediation appointment will be arranged within 28 day') }}
   {% else %}
     {{ t('Wait for the court to review the case') }}
   {% endif %}
