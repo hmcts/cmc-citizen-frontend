@@ -78,15 +78,15 @@ function testData () {
         },
         ...claimantRejectAlreadyPaidWithMediation()
       },
-      claimantAssertions: ['We’ll contact you to try to arrange a mediation appointment',
-        'You’ve rejected the defendant’s response.',
+      claimantAssertions: ['Your mediation appointment will be arranged within 28 day',
+        'You’ve rejected the defendant’s response',
         'You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.',
-        'Find out how mediation works'
+        'Find out more about how mediation works (opens in new tab)'
       ],
-      defendantAssertions: ['We’ll contact you to try to arrange a mediation appointment',
-        'John Smith has rejected your defence.',
+      defendantAssertions: ['Your mediation appointment will be arranged within 28 day',
+        'John Smith rejected your response',
         'You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.',
-        'Find out how mediation works'
+        'Find out more about how mediation works (opens in new tab)'
       ]
     },
     {
@@ -133,14 +133,14 @@ function testData () {
         ...claimantRejectAlreadyPaidWithMediation()
       },
       claimantAssertions: [
-        'You’ve rejected the defendant’s response.',
+        'You’ve rejected the defendant’s response',
         'You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.',
-        'Find out how mediation works'
+        'Find out more about how mediation works (opens in new tab)'
       ],
       defendantAssertions: [
-        statesPaidClaim().claim.claimants[0].name + ' has rejected your defence.',
+        statesPaidClaim().claim.claimants[0].name + ' rejected your response',
         'You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.',
-        'Find out how mediation works',
+        'Find out more about how mediation works (opens in new tab)',
         'They’ve also sent us their hearing requirements.',
         'Download their hearing requirements'
       ]
