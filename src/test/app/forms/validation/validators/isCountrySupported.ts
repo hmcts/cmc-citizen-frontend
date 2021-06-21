@@ -11,7 +11,7 @@ const mockPostcodeServer = 'https://api.os.uk'
 const mockPostcodePath = /\/search\/places\/v1\/postcode\?.+/
 
 const mockCountryServer = 'https://api.os.uk'
-const mockCountryPath = /\/search\/names\/v1\?.+/
+const mockCountryPath = /\/search\/names\/v1\/find\?.+/
 
 describe('IsCountrySupported', () => {
   const constraint: CheckCountryConstraint = new CheckCountryConstraint()
