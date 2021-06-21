@@ -7,11 +7,11 @@ import * as nock from 'nock'
 import { mockPostcodeLookupResponse, mockScottishPostcodeLookupResponse } from 'test/data/entity/mockPostcodeLookupResponse'
 import { mockCountryLookupResponse, mockScottishCountryLookupResponse } from 'test/data/entity/mockCountryLookupResponse'
 
-const mockPostcodeServer = 'https://api.ordnancesurvey.co.uk'
-const mockPostcodePath = /\/places\/v1\/addresses\/postcode\?.+/
+const mockPostcodeServer = 'https://api.os.uk'
+const mockPostcodePath = /\/search\/places\/v1\/postcode\?.+/
 
-const mockCountryServer = 'https://api.ordnancesurvey.co.uk'
-const mockCountryPath = /\/opennames\/v1\/find\?.+/
+const mockCountryServer = 'https://api.os.uk'
+const mockCountryPath = /\/search\/names\/v1\?.+/
 
 describe('IsCountrySupported', () => {
   const constraint: CheckCountryConstraint = new CheckCountryConstraint()
