@@ -11,7 +11,8 @@
         <input type="hidden" name="known" value="true" />
         {{ csrfProtection(csrf) }}
 
-        {{ dateInput(name = 'date', form = form, hint = t('For example, {{ futureDate }}', { futureDate: futureDate | inputDate })) }}
+        {{ dateInput(name = 'date', form = form, hint = t('For example, {{ futureDate }}', { futureDate: futureDate | inputDate }),
+            visuallyHiddenLabelValue = 'pay by set date') }}
 
         {{ saveAndContinueButton() }}
       </form>
