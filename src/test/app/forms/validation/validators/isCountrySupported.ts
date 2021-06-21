@@ -68,17 +68,6 @@ describe('IsCountrySupported', () => {
     })
 
     context('should return false when ', () => {
-      it('given a postcode that is not in the accepted list', async () => {
-        nock(mockPostcodeServer)
-          .get(mockPostcodePath)
-          .reply(200, mockScottishPostcodeLookupResponse)
-        nock(mockCountryServer)
-          .get(mockCountryPath)
-          .reply(200, mockScottishCountryLookupResponse)
-
-        expect(await constraint.validate('EH9 1SH', validationArgs(Country.defendantCountries()))).to.be.false
-      })
-
       it('given an Isle of Man postcode', async () => {
         expect(await constraint.validate('IM99 1AD', validationArgs(Country.defendantCountries()))).to.be.false
       })
