@@ -8,8 +8,8 @@ import { mockPostcodeLookupResponse } from '../data/entity/mockPostcodeLookupRes
 
 describe('PostCode Lookup', () => {
 
-  const mockPostcodeServer = 'https://api.ordnancesurvey.co.uk'
-  const mockPostcodePath = /\/places\/v1\/addresses\/postcode\?.+/
+  const mockPostcodeServer = 'https://api.os.uk'
+  const mockPostcodePath = /\/search\/places\/v1\/postcode\?.+/
 
   it('should return correct address when postCode lookup is used', async () => {
     mock(mockPostcodeServer)
