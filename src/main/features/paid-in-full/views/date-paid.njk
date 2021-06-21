@@ -11,7 +11,8 @@
         <input type="hidden" name="known" value="true"/>
         {{ csrfProtection(csrf) }}
 
-        {{ dateInput(form = form, name = 'date', hint = t('For example, {{ twoWeeksAgo }}', { twoWeeksAgo : 'now' | addDays(-14) | inputDate })) }}
+        {{ dateInput(form = form, name = 'date', hint = t('For example, {{ twoWeeksAgo }}', { twoWeeksAgo : 'now' | addDays(-14) | inputDate }),
+            visuallyHiddenLabelValue = 'settlement date') }}
 
         {{ submitButton('Settle the claim') }}
       </form>

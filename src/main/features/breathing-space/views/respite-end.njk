@@ -15,7 +15,8 @@
       <form method="post">
         <input type="hidden" name="known" value="true" />
         {{ csrfProtection(csrf) }}
-        {{ dateInput('respiteEnd', form, hint = t('For example, {{ currentDate }}', { currentDate: currentDate | inputDate })) }}
+        {{ dateInput('respiteEnd', form, hint = t('For example, {{ currentDate }}', { currentDate: currentDate | inputDate }),
+            visuallyHiddenLabelValue = 'expected end date') }}
         {{ saveAndContinueButton() }}
       </form>
     </div>
