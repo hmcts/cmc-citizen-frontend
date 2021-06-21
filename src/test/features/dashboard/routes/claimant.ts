@@ -77,7 +77,7 @@ describe('Dashboard - claimant page', () => {
           await request(app)
             .get(claimPagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('We’ve sent this case to the County Court Business Centre', 'Your online account won’t be updated - any further updates will be by post.', 'If you need to send any forms, letters or documents about the claim, send them to this address'))
+            .expect(res => expect(res).to.be.successful.withText('We’ve sent this claim and all related documents to the County Court Business Centre', 'Your online account won’t be updated - any further updates will be by post.', 'If you need to send any forms, letters or documents about the claim, send them to this address'))
         })
 
         it('should render page when everything is fine and not show download defendant responds when response is via ocon9x', async () => {

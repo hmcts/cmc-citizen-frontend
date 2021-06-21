@@ -1,21 +1,16 @@
 {% macro businessQueueClaimDetails() %}
   <div class="status-block">
-    <h2 class="heading-medium"> {{ t('We’ve sent this case to the County Court Business Centre') }} </h2>
-    <p>{{  t('Your online account won’t be updated - any further updates will be by post.') }}</p>
-    <p>{{  t('If you need to send any forms, letters or documents about the claim, send them to this address:') }}</p>
+    <h2 class="heading-medium"> {{ t('We’ve sent this claim and all related documents to the County Court Business Centre') }} </h2>
+    <p>{{  t('This claim cannot continue online - any further updates will be by post.') }}</p>
+    <p>{{  t('If you need to send any forms, letters or documents about the claim, email:') }}</p>
+    <p><a href="mailto:OCMCNton@justice.gov.uk">OCMCNton@justice.gov.uk</a></p>
+    <p>{{  t('Or you can send them by post to:') }}
     <p>
       {{ 'County Court Business Centre'  }}<br/>
       {{ 'St. Katherine House' }} <br/>
-      {{ '21-27 St. Katherine Street' }} <br/>     
+      {{ '21-27 St. Katherine Street' }} <br/>
       {{ 'Northampton' }} <br/>
       {{ 'NN1 2LH' }} <br/>
-    </p>
-    <p> 
-      {{ 'Contact the County Court Business Centre if you have any questions about the claim.'}}
-    </p>
-    <p> 
-      {{ 'Phone: 0300 123 7050' }} <br/>
-      {{ 'Email: CCBCAQ@justice.gov.uk' }} <br/>
     </p>
   </div>
 {% endmacro %}
