@@ -4,8 +4,8 @@ import { CheckCountryConstraint } from 'forms/validation/validators/isCountrySup
 import { Country } from 'common/country'
 import { ValidationArguments } from '@hmcts/class-validator'
 import * as nock from 'nock'
-import { mockPostcodeLookupResponse, mockScottishPostcodeLookupResponse } from 'test/data/entity/mockPostcodeLookupResponse'
-import { mockCountryLookupResponse, mockScottishCountryLookupResponse } from 'test/data/entity/mockCountryLookupResponse'
+import { mockPostcodeLookupResponse } from 'test/data/entity/mockPostcodeLookupResponse'
+import { mockCountryLookupResponse } from 'test/data/entity/mockCountryLookupResponse'
 
 const mockPostcodeServer = 'https://api.os.uk'
 const mockPostcodePath = /\/search\/places\/v1\/postcode\?.+/
