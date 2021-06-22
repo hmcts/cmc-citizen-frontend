@@ -68,7 +68,7 @@ describe('IsCountrySupported', () => {
     })
 
     context('should return false when ', () => {
-      it.only('given a postcode that is not in the accepted list', async () => {
+      it('given a postcode that is not in the accepted list', async () => {
         nock(mockPostcodeServer)
           .get(mockPostcodePath)
           .reply(200, mockScottishPostcodeLookupResponse)
