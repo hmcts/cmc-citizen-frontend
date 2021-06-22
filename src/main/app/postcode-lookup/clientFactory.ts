@@ -2,7 +2,7 @@ import { OSPlacesClient } from '@hmcts/os-places-client'
 import { RequestPromiseOptions } from 'request-promise-native'
 import { request } from 'client/request'
 import * as config from 'config'
-import { PostcodeToCountryClient } from '@hmcts/os-names-client'
+import { PostcodeToCountryClient } from 'postcode-lookup/postcodeToCountryClient'
 
 const postcodeLookupApiKey = config.get<string>('secrets.cmc.os-postcode-lookup-api-key')
 
