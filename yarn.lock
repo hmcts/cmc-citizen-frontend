@@ -259,21 +259,10 @@
     on-finished "^2.3.0"
     winston "^2.4.1"
 
-"@hmcts/os-names-client@^1.0.7":
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/@hmcts/os-names-client/-/os-names-client-1.0.7.tgz#c38e68583753f171cb88c38dae7998d0148dd073"
-  integrity sha512-MGf+Z9TZmHHQTNKPtaYMtoaeOfY7twkTsxNhvybHtR/0V+yl+AlsK/2dAa1AdMu9MgLuD61ft6LzTLwGd9u6/g==
-  dependencies:
-    braces ">=2.3.1"
-    mem ">=4.0.0"
-    request "^2.83.0"
-    request-promise-native "^1.0.5"
-    set-value ">=2.0.1"
-
-"@hmcts/os-places-client@^1.0.6":
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/@hmcts/os-places-client/-/os-places-client-1.0.6.tgz#435fdfffb7a523f02354f645adc5ec3ee6eb31fb"
-  integrity sha512-FMppnNjgMzLymUyPiZWyXth1O+k9c3qmCOUjYHbdLZy136R53v7Cj1IZq9ylMZfIRfDbN22iQ6S9K/fz5Sddvw==
+"@hmcts/os-places-client@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@hmcts/os-places-client/-/os-places-client-1.1.2.tgz#a075893a7c70ab8065d1ce1b94019f60e4c82e8b"
+  integrity sha512-XpZBxP37kuBIC/xon4F6qndRJsVe8j6jTt88pQHbGK4Kj62bxSNXF0SaaSHRuHDOsN0+4CXyZ5o8DCIqaUeccA==
   dependencies:
     request "^2.83.0"
     request-promise-native "^1.0.5"
@@ -1595,13 +1584,6 @@ brace-expansion@^1.1.7:
     balanced-match "^1.0.0"
     concat-map "0.0.1"
 
-braces@>=2.3.1, braces@~3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/braces/-/braces-3.0.2.tgz#3454e1a462ee8d599e236df336cd9ea4f8afe107"
-  integrity sha512-b8um+L1RzM3WDSzvhm6gIz1yfTbBt6YTlcEKAvsmqCZZFw46z626lVj9j1yEPW33H5H+lBQpZMP1k8l+78Ha0A==
-  dependencies:
-    fill-range "^7.0.1"
-
 braces@^2.3.1, braces@^2.3.2:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/braces/-/braces-2.3.2.tgz#5979fd3f14cd531565e5fa2df1abfff1dfaee729"
@@ -1617,6 +1599,13 @@ braces@^2.3.1, braces@^2.3.2:
     snapdragon-node "^2.0.1"
     split-string "^3.0.2"
     to-regex "^3.0.1"
+
+braces@~3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/braces/-/braces-3.0.2.tgz#3454e1a462ee8d599e236df336cd9ea4f8afe107"
+  integrity sha512-b8um+L1RzM3WDSzvhm6gIz1yfTbBt6YTlcEKAvsmqCZZFw46z626lVj9j1yEPW33H5H+lBQpZMP1k8l+78Ha0A==
+  dependencies:
+    fill-range "^7.0.1"
 
 browser-process-hrtime@^1.0.0:
   version "1.0.0"
@@ -2052,9 +2041,9 @@ cls-hooked@^4.2.2:
     emitter-listener "^1.0.1"
     semver "^5.4.1"
 
-"cmc-cookies-manager@github:hmcts/cmc-cookies-manager#3.0.0":
+"cmc-cookies-manager@github:hmcts/cmc-cookies-manager#3.0.2":
   version "1.0.6"
-  resolved "https://codeload.github.com/hmcts/cmc-cookies-manager/tar.gz/595789408f3e6b547d676758ddb783f00a9729ce"
+  resolved "https://codeload.github.com/hmcts/cmc-cookies-manager/tar.gz/b41d9321c8c0b12ed36a550a0859b75c7c75467b"
   dependencies:
     govuk-frontend "^3.11.0"
 
@@ -6003,13 +5992,6 @@ make-iterator@^1.0.0:
   dependencies:
     kind-of "^6.0.2"
 
-map-age-cleaner@^0.1.3:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/map-age-cleaner/-/map-age-cleaner-0.1.3.tgz#7d583a7306434c055fe474b0f45078e6e1b4b92a"
-  integrity sha512-bJzx6nMoP6PDLPBFmg7+xRKeFZvFboMrGlxmNj9ClvX53KrmvM5bXFXEWjbz4cz1AFn+jWJ9z/DJSz7hrs0w3w==
-  dependencies:
-    p-defer "^1.0.0"
-
 map-cache@^0.2.0, map-cache@^0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/map-cache/-/map-cache-0.2.2.tgz#c32abd0bd6525d9b051645bb4f26ac5dc98a0dbf"
@@ -6055,14 +6037,6 @@ media-typer@0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/media-typer/-/media-typer-0.3.0.tgz#8710d7af0aa626f8fffa1ce00168545263255748"
   integrity sha1-hxDXrwqmJvj/+hzgAWhUUmMlV0g=
-
-mem@>=4.0.0:
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/mem/-/mem-6.0.1.tgz#3f8ad1b0f8c4e00daf07f104e95b9d78131d7908"
-  integrity sha512-uIRYASflIsXqvKe+7aXbLrydaRzz4qiK6amqZDQI++eRtW3UoKtnDcGeCAOREgll7YMxO5E4VB9+3B0LFmy96g==
-  dependencies:
-    map-age-cleaner "^0.1.3"
-    mimic-fn "^3.0.0"
 
 meow@^3.7.0:
   version "3.7.0"
@@ -6145,11 +6119,6 @@ mimic-fn@^1.0.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/mimic-fn/-/mimic-fn-1.2.0.tgz#820c86a39334640e99516928bd03fca88057d022"
   integrity sha512-jf84uxzwiuiIVKiOLpfYk7N46TSy8ubTonmneY9vrpHNAnp0QBt2BxWV9dO3/j+BoVAb+a5G6YDPW3M5HOdMWQ==
-
-mimic-fn@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/mimic-fn/-/mimic-fn-3.0.0.tgz#76044cfa8818bbf6999c5c9acadf2d3649b14b4b"
-  integrity sha512-PiVO95TKvhiwgSwg1IdLYlCTdul38yZxZMIcnDSFIBUm4BNZha2qpQ4GpJ++15bHoKDtrW2D69lMfFwdFYtNZQ==
 
 mimic-response@^1.0.0, mimic-response@^1.0.1:
   version "1.0.1"
@@ -6977,11 +6946,6 @@ p-cancelable@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/p-cancelable/-/p-cancelable-2.0.0.tgz#4a3740f5bdaf5ed5d7c3e34882c6fb5d6b266a6e"
   integrity sha512-wvPXDmbMmu2ksjkB4Z3nZWTSkJEb9lqVdMaCKpZUGJG9TMiNp9XcbG3fn9fPKjem04fJMJnXoyFPk2FmgiaiNg==
-
-p-defer@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/p-defer/-/p-defer-1.0.0.tgz#9f6eb182f6c9aa8cd743004a7d4f96b196b0fb0c"
-  integrity sha1-n26xgvbJqozXQwBKfU+WsZaw+ww=
 
 p-event@^2.1.0:
   version "2.3.1"
@@ -8336,13 +8300,6 @@ set-blocking@^2.0.0, set-blocking@~2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/set-blocking/-/set-blocking-2.0.0.tgz#045f9782d011ae9a6803ddd382b24392b3d890f7"
   integrity sha1-BF+XgtARrppoA93TgrJDkrPYkPc=
-
-set-value@>=2.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/set-value/-/set-value-3.0.1.tgz#52c82af7653ba69eb1db92e81f5cdb32739b9e95"
-  integrity sha512-w6n3GUPYAWQj4ZyHWzD7K2FnFXHx9OTwJYbWg+6nXjG8sCLfs9DGv+KlqglKIIJx+ks7MlFuwFW2RBPb+8V+xg==
-  dependencies:
-    is-plain-object "^2.0.4"
 
 set-value@^2.0.0, set-value@^2.0.1:
   version "2.0.1"

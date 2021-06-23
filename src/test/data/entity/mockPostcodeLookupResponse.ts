@@ -1,6 +1,6 @@
 export const mockPostcodeLookupResponse = {
   'header': {
-    'uri': 'https://api.ordnancesurvey.co.uk/places/v1/addresses/postcode?offset=0&postcode=SW2%201AN',
+    'uri': 'https://api.os.uk/search/names/v1/find?offset=0&postcode=SW2%201AN',
     'query': 'postcode=SW2 1AN',
     'offset': 0,
     'totalresults': 33,
@@ -75,7 +75,7 @@ export const mockPostcodeLookupResponse = {
 
 export const mockScottishPostcodeLookupResponse = {
   'header': {
-    'uri': 'https://api.ordnancesurvey.co.uk/places/v1/addresses/postcode?offset=0&postcode=EH9%201SH',
+    'uri': 'https://api.os.uk/search/names/v1/find?offset=0&postcode=EH9%201SH',
     'query': 'postcode=EH9 1SH',
     'offset': 0,
     'totalresults': 2,
