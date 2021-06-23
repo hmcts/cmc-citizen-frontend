@@ -79,7 +79,7 @@ describe('Dashboard - defendant page', () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId({ state: 'BUSINESS_QUEUE' })
 
           await request(app)
-            .get(claimPagePath)
+            .get(defendantPage)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('OCMCNton@justice.gov.uk'))
         })
