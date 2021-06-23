@@ -79,6 +79,7 @@
 
       {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
         <p>{{ t('You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.') }}</p>
+        <p><a target="_blank" rel="noreferrer noopener" href="https://www.gov.uk/guidance/small-claims-mediation-service">{{  t('Find out more about how mediation works (opens in new tab)') }}</a></p>
       {% else %}
         <p>{{ t('You might have to go to a hearing. We’ll contact you if we set a hearing date to tell you how to prepare.') }}</p>
         {% if claim.directionsQuestionnaireDeadline %}
