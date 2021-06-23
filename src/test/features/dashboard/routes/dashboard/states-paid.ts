@@ -58,8 +58,8 @@ function testData () {
         },
         ...claimantRejectAlreadyPaidWithMediation()
       },
-      claimantAssertions: ['Your mediation appointment will be arranged within 28 day'],
-      defendantAssertions: ['Your mediation appointment will be arranged within 28 day']
+      claimantAssertions: ['Your mediation appointment will be arranged within 28 days'],
+      defendantAssertions: ['Your mediation appointment will be arranged within 28 days']
     },
     {
       status: 'States paid defence with mediation - defendant paid what he believed he owed with mediation - claimant rejects - mediation failed',

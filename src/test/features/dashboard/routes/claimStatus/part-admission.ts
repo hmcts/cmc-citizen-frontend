@@ -752,7 +752,7 @@ function legacyClaimDetails () {
         'Tell us you’ve ended the claim'
       ],
       defendantAssertions: [
-        'Your mediation appointment will be arranged within 28 day',
+        'Your mediation appointment will be arranged within 28 days',
         partAdmissionClaim().claim.claimants[0].name + ' rejected your response',
         'You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.',
         'Find out more about how mediation works (opens in new tab)'
@@ -823,7 +823,7 @@ const mediationDQEnabledClaimDetails = [
       claimantRespondedAt: MomentFactory.currentDate()
     },
     claimantAssertions: [
-      'Your mediation appointment will be arranged within 28 day',
+      'Your mediation appointment will be arranged within 28 days',
       'You rejected the defendant’s admission of ',
       'You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.',
       'Find out more about how mediation works (opens in new tab)'
@@ -831,7 +831,7 @@ const mediationDQEnabledClaimDetails = [
     defendantAssertions: [
       partAdmissionClaim().claim.claimants[0].name + ' has rejected your admission of',
       'They believe you owe them the full ',
-      'They have agreed to try mediation. We’ll contact you to try to arrange an appointment.',
+      'You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.',
       'They’ve also sent us their hearing requirements.',
       'Download their hearing requirements'
     ]

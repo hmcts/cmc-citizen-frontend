@@ -100,8 +100,8 @@ function mediationDQEnabledClaimDetails () {
         },
         claimantRespondedAt: MomentFactory.currentDate()
       },
-      claimantAssertions: ['Your mediation appointment will be arranged within 28 day'],
-      defendantAssertions: ['Your mediation appointment will be arranged within 28 day']
+      claimantAssertions: ['Your mediation appointment will be arranged within 28 days'],
+      defendantAssertions: ['Your mediation appointment will be arranged within 28 days']
     },
     {
       status: 'Part admission - defendant part admits and accepts mediation DQs enabled - claimant rejects part admission with mediation - mediation failed',
@@ -492,8 +492,8 @@ function legacyClaimDetails () {
         },
         claimantRespondedAt: MomentFactory.currentDate()
       },
-      claimantAssertions: ['Your mediation appointment will be arranged within 28 day'],
-      defendantAssertions: ['Your mediation appointment will be arranged within 28 day']
+      claimantAssertions: ['Your mediation appointment will be arranged within 28 days'],
+      defendantAssertions: ['Your mediation appointment will be arranged within 28 days']
     }
   ]
 }

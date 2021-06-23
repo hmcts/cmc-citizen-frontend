@@ -43,7 +43,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.see('You agreed to try free mediation')
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
-    I.see('Your mediation appointment will be arranged within 28 day')
+    I.see('Your mediation appointment will be arranged within 28 days')
   })
 
   Scenario('I can as a claimant accept the defendants part admission by immediately with settlement agreement and accepting defendants payment method @nightly @admissions', { retries: 3 }, async (I: I) => {

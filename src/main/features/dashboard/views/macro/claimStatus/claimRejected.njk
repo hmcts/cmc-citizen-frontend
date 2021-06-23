@@ -62,7 +62,7 @@
 {% endmacro %}
 
 {% macro claimRejectedDefendantDefenceFreeMediationYESForDefendantDashboard(claim) %}
-  {{ t('Your mediation appointment will be arranged within 28 day') }}
+  {{ t('Your mediation appointment will be arranged within 28 days') }}
 {% endmacro %}
 
 {% macro claimantAcceptedDefendantDefenceDefendantDashboard(claim) %}
@@ -178,7 +178,7 @@
 
 {% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDashboard(claim) %}
   {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-    {{ t('Your mediation appointment will be arranged within 28 day') }}
+    {{ t('Your mediation appointment will be arranged within 28 days') }}
   {% else %}
     {{ t('Wait for the court to review the case') }}
   {% endif %}

@@ -24,7 +24,7 @@
   {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
     {{ t('You both agreed a settlement through mediation') }}
   {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-    {{ t('Your mediation appointment will be arranged within 28 day.') }}
+    {{ t('Your mediation appointment will be arranged within 28 days.') }}
   {% else %}
     {{ t('Wait for the court to review the case') }}
   {% endif %}
@@ -94,7 +94,7 @@
       claimantName: claim.claimData.claimant.name,
       amount: amount | numeral}) }}
   {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-    {{ t('Your mediation appointment will be arranged within 28 day') }}
+    {{ t('Your mediation appointment will be arranged within 28 days') }}
   {% else %}
     {{ t('Wait for the court to review the case') }}
   {% endif %}
@@ -122,7 +122,7 @@
 
     <h2 class="heading-small">{{ t('Wait for the court to review the case') }}</h2>
     {% if mediation %}
-      <p>{{ t('Your mediation appointment will be arranged within 28 day') }}</p>
+      <p>{{ t('Your mediation appointment will be arranged within 28 days') }}</p>
     {% else %}
       <p>{{ t('{{ claimantName }} has rejected your admission of {{ amount }}', { claimantName: claim.claimData.claimant.name, amount: amount | numeral}) }}<p>
       {% if enhancedMediationJourney %}
@@ -149,7 +149,7 @@
 {% endmacro %}
 
 {% macro statesPaidRejectedMediationYESDefendantClaimDetails(claim) %}
-  <p>{{ t('They agreed to try mediation. We’ll contact you to try to arrange an appointment.') }}</p>
+  <p>{{ t('You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.') }}</p>
   <p><a target="_blank" rel="noreferrer noopener" href="https://www.gov.uk/guidance/small-claims-mediation-service">{{  t('Find out more about how mediation works (opens in new tab)') }}</a></p>
 {% endmacro %}
 

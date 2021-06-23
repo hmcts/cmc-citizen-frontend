@@ -20,7 +20,7 @@
   {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
     {{ t('You both agreed a settlement through mediation') }}
   {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-    {{ t('Your mediation appointment will be arranged within 28 day') }}
+    {{ t('Your mediation appointment will be arranged within 28 days') }}
   {% else %}
     {{ t('Wait for the court to review the case') }}
   {% endif %}
@@ -78,7 +78,7 @@
       <p>{{ t('They believe you owe them the full {{ amount }} claimed.', { amount: claim.totalAmountTillToday | numeral }) }}</p>
 
       {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-        <p>{{ t('They have agreed to try mediation. We’ll contact you to try to arrange an appointment.') }}</p>
+        <p>{{ t('You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.') }}</p>
       {% else %}
         <p>{{ t('You might have to go to a hearing. We’ll contact you if we set a hearing date to tell you how to prepare.') }}</p>
         {% if claim.directionsQuestionnaireDeadline %}

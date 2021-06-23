@@ -18,7 +18,7 @@
   {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
     {{ t('You both agreed a settlement through mediation') }}
   {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-    {{ t('Your mediation appointment will be arranged within 28 day') }}
+    {{ t('Your mediation appointment will be arranged within 28 days') }}
   {% else %}
     {{ t('Wait for the court to review the case') }}
   {% endif %}

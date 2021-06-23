@@ -78,12 +78,12 @@ function testData () {
         },
         ...claimantRejectAlreadyPaidWithMediation()
       },
-      claimantAssertions: ['Your mediation appointment will be arranged within 28 day',
+      claimantAssertions: ['Your mediation appointment will be arranged within 28 days',
         'You’ve rejected the defendant’s response',
         'You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.',
         'Find out more about how mediation works (opens in new tab)'
       ],
-      defendantAssertions: ['Your mediation appointment will be arranged within 28 day',
+      defendantAssertions: ['Your mediation appointment will be arranged within 28 days',
         'John Smith rejected your response',
         'You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.',
         'Find out more about how mediation works (opens in new tab)'
