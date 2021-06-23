@@ -75,6 +75,15 @@ describe('Dashboard - defendant page', () => {
             .expect(res => expect(res).to.be.successful.withText('We’ve sent this claim and all related documents to the County Court Business Centre'))
         })
 
+        it('should render page with correct email address when claim is in business queue', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId({ state: 'BUSINESS_QUEUE' })
+
+          await request(app)
+            .get(claimPagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('OCMCNton@justice.gov.uk'))
+        })
+
       })
     })
   })
