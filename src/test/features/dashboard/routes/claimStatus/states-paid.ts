@@ -141,7 +141,7 @@ function testData () {
         statesPaidClaim().claim.claimants[0].name + ' rejected your response',
         'You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.',
         'Find out more about how mediation works (opens in new tab)',
-        'They’ve also sent us their hearing requirements.',
+        'They’ve also sent us their hearing requirements:',
         'Download their hearing requirements'
       ]
     },

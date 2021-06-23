@@ -794,7 +794,7 @@ const mediationDQEnabledClaimDetails = [
       partAdmissionClaim().claim.claimants[0].name + ' has rejected your admission of',
       'They believe you owe them the full ',
       'You might have to go to a hearing. We’ll contact you if we set a hearing date to tell you how to prepare.',
-      'They’ve also sent us their hearing requirements.',
+      'They’ve also sent us their hearing requirements:',
       'Download their hearing requirements'
     ]
   },
@@ -830,9 +830,8 @@ const mediationDQEnabledClaimDetails = [
     ],
     defendantAssertions: [
       partAdmissionClaim().claim.claimants[0].name + ' has rejected your admission of',
-      'They believe you owe them the full ',
       'You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.',
-      'They’ve also sent us their hearing requirements.',
+      'They’ve also sent us their hearing requirements:',
       'Download their hearing requirements'
     ]
   },
