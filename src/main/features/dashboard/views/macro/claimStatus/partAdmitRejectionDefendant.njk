@@ -69,7 +69,8 @@
   {% else %}
     <div class="status-block">
       {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-        <h2 class="heading-medium">{{ t('{{ claimantName }} has rejected response') }}</h2>
+        <h2 class="heading-medium">{{ t('{{ claimantName }} has rejected response',
+                { amount: claim.response.amount | numeral, claimantName: claim.claimData.claimant.name }) }}</h2>
       {% else %}
         <h2 class="heading-medium">{{ t('{{ claimantName }} has rejected your admission of {{ amount }}',
                 { amount: claim.response.amount | numeral, claimantName: claim.claimData.claimant.name }) }}</h2>
