@@ -60,7 +60,7 @@
       {% elseif (claim.mediationOutcome === MediationOutcome.FAILED) %}
         {{ mediationFailedForOnlineDQClaimantClaimDetails(claim) }}
       {% else %}
-        <h2 class="heading-medium">{{ t('You rejected the defendant’s admission of {{ amount }}', { amount: claim.response.amount | numeral }) }}</h2>
+        <h2 class="heading-medium">{{ t('You’ve rejected the defendant’s response') }}</h2>
         <p>{{ t('You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.') }}</p>
         <p><a target="_blank" rel="noreferrer noopener" href="https://www.gov.uk/guidance/small-claims-mediation-service">{{  t('Find out more about how mediation works (opens in new tab)') }}</a></p>
       {% endif %}

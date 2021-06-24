@@ -187,7 +187,7 @@
   {% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDetails(claim) %}
   <div class="status-block">
     <h2
-      class="heading-medium">{{ t('You’ve rejected {{ defendantName }} response', { defendantName: claim.claimData.defendant.name }) }}</h2>
+      class="heading-medium">{{ t('You’ve rejected the defendant’s response') }}</h2>
 
     {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
   <p>{{ t('You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.') }}</p>
