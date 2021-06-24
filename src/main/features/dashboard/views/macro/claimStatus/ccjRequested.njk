@@ -7,7 +7,8 @@
 {% macro ccjRequestedForClaimantClaimDetails(claim) %}
   <div class="status-block">
     <h2 class="heading-medium">{{ t('County Court Judgment (CCJ) requested') }}</h2>
-    <p>{{ t('We’ll process your request and post a copy of the judgment to you and to Mary Richards. We aim to do this within 10 working days.') }}</p>
+    <p>{{ t('We’ll process your request and post a copy of the judgment to you and to {{ defendantName }}. We aim to do this within 10 working days.',
+         { defendantName: claim.claimData.defendant.name }) }}</p>
     <p>{{ t('Your online account will not be updated with the progress of this claim - any further updates will be by post.') }}</p>
     <p>{{ t('{{ defendantName }} can no longer respond to your claim online.',
         { defendantName: claim.claimData.defendant.name }) }}</p>
