@@ -59,7 +59,7 @@ describe('CCJ: confirmation page', () => {
           await request(app)
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('We’ll contact you to tell you whether the judgment has been entered. We aim to do this within 10 working days'))
+          .expect(res => expect(res).to.be.successful.withText('We’ll process your request and post a copy of the judgment'))
         })
       })
     })
