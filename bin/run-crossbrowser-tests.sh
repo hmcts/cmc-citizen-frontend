@@ -9,8 +9,8 @@ then
     BROWSER_GROUP=microsoft yarn test:crossbrowser-verbose || EXIT_STATUS=$?
     BROWSER_GROUP=safari yarn test:crossbrowser-verbose || EXIT_STATUS=$?
     echo EXIT_STATUS: $EXIT_STATUS
-    exit $EXIT_STATUS
 else
     # Compatible with Jenkins parallel crossbrowser pipeline
-    yarn test:crossbrowser-verbose
+    yarn test:crossbrowser-verbose || EXIT_STATUS=$?
+    echo EXIT_STATUS: $EXIT_STATUS
 fi
