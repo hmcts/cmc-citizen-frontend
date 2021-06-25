@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ex
 
-if [[ "$BROWSER_GROUP" == "--all" ]]
+if [[ "$BROWSER_GROUP" == "" ]]
 then
     EXIT_STATUS=0
     BROWSER_GROUP=chrome yarn test:crossbrowser-verbose || EXIT_STATUS=$?
@@ -11,5 +11,6 @@ then
     echo EXIT_STATUS: $EXIT_STATUS
 else
     # Compatible with Jenkins parallel crossbrowser pipeline
-    yarn test:crossbrowser-verbose
+    yarn test:crossbrowser-verbose || EXIT_STATUS=$?
+    echo EXIT_STATUS: $EXIT_STATUS
 fi
