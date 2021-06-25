@@ -4547,10 +4547,10 @@ hosted-git-info@^2.1.4, hosted-git-info@^3.0.8:
   dependencies:
     lru-cache "^6.0.0"
 
-hpkp@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/hpkp/-/hpkp-2.0.1.tgz#9422bc8671073e907c0557eceb101378547b0ce6"
-  integrity sha512-viDpriUy1l/pQWTFhFE8DCnn61sYLI7598tVrFsaDoYVPj6k0B3eeEWfsiuMKiJS5XrO0BghDtDGep/2ZkjGmg==
+hpkp@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/hpkp/-/hpkp-2.0.2.tgz#3739a20bf98159852f26b7be76e72abaf1c36370"
+  integrity sha512-cDPrZ2ieYUfYrqRp+jzazMoxGqhNj7o5rnu1dD8FdAxEdEldJMD3hhET6U4P7ksvKs7V3itjdQHi8WFzenrSRA==
 
 html-encoding-sniffer@^2.0.1:
   version "2.0.1"
