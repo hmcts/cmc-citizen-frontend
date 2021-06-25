@@ -7,6 +7,7 @@ import { PaymentOption } from 'integration-test/data/payment-option'
 import { ClaimantCheckAndSendPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-check-and-send'
 import { EndToEndTestData } from 'integration-test/tests/citizen/endToEnd/data/EndToEndTestData'
 import { DefenceType } from 'integration-test/data/defence-type'
+import { ClaimantResponseTestData } from './data/ClaimantResponseTestData'
 
 const helperSteps: Helper = new Helper()
 const userSteps: UserSteps = new UserSteps()
