@@ -47,7 +47,6 @@ export class DraftClaim extends DraftDocument {
   evidence: Evidence = new Evidence()
   feeAmountInPennies: number = 0
   breathingSpace: BreathingSpace = new BreathingSpace()
-  feeCode: string = null
 
   deserialize (input: any): DraftClaim {
     if (input) {
@@ -63,10 +62,6 @@ export class DraftClaim extends DraftDocument {
       this.interestTotal = new InterestTotal().deserialize(input.interestTotal)
       this.interestContinueClaiming = new InterestContinueClaiming().deserialize(input.interestContinueClaiming)
       this.interestHowMuch = new InterestHowMuch().deserialize(input.interestHowMuch)
-      if (input.feeCode)
-      {
-        this.feeCode = input.feeCode
-      }
       if (input.helpWithFees) {
         this.helpWithFees = new HelpWithFees().deserialize(input.helpWithFees)
       }

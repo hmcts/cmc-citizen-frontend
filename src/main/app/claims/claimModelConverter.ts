@@ -70,7 +70,6 @@ export class ClaimModelConverter {
       && draftClaim.helpWithFees.declared.option === YesNoOption.YES.option) {
       claimData.helpWithFeesNumber = draftClaim.helpWithFees.helpWithFeesNumber
       claimData.feeAmountInPennies = draftClaim.feeAmountInPennies
-      claimData.feeCode = draftClaim.feeCode
       claimData.helpWithFeesType = 'Claim Issue'
     }
     return claimData

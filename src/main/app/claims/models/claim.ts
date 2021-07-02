@@ -94,7 +94,6 @@ export class Claim {
   helpWithFeesNumber?: string
   helpWithFessBalanceClaimFee?: number
   lastEventTriggeredForHwfCase?: string
-  feeCode?: string
 
   get defendantOffer (): Offer {
     if (!this.settlement) {
@@ -351,9 +350,6 @@ export class Claim {
       this.createdAt = MomentFactory.parse(input.createdAt)
       this.claimData = new ClaimData().deserialize(input.claim)
       this.moreTimeRequested = input.moreTimeRequested
-      if (input.feeCode) {
-        this.feeCode = input.feeCode
-      }
       if (this.claimData.feeRemitted !== undefined && this.claimData.feeAmountInPennies !== undefined) {
         this.helpWithFessBalanceClaimFee = MoneyConverter.convertPenniesToPounds(this.claimData.outstandingFeeAmountInPennies)
       }

@@ -9,15 +9,10 @@ import { ErrorHandling } from 'shared/errorHandling'
 import { Draft } from '@hmcts/draft-store-client'
 import { YesNoOption } from 'models/yesNoOption'
 
-import { DraftService } from 'services/draftService'
-import { User } from 'idam/user'
-
-
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.totalPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
-      const user: User = res.locals.user
       const draft: Draft<DraftClaim> = res.locals.claimDraft
 
       const interest: number = await draftInterestAmount(draft.document)
@@ -25,11 +20,6 @@ export default express.Router()
       const claimAmount: number = await draftClaimAmountWithInterest(draft.document)
 
       const issueFee = await FeesClient.calculateIssueFee(claimAmount)
-      const feeCode = await FeesClient.issueFeeCode(claimAmount)
-
-      draft.document.feeCode = feeCode
-      await new DraftService().save(draft, user.bearerToken)
-
       const hearingFee: number = await FeesClient.calculateHearingFee(claimAmount)
 
       const helpWithFeesFeature: boolean = draft.document.helpWithFees && draft.document.helpWithFees.declared
