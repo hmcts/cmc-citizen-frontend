@@ -28,6 +28,7 @@ export class ClaimData {
   amount: ClaimAmountBreakdown = new ClaimAmountBreakdown()
   feeAmountInPennies: number
   outstandingFeeAmountInPennies: number
+  feeCode: string
   reason: string
   timeline: ClaimantTimeline
   evidence: Evidence

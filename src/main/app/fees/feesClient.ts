@@ -36,6 +36,16 @@ export class FeesClient {
     }
   }
 
+  static async issueFeeCode (claimValue: number): Promise<string> {
+    if (await featureToggles.isNewClaimFeesEnabled()) {
+      return this.calculateFee(issueFeeEvent, claimValue, paperChannel)
+      .then((outcome: FeeOutcome) => (outcome.code + " - " + outcome.description))
+    } else {
+      return this.calculateFee(issueFeeEvent, claimValue, onlineChannel)
+      .then((outcome: FeeOutcome) => (outcome.code + " - " + outcome.description))
+    }
+  }
+
   /**
    * Calculates the hearing fee a claimant should pay with paper/default channel
    *
