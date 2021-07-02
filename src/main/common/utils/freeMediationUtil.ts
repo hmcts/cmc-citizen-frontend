@@ -5,30 +5,14 @@ import { Claim } from 'main/app/claims/models/claim'
 import { FreeMediationOption } from 'main/app/forms/models/freeMediation'
 import { CompanyDetails } from 'forms/models/companyDetails'
 import { FeatureToggles } from 'utils/featureToggles'
-import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
 export class FreeMediationUtil {
 
   static async getFreeMediation (mediationDraft: MediationDraft): Promise<YesNoOption> {
-    const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
-    if (await featureToggles.isEnhancedMediationJourneyEnabled()) {
-      if (mediationDraft.willYouTryMediation) {
-        return mediationDraft.willYouTryMediation.option as YesNoOption
-      } else {
-        return YesNoOption.NO
-      }
+    if (mediationDraft.willYouTryMediation) {
+      return mediationDraft.willYouTryMediation.option as YesNoOption
     } else {
-      if (!FeatureToggles.isEnabled('mediation') && mediationDraft.willYouTryMediation) {
-        return mediationDraft.willYouTryMediation.option as YesNoOption
-      } else {
-        const freeMediation = mediationDraft.youCanOnlyUseMediation
-
-        if (!freeMediation || !freeMediation.option) {
-          return YesNoOption.NO
-        } else {
-          return freeMediation.option as YesNoOption
-        }
-      }
+      return YesNoOption.NO
     }
   }
 
@@ -73,9 +57,7 @@ export class FreeMediationUtil {
   }
 
   static async getNoMediationReason (mediationDraft: MediationDraft): Promise<string> {
-    const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
-    if (await featureToggles.isEnhancedMediationJourneyEnabled()
-      && mediationDraft.willYouTryMediation
+    if (mediationDraft.willYouTryMediation
       && mediationDraft.willYouTryMediation.option === FreeMediationOption.NO) {
       if (mediationDraft.noMediationReason && mediationDraft.noMediationReason.otherReason) {
         return 'Another reason - ' + mediationDraft.noMediationReason.otherReason

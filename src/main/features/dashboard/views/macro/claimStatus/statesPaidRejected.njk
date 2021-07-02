@@ -127,9 +127,7 @@
       <p>{{ t('We’ll contact you to try to arrange a mediation appointment') }}</p>
     {% else %}
       <p>{{ t('{{ claimantName }} has rejected your admission of {{ amount }}', { claimantName: claim.claimData.claimant.name, amount: amount | numeral}) }}<p>
-      {% if enhancedMediationJourney %}
       <p>{{ t('{{ claimantName }} has said no to trying mediation.', { claimantName: claim.claimData.claimant.name }) }}</p>
-      {% endif %}
     {% endif %}
 
     {% if claim.claimantResponse.paymentReceived === YesNoOption.YES.option %}

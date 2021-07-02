@@ -7,7 +7,6 @@ import 'test/routes/expectations'
 import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
 
 import { Paths as MediationPaths } from 'mediation/paths'
-import { Paths as ResponsePaths } from 'response/paths'
 import { Paths as ClaimantResponsePaths } from 'claimant-response/paths'
 
 import { app } from 'main/app'
@@ -22,9 +21,6 @@ import {
   verifyRedirectForGetWhenAlreadyPaidInFull,
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
-
-import * as sinon from 'sinon'
-import { FeatureToggles } from 'utils/featureToggles'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = MediationPaths.mediationDisagreementPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -72,16 +68,10 @@ describe('Free mediation: mediation disagreement page', () => {
   describe('on POST', () => {
     const method = 'post'
     checkAuthorizationGuards(app, method, pagePath)
-    let isEnhancedMediationJourneyEnabledStub: sinon.SinonStub
 
     context('when defendant authorised', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
-        isEnhancedMediationJourneyEnabledStub = sinon.stub(FeatureToggles.prototype, 'isEnhancedMediationJourneyEnabled')
-      })
-
-      afterEach(() => {
-        isEnhancedMediationJourneyEnabledStub.restore()
       })
 
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
@@ -90,7 +80,6 @@ describe('Free mediation: mediation disagreement page', () => {
       context('when response not submitted', () => {
         context('when form is invalid', () => {
           it('should return 500 and render error page when cannot retrieve claim', async () => {
-            isEnhancedMediationJourneyEnabledStub.returns(false)
             claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
             await request(app)
@@ -100,7 +89,6 @@ describe('Free mediation: mediation disagreement page', () => {
           })
 
           it('should render error page when there is no option selected', async () => {
-            isEnhancedMediationJourneyEnabledStub.returns(false)
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveFind('response')
@@ -111,26 +99,10 @@ describe('Free mediation: mediation disagreement page', () => {
               .send({ })
               .expect(res => expect(res).to.be.successful.withText('There was a problem'))
           })
-
-          context('when enhancedMediationJourney is enabled', () => {
-            it('should render error page when there is no option selected', async () => {
-              isEnhancedMediationJourneyEnabledStub.returns(true)
-              claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-              draftStoreServiceMock.resolveFind('mediation')
-              draftStoreServiceMock.resolveFind('response')
-
-              await request(app)
-                .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
-                .send({ })
-                .expect(res => expect(res).to.be.successful.withText('There was a problem'))
-            })
-          })
         })
 
         context('when form is valid', () => {
           it('should return 500 and render error page when cannot save draft', async () => {
-            isEnhancedMediationJourneyEnabledStub.returns(false)
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveFind('response')
@@ -143,8 +115,7 @@ describe('Free mediation: mediation disagreement page', () => {
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should redirect to mediation agreement page when everything is fine', async () => {
-            isEnhancedMediationJourneyEnabledStub.returns(false)
+          it('should redirect to can we use page when everything is fine', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveFind('response')
@@ -155,12 +126,11 @@ describe('Free mediation: mediation disagreement page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ option: FreeMediationOption.YES })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(MediationPaths.mediationAgreementPage
+                .toLocation(MediationPaths.canWeUsePage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
 
-          it('should redirect to response task list when No was chosen and no response is available', async () => {
-            isEnhancedMediationJourneyEnabledStub.returns(false)
+          it('should redirect to I dont want free mediation page when No was chosen and no response is available', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveFind('response')
@@ -171,12 +141,11 @@ describe('Free mediation: mediation disagreement page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ option: FreeMediationOption.NO })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.taskListPage
+                .toLocation(MediationPaths.iDontWantFreeMediationPage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
 
-          it('should redirect to mediation agreement page when Yes was chosen', async () => {
-            isEnhancedMediationJourneyEnabledStub.returns(false)
+          it('should redirect to can we use page when Yes was chosen', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveFind('response')
@@ -187,72 +156,8 @@ describe('Free mediation: mediation disagreement page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ option: FreeMediationOption.YES })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(MediationPaths.mediationAgreementPage
+                .toLocation(MediationPaths.canWeUsePage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
-          })
-
-          context('when enhancedMediationJourney is enabled', () => {
-            it('should return 500 and render error page when cannot save draft', async () => {
-              isEnhancedMediationJourneyEnabledStub.returns(true)
-              claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-              draftStoreServiceMock.resolveFind('mediation')
-              draftStoreServiceMock.resolveFind('response')
-              draftStoreServiceMock.rejectUpdate()
-
-              await request(app)
-                .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
-                .send({ option: FreeMediationOption.YES })
-                .expect(res => expect(res).to.be.serverError.withText('Error'))
-            })
-
-            it('should redirect to can we use page when everything is fine', async () => {
-              isEnhancedMediationJourneyEnabledStub.returns(true)
-              claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-              draftStoreServiceMock.resolveFind('mediation')
-              draftStoreServiceMock.resolveFind('response')
-              draftStoreServiceMock.resolveUpdate()
-
-              await request(app)
-                .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
-                .send({ option: FreeMediationOption.YES })
-                .expect(res => expect(res).to.be.redirect
-                  .toLocation(MediationPaths.canWeUsePage
-                    .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
-            })
-
-            it('should redirect to I dont want free mediation page when No was chosen and no response is available', async () => {
-              isEnhancedMediationJourneyEnabledStub.returns(true)
-              claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-              draftStoreServiceMock.resolveFind('mediation')
-              draftStoreServiceMock.resolveFind('response')
-              draftStoreServiceMock.resolveUpdate()
-
-              await request(app)
-                .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
-                .send({ option: FreeMediationOption.NO })
-                .expect(res => expect(res).to.be.redirect
-                  .toLocation(MediationPaths.iDontWantFreeMediationPage
-                    .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
-            })
-
-            it('should redirect to can we use page when Yes was chosen', async () => {
-              isEnhancedMediationJourneyEnabledStub.returns(true)
-              claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-              draftStoreServiceMock.resolveFind('mediation')
-              draftStoreServiceMock.resolveFind('response')
-              draftStoreServiceMock.resolveUpdate()
-
-              await request(app)
-                .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
-                .send({ option: FreeMediationOption.YES })
-                .expect(res => expect(res).to.be.redirect
-                  .toLocation(MediationPaths.canWeUsePage
-                    .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
-            })
           })
         })
       })
@@ -261,17 +166,11 @@ describe('Free mediation: mediation disagreement page', () => {
     context('when claimant authorised', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.submitterId, 'citizen')
-        isEnhancedMediationJourneyEnabledStub = sinon.stub(FeatureToggles.prototype, 'isEnhancedMediationJourneyEnabled')
-      })
-
-      afterEach(() => {
-        isEnhancedMediationJourneyEnabledStub.restore()
       })
 
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
 
       it('should redirect to claimant response task list when No was chosen and there is a response', async () => {
-        isEnhancedMediationJourneyEnabledStub.returns(false)
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleDefendantResponseObj)
         draftStoreServiceMock.resolveFind('mediation')
         draftStoreServiceMock.resolveFind('response')
@@ -287,7 +186,6 @@ describe('Free mediation: mediation disagreement page', () => {
       })
 
       it('should redirect to can we use page when Yes was chosen and there is a response', async () => {
-        isEnhancedMediationJourneyEnabledStub.returns(true)
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleDefendantResponseObj)
         draftStoreServiceMock.resolveFind('mediation')
         draftStoreServiceMock.resolveFind('response')

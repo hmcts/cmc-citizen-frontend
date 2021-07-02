@@ -9,39 +9,11 @@ import { Claim } from 'claims/models/claim'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { defenceWithDisputeDraft } from 'test/data/draft/responseDraft'
 import { FeatureToggles } from 'utils/featureToggles'
-import * as sinon from 'sinon'
 
 describe('FreeMediationUtil', () => {
-  let isEnhancedMediationJourneyEnabledStub: sinon.SinonStub
-
   context('convertFreeMediation should return expected FreeMediation when', () => {
 
-    beforeEach(() => {
-      isEnhancedMediationJourneyEnabledStub = sinon.stub(FeatureToggles.prototype, 'isEnhancedMediationJourneyEnabled')
-    })
-
-    afterEach(() => {
-      isEnhancedMediationJourneyEnabledStub.restore()
-    })
-
-    it('getFreeMediation value is provided', async () => {
-      isEnhancedMediationJourneyEnabledStub.returns(false)
-      const myExternalId: String = 'b17af4d2-273f-4999-9895-bce382fa24c8'
-      const draft: MediationDraft = new MediationDraft().deserialize({
-        externalId: myExternalId,
-        youCanOnlyUseMediation: {
-          option: FreeMediationOption.YES
-        },
-        willYouTryMediation: {
-          option: FreeMediationOption.YES
-        }
-      })
-      const expectedValue: YesNoOption = YesNoOption.YES
-      expect(await FreeMediationUtil.getFreeMediation(draft)).to.deep.equal(expectedValue, 'Yes is expected')
-    })
-
-    it('getFreeMediation value is provided for enhanced mediation journey', async () => {
-      isEnhancedMediationJourneyEnabledStub.returns(true)
+    it('getFreeMediation value is provided for mediation journey', async () => {
       const myExternalId: String = 'b17af4d2-273f-4999-9895-bce382fa24c8'
       const draft: MediationDraft = new MediationDraft().deserialize({
         externalId: myExternalId,
@@ -58,7 +30,6 @@ describe('FreeMediationUtil', () => {
 
     if (FeatureToggles.isEnabled('mediation')) {
       it('value is not provided', async () => {
-        isEnhancedMediationJourneyEnabledStub.returns(false)
         const myExternalId: String = 'b17af4d2-273f-4999-9895-bce382fa24c8'
         const draft: MediationDraft = new MediationDraft().deserialize({
           externalId: myExternalId,
@@ -158,16 +129,7 @@ describe('FreeMediationUtil', () => {
 
   context('getNoMediationReason should return expected value when', () => {
 
-    beforeEach(() => {
-      isEnhancedMediationJourneyEnabledStub = sinon.stub(FeatureToggles.prototype, 'isEnhancedMediationJourneyEnabled')
-    })
-
-    afterEach(() => {
-      isEnhancedMediationJourneyEnabledStub.restore()
-    })
-
     it('User selects a valid no mediation reason', async () => {
-      isEnhancedMediationJourneyEnabledStub.returns(true)
       const myExternalId: String = 'b17af4d2-273f-4999-9895-bce382fa24c8'
       const draft: MediationDraft = new MediationDraft().deserialize({
         externalId: myExternalId,
@@ -192,7 +154,6 @@ describe('FreeMediationUtil', () => {
     })
 
     it('User selects other as no mediation reason', async () => {
-      isEnhancedMediationJourneyEnabledStub.returns(true)
       const myExternalId: String = 'b17af4d2-273f-4999-9895-bce382fa24c8'
       const draft: MediationDraft = new MediationDraft().deserialize({
         externalId: myExternalId,
@@ -217,7 +178,6 @@ describe('FreeMediationUtil', () => {
     })
 
     it('no mediation reason should be returned when the toggle is off', async () => {
-      isEnhancedMediationJourneyEnabledStub.returns(false)
       const myExternalId: String = 'b17af4d2-273f-4999-9895-bce382fa24c8'
       const draft: MediationDraft = new MediationDraft().deserialize({
         externalId: myExternalId,

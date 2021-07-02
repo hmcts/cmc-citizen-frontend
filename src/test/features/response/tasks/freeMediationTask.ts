@@ -9,25 +9,13 @@ import { CanWeUseCompany } from 'mediation/form/models/CanWeUseCompany'
 import { Claim } from 'claims/models/claim'
 import * as claimStoreMock from '../../../http-mocks/claim-store'
 import { FeatureToggles } from 'utils/featureToggles'
-import * as sinon from 'sinon'
 
 describe('Free mediation task', () => {
   const claim: Claim = new Claim().deserialize({
     ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
   })
 
-  let isEnhancedMediationJourneyEnabledStub: sinon.SinonStub
-
-  beforeEach(() => {
-    isEnhancedMediationJourneyEnabledStub = sinon.stub(FeatureToggles.prototype, 'isEnhancedMediationJourneyEnabled')
-  })
-
-  afterEach(() => {
-    isEnhancedMediationJourneyEnabledStub.restore()
-  })
-
   it('should not be completed when free mediation object is undefined', async () => {
-    isEnhancedMediationJourneyEnabledStub.returns(false)
     const mediationDraft = new MediationDraft()
     mediationDraft.willYouTryMediation = undefined
 
@@ -36,7 +24,6 @@ describe('Free mediation task', () => {
 
   if (FeatureToggles.isEnabled('mediation')) {
     it('should not be completed when willYouTryMediation is yes and youCanOnlyUseMediation is undefined', async () => {
-      isEnhancedMediationJourneyEnabledStub.returns(false)
       const mediationDraft = new MediationDraft()
       mediationDraft.willYouTryMediation = new FreeMediation(FreeMediationOption.YES)
       mediationDraft.youCanOnlyUseMediation = undefined
@@ -46,7 +33,6 @@ describe('Free mediation task', () => {
   }
 
   it('should be completed when willYouTryMediation is yes and youCanOnlyUseMediation is yes and canWeUse is yes', async () => {
-    isEnhancedMediationJourneyEnabledStub.returns(false)
     const mediationDraft = new MediationDraft()
     mediationDraft.willYouTryMediation = new FreeMediation(FreeMediationOption.YES)
     mediationDraft.youCanOnlyUseMediation = new FreeMediation(FreeMediationOption.YES)
@@ -56,7 +42,6 @@ describe('Free mediation task', () => {
   })
 
   it('should be completed when willYouTryMediation is yes and youCanOnlyUseMediation is no', async () => {
-    isEnhancedMediationJourneyEnabledStub.returns(false)
     const mediationDraft = new MediationDraft()
     mediationDraft.willYouTryMediation = new FreeMediation(FreeMediationOption.YES)
     mediationDraft.youCanOnlyUseMediation = new FreeMediation(FreeMediationOption.NO)
@@ -65,7 +50,6 @@ describe('Free mediation task', () => {
   })
 
   it('should be completed when willYouTryMediation is yes and youCanOnlyUseMediation is Yes and can we use is no and phone number is provided', async () => {
-    isEnhancedMediationJourneyEnabledStub.returns(false)
     const mediationDraft = new MediationDraft()
     mediationDraft.willYouTryMediation = new FreeMediation(FreeMediationOption.YES)
     mediationDraft.youCanOnlyUseMediation = new FreeMediation(FreeMediationOption.YES)
@@ -75,7 +59,6 @@ describe('Free mediation task', () => {
   })
 
   it('should be completed when WeCanUseCompany is yes and phone number confirmation is provided', async () => {
-    isEnhancedMediationJourneyEnabledStub.returns(false)
     const mediationDraft = new MediationDraft()
     mediationDraft.willYouTryMediation = new FreeMediation(FreeMediationOption.YES)
     mediationDraft.youCanOnlyUseMediation = new FreeMediation(FreeMediationOption.YES)
@@ -85,7 +68,6 @@ describe('Free mediation task', () => {
   })
 
   it('should be completed when WeCanUseCompany is no and phone number and contact person is provided', async () => {
-    isEnhancedMediationJourneyEnabledStub.returns(false)
     const mediationDraft = new MediationDraft()
     mediationDraft.willYouTryMediation = new FreeMediation(FreeMediationOption.YES)
     mediationDraft.youCanOnlyUseMediation = new FreeMediation(FreeMediationOption.YES)

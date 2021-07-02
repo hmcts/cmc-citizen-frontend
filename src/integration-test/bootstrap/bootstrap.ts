@@ -64,7 +64,6 @@ async function waitTillHealthy (appURL: string) {
       console.log(`AUTO_ENROLL_INTO_NEW_FEATURE=${process.env.AUTO_ENROLL_INTO_NEW_FEATURE}`)
       console.log(`FEATURE_HELP_WITH_FEES=${process.env.FEATURE_HELP_WITH_FEES}`)
       console.log(`FEATURE_BREATHING_SPACE=${process.env.FEATURE_BREATHING_SPACE}`)
-      console.log(`ENHANCED_MEDIATION_JOURNEY=${process.env.ENHANCED_MEDIATION_JOURNEY}`)
       return Promise.resolve()
     } else {
       logStartupProblem(response)

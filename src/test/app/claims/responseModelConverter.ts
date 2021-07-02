@@ -48,7 +48,6 @@ import { FreeMediationOption } from 'forms/models/freeMediation'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { CourtLocationType } from 'claims/models/directions-questionnaire/hearingLocation'
-import * as sinon from 'sinon'
 
 function prepareResponseDraft (draftTemplate: any, partyDetails: object): ResponseDraft {
   return new ResponseDraft().deserialize({
@@ -81,7 +80,6 @@ function convertObjectLiteralToJSON (value: object): object {
 describe('ResponseModelConverter', () => {
   const mediationDraft = new MediationDraft().deserialize(sampleMediationDraftObj)
   const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft().deserialize(sampleDirectionsQuestionnaireDraftObj)
-  let isEnhancedMediationJourneyEnabledStub: sinon.SinonStub
 
   const directionsQuestionnaireResponseData = {
     directionsQuestionnaire: {
@@ -134,14 +132,6 @@ describe('ResponseModelConverter', () => {
 
     if (!FeatureToggles.isEnabled('mediation')) {
 
-      beforeEach(() => {
-        isEnhancedMediationJourneyEnabledStub = sinon.stub(FeatureToggles.prototype, 'isEnhancedMediationJourneyEnabled')
-      })
-
-      afterEach(() => {
-        isEnhancedMediationJourneyEnabledStub.restore()
-      })
-
       context('full defence conversion', () => {
         [
           [individualDetails, individual],
@@ -150,7 +140,6 @@ describe('ResponseModelConverter', () => {
           [organisationDetails, organisation]
         ].forEach(([partyDetails, party]) => {
           it(`should convert defence with dispute submitted by ${partyDetails.type}`, async () => {
-            isEnhancedMediationJourneyEnabledStub.returns(false)
             const responseDraft = prepareResponseDraft(defenceWithDisputeDraft, partyDetails)
             const responseData = prepareResponseData({ ...defenceWithDisputeData, ...directionsQuestionnaireResponseData }, party)
             const claim: Claim = new Claim().deserialize({
@@ -161,7 +150,6 @@ describe('ResponseModelConverter', () => {
           })
 
           it(`should convert defence with amount claimed already paid submitted by ${partyDetails.type} to partial admission`, async () => {
-            isEnhancedMediationJourneyEnabledStub.returns(false)
             const responseDraft = prepareResponseDraft(defenceWithAmountClaimedAlreadyPaidDraft, partyDetails)
             const responseData = preparePartialResponseData({ ...partialAdmissionFromStatesPaidDefence, ...directionsQuestionnaireResponseData }, party)
             const claim: Claim = new Claim().deserialize({
@@ -174,7 +162,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should not convert payment declaration for defence with dispute', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...defenceWithDisputeDraft,
             whenDidYouPay: {
@@ -197,7 +184,6 @@ describe('ResponseModelConverter', () => {
 
       context('full admission conversion', () => {
         it('should convert full admission paid immediately', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(fullAdmissionWithImmediatePaymentDraft, individualDetails)
           const responseData = prepareResponseData(fullAdmissionWithImmediatePaymentData(), individual)
           const claim: Claim = new Claim().deserialize({
@@ -209,7 +195,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert full admission paid immediately with title, firstName and lastName', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(
             {
               ...fullAdmissionWithImmediatePaymentDraft,
@@ -225,7 +210,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert full admission paid by set date', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(fullAdmissionWithPaymentBySetDateDraft, individualDetails)
           const responseData = prepareResponseData(fullAdmissionWithPaymentBySetDateData, individual)
           const claim: Claim = new Claim().deserialize({
@@ -237,7 +221,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert full admission paid by set date with mandatory SoM only', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...fullAdmissionWithPaymentBySetDateDraft,
             statementOfMeans: { ...statementOfMeansWithMandatoryFieldsDraft }
@@ -255,7 +238,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert full admission paid by instalments', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(fullAdmissionWithPaymentByInstalmentsDraft, individualDetails)
           const responseData = prepareResponseData(fullAdmissionWithPaymentByInstalmentsData, individual)
           const claim: Claim = new Claim().deserialize({
@@ -267,7 +249,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert full admission paid by instalments with complete SoM', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...fullAdmissionWithPaymentByInstalmentsDraft,
             statementOfMeans: { ...statementOfMeansWithAllFieldsDraft }
@@ -287,7 +268,6 @@ describe('ResponseModelConverter', () => {
 
       context('partial admission conversion', () => {
         it('should convert already paid partial admission', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(partialAdmissionAlreadyPaidDraft, individualDetails)
           const responseData = preparePartialResponseData({ ...partialAdmissionAlreadyPaidData, ...directionsQuestionnaireResponseData }, individual)
           const claim: Claim = new Claim().deserialize({
@@ -299,7 +279,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert partial admission paid immediately', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(partialAdmissionWithImmediatePaymentDraft, individualDetails)
           const responseData = preparePartialResponseData({ ...partialAdmissionWithImmediatePaymentData(), ...directionsQuestionnaireResponseData }, individual)
           const claim: Claim = new Claim().deserialize({
@@ -311,7 +290,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert partial admission paid by set date', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(partialAdmissionWithPaymentBySetDateDraft, individualDetails)
           const responseData = preparePartialResponseData({ ...partialAdmissionWithPaymentBySetDateData, ...directionsQuestionnaireResponseData }, individual)
           const claim: Claim = new Claim().deserialize({
@@ -323,7 +301,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert partial admission paid by set date with mandatory SoM only', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithPaymentBySetDateDraft,
             statementOfMeans: { ...statementOfMeansWithMandatoryFieldsDraft }
@@ -342,7 +319,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert partial admission paid by instalments', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(partialAdmissionWithPaymentByInstalmentsDraft, individualDetails)
           const responseData = preparePartialResponseData({ ...partialAdmissionWithPaymentByInstalmentsData, ...directionsQuestionnaireResponseData }, individual)
           const claim: Claim = new Claim().deserialize({
@@ -354,7 +330,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert partial admission paid by instalments with complete SoM', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithPaymentByInstalmentsDraft,
             statementOfMeans: { ...statementOfMeansWithAllFieldsDraft }
@@ -598,18 +573,8 @@ describe('ResponseModelConverter', () => {
       })
 
       context('partial admission conversion', () => {
-        let isEnhancedMediationJourneyEnabledStub: sinon.SinonStub
-
-        beforeEach(() => {
-          isEnhancedMediationJourneyEnabledStub = sinon.stub(FeatureToggles.prototype, 'isEnhancedMediationJourneyEnabled')
-        })
-
-        afterEach(() => {
-          isEnhancedMediationJourneyEnabledStub.restore()
-        })
 
         it('should convert already paid partial admission', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionAlreadyPaidDraft,
             ...sampleMediationDraftObj
@@ -628,7 +593,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert partial admission paid immediately', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithImmediatePaymentDraft,
             ...sampleMediationDraftObj
@@ -647,7 +611,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert partial admission paid by set date', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithPaymentBySetDateDraft,
             ...sampleMediationDraftObj
@@ -666,7 +629,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert partial admission paid by set date with mandatory SoM only', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithPaymentBySetDateDraft,
             ...sampleMediationDraftObj,
@@ -687,7 +649,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert partial admission paid by set date with cohibition option', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithPaymentByInstalmentsDraft,
             ...sampleMediationDraftObj,
@@ -705,7 +666,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert partial admission paid by instalments', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithPaymentByInstalmentsDraft,
             ...sampleMediationDraftObj
@@ -724,7 +684,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert partial admission paid by instalments with complete SoM', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithPaymentByInstalmentsDraft,
             ...sampleMediationDraftObj,
@@ -745,7 +704,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert partial admission with Mediation canWeUse FreeMediation to NO', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithPaymentByInstalmentsDraft
           }, individualDetails)
@@ -773,7 +731,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert partial admission with Mediation canWeUse FreeMediation to YES and response not submitted', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithPaymentByInstalmentsDraft
           }, individualDetails)
@@ -814,15 +771,6 @@ describe('ResponseModelConverter', () => {
           [companyDetails, company],
           [organisationDetails, organisation]
         ].forEach(([partyDetails, party]) => {
-          let isEnhancedMediationJourneyEnabledStub: sinon.SinonStub
-
-          beforeEach(() => {
-            isEnhancedMediationJourneyEnabledStub = sinon.stub(FeatureToggles.prototype, 'isEnhancedMediationJourneyEnabled')
-          })
-
-          afterEach(() => {
-            isEnhancedMediationJourneyEnabledStub.restore()
-          })
 
           it(`should convert defence with dispute submitted by ${partyDetails.type}`, async () => {
             const responseDraft = prepareResponseDraft(defenceWithDisputeDraft, partyDetails)
@@ -833,7 +781,6 @@ describe('ResponseModelConverter', () => {
           })
 
           it(`should convert defence with amount claimed already paid submitted by ${partyDetails.type} to partial admission`, async () => {
-            isEnhancedMediationJourneyEnabledStub.returns(false)
             const responseDraft = prepareResponseDraft(defenceWithAmountClaimedAlreadyPaidDraft, partyDetails)
             const responseData = preparePartialResponseData(partialAdmissionFromStatesPaidDefence, party)
             const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
@@ -844,7 +791,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should not convert payment declaration for defence with dispute', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...defenceWithDisputeDraft,
             whenDidYouPay: {
@@ -865,7 +811,6 @@ describe('ResponseModelConverter', () => {
 
       context('full admission conversion', () => {
         it('should convert full admission paid immediately', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(fullAdmissionWithImmediatePaymentDraft, individualDetails)
           const responseData = prepareResponseData(fullAdmissionWithImmediatePaymentData(), individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
@@ -875,7 +820,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert full admission paid immediately with title, firstname and lastname', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(fullAdmissionWithImmediatePaymentDraft, individualSplitNameDetails)
           const responseData = prepareResponseData(fullAdmissionWithImmediatePaymentData(), individualDefendant)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
@@ -885,7 +829,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert full admission paid by set date', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(fullAdmissionWithPaymentBySetDateDraft, individualDetails)
           const responseData = prepareResponseData(fullAdmissionWithPaymentBySetDateData, individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
@@ -895,7 +838,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert full admission paid by set date with mandatory SoM only', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...fullAdmissionWithPaymentBySetDateDraft,
             statementOfMeans: { ...statementOfMeansWithMandatoryFieldsDraft }
@@ -911,7 +853,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert full admission paid by instalments', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(fullAdmissionWithPaymentByInstalmentsDraft, individualDetails)
           const responseData = prepareResponseData(fullAdmissionWithPaymentByInstalmentsData, individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
@@ -921,7 +862,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert full admission paid by instalments with complete SoM', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...fullAdmissionWithPaymentByInstalmentsDraft,
             statementOfMeans: { ...statementOfMeansWithAllFieldsDraft }
@@ -939,7 +879,6 @@ describe('ResponseModelConverter', () => {
 
       context('partial admission conversion', () => {
         it('should convert already paid partial admission', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(partialAdmissionAlreadyPaidDraft, individualDetails)
           const responseData = preparePartialResponseData(partialAdmissionAlreadyPaidData, individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
@@ -949,7 +888,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert partial admission paid immediately', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(partialAdmissionWithImmediatePaymentDraft, individualDetails)
           const responseData = preparePartialResponseData(partialAdmissionWithImmediatePaymentData(), individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
@@ -959,7 +897,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert partial admission paid by set date', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(partialAdmissionWithPaymentBySetDateDraft, individualDetails)
           const responseData = preparePartialResponseData(partialAdmissionWithPaymentBySetDateData, individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
@@ -969,7 +906,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert partial admission paid by set date with mandatory SoM only', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithPaymentBySetDateDraft,
             statementOfMeans: { ...statementOfMeansWithMandatoryFieldsDraft }
@@ -985,7 +921,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert partial admission paid by instalments', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(partialAdmissionWithPaymentByInstalmentsDraft, individualDetails)
           const responseData = preparePartialResponseData(partialAdmissionWithPaymentByInstalmentsData, individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
@@ -995,7 +930,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert partial admission paid by instalments with complete SoM', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithPaymentByInstalmentsDraft,
             statementOfMeans: { ...statementOfMeansWithAllFieldsDraft }
@@ -1011,7 +945,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert partial admission already paid', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(partialAdmissionAlreadyPaidDraft, individualDetails)
           const responseData = preparePartialResponseData(partialAdmissionAlreadyPaidData, individual)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
@@ -1037,18 +970,8 @@ describe('ResponseModelConverter', () => {
           [companyDetails, company],
           [organisationDetails, organisation]
         ].forEach(([partyDetails, party]) => {
-          let isEnhancedMediationJourneyEnabledStub: sinon.SinonStub
-
-          beforeEach(() => {
-            isEnhancedMediationJourneyEnabledStub = sinon.stub(FeatureToggles.prototype, 'isEnhancedMediationJourneyEnabled')
-          })
-
-          afterEach(() => {
-            isEnhancedMediationJourneyEnabledStub.restore()
-          })
 
           it(`should convert defence with dispute submitted by ${partyDetails.type}`, async () => {
-            isEnhancedMediationJourneyEnabledStub.returns(false)
             const responseDraft = prepareResponseDraft({
               ...defenceWithDisputeDraft,
               ...sampleMediationDraftObj
@@ -1063,7 +986,6 @@ describe('ResponseModelConverter', () => {
           })
 
           it(`should convert defence with amount claimed already paid submitted by ${partyDetails.type} to partial admission`, async () => {
-            isEnhancedMediationJourneyEnabledStub.returns(false)
             const responseDraft = prepareResponseDraft({
               ...defenceWithAmountClaimedAlreadyPaidDraft,
               ...sampleMediationDraftObj
@@ -1080,7 +1002,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it(`should convert company who says YES to mediation and confirm number`, async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const mediationDraft = new MediationDraft().deserialize({
             youCanOnlyUseMediation: {
               option: FreeMediationOption.YES
@@ -1111,7 +1032,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should not convert payment declaration for defence with dispute', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...defenceWithDisputeDraft,
             ...sampleMediationDraftObj,
@@ -1136,7 +1056,6 @@ describe('ResponseModelConverter', () => {
 
       context('full admission conversion', () => {
         it('should convert full admission paid immediately', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(
             {
               ...fullAdmissionWithImmediatePaymentDraft,
@@ -1153,7 +1072,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert full admission with title, firstName and lastName', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft(
             {
               ...fullAdmissionWithImmediatePaymentDraft,
@@ -1170,7 +1088,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert full admission paid by set date', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...fullAdmissionWithPaymentBySetDateDraft,
             ...sampleMediationDraftObj
@@ -1186,7 +1103,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert full admission paid by set date with mandatory SoM only', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...fullAdmissionWithPaymentBySetDateDraft,
             statementOfMeans: { ...statementOfMeansWithMandatoryFieldsDraft },
@@ -1204,7 +1120,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert full admission paid by instalments', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...fullAdmissionWithPaymentByInstalmentsDraft,
             ...sampleMediationDraftObj
@@ -1220,7 +1135,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert full admission paid by instalments with complete SoM', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...fullAdmissionWithPaymentByInstalmentsDraft,
             ...sampleMediationDraftObj,
@@ -1239,7 +1153,6 @@ describe('ResponseModelConverter', () => {
       })
 
       context('partial admission conversion', () => {
-        isEnhancedMediationJourneyEnabledStub.returns(false)
         it('should convert already paid partial admission', async () => {
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionAlreadyPaidDraft,
@@ -1256,7 +1169,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert partial admission paid immediately', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithImmediatePaymentDraft,
             ...sampleMediationDraftObj
@@ -1272,7 +1184,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert partial admission paid by set date', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithPaymentBySetDateDraft,
             ...sampleMediationDraftObj
@@ -1288,7 +1199,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert partial admission paid by set date with mandatory SoM only', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithPaymentBySetDateDraft,
             ...sampleMediationDraftObj,
@@ -1306,7 +1216,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert partial admission paid by instalments', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithPaymentByInstalmentsDraft,
             ...sampleMediationDraftObj
@@ -1322,7 +1231,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert partial admission paid by instalments with complete SoM', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithPaymentByInstalmentsDraft,
             ...sampleMediationDraftObj,
@@ -1340,7 +1248,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert partial admission with Mediation canWeUse FreeMediation to NO', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithPaymentByInstalmentsDraft
           }, individualDetails)
@@ -1365,7 +1272,6 @@ describe('ResponseModelConverter', () => {
         })
 
         it('should convert partial admission with Mediation canWeUse FreeMediation to YES and response not submitted', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           const responseDraft = prepareResponseDraft({
             ...partialAdmissionWithPaymentByInstalmentsDraft
           }, individualDetails)

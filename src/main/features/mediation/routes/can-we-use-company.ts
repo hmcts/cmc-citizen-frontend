@@ -17,21 +17,12 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { FreeMediationOption } from 'forms/models/freeMediation'
 import { CanWeUseCompany } from 'mediation/form/models/CanWeUseCompany'
 import { CompanyDetails } from 'forms/models/companyDetails'
-import { FeatureToggles } from 'utils/featureToggles'
-import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
 async function renderView (form: Form<CanWeUseCompany>, res: express.Response): Promise<void> {
-  const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
-  let enhancedMediationJourney: boolean = false
-
-  if (await featureToggles.isEnhancedMediationJourneyEnabled()) {
-    enhancedMediationJourney = true
-  }
 
   res.render(Paths.canWeUseCompanyPage.associatedView, {
     form: form,
-    contactName: getContactName(res),
-    enhancedMediationJourney: enhancedMediationJourney
+    contactName: getContactName(res)
   })
 }
 

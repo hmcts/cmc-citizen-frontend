@@ -29,7 +29,6 @@ import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
 import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import { Moment } from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
-import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
 function getPaymentIntention (draft: DraftClaimantResponse, claim: Claim): PaymentIntention {
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
@@ -71,8 +70,6 @@ async function renderView (form: Form<StatementOfTruth>, res: express.Response):
   const mediationPilot: boolean = ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'mediationPilot')
   const dqsEnabled: boolean = DirectionsQuestionnaireHelper.isDirectionsQuestionnaireEligible(draft.document, claim)
   const dispute: boolean = claim.response.responseType === ResponseType.FULL_DEFENCE
-  const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
-  const enhancedMediationJourney = await featureToggles.isEnhancedMediationJourneyEnabled()
 
   let datesUnavailable: string[]
   if (dqsEnabled) {
@@ -109,8 +106,7 @@ async function renderView (form: Form<StatementOfTruth>, res: express.Response):
     datesUnavailable: datesUnavailable,
     dispute: dispute,
     mediationPilot: mediationPilot,
-    alternatePaymentMethodDate: alternatePaymentMethodDate,
-    enhancedMediationJourney: enhancedMediationJourney
+    alternatePaymentMethodDate: alternatePaymentMethodDate
   })
 }
 

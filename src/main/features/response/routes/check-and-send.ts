@@ -51,8 +51,6 @@ async function renderView (form: Form<StatementOfTruth>, res: express.Response):
     }
   }
   const mediationPilot: boolean = ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'mediationPilot')
-  const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
-  const enhancedMediationJourney = await featureToggles.isEnhancedMediationJourneyEnabled()
 
   res.render(Paths.checkAndSendPage.associatedView, {
     claim: claim,
@@ -70,8 +68,7 @@ async function renderView (form: Form<StatementOfTruth>, res: express.Response):
     mediationPilot: mediationPilot,
     mediationEnabled: FeatureToggles.isEnabled('mediation'),
     timeline: getTimeline(draft),
-    evidence: getEvidence(draft),
-    enhancedMediationJourney: enhancedMediationJourney
+    evidence: getEvidence(draft)
   })
 }
 

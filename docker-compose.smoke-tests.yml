@@ -22,7 +22,6 @@ services:
         - FEATURE_PCQ
         - FEATURE_HELP_WITH_FEES
         - FEATURE_BREATHING_SPACE
-        - ENHANCED_MEDIATION_JOURNEY
       volumes:
         - ./smoke-output:/usr/src/app/output
     remote-webdriver:
