@@ -22,16 +22,6 @@ describe('Free mediation task', () => {
     expect(await FreeMediationTask.isCompleted(mediationDraft, claim)).to.be.false
   })
 
-  if (FeatureToggles.isEnabled('mediation')) {
-    it('should not be completed when willYouTryMediation is yes and youCanOnlyUseMediation is undefined', async () => {
-      const mediationDraft = new MediationDraft()
-      mediationDraft.willYouTryMediation = new FreeMediation(FreeMediationOption.YES)
-      mediationDraft.youCanOnlyUseMediation = undefined
-
-      expect(await FreeMediationTask.isCompleted(mediationDraft, claim)).to.be.false
-    })
-  }
-
   it('should be completed when willYouTryMediation is yes and youCanOnlyUseMediation is yes and canWeUse is yes', async () => {
     const mediationDraft = new MediationDraft()
     mediationDraft.willYouTryMediation = new FreeMediation(FreeMediationOption.YES)

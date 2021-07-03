@@ -176,20 +176,5 @@ describe('FreeMediationUtil', () => {
       const expectedValue: string = 'Another reason - Not interested'
       expect(await FreeMediationUtil.getNoMediationReason(draft)).to.deep.equal(expectedValue)
     })
-
-    it('no mediation reason should be returned when the toggle is off', async () => {
-      const myExternalId: String = 'b17af4d2-273f-4999-9895-bce382fa24c8'
-      const draft: MediationDraft = new MediationDraft().deserialize({
-        externalId: myExternalId,
-        willYouTryMediation: {
-          option: FreeMediationOption.NO
-        },
-        noMediationReason: {
-          iDoNotWantMediationReason: 'OTHER',
-          otherReason: 'Not interested'
-        }
-      })
-      expect(await FreeMediationUtil.getNoMediationReason(draft)).to.be.undefined
-    })
   })
 })

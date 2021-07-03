@@ -7,7 +7,6 @@ import 'test/routes/expectations'
 import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
 
 import { Paths as MediationPaths } from 'mediation/paths'
-import { Paths as ClaimantResponsePaths } from 'claimant-response/paths'
 
 import { app } from 'main/app'
 
@@ -181,7 +180,7 @@ describe('Free mediation: mediation disagreement page', () => {
           .set('Cookie', `${cookieName}=ABC`)
           .send({ option: FreeMediationOption.NO })
           .expect(res => expect(res).to.be.redirect
-            .toLocation(ClaimantResponsePaths.taskListPage
+            .toLocation(MediationPaths.iDontWantFreeMediationPage
               .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
       })
 
