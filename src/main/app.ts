@@ -28,7 +28,6 @@ import { TestingSupportFeature } from 'testing-support/index'
 import { FeatureToggles } from 'utils/featureToggles'
 import { ClaimantResponseFeature } from 'claimant-response/index'
 import { PaidInFullFeature } from 'paid-in-full/index'
-import { MediationFeature } from 'mediation/index'
 import { DirectionsQuestionnaireFeature } from 'features/directions-questionnaire'
 import { OrdersFeature } from 'orders/index'
 import { trackCustomEvent } from 'logging/customEventTracker'
@@ -115,9 +114,6 @@ new SettlementAgreementFeature().enableFor(app)
 
 logger.info('Loading BreathingSpaceFeature')
 new BreathingSpaceFeature().enableFor(app)
-
-logger.info('Loading MediationFeature')
-new MediationFeature().enableFor(app)
 
 logger.info('Loading PaidInFullFeature')
 new PaidInFullFeature().enableFor(app)

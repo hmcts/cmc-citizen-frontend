@@ -85,7 +85,6 @@
     "returnErrorToUser": false,
     "mockPay": false,
     "mediation": false,
-    "mediationPilot": false,
     "directionsQuestionnaire": false,
     "legalAdvisorPilot": false,
     "judgePilot": false,

@@ -1,7 +1,7 @@
 {% from "table.njk" import tableStart, tableEnd, row %}
 {% from "party/details.njk" import partyDetailRow %}
 
-{% macro freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot, mediationEnabled) %}
+{% macro freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber) %}
   <h2 class="govuk-heading-m">{{ t("Free telephone mediation") }}</h2>
   <dl class="govuk-summary-list govuk-!-margin-bottom-9">
   {{ partyDetailRow(
@@ -10,7 +10,7 @@
     changeLink = MediationPaths.freeTelephoneMediationPage.evaluateUri({ externalId: claim.externalId }),
     bold = true
   ) }}
-    
+
     {% if mediationDraft.canWeUseCompany %}
       {% if mediationDraft.canWeUseCompany.mediationPhoneNumberConfirmation %}
         {{ partyDetailRow(

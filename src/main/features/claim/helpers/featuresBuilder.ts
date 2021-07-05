@@ -56,12 +56,6 @@ type FeatureDefinition = {
 
 export const FEATURES: FeatureDefinition[] = [
   {
-    feature: 'mediationPilot',
-    toggle: 'mediation_pilot',
-    setting: 'mediationPilot',
-    validForAmount: amount => amount <= FeaturesBuilder.MEDIATION_PILOT_AMOUNT
-  },
-  {
     feature: 'LAPilotEligible',
     toggle: 'legal_advisor_pilot',
     setting: 'legalAdvisorPilot',

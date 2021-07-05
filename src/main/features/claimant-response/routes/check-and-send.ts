@@ -17,7 +17,6 @@ import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { ResponseType } from 'claims/models/response/responseType'
-import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { FeatureToggles } from 'utils/featureToggles'
 import { SignatureType } from 'common/signatureType'
 import { Form } from 'forms/form'
@@ -67,7 +66,6 @@ async function renderView (form: Form<StatementOfTruth>, res: express.Response):
   const claim: Claim = res.locals.claim
   const alreadyPaid: boolean = StatesPaidHelper.isResponseAlreadyPaid(claim)
   const paymentIntention: PaymentIntention = alreadyPaid || claim.response.responseType === ResponseType.FULL_DEFENCE ? undefined : getPaymentIntention(draft.document, claim)
-  const mediationPilot: boolean = ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'mediationPilot')
   const dqsEnabled: boolean = DirectionsQuestionnaireHelper.isDirectionsQuestionnaireEligible(draft.document, claim)
   const dispute: boolean = claim.response.responseType === ResponseType.FULL_DEFENCE
 
@@ -105,7 +103,6 @@ async function renderView (form: Form<StatementOfTruth>, res: express.Response):
     directionsQuestionnaireDraft: directionsQuestionnaireDraft.document,
     datesUnavailable: datesUnavailable,
     dispute: dispute,
-    mediationPilot: mediationPilot,
     alternatePaymentMethodDate: alternatePaymentMethodDate
   })
 }

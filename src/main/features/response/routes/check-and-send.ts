@@ -50,7 +50,6 @@ async function renderView (form: Form<StatementOfTruth>, res: express.Response):
       form.model.type = SignatureType.DIRECTION_QUESTIONNAIRE
     }
   }
-  const mediationPilot: boolean = ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'mediationPilot')
 
   res.render(Paths.checkAndSendPage.associatedView, {
     claim: claim,
@@ -65,7 +64,6 @@ async function renderView (form: Form<StatementOfTruth>, res: express.Response):
     directionsQuestionnaireDraft: directionsQuestionnaireDraft.document,
     datesUnavailable: datesUnavailable,
     statementOfTruthType: statementOfTruthType,
-    mediationPilot: mediationPilot,
     mediationEnabled: FeatureToggles.isEnabled('mediation'),
     timeline: getTimeline(draft),
     evidence: getEvidence(draft)

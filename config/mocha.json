@@ -31,7 +31,6 @@
     "newFeaturesConsent": true,
     "returnErrorToUser": true,
     "mediation": true,
-    "mediationPilot": true,
     "directionsQuestionnaire": true,
     "newDashboardStatus": false,
     "inversionOfControl": true,
