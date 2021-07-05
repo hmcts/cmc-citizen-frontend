@@ -78,15 +78,15 @@ function testData () {
         },
         ...claimantRejectAlreadyPaidWithMediation()
       },
-      claimantAssertions: ['We’ll contact you to try to arrange a mediation appointment',
-        'You’ve rejected the defendant’s response.',
-        'You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.',
-        'Find out how mediation works'
+      claimantAssertions: ['Your mediation appointment will be arranged within 28 days',
+        'You’ve rejected the defendant’s response',
+        'You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.',
+        'Find out more about how mediation works (opens in new tab)'
       ],
-      defendantAssertions: ['We’ll contact you to try to arrange a mediation appointment',
-        'John Smith has rejected your defence.',
-        'You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.',
-        'Find out how mediation works'
+      defendantAssertions: ['Your mediation appointment will be arranged within 28 days',
+        'John Smith rejected your response',
+        'You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.',
+        'Find out more about how mediation works (opens in new tab)'
       ]
     },
     {
@@ -133,15 +133,15 @@ function testData () {
         ...claimantRejectAlreadyPaidWithMediation()
       },
       claimantAssertions: [
-        'You’ve rejected the defendant’s response.',
-        'You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.',
-        'Find out how mediation works'
+        'You’ve rejected the defendant’s response',
+        'You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.',
+        'Find out more about how mediation works (opens in new tab)'
       ],
       defendantAssertions: [
-        statesPaidClaim().claim.claimants[0].name + ' has rejected your defence.',
-        'You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.',
-        'Find out how mediation works',
-        'They’ve also sent us their hearing requirements.',
+        statesPaidClaim().claim.claimants[0].name + ' rejected your response',
+        'You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.',
+        'Find out more about how mediation works (opens in new tab)',
+        'They’ve also sent us their hearing requirements:',
         'Download their hearing requirements'
       ]
     },
