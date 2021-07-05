@@ -105,19 +105,17 @@ function testData () {
         responseDeadline: MomentFactory.currentDate().subtract(16, 'days')
       },
       claimantAssertions: ['000MC000',
-        'Wait for the judgment to be confirmed',
-        'We’ll contact you to tell you whether the judgment has been entered. We aim to do this within 10 working days',
-        'Your online account won’t be updated with the progress of this claim - any further updates will be by post.',
-        'John Doe can no longer respond to your claim using this service - they may have responded by post.',
-        'It’s possible we received a postal response before the deadline but hadn’t processed it when you requested judgment.',
-        'If we discover this has happened, we’ll reject your request.'
+        'County Court Judgment (CCJ) requested',
+        'We’ll process your request and post a copy of the judgment to you and to John Doe. We aim to do this within 10 working days.',
+        'Your online account will not be updated with the progress of this claim - any further updates will be by post.',
+        'John Doe can no longer respond to your claim online.',
+        'If a postal response is received before the judgment is issued your request will be rejected.'
       ],
       defendantAssertions: ['000MC000',
-        'We’ll contact you',
-        'John Smith has requested a County Court Judgment (CCJ) against you because the deadline for your response has passed.',
-        'It’s possible we received your postal response before the deadline but hadn’t processed it when they requested judgment.',
-        'If we discover this has happened, we’ll reject their request.',
-        'Otherwise we’ll post a copy of the CCJ to you and to John Smith and explain what to do next.'
+        'Claimant has requested a County Court Judgment (CCJ)',
+        'John Smith has requested a CCJ against you because the deadline for your response has passed.',
+        'Your online account will not be updated with the progress of this claim - any further updates will be by post.',
+        'If your deadline has passed, but the CCJ has not been issued, you can still respond. Contact us for more information'
       ]
     },
     {

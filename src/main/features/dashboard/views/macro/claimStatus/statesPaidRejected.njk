@@ -24,7 +24,7 @@
   {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
     {{ t('You both agreed a settlement through mediation') }}
   {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-    {{ t('We’ll contact you to try to arrange a mediation appointment.') }}
+    {{ t('Your mediation appointment will be arranged within 28 days') }}
   {% else %}
     {{ t('Wait for the court to review the case') }}
   {% endif %}
@@ -51,11 +51,9 @@
     {% endif %}
   {% elseif featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
     <div class="status-block">
-      <h2 class="heading-medium">{{ t('We’ll contact you to try to arrange a mediation appointment') }}</h2>
-
-      <p>{{ t('You’ve rejected the defendant’s response.') }}</p>
-      <p>{{ t('You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.') }}</p>
-      <p>{{ internalLink(t('Find out how mediation works'), DashboardPaths.howFreeMediationWorksPage.uri) }}</p>
+      <h2 class="heading-medium">{{ t('You’ve rejected the defendant’s response') }}</h2>
+      <p>{{ t('You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.') }}</p>
+      <p><a target="_blank" rel="noreferrer noopener" href="https://www.gov.uk/guidance/small-claims-mediation-service">{{  t('Find out more about how mediation works (opens in new tab)') }}</a></p>
 
     </div>
   {% else %}
@@ -68,7 +66,7 @@
     <h2 class="heading-small">{{ t('You’ve rejected the defendant’s admission') }}</h2>
     <p>{{ t('They said they owe {{ amount }}.', { amount: amount | numeral }) }}</p>
     <p>{{ t('You’ve both agreed to try mediation. The Small Claims Mediation Service will contact you to arrange a call with the mediator.') }}</p>
-    {{ externalLink(t('Find out how mediation works'), 'https://www.gov.uk/government/publications/small-claims-mediation-service-ex730') }}
+    <p><a target="_blank" rel="noreferrer noopener" href="https://www.gov.uk/guidance/small-claims-mediation-service">{{  t('Find out more about how mediation works (opens in new tab)') }}</a></p>
 
     <p>{{ downloadTheirResponseLink(claim) }}</p>
   {% endif %}
@@ -96,7 +94,7 @@
       claimantName: claim.claimData.claimant.name,
       amount: amount | numeral}) }}
   {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-    {{ t('We’ll contact you to try to arrange a mediation appointment') }}
+    {{ t('Your mediation appointment will be arranged within 28 days') }}
   {% else %}
     {{ t('Wait for the court to review the case') }}
   {% endif %}
@@ -124,7 +122,7 @@
 
     <h2 class="heading-small">{{ t('Wait for the court to review the case') }}</h2>
     {% if mediation %}
-      <p>{{ t('We’ll contact you to try to arrange a mediation appointment') }}</p>
+      <p>{{ t('Your mediation appointment will be arranged within 28 days') }}</p>
     {% else %}
       <p>{{ t('{{ claimantName }} has rejected your admission of {{ amount }}', { claimantName: claim.claimData.claimant.name, amount: amount | numeral}) }}<p>
       <p>{{ t('{{ claimantName }} has said no to trying mediation.', { claimantName: claim.claimData.claimant.name }) }}</p>
@@ -149,17 +147,16 @@
 {% endmacro %}
 
 {% macro statesPaidRejectedMediationYESDefendantClaimDetails(claim) %}
-  <p>{{ t('They agreed to try mediation. We’ll contact you to try to arrange an appointment.') }}</p>
-  {{ externalLink(t('Find out how mediation works'), 'https://www.gov.uk/government/publications/small-claims-mediation-service-ex730') }}
+  <p>{{ t('You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.') }}</p>
+  <p><a target="_blank" rel="noreferrer noopener" href="https://www.gov.uk/guidance/small-claims-mediation-service">{{  t('Find out more about how mediation works (opens in new tab)') }}</a></p>
 {% endmacro %}
 
 {% macro statesPaidRejectionMediationYESDefendantClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-medium">{{ t('We’ll contact you to try to arrange a mediation appointment') }}</h2>
-    <p>{{ t('{{ claimantName }} has rejected your defence.',
-        { claimantName: claim.claimData.claimant.name }) }}</p>
-    <p>{{ t('You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.') }}</p>
-    <p>{{ internalLink(t('Find out how mediation works'), DashboardPaths.howFreeMediationWorksPage.uri) }}</p>
+    <h2 class="heading-medium">{{ t('{{ claimantName }} rejected your response',
+        { claimantName: claim.claimData.claimant.name }) }}</h2>
+    <p>{{ t('You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.') }}</p>
+    <p><a target="_blank" rel="noreferrer noopener" href="https://www.gov.uk/guidance/small-claims-mediation-service">{{  t('Find out more about how mediation works (opens in new tab)') }}</a></p>
     {{ downloadClaimantDQs(claim) }}
   </div>
 {% endmacro %}

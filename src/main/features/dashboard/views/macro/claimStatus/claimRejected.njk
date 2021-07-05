@@ -62,7 +62,7 @@
 {% endmacro %}
 
 {% macro claimRejectedDefendantDefenceFreeMediationYESForDefendantDashboard(claim) %}
-  {{ t('We’ll contact you to try to arrange a mediation appointment') }}
+  {{ t('Your mediation appointment will be arranged within 28 days') }}
 {% endmacro %}
 
 {% macro claimantAcceptedDefendantDefenceDefendantDashboard(claim) %}
@@ -92,7 +92,7 @@
 {% macro claimRejectedDefendantDefenceFreeMediationNOForDefendantDetails(claim) %}
   <div class="status-block">
     <h2 class="heading-medium">{{ t('Wait for the court to review the case') }}</h2>
-    <p>{{ t('{{ claimantName }} has rejected your defence.',
+    <p>{{ t('{{ claimantName }} rejected your response',
         { claimantName: claim.claimData.claimant.name }) }}</p>
     <p>{{ t('{{ claimantName }} has said no to trying mediation.',
         { claimantName: claim.claimData.claimant.name }) }}</p>
@@ -103,11 +103,10 @@
 
 {% macro claimRejectedDefendantDefenceFreeMediationYESForDefendantDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-medium">{{ t('We’ll contact you to try to arrange a mediation appointment') }}</h2>
-    <p>{{ t('{{ claimantName }} has rejected your defence.',
-        { claimantName: claim.claimData.claimant.name }) }}</p>
-    <p>{{ t('You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.') }}</p>
-    <p>{{ internalLink( t('Find out how mediation works'), DashboardPaths.howFreeMediationWorksPage.uri) }}</p>
+    <h2 class="heading-medium">{{ t('{{ claimantName }} rejected your response',
+        { claimantName: claim.claimData.claimant.name }) }}</h2>
+    <p>{{ t('You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.') }}</p>
+    <p><a target="_blank" rel="noreferrer noopener" href="https://www.gov.uk/guidance/small-claims-mediation-service">{{  t('Find out more about how mediation works (opens in new tab)') }}</a></p>
     {{ downloadClaimantDQs(claim) }}
   </div>
 {% endmacro %}
@@ -177,7 +176,7 @@
 
 {% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDashboard(claim) %}
   {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-    {{ t('We’ll contact you to try to arrange a mediation appointment') }}
+    {{ t('Your mediation appointment will be arranged within 28 days') }}
   {% else %}
     {{ t('Wait for the court to review the case') }}
   {% endif %}
@@ -186,11 +185,11 @@
   {% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDetails(claim) %}
   <div class="status-block">
     <h2
-      class="heading-medium">{{ t('You’ve rejected {{ defendantName }} response.', { defendantName: claim.claimData.defendant.name }) }}</h2>
+      class="heading-medium">{{ t('You’ve rejected the defendant’s response') }}</h2>
 
     {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-  <p>{{ t('You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.') }}</p>
-  <p>{{ externalLink(t('Find out how mediation works'), 'https://www.gov.uk/government/publications/small-claims-mediation-service-ex730') }}</p>
+  <p>{{ t('You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.') }}</p>
+  <p><a target="_blank" rel="noreferrer noopener" href="https://www.gov.uk/guidance/small-claims-mediation-service">{{  t('Find out more about how mediation works (opens in new tab)') }}</a></p>
   {% endif %}
   </div>
 {% endmacro %}
@@ -272,7 +271,7 @@
       <h2 class="heading-medium">{{ t('The defendant’s response') }}</h2>
       <p>{{ t('{{ defendantName }} has rejected the claim. They’ve suggested mediation to help resolve this dispute.',
           { defendantName: claim.claimData.defendant.name }) }}</p>
-      <p>{{ t(externalLink('Find out how mediation works', 'https://formfinder.hmctsformfinder.justice.gov.uk/ex730-eng.pdf') + ' (PDF, 399KB)') | safe }}</p>
+      <p><a target="_blank" rel="noreferrer noopener" href="https://www.gov.uk/guidance/small-claims-mediation-service">{{  t('Find out more about how mediation works (opens in new tab)') }}</a></p>
       {% if mediationDeadline %}
         <p>{{ t('You need to email {{ emailAddress }} before 4pm on {{ respondToMediationDeadline }} to tell us if you agree to mediation or not.',
             { emailAddress: supportEmailAddress, respondToMediationDeadline: mediationDeadline | date }) }}</p>
