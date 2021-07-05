@@ -4,7 +4,6 @@ import { ResponseDraft } from 'main/features/response/draft/responseDraft'
 import { Claim } from 'main/app/claims/models/claim'
 import { FreeMediationOption } from 'main/app/forms/models/freeMediation'
 import { CompanyDetails } from 'forms/models/companyDetails'
-import { FeatureToggles } from 'utils/featureToggles'
 
 export class FreeMediationUtil {
 
@@ -17,9 +16,7 @@ export class FreeMediationUtil {
   }
 
   static getMediationPhoneNumber (claim: Claim, mediationDraft: MediationDraft, draft?: ResponseDraft): string {
-    if (!FeatureToggles.isEnabled('mediation')) {
-      return undefined
-    } else if (mediationDraft.canWeUseCompany) {
+    if (mediationDraft.canWeUseCompany) {
       if (mediationDraft.canWeUseCompany.option === FreeMediationOption.YES) {
         return mediationDraft.canWeUseCompany.mediationPhoneNumberConfirmation
       } else {
@@ -40,9 +37,7 @@ export class FreeMediationUtil {
   }
 
   static getMediationContactPerson (claim: Claim, mediationDraft: MediationDraft, draft?: ResponseDraft): string {
-    if (!FeatureToggles.isEnabled('mediation')) {
-      return undefined
-    } else if (mediationDraft.canWeUseCompany) {
+     if (mediationDraft.canWeUseCompany) {
       if (mediationDraft.canWeUseCompany.option === FreeMediationOption.YES) {
         if (!claim.isResponseSubmitted() && draft) {
           return (draft.defendantDetails.partyDetails as CompanyDetails).contactPerson || undefined

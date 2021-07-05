@@ -3,7 +3,6 @@
     "testingSupport": true,
     "newFeaturesConsent": true,
     "returnErrorToUser": true,
-    "mediation": true,
     "legalAdvisorPilot": true,
     "judgePilot": true,
     "directionsQuestionnaire": true,

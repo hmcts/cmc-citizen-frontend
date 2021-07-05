@@ -64,7 +64,6 @@ async function renderView (form: Form<StatementOfTruth>, res: express.Response):
     directionsQuestionnaireDraft: directionsQuestionnaireDraft.document,
     datesUnavailable: datesUnavailable,
     statementOfTruthType: statementOfTruthType,
-    mediationEnabled: FeatureToggles.isEnabled('mediation'),
     timeline: getTimeline(draft),
     evidence: getEvidence(draft)
   })

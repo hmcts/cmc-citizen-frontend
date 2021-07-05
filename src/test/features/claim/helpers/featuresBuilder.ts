@@ -21,7 +21,6 @@ const userWithoutConsent = new User('1', 'user@example.com', 'John', 'Smith', ['
 const MIN_THRESHOLD = Math.min(
   FeaturesBuilder.JUDGE_PILOT_THRESHOLD,
   FeaturesBuilder.LA_PILOT_THRESHOLD,
-  FeaturesBuilder.MEDIATION_PILOT_AMOUNT,
   FeaturesBuilder.ONLINE_DQ_THRESHOLD
 )
 
@@ -59,20 +58,6 @@ describe('FeaturesBuilder', () => {
       expect(features).to.be.undefined
     })
 
-  })
-
-  describe('Mediation Pilot Feature', () => {
-    it(`should add mediation pilot to features if amount <= ${FeaturesBuilder.MEDIATION_PILOT_AMOUNT} and flag is set`, async () => {
-      isAutoEnrollIntoNewFeatureEnabledStub.returns(true)
-      const features = await featuresBuilder.features(FeaturesBuilder.MEDIATION_PILOT_AMOUNT, user)
-      expect(features).to.equal('judgePilotEligible, directionsQuestionnaire')
-    })
-
-    it(`should not add mediation pilot to features if amount > ${FeaturesBuilder.MEDIATION_PILOT_AMOUNT}`, async () => {
-      isAutoEnrollIntoNewFeatureEnabledStub.returns(true)
-      const features = await featuresBuilder.features(FeaturesBuilder.MEDIATION_PILOT_AMOUNT + 0.01, user)
-      expect(features).to.be.equal('judgePilotEligible, directionsQuestionnaire')
-    })
   })
 
   describe('Legal advisor Pilot Feature', () => {

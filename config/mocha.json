@@ -30,7 +30,6 @@
     "testingSupport": true,
     "newFeaturesConsent": true,
     "returnErrorToUser": true,
-    "mediation": true,
     "directionsQuestionnaire": true,
     "newDashboardStatus": false,
     "inversionOfControl": true,

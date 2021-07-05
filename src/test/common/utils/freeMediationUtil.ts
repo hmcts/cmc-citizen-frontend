@@ -8,7 +8,6 @@ import * as claimStoreServiceMock from '../../http-mocks/claim-store'
 import { Claim } from 'claims/models/claim'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { defenceWithDisputeDraft } from 'test/data/draft/responseDraft'
-import { FeatureToggles } from 'utils/featureToggles'
 
 describe('FreeMediationUtil', () => {
   context('convertFreeMediation should return expected FreeMediation when', () => {
@@ -28,18 +27,16 @@ describe('FreeMediationUtil', () => {
       expect(await FreeMediationUtil.getFreeMediation(draft)).to.deep.equal(expectedValue, 'Yes is expected')
     })
 
-    if (FeatureToggles.isEnabled('mediation')) {
-      it('value is not provided', async () => {
-        const myExternalId: String = 'b17af4d2-273f-4999-9895-bce382fa24c8'
-        const draft: MediationDraft = new MediationDraft().deserialize({
-          externalId: myExternalId,
-          willYouTryMediation: undefined,
-          youCanOnlyUseMediation: undefined
-        })
-        const expectedValue: YesNoOption = YesNoOption.NO
-        expect(await FreeMediationUtil.getFreeMediation(draft)).to.deep.equal(expectedValue, 'No is expected')
+    it('value is not provided', async () => {
+      const myExternalId: String = 'b17af4d2-273f-4999-9895-bce382fa24c8'
+      const draft: MediationDraft = new MediationDraft().deserialize({
+        externalId: myExternalId,
+        willYouTryMediation: undefined,
+        youCanOnlyUseMediation: undefined
       })
-    }
+      const expectedValue: YesNoOption = YesNoOption.NO
+      expect(await FreeMediationUtil.getFreeMediation(draft)).to.deep.equal(expectedValue, 'No is expected')
+    })
   })
 
   context('getMediationPhoneNumber should return expected value when', () => {

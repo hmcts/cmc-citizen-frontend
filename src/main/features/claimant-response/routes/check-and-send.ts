@@ -17,7 +17,6 @@ import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { ResponseType } from 'claims/models/response/responseType'
-import { FeatureToggles } from 'utils/featureToggles'
 import { SignatureType } from 'common/signatureType'
 import { Form } from 'forms/form'
 import { StatementOfTruth } from 'claimant-response/form/models/statementOfTruth'
@@ -95,7 +94,6 @@ async function renderView (form: Form<StatementOfTruth>, res: express.Response):
     claimantPaymentPlan: draft.document.alternatePaymentMethod ? draft.document.alternatePaymentMethod.toDomainInstance() : undefined,
     alreadyPaid: alreadyPaid,
     amount: alreadyPaid ? StatesPaidHelper.getAlreadyPaidAmount(claim) : undefined,
-    mediationEnabled: FeatureToggles.isEnabled('mediation'),
     directionsQuestionnaireEnabled: dqsEnabled,
     mediationDraft: mediationDraft.document,
     contactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft.document),

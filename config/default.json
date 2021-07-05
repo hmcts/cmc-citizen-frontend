@@ -84,7 +84,6 @@
     "newFeaturesConsent": false,
     "returnErrorToUser": false,
     "mockPay": false,
-    "mediation": false,
     "directionsQuestionnaire": false,
     "legalAdvisorPilot": false,
     "judgePilot": false,

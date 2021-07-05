@@ -258,7 +258,7 @@
 {% endmacro %}
 
 {% macro claimRejectedForClaimantClaimDetails(claim, mediationDeadline) %}
-  {% if featureToggles.mediation and claim.isIntentionToProceedEligible() %}
+  {% if claim.isIntentionToProceedEligible() %}
     <div class="status-block">
       <h2 class="heading-medium">{{ t('Decide whether to proceed') }}</h2>
       <p>{{ t('{{ defendantName }} has rejected your claim.', { defendantName: claim.claimData.defendant.name }) }}</p>
