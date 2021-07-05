@@ -37,7 +37,7 @@ export class FreeMediationUtil {
   }
 
   static getMediationContactPerson (claim: Claim, mediationDraft: MediationDraft, draft?: ResponseDraft): string {
-     if (mediationDraft.canWeUseCompany) {
+    if (mediationDraft.canWeUseCompany) {
       if (mediationDraft.canWeUseCompany.option === FreeMediationOption.YES) {
         if (!claim.isResponseSubmitted() && draft) {
           return (draft.defendantDetails.partyDetails as CompanyDetails).contactPerson || undefined
