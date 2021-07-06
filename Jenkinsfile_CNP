@@ -57,7 +57,7 @@ env.ENHANCED_MEDIATION_JOURNEY = 'true'
 
 String notificationsChannel = '#cmc-tech-notification'
 
-def branchesToSync = ['demo', 'perftest']
+def branchesToSync = ['demo', 'perftest', 'ithc']
 
 
 withPipeline("nodejs", product, component) {
