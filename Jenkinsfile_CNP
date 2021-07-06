@@ -57,6 +57,9 @@ env.ENHANCED_MEDIATION_JOURNEY = 'true'
 
 String notificationsChannel = '#cmc-tech-notification'
 
+def branchesToSync = ['demo', 'perftest']
+
+
 withPipeline("nodejs", product, component) {
 
   after('build') {
@@ -88,4 +91,5 @@ withPipeline("nodejs", product, component) {
 
   loadVaultSecrets(secrets)
   enableSlackNotifications(notificationsChannel)
+  syncBranchesWithMaster(branchesToSync)
 }
