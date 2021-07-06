@@ -37,7 +37,7 @@
         <h2 class="heading-medium">{{ t('{{ claimantName }} rejected your response',
             { claimantName: claim.claimData.claimant.name }) }}</h2>
         <p>{{ t('You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.') }}</p>
-        <p><a target="_blank" rel="noreferrer noopener" href="https://www.gov.uk/guidance/small-claims-mediation-service">{{  t('Find out more about how mediation works (opens in new tab)') }}</a></p>
+        <p><a target="_blank" rel="noreferrer noopener" href="https://www.gov.uk/guidance/small-claims-mediation-service">{{ t('Find out more about how mediation works (opens in new tab)') }}</a></p>
       </div>
     {% endif %}
   {% else %}
@@ -49,8 +49,7 @@
         <h2 class="heading-medium">{{ t('{{ claimantName }} has rejected your admission of {{ amount }}',
                 { amount: claim.response.amount | numeral, claimantName: claim.claimData.claimant.name }) }}</h2>
       {% endif %}
-      <h2 class="heading-medium">{{ t('{{ claimantName }} rejected your response') }}</h2>
-      {% if claim.response.freeMediation === FreeMediationOption.YES and claim.claimantResponse.freeMediation === FreeMediationOption.NO and enhancedMediationJourney %
+      {% if claim.response.freeMediation === FreeMediationOption.YES and claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
         <p>{{ t('{{ claimantName }} has said no to trying mediation.',
         { claimantName: claim.claimData.claimant.name }) }}</p>
       {% endif %}
@@ -82,14 +81,14 @@
         <h2 class="heading-medium">{{ t('{{ claimantName }} has rejected your admission of {{ amount }}',
                 { amount: claim.response.amount | numeral, claimantName: claim.claimData.claimant.name }) }}</h2>
       {% endif %}
-      {% if claim.response.freeMediation === FreeMediationOption.YES and claim.claimantResponse.freeMediation === FreeMediationOption.NO and enhancedMediationJourney %}
+      {% if claim.response.freeMediation === FreeMediationOption.YES and claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
         <p>{{ t('{{ claimantName }} has said no to trying mediation.',
         { claimantName: claim.claimData.claimant.name }) }}</p>
       {% endif %}
 
       {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
         <p>{{ t('You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.') }}</p>
-        <p><a target="_blank" rel="noreferrer noopener" href="https://www.gov.uk/guidance/small-claims-mediation-service">{{  t('Find out more about how mediation works (opens in new tab)') }}</a></p>
+        <p><a target="_blank" rel="noreferrer noopener" href="https://www.gov.uk/guidance/small-claims-mediation-service">{{ t('Find out more about how mediation works (opens in new tab)') }}</a></p>
       {% else %}
         <p>{{ t('They believe you owe them the full {{ amount }} claimed.', { amount: claim.totalAmountTillToday | numeral }) }}</p>
         <p>{{ t('You might have to go to a hearing. We’ll contact you if we set a hearing date to tell you how to prepare.') }}</p>
