@@ -55,6 +55,9 @@ env.FEATURE_BREATHING_SPACE = 'true'
 
 String notificationsChannel = '#cmc-tech-notification'
 
+def branchesToSync = ['demo', 'perftest', 'ithc']
+
+
 withPipeline("nodejs", product, component) {
 
   after('build') {
@@ -86,4 +89,5 @@ withPipeline("nodejs", product, component) {
 
   loadVaultSecrets(secrets)
   enableSlackNotifications(notificationsChannel)
+  syncBranchesWithMaster(branchesToSync)
 }
