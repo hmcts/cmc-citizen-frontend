@@ -65,18 +65,6 @@ Scenario('Defendant agreed(Individual Vs Individual) to pay all of the claim... 
   I.see(testData.claimRef)
 })
 
-Scenario('Organization agreed to pay all of the claim to sole trader...', { retries: 3 }, async (I: I) => {
-  const testData = await EndToEndTestData.prepareData(I, PartyType.ORGANISATION, PartyType.SOLE_TRADER)
-  testData.paymentOption = PaymentOption.IMMEDIATELY
-  helperSteps.finishResponseWithFullAdmission(testData)
-  I.click('Sign out')
-  userSteps.login(testData.claimantEmail)
-  claimantResponseSteps.viewClaimFromDashboard(testData.claimRef)
-  I.see(testData.claimRef)
-  I.click('My account')
-  I.see(testData.claimRef)
-})
-
 Scenario('Company agreed to pay all of the claim  to individual @nightly', { retries: 3 }, async (I: I) => {
   const testData = await EndToEndTestData.prepareData(I, PartyType.COMPANY, PartyType.INDIVIDUAL)
   testData.paymentOption = PaymentOption.IMMEDIATELY

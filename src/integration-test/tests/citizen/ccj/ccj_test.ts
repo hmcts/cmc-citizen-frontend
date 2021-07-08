@@ -34,7 +34,7 @@ Scenario('Default CCJ E2E @nightly @citizen', { retries: 3 }, async (I: I) => {
   I.see('County Court Judgment requested', 'h1.bold-large')
 })
 
-Scenario('CCJ requested with no defendant email... @nightly @citizen', { retries: 3 }, async (I: I) => {
+Scenario('CCJ requested with no defendant email... @citizen @nightly', { retries: 3 }, async (I: I) => {
   userSteps.login(email)
   await ccjSteps.requestCCJ(I, claimRef, defendantType)
   ccjSteps.ccjDefendantToPayByInstalments()
