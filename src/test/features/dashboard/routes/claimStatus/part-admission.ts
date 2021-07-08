@@ -746,17 +746,16 @@ function legacyClaimDetails () {
         ...directionsQuestionnaireDeadline()
       },
       claimantAssertions: [
-        'We’ll contact you to try to arrange a mediation appointment',
-        'You’ve rejected the defendant’s response.',
-        'You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.',
-        'Find out how mediation works',
+        'You’ve rejected the defendant’s response',
+        'You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.',
+        'Find out more about how mediation works (opens in new tab)',
         'Tell us you’ve ended the claim'
       ],
       defendantAssertions: [
-        'We’ll contact you to try to arrange a mediation appointment',
-        partAdmissionClaim().claim.claimants[0].name + ' has rejected your defence.',
-        'You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.',
-        'Find out how mediation works'
+        'Your mediation appointment will be arranged within 28 days',
+        partAdmissionClaim().claim.claimants[0].name + ' rejected your response',
+        'You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.',
+        'Find out more about how mediation works (opens in new tab)'
       ]
     }
   ]
@@ -795,7 +794,7 @@ const mediationDQEnabledClaimDetails = [
       partAdmissionClaim().claim.claimants[0].name + ' has rejected your admission of',
       'They believe you owe them the full ',
       'You might have to go to a hearing. We’ll contact you if we set a hearing date to tell you how to prepare.',
-      'They’ve also sent us their hearing requirements.',
+      'They’ve also sent us their hearing requirements:',
       'Download their hearing requirements'
     ]
   },
@@ -824,16 +823,15 @@ const mediationDQEnabledClaimDetails = [
       claimantRespondedAt: MomentFactory.currentDate()
     },
     claimantAssertions: [
-      'We’ll contact you to try to arrange a mediation appointment',
-      'You rejected the defendant’s admission of ',
-      'You’ve both agreed to try mediation. We’ll contact you to arrange a call with the mediator.',
-      'Find out how mediation works'
+      'Your mediation appointment will be arranged within 28 days',
+      'You’ve rejected the defendant’s response',
+      'You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.',
+      'Find out more about how mediation works (opens in new tab)'
     ],
     defendantAssertions: [
-      partAdmissionClaim().claim.claimants[0].name + ' has rejected your admission of',
-      'They believe you owe them the full ',
-      'They have agreed to try mediation. We’ll contact you to try to arrange an appointment.',
-      'They’ve also sent us their hearing requirements.',
+      partAdmissionClaim().claim.claimants[0].name + ' rejected your response',
+      'You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.',
+      'They’ve also sent us their hearing requirements:',
       'Download their hearing requirements'
     ]
   },
