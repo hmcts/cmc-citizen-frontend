@@ -33,7 +33,7 @@ export class CourtFinderClient {
       return Promise.reject('Missing court name')
     }
 
-    return this.performRequest(this.nameSearchUrl + `${name}`)
+    return this.performRequest(this.nameSearchUrl + encodeURIComponent(name))
   }
 
   public getCourtDetails (slug: string): Promise<CourtDetailsResponse> {
