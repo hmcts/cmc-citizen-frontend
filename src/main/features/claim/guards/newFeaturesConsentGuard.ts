@@ -14,9 +14,6 @@ export class NewFeaturesConsentGuard {
 
   static requestHandler (): express.RequestHandler {
     return GuardFactory.createAsync(async (req: express.Request, res: express.Response) => {
-      if (await featureToggles.isAutoEnrollIntoNewFeatureEnabled()) {
-        return true
-      }
       if (!FeatureToggles.isEnabled('newFeaturesConsent')) {
         return true
       }
