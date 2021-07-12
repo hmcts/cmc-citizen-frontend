@@ -105,29 +105,3 @@ describe('FeaturesBuilder', () => {
     expect(features).to.equal('mediationPilot, LAPilotEligible, directionsQuestionnaire')
   })
 })
-
-describe('Auto Enroll into new feature scenario', () => {
-  attachDefaultHooks(app)
-
-
-
-  it(`should return undefined when auto enroll toggle is set to false and roles do not contain consent given`, async () => {
-    claimStoreServiceMock.resolveRetrieveUserRoles('not-a-consent-role')
-    const features = await featuresBuilder.features(FeaturesBuilder.ONLINE_DQ_THRESHOLD, userWithoutConsent)
-    expect(features).to.equal(undefined)
-  })
-
-  it(`should return undefined when auto enroll toggle is set to true and roles do not contain consent given`, async () => {
-    claimStoreServiceMock.resolveRetrieveUserRoles('not-a-consent-role')
-    enableFeatures('legal_advisor_pilot', 'directions_questionnaire', 'mediation_pilot')
-    const features = await featuresBuilder.features(MIN_THRESHOLD, user)
-    expect(features).to.equal('mediationPilot, LAPilotEligible, directionsQuestionnaire')
-  })
-
-  it(`should return defined roles when auto enroll toggle is set to false and user has given consent to new feature`, async () => {
-    claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
-    enableFeatures('legal_advisor_pilot', 'directions_questionnaire', 'mediation_pilot')
-    const features = await featuresBuilder.features(MIN_THRESHOLD, user)
-    expect(features).to.equal('mediationPilot, LAPilotEligible, directionsQuestionnaire')
-  })
-})
