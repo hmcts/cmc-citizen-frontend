@@ -9,14 +9,11 @@ import { app } from 'main/app'
 import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { anything, instance, mock, reset, when } from 'ts-mockito'
-import { FeatureToggles } from 'utils/featureToggles'
-import * as sinon from 'sinon'
 
 const mockLaunchDarklyClient: LaunchDarklyClient = mock(LaunchDarklyClient)
 const featuresBuilder = new FeaturesBuilder(new ClaimStoreClient(), instance(mockLaunchDarklyClient))
 
 const user = new User('1', 'user@example.com', 'John', 'Smith', ['cmc-new-features-consent-given'], 'citizen', '')
-const userWithoutConsent = new User('1', 'user@example.com', 'John', 'Smith', ['cmc-new-features-consent-not-given'], 'citizen', '')
 
 const MIN_THRESHOLD = Math.min(
   FeaturesBuilder.JUDGE_PILOT_THRESHOLD,

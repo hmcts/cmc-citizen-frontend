@@ -1,26 +1,21 @@
 import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
-import * as sinon from 'sinon'
 
 import 'test/routes/expectations'
 
 import { Paths } from 'testing-support/paths'
-import { Paths as ClaimPaths } from 'claim/paths'
 import { app } from 'main/app'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
-import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import { checkAuthorizationGuards } from 'test/routes/authorization-check'
-import { FeatureToggles } from 'utils/featureToggles'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = Paths.createClaimDraftPage.uri
 const pageText: string = 'Create Claim Draft'
-const draftSuccessful: string = ClaimPaths.checkAndSendPage.uri
 
 describe('Testing Support: Create Claim Draft', () => {
   attachDefaultHooks(app)

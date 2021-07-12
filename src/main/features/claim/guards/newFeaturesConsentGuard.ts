@@ -5,10 +5,8 @@ import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { FeatureToggles } from 'utils/featureToggles'
 import { GuardFactory } from 'response/guards/guardFactory'
 import { Paths as ClaimPaths } from 'claim/paths'
-import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
 const claimStoreClient = new ClaimStoreClient()
-const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
 
 export class NewFeaturesConsentGuard {
 
