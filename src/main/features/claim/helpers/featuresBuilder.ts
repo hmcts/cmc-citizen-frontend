@@ -26,8 +26,6 @@ export class FeaturesBuilder {
     let features = []
     for (const feature of FEATURES) {
       if (feature.validForAmount(amount)) {
-          features.push(feature.feature)
-        }
       }
     }
     return (!features || features.length === 0) ? undefined : features.join(', ')
