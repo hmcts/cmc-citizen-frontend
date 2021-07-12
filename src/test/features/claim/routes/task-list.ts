@@ -23,20 +23,11 @@ describe('Claim issue: task list page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    let isAutoEnrollIntoNewFeatureEnabledStub: sinon.SinonStub
     checkAuthorizationGuards(app, 'get', ClaimPaths.incompleteSubmissionPage.uri)
     checkEligibilityGuards(app, 'get', ClaimPaths.incompleteSubmissionPage.uri)
 
-    beforeEach(() => {
-      isAutoEnrollIntoNewFeatureEnabledStub = sinon.stub(FeatureToggles.prototype, 'isAutoEnrollIntoNewFeatureEnabled')
-    })
-
-    afterEach(() => {
-      isAutoEnrollIntoNewFeatureEnabledStub.restore()
-    })
 
     it('should render page when everything is fine when user role present', async () => {
-      isAutoEnrollIntoNewFeatureEnabledStub.returns(false)
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       draftStoreServiceMock.resolveFind('claim')
       claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
@@ -48,7 +39,6 @@ describe('Claim issue: task list page', () => {
     })
 
     it('should show error page when user role cannot be retrieved', async () => {
-      isAutoEnrollIntoNewFeatureEnabledStub.returns(false)
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       draftStoreServiceMock.resolveFind('claim')
       claimStoreServiceMock.rejectRetrieveUserRoles()
@@ -59,7 +49,6 @@ describe('Claim issue: task list page', () => {
     })
 
     it('should render page redirect to feature consent page when no role present', async () => {
-      isAutoEnrollIntoNewFeatureEnabledStub.returns(false)
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       draftStoreServiceMock.resolveFind('claim')
       claimStoreServiceMock.resolveRetrieveUserRoles()
@@ -82,7 +71,6 @@ describe('Claim issue: task list page', () => {
     })
 
     it('should render page when everything is fine when auto enroll feature is turned on', async () => {
-      isAutoEnrollIntoNewFeatureEnabledStub.returns(true)
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       draftStoreServiceMock.resolveFind('claim')
 
