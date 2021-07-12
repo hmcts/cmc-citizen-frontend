@@ -49,6 +49,11 @@ env.CITIZEN_APP_URL = params.URL_TO_TEST //required
 
 withNightlyPipeline("nodejs", product, component) {
   loadVaultSecrets(secrets)
+  enableCrossBrowserTest()
   enableSecurityScan()
   enableFullFunctionalTest(200)
+
+  after('crossBrowserTest') {
+    steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'functional-output/**/*'
+  }
 }
