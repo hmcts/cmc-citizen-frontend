@@ -77,7 +77,6 @@ describe('FeatureToggles', () => {
     })
   })
 
-
   describe('isPaginationForDashboardEnabled', () => {
     it('should return toggle if pagination toggle exists', async () => {
       const mockLaunchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()

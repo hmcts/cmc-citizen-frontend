@@ -46,7 +46,6 @@ describe('Testing Support: Create Claim Draft', () => {
         idamServiceMock.resolveRetrieveUserFor('100', 'citizen')
       })
 
-
       it('should return 500 and render error page when cannot retrieve claim draft', async () => {
         draftStoreServiceMock.rejectFind('HTTP Error')
 

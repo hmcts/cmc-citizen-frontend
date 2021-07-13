@@ -19,10 +19,6 @@ export class FeaturesBuilder {
   async features (amount: number, user: User): Promise<string> {
 
     let features = []
-    for (const feature of FEATURES) {
-      if (feature.validForAmount(amount)) {
-      }
-    }
     return (!features || features.length === 0) ? undefined : features.join(', ')
   }
 }
