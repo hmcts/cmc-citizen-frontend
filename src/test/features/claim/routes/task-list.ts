@@ -27,7 +27,6 @@ describe('Claim issue: task list page', () => {
     it('should render page when everything is fine when user role present', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       draftStoreServiceMock.resolveFind('claim')
-      claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
 
       await request(app)
         .get(ClaimPaths.taskListPage.uri)
@@ -35,31 +34,9 @@ describe('Claim issue: task list page', () => {
         .expect(res => expect(res).to.be.successful.withText('Make a money claim'))
     })
 
-    it('should show error page when user role cannot be retrieved', async () => {
-      idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-      draftStoreServiceMock.resolveFind('claim')
-      claimStoreServiceMock.rejectRetrieveUserRoles()
-      await request(app)
-        .get(ClaimPaths.taskListPage.uri)
-        .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.serverError.withText('error'))
-    })
-
-    it('should render page redirect to feature consent page when no role present', async () => {
-      idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-      draftStoreServiceMock.resolveFind('claim')
-      claimStoreServiceMock.resolveRetrieveUserRoles()
-
-      await request(app)
-        .get(ClaimPaths.taskListPage.uri)
-        .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.newFeaturesConsentPage.uri))
-    })
-
     it('should render page and display number of sections completed and number of secsions pending', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       draftStoreServiceMock.resolveFind('claim')
-      claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
 
       await request(app)
         .get(ClaimPaths.taskListPage.uri)
