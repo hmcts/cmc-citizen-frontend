@@ -37,7 +37,6 @@ describe('Claim issue: finish payment page', () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       draftStoreServiceMock.resolveFind('claim', { externalId })
       claimStoreServiceMock.resolveRetrieveClaimByExternalId({ externalId, state: 'AWAITING_CITIZEN_PAYMENT' })
-      claimStoreServiceMock.resolveRetrieveUserRoles()
       claimStoreServiceMock.resolveCreateClaimCitizen({ externalId, state: 'AWAITING_CITIZEN_PAYMENT' })
 
       await request(app)
@@ -50,7 +49,6 @@ describe('Claim issue: finish payment page', () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       draftStoreServiceMock.resolveFind('claim', { externalId })
       claimStoreServiceMock.resolveRetrieveClaimByExternalId({ externalId, state: 'AWAITING_CITIZEN_PAYMENT' })
-      claimStoreServiceMock.resolveRetrieveUserRoles()
       claimStoreServiceMock.resolveCreateClaimCitizen({ externalId, state: 'OPEN' })
       draftStoreServiceMock.resolveDelete()
 

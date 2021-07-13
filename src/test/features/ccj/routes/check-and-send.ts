@@ -41,8 +41,6 @@ describe('CCJ: check and send page', () => {
 
       context('when user authorised', () => {
         it('should return 500 and render error page when cannot retrieve claims', async () => {
-          claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
-
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)

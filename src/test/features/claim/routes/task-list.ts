@@ -66,15 +66,5 @@ describe('Claim issue: task list page', () => {
         .set('Cookie', `${cookieName}=ABC`)
         .expect(res => expect(res).to.be.successful.withText('Make a money claim', 'Application incomplete', 'You have completed 6 of 7 sections'))
     })
-
-    it('should render page when everything is fine when auto enroll feature is turned on', async () => {
-      idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-      draftStoreServiceMock.resolveFind('claim')
-
-      await request(app)
-        .get(ClaimPaths.taskListPage.uri)
-        .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.successful.withText('Make a money claim'))
-    })
   })
 })
