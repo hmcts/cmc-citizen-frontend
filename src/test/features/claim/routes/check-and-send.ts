@@ -617,7 +617,6 @@ describe('Claim issue: check and send page', () => {
         // mock updateHelpWithFees 'put' request failed with error
         claimStoreServiceMock.resolveUpdateHelpWithFeesClaimWithError()
         // mock user roles
-        
         const nextPage = ClaimPaths.taskListPage.uri
         await request(app)
           .post(ClaimPaths.checkAndSendPage.uri)
