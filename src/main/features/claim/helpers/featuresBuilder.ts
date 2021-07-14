@@ -1,46 +1,15 @@
-import { ClaimStoreClient } from 'claims/claimStoreClient'
-import { User } from 'idam/user'
-import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
-import * as config from 'config'
-import { FeatureToggles } from 'utils/featureToggles'
-
-const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
-
 export class FeaturesBuilder {
   static readonly MEDIATION_PILOT_AMOUNT = 500
   static readonly LA_PILOT_THRESHOLD = 300
   static readonly JUDGE_PILOT_THRESHOLD = 10000
   static readonly ONLINE_DQ_THRESHOLD = 10000
 
-  readonly claimStoreClient: ClaimStoreClient
-  readonly launchDarklyClient: LaunchDarklyClient
-
-  constructor (claimStoreClient: ClaimStoreClient, launchDarklyClient: LaunchDarklyClient) {
-    this.claimStoreClient = claimStoreClient
-    this.launchDarklyClient = launchDarklyClient
-  }
-
-  async features (amount: number, user: User): Promise<string> {
-    const roles: string[] = await this.claimStoreClient.retrieveUserRoles(user)
-    const autoEnrollFeatureEnabled: boolean = await featureToggles.isAutoEnrollIntoNewFeatureEnabled()
-
-    if (!autoEnrollFeatureEnabled && !roles.includes('cmc-new-features-consent-given')) {
-      // all features require consent
-      return undefined
-    }
+  async features (amount: number): Promise<string> {
 
     let features = []
     for (const feature of FEATURES) {
       if (feature.validForAmount(amount)) {
-        if (!autoEnrollFeatureEnabled) {
-          const offlineDefault = config.get<boolean>(`featureToggles.${feature.setting}`) || false
-          const ldVariation = await this.launchDarklyClient.userVariation(user, roles, feature.toggle, offlineDefault)
-          if (ldVariation) {
-            features.push(feature.feature)
-          }
-        } else {
-          features.push(feature.feature)
-        }
+        features.push(feature.feature)
       }
     }
     return (!features || features.length === 0) ? undefined : features.join(', ')

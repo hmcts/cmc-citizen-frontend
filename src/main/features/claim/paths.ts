@@ -40,7 +40,6 @@ export class Paths {
   static readonly defendantPartyTypeSelectionPage = new RoutablePath('/claim/defendant-party-type-selection')
   static readonly incompleteSubmissionPage = new RoutablePath('/claim/incomplete-submission')
   static readonly sealedClaimPdfReceiver = new RoutablePath('/claim/:externalId/sealed-claim')
-  static readonly newFeaturesConsentPage = new RoutablePath('/claim/new-features-consent')
   static readonly initiatePaymentController = new RoutablePath('/claim/initiate-payment')
   static readonly finishPaymentController = new RoutablePath('/claim/:externalId/finish-payment')
   static readonly documentPage = new RoutablePath('/claim/:externalId/document/:documentURI')

@@ -37,8 +37,7 @@ import { MoneyConverter } from 'fees/moneyConverter'
 const logger = Logger.getLogger('claims/claimStoreClient')
 const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient(noRetryRequest)
-const launchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
-const featuresBuilder: FeaturesBuilder = new FeaturesBuilder(claimStoreClient, launchDarklyClient)
+const featuresBuilder: FeaturesBuilder = new FeaturesBuilder()
 
 async function getClaimAmountTotal (draft: DraftClaim): Promise<TotalAmount> {
   const interest: number = await draftInterestAmount(draft)
@@ -153,7 +152,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response, next: 
 }
 
 async function handleHelpwWithFees (draft: Draft<DraftClaim>, user: User): Promise<boolean> {
-  const features = await featuresBuilder.features(draft.document.amount.totalAmount(), user)
+  const features = await featuresBuilder.features(draft.document.amount.totalAmount())
 
   // retrieve claim to check if the claimant initiated payment
   const existingClaim: void | Claim = await claimStoreClient.retrieveByExternalId(draft.document.externalId, user)
