@@ -12,7 +12,7 @@ maintainers:
     email: cmc-developers@HMCTS.NET
 dependencies:
   - name: nodejs
-    version: 2.3.4
+    version: 2.3.7
     repository: '@hmctspublic'
 
   - name: idam-pr
@@ -21,33 +21,33 @@ dependencies:
     condition: idam-pr.enabled
 
   - name: cmc-claim-store
-    version: 4.1.26
+    version: 4.1.27
     repository: '@hmctspublic'
     condition: cmc-claim-store.enabled
 
   - name: postgresql
-    version: 10.2.7
+    version: 10.4.3
     repository: https://charts.bitnami.com/bitnami
     condition: postgresql.enabled
 
   - name: ccd
-    version: v5.0.2
+    version: 5.0.4
     repository: '@hmctspublic'
     condition: ccd.enabled
-  
+
   - name: xui-webapp
     version: ~0.2.1
     repository: '@hmctspublic'
     condition: xui-webapp.enabled
-  
+
   - name: elasticsearch
     version: 7.8.1
     repository: '@hmctspublic'
     condition: elastic.enabled
-    
+
   - name: logstash
     version: 2.4.1
     repository: '@hmctspublic'
     condition: elastic.enabled
-  
+
 
