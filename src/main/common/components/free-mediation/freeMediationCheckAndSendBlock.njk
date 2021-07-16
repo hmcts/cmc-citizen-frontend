@@ -1,46 +1,16 @@
 {% from "table.njk" import tableStart, tableEnd, row %}
 {% from "party/details.njk" import partyDetailRow %}
 
-{% macro freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot, mediationEnabled, enhancedMediationJourney) %}
+{% macro freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber) %}
   <h2 class="govuk-heading-m">{{ t("Free telephone mediation") }}</h2>
   <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-    {% if enhancedMediationJourney %}
-      {{ partyDetailRow(
-        label = 'Will you try free mediation?',
-        value = t(mediationDraft.willYouTryMediation.option) | capitalize,
-        changeLink = MediationPaths.freeTelephoneMediationPage.evaluateUri({ externalId: claim.externalId }),
-        bold = true
-      ) }}
-    {% elseif not mediationEnabled %}
-      {{ partyDetailRow(
-        label = 'Free mediation?',
-        value = t(mediationDraft.willYouTryMediation.option) | capitalize,
-        changeLink = MediationPaths.tryFreeMediationPage.evaluateUri({ externalId: claim.externalId }),
-        bold = true
-      ) }}
-    {% elseif mediationPilot and mediationDraft.willYouTryMediation.option %}
-      {{ partyDetailRow(
-        label = 'Will you try free mediation?',
-        value = t(mediationDraft.willYouTryMediation.option) | capitalize,
-        changeLink = MediationPaths.howMediationWorksPage.evaluateUri({ externalId: claim.externalId }),
-        bold = true
-      ) }}
-    {% else %}
-      {{ partyDetailRow(
-        label = 'Will you try free mediation?',
-        value = t(mediationDraft.willYouTryMediation.option) | capitalize,
-        changeLink = MediationPaths.willYouTryMediation.evaluateUri({ externalId: claim.externalId }),
-        bold = true
-      ) }}
-    {% endif %}
-    {% if not enhancedMediationJourney and mediationEnabled and mediationDraft.willYouTryMediation.option === YesNoOption.YES.option %}
-      {{ partyDetailRow(
-        label = 'Agree to mediation conditions',
-        value = t(mediationDraft.youCanOnlyUseMediation.option) | capitalize,
-        changeLink = MediationPaths.mediationAgreementPage.evaluateUri({ externalId: claim.externalId }),
-        bold = true
-      ) }}
-    {% endif %}
+  {{ partyDetailRow(
+    label = 'Will you try free mediation?',
+    value = t(mediationDraft.willYouTryMediation.option) | capitalize,
+    changeLink = MediationPaths.freeTelephoneMediationPage.evaluateUri({ externalId: claim.externalId }),
+    bold = true
+  ) }}
+
     {% if mediationDraft.canWeUseCompany %}
       {% if mediationDraft.canWeUseCompany.mediationPhoneNumberConfirmation %}
         {{ partyDetailRow(

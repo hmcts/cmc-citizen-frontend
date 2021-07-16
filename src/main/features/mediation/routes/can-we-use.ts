@@ -16,18 +16,10 @@ import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { Claim } from 'claims/models/claim'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { FreeMediationOption } from 'forms/models/freeMediation'
-import { FeatureToggles } from 'utils/featureToggles'
-import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
 async function renderView (form: Form<CanWeUse>, res: express.Response): Promise<void> {
-  const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
   const claim: Claim = res.locals.claim
   let phoneNumber: string
-  let enhancedMediationJourney: boolean = false
-
-  if (await featureToggles.isEnhancedMediationJourneyEnabled()) {
-    enhancedMediationJourney = true
-  }
 
   if (!claim.isResponseSubmitted()) {
     const draftResponse: Draft<ResponseDraft> = res.locals.responseDraft
@@ -37,8 +29,7 @@ async function renderView (form: Form<CanWeUse>, res: express.Response): Promise
   }
   res.render(Paths.canWeUsePage.associatedView, {
     form: form,
-    phoneNumber: phoneNumber,
-    enhancedMediationJourney: enhancedMediationJourney
+    phoneNumber: phoneNumber
   })
 }
 

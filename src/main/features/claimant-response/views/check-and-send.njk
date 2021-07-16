@@ -193,14 +193,12 @@
             }}
           </dl>
 
-          {% if mediationEnabled %}
-              {% if draft.intentionToProceed.proceed.option === YesNoOption.YES.option and claim.response.freeMediation === YesNoOption.YES.option %}
-                {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot, mediationEnabled, enhancedMediationJourney) }}
-              {% endif %}
+          {% if draft.intentionToProceed.proceed.option === YesNoOption.YES.option and claim.response.freeMediation === YesNoOption.YES.option %}
+            {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber) }}
           {% endif %}
 
           {{ directionsQuestionnaire() }}
-          
+
         {% elseif alreadyPaid %}
           <dl class="govuk-summary-list govuk-!-margin-bottom-9">
             {% if draft.partPaymentReceived %}
@@ -227,7 +225,7 @@
 
           {% if claim.response.freeMediation === YesNoOption.YES.option and (draft.accepted.accepted.option === YesNoOption.NO.option
             or draft.partPaymentReceived.received.option === YesNoOption.NO.option) %}
-            {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot, mediationEnabled, enhancedMediationJourney) }}
+            {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber) }}
           {% endif %}
 
           {{ directionsQuestionnaire() }}
@@ -237,7 +235,7 @@
             {{ partyDetailRow(label = 'Do you want to proceed with the claim?', bold = true, value = draft.intentionToProceed.proceed | yesNo,
               changeLink = ClaimantResponsePaths.intentionToProceedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
               {% if draft.intentionToProceed.proceed === YesNoOption.YES and claim.response.freeMediation === YesNoOption.YES.option %}
-              {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot, mediationEnabled, enhancedMediationJourney) }}
+              {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber) }}
           {% endif %}
           </dl>
 
@@ -258,7 +256,7 @@
                 changeLink = ClaimantResponsePaths.settleAdmittedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
             </dl>
             {% if draft.settleAdmitted.admitted === YesNoOption.NO and claim.response.freeMediation === YesNoOption.YES.option %}
-                {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot, mediationEnabled, enhancedMediationJourney) }}
+                {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber) }}
             {% endif %}
             {{ directionsQuestionnaire() }}
           {% endif %}
@@ -436,7 +434,7 @@
 
           {% endif %}
         {% endif %}
-        
+
         {{ submitButton('Submit response') }}
       </form>
     </div>

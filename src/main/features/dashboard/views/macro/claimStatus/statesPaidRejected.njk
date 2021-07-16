@@ -41,15 +41,15 @@
 {% endmacro %}
 
 {% macro statesPaidRejectedMediationYESClaimantClaimDetails(claim) %}
-  {% if featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
+  {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
     {{ mediationSuccessForClaimantClaimDetails(claim) }}
-  {% elseif featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.FAILED %}
+  {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.FAILED %}
     {% if (claim.directionsQuestionnaireDeadline) %}
       {{ mediationFailedForOfflineDQClaimantClaimDetails(claim) }}
     {% else %}
       {{ mediationFailedForOnlineDQClaimantClaimDetails(claim) }}
     {% endif %}
-  {% elseif featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
+  {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
     <div class="status-block">
       <h2 class="heading-medium">{{ t('You’ve rejected the defendant’s response') }}</h2>
       <p>{{ t('You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.') }}</p>
@@ -101,15 +101,15 @@
 {% endmacro %}
 
 {% macro statesPaidRejectedDefendantClaimDetails(claim) %}
-  {% if featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
+  {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
     {{ mediationSuccessForDefendantClaimDetails(claim) }}
-  {% elseif featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.FAILED %}
+  {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.FAILED %}
     {% if (claim.claim.directionsQuestionnaireDeadline ) %}
       {{ mediationFailedOfflineDQForDefendantClaimDetails(claim) }}
     {% else %}
       {{ mediationFailedOnlineDQForDefendantClaimDetails(claim) }}
     {% endif %}
-  {% elseif featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
+  {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
     {{ statesPaidRejectionMediationYESDefendantClaimDetails(claim) }}
   {% else %}
 
@@ -125,9 +125,7 @@
       <p>{{ t('Your mediation appointment will be arranged within 28 days') }}</p>
     {% else %}
       <p>{{ t('{{ claimantName }} has rejected your admission of {{ amount }}', { claimantName: claim.claimData.claimant.name, amount: amount | numeral}) }}<p>
-      {% if enhancedMediationJourney %}
       <p>{{ t('{{ claimantName }} has said no to trying mediation.', { claimantName: claim.claimData.claimant.name }) }}</p>
-      {% endif %}
     {% endif %}
 
     {% if claim.claimantResponse.paymentReceived === YesNoOption.YES.option %}

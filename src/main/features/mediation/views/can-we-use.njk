@@ -4,11 +4,7 @@
 {% set heading = 'Enter a phone number' %}
 
 {% if phoneNumber %}
-  {% if enhancedMediationJourney %}
-    {% set heading = 'Confirm your telephone number' %}
-  {% else %}
-    {% set heading = 'Can the mediation service use ' + phoneNumber + ' to call you?' %}
-  {% endif %}
+  {% set heading = 'Confirm your telephone number' %}
 {% endif %}
 
 {% block content %}
@@ -24,9 +20,7 @@
         {{ csrfProtection(csrf) }}
 
         {% if phoneNumber %}
-          {% if enhancedMediationJourney %}
-            <p>{{ t('Can the mediation service use ' + phoneNumber + ' to call you?')}}</p>
-          {% endif %}
+          <p>{{ t('Can the mediation service use ' + phoneNumber + ' to call you?')}}</p>
           {% set error = form.errorFor('option') %}
           <div class="form-group {% if error %} form-group-error {% endif %}">
             <fieldset id="option[label]">

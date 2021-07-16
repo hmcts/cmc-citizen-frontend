@@ -21,8 +21,6 @@ import {
   verifyRedirectForGetWhenAlreadyPaidInFull,
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
-import * as sinon from 'sinon'
-import { FeatureToggles } from 'utils/featureToggles'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = MediationPaths.canWeUsePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -33,23 +31,16 @@ describe('Free mediation: can we use phone number page', () => {
   describe('on GET', () => {
     const method = 'get'
     checkAuthorizationGuards(app, method, pagePath)
-    let isEnhancedMediationJourneyEnabledStub: sinon.SinonStub
 
     context('when user authorised', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
-        isEnhancedMediationJourneyEnabledStub = sinon.stub(FeatureToggles.prototype, 'isEnhancedMediationJourneyEnabled')
-      })
-
-      afterEach(() => {
-        isEnhancedMediationJourneyEnabledStub.restore()
       })
 
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
       verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
 
       it('should return 500 and render error page when cannot retrieve claim', async () => {
-        isEnhancedMediationJourneyEnabledStub.returns(false)
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
         await request(app)
@@ -58,7 +49,6 @@ describe('Free mediation: can we use phone number page', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
       it('should render page when everything is fine and no defendant phone number is provided', async () => {
-        isEnhancedMediationJourneyEnabledStub.returns(false)
         draftStoreServiceMock.resolveFind('mediation')
         draftStoreServiceMock.resolveFind('response')
         claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId()
@@ -70,19 +60,6 @@ describe('Free mediation: can we use phone number page', () => {
       })
 
       it('should render page when everything is fine and defendant phone number is not provided', async () => {
-        isEnhancedMediationJourneyEnabledStub.returns(false)
-        draftStoreServiceMock.resolveFind('mediation')
-        draftStoreServiceMock.resolveFind('response', { defendantDetails: { phone: { number: undefined } } })
-        claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId()
-
-        await request(app)
-          .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Enter a phone number'))
-      })
-
-      it('should render page when everything is fine and defendant phone number is not provided and enhanced mediation journey is true', async () => {
-        isEnhancedMediationJourneyEnabledStub.returns(true)
         draftStoreServiceMock.resolveFind('mediation')
         draftStoreServiceMock.resolveFind('response', { defendantDetails: { phone: { number: undefined } } })
         claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId()
@@ -98,16 +75,10 @@ describe('Free mediation: can we use phone number page', () => {
   describe('on POST', () => {
     const method = 'post'
     checkAuthorizationGuards(app, method, pagePath)
-    let isEnhancedMediationJourneyEnabledStub: sinon.SinonStub
 
     context('when defendant authorised', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
-        isEnhancedMediationJourneyEnabledStub = sinon.stub(FeatureToggles.prototype, 'isEnhancedMediationJourneyEnabled')
-      })
-
-      afterEach(() => {
-        isEnhancedMediationJourneyEnabledStub.restore()
       })
 
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
@@ -115,7 +86,6 @@ describe('Free mediation: can we use phone number page', () => {
 
       context('when response not submitted', () => {
         it('should return 500 and render error page when cannot retrieve claim', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
           await request(app)
@@ -127,7 +97,6 @@ describe('Free mediation: can we use phone number page', () => {
 
       context('when form is valid', () => {
         it('should return 500 and render error page when cannot save draft', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveFind('response')
           draftStoreServiceMock.rejectUpdate()
@@ -141,7 +110,6 @@ describe('Free mediation: can we use phone number page', () => {
         })
 
         it('should redirect to defendant task list when defendant says yes', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveFind('response')
           draftStoreServiceMock.resolveUpdate()
@@ -157,7 +125,6 @@ describe('Free mediation: can we use phone number page', () => {
         })
 
         it('should redirect to response task list when No was chosen and a phone number is given', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
           draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveFind('response')
           draftStoreServiceMock.resolveUpdate()
@@ -176,21 +143,6 @@ describe('Free mediation: can we use phone number page', () => {
         })
 
         it('should show validation error when defendant says no with no phone number', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(false)
-          claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId()
-
-          await request(app)
-            .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .send({
-              option: FreeMediationOption.NO,
-              mediationPhoneNumber: undefined
-            })
-            .expect(res => expect(res).to.be.serverError.withText('Error'))
-        })
-
-        it('should show validation error when defendant says no with no phone number and enhanced mediation journey is enabled', async () => {
-          isEnhancedMediationJourneyEnabledStub.returns(true)
           claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId()
 
           await request(app)

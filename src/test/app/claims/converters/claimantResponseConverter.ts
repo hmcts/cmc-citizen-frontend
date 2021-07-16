@@ -32,8 +32,6 @@ import {
 import { Claim } from 'claims/models/claim'
 import * as claimStoreMock from 'test/http-mocks/claim-store'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
-import { FeatureToggles } from 'utils/featureToggles'
-import * as sinon from 'sinon'
 
 function createDraftClaimantResponseForFullRejection (): DraftClaimantResponse {
   const draftResponse: DraftClaimantResponse = new DraftClaimantResponse()
@@ -81,16 +79,6 @@ function createDraftClaimantResponseWithCourtDecisionType (
 describe('claimant response converter', () => {
   const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-  let isEnhancedMediationJourneyEnabledStub: sinon.SinonStub
-
-  beforeEach(() => {
-    isEnhancedMediationJourneyEnabledStub = sinon.stub(FeatureToggles.prototype, 'isEnhancedMediationJourneyEnabled')
-  })
-
-  afterEach(() => {
-    isEnhancedMediationJourneyEnabledStub.restore()
-  })
-
   const mediationDraft = new MediationDraft().deserialize({
     willYouTryMediation: {
       option: FreeMediationOption.YES
@@ -104,136 +92,126 @@ describe('claimant response converter', () => {
       mediationContactPerson: 'Mary Richards'
     }})
 
-  if (FeatureToggles.isEnabled('mediation')) {
-    describe('Claimant Rejection', () => {
-      it('rejection with mediation missing ', async () => {
-        isEnhancedMediationJourneyEnabledStub.returns(false)
-        const mediationDraft = new MediationDraft().deserialize({
-          youCanOnlyUseMediation: {
-            option: FreeMediationOption.NO
-          }
-        })
-
-        expect(await converter.convertToClaimantResponse(claim, createDraftClaimantResponseForFullRejection(), mediationDraft, false)).to.deep.eq({
-          'type': 'REJECTION',
-          'amountPaid': 10,
-          'reason': 'Rejection reason is..',
-          'freeMediation': 'no',
-          'mediationContactPerson': undefined,
-          'noMediationReason': undefined,
-          'mediationPhoneNumber': undefined
-        })
+  describe('Claimant Rejection', () => {
+    it('rejection with mediation missing ', async () => {
+      const mediationDraft = new MediationDraft().deserialize({
+        youCanOnlyUseMediation: {
+          option: FreeMediationOption.NO
+        }
       })
 
-      it('rejection with mediation', async () => {
-        isEnhancedMediationJourneyEnabledStub.returns(false)
-        const draftClaimantResponse = createDraftClaimantResponseForFullRejection()
-        draftClaimantResponse.freeMediation = new FreeMediation('yes')
-        expect(await converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft, false)).to.deep.eq({
-          'type': 'REJECTION',
-          'amountPaid': 10,
-          'freeMediation': 'yes',
-          'mediationContactPerson': undefined,
-          'mediationPhoneNumber': '07777777788',
-          'noMediationReason': undefined,
-          'reason': 'Rejection reason is..'
-        })
-
-      })
-
-      it('rejection with mediation with reason', async () => {
-        isEnhancedMediationJourneyEnabledStub.returns(false)
-        const draftClaimantResponse = createDraftClaimantResponseForFullRejection()
-        draftClaimantResponse.courtDetermination.rejectionReason = new RejectionReason('rejected')
-        expect(await converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft, false)).to.deep.eq({
-          'type': 'REJECTION',
-          'amountPaid': 10,
-          'freeMediation': 'yes',
-          'mediationContactPerson': undefined,
-          'mediationPhoneNumber': '07777777788',
-          'noMediationReason': undefined,
-          'reason': 'rejected'
-        })
-      })
-
-      it('rejection with mediation with nil amount paid', async () => {
-        isEnhancedMediationJourneyEnabledStub.returns(false)
-        const draftClaimantResponse: DraftClaimantResponse = new DraftClaimantResponse()
-        draftClaimantResponse.settleAdmitted = new SettleAdmitted(YesNoOption.NO)
-        draftClaimantResponse.paidAmount = new PaidAmount(PaidAmountOption.NO, 0, 100)
-        draftClaimantResponse.freeMediation = new FreeMediation('yes')
-        draftClaimantResponse.courtDetermination = new CourtDetermination(
-          intentionOfPaymentByInstalments,
-          intentionOfPaymentInFullBySetDate,
-          new RejectionReason('Rejection reason is..'),
-          1000,
-          DecisionType.COURT)
-        expect(await converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft, false)).to.deep.eq({
-          'type': 'REJECTION',
-          'amountPaid': 0,
-          'freeMediation': 'yes',
-          'mediationContactPerson': undefined,
-          'mediationPhoneNumber': '07777777788',
-          'noMediationReason': undefined,
-          'reason': 'Rejection reason is..'
-        })
-      })
-
-      it('rejection from non acceptance of states paid', async () => {
-        isEnhancedMediationJourneyEnabledStub.returns(false)
-        const draftClaimantResponse = new DraftClaimantResponse()
-        draftClaimantResponse.accepted = new ClaimSettled(YesNoOption.NO)
-        draftClaimantResponse.partPaymentReceived = new PartPaymentReceived(YesNoOption.YES)
-        draftClaimantResponse.freeMediation = new FreeMediation('yes')
-        draftClaimantResponse.rejectionReason = new RejectionReason('OBJECTION!')
-
-        expect(await converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft, false)).to.deep.eq({
-          'type': 'REJECTION',
-          'freeMediation': 'yes',
-          'mediationContactPerson': undefined,
-          'mediationPhoneNumber': '07777777788',
-          'noMediationReason': undefined,
-          'paymentReceived': 'yes',
-          'settleForAmount': 'no',
-          'reason': 'OBJECTION!'
-        })
-      })
-
-      it('rejection when intends to proceed', async () => {
-        isEnhancedMediationJourneyEnabledStub.returns(false)
-        const draftClaimantResponse = new DraftClaimantResponse()
-        draftClaimantResponse.intentionToProceed = new IntentionToProceed(YesNoOption.YES)
-
-        expect(await converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft, false)).to.deep.eq({
-          'type': 'REJECTION',
-          'freeMediation': 'yes',
-          'mediationContactPerson': undefined,
-          'mediationPhoneNumber': '07777777788',
-          'noMediationReason': undefined
-        })
-      })
-
-      it('Should convert to rejection when given a no option in part payment received', async () => {
-        isEnhancedMediationJourneyEnabledStub.returns(false)
-        const draftClaimantResponse = new DraftClaimantResponse()
-        draftClaimantResponse.partPaymentReceived = new PartPaymentReceived(YesNoOption.NO)
-        draftClaimantResponse.freeMediation = new FreeMediation('yes')
-
-        expect(await converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft, false)).to.deep.eq({
-          'type': 'REJECTION',
-          'freeMediation': 'yes',
-          'mediationContactPerson': undefined,
-          'mediationPhoneNumber': '07777777788',
-          'noMediationReason': undefined,
-          'paymentReceived': 'no'
-        })
+      expect(await converter.convertToClaimantResponse(claim, createDraftClaimantResponseForFullRejection(), mediationDraft, false)).to.deep.eq({
+        'type': 'REJECTION',
+        'amountPaid': 10,
+        'reason': 'Rejection reason is..',
+        'freeMediation': 'no',
+        'mediationContactPerson': undefined,
+        'noMediationReason': undefined,
+        'mediationPhoneNumber': undefined
       })
     })
-  }
+
+    it('rejection with mediation', async () => {
+      const draftClaimantResponse = createDraftClaimantResponseForFullRejection()
+      draftClaimantResponse.freeMediation = new FreeMediation('yes')
+      expect(await converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft, false)).to.deep.eq({
+        'type': 'REJECTION',
+        'amountPaid': 10,
+        'freeMediation': 'yes',
+        'mediationContactPerson': undefined,
+        'mediationPhoneNumber': '07777777788',
+        'noMediationReason': undefined,
+        'reason': 'Rejection reason is..'
+      })
+
+    })
+
+    it('rejection with mediation with reason', async () => {
+      const draftClaimantResponse = createDraftClaimantResponseForFullRejection()
+      draftClaimantResponse.courtDetermination.rejectionReason = new RejectionReason('rejected')
+      expect(await converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft, false)).to.deep.eq({
+        'type': 'REJECTION',
+        'amountPaid': 10,
+        'freeMediation': 'yes',
+        'mediationContactPerson': undefined,
+        'mediationPhoneNumber': '07777777788',
+        'noMediationReason': undefined,
+        'reason': 'rejected'
+      })
+    })
+
+    it('rejection with mediation with nil amount paid', async () => {
+      const draftClaimantResponse: DraftClaimantResponse = new DraftClaimantResponse()
+      draftClaimantResponse.settleAdmitted = new SettleAdmitted(YesNoOption.NO)
+      draftClaimantResponse.paidAmount = new PaidAmount(PaidAmountOption.NO, 0, 100)
+      draftClaimantResponse.freeMediation = new FreeMediation('yes')
+      draftClaimantResponse.courtDetermination = new CourtDetermination(
+        intentionOfPaymentByInstalments,
+        intentionOfPaymentInFullBySetDate,
+        new RejectionReason('Rejection reason is..'),
+        1000,
+        DecisionType.COURT)
+      expect(await converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft, false)).to.deep.eq({
+        'type': 'REJECTION',
+        'amountPaid': 0,
+        'freeMediation': 'yes',
+        'mediationContactPerson': undefined,
+        'mediationPhoneNumber': '07777777788',
+        'noMediationReason': undefined,
+        'reason': 'Rejection reason is..'
+      })
+    })
+
+    it('rejection from non acceptance of states paid', async () => {
+      const draftClaimantResponse = new DraftClaimantResponse()
+      draftClaimantResponse.accepted = new ClaimSettled(YesNoOption.NO)
+      draftClaimantResponse.partPaymentReceived = new PartPaymentReceived(YesNoOption.YES)
+      draftClaimantResponse.freeMediation = new FreeMediation('yes')
+      draftClaimantResponse.rejectionReason = new RejectionReason('OBJECTION!')
+
+      expect(await converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft, false)).to.deep.eq({
+        'type': 'REJECTION',
+        'freeMediation': 'yes',
+        'mediationContactPerson': undefined,
+        'mediationPhoneNumber': '07777777788',
+        'noMediationReason': undefined,
+        'paymentReceived': 'yes',
+        'settleForAmount': 'no',
+        'reason': 'OBJECTION!'
+      })
+    })
+
+    it('rejection when intends to proceed', async () => {
+      const draftClaimantResponse = new DraftClaimantResponse()
+      draftClaimantResponse.intentionToProceed = new IntentionToProceed(YesNoOption.YES)
+
+      expect(await converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft, false)).to.deep.eq({
+        'type': 'REJECTION',
+        'freeMediation': 'yes',
+        'mediationContactPerson': undefined,
+        'mediationPhoneNumber': '07777777788',
+        'noMediationReason': undefined
+      })
+    })
+
+    it('Should convert to rejection when given a no option in part payment received', async () => {
+      const draftClaimantResponse = new DraftClaimantResponse()
+      draftClaimantResponse.partPaymentReceived = new PartPaymentReceived(YesNoOption.NO)
+      draftClaimantResponse.freeMediation = new FreeMediation('yes')
+
+      expect(await converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft, false)).to.deep.eq({
+        'type': 'REJECTION',
+        'freeMediation': 'yes',
+        'mediationContactPerson': undefined,
+        'mediationPhoneNumber': '07777777788',
+        'noMediationReason': undefined,
+        'paymentReceived': 'no'
+      })
+    })
+  })
 
   describe('Claimant Acceptance', () => {
     it('Accept defendant offer with CCJ', async () => {
-      isEnhancedMediationJourneyEnabledStub.returns(false)
       const draftClaimantResponse = createDraftClaimantResponseBaseForAcceptance(null,YesNoOption.YES)
       draftClaimantResponse.formaliseRepaymentPlan = new FormaliseRepaymentPlan(FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT)
       expect(await converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft,false)).to.deep.eq({
@@ -245,7 +223,6 @@ describe('claimant response converter', () => {
     })
 
     it('Accept defendant offer with settlement', async () => {
-      isEnhancedMediationJourneyEnabledStub.returns(false)
       const draftClaimantResponse = createDraftClaimantResponseBaseForAcceptance(null,YesNoOption.YES)
       draftClaimantResponse.formaliseRepaymentPlan = new FormaliseRepaymentPlan(FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT)
       expect(await converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft,false)).to.deep.eq({
@@ -257,7 +234,6 @@ describe('claimant response converter', () => {
     })
 
     it('Accept defendant offer but propose a counter repayment plan to pay immediately', async () => {
-      isEnhancedMediationJourneyEnabledStub.returns(false)
       const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(
         payImmediatelyIntent,
         DecisionType.DEFENDANT,
@@ -283,7 +259,6 @@ describe('claimant response converter', () => {
     })
 
     it('Accept defendant offer but propose a counter repayment plan to pay by set date', async () => {
-      isEnhancedMediationJourneyEnabledStub.returns(false)
       const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(
         payBySetDateIntent,
         DecisionType.DEFENDANT,
@@ -309,7 +284,6 @@ describe('claimant response converter', () => {
     })
 
     it('Accept defendant offer but propose a counter repayment plan to pay by instalments', async () => {
-      isEnhancedMediationJourneyEnabledStub.returns(false)
       const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(
         payByInstallmentsIntent,
         DecisionType.DEFENDANT,
@@ -341,7 +315,6 @@ describe('claimant response converter', () => {
     })
 
     it('Claimant proposes immediate payment court decides pay by set date', async () => {
-      isEnhancedMediationJourneyEnabledStub.returns(false)
       const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(
         payImmediatelyIntent,
         DecisionType.COURT,
@@ -367,7 +340,6 @@ describe('claimant response converter', () => {
     })
 
     it('Accept court decision to pay by instalments with ccj', async () => {
-      isEnhancedMediationJourneyEnabledStub.returns(false)
       const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(
         payImmediatelyIntent,
         DecisionType.COURT,
@@ -393,7 +365,6 @@ describe('claimant response converter', () => {
     })
 
     it('Accept court decision favouring defendant payment intent', async () => {
-      isEnhancedMediationJourneyEnabledStub.returns(false)
       const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(
         payBySetDateIntent,
         DecisionType.DEFENDANT,
@@ -419,7 +390,6 @@ describe('claimant response converter', () => {
     })
 
     it('Accept court decision favouring claimant payment intent', async () => {
-      isEnhancedMediationJourneyEnabledStub.returns(false)
       const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(
         payByInstallmentsIntent,
         DecisionType.CLAIMANT,
@@ -451,7 +421,6 @@ describe('claimant response converter', () => {
     })
 
     it('Reject court decision to pay by set date and refer to judge', async () => {
-      isEnhancedMediationJourneyEnabledStub.returns(false)
       const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(
         payImmediatelyIntent,
         DecisionType.COURT,
@@ -479,7 +448,6 @@ describe('claimant response converter', () => {
     })
 
     it('Reject court decision to pay by instalments and refer to judge', async () => {
-      isEnhancedMediationJourneyEnabledStub.returns(false)
       const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(
         payImmediatelyIntent,
         DecisionType.COURT,
@@ -507,7 +475,6 @@ describe('claimant response converter', () => {
     })
 
     it('If defendant is a business and claimant rejects defendant payment plan for alternative means then refer to judge', async () => {
-      isEnhancedMediationJourneyEnabledStub.returns(false)
       const draftClaimantResponse = createDraftClaimantResponseBaseForAcceptance(YesNoOption.YES, YesNoOption.YES)
       draftClaimantResponse.formaliseRepaymentPlan = new FormaliseRepaymentPlan(FormaliseRepaymentPlanOption.REFER_TO_JUDGE)
       draftClaimantResponse.alternatePaymentMethod = payImmediatelyIntent

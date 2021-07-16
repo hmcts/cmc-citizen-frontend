@@ -7,7 +7,6 @@ import { FeatureToggles } from 'utils/featureToggles'
 const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
 
 export class FeaturesBuilder {
-  static readonly MEDIATION_PILOT_AMOUNT = 500
   static readonly LA_PILOT_THRESHOLD = 300
   static readonly JUDGE_PILOT_THRESHOLD = 10000
   static readonly ONLINE_DQ_THRESHOLD = 10000
@@ -55,12 +54,6 @@ type FeatureDefinition = {
 }
 
 export const FEATURES: FeatureDefinition[] = [
-  {
-    feature: 'mediationPilot',
-    toggle: 'mediation_pilot',
-    setting: 'mediationPilot',
-    validForAmount: amount => amount <= FeaturesBuilder.MEDIATION_PILOT_AMOUNT
-  },
   {
     feature: 'LAPilotEligible',
     toggle: 'legal_advisor_pilot',

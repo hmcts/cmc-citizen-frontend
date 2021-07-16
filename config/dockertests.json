@@ -3,8 +3,6 @@
     "testingSupport": true,
     "newFeaturesConsent": true,
     "returnErrorToUser": true,
-    "mediation": true,
-    "mediationPilot": true,
     "directionsQuestionnaire": true,
     "newDashboardStatus": false,
     "warningBanner": false,
@@ -13,8 +11,7 @@
     "autoEnrollIntoNewFeature": true,
     "dashboard_pagination_enabled": false,
     "breathingSpace": true,
-    "newClaimFees": true,
-    "enhancedMediationJourney": true
+    "newClaimFees": true
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"

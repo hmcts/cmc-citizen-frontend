@@ -5,11 +5,7 @@
 {% if contactName %}
   {% set heading = 'Is ' + contactName + ' the right person for the mediation service to call?' %}
 {% else %}
-  {% if enhancedMediationJourney %}
-    {% set heading = 'Who should the mediation service call?' %}
-  {% else %}
-    {% set heading = 'Enter a contact name and phone number' %}
-  {% endif %}
+  {% set heading = 'Who should the mediation service call?' %}
 {% endif %}
 
 {% block content %}

@@ -36,7 +36,6 @@ import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/dir
 import { FeatureToggles } from 'utils/featureToggles'
 import { DeadlineCalculatorClient } from 'claims/deadlineCalculatorClient'
 import { TaskStatus } from 'utils/taskStatus'
-import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
 export class TaskListBuilder extends TaskStatus {
   static async buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim, now: moment.Moment): Promise<TaskList> {
@@ -239,44 +238,17 @@ export class TaskListBuilder extends TaskStatus {
       || draft.isResponseRejectedFullyBecausePaidWhatOwed()
       || TaskListBuilder.isPartiallyAdmittedAndWhyDoYouDisagreeTaskCompleted(draft)) {
 
-      const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
       let path: string
-      if (await featureToggles.isEnhancedMediationJourneyEnabled()) {
-        path = MediationPaths.freeTelephoneMediationPage.evaluateUri({ externalId: claim.externalId })
-        return new TaskList(
-          'Resolving the claim', [
-            new TaskListItem(
-              'Free telephone mediation',
-              path,
-              await FreeMediationTask.isCompleted(mediationDraft, claim)
-            )
-          ]
-        )
-      } else {
-        if (FeatureToggles.isEnabled('mediation')) {
-          path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
-          return new TaskList(
-            'Try to resolve the claim', [
-              new TaskListItem(
-                'Free telephone mediation',
-                path,
-                await FreeMediationTask.isCompleted(mediationDraft, claim)
-              )
-            ]
+      path = MediationPaths.freeTelephoneMediationPage.evaluateUri({ externalId: claim.externalId })
+      return new TaskList(
+        'Resolving the claim', [
+          new TaskListItem(
+            'Free telephone mediation',
+            path,
+            await FreeMediationTask.isCompleted(mediationDraft, claim)
           )
-        } else {
-          path = MediationPaths.tryFreeMediationPage.evaluateUri({ externalId: claim.externalId })
-          return new TaskList(
-            'Resolving the claim', [
-              new TaskListItem(
-                'Free telephone mediation',
-                path,
-                await FreeMediationTask.isCompleted(mediationDraft, claim)
-              )
-            ]
-          )
-        }
-      }
+        ]
+      )
     }
 
     return undefined

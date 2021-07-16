@@ -17,8 +17,6 @@ import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { ResponseType } from 'claims/models/response/responseType'
-import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
-import { FeatureToggles } from 'utils/featureToggles'
 import { SignatureType } from 'common/signatureType'
 import { Form } from 'forms/form'
 import { StatementOfTruth } from 'claimant-response/form/models/statementOfTruth'
@@ -29,7 +27,6 @@ import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
 import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import { Moment } from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
-import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
 function getPaymentIntention (draft: DraftClaimantResponse, claim: Claim): PaymentIntention {
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
@@ -68,11 +65,8 @@ async function renderView (form: Form<StatementOfTruth>, res: express.Response):
   const claim: Claim = res.locals.claim
   const alreadyPaid: boolean = StatesPaidHelper.isResponseAlreadyPaid(claim)
   const paymentIntention: PaymentIntention = alreadyPaid || claim.response.responseType === ResponseType.FULL_DEFENCE ? undefined : getPaymentIntention(draft.document, claim)
-  const mediationPilot: boolean = ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'mediationPilot')
   const dqsEnabled: boolean = DirectionsQuestionnaireHelper.isDirectionsQuestionnaireEligible(draft.document, claim)
   const dispute: boolean = claim.response.responseType === ResponseType.FULL_DEFENCE
-  const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
-  const enhancedMediationJourney = await featureToggles.isEnhancedMediationJourneyEnabled()
 
   let datesUnavailable: string[]
   if (dqsEnabled) {
@@ -100,7 +94,6 @@ async function renderView (form: Form<StatementOfTruth>, res: express.Response):
     claimantPaymentPlan: draft.document.alternatePaymentMethod ? draft.document.alternatePaymentMethod.toDomainInstance() : undefined,
     alreadyPaid: alreadyPaid,
     amount: alreadyPaid ? StatesPaidHelper.getAlreadyPaidAmount(claim) : undefined,
-    mediationEnabled: FeatureToggles.isEnabled('mediation'),
     directionsQuestionnaireEnabled: dqsEnabled,
     mediationDraft: mediationDraft.document,
     contactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft.document),
@@ -108,9 +101,7 @@ async function renderView (form: Form<StatementOfTruth>, res: express.Response):
     directionsQuestionnaireDraft: directionsQuestionnaireDraft.document,
     datesUnavailable: datesUnavailable,
     dispute: dispute,
-    mediationPilot: mediationPilot,
-    alternatePaymentMethodDate: alternatePaymentMethodDate,
-    enhancedMediationJourney: enhancedMediationJourney
+    alternatePaymentMethodDate: alternatePaymentMethodDate
   })
 }
 
