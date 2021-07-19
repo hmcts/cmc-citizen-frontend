@@ -21,7 +21,9 @@ services:
         - FEATURE_INVERSION_OF_CONTROL
         - FEATURE_PCQ
         - FEATURE_HELP_WITH_FEES
+        - FEATURE_BREATHING_SPACE
+        - ENHANCED_MEDIATION_JOURNEY
       volumes:
         - ./smoke-output:/usr/src/app/output
     remote-webdriver:
-      image: selenium/standalone-chrome:3.8.1
+      image: selenium/standalone-chrome:3.141.59-20210607

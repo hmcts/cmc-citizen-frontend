@@ -1,4 +1,4 @@
-{% macro dateInput(name, form, hint='For example, 31 3 1980', label, bold=true) %}
+{% macro dateInput(name, form, hint='For example, 31 3 1980', label, bold=true, visuallyHiddenLabelValue='') %}
   {% set dayError = form.errorFor(name + "[day]") %}
   {% set monthError = form.errorFor(name + "[month]") %}
   {% set yearError = form.errorFor(name + "[year]") %}
@@ -13,22 +13,22 @@
     {% if dateError %}<span class="error-message">{{ t(dateError) }}</span>{% endif %}
     
     <fieldset id="dateofbirth[label]">
-     <legend> 
+      <legend>
           <span class="visuallyhidden">
-          Enter your date of birth</span>
+          Enter {{ visuallyHiddenLabelValue }}</span>
       </legend>
     <div class="form-date" id="{{ name }}[label]">
       <div class="form-group form-group-day">
         <label class="form-label" id="{{ name }}[day][label]" for="{{ name }}[day]">{{ t('Day') }}</label>
-        <input class="form-control {% if dayError or dateError %} form-control-error {% endif %}" id="{{ name }}[day]" name="{{ name }}[day]" value="{{ form.valueFor(name).day | default('') }}" type="number" aria-describedby="dob-hint">
+        <input class="form-control {% if dayError or dateError %} form-control-error {% endif %}" id="{{ name }}[day]" name="{{ name }}[day]" value="{{ form.valueFor(name).day | default('') }}" type="number" aria-describedby="day">
       </div>
       <div class="form-group form-group-month">
         <label class="form-label" id="{{ name }}[month][label]" for="{{ name }}[month]">{{ t('Month') }}</label>
-        <input class="form-control {% if monthError or dateError %} form-control-error {% endif %}" id="{{ name }}[month]" name="{{ name }}[month]" value="{{ form.valueFor(name).month | default('') }}" type="number">
+        <input class="form-control {% if monthError or dateError %} form-control-error {% endif %}" id="{{ name }}[month]" name="{{ name }}[month]" value="{{ form.valueFor(name).month | default('') }}" type="number" aria-describedby="month">
       </div>
       <div class="form-group form-group-year">
         <label class="form-label" id="{{ name }}[year][label]" for="{{ name }}[year]">{{ t('Year') }}</label>
-        <input class="form-control {% if yearError or dateError %} form-control-error {% endif %}" id="{{ name }}[year]" name="{{ name }}[year]" value="{{ form.valueFor(name).year | default('') }}" type="number">
+        <input class="form-control {% if yearError or dateError %} form-control-error {% endif %}" id="{{ name }}[year]" name="{{ name }}[year]" value="{{ form.valueFor(name).year | default('') }}" type="number" aria-describedby="year">
       </div>
     </div>
     </fieldset>

@@ -11,7 +11,7 @@
         <input type="hidden" name="known" value="true" />
         {{ csrfProtection(csrf) }}
 
-        {{ dateInput(form = form, name = 'date') }}
+        {{ dateInput(form = form, name = 'date', visuallyHiddenLabelValue = 'date of birth') }}
 
         {{ saveAndContinueButton() }}
       </form>

@@ -10,20 +10,18 @@ import { Paths } from 'eligibility/paths'
 import { app } from 'main/app'
 
 import { YesNoOption } from 'models/yesNoOption'
-import { NotEligibleReason } from 'eligibility/notEligibleReason'
 
 const pagePath: string = Paths.helpWithFeesReferencePage.uri
-const pageRedirect: string = Paths.eligiblePage.uri
+const pageRedirect: string = Paths.hwfEligibleReferencePage.uri
 const expectedTextOnPage: string = 'Do you have a Help With Fees reference number?'
-const notEligibleReason: string = NotEligibleReason.HELP_WITH_FEES_REFERENCE
 
-describe('Claim eligibility: help with fees reference page', () => {
+describe('Claim eligibility: help with fees reference number page', () => {
   attachDefaultHooks(app)
 
   context('on GET', () => {
     checkAuthorizationMiddleware(app, 'get', pagePath)
 
-    it('should render page when everything is fine', async () => {
+    it("Should render page with 'Do you have a Help With Fees reference number?' ", async () => {
 
       await request(app)
         .get(pagePath)
@@ -41,7 +39,7 @@ describe('Claim eligibility: help with fees reference page', () => {
         .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage, 'div class="error-summary"'))
     })
 
-    it('should redirect to single defendant page when form is valid and everything is fine', async () => {
+    it('Should redirect to Help with Fees Eligible Reference Page', async () => {
 
       await request(app)
         .post(pagePath)
@@ -49,12 +47,12 @@ describe('Claim eligibility: help with fees reference page', () => {
         .expect(res => expect(res).to.be.redirect.toLocation(pageRedirect))
     })
 
-    it('should redirect to not eligible page when form is valid and not eligible option selected', async () => {
+    it('Should redirect to Help with Fees Eligible Page', async () => {
 
       await request(app)
         .post(pagePath)
         .send({ helpWithFeesReference: YesNoOption.NO.option })
-        .expect(res => expect(res).to.be.redirect.toLocation(`${Paths.hwfEligiblePage.uri}?reason=${notEligibleReason}`))
+        .expect(res => expect(res).to.be.redirect.toLocation(Paths.hwfEligiblePage.uri))
     })
   })
 })

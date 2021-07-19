@@ -5,6 +5,8 @@ import { ClaimValidator } from 'utils/claimValidator'
 import { FeeOutcome } from 'fees/models/feeOutcome'
 import { FeeRange } from 'fees/models/feeRange'
 import { StringUtils } from 'utils/stringUtils'
+import { FeatureToggles } from 'utils/featureToggles'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
 const feesUrl = config.get<string>('fees.url')
 const service = config.get<string>('fees.service')
@@ -14,6 +16,7 @@ const onlineChannel = config.get<string>('fees.channel.online')
 const paperChannel = config.get<string>('fees.channel.paper')
 const issueFeeEvent = config.get<string>('fees.issueFee.event')
 const hearingFeeEvent = config.get<string>('fees.hearingFee.event')
+const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
 
 export class FeesClient {
 
@@ -23,9 +26,14 @@ export class FeesClient {
    * @param {number} claimValue the amount claiming for in pounds
    * @returns {Promise.<number>} promise containing the fee amount in pounds
    */
-  static calculateIssueFee (claimValue: number): Promise<number> {
-    return this.calculateFee(issueFeeEvent, claimValue, onlineChannel)
+  static async calculateIssueFee (claimValue: number): Promise<number> {
+    if (await featureToggles.isNewClaimFeesEnabled()) {
+      return this.calculateFee(issueFeeEvent, claimValue, paperChannel)
       .then((outcome: FeeOutcome) => outcome.amount)
+    } else {
+      return this.calculateFee(issueFeeEvent, claimValue, onlineChannel)
+      .then((outcome: FeeOutcome) => outcome.amount)
+    }
   }
 
   /**
@@ -68,8 +76,12 @@ export class FeesClient {
    * Get the issue fee range group with online channel
    * @returns {Promise.<FeeRange>} promise containing the range group (including fee amounts in GBP)
    */
-  static getIssueFeeRangeGroup (): Promise<FeeRange[]> {
-    return this.getRangeGroup(issueFeeEvent, onlineChannel)
+  static async getIssueFeeRangeGroup (): Promise<FeeRange[]> {
+    if (await featureToggles.isNewClaimFeesEnabled()) {
+      return this.getRangeGroup(issueFeeEvent, paperChannel)
+    } else {
+      return this.getRangeGroup(issueFeeEvent, onlineChannel)
+    }
   }
 
   /**

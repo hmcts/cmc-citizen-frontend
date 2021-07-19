@@ -1,0 +1,24 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, textInput, saveAndContinueButton, errorSummary %}
+{% from "date.njk" import dateInput %}
+{% block additional_head %}
+  <link rel="stylesheet" href="{{ asset_paths['style'] }}/govuk-frontend/all.css"/>
+{% endblock %}
+
+{% set heading = 'When did it start?' %}
+{% set govukBackLinkHref = '/breathing-space/' + breathingSpaceExternalId + '/reference-number' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+    <p>{{ t('This is the date it started, not the date you received notification of it (optional).') }}</p>
+      <form method="post">
+        <input type="hidden" name="known" value="true" />
+        {{ csrfProtection(csrf) }}
+        {{ dateInput('respiteStart', form, hint = t('For example, {{ pastDate }}', { pastDate: pastDate | inputDate }),
+            visuallyHiddenLabelValue = 'respite start date') }}
+        {{ saveAndContinueButton() }}
+      </form>
+    </div>
+  </div>
+{% endblock %}

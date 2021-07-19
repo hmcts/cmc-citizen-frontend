@@ -67,12 +67,12 @@ describe('FeatureToggles', () => {
     })
   })
 
-  describe('isAutoEnrollIntoNewFeatureEnabled', () => {
-    it('should return toggle if autoEnrollIntoNewFeature toggle exists', async () => {
+  describe('isAntennaWebChatEnabled', () => {
+    it('should return toggle if Antenna web chat toggle exists', async () => {
       const mockLaunchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
       const featureToggles = new FeatureToggles(mockLaunchDarklyClient)
-      let actual = toBoolean(config.get<boolean>(`featureToggles.autoEnrollIntoNewFeature`))
-      let result = await featureToggles.isAutoEnrollIntoNewFeatureEnabled()
+      let actual = toBoolean(config.get<boolean>(`featureToggles.antennawebChat`))
+      let result = await featureToggles.isAntennaWebChatEnabled()
       expect(result).to.equal(actual)
     })
   })
@@ -83,6 +83,26 @@ describe('FeatureToggles', () => {
       const featureToggles = new FeatureToggles(mockLaunchDarklyClient)
       let actual = toBoolean(config.get<boolean>(`featureToggles.dashboard_pagination_enabled`))
       let result = await featureToggles.isDashboardPaginationEnabled()
+      expect(result).to.equal(actual)
+    })
+  })
+
+  describe('isBreathingSpaceEnabled', () => {
+    it('should return toggle if pagination toggle exists', async () => {
+      const mockLaunchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
+      const featureToggles = new FeatureToggles(mockLaunchDarklyClient)
+      let actual = toBoolean(config.get<boolean>(`featureToggles.breathingSpace`))
+      let result = await featureToggles.isBreathingSpaceEnabled()
+      expect(result).to.equal(actual)
+    })
+  })
+
+  describe('isNewClaimFeesEnabled', () => {
+    it('should return toggle if new claim fees toggle exists', async () => {
+      const mockLaunchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
+      const featureToggles = new FeatureToggles(mockLaunchDarklyClient)
+      let actual = toBoolean(config.get<boolean>(`featureToggles.newClaimFees`))
+      let result = await featureToggles.isNewClaimFeesEnabled()
       expect(result).to.equal(actual)
     })
   })

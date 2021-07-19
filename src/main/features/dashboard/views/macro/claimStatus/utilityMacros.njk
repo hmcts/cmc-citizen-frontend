@@ -35,7 +35,7 @@
 
 {% macro downloadClaimantDQs(claim) %}
   {% if claim.response.directionsQuestionnaire %}
-    <p>{{ t('They’ve also sent us their hearing requirements.') }}</p>
-    {{ internalLink(t('Download their hearing requirements  (PDF)'), DirectionsQuestionnairePaths.claimantHearingRequirementsReceiver.evaluateUri({ externalId: claim.externalId }) )}}
+    <p>{{ t('They’ve also sent us their hearing requirements:') }}</p>
+    {{ internalLink(t('Download their hearing requirements  (PDF, 11.1KB)'), DirectionsQuestionnairePaths.claimantHearingRequirementsReceiver.evaluateUri({ externalId: claim.externalId }) )}}
   {% endif %}
 {% endmacro %}

@@ -1,0 +1,25 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, radioGroup, errorSummary, textInput, saveAndContinueButton %}
+{% from "externalLink.njk" import externalLink %}
+{% from "internalLink.njk" import internalLink %}
+{% set heading = 'Apply for Help with Fees' %}
+{% set linkApplyHelpWithFees = t(externalLink('Apply for Help with Fees',
+  'https://www.gov.uk/get-help-with-court-fees') + '.') %}
+{% set additionalInformationPaper = t('If you need to use the paper Help with Fees application rather than the online version, you will not be able to use Online Civil Money Claims to issue your claim.') %}
+{% set additionalInformationHelp = t('When you apply for Help with Fees you will be asked for the number on your court or tribunal form. Please note that this is N1.') %}
+{% set additionalInformationCompleted = t('When you have completed your Help with Fees application, you will be given a reference number. Please note the number and keep it safe. You will need it later in the claim process. Then return to this page and click the Save and continue box below so that you can start the claim.') %}
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <h2 class="heading-small">{{ t('Please Note:') }}</h2>
+      <p>If you have already applied for Help with Fees in respect of
+        <span class="bold">THIS CLAIM</span>, you may already have a reference number. If so, you can save and continue and enter it when asked. Do not use a number related to a different claim. If you don’t have a Help with Fees number for this claim, please follow the instructions below.</p>
+      <p>{{ linkApplyHelpWithFees | safe }}</p>
+      <p>{{ additionalInformationPaper }}</p>
+      <p>{{ additionalInformationHelp }}</p>
+      <p>{{ additionalInformationCompleted }}</p>
+      {% set name = 'infoAboutHelpWithFees' %}
+      {{ internalLink(t('Save and Continue'), EligibilityPaths.helpWithFeesReferencePage.uri, 'button button-primary') | safe}}
+    </div>
+  </div>
+{% endblock %}

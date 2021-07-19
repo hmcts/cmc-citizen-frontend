@@ -44,12 +44,12 @@ export class FeatureToggles {
     return this.launchDarklyClient.serviceVariation('pcq', toBoolean(config.get<boolean>(`featureToggles.pcq`)))
   }
 
-  async isSignPostingEnabled (): Promise<boolean> {
-    return this.launchDarklyClient.serviceVariation('sign-posting-ctsc', toBoolean(config.get<boolean>(`featureToggles.signPostingCTSC`)))
+  async isAntennaWebChatEnabled (): Promise<boolean> {
+    return this.launchDarklyClient.serviceVariation('antenna-web-chat', toBoolean(config.get<boolean>(`featureToggles.AntennawebChat`)))
   }
 
-  async isAutoEnrollIntoNewFeatureEnabled (): Promise<boolean> {
-    return this.launchDarklyClient.serviceVariation('auto-enroll-into-new-feature', toBoolean(config.get<boolean>(`featureToggles.autoEnrollIntoNewFeature`)))
+  async isSignPostingEnabled (): Promise<boolean> {
+    return this.launchDarklyClient.serviceVariation('sign-posting-ctsc', toBoolean(config.get<boolean>(`featureToggles.signPostingCTSC`)))
   }
 
   async isDashboardPaginationEnabled (): Promise<boolean> {
@@ -58,5 +58,16 @@ export class FeatureToggles {
 
   async isOCONEnhancementEnabled (): Promise<boolean> {
     return this.launchDarklyClient.serviceVariation('ocon-enhancement-2', toBoolean(config.get<boolean>(`featureToggles.oconEnhancements`)))
+
+  async isEnhancedMediationJourneyEnabled (): Promise<boolean> {
+    return this.launchDarklyClient.serviceVariation('enhanced-mediation-journey', toBoolean(config.get<boolean>(`featureToggles.enhancedMediationJourney`)))
+  }
+
+  async isBreathingSpaceEnabled (): Promise<boolean> {
+    return this.launchDarklyClient.serviceVariation('breathing-space', toBoolean(config.get<boolean>(`featureToggles.breathingSpace`)))
+  }
+
+  async isNewClaimFeesEnabled (): Promise<boolean> {
+    return this.launchDarklyClient.serviceVariation('new-claim-fees', toBoolean(config.get<boolean>(`featureToggles.newClaimFees`)))
   }
 }

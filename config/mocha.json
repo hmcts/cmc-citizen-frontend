@@ -36,11 +36,14 @@
     "newDashboardStatus": false,
     "inversionOfControl": true,
     "warningBanner": false,
+    "antennawebChat": true,
     "helpWithFees": true,
     "pcq": true,
-    "autoEnrollIntoNewFeature": true,
+    "oconEnhancements" : false,
     "dashboard_pagination_enabled": true,
-    "oconEnhancements" : false
+    "breathingSpace": true,
+    "newClaimFees": true,
+    "enhancedMediationJourney": true
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"

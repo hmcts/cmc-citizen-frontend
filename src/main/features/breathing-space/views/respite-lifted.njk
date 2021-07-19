@@ -1,0 +1,24 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, textInput, saveAndContinueButton, errorSummary %}
+{% from "date.njk" import dateInput %}
+{% block additional_head %}
+  <link rel="stylesheet" href="{{ asset_paths['style'] }}/govuk-frontend/all.css"/>
+{% endblock %}
+
+{% set heading = 'Date for lifting debt respite scheme (breathing space)' %}
+{% set govukBackLinkHref = '/dashboard/' + breathingSpaceExternalId + '/claimant' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+    <p>{{ t('This is the date that you have been told it will finish (optional):') }}</p>
+      <form method="post">
+        <input type="hidden" name="known" value="true" />
+        {{ csrfProtection(csrf) }}
+        {{ dateInput('respiteLiftDate', form, hint = t('For example, {{ currentDate }}', { currentDate: currentDate | inputDate }),
+            visuallyHiddenLabelValue = 'respite lift date') }}
+        {{ saveAndContinueButton() }}
+      </form>
+    </div>
+  </div>
+{% endblock %}

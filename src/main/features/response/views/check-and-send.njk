@@ -140,7 +140,7 @@
                   bold = true
                 )
               }}
-              
+
               {{
                 partyDetailRow(
                   label = 'Your timeline of what happened (optional)',
@@ -153,7 +153,7 @@
               {% endfor %}
 
               {{ partyDetailRow(label = 'Comments about their timeline (optional)', value = draft.partialAdmission.timeline.comment | default(''), bold = true) }}
-              
+
               {{
                 partyDetailRow(
                   label = 'Your evidence (optional)',
@@ -171,7 +171,7 @@
                   )
                 }}
               {% endfor %}
-              
+
               {{ partyDetailRow(label = 'Comments about their evidence (optional)', value = draft.partialAdmission.evidence.comment | default(''), changeLink = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
             {% endif %}
           </dl>
@@ -224,7 +224,7 @@
               {% for timelineRow in draft.timeline.getPopulatedRowsOnly() %}
                 {{ partyDetailRow(label = timelineRow.date, value = timelineRow.description, changeLink = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }), bottomBorder = loop.last) }}
               {% endfor %}
-              
+
               {{ partyDetailRow(label = 'Comments about their timeline (optional)', value = draft.timeline.comment | default(''), changeLink = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
 
               {{
@@ -276,7 +276,7 @@
             {% endfor %}
 
             {{ partyDetailRow(label = 'Comments about their timeline (optional)', value = draft.timeline.comment | default(''), bold = true) }}
-            
+
             {{
               partyDetailRow(
                 label = 'Your evidence (optional)',
@@ -293,7 +293,7 @@
                 )
               }}
             {% endfor %}
-            
+
             {{ partyDetailRow(label = 'Comments about their evidence (optional)', value = draft.evidence.comment | default(''), bold = true) }}
           </dl>
         {% endif %}
@@ -344,7 +344,7 @@
         {% endif %}
 
         {% if mediationDraft.id !== 0 %}
-          {{ freeMediationBlock(claim, mediationDraft.document, contactPerson, contactNumber, mediationPilot, mediationEnabled) }}
+          {{ freeMediationBlock(claim, mediationDraft.document, contactPerson, contactNumber, mediationPilot, mediationEnabled, enhancedMediationJourney) }}
         {% endif %}
 
         {% if dqsEnabled %}

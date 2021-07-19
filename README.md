@@ -10,9 +10,9 @@ This is the frontend application for CMC. Service provides web UI for citizens, 
 
 Service delegates most of the non UI responsibilities to underlying services e.g. claim-store or pdf-service.
 
-## Getting Started
+### Getting Started
 
-### Prerequisites 
+### Prerequisites
 
 * [Node.js](https://nodejs.org/) >= 12.17.0
 * [yarn](https://yarnpkg.com/)

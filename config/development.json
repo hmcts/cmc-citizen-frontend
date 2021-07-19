@@ -13,10 +13,13 @@
     "warningBanner": false,
     "helpWithFees": true,
     "pcq":true,
+    "AntennawebChat": false,
     "signPostingCTSC": false,
     "oconEnhancements": false,
-    "autoEnrollIntoNewFeature": true,
-    "dashboard_pagination_enabled": false
+    "dashboard_pagination_enabled": false,
+    "breathingSpace": true,
+    "newClaimFees": true,
+    "enhancedMediationJourney": true
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"

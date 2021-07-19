@@ -7,11 +7,11 @@ import * as nock from 'nock'
 import { mockPostcodeLookupResponse, mockScottishPostcodeLookupResponse } from 'test/data/entity/mockPostcodeLookupResponse'
 import { mockCountryLookupResponse, mockScottishCountryLookupResponse } from 'test/data/entity/mockCountryLookupResponse'
 
-const mockPostcodeServer = 'https://api.ordnancesurvey.co.uk'
-const mockPostcodePath = /\/places\/v1\/addresses\/postcode\?.+/
+const mockPostcodeServer = 'https://api.os.uk'
+const mockPostcodePath = /\/search\/places\/v1\/postcode\?.+/
 
-const mockCountryServer = 'https://api.ordnancesurvey.co.uk'
-const mockCountryPath = /\/opennames\/v1\/find\?.+/
+const mockCountryServer = 'https://api.os.uk'
+const mockCountryPath = /\/search\/names\/v1\/find\?.+/
 
 describe('IsCountrySupported', () => {
   const constraint: CheckCountryConstraint = new CheckCountryConstraint()
@@ -36,7 +36,15 @@ describe('IsCountrySupported', () => {
           .get(mockPostcodePath)
           .reply(404)
 
-        expect(await constraint.validate('2SW1AN', validationArgs(Country.all()))).to.be.true
+        expect(await constraint.validate('2SW1AN', validationArgs(Country.all()))).to.be.false
+      })
+
+      it('Should return false when given postcode is simillar to UK postcode but not a valid one', async () => {
+        nock(mockPostcodeServer)
+          .get(mockPostcodePath)
+          .reply(404)
+
+        expect(await constraint.validate('RG10 4JE', validationArgs(Country.all()))).to.be.false
       })
 
       it('the postcode lookup client returns an error', async () => {

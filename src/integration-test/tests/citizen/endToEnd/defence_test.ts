@@ -42,14 +42,14 @@ Scenario('I can as an Individual make a claim against an Individual who then ful
 Scenario('I can as an Individual make a claim against an Individual who then rejects the claim as they have paid the full amount then I accept the defence @nightly', { retries: 3 }, async (I: I) => {
   const claimantResponseTestData = new ClaimantResponseTestData()
   claimantResponseTestData.pageSpecificValues.howMuchHaveYouPaidPageEnterAmountPaidWithDateAndExplanation = {
-    paidAmount: 105.5,
+    paidAmount: 115.5,
     date: '2018-01-01',
     explanation: 'My explanation...'
   }
   // as defendant
   await defendantResponseSteps.disputeClaimAsAlreadyPaid(I, testData, claimantResponseTestData, true)
   I.see(testData.claimRef)
-  I.see(`You told us you’ve paid £105.50. We’ve sent ${testData.claimantName} this response`)
+  I.see(`You told us you’ve paid £115.50. We’ve sent ${testData.claimantName} this response`)
   // check dashboard
   I.click('My account')
   I.see('Wait for the claimant to respond')
