@@ -557,7 +557,6 @@ describe('Claim issue: check and send page', () => {
           feeAmountInPennies: 200
         } })
         claimStoreServiceMock.resolveSaveHelpWithFeesClaimForUser()
-        claimStoreServiceMock.resolveRetrieveUserRoles()
         draftStoreServiceMock.resolveDelete()
 
         const nextPage = ClaimPaths.confirmationPage.uri.replace(':externalId', 'fe6e9413-e804-48d5-bbfd-645917fc46e5')
@@ -576,7 +575,6 @@ describe('Claim issue: check and send page', () => {
         } })
         // mock 'saveHelpWithFees' request with error
         claimStoreServiceMock.resolveSaveHelpWithFeesClaimWithError()
-        claimStoreServiceMock.resolveRetrieveUserRoles()
 
         const nextPage = ClaimPaths.taskListPage.uri
         await request(app)
@@ -597,7 +595,6 @@ describe('Claim issue: check and send page', () => {
         // mock updateHelpWithFees 'put' request
         claimStoreServiceMock.resolveUpdateHelpWithFeesClaimForUser()
         // mock user roles
-        claimStoreServiceMock.resolveRetrieveUserRoles()
         // mock delete draft
         draftStoreServiceMock.resolveDelete()
 
@@ -620,8 +617,6 @@ describe('Claim issue: check and send page', () => {
         // mock updateHelpWithFees 'put' request failed with error
         claimStoreServiceMock.resolveUpdateHelpWithFeesClaimWithError()
         // mock user roles
-        claimStoreServiceMock.resolveRetrieveUserRoles()
-
         const nextPage = ClaimPaths.taskListPage.uri
         await request(app)
           .post(ClaimPaths.checkAndSendPage.uri)

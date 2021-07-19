@@ -97,7 +97,6 @@
     "helpWithFees": true,
     "pcq":true,
     "signPostingCTSC": true,
-    "autoEnrollIntoNewFeature": true,
     "dashboard_pagination_enabled": false,
     "breathingSpace": true,
     "newClaimFees": true,
