@@ -39,7 +39,7 @@
     "antennawebChat": true,
     "helpWithFees": true,
     "pcq": true,
-    "autoEnrollIntoNewFeature": true,
+    "oconEnhancements" : false,
     "dashboard_pagination_enabled": true,
     "breathingSpace": true,
     "newClaimFees": true,
