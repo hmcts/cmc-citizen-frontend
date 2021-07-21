@@ -41,6 +41,8 @@ export class TaskListBuilder extends TaskStatus {
   static async buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim, now: moment.Moment): Promise<TaskList> {
     const tasks: TaskListItem[] = []
     const externalId: string = claim.externalId
+    const launchDarklyClient = new LaunchDarklyClient()
+    const featureToggles = new FeatureToggles(launchDarklyClient)
 
     tasks.push(
       new TaskListItem(
@@ -50,8 +52,15 @@ export class TaskListBuilder extends TaskStatus {
       )
     )
 
-    const postponedDeadline: moment.Moment = await DeadlineCalculatorClient.calculatePostponedDeadline(claim.issuedOn)
-    if (!isPastDeadline(now, postponedDeadline)) {
+    let isDeadlinePassed: boolean = false
+    if (await featureToggles.isOCONEnhancementEnabled()) {
+      isDeadlinePassed = isPastDeadline(now, claim.responseDeadline)
+    } else {
+      const postponedDeadline: moment.Moment = await DeadlineCalculatorClient.calculatePostponedDeadline(claim.issuedOn)
+      isDeadlinePassed = isPastDeadline(now, postponedDeadline)
+    }
+
+    if (!isDeadlinePassed) {
       tasks.push(
         new TaskListItem(
           'Decide if you need more time to respond',

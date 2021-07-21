@@ -13,7 +13,7 @@
     "pcq":true,
     "AntennawebChat": false,
     "signPostingCTSC": false,
-    "autoEnrollIntoNewFeature": true,
+    "oconEnhancements": false,
     "dashboard_pagination_enabled": false,
     "breathingSpace": true,
     "newClaimFees": true
