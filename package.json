@@ -76,7 +76,7 @@
     "helmet": "^4.6.0",
     "hpkp": "^2.0.2",
     "http-status-codes": "^1.4.0",
-    "i18next": "^18.0.0",
+    "i18next": "^20.3.4",
     "i18next-conv": "^10.2.0",
     "i18next-express-middleware": "^1.9.1",
     "i18next-sprintf-postprocessor": "^0.2.2",
