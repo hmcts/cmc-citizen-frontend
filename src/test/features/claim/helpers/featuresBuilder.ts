@@ -10,7 +10,6 @@ const featuresBuilder = new FeaturesBuilder()
 const MIN_THRESHOLD = Math.min(
   FeaturesBuilder.JUDGE_PILOT_THRESHOLD,
   FeaturesBuilder.LA_PILOT_THRESHOLD,
-  FeaturesBuilder.MEDIATION_PILOT_AMOUNT,
   FeaturesBuilder.ONLINE_DQ_THRESHOLD
 )
 
@@ -35,28 +34,16 @@ describe('FeaturesBuilder', () => {
 
   })
 
-  describe('Mediation Pilot Feature', () => {
-    it(`should add mediation pilot to features if amount <= ${FeaturesBuilder.MEDIATION_PILOT_AMOUNT} and flag is set`, async () => {
-      const features = await featuresBuilder.features(FeaturesBuilder.MEDIATION_PILOT_AMOUNT)
-      expect(features).to.equal('mediationPilot, judgePilotEligible, directionsQuestionnaire')
-    })
-
-    it(`should not add mediation pilot to features if amount > ${FeaturesBuilder.MEDIATION_PILOT_AMOUNT}`, async () => {
-      const features = await featuresBuilder.features(FeaturesBuilder.MEDIATION_PILOT_AMOUNT + 0.01)
-      expect(features).to.be.equal('judgePilotEligible, directionsQuestionnaire')
-    })
-  })
-
   describe('Legal advisor Pilot Feature', () => {
     it(`should add legal advisor eligible to features if amount <= ${FeaturesBuilder.LA_PILOT_THRESHOLD} and flag is set`, async () => {
       enableFeatures('legal_advisor_pilot')
       const features = await featuresBuilder.features(FeaturesBuilder.LA_PILOT_THRESHOLD)
-      expect(features).to.equal('mediationPilot, LAPilotEligible, directionsQuestionnaire')
+      expect(features).to.equal('LAPilotEligible, directionsQuestionnaire')
     })
 
     it(`should not add legal advisor eligible to features if amount > ${FeaturesBuilder.LA_PILOT_THRESHOLD}`, async () => {
       const features = await featuresBuilder.features(FeaturesBuilder.LA_PILOT_THRESHOLD + 1)
-      expect(features).to.equal('mediationPilot, judgePilotEligible, directionsQuestionnaire')
+      expect(features).to.equal('judgePilotEligible, directionsQuestionnaire')
     })
   })
 
@@ -76,11 +63,11 @@ describe('FeaturesBuilder', () => {
   it(`should add legal advisor, dqOnline and mediation pilot to features if principal amount <= ${MIN_THRESHOLD} and flags are set`, async () => {
     enableFeatures('legal_advisor_pilot', 'directions_questionnaire', 'mediation_pilot')
     const features = await featuresBuilder.features(MIN_THRESHOLD)
-    expect(features).to.equal('mediationPilot, LAPilotEligible, directionsQuestionnaire')
+    expect(features).to.equal('LAPilotEligible, directionsQuestionnaire')
   })
 
   it(`should not add judge pilot if legal advisor pilot is eligible`, async () => {
     const features = await featuresBuilder.features(FeaturesBuilder.LA_PILOT_THRESHOLD)
-    expect(features).to.equal('mediationPilot, LAPilotEligible, directionsQuestionnaire')
+    expect(features).to.equal('LAPilotEligible, directionsQuestionnaire')
   })
 })

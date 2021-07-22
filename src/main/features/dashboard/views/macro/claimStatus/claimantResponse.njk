@@ -10,7 +10,7 @@
 
 {% set claimNumber = claim.claimNumber %}
 
-  {% if featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
+  {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
       <div class="status-block">
       <h2 class="heading-medium">{{ t('You’ve rejected the defendant’s response')}}</h2>
       <p>{{ t('You’ve both agreed to try mediation. Your mediation appointment will be arranged within 28 days.') }}</p>
