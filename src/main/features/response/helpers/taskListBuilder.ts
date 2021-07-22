@@ -248,44 +248,17 @@ export class TaskListBuilder extends TaskStatus {
       || draft.isResponseRejectedFullyBecausePaidWhatOwed()
       || TaskListBuilder.isPartiallyAdmittedAndWhyDoYouDisagreeTaskCompleted(draft)) {
 
-      const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
       let path: string
-      if (await featureToggles.isEnhancedMediationJourneyEnabled()) {
-        path = MediationPaths.freeTelephoneMediationPage.evaluateUri({ externalId: claim.externalId })
-        return new TaskList(
-          'Resolving the claim', [
-            new TaskListItem(
-              'Free telephone mediation',
-              path,
-              await FreeMediationTask.isCompleted(mediationDraft, claim)
-            )
-          ]
-        )
-      } else {
-        if (FeatureToggles.isEnabled('mediation')) {
-          path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
-          return new TaskList(
-            'Try to resolve the claim', [
-              new TaskListItem(
-                'Free telephone mediation',
-                path,
-                await FreeMediationTask.isCompleted(mediationDraft, claim)
-              )
-            ]
+      path = MediationPaths.freeTelephoneMediationPage.evaluateUri({ externalId: claim.externalId })
+      return new TaskList(
+        'Resolving the claim', [
+          new TaskListItem(
+            'Free telephone mediation',
+            path,
+            await FreeMediationTask.isCompleted(mediationDraft, claim)
           )
-        } else {
-          path = MediationPaths.tryFreeMediationPage.evaluateUri({ externalId: claim.externalId })
-          return new TaskList(
-            'Resolving the claim', [
-              new TaskListItem(
-                'Free telephone mediation',
-                path,
-                await FreeMediationTask.isCompleted(mediationDraft, claim)
-              )
-            ]
-          )
-        }
-      }
+        ]
+      )
     }
 
     return undefined

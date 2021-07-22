@@ -60,10 +60,6 @@ export class FeatureToggles {
     return this.launchDarklyClient.serviceVariation('ocon-enhancement-2', toBoolean(config.get<boolean>(`featureToggles.oconEnhancements`)))
   }
 
-  async isEnhancedMediationJourneyEnabled (): Promise<boolean> {
-    return this.launchDarklyClient.serviceVariation('enhanced-mediation-journey', toBoolean(config.get<boolean>(`featureToggles.enhancedMediationJourney`)))
-  }
-
   async isBreathingSpaceEnabled (): Promise<boolean> {
     return this.launchDarklyClient.serviceVariation('breathing-space', toBoolean(config.get<boolean>(`featureToggles.breathingSpace`)))
   }

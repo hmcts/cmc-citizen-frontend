@@ -42,8 +42,6 @@ nodejs:
     # there should be no more than 2 or 3 at a time
     FEATURE_NEW_FEATURES_CONSENT: true
     FEATURE_ADMISSIONS: true
-    FEATURE_MEDIATION: true
-    FEATURE_MEDIATION_PILOT: true
     FEATURE_DIRECTIONS_QUESTIONNAIRE: true
     FEATURE_INVERSION_OF_CONTROL: true
     FEATURE_PCQ: false
@@ -52,7 +50,6 @@ nodejs:
     FEATURE_OCON_ENHANCEMENTS: false
     AUTO_ENROLL_INTO_NEW_FEATURE: true
     FEATURE_BREATHING_SPACE: false
-    ENHANCED_MEDIATION_JOURNEY: false
 
   keyVaults:
     cmc:
@@ -85,4 +82,4 @@ cmc-claim-store:
 xui-webapp:
   enabled: false
 elastic:
-  enabled: false 
+  enabled: false

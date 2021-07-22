@@ -26,14 +26,6 @@ describe('Free mediation task', () => {
     })
   })
 
-  it('isYouCanOnlyUseMediationCompleted should not be completed when youCanOnlyUseMediation object is undefined', () => {
-    const mediationDraft = new MediationDraft()
-    mediationDraft.willYouTryMediation = new FreeMediation(FreeMediationOption.YES)
-    mediationDraft.youCanOnlyUseMediation = undefined
-
-    expect(FreeMediationTask.isYouCanOnlyUseMediationCompleted(mediationDraft)).to.be.false
-  })
-
   it('isYouCanOnlyUseMediationCompleted should be completed when youCanOnlyUseMediation object is ', () => {
     FreeMediationOption.all().forEach(option => {
       it(`${option}`, () => {
