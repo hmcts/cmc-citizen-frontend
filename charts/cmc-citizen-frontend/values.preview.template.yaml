@@ -94,7 +94,7 @@ cmc-claim-store:
   enabled: true
   java:
     imagePullPolicy: Always
-    image: hmctspublic.azurecr.io/cmc/claim-store:latest
+    image: hmctspublic.azurecr.io/cmc/claim-store:pr-2466
     releaseNameOverride: ${SERVICE_NAME}-claim-store
     ingressHost: claim-store-${SERVICE_FQDN}
     readinessDelay: 250  # ccd-stack will start much slower
@@ -248,7 +248,7 @@ ccd:
         ELASTIC_SEARCH_DATA_NODES_HOSTS:  http://${SERVICE_NAME}-es-master:9200
 
   ccd-user-profile-importer:
-    image: hmctspublic.azurecr.io/ccd/user-profile-importer:db2r9a
+    image: hmctspublic.azurecr.io/ccd/user-profile-importer:pr-545-0f38c67e
     users:
       - civilmoneyclaims+ccd@gmail.com|CMC|MoneyClaimCase|open
       - civilmoneyclaims+judge@gmail.com|CMC|MoneyClaimCase|orderForJudgeReview
