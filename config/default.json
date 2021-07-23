@@ -84,8 +84,6 @@
     "newFeaturesConsent": false,
     "returnErrorToUser": false,
     "mockPay": false,
-    "mediation": false,
-    "mediationPilot": false,
     "directionsQuestionnaire": false,
     "legalAdvisorPilot": false,
     "judgePilot": false,
@@ -100,8 +98,7 @@
     "oconEnhancements": false,
     "dashboard_pagination_enabled": false,
     "breathingSpace": true,
-    "newClaimFees": true,
-    "enhancedMediationJourney": true
+    "newClaimFees": true
   },
   "oauth": {
     "clientId": "cmc_citizen"
