@@ -25,19 +25,3 @@ Before(async (I: I) => {
   claimRef = await I.createClaim(claimData, email)
 
 })
-
-Scenario('Default CCJ E2E @nightly @citizen', { retries: 3 }, async (I: I) => {
-  userSteps.login(email)
-  await ccjSteps.requestCCJWhenDefendantNotPaid(I, claimRef, defendantType)
-  ccjSteps.ccjDefendantToPayImmediately()
-  ccjSteps.validateCheckAndSendPageAnswers(claimantType, claimData.defendants[0], defendantType)
-  I.see('County Court Judgment requested', 'h1.bold-large')
-})
-
-Scenario('CCJ requested with no defendant email... @citizen @nightly', { retries: 3 }, async (I: I) => {
-  userSteps.login(email)
-  await ccjSteps.requestCCJ(I, claimRef, defendantType)
-  ccjSteps.ccjDefendantToPayByInstalments()
-  ccjSteps.checkCCJFactsAreTrueAndSubmit(claimantType, claimData.defendants[0], defendantType)
-  I.see('County Court Judgment requested', 'h1.bold-large')
-})
