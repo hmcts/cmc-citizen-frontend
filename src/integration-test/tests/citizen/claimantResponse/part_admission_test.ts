@@ -24,4 +24,113 @@ Before(async (I: I) => {
 })
 
 if (process.env.FEATURE_ADMISSIONS === 'true') {
+  Scenario('I can as a claimant reject the defendants part admission by immediately @nightly @admissions', { retries: 3 }, async (I: I) => {
+    testData.paymentOption = PaymentOption.IMMEDIATELY
+    testData.defenceType = DefenceType.PART_ADMISSION
+    testData.defendantClaimsToHavePaidInFull = false
+    const claimantResponseTestData = new ClaimantResponseTestData()
+    claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage = true
+    // as defendant
+    await helperSteps.finishResponse(testData, false)
+    I.click('Sign out')
+    // as claimant
+    userSteps.login(testData.claimantEmail)
+    claimantResponseSteps.viewClaimFromDashboard(testData.claimRef)
+    claimantResponseSteps.respondToOffer('View and respond')
+    claimantResponseSteps.reject(testData, claimantResponseTestData)
+    checkAndSendPage.verifyFactsForPartAdmitRejection()
+    checkAndSendPage.checkFactsTrueAndSubmit(testData.defenceType)
+    I.see('You agreed to try free mediation')
+    confirmationPage.clickGoToYourAccount()
+    I.see(testData.claimRef)
+    I.see('Your mediation appointment will be arranged within 28 days')
+  })
+
+  Scenario('I can as a claimant accept the defendants part admission by immediately with settlement agreement and accepting defendants payment method @nightly @admissions', { retries: 3 }, async (I: I) => {
+
+    testData.paymentOption = PaymentOption.IMMEDIATELY
+    testData.defenceType = DefenceType.PART_ADMISSION
+    testData.defendantClaimsToHavePaidInFull = false
+    const claimantResponseTestData = new ClaimantResponseTestData()
+    claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage = true
+    // as defendant
+    await helperSteps.finishResponse(testData)
+    I.click('Sign out')
+    // as claimant
+    userSteps.login(testData.claimantEmail)
+    claimantResponseSteps.acceptSettlementFromDashboardWhenAcceptPaymentMethod(testData, claimantResponseTestData, 'View and respond')
+    checkAndSendPage.verifyFactsForSettlement()
+    checkAndSendPage.submitNoDq()
+    I.see('You’ve signed a settlement agreement')
+    confirmationPage.clickGoToYourAccount()
+    I.see(testData.claimRef)
+    I.see('You’ve signed a settlement agreement.')
+  })
+
+  Scenario('I can as a claimant accept the defendants part admission by instalments with settlement agreement and rejecting defendants payment method in favour of immediate payment @citizen @admissions @e2e', { retries: 3 }, async (I: I) => {
+
+    testData.paymentOption = PaymentOption.INSTALMENTS
+    testData.defenceType = DefenceType.PART_ADMISSION
+    testData.claimantPaymentOption = PaymentOption.IMMEDIATELY
+    testData.defendantClaimsToHavePaidInFull = false
+    const claimantResponseTestData = new ClaimantResponseTestData()
+    claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage = true
+    // as defendant
+    await helperSteps.finishResponse(testData)
+    I.click('Sign out')
+    // as claimant
+    userSteps.login(testData.claimantEmail)
+    claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData, 'View and respond')
+    checkAndSendPage.verifyFactsForSettlement()
+    I.click('input[type=submit]')
+    I.see('You’ve signed a settlement agreement')
+    confirmationPage.clickGoToYourAccount()
+    I.see(testData.claimRef)
+    I.see('You’ve signed a settlement agreement.')
+  })
+
+  Scenario('I can as a claimant accept the defendants part admission by instalments with settlement agreement and rejecting defendants payment method in favour of set date @nightly @admissions', { retries: 3 }, async (I: I) => {
+
+    testData.paymentOption = PaymentOption.INSTALMENTS
+    testData.defenceType = DefenceType.PART_ADMISSION
+    testData.claimantPaymentOption = PaymentOption.BY_SET_DATE
+    testData.defendantClaimsToHavePaidInFull = false
+    const claimantResponseTestData = new ClaimantResponseTestData()
+    claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage = true
+    claimantResponseTestData.isExpectingToSeeCourtOfferedInstalmentsPage = true
+    // as defendant
+    await helperSteps.finishResponse(testData)
+    I.click('Sign out')
+    // as claimant
+    userSteps.login(testData.claimantEmail)
+    claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData, 'View and respond')
+    checkAndSendPage.verifyFactsForSettlement()
+    checkAndSendPage.submitNoDq()
+    I.see('You’ve signed a settlement agreement')
+    confirmationPage.clickGoToYourAccount()
+    I.see(testData.claimRef)
+    I.see('You’ve signed a settlement agreement.')
+  })
+
+  Scenario('I can as a claimant accept the defendants part admission by instalments with settlement agreement and rejecting defendants payment method in favour of instalments @nightly @admissions', { retries: 3 }, async (I: I) => {
+
+    testData.paymentOption = PaymentOption.BY_SET_DATE
+    testData.defenceType = DefenceType.PART_ADMISSION
+    testData.claimantPaymentOption = PaymentOption.INSTALMENTS
+    testData.defendantClaimsToHavePaidInFull = false
+    const claimantResponseTestData = new ClaimantResponseTestData()
+    claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage = true
+    // as defendant
+    await helperSteps.finishResponse(testData)
+    I.click('Sign out')
+    // as claimant
+    userSteps.login(testData.claimantEmail)
+    claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData, 'View and respond')
+    checkAndSendPage.verifyFactsForSettlement()
+    checkAndSendPage.submitNoDq()
+    I.see('You’ve proposed a different repayment plan')
+    confirmationPage.clickGoToYourAccount()
+    I.see(testData.claimRef)
+    I.see('You’ve signed a settlement agreement.')
+  })
 }

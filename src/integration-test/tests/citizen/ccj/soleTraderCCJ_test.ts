@@ -25,3 +25,11 @@ Before(async (I: I) => {
   claimRef = await I.createClaim(claimData, email)
 
 })
+
+Scenario(' CCJ requested as a sole trader(Pay immediately) @nightly', { retries: 3 }, async (I: I) => {
+  userSteps.login(email)
+  await ccjSteps.requestCCJ(I, claimRef, defendantType)
+  ccjSteps.ccjDefendantToPayImmediately()
+  ccjSteps.checkCCJFactsAreTrueAndSubmit(claimantType, claimData.defendants[0], defendantType)
+  I.see('County Court Judgment requested', 'h1.bold-large')
+})

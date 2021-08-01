@@ -32,4 +32,16 @@ Before(async (I: I) => {
 })
 
 if (process.env.FEATURE_ADMISSIONS === 'true') {
+
+  Scenario('Admit all of the claim(Pay Immediately) @citizen @nightly @admissions', { retries: 3 }, async (I: I) => {
+    defenceSteps.makeFullAdmission(defendant, PartyType.INDIVIDUAL, PaymentOption.IMMEDIATELY, claimant, false)
+  })
+
+  Scenario('Admit all of the claim(Pay By Set Date) @citizen @nightly @admissions', { retries: 3 }, async (I: I) => {
+    defenceSteps.makeFullAdmission(defendant, PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE, claimant, false)
+  })
+
+  Scenario('Admit all of the claim(Pay By Instalment) with PCQ @citizen @admissions', { retries: 3 }, async (I: I) => {
+    defenceSteps.makeFullAdmission(defendant, PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS, claimant, false, true)
+  })
 }
