@@ -7,11 +7,13 @@ import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
 import { ClaimantResponseSteps } from 'integration-test/tests/citizen/claimantResponse/steps/claimant-reponse'
 import { createClaimData } from 'integration-test/data/test-data'
 import { DashboardClaimDetails } from 'integration-test/tests/citizen/defence/pages/defendant-claim-details'
+import { ClaimantCheckAndSendPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-check-and-send'
 
 const helperSteps: Helper = new Helper()
 const userSteps: UserSteps = new UserSteps()
 const claimantResponseSteps: ClaimantResponseSteps = new ClaimantResponseSteps()
 const defendantDetails: DashboardClaimDetails = new DashboardClaimDetails()
+const checkAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage()
 let testData
 let claimData
 

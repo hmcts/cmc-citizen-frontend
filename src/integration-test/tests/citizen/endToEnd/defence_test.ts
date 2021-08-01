@@ -5,9 +5,12 @@ import { EndToEndTestData } from './data/EndToEndTestData'
 import { DefenceType } from 'integration-test/data/defence-type'
 import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
 import { ClaimantResponseSteps } from 'integration-test/tests/citizen/claimantResponse/steps/claimant-reponse'
+import { ClaimantResponseTestData } from 'integration-test/tests/citizen/claimantResponse/data/ClaimantResponseTestData'
+import { DefendantResponseSteps } from 'integration-test/tests/citizen/claimantResponse/steps/defendant'
 const helperSteps: Helper = new Helper()
 const userSteps: UserSteps = new UserSteps()
 const claimantResponseSteps: ClaimantResponseSteps = new ClaimantResponseSteps()
+const defendantResponseSteps: DefendantResponseSteps = new DefendantResponseSteps()
 let testData
 
 Feature('Full Defence E2E Journeys ')

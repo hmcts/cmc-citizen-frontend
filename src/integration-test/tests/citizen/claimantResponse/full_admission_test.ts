@@ -8,7 +8,8 @@ import { ClaimantConfirmation } from 'integration-test/tests/citizen/claimantRes
 import { ClaimantCheckAndSendPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-check-and-send'
 import { EndToEndTestData } from 'integration-test/tests/citizen/endToEnd/data/EndToEndTestData'
 import {
-  ClaimantResponseTestData
+  ClaimantResponseTestData,
+  UnreasonableClaimantResponseTestData
 } from 'integration-test/tests/citizen/claimantResponse/data/ClaimantResponseTestData'
 
 const helperSteps: Helper = new Helper()
