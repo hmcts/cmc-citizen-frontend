@@ -40,6 +40,7 @@ export class DirectionsQuestionnaireSteps {
       if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
         hearingExceptionalCircumstancesPage.chooseNo()
       }
+      hearingLocationPage.chooseNo()
       usingExpertPage.chooseExpertNo()
       selfWitnessPage.chooseNo()
       otherWitnessPage.chooseNo()
