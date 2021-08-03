@@ -68,7 +68,7 @@ export class DefendantSteps {
 
   async selectTaskHearingRequirements (defendantType: PartyType): Promise<void> {
     defendantTaskListPage.selectTaskHearingRequirements()
-    await directionsQuestionnaireSteps.acceptDirectionsQuestionnaireYesJourney(defendantType)
+    directionsQuestionnaireSteps.acceptDirectionsQuestionnaireNoJourney(defendantType)
   }
 
   selectTaskWhenYouWillPay (): void {
