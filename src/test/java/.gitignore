@@ -1,0 +1,17 @@
+# Package Files #
+.classpath
+.project
+.settings/
+target/
+
+# IntelliJ IDEA files
+.idea/
+*.iws
+*.iml
+*.ipr
+
+### Gradle
+.gradle/
+out/
+bin/
+build/
