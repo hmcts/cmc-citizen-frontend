@@ -14,11 +14,9 @@ import { FeaturesBuilder } from 'claim/helpers/featuresBuilder'
 import * as HttpStatus from 'http-status-codes'
 import { ErrorHandling } from 'shared/errorHandling'
 import { noRetryRequest } from 'client/request'
-import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient(noRetryRequest)
-const launchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
-const featuresBuilder: FeaturesBuilder = new FeaturesBuilder(claimStoreClient, launchDarklyClient)
+const featuresBuilder: FeaturesBuilder = new FeaturesBuilder()
 
 const logger = Logger.getLogger('router/finish-payment')
 
@@ -35,7 +33,7 @@ export default express.Router()
       const claim: Claim = await claimStoreClient.retrieveByExternalId(externalId, user)
       logger.info(`CLAIM IN FINISH PAYMENT, Payment state for external id (${externalId}): `, claim.state)
       if (ClaimState[claim.state] === ClaimState.AWAITING_CITIZEN_PAYMENT) {
-        const features = await featuresBuilder.features(claim.claimData.amount.totalAmount(), user)
+        const features = await featuresBuilder.features(claim.claimData.amount.totalAmount())
 
         const createdClaim = await claimStoreClient.createCitizenClaim(draft, user, features)
         if (ClaimState[createdClaim.state] === ClaimState.AWAITING_CITIZEN_PAYMENT) {

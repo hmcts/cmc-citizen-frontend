@@ -344,7 +344,7 @@
         {% endif %}
 
         {% if mediationDraft.id !== 0 %}
-          {{ freeMediationBlock(claim, mediationDraft.document, contactPerson, contactNumber, mediationPilot, mediationEnabled, enhancedMediationJourney) }}
+          {{ freeMediationBlock(claim, mediationDraft.document, contactPerson, contactNumber) }}
         {% endif %}
 
         {% if dqsEnabled %}

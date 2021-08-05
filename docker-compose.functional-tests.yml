@@ -12,7 +12,6 @@ services:
         - OAUTH_CLIENT_SECRET
         - HEALTHCHECK_CITIZEN=true
         - FEATURE_ADMISSIONS
-        - FEATURE_MEDIATION
         - FEATURE_DIRECTIONS_QUESTIONNAIRE
         - FEATURE_TESTING_SUPPORT
         - SMOKE_TEST_CITIZEN_USERNAME
@@ -21,7 +20,6 @@ services:
         - FEATURE_PCQ
         - FEATURE_HELP_WITH_FEES
         - FEATURE_BREATHING_SPACE
-        - ENHANCED_MEDIATION_JOURNEY
       volumes:
         - ./functional-output:/usr/src/app/output
     remote-webdriver:
