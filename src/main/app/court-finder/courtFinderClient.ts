@@ -1,6 +1,5 @@
 import * as requestDefault from 'request'
 import * as requestPromise from 'request-promise-native'
-import { Address } from './address'
 import { Court } from './court'
 import { CourtFinderResponse } from './courtFinderResponse'
 import * as config from 'config'
