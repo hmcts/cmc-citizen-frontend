@@ -305,8 +305,8 @@ describe('Directions Questionnaire - hearing location', () => {
               .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to '))
           })
 
-          it('should display the search result for edge case', async () => {
-            const searchWithPostCodeFirstLoopFormData = { courtAccepted: undefined, alternativeCourtSelected: undefined, alternativeOption: 'postcode', alternativePostcode: 'AB1 2CD' }
+          it.only('should display the search result for edge case', async () => {
+            const searchWithPostCodeFirstLoopFormData = { courtAccepted: undefined, alternativeCourtSelected: undefined, alternativeOption: 'postcode', alternativePostcode: 'B46DS' }
 
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
