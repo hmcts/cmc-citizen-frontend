@@ -17,7 +17,7 @@ export const searchResponse = [
     magistrate_code: null,
     slug: 'birmingham-district-probate-registry',
     types: [],
-    address: {
+    addresses: {
       address_lines: [
         'The Priory Courts',
         '33 Bull Street'
