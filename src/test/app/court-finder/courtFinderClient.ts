@@ -92,7 +92,7 @@ describe('CourtFinderClient', () => {
         })
     })
 
-    it.only('should return found courts', () => {
+    it('should return found courts', () => {
       nock(mockClient)
           .get(/\/court-finder\/search-postcode\/.+/)
           .reply(200, apiData)
