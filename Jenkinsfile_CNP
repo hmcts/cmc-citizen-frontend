@@ -17,7 +17,10 @@ def secrets = [
   'ccd-${env}': [
     secret('ccd-data-s2s-secret', 'DATA_STORE_S2S_KEY'),
     secret('ccd-definition-s2s-secret', 'DEFINITION_STORE_S2S_KEY'),
-    secret('ccd-admin-web-oauth2-client-secret', 'ADMIN_WEB_IDAM_SECRET')
+    secret('ccd-admin-web-oauth2-client-secret', 'ADMIN_WEB_IDAM_SECRET'),
+    secret('idam-data-store-client-secret','IDAM_OAUTH2_DATA_STORE_CLIENT_SECRET'),
+    secret('idam-data-store-system-user-username','IDAM_DATA_STORE_SYSTEM_USER_USERNAME'),
+    secret('idam-data-store-system-user-password','IDAM_DATA_STORE_SYSTEM_USER_PASSWORD')
   ]
 ]
 
@@ -46,13 +49,11 @@ def String generateClaimStoreUrl(String testUrl) {
 env.IDAM_URL = 'https://idam-api.aat.platform.hmcts.net'
 env.CLAIM_STORE_URL = 'http://cmc-claim-store-aat.service.core-compute-aat.internal'
 env.FEATURE_ADMISSIONS = 'true'
-env.FEATURE_MEDIATION = 'true'
 env.FEATURE_DIRECTIONS_QUESTIONNAIRE = 'true'
 env.FEATURE_TESTING_SUPPORT = 'true'
 env.FEATURE_INVERSION_OF_CONTROL = 'true'
 env.FEATURE_PCQ = 'true'
 env.FEATURE_BREATHING_SPACE = 'true'
-env.ENHANCED_MEDIATION_JOURNEY = 'true'
 // add any others needed to selective testing...
 
 String notificationsChannel = '#cmc-tech-notification'
