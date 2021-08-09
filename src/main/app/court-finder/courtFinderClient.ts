@@ -65,11 +65,7 @@ export class CourtFinderClient {
           return new Court(
             court.name,
             court.slug,
-            new Address(
-              court.address.address_lines,
-              court.address.postcode,
-              court.address.town,
-              court.address.type)
+            court.addresses
             )
         }))
       return courtFinderResponse
