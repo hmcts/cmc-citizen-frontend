@@ -145,7 +145,7 @@ cmc-claim-store:
       FEATURE_TOGGLES_BREATHING_SPACE: true
       FEATURE_AUTO_CANCEL_PAYMENTS: true
       OIDC_ISSUER: https://forgerock-am.service.core-compute-idam-aat2.internal:8443/openam/oauth2/realms/root/realms/hmcts
-      COURT_FINDER_API_URL: https://fact-api-pr-419.service.core-compute-preview.internal
+      COURT_FINDER_API_URL: http://fact-api-pr-419.service.core-compute-preview.internal
 
 ccd:
   enabled: true
