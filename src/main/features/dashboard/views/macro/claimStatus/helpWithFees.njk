@@ -108,7 +108,7 @@
   {% set loopIndex = 0 %}
   {% for row in claim.claimData.hwfMoreInfoNeededDocuments %}
     {% if row === 'BANK_STATEMENTS' %}
-      <li>a bank statement from the last month </li>
+      <li>Bank statement - Last month’s statements for all of the applicant's current accounts, and if part of a couple, their partner’s bank statements. Bank statement should be for full month prior to the date the fee is to be paid, for example, if the fee is to be paid on 26 July 2021 the bank statement should be for June 2021. </li>
       {% elif row === 'ANY_OTHER_INCOME' %}
         {% set otherDoc = 1 %}
       {% elif row === 'WAGE_SLIPS' %}
