@@ -43,6 +43,7 @@ export class ClaimData {
   hwfDocumentsToBeSentBefore?: Moment
   hwfMoreInfoNeededDocuments?: string[]
   breathingSpace: BreathingSpace = new BreathingSpace()
+  feeCode?: string
 
   get claimant (): Party {
     if (this.claimants.length === 1) {
@@ -120,6 +121,9 @@ export class ClaimData {
       }
       if (input.hwfDocumentsToBeSentBefore) {
         this.hwfDocumentsToBeSentBefore = MomentFactory.parse(input.hwfDocumentsToBeSentBefore)
+      }
+      if(input.feeCode) {
+        this.feeCode = input.feeCode
       }
     }
     return this
