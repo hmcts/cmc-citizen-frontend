@@ -122,7 +122,7 @@ export class ClaimData {
       if (input.hwfDocumentsToBeSentBefore) {
         this.hwfDocumentsToBeSentBefore = MomentFactory.parse(input.hwfDocumentsToBeSentBefore)
       }
-      if(input.feeCode) {
+      if (input.feeCode) {
         this.feeCode = input.feeCode
       }
     }
