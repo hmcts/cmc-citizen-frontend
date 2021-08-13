@@ -551,11 +551,14 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('should redirect to confirmation page when form is valid and help with fee is submitted', async () => {
+        newClaimFeesEnabledStub.returns(true)
         draftStoreServiceMock.resolveFind('claim', { helpWithFees: {
           declared: YesNoOption.YES,
           helpWithFeesNumber: 'HWF123456',
           feeAmountInPennies: 200
         } })
+        feesServiceMock.resolveRetreiveClaimIssuanceFeeCode()
+        draftStoreServiceMock.resolveUpdate()
         claimStoreServiceMock.resolveSaveHelpWithFeesClaimForUser()
         draftStoreServiceMock.resolveDelete()
 
@@ -569,10 +572,13 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('should redirect to tasklist page when form is valid and help with fee submission throws error', async () => {
+        newClaimFeesEnabledStub.returns(true)
         draftStoreServiceMock.resolveFind('claim', { helpWithFees: {
           declared: YesNoOption.YES,
           helpWithFeesNumber: 'HWF123456'
         } })
+        feesServiceMock.resolveRetreiveClaimIssuanceFeeCode()
+        draftStoreServiceMock.resolveUpdate()
         // mock 'saveHelpWithFees' request with error
         claimStoreServiceMock.resolveSaveHelpWithFeesClaimWithError()
 
@@ -586,10 +592,13 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('should redirect to confirmation page when form is valid, user initiated payment, but help with fee is submitted', async () => {
+        newClaimFeesEnabledStub.returns(true)
         draftStoreServiceMock.resolveFind('claim', { helpWithFees: {
           declared: YesNoOption.YES,
           helpWithFeesNumber: 'HWF123456'
         } })
+        feesServiceMock.resolveRetreiveClaimIssuanceFeeCode()
+        draftStoreServiceMock.resolveUpdate()
         // mock 'awaiting payment' state
         claimStoreServiceMock.resolveRetrieveClaimByExternalId({ state: 'AWAITING_CITIZEN_PAYMENT' })
         // mock updateHelpWithFees 'put' request
@@ -608,10 +617,13 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('should redirect to tasklist page when form is valid, user initiated payment, but used help with fee submission which failed with errors', async () => {
+        newClaimFeesEnabledStub.returns(true)
         draftStoreServiceMock.resolveFind('claim', { helpWithFees: {
           declared: YesNoOption.YES,
           helpWithFeesNumber: 'HWF123456'
         } })
+        feesServiceMock.resolveRetreiveClaimIssuanceFeeCode()
+        draftStoreServiceMock.resolveUpdate()
         // mock 'awaiting payment' state
         claimStoreServiceMock.resolveRetrieveClaimByExternalId({ state: 'AWAITING_CITIZEN_PAYMENT' })
         // mock updateHelpWithFees 'put' request failed with error

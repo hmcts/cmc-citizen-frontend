@@ -311,6 +311,14 @@ export function resolveCalculateHearingFee (): mock.Scope {
   return resolveCalculateFee(hearingEvent, defaultChannel)
 }
 
+export function resolveRetreiveClaimIssuanceFeeCode (): mock.Scope {
+  return resolveCalculateFee(issueEvent, defaultChannel)
+}
+
+export function rejectRetreiveClaimIssuanceFeeCode (reason: string = 'HTTP error'): mock.Scope {
+  return rejectCalculateFee(issueEvent, defaultChannel, reason)
+}
+
 export function rejectCalculateHearingFee (reason: string = 'HTTP error'): mock.Scope {
   return rejectCalculateFee(hearingEvent, defaultChannel, reason)
 }
