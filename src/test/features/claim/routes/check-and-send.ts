@@ -551,7 +551,6 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('should redirect to confirmation page when form is valid and help with fee is submitted', async () => {
-        newClaimFeesEnabledStub.returns(true)
         draftStoreServiceMock.resolveFind('claim', { helpWithFees: {
           declared: YesNoOption.YES,
           helpWithFeesNumber: 'HWF123456',
@@ -572,7 +571,6 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('should redirect to tasklist page when form is valid and help with fee submission throws error', async () => {
-        newClaimFeesEnabledStub.returns(true)
         draftStoreServiceMock.resolveFind('claim', { helpWithFees: {
           declared: YesNoOption.YES,
           helpWithFeesNumber: 'HWF123456'
@@ -592,7 +590,6 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('should redirect to confirmation page when form is valid, user initiated payment, but help with fee is submitted', async () => {
-        newClaimFeesEnabledStub.returns(true)
         draftStoreServiceMock.resolveFind('claim', { helpWithFees: {
           declared: YesNoOption.YES,
           helpWithFeesNumber: 'HWF123456'
@@ -617,7 +614,6 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('should redirect to tasklist page when form is valid, user initiated payment, but used help with fee submission which failed with errors', async () => {
-        newClaimFeesEnabledStub.returns(true)
         draftStoreServiceMock.resolveFind('claim', { helpWithFees: {
           declared: YesNoOption.YES,
           helpWithFeesNumber: 'HWF123456'

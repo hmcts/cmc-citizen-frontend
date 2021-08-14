@@ -43,13 +43,8 @@ export class FeesClient {
    * @returns {Promise.<string>} promise containing the fee code
    */
   static async retreiveClaimIssuanceFeeCode (claimValue: number): Promise<string> {
-    if (await featureToggles.isNewClaimFeesEnabled()) {
-      return this.calculateFee(issueFeeEvent, claimValue, paperChannel)
-      .then((outcome: FeeOutcome) => outcome.code)
-    } else {
-      return this.calculateFee(issueFeeEvent, claimValue, onlineChannel)
-      .then((outcome: FeeOutcome) => outcome.code)
-    }
+    return this.calculateFee(issueFeeEvent, claimValue, paperChannel)
+    .then((outcome: FeeOutcome) => outcome.code)
   }
 
   /**
