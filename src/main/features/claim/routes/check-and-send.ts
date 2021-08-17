@@ -214,9 +214,13 @@ export default express.Router()
         if (await featureToggles.isHelpWithFeesEnabled()
           && draft.document.helpWithFees && draft.document.helpWithFees.declared.option === YesNoOption.YES.option) {
 
-          draft.document.feeCode = await getClaimIssuanceFeeCode(draft.document)
+          try {
+            draft.document.feeCode = await getClaimIssuanceFeeCode(draft.document)
+          } catch (err) {
+            // redirect to tasklist page if fails to retrieve the fee code
+            res.redirect(Paths.taskListPage.uri)
+          }
           await new DraftService().save(draft, user.bearerToken)
-
           // handle helpWithFees
           const helpWithFeesSuccessful = await handleHelpwWithFees(draft, user)
 
