@@ -34,7 +34,7 @@
       <li>call us to pay the full claim fee by card (if you don't have a valid Help with Fees number)</li>
     </ul>
   </p>
-  
+
   {% set dash = joiner("-") %}
   {% set hyphenatedCcdCaseId %}
   {% for batch in claim.ccdCaseId | string | batch(4) -%}
@@ -53,7 +53,7 @@
 <div class="status-block">
   <h2 class="heading-medium">{{ t('Your Help with Fees application has been rejected') }}</h2>
   <p>{{ t('We have rejected your Help with Fees application for the following reason:') }}</p>
-  
+
   {% if claim.claimData.hwfFeeDetailsSummary === 'NOT_QUALIFY_FEE_ASSISTANCE' %}
       <p>{{ t('You do not qualify for assistance.') }}</p>
       <p>{{ t('{{ rejectionDetails }}', { rejectionDetails: claim.claimData.hwfMandatoryDetails }) }}</p>
@@ -102,13 +102,13 @@
   <h2 class="heading-medium">{{ t('Your Help with Fees application: more information needed') }}</h2>
   <p>{{ t('You need to provide proof of your income, such as a wage slip, pension or type and amount of benefit, before {{ dedlineDate }} or you will not get a reduction in court fees.', { dedlineDate: claim.claimData.hwfDocumentsToBeSentBefore | date }) | safe  }}</p>
   <p>{{ t('You need to get a copy of all the documents that apply to you. Make sure your name is clearly visible on every document. Write your HwF reference at the top of every document. Scan and email the document to ') }}{{ t('<a href="mailto:{{ emailSubject }}">{{ email }}</a>', { ccdId: claim.ccdCaseId, email: 'contactocmc@justice.gov.uk', emailSubject: 'contactocmc@justice.gov.uk?subject={{ ccdId }}' }) | safe }}</p>
-  
+
   <h3 class="heading-small">{{ t('Proof of income you need to send in') }}</h3>
   <ul class="list list-bullet">
   {% set loopIndex = 0 %}
   {% for row in claim.claimData.hwfMoreInfoNeededDocuments %}
     {% if row === 'BANK_STATEMENTS' %}
-      <li>a bank statement from the last 3 months </li>
+      <li>Bank statement - Last month’s statements for all of the applicant's current accounts, and if part of a couple, their partner’s bank statements. Bank statement should be for full month prior to the date the fee is to be paid, for example, if the fee is to be paid on 26 July 2021 the bank statement should be for June 2021. </li>
       {% elif row === 'ANY_OTHER_INCOME' %}
         {% set otherDoc = 1 %}
       {% elif row === 'WAGE_SLIPS' %}
@@ -122,15 +122,15 @@
         {% set loopIndex = 1 %}
       {% elif otherDoc === 1 and row !== 'PENSIONS' and row !== 'RENTAL_INCOME' and row !== 'INCOME_FROM_SELLING_GOODS' and row !== 'PRISONERS_INCOME' %}
         <li>{{ row }}</li>
-    {% endif %} 
+    {% endif %}
   {% endfor %}
   </ul>
-  
+
   <h3 class="heading-small">{{ t('What to do next') }}</h3>
   <p>{{ t('Send in the relevant proof of income documents before {{ dedlineDate }} or you will not get a reduction in court fees.', { dedlineDate: claim.claimData.hwfDocumentsToBeSentBefore | date }) | safe }}</p>
   <p>{{ t('Alternatively, if you want the claim to be issued to the defendant now, you can pay the {{ claimAmount }} claim fee.', { claimAmount : claim.claimData.feeAmountInPennies | pennies2pounds | numeral }) }} </p>
   <p>{{ t('To pay by card, phone 0300 123 7050') }}</p>
-  
+
   {% set dash = joiner("-") %}
   {% set hyphenatedCcdCaseId %}
   {% for batch in claim.ccdCaseId | string | batch(4) -%}
@@ -154,7 +154,7 @@
   {% elif claim.helpWithFessBalanceClaimFee !== 0 %}
     <p>{{ t('Pay the remaining claim fee of {{ claimAmount }} by credit or debit card. Phone 0300 123 7050.', { claimAmount : claim.helpWithFessBalanceClaimFee | numeral }) }}</p>
   {% endif %}
-  
+
   {% set dash = joiner("-") %}
   {% set hyphenatedCcdCaseId %}
   {% for batch in claim.ccdCaseId | string | batch(4) -%}
