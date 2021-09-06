@@ -75,14 +75,14 @@ describe('Dashboard - defendant page', () => {
             .expect(res => expect(res).to.be.successful.withText('We’ve received a response that was not submitted through the online civil money claims service'))
         })
 
-         it('should render page with correct email address when claim is in business queue', async () => {
-                  claimStoreServiceMock.resolveRetrieveClaimByExternalId({ state: 'BUSINESS_QUEUE' })
+        it('should render page with correct email address when claim is in business queue', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId({ state: 'BUSINESS_QUEUE' })
 
-                  await request(app)
+          await request(app)
                     .get(defendantPage)
                     .set('Cookie', `${cookieName}=ABC`)
                     .expect(res => expect(res).to.be.successful.withText('OCMCNton@justice.gov.uk'))
-         })
+        })
 
       })
     })

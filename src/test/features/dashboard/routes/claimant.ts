@@ -81,9 +81,9 @@ describe('Dashboard - claimant page', () => {
         })
 
         it('should render page with correct email address when claim is in business queue', async () => {
-                  claimStoreServiceMock.resolveRetrieveClaimByExternalId({ state: 'BUSINESS_QUEUE' })
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId({ state: 'BUSINESS_QUEUE' })
 
-                  await request(app)
+          await request(app)
                   .get(claimPagePath)
                   .set('Cookie', `${cookieName}=ABC`)
                   .expect(res => expect(res).to.be.successful.withText('OCMCNton@justice.gov.uk'))
