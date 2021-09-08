@@ -20,7 +20,7 @@ export default express.Router()
         }
       })
     }
-    osPlacesClient.lookupByPostcode(req.query.postcode)
+    osPlacesClient.lookupByPostcodeAndDataSet(req.query.postcode, 'DPA,LPI')
       .then((addressInfoResponse: AddressInfoResponse) => res.json(addressInfoResponse))
       .catch(err => {
         if (err.message === 'Authentication failed') {

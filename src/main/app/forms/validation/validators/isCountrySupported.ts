@@ -30,7 +30,7 @@ export class CheckCountryConstraint implements ValidatorConstraintInterface {
     }
 
     try {
-      const addressInfoResponse: AddressInfoResponse = await postcodeClient.lookupByPostcode(value)
+      const addressInfoResponse: AddressInfoResponse = await postcodeClient.lookupByPostcodeAndDataSet(value, 'DPA,LPI')
       if (!addressInfoResponse.isValid) {
         return false
       }
