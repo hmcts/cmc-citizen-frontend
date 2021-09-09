@@ -34,6 +34,9 @@ export class CheckCountryConstraint implements ValidatorConstraintInterface {
       if (!addressInfoResponse.isValid) {
         return false
       }
+
+      addressInfoResponse.addresses 
+        = this.removeDulpicateAddresses(addressInfoResponse)
       const country = await countryClient.lookupCountry(addressInfoResponse.addresses[0].postcode)
       const countries: Country[] = args.constraints[0]
 
@@ -43,6 +46,15 @@ export class CheckCountryConstraint implements ValidatorConstraintInterface {
       errorLogger.log(err)
       return true
     }
+  }
+
+  private removeDulpicateAddresses(addressInfoResponse: AddressInfoResponse) {
+    return addressInfoResponse.addresses
+      .filter((addresses, index, self) => 
+        index === self.findIndex((t) => 
+          (t.formattedAddress === addresses.formattedAddress)
+        )
+      )
   }
 
   defaultMessage (args: ValidationArguments) {
