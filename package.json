@@ -42,7 +42,7 @@
     "@hmcts/info-provider": "^1.0.0",
     "@hmcts/nodejs-healthcheck": "^1.7.0",
     "@hmcts/nodejs-logging": "^3.0.1",
-    "@hmcts/os-places-client": "^1.1.3",
+    "@hmcts/os-places-client": "^1.1.5",
     "@hmcts/properties-volume": "0.0.9",
     "@hmcts/requestretry": "^1.1.2",
     "@taoqf/javascript-state-machine": "^3.1.6",
