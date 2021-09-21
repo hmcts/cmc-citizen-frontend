@@ -15,7 +15,7 @@ export class PostcodeToCountryClient {
       return Promise.reject(new Error('Missing required postcode'))
     }
 
-    const uri: string = this.apiUrl + `/search/names/v1/find?query=${postcode}&maxresults=1&key=${this.apiToken}`
+    const uri: string = this.apiUrl + `/search/names/v1/find?query=${postcode}&dataset=DPA,LPI&maxresults=1&key=${this.apiToken}`
     return this.request.get({
       json: true,
       resolveWithFullResponse: true,

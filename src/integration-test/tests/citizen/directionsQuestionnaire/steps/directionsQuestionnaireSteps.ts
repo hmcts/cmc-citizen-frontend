@@ -39,8 +39,9 @@ export class DirectionsQuestionnaireSteps {
       supportRequiredPage.selectAll()
       if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
         hearingExceptionalCircumstancesPage.chooseNo()
+      } else {
+        hearingLocationPage.chooseYes()
       }
-      hearingLocationPage.chooseYes()
       usingExpertPage.chooseExpertNo()
       selfWitnessPage.chooseNo()
       otherWitnessPage.chooseNo()
@@ -53,8 +54,9 @@ export class DirectionsQuestionnaireSteps {
       supportRequiredPage.selectAll()
       if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
         hearingExceptionalCircumstancesPage.chooseNo()
+      } else {
+        hearingLocationPage.chooseNoAsClaimant()
       }
-      hearingLocationPage.chooseNoAsClaimant()
       usingExpertPage.chooseExpertNo()
       selfWitnessPage.chooseNo()
       otherWitnessPage.chooseNo()
