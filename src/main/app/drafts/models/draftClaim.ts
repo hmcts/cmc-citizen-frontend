@@ -47,6 +47,7 @@ export class DraftClaim extends DraftDocument {
   evidence: Evidence = new Evidence()
   feeAmountInPennies: number = 0
   breathingSpace: BreathingSpace = new BreathingSpace()
+  feeCode?: string
 
   deserialize (input: any): DraftClaim {
     if (input) {
@@ -84,6 +85,7 @@ export class DraftClaim extends DraftDocument {
       this.timeline = new ClaimantTimeline().deserialize(input.timeline) as ClaimantTimeline
       this.evidence = new Evidence().deserialize(input.evidence) as Evidence
       this.breathingSpace = new BreathingSpace().deserialize(input.breathingSpace)
+      this.feeCode = input.feeCode
     }
     return this
   }
