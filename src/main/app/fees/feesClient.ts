@@ -37,6 +37,17 @@ export class FeesClient {
   }
 
   /**
+   * Retrieves the fee code for claim issuance fee for HWF claims
+   *
+   * @param {number} claimValue the amount claiming for in pounds
+   * @returns {Promise.<string>} promise containing the fee code
+   */
+  static async retreiveClaimIssuanceFeeCode (claimValue: number): Promise<string> {
+    return this.calculateFee(issueFeeEvent, claimValue, paperChannel)
+    .then((outcome: FeeOutcome) => outcome.code)
+  }
+
+  /**
    * Calculates the hearing fee a claimant should pay with paper/default channel
    *
    * @param {number} claimValue the amount claiming for in pounds
