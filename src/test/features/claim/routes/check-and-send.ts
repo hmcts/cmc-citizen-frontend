@@ -556,6 +556,8 @@ describe('Claim issue: check and send page', () => {
           helpWithFeesNumber: 'HWF123456',
           feeAmountInPennies: 200
         } })
+        feesServiceMock.resolveRetreiveClaimIssuanceFeeCode()
+        draftStoreServiceMock.resolveUpdate()
         claimStoreServiceMock.resolveSaveHelpWithFeesClaimForUser()
         draftStoreServiceMock.resolveDelete()
 
@@ -573,9 +575,26 @@ describe('Claim issue: check and send page', () => {
           declared: YesNoOption.YES,
           helpWithFeesNumber: 'HWF123456'
         } })
+        feesServiceMock.resolveRetreiveClaimIssuanceFeeCode()
+        draftStoreServiceMock.resolveUpdate()
         // mock 'saveHelpWithFees' request with error
         claimStoreServiceMock.resolveSaveHelpWithFeesClaimWithError()
 
+        const nextPage = ClaimPaths.taskListPage.uri
+        await request(app)
+          .post(ClaimPaths.checkAndSendPage.uri)
+          .send({ type: SignatureType.BASIC })
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({ signed: 'true' })
+          .expect(res => expect(res).to.be.redirect.toLocation(nextPage))
+      })
+
+      it('should redirect to tasklist page when form is valid and fee code retrieval throws error', async () => {
+        draftStoreServiceMock.resolveFind('claim', { helpWithFees: {
+          declared: YesNoOption.YES,
+          helpWithFeesNumber: 'HWF123456'
+        } })
+        feesServiceMock.rejectRetreiveClaimIssuanceFeeCode()
         const nextPage = ClaimPaths.taskListPage.uri
         await request(app)
           .post(ClaimPaths.checkAndSendPage.uri)
@@ -590,6 +609,8 @@ describe('Claim issue: check and send page', () => {
           declared: YesNoOption.YES,
           helpWithFeesNumber: 'HWF123456'
         } })
+        feesServiceMock.resolveRetreiveClaimIssuanceFeeCode()
+        draftStoreServiceMock.resolveUpdate()
         // mock 'awaiting payment' state
         claimStoreServiceMock.resolveRetrieveClaimByExternalId({ state: 'AWAITING_CITIZEN_PAYMENT' })
         // mock updateHelpWithFees 'put' request
@@ -612,6 +633,8 @@ describe('Claim issue: check and send page', () => {
           declared: YesNoOption.YES,
           helpWithFeesNumber: 'HWF123456'
         } })
+        feesServiceMock.resolveRetreiveClaimIssuanceFeeCode()
+        draftStoreServiceMock.resolveUpdate()
         // mock 'awaiting payment' state
         claimStoreServiceMock.resolveRetrieveClaimByExternalId({ state: 'AWAITING_CITIZEN_PAYMENT' })
         // mock updateHelpWithFees 'put' request failed with error

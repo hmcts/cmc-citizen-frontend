@@ -31,7 +31,7 @@ export async function searchByPostCodeForEdgecase (res: express.Response, form: 
     courtDetails.push(await Court.getCourtDetails(court.slug))
 
     draft.document.hearingLocation.courtName = court.name
-    draft.document.hearingLocation.courtPostcode = court.address.postcode
+    draft.document.hearingLocation.courtPostcode = court.addresses[0].postcode
     draft.document.hearingLocation.courtAccepted = YesNoOption.NO
 
     renderPage(res, new Form<HearingLocation>(new HearingLocation(draft.document.hearingLocation.courtName,

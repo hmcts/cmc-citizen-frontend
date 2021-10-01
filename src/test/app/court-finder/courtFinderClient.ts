@@ -17,7 +17,7 @@ const apiData = [
     magistrate_code: null,
     slug: 'birmingham-district-probate-registry',
     types: [],
-    address: {
+    addresses: {
       address_lines: [
         'The Priory Courts',
         '33 Bull Street'
@@ -50,8 +50,8 @@ const apiData = [
 const expectedResponse = {
   courts: [
     {
-      address: {
-        addressLines: [
+      addresses: {
+        address_lines: [
           'The Priory Courts',
           '33 Bull Street'
         ],
@@ -96,7 +96,7 @@ describe('CourtFinderClient', () => {
       nock(mockClient)
           .get(/\/court-finder\/search-postcode\/.+/)
           .reply(200, apiData)
-      return courtFinderClient.findMoneyClaimCourtsByPostcode('C333CC')
+      return courtFinderClient.findMoneyClaimCourtsByPostcode('B46DS')
           .then((courtResponse: CourtFinderResponse) => {
             chai.expect(courtResponse).eql(expectedResponse)
           })

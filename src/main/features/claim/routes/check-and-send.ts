@@ -47,6 +47,13 @@ async function getClaimAmountTotal (draft: DraftClaim): Promise<TotalAmount> {
     .then((feeAmount: number) => new TotalAmount(totalAmount, interest, feeAmount))
 }
 
+async function getClaimIssuanceFeeCode (draft: DraftClaim): Promise<string> {
+  const interest: number = await draftInterestAmount(draft)
+  const totalAmount: number = draft.amount.totalAmount()
+
+  return FeesClient.retreiveClaimIssuanceFeeCode(totalAmount + interest)
+}
+
 function getBusinessName (partyDetails: PartyDetails): string {
   if (partyDetails.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value) {
     return (partyDetails as SoleTraderDetails).businessName
@@ -207,6 +214,13 @@ export default express.Router()
         if (await featureToggles.isHelpWithFeesEnabled()
           && draft.document.helpWithFees && draft.document.helpWithFees.declared.option === YesNoOption.YES.option) {
 
+          try {
+            draft.document.feeCode = await getClaimIssuanceFeeCode(draft.document)
+          } catch (err) {
+            // redirect to tasklist page if fails to retrieve the fee code
+            res.redirect(Paths.taskListPage.uri)
+          }
+          await new DraftService().save(draft, user.bearerToken)
           // handle helpWithFees
           const helpWithFeesSuccessful = await handleHelpwWithFees(draft, user)
 
