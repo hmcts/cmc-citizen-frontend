@@ -52,16 +52,12 @@ export class FeatureToggles {
     return this.launchDarklyClient.serviceVariation('sign-posting-ctsc', toBoolean(config.get<boolean>(`featureToggles.signPostingCTSC`)))
   }
 
-  async isAutoEnrollIntoNewFeatureEnabled (): Promise<boolean> {
-    return this.launchDarklyClient.serviceVariation('auto-enroll-into-new-feature', toBoolean(config.get<boolean>(`featureToggles.autoEnrollIntoNewFeature`)))
-  }
-
   async isDashboardPaginationEnabled (): Promise<boolean> {
     return this.launchDarklyClient.serviceVariation('dashboard_pagination_enabled', toBoolean(config.get<boolean>(`featureToggles.dashboard_pagination_enabled`)))
   }
 
-  async isEnhancedMediationJourneyEnabled (): Promise<boolean> {
-    return this.launchDarklyClient.serviceVariation('enhanced-mediation-journey', toBoolean(config.get<boolean>(`featureToggles.enhancedMediationJourney`)))
+  async isOCONEnhancementEnabled (): Promise<boolean> {
+    return this.launchDarklyClient.serviceVariation('ocon-enhancement-2', toBoolean(config.get<boolean>(`featureToggles.oconEnhancements`)))
   }
 
   async isBreathingSpaceEnabled (): Promise<boolean> {

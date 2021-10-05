@@ -71,6 +71,7 @@ export class ClaimModelConverter {
       claimData.helpWithFeesNumber = draftClaim.helpWithFees.helpWithFeesNumber
       claimData.feeAmountInPennies = draftClaim.feeAmountInPennies
       claimData.helpWithFeesType = 'Claim Issue'
+      claimData.feeCode = draftClaim.feeCode
     }
     return claimData
   }
