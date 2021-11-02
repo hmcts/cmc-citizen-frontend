@@ -6,7 +6,7 @@ import { NameFormatter } from 'utils/nameFormatter'
 export class ValidationErrors {
   static readonly FIRSTNAME_REQUIRED: string = 'Enter first name'
   static readonly LASTNAME_REQUIRED: string = 'Enter last name'
-  static errorTooLong(input: string): string {
+  static errorTooLong (input: string): string {
     return `${input} must be no longer than $constraint1 characters`
   }
 }
@@ -29,11 +29,11 @@ export class SplitNamedPartyDetails extends PartyDetails {
   @MaxLength(255, { message: ValidationErrors.errorTooLong('Last name'), groups: ['defendant', 'response', 'claimant'] })
   lastName?: string
 
-  constructor() {
+  constructor () {
     super()
   }
 
-  static fromObject(input?: any): SplitNamedPartyDetails {
+  static fromObject (input?: any): SplitNamedPartyDetails {
     if (input == null) {
       return input
     }
@@ -52,7 +52,7 @@ export class SplitNamedPartyDetails extends PartyDetails {
     return deserialized
   }
 
-  deserialize(input?: any): SplitNamedPartyDetails {
+  deserialize (input?: any): SplitNamedPartyDetails {
     if (input) {
       Object.assign(this, new PartyDetails().deserialize(input))
       this.title = input.title
