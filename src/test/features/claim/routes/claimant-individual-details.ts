@@ -63,7 +63,7 @@ describe('claimant as individual details page', () => {
         idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       })
 
-      // it('should render page with error when claimant name is invalid.', async () => { 
+      // it('should render page with error when claimant name is invalid.', async () => {
       //   draftStoreServiceMock.resolveFind('claim')
       //   const nameMissingInput = { ...input, ...{ firstName: '', lastName: 'ok' } }
       //   await request(app)
