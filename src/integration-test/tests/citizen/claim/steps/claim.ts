@@ -32,6 +32,7 @@ import { AmountHelper } from 'integration-test/helpers/amountHelper'
 import { NewFeaturesPage } from 'integration-test/tests/citizen/claim/pages/new-features'
 import { TestingSupportSteps } from 'integration-test/tests/citizen/testingSupport/steps/testingSupport'
 import I = CodeceptJS.I
+import { claim } from 'test/data/entity/settlement'
 
 const I: I = actor()
 const citizenResolveDisputePage: CitizenResolveDisputePage = new CitizenResolveDisputePage()
@@ -261,7 +262,9 @@ export class ClaimSteps {
     this.readCompletingYourClaim()
     userSteps.selectYourDetails()
     partyTypePage.selectIndividual()
-    individualDetailsPage.enterName(claimant.name)
+    individualDetailsPage.enterTitle(claimant.title)
+    individualDetailsPage.enterFirstName(claimant.firstName)
+    individualDetailsPage.enterLastName(claimant.lastName)
     individualDetailsPage.lookupAddress(postcodeLookupQuery)
     individualDetailsPage.enterAddress(claimant.address, false)
     individualDetailsPage.submit()
@@ -296,7 +299,7 @@ export class ClaimSteps {
     this.enterClaimDetails()
     I.bypassPCQ()
     userSteps.selectCheckAndSubmitYourClaim()
-    I.see('John Smith')
+    I.see('Mr. John Smith')
     I.see('10, DALBERG')
     I.see('LONDON')
     I.see('SW2 1AN')
@@ -385,7 +388,7 @@ export class ClaimSteps {
     this.enterClaimDetails()
     I.bypassPCQ()
     userSteps.selectCheckAndSubmitYourClaim()
-    I.see('John Smith')
+    I.see('Mr. John Smith')
     I.see('10, DALBERG')
     I.see('LONDON')
     I.see('SW2 1AN')
@@ -410,7 +413,9 @@ export class ClaimSteps {
     this.readCompletingYourClaim()
     userSteps.selectYourDetails()
     partyTypePage.selectIndividual()
-    individualDetailsPage.enterName(claimant.name)
+    individualDetailsPage.enterTitle(claimant.title)
+    individualDetailsPage.enterFirstName(claimant.firstName)
+    individualDetailsPage.enterLastName(claimant.lastName)
     individualDetailsPage.lookupAddress(postcodeLookupQuery)
     individualDetailsPage.enterAddress(claimant.address, false)
     individualDetailsPage.submit()
@@ -445,7 +450,7 @@ export class ClaimSteps {
     this.enterClaimDetails()
     I.bypassPCQ()
     userSteps.selectCheckAndSubmitYourClaim()
-    I.see('John Smith')
+    I.see('Mr. John Smith')
     I.see('10, DALBERG')
     I.see('LONDON')
     I.see('SW2 1AN')
