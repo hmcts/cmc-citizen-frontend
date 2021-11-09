@@ -95,7 +95,7 @@ cmc-claim-store:
   java:
     imagePullPolicy: Always
     image: hmctspublic.azurecr.io/cmc/claim-store:latest
-    releaseNameOverride: ${SERVICE_NAME}-claim-store:2518
+    releaseNameOverride: ${SERVICE_NAME}-claim-store:pr-2518
     ingressHost: claim-store-${SERVICE_FQDN}
     readinessDelay: 250  # ccd-stack will start much slower
     livenessDelay:  250  # ccd-stack will start much slower
@@ -146,6 +146,7 @@ cmc-claim-store:
       FEATURE_AUTO_CANCEL_PAYMENTS: true
       OIDC_ISSUER: https://forgerock-am.service.core-compute-idam-aat2.internal:8443/openam/oauth2/realms/root/realms/hmcts
       COURT_FINDER_API_URL: https://www.find-court-tribunal.service.gov.uk
+      CASE_DOCUMENT_AM_URL: http://ccd-case-document-am-api-aat.service.core-compute-aat.internal 
 
 ccd:
   enabled: true
