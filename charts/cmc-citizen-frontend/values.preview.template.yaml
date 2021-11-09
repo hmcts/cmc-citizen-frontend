@@ -95,7 +95,7 @@ cmc-claim-store:
   java:
     imagePullPolicy: Always
     image: hmctspublic.azurecr.io/cmc/claim-store:latest
-    releaseNameOverride: ${SERVICE_NAME}-claim-store
+    releaseNameOverride: ${SERVICE_NAME}-claim-store:2518
     ingressHost: claim-store-${SERVICE_FQDN}
     readinessDelay: 250  # ccd-stack will start much slower
     livenessDelay:  250  # ccd-stack will start much slower
