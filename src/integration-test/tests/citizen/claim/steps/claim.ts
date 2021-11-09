@@ -32,7 +32,6 @@ import { AmountHelper } from 'integration-test/helpers/amountHelper'
 import { NewFeaturesPage } from 'integration-test/tests/citizen/claim/pages/new-features'
 import { TestingSupportSteps } from 'integration-test/tests/citizen/testingSupport/steps/testingSupport'
 import I = CodeceptJS.I
-import { claim } from 'test/data/entity/settlement'
 
 const I: I = actor()
 const citizenResolveDisputePage: CitizenResolveDisputePage = new CitizenResolveDisputePage()
