@@ -77,7 +77,9 @@ export class ClaimSteps {
     switch (claimantType) {
       case PartyType.INDIVIDUAL:
         partyTypePage.selectIndividual()
-        individualDetailsPage.enterName(claimant.name)
+        individualDetailsPage.enterTitle(claimant.title)
+        individualDetailsPage.enterFirstName(claimant.firstName)
+        individualDetailsPage.enterLastName(claimant.lastName)
         individualDetailsPage.enterAddresses(claimant.address, claimant.correspondenceAddress)
         individualDetailsPage.submit()
         citizenDOBPage.enterDOB(claimant.dateOfBirth)
