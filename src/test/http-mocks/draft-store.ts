@@ -130,6 +130,8 @@ const commonIndividualClaimant = {
     partyDetails: {
       type: 'individual',
       name: 'John Smith',
+      firstName: 'John',
+      lastName: 'Smith',
       address: {
         line1: 'Apt 99',
         line2: '',
