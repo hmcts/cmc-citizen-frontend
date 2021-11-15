@@ -64,15 +64,15 @@ describe('claimant as individual details page', () => {
         idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       })
 
-      // it('should render page with error when claimant name is invalid', async () => {
-      //   draftStoreServiceMock.resolveFind('claim')
-      //   const nameMissingInput = { ...input, ...{ name: '' } }
-      //   await request(app)
-      //     .post(ClaimPaths.claimantIndividualDetailsPage.uri)
-      //     .set('Cookie', `${cookieName}=ABC`)
-      //     .send(nameMissingInput)
-      //     .expect(res => expect(res).to.be.successful.withText(heading, 'div class="error-summary"', 'Enter name'))
-      // })
+      it('should render page with error when claimant name is invalid', async () => {
+        draftStoreServiceMock.resolveFind('claim')
+        const nameMissingInput = { ...input, ...{ firstName: '', lastName: 'ok' } }
+        await request(app)
+          .post(ClaimPaths.claimantIndividualDetailsPage.uri)
+          .set('Cookie', `${cookieName}=ABC`)
+          .send(nameMissingInput)
+          .expect(res => expect(res).to.be.successful.withText(theirTitle, theirFirstName, theirLastName, 'div class="error-summary"', 'Enter first name'))
+      })
       describe('should render page with error when address is invalid', () => {
         beforeEach(() => {
           draftStoreServiceMock.resolveFind('claim')

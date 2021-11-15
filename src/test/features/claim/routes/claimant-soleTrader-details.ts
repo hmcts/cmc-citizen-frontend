@@ -18,7 +18,8 @@ const cookieName: string = config.get<string>('session.cookieName')
 const heading: string = 'Enter your details'
 const input = {
   type: 'soleTrader',
-  name: 'John Smith',
+  firstName: 'John',
+  lastName: 'Smith',
   address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: 'SE28 0JE' } as Address,
   hasCorrespondenceAddress: false,
   businessName: 'businessName'
@@ -53,12 +54,12 @@ describe('claimant as soleTrader details page', () => {
 
       it('should render page with error when claimant name is invalid', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        const nameMissingInput = { ...input, ...{ name: '' } }
+        const nameMissingInput = { ...input, ...{ firstName: '', lastName: '' } }
         await request(app)
           .post(ClaimPaths.claimantSoleTraderOrSelfEmployedDetailsPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send(nameMissingInput)
-          .expect(res => expect(res).to.be.successful.withText(heading, 'div class="error-summary"', 'Enter name'))
+          .expect(res => expect(res).to.be.successful.withText(heading, 'div class="error-summary"', 'Enter first name'))
       })
       describe('should render page with error when address is invalid', () => {
         beforeEach(() => {
