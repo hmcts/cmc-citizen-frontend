@@ -32,7 +32,7 @@ import {
   statementOfMeansWithAllFieldsData,
   statementOfMeansWithMandatoryFieldsOnlyData
 } from 'test/data/entity/responseData'
-import {company, individual, organisation, soleTrader, individualDefendant, soleTrader2} from 'test/data/entity/party'
+import { company, individual, organisation, soleTrader, individualDefendant, soleTrader2 } from 'test/data/entity/party'
 import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { Claim } from 'claims/models/claim'
 import { CohabitingOption } from 'response/form/models/statement-of-means/cohabiting'
