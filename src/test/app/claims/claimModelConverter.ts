@@ -15,7 +15,7 @@ import {
 } from 'test/data/draft/partyDetails'
 
 import { ClaimData } from 'claims/models/claimData'
-import { claimData as entityTemplate } from 'test/data/entity/claimData'
+// import { claimData as entityTemplate } from 'test/data/entity/claimData'
 import {
   company,
   individual,
