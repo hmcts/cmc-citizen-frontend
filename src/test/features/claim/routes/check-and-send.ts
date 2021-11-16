@@ -23,7 +23,6 @@ import {
   companyDetails,
   defendantIndividualDetails,
   defendantSoleTraderDetails,
-  individualDetails,
   individualDetails2,
   organisationDetails
 } from 'test/data/draft/partyDetails'
