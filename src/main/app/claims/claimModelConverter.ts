@@ -83,8 +83,6 @@ export class ClaimModelConverter {
 
         return new ClaimantAsIndividual(
           individualDetails.name,
-          individualDetails.firstName,
-          individualDetails.lastName,
           individualDetails.pcqId,
           this.convertAddress(individualDetails.address),
           individualDetails.hasCorrespondenceAddress ? this.convertAddress(individualDetails.correspondenceAddress) : undefined,
