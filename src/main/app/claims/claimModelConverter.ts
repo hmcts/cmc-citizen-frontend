@@ -83,6 +83,8 @@ export class ClaimModelConverter {
 
         return new ClaimantAsIndividual(
           individualDetails.name,
+          individualDetails.firstName,
+          individualDetails.lastName,
           individualDetails.pcqId,
           this.convertAddress(individualDetails.address),
           individualDetails.hasCorrespondenceAddress ? this.convertAddress(individualDetails.correspondenceAddress) : undefined,
@@ -96,6 +98,8 @@ export class ClaimModelConverter {
 
         return new ClaimantAsSoleTrader(
           soleTraderDetails.name,
+          soleTraderDetails.firstName,
+          soleTraderDetails.lastName,
           soleTraderDetails.pcqId,
           this.convertAddress(soleTraderDetails.address),
           soleTraderDetails.hasCorrespondenceAddress ? this.convertAddress(soleTraderDetails.correspondenceAddress) : undefined,

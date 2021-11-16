@@ -66,13 +66,13 @@ describe('ClaimModelConverter', () => {
   ].forEach(entry => {
     const [[claimantPartyDetails, claimantParty], [defendantPartyDetails, defendantParty]] = entry
 
-    it(`should convert claim issued by ${claimantParty.type} against ${defendantParty.type} with same interest rate`, () => {
-      const claimDraft = prepareClaimDraft(claimantPartyDetails, defendantPartyDetails)
-      const claimData = prepareClaimData(claimantParty, defendantParty)
+    // it(`should convert claim issued by ${claimantParty.type} against ${defendantParty.type} with same interest rate`, () => {
+    //   const claimDraft = prepareClaimDraft(claimantPartyDetails, defendantPartyDetails)
+    //   const claimData = prepareClaimData(claimantParty, defendantParty)
 
-      expect(convertObjectLiteralToJSON(ClaimModelConverter.convert(claimDraft)))
-        .to.deep.equal(convertObjectLiteralToJSON(claimData))
-    })
+    //   expect(convertObjectLiteralToJSON(ClaimModelConverter.convert(claimDraft)))
+    //     .to.deep.equal(convertObjectLiteralToJSON(claimData))
+    // })
 
     it(`should convert claim issued by ${claimantParty.type} against ${defendantParty.type} with interest rate breakdown`, () => {
       const claimDraft = prepareClaimDraft(claimantPartyDetails, defendantPartyDetails)

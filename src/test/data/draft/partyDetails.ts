@@ -20,6 +20,7 @@ export const addressCorrespondenceAddress = {
 
 export const individualDetails = {
   type: PartyType.INDIVIDUAL.value,
+  name: 'John Smith',
   firstName: 'John',
   lastName: 'Smith',
   ...addressCorrespondenceAddress,
@@ -50,7 +51,9 @@ export const defendantIndividualDetails = {
 
 export const soleTraderDetails = {
   type: PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value,
-  name: 'SoleTrader Smith',
+
+  firstName: 'John',
+  lastName: 'Smith',
   businessName: 'SoleTrader Ltd.',
   ...addressCorrespondenceAddress
 }
