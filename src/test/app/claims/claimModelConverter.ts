@@ -10,9 +10,7 @@ import {
   defendantIndividualDetails,
   defendantSoleTraderDetails,
   individualDetails,
-  individualDetails2,
   organisationDetails,
-  soleTraderDetails,
   soleTraderDetails2
 } from 'test/data/draft/partyDetails'
 
@@ -23,7 +21,7 @@ import {
   individual,
   individualDefendant,
   organisation,
-  soleTrader, soleTrader2,
+  soleTrader,
   soleTraderDefendant
 } from 'test/data/entity/party'
 import { YesNoOption } from 'models/yesNoOption'

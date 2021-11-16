@@ -16,7 +16,7 @@ import {
   statementOfMeansWithAllFieldsDraft,
   statementOfMeansWithMandatoryFieldsDraft
 } from 'test/data/draft/responseDraft'
-import { companyDetails, individualDetails, individualDetails2, organisationDetails, soleTraderDetails, soleTraderDetails2, individualSplitNameDetails } from 'test/data/draft/partyDetails'
+import { companyDetails, individualDetails, organisationDetails, soleTraderDetails, soleTraderDetails2, individualSplitNameDetails } from 'test/data/draft/partyDetails'
 
 import { Response } from 'claims/models/response'
 import {
