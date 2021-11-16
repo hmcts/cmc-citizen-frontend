@@ -21,12 +21,16 @@ export const addressCorrespondenceAddress = {
 export const individual = {
   type: PartyType.INDIVIDUAL.value,
   name: 'John Smith',
-  firstName: 'John',
-  lastName: 'Smith',
   ...addressCorrespondenceAddress,
   dateOfBirth: '1999-01-01',
   phone: '0700000001',
   email: 'individual@example.com'
+}
+
+export const individual2 = {
+  ...individual,
+  firstName: 'John',
+  lastName: 'Smith'
 }
 
 export const individualDefendant = {
@@ -40,12 +44,16 @@ export const individualDefendant = {
 export const soleTrader = {
   type: PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value,
   name: 'John Smith',
-  firstName: 'John',
-  lastName: 'Smith',
   businessName: 'SoleTrader Ltd.',
   ...addressCorrespondenceAddress,
   phone: '0700000002',
   email: 'sole-trader@example.com'
+}
+
+export const soleTrader2 = {
+  ...soleTrader,
+  firstName: 'John',
+  lastName: 'Smith'
 }
 
 export const soleTraderDefendant = {

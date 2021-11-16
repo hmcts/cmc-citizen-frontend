@@ -21,8 +21,6 @@ export const addressCorrespondenceAddress = {
 export const individualDetails = {
   type: PartyType.INDIVIDUAL.value,
   name: 'John Smith',
-  firstName: 'John',
-  lastName: 'Smith',
   ...addressCorrespondenceAddress,
   dateOfBirth: {
     known: true,
@@ -32,6 +30,12 @@ export const individualDetails = {
       day: 1
     }
   }
+}
+
+export const individualDetails2 = {
+  ...individualDetails,
+  firstName: 'John',
+  lastName: 'Smith'
 }
 
 export const individualSplitNameDetails = {
@@ -51,11 +55,14 @@ export const defendantIndividualDetails = {
 
 export const soleTraderDetails = {
   type: PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value,
-
-  firstName: 'John',
-  lastName: 'Smith',
   businessName: 'SoleTrader Ltd.',
   ...addressCorrespondenceAddress
+}
+
+export const soleTraderDetails2 = {
+  ...soleTraderDetails,
+  firstName: 'John',
+  lastName: 'Smith'
 }
 
 export const claimantSoleTraderDetails = {

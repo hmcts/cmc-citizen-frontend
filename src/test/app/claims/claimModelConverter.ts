@@ -10,18 +10,20 @@ import {
   defendantIndividualDetails,
   defendantSoleTraderDetails,
   individualDetails,
+  individualDetails2,
   organisationDetails,
-  soleTraderDetails
+  soleTraderDetails,
+  soleTraderDetails2
 } from 'test/data/draft/partyDetails'
 
 import { ClaimData } from 'claims/models/claimData'
-// import { claimData as entityTemplate } from 'test/data/entity/claimData'
+import { claimData as entityTemplate } from 'test/data/entity/claimData'
 import {
   company,
   individual,
   individualDefendant,
   organisation,
-  soleTrader,
+  soleTrader, soleTrader2,
   soleTraderDefendant
 } from 'test/data/entity/party'
 import { YesNoOption } from 'models/yesNoOption'
@@ -45,34 +47,34 @@ function prepareClaimDraft (claimantPartyDetails: object, defendantPartyDetails:
   })
 }
 
-// function prepareClaimData (claimantParty: object, defendantParty: object): ClaimData {
-//   return new ClaimData().deserialize({
-//     ...entityTemplate,
-//     claimants: [{ ...claimantParty, email: undefined, phone: '07000000000' }],
-//     defendants: [{ ...defendantParty, email: 'defendant@example.com', dateOfBirth: undefined, phone: '07284798778' }]
-//   })
-// }
+function prepareClaimData (claimantParty: object, defendantParty: object): ClaimData {
+  return new ClaimData().deserialize({
+    ...entityTemplate,
+    claimants: [{ ...claimantParty, email: undefined, phone: '07000000000' }],
+    defendants: [{ ...defendantParty, email: 'defendant@example.com', dateOfBirth: undefined, phone: '07284798778' }]
+  })
+}
 
-// function convertObjectLiteralToJSON (value: object): object {
-//   return JSON.parse(JSON.stringify(value))
-// }
+function convertObjectLiteralToJSON (value: object): object {
+  return JSON.parse(JSON.stringify(value))
+}
 
 describe('ClaimModelConverter', () => {
   [
     [[individualDetails, individual], [defendantSoleTraderDetails, soleTraderDefendant]],
-    [[soleTraderDetails, soleTrader], [companyDetails, company]],
+    [[soleTraderDetails2, soleTrader], [companyDetails, company]],
     [[companyDetails, company], [organisationDetails, organisation]],
     [[organisationDetails, organisation], [defendantIndividualDetails, individualDefendant]]
   ].forEach(entry => {
     const [[claimantPartyDetails, claimantParty], [defendantPartyDetails, defendantParty]] = entry
 
-    // it(`should convert claim issued by ${claimantParty.type} against ${defendantParty.type} with same interest rate`, () => {
-    //   const claimDraft = prepareClaimDraft(claimantPartyDetails, defendantPartyDetails)
-    //   const claimData = prepareClaimData(claimantParty, defendantParty)
+    it(`should convert claim issued by ${claimantParty.type} against ${defendantParty.type} with same interest rate`, () => {
+      const claimDraft = prepareClaimDraft(claimantPartyDetails, defendantPartyDetails)
+      const claimData = prepareClaimData(claimantParty, defendantParty)
 
-    //   expect(convertObjectLiteralToJSON(ClaimModelConverter.convert(claimDraft)))
-    //     .to.deep.equal(convertObjectLiteralToJSON(claimData))
-    // })
+      expect(convertObjectLiteralToJSON(ClaimModelConverter.convert(claimDraft)))
+        .to.deep.equal(convertObjectLiteralToJSON(claimData))
+    })
 
     it(`should convert claim issued by ${claimantParty.type} against ${defendantParty.type} with interest rate breakdown`, () => {
       const claimDraft = prepareClaimDraft(claimantPartyDetails, defendantPartyDetails)
