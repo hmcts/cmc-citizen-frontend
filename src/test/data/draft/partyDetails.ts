@@ -32,7 +32,7 @@ export const individualDetails = {
   }
 }
 
-export const individualDetails2 = {
+export const individualDetailsWithSeparatedName = {
   ...individualDetails,
   firstName: 'John',
   lastName: 'Smith'
@@ -59,7 +59,7 @@ export const soleTraderDetails = {
   ...addressCorrespondenceAddress
 }
 
-export const soleTraderDetails2 = {
+export const soleTraderDetailsWithSeparatedName = {
   ...soleTraderDetails,
   firstName: 'John',
   lastName: 'Smith'

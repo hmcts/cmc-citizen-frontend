@@ -23,7 +23,7 @@ import {
   companyDetails,
   defendantIndividualDetails,
   defendantSoleTraderDetails,
-  individualDetails2,
+  individualDetailsWithSeparatedName,
   organisationDetails
 } from 'test/data/draft/partyDetails'
 
@@ -118,7 +118,7 @@ describe('Claim issue: check and send page', () => {
         draftStoreServiceMock.resolveFind('claim', {
           claimant: {
             ...draftStoreServiceMock.sampleClaimDraftObj.claimant,
-            partyDetails: individualDetails2
+            partyDetails: individualDetailsWithSeparatedName
           },
           defendant: {
             ...draftStoreServiceMock.sampleClaimDraftObj.defendant,
