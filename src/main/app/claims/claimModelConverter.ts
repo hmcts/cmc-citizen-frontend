@@ -96,8 +96,6 @@ export class ClaimModelConverter {
 
         return new ClaimantAsSoleTrader(
           soleTraderDetails.name,
-          soleTraderDetails.firstName,
-          soleTraderDetails.lastName,
           soleTraderDetails.pcqId,
           this.convertAddress(soleTraderDetails.address),
           soleTraderDetails.hasCorrespondenceAddress ? this.convertAddress(soleTraderDetails.correspondenceAddress) : undefined,
