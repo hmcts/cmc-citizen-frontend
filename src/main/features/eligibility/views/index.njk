@@ -22,9 +22,6 @@
 
         <p>{{ t('We’ll ask you some questions to check you can use the new service.') }}</p>
 
-        <p>{{ t('You can still {{ useMCOL }} if you prefer while we’re testing the new service.',
-            { useMCOL: internalLink('use Money Claim Online (MCOL)', EligibilityPaths.mcolEligibilityPage.uri) }) | safe }}</p>
-
       {% endif %}
 
       {{ internalLink(t('Continue'), EligibilityPaths.claimValuePage.uri, 'button') }}
