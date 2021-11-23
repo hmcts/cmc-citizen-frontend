@@ -32,6 +32,12 @@ export const individualDetails = {
   }
 }
 
+export const individualDetailsWithSeparatedName = {
+  ...individualDetails,
+  firstName: 'John',
+  lastName: 'Smith'
+}
+
 export const individualSplitNameDetails = {
   ...individualDetails,
   name: 'Mr. John Smith',
@@ -49,14 +55,20 @@ export const defendantIndividualDetails = {
 
 export const soleTraderDetails = {
   type: PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value,
-  name: 'SoleTrader Smith',
   businessName: 'SoleTrader Ltd.',
   ...addressCorrespondenceAddress
 }
 
+export const soleTraderDetailsWithSeparatedName = {
+  ...soleTraderDetails,
+  firstName: 'John',
+  lastName: 'Smith'
+}
+
 export const claimantSoleTraderDetails = {
   type: PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value,
-  name: 'Claimant SoleTrader',
+  firstName: 'Claimant',
+  lastName: 'SoleTrader',
   businessName: 'Claimant SoleTrader Ltd.',
   ...addressCorrespondenceAddress
 }
