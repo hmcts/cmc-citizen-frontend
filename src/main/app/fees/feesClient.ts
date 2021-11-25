@@ -74,7 +74,8 @@ export class FeesClient {
       throw new Error('Fee channel is required')
     }
     ClaimValidator.claimAmount(amount)
-    const feeUri: string = `${feesUrl}/fees-register/fees/lookup?service=${service}&jurisdiction1=${jurisdiction1}&jurisdiction2=${jurisdiction2}&channel=${channel}&event=${eventType}&amount_or_volume=${amount}`
+    const keyword: string = 'MoneyClaim HearingSmallClaims counter-claim'
+    const feeUri: string = `${feesUrl}/fees-register/fees/lookup?service=${service}&jurisdiction1=${jurisdiction1}&jurisdiction2=${jurisdiction2}&channel=${channel}&event=${eventType}&keyword=${keyword}&amount_or_volume=${amount}`
     const options = {
       uri: feeUri
     }
