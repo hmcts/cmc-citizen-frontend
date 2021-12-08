@@ -219,6 +219,13 @@ ccd:
       environment:
         USER_PROFILE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_definition,ccd_admin,cmc_claim_store,xui_webapp,xuiwebapp
 
+  am-role-assignment-service:
+    java:
+      keyVaults:
+        am:
+          secrets:
+            - role-assignment-service-LD-SDK-KEY
+
   ccd-definition-store-api:
     java:
       imagePullPolicy: Always
