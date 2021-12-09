@@ -55,7 +55,7 @@ describe('FeaturesBuilder', () => {
     })
 
     it(`should not add judge pilot eligible to features if amount > ${FeaturesBuilder.JUDGE_PILOT_THRESHOLD}`, async () => {
-      const features = await featuresBuilder.features(FeaturesBuilder.JUDGE_PILOT_THRESHOLD + 1)
+      const features = await featuresBuilder.features(FeaturesBuilder.JUDGE_PILOT_THRESHOLD - 1)
       expect(features).to.be.undefined
     })
   })
