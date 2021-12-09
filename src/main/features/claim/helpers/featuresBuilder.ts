@@ -33,7 +33,7 @@ export const FEATURES: FeatureDefinition[] = [
     feature: 'judgePilotEligible',
     toggle: 'judge_pilot',
     setting: 'judgePilot',
-    validForAmount: amount => amount > FeaturesBuilder.LA_PILOT_THRESHOLD && amount <= FeaturesBuilder.JUDGE_PILOT_THRESHOLD
+    validForAmount: amount => amount > FeaturesBuilder.LA_PILOT_THRESHOLD
   },
   {
     feature: 'directionsQuestionnaire',
