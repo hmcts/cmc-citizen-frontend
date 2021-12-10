@@ -17,13 +17,10 @@
 
       {% else %}
 
-        <p>{{ t('We’re building a new service which is currently in beta. This means we’re testing different designs '
-          + 'and making changes based on feedback from users.') }}</p>
+        <p>{{ t('We are building a new service. Different designs are being tested and changed based '
+          + 'on feedback from users.') }}</p>
 
-        <p>{{ t('We’ll ask you some questions to check you can use the new service.') }}</p>
-
-        <p>{{ t('You can still {{ useMCOL }} if you prefer while we’re testing the new service.',
-            { useMCOL: internalLink('use Money Claim Online (MCOL)', EligibilityPaths.mcolEligibilityPage.uri) }) | safe }}</p>
+        <p>{{ t('You will be asked some questions to check you are eligible to use this service.') }}</p>
 
       {% endif %}
 

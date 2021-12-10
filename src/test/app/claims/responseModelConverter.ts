@@ -16,7 +16,7 @@ import {
   statementOfMeansWithAllFieldsDraft,
   statementOfMeansWithMandatoryFieldsDraft
 } from 'test/data/draft/responseDraft'
-import { companyDetails, individualDetails, organisationDetails, soleTraderDetails, individualSplitNameDetails } from 'test/data/draft/partyDetails'
+import { companyDetails, individualDetails, organisationDetails, soleTraderDetails, soleTraderDetailsWithSeparatedName, individualSplitNameDetails } from 'test/data/draft/partyDetails'
 
 import { Response } from 'claims/models/response'
 import {
@@ -32,7 +32,7 @@ import {
   statementOfMeansWithAllFieldsData,
   statementOfMeansWithMandatoryFieldsOnlyData
 } from 'test/data/entity/responseData'
-import { company, individual, organisation, soleTrader, individualDefendant } from 'test/data/entity/party'
+import { company, individual, organisation, soleTrader, individualDefendant, soleTraderWithSeparatedName } from 'test/data/entity/party'
 import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { Claim } from 'claims/models/claim'
 import { CohabitingOption } from 'response/form/models/statement-of-means/cohabiting'
@@ -137,7 +137,7 @@ describe('ResponseModelConverter', () => {
     context('full defence conversion', () => {
       [
         [individualDetails, individual],
-        [soleTraderDetails, soleTrader],
+        [soleTraderDetailsWithSeparatedName, soleTraderWithSeparatedName],
         [companyDetails, company],
         [organisationDetails, organisation]
       ].forEach(([partyDetails, party]) => {

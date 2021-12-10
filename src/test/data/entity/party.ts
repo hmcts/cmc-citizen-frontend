@@ -37,11 +37,17 @@ export const individualDefendant = {
 
 export const soleTrader = {
   type: PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value,
-  name: 'SoleTrader Smith',
+  name: 'John Smith',
   businessName: 'SoleTrader Ltd.',
   ...addressCorrespondenceAddress,
   phone: '0700000002',
   email: 'sole-trader@example.com'
+}
+
+export const soleTraderWithSeparatedName = {
+  ...soleTrader,
+  firstName: 'John',
+  lastName: 'Smith'
 }
 
 export const soleTraderDefendant = {
