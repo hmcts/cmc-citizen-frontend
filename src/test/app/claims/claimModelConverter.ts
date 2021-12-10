@@ -11,7 +11,7 @@ import {
   defendantSoleTraderDetails,
   individualDetails,
   organisationDetails,
-  soleTraderDetails
+  soleTraderDetailsWithSeparatedName
 } from 'test/data/draft/partyDetails'
 
 import { ClaimData } from 'claims/models/claimData'
@@ -60,7 +60,7 @@ function convertObjectLiteralToJSON (value: object): object {
 describe('ClaimModelConverter', () => {
   [
     [[individualDetails, individual], [defendantSoleTraderDetails, soleTraderDefendant]],
-    [[soleTraderDetails, soleTrader], [companyDetails, company]],
+    [[soleTraderDetailsWithSeparatedName, soleTrader], [companyDetails, company]],
     [[companyDetails, company], [organisationDetails, organisation]],
     [[organisationDetails, organisation], [defendantIndividualDetails, individualDefendant]]
   ].forEach(entry => {

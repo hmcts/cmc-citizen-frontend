@@ -114,7 +114,10 @@ export function createClaimant (type: PartyType): Party {
 
   switch (type) {
     case PartyType.INDIVIDUAL:
-      claimant.name = 'John Smith'
+      claimant.name = 'Mr. John Smith'
+      claimant.title = 'Mr.'
+      claimant.firstName = 'John'
+      claimant.lastName = 'Smith'
       claimant.dateOfBirth = '1982-07-26'
       break
     case PartyType.SOLE_TRADER:
