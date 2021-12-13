@@ -126,7 +126,7 @@ cmc-claim-store:
           - rpa-email-breathing-space
     environment:
       LOG_LEVEL: DEBUG
-      DOC_ASSEMBLY_URL: http://dg-docassembly-aat.service.core-compute-aat.internal
+      DOC_ASSEMBLY_URL: http://dg-docassembly-demo.service.core-compute-demo.internal
       FRONTEND_BASE_URL: https://${SERVICE_FQDN}
       RESPOND_TO_CLAIM_URL: https://${SERVICE_FQDN}/first-contact/start
       CMC_DB_HOST: ${SERVICE_NAME}-postgresql
@@ -176,7 +176,7 @@ ccd:
     s2sUrl: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
     ccdDefinitionStoreUrl: http://${SERVICE_NAME}-ccd-definition-store
     ccdUserProfileUrl: http://${SERVICE_NAME}-ccd-user-profile-api
-    dmStoreUrl: http://dm-store-aat.service.core-compute-aat.internal
+    dmStoreUrl: http://dm-store-demo.service.core-compute-demo.internal
     draftStoreUrl: http://draft-store-service-aat.service.core-compute-aat.internal
     paymentsUrl: http://payment-api-aat.service.core-compute-aat.internal
     emAnnotationUrl: http://em-anno-aat.service.core-compute-aat.internal
@@ -207,7 +207,7 @@ ccd:
       environment:
         CCD_ACTIVITY_URL: null
         DM_URL: https://gateway-${SERVICE_FQDN}/documents
-        DM_URL_REMOTE: https?://(gateway-${SERVICE_FQDN}:443|dm-store-aat.service.core-compute-aat.internal)/documents
+        DM_URL_REMOTE: https?://(gateway-${SERVICE_FQDN}:443|dm-store-demo.service.core-compute-demo.internal)/documents
         NODE_TLS_REJECT_UNAUTHORIZED: 0
       ingressHost: case-management-web-${SERVICE_FQDN}
       ingressIP: ${INGRESS_IP}
