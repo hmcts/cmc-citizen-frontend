@@ -16,6 +16,8 @@ const onlineChannel = config.get<string>('fees.channel.online')
 const paperChannel = config.get<string>('fees.channel.paper')
 const issueFeeEvent = config.get<string>('fees.issueFee.event')
 const hearingFeeEvent = config.get<string>('fees.hearingFee.event')
+const issueFeeKeyWord = config.get<string>('fees.issueFee.keyword')
+const hearingFeeKeyWord = config.get<string>('fees.hearingFee.keyword')
 const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
 
 export class FeesClient {
@@ -26,7 +28,7 @@ export class FeesClient {
    * @param {number} claimValue the amount claiming for in pounds
    * @returns {Promise.<number>} promise containing the fee amount in pounds
    */
-  static async calculateIssueFee (claimValue: number): Promise<number> {
+  static async F (claimValue: number): Promise<number> {
     if (await featureToggles.isNewClaimFeesEnabled()) {
       return this.calculateFee(issueFeeEvent, claimValue, paperChannel)
       .then((outcome: FeeOutcome) => outcome.amount)
@@ -42,7 +44,7 @@ export class FeesClient {
    * @param {number} claimValue the amount claiming for in pounds
    * @returns {Promise.<string>} promise containing the fee code
    */
-  static async retreiveClaimIssuanceFeeCode (claimValue: number): Promise<string> {
+  static async retrieveClaimIssuanceFeeCode (claimValue: number): Promise<string> {
     return this.calculateFee(issueFeeEvent, claimValue, paperChannel)
     .then((outcome: FeeOutcome) => outcome.code)
   }
