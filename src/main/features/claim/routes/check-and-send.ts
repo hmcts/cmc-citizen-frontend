@@ -51,7 +51,7 @@ async function getClaimIssuanceFeeCode (draft: DraftClaim): Promise<string> {
   const interest: number = await draftInterestAmount(draft)
   const totalAmount: number = draft.amount.totalAmount()
 
-  return FeesClient.retreiveClaimIssuanceFeeCode(totalAmount + interest)
+  return FeesClient.retrieveClaimIssuanceFeeCode(totalAmount + interest)
 }
 
 function getBusinessName (partyDetails: PartyDetails): string {
