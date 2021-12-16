@@ -28,7 +28,7 @@ export class FeesClient {
    * @param {number} claimValue the amount claiming for in pounds
    * @returns {Promise.<number>} promise containing the fee amount in pounds
    */
-  static async F (claimValue: number): Promise<number> {
+  static async calculateIssueFee (claimValue: number): Promise<number> {
     if (await featureToggles.isNewClaimFeesEnabled()) {
       return this.calculateFee(issueFeeEvent, claimValue, paperChannel, issueFeeKeyWord)
       .then((outcome: FeeOutcome) => outcome.amount)
@@ -75,7 +75,7 @@ export class FeesClient {
     if (StringUtils.isBlank(channel)) {
       throw new Error('Fee channel is required')
     }
-    if(StringUtils.isBlank(keyword)) {
+    if (StringUtils.isBlank(keyword)) {
       throw new Error('Keyword is required')
     }
     ClaimValidator.claimAmount(amount)
