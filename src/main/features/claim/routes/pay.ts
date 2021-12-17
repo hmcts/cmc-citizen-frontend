@@ -33,6 +33,7 @@ const featuresBuilder: FeaturesBuilder = new FeaturesBuilder()
 const logger = Logger.getLogger('router/pay')
 const event: string = config.get<string>('fees.issueFee.event')
 const channel: string = config.get<string>('fees.channel.online')
+const keyword: string = config.get<string>('fees.issueFee.keyword')
 
 const getPayClient = async (req: express.Request): Promise<PayClient> => {
   const authToken = await new ServiceAuthTokenFactoryImpl().get()
@@ -131,7 +132,7 @@ export default express.Router()
         }
       }
 
-      const feeOutcome: FeeOutcome = await FeesClient.calculateFee(event, amount, channel)
+      const feeOutcome: FeeOutcome = await FeesClient.calculateFee(event, amount, channel, keyword)
       const payClient: PayClient = await getPayClient(req)
       const payment: Payment = await payClient.create(
         user,
