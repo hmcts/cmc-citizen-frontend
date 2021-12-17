@@ -46,6 +46,7 @@ const draftType = 'claim'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const event: string = config.get<string>('fees.issueFee.event')
+const keyword: string = config.get<string>('fees.issueFee.keyword')
 const channel: string = config.get<string>('fees.channel.online')
 const failureMessage: string = 'failure message'
 const externalId: string = draftStoreServiceMock.sampleClaimDraftObj.externalId
@@ -173,7 +174,7 @@ describe('Claim issue: initiate payment receiver', () => {
     it('should return 500 and error page when cannot retrieve service token needed for payment service', async () => {
       overrideClaimDraftObj.claimant.payment = undefined
       draftStoreServiceMock.resolveFind(draftType, overrideClaimDraftObj)
-      feesServiceMock.resolveCalculateFee(event, channel)
+      feesServiceMock.resolveCalculateFee(event, channel, keyword)
       idamServiceMock.rejectRetrieveServiceToken()
 
       await request(app)
@@ -185,7 +186,7 @@ describe('Claim issue: initiate payment receiver', () => {
     it('should return 500 and error page when cannot create payment', async () => {
       overrideClaimDraftObj.claimant.payment = undefined
       draftStoreServiceMock.resolveFind(draftType, overrideClaimDraftObj)
-      feesServiceMock.resolveCalculateFee(event, channel)
+      feesServiceMock.resolveCalculateFee(event, channel, keyword)
       idamServiceMock.resolveRetrieveServiceToken()
       payServiceMock.rejectCreate()
 
@@ -198,7 +199,7 @@ describe('Claim issue: initiate payment receiver', () => {
     it('should return 500 and error page when cannot save draft', async () => {
       overrideClaimDraftObj.claimant.payment = undefined
       draftStoreServiceMock.resolveFind(draftType, overrideClaimDraftObj)
-      feesServiceMock.resolveCalculateFee(event, channel)
+      feesServiceMock.resolveCalculateFee(event, channel, keyword)
       idamServiceMock.resolveRetrieveServiceToken()
       payServiceMock.resolveCreate()
       draftStoreServiceMock.rejectUpdate()
@@ -217,7 +218,7 @@ describe('Claim issue: initiate payment receiver', () => {
       idamServiceMock.resolveRetrieveServiceToken()
       draftStoreServiceMock.resolveFind(draftType, overrideClaimDraftObj)
       payServiceMock.resolveRetrieveToNotFound()
-      feesServiceMock.resolveCalculateFee(event, channel)
+      feesServiceMock.resolveCalculateFee(event, channel, keyword)
       payServiceMock.resolveCreate()
       draftStoreServiceMock.resolveUpdate()
 
@@ -230,7 +231,7 @@ describe('Claim issue: initiate payment receiver', () => {
     it('should redirect to next page when everything is fine', async () => {
       overrideClaimDraftObj.claimant.payment = undefined
       draftStoreServiceMock.resolveFind(draftType, overrideClaimDraftObj)
-      feesServiceMock.resolveCalculateFee(event, channel)
+      feesServiceMock.resolveCalculateFee(event, channel, keyword)
       idamServiceMock.resolveRetrieveServiceToken()
       payServiceMock.resolveCreate()
       draftStoreServiceMock.resolveUpdate()
