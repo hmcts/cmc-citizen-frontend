@@ -10,6 +10,8 @@ const defaultChannel = config.get<string>('fees.channel.paper')
 const issueEvent = config.get<string>('fees.issueFee.event')
 const hearingEvent = config.get<string>('fees.hearingFee.event')
 const baseFeeUri = config.get<string>('fees.url')
+const issueFeeKeyWord = config.get<string>('fees.issueFee.keyword')
+const hearingFeeKeyWord = config.get<string>('fees.hearingFee.keyword')
 
 const feeOutcome = {
   code: 'X0002',
@@ -292,11 +294,11 @@ export const feeRange = [
 ]
 
 export function resolveCalculateIssueFee (): mock.Scope {
-  return resolveCalculateFee(issueEvent, onlineChannel)
+  return resolveCalculateFee(issueEvent, onlineChannel, issueFeeKeyWord)
 }
 
 export function resolveCalculateIssueFeeDefaultChannel (): mock.Scope {
-  return resolveCalculateFee(issueEvent, defaultChannel)
+  return resolveCalculateFee(issueEvent, defaultChannel, issueFeeKeyWord)
 }
 
 export function rejectCalculateIssueFee (reason: string = 'HTTP error'): mock.Scope {
@@ -308,11 +310,11 @@ export function rejectCalculateIssueFeeDefaultChannel (reason: string = 'HTTP er
 }
 
 export function resolveCalculateHearingFee (): mock.Scope {
-  return resolveCalculateFee(hearingEvent, defaultChannel)
+  return resolveCalculateFee(hearingEvent, defaultChannel, hearingFeeKeyWord)
 }
 
 export function resolveRetreiveClaimIssuanceFeeCode (): mock.Scope {
-  return resolveCalculateFee(issueEvent, defaultChannel)
+  return resolveCalculateFee(issueEvent, defaultChannel, issueFeeKeyWord)
 }
 
 export function rejectRetreiveClaimIssuanceFeeCode (reason: string = 'HTTP error'): mock.Scope {
@@ -347,7 +349,7 @@ export function rejectGetHearingFeeRangeGroup (reason: string = 'HTTP error'): m
   return rejectGetFeeRangeGroup(hearingEvent, defaultChannel, reason)
 }
 
-export function resolveCalculateFee (eventType: string, channel: string): mock.Scope {
+export function resolveCalculateFee (eventType: string, channel: string, keyword: string): mock.Scope {
   return mock(baseFeeUri)
     .get(`/fees-register/fees/lookup`)
     .query({
@@ -356,6 +358,7 @@ export function resolveCalculateFee (eventType: string, channel: string): mock.S
       jurisdiction2: `${jurisdiction2}`,
       channel: `${channel}`,
       event: `${eventType}`,
+      keyword: `${keyword}`,
       amount_or_volume: new RegExp(`[\\d]+`)
     })
     .reply(HttpStatus.OK, feeOutcome)
