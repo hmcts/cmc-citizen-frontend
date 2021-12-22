@@ -35,7 +35,7 @@ exports.config = {
       smartWait:5000,
       desiredCapabilities: {
         chromeOptions: {
-          args: [ "--no-sandbox", "--disable-dev-shm-usage", "--allow-running-insecure-content", "--ignore-certificate-errors"]
+          args: [ "--no-sandbox", "--disable-dev-shm-usage", "--allow-running-insecure-content", "--ignore-certificate-errors", "--headless"]
         },
         proxy: new ProxySettings()
       }
