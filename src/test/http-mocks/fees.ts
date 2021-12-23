@@ -12,7 +12,6 @@ const hearingEvent = config.get<string>('fees.hearingFee.event')
 const baseFeeUri = config.get<string>('fees.url')
 const issueFeeKeyWord = config.get<string>('fees.issueFee.keyword')
 const hearingFeeKeyWord = config.get<string>('fees.hearingFee.keyword')
-
 const feeOutcome = {
   code: 'X0002',
   description: 'Civil Court fees - Money Claims - Claim Amount - 300.01 up to 500 GBP',
@@ -302,11 +301,11 @@ export function resolveCalculateIssueFeeDefaultChannel (): mock.Scope {
 }
 
 export function rejectCalculateIssueFee (reason: string = 'HTTP error'): mock.Scope {
-  return rejectCalculateFee(issueEvent, onlineChannel, reason)
+  return rejectCalculateFee(issueEvent, onlineChannel, issueFeeKeyWord, reason)
 }
 
 export function rejectCalculateIssueFeeDefaultChannel (reason: string = 'HTTP error'): mock.Scope {
-  return rejectCalculateFee(issueEvent, defaultChannel, reason)
+  return rejectCalculateFee(issueEvent, defaultChannel, issueFeeKeyWord, reason)
 }
 
 export function resolveCalculateHearingFee (): mock.Scope {
@@ -318,11 +317,11 @@ export function resolveRetreiveClaimIssuanceFeeCode (): mock.Scope {
 }
 
 export function rejectRetreiveClaimIssuanceFeeCode (reason: string = 'HTTP error'): mock.Scope {
-  return rejectCalculateFee(issueEvent, defaultChannel, reason)
+  return rejectCalculateFee(issueEvent, defaultChannel, issueFeeKeyWord, reason)
 }
 
 export function rejectCalculateHearingFee (reason: string = 'HTTP error'): mock.Scope {
-  return rejectCalculateFee(hearingEvent, defaultChannel, reason)
+  return rejectCalculateFee(hearingEvent, defaultChannel, hearingFeeKeyWord, reason)
 }
 
 export function resolveGetIssueFeeRangeGroup (): mock.Scope {
@@ -364,7 +363,7 @@ export function resolveCalculateFee (eventType: string, channel: string, keyword
     .reply(HttpStatus.OK, feeOutcome)
 }
 
-export function rejectCalculateFee (eventType: string, channel: string, reason: string = 'HTTP error'): mock.Scope {
+export function rejectCalculateFee (eventType: string, channel: string, keyword: string, reason: string = 'HTTP error'): mock.Scope {
   return mock(baseFeeUri)
     .get(`/fees-register/fees/lookup`)
     .query({
@@ -373,6 +372,7 @@ export function rejectCalculateFee (eventType: string, channel: string, reason: 
       jurisdiction2: `${jurisdiction2}`,
       channel: `${channel}`,
       event: `${eventType}`,
+      keyword: `${keyword}`,
       amount_or_volume: new RegExp(`[\\d]+`)
     })
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)

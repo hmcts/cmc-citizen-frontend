@@ -163,7 +163,7 @@ describe('Claim issue: initiate payment receiver', () => {
     it('should return 500 and error page when cannot calculate issue fee', async () => {
       overrideClaimDraftObj.claimant.payment = undefined
       draftStoreServiceMock.resolveFind(draftType, overrideClaimDraftObj)
-      feesServiceMock.rejectCalculateFee(event, channel, failureMessage)
+      feesServiceMock.rejectCalculateFee(event, channel, keyword, failureMessage)
 
       await request(app)
         .get(Paths.startPaymentReceiver.uri)
