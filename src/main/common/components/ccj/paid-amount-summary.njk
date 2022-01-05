@@ -54,7 +54,7 @@
         <tr>
           <th scope="row">{{ t('Claim fee amount') }}</th>
           <td class="numeric last">
-            <span class="font-small">{{ claimFee | pennies2pounds | numeral | safe }}</span>
+            <span class="font-small">{{ claimFee | pennies2pounds | numeral }}</span>
           </td>
         </tr>
         {% if alreadyPaid %}
