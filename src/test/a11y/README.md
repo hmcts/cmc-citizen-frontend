@@ -2,7 +2,7 @@
 The current implementation of Pa11y validattion/evaluattion is very good and covers majority of the accessibility errors. However DAC(Digital Accessibility Centre) has reported serveral accessibility issues that were either ignored or not considered as errors by Pa11y. 
 
 # How to test DAC reported errors.
-In order to ensure DAC reported errors are also tested as part of `Pa11y` tests, we had to add custom methods and assertions.
+In order to ensure DAC reported errors are also tested as part of `Pa11y` tests, we had to add custom methods and assertions..
 
 # How we did
 Since the tests use `supertest` to get the page content as string html. Majority of the Pa11y tests run on this string html. 
