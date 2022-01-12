@@ -2,11 +2,12 @@ const gulp = require('gulp')
 const nodemon = require('gulp-nodemon')
 const plumber = require('gulp-plumber')
 const livereload = require('gulp-livereload')
-const sass = require('gulp-sass')
+const sass = require('gulp-sass')(require('sass'));
 const path = require('path')
 const replace = require('gulp-replace')
 const rename = require('gulp-rename')
 const fs = require('fs')
+
 
 const repoRoot = path.join(__dirname, '/')
 const govUkFrontendToolkitRoot = path.join(repoRoot, 'node_modules/govuk_frontend_toolkit/stylesheets')

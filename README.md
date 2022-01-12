@@ -18,6 +18,7 @@ Service delegates most of the non UI responsibilities to underlying services e.g
 * [yarn](https://yarnpkg.com/)
 * [Gulp](http://gulpjs.com/)
 * [Docker](https://www.docker.com)
+* [SASS](npm install --save-dev sass)
 
 #### Running the application
 
