@@ -40,7 +40,7 @@ describe('Claimant Response guard', () => {
   context('When the claim has a claimant response', () => {
     it('should not pass the request through', async () => {
       const spy = sinon.spy(next)
-      await ClaimantResponseGuard.checkClaimantResponseDoesNotExist()(req, res, spy)
+      ClaimantResponseGuard.checkClaimantResponseDoesNotExist()(req, res, spy)
 
       chai.expect(spy).to.have.not.been.called
     })
@@ -53,7 +53,7 @@ describe('Claimant Response guard', () => {
 
     it('should pass the request through', async () => {
       const spy = sinon.spy(next)
-      await ClaimantResponseGuard.checkClaimantResponseDoesNotExist()(req, res, spy)
+      ClaimantResponseGuard.checkClaimantResponseDoesNotExist()(req, res, spy)
 
       chai.expect(spy).to.have.been.called
     })
