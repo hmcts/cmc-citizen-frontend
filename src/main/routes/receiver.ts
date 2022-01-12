@@ -70,8 +70,7 @@ async function getAuthToken (req: express.Request,
 
 function isDefendantFirstContactPinLogin (req: express.Request): boolean {
   const state = req.query.state as string
-  const stateMatch = state.match(/[0-9]{3}MC[0-9]{3}/)
-  return stateMatch !== null
+  return !!state.match(/[0-9]{3}MC[0-9]{3}/)
 }
 
 function loginErrorHandler (req: express.Request,
