@@ -23,6 +23,7 @@
     "no-default-export": true,
     "no-floating-promises": false,
     "no-console": true,
-    "mocha-avoid-only": true
+    "mocha-avoid-only": true,
+    "await-promise": false
   }
 }

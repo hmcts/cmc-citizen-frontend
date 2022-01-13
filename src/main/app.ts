@@ -7,7 +7,6 @@ import * as path from 'path'
 import * as favicon from 'serve-favicon'
 import * as cookieParser from 'cookie-parser'
 import * as cookieEncrypter from '@hmcts/cookie-encrypter'
-import * as bodyParser from 'body-parser'
 import { ForbiddenError, NotFoundError } from 'errors'
 import { ErrorLogger } from 'logging/errorLogger'
 import { RouterFinder } from 'shared/router/routerFinder'
@@ -68,8 +67,8 @@ app.use(/^\/(?!js|img|pdf|stylesheets).*$/, async (req, res, next) => {
 
 app.enable('trust proxy')
 app.use(favicon(path.join(__dirname, '/public/img/lib/favicon.ico')))
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({
+app.use(express.json())
+app.use(express.urlencoded({
   extended: true,
   limit: '10mb'
 }))
@@ -123,7 +122,7 @@ logger.info('Loading PaidInFullFeature')
 new PaidInFullFeature().enableFor(app)
 
 logger.info('Loading ClaimantResponseFeature')
-new ClaimantResponseFeature().enableFor(app)
+new ClaimantResponseFeature().enableFor(app).then()
 
 if (FeatureToggles.isEnabled('testingSupport')) {
   logger.info('FeatureToggles.testingSupport enabled')
