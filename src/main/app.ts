@@ -41,6 +41,12 @@ export const app: express.Express = express()
 const env = process.env.NODE_ENV || 'development'
 app.locals.ENV = env
 
+app.use(express.urlencoded({
+  extended: true,
+  limit: '10mb'
+}))
+app.use(express.json())
+
 const developmentMode = env === 'development'
 
 const i18next = I18Next.enableFor(app)
@@ -67,11 +73,6 @@ app.use(/^\/(?!js|img|pdf|stylesheets).*$/, async (req, res, next) => {
 
 app.enable('trust proxy')
 app.use(favicon(path.join(__dirname, '/public/img/lib/favicon.ico')))
-app.use(express.json())
-app.use(express.urlencoded({
-  extended: true,
-  limit: '10mb'
-}))
 app.use(cookieParser())
 app.use(cookieEncrypter(config.get('secrets.cmc.encryptionKey'), {
   options: {
@@ -122,7 +123,7 @@ logger.info('Loading PaidInFullFeature')
 new PaidInFullFeature().enableFor(app)
 
 logger.info('Loading ClaimantResponseFeature')
-new ClaimantResponseFeature().enableFor(app).then()
+new ClaimantResponseFeature().enableFor(app)
 
 if (FeatureToggles.isEnabled('testingSupport')) {
   logger.info('FeatureToggles.testingSupport enabled')
