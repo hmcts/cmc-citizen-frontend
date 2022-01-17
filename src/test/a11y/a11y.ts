@@ -61,7 +61,8 @@ async function runPa11y (url: string): Promise<Issue[]> {
       Cookie: `${cookieName}=ABC`
     },
     chromeLaunchConfig: {
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      args: ['--no-sandbox', '--disable-setuid-sandbox', '--headless'],
+      ignoreHTTPSErrors: false
     }
   })
   return result.issues
