@@ -18,16 +18,8 @@ import { Logger } from '@hmcts/nodejs-logging'
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 const logger = Logger.getLogger('router/dashboards')
 
-function renderPage (res: express.Response, claimsAsClaimant: Claim[], claimDraftSaved: boolean, claimsAsDefendant: Claim[], responseDraftSaved: boolean, paginationArgumentClaimant: object, paginationArgumentDefendant: object, userEmail: string) {
-  res.render(Paths.dashboardPage.associatedView, {
-    claimsAsClaimant: claimsAsClaimant,
-    claimDraftSaved: claimDraftSaved,
-    claimsAsDefendant: claimsAsDefendant,
-    responseDraftSaved: responseDraftSaved,
-    paginationArgumentClaimant: paginationArgumentClaimant,
-    paginationArgumentDefendant: paginationArgumentDefendant,
-    userEmail: userEmail
-  })
+function renderPage (res: express.Response, claimParams: object) {
+  res.render(Paths.dashboardPage.associatedView, claimParams)
 }
 
 /* tslint:disable:no-default-export */
@@ -65,7 +57,15 @@ export default express.Router()
       claimState(claimsAsClaimant,ActorType.CLAIMANT)
       claimState(claimsAsDefendant,ActorType.DEFENDANT)
 
-      renderPage(res, claimsAsClaimant, claimDraftSaved, claimsAsDefendant, responseDraftSaved, paginationArgumentClaimant, paginationArgumentDefendant, userEmail)
+      renderPage(res, {
+        claimsAsClaimant: claimsAsClaimant,
+        claimDraftSaved: claimDraftSaved,
+        claimsAsDefendant: claimsAsDefendant,
+        responseDraftSaved: responseDraftSaved,
+        paginationArgumentClaimant: paginationArgumentClaimant,
+        paginationArgumentDefendant: paginationArgumentDefendant,
+        userEmail: userEmail
+      })
     } else {
       logger.info('Dashboard feature is not enabled')
       const claimsAsClaimant: Claim[] = await claimStoreClient.retrieveByClaimantId(user, undefined)
@@ -73,7 +73,14 @@ export default express.Router()
       claimState(claimsAsClaimant,ActorType.CLAIMANT)
       claimState(claimsAsDefendant,ActorType.DEFENDANT)
 
-      renderPage(res, claimsAsClaimant, claimDraftSaved, claimsAsDefendant, responseDraftSaved, undefined, undefined, userEmail)
+      renderPage(res, {
+        claimsAsClaimant: claimsAsClaimant,
+        claimDraftSaved: claimDraftSaved,
+        claimsAsDefendant: claimsAsDefendant,
+        responseDraftSaved: responseDraftSaved,
+        paginationArgumentClaimant: undefined,
+        paginationArgumentDefendant: undefined,
+        userEmail: userEmail})
     }
 
   }))
