@@ -47,7 +47,7 @@ async function getOAuthAccessToken (req: express.Request, receiver: RoutablePath
       })
   }
   const authToken: AuthToken = await IdamClient.exchangeCode(
-    req.query.code,
+    req.query.code as string,
     buildURL(req, receiver.uri)
   )
   if (authToken) {
@@ -69,7 +69,10 @@ async function getAuthToken (req: express.Request,
 }
 
 function isDefendantFirstContactPinLogin (req: express.Request): boolean {
-  return req.query && req.query.state && req.query.state.match(/[0-9]{3}MC[0-9]{3}/)
+  if (req.query) {
+    const state = req.query.state as string
+    return !!state.match(/[0-9]{3}MC[0-9]{3}/)
+  }
 }
 
 function loginErrorHandler (req: express.Request,
@@ -143,7 +146,7 @@ export default express.Router()
       if (res.locals.isLoggedIn) {
         if (isDefendantFirstContactPinLogin(req)) {
           // re-set state cookie as it was cleared above, we need it in this case
-          cookies.set(stateCookieName, req.query.state)
+          cookies.set(stateCookieName, req.query.state as string)
           return res.redirect(FirstContactPaths.claimSummaryPage.uri)
         } else {
           if (await featureToggles.isDashboardPaginationEnabled()) {
