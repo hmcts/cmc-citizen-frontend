@@ -76,7 +76,6 @@ describe('claim - date money was received', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-
       context('when form is valid', async () => {
         it('should render the confirmation page', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
