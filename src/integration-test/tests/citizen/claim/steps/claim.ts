@@ -248,7 +248,6 @@ export class ClaimSteps {
   }
 
   async makeAClaimAndNavigateUpToPayment (I: I) {
-    window.localStorage.clear()
     const claimant = createClaimant(PartyType.INDIVIDUAL)
     const defendant = await createDefendant(I, PartyType.INDIVIDUAL, true)
 
