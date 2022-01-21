@@ -87,7 +87,7 @@ describe('claim - date money was received', () => {
             .send({ date: { day: '', month: '', year: '' } })
             .expect(res => expect(res).to.be.successful.withText('When did you settle with the defendant?', 'div class="error-summary"'))
         })
-      }
+      })
 
       context('when form is valid', async () => {
         it('should render the confirmation page', async () => {
