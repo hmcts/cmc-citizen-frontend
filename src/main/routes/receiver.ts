@@ -71,7 +71,7 @@ async function getAuthToken (req: express.Request,
 function isDefendantFirstContactPinLogin (req: express.Request): boolean {
   if (req.query) {
     const state = req.query.state as string
-    return state ? !!state.match(/[0-9]{3}MC[0-9]{3}/) : false
+    return state ? !!state.match(/[\d]{3}MC[\d]{3}/) : false
   }
 }
 
@@ -122,6 +122,36 @@ function setAuthCookie (cookies: Cookies, authenticationToken: string): void {
   cookies.set(stateCookieName, '')
 }
 
+async function checkAuthentication (req: express.Request, res: express.Response, cookies: Cookies, user: User) {
+  if (res.locals.isLoggedIn) {
+    if (isDefendantFirstContactPinLogin(req)) {
+      // re-set state cookie as it was cleared above, we need it in this case
+      cookies.set(stateCookieName, req.query.state as string)
+      return res.redirect(FirstContactPaths.claimSummaryPage.uri)
+    } else {
+      await checkDashboardPagination(cookies, user)
+      res.redirect(await retrieveRedirectForLandingPage(req, res))
+    }
+  } else {
+    if (res.locals.code) {
+      trackCustomEvent('Authentication token undefined (jwt defined)',
+        { requestValue: req.query.state })
+    }
+    res.redirect(OAuthHelper.forLogin(req, res))
+  }
+}
+
+async function checkDashboardPagination (cookies: Cookies, user: User) {
+  if (await featureToggles.isDashboardPaginationEnabled()) {
+    if (cookies.get('lid') && cookies.get('lid') !== undefined && cookies.get('lid') !== '') {
+      await claimStoreClient.linkDefendant(user, cookies.get('lid'))
+    }
+    cookies.set('lid', '')
+  } else {
+    await claimStoreClient.linkDefendant(user, '')
+  }
+}
+
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(AppPaths.receiver.uri,
@@ -142,30 +172,7 @@ export default express.Router()
       } catch (err) {
         return loginErrorHandler(req, res, cookies, next, err)
       }
-
-      if (res.locals.isLoggedIn) {
-        if (isDefendantFirstContactPinLogin(req)) {
-          // re-set state cookie as it was cleared above, we need it in this case
-          cookies.set(stateCookieName, req.query.state as string)
-          return res.redirect(FirstContactPaths.claimSummaryPage.uri)
-        } else {
-          if (await featureToggles.isDashboardPaginationEnabled()) {
-            if (cookies.get('lid') && cookies.get('lid') !== undefined && cookies.get('lid') !== '') {
-              await claimStoreClient.linkDefendant(user, cookies.get('lid'))
-            }
-            cookies.set('lid', '')
-          } else {
-            await claimStoreClient.linkDefendant(user, '')
-          }
-          res.redirect(await retrieveRedirectForLandingPage(req, res))
-        }
-      } else {
-        if (res.locals.code) {
-          trackCustomEvent('Authentication token undefined (jwt defined)',
-            { requestValue: req.query.state })
-        }
-        res.redirect(OAuthHelper.forLogin(req, res))
-      }
+      await checkAuthentication(req, res, cookies, user)
     }))
   .get(AppPaths.linkDefendantReceiver.uri,
     ErrorHandling.apply(async (req: express.Request,
