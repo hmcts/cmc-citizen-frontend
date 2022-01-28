@@ -137,7 +137,6 @@ export function createClaimant (type: PartyType): Party {
 }
 
 export async function createDefendant (I: I, type: PartyType, hasEmailAddress: boolean = false): Promise<Party> {
-  const emailAddress = hasEmailAddress ? (await I.getDefendantEmail()) : undefined
   const defendant: Party = {
     type: type,
     name: undefined,
@@ -148,7 +147,7 @@ export async function createDefendant (I: I, type: PartyType, hasEmailAddress: b
       postcode: 'SW2 1AN'
     },
     phone: '07700000002',
-    email: emailAddress
+    email: hasEmailAddress ? await I.getDefendantEmail() : undefined
   }
 
   switch (type) {
