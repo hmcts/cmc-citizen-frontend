@@ -83,8 +83,8 @@ describe('claim - date money was received', () => {
 
           await request(app)
             .post(pagePath)
-            .send({ date: { day: '', month: '', year: '' } })
             .set('Cookie', `${cookieName}=ABC`)
+            .send({ date: { day: '', month: '', year: '' } })
             .expect(res => expect(res).to.be.successful.withText('When did you settle with the defendant?', 'div class="error-summary"'))
         })
       })
