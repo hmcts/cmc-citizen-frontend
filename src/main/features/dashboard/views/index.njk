@@ -6,7 +6,7 @@
 {% set heading = 'Your money claims account' %}
 
 {% block content %}
-  {% if claimsAsDefendant | length >=160 %}
+  {% if claimsAsDefendant | length >=10 %}
       {% include "./banner/banner-claim-threshold.njk" %}
   {% endif %}
   <div class="grid-row">
