@@ -147,7 +147,7 @@ export async function createDefendant (I: I, type: PartyType, hasEmailAddress: b
       postcode: 'SW2 1AN'
     },
     phone: '07700000002',
-    email: hasEmailAddress ? 'civilmoneyclaims+smoke-tests@gmail.com' : undefined
+    email: hasEmailAddress ? await I.getDefendantEmail() : undefined
   }
 
   switch (type) {
