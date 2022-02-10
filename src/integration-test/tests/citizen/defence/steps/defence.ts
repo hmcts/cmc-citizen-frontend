@@ -363,7 +363,7 @@ export class DefenceSteps {
         throw new Error('Unknown DefenceType')
     }
     this.checkAndSendAndSubmit(defendantType, defenceType)
-    await I.wait(10)
+    await I.wait(60)
     I.waitForText('You’ve submitted your response')
   }
 
