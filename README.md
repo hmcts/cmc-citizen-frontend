@@ -33,7 +33,7 @@ Run:
 $ gulp
 ```
 
-It will be available at https://localhost:3000
+It will be avai lable at https://localhost:3000
 
 ### Running the application on docker (integrated environment)
 
