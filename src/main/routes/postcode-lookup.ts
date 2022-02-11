@@ -20,8 +20,16 @@ export default express.Router()
         }
       })
     }
-    osPlacesClient.lookupByPostcode(req.query.postcode)
-      .then((addressInfoResponse: AddressInfoResponse) => res.json(addressInfoResponse))
+    osPlacesClient.lookupByPostcodeAndDataSet(req.query.postcode, 'DPA,LPI')
+      .then((addressInfoResponse: AddressInfoResponse) => {
+        addressInfoResponse.addresses
+          = addressInfoResponse.addresses.filter((addresses, index, self) =>
+            index === self.findIndex((t) =>
+              (t.formattedAddress === addresses.formattedAddress)
+            )
+          )
+        res.json(addressInfoResponse)
+      })
       .catch(err => {
         if (err.message === 'Authentication failed') {
           trackCustomEvent(`Ordnance Survey keys stopped working`, { error: err })

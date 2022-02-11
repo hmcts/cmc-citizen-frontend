@@ -18,9 +18,14 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const heading: string = 'Enter your details'
+const theirFirstName: string = 'First name'
+const theirLastName: string = 'Last name'
+const theirTitle: string = 'Title'
 const input = {
   type: 'individual',
   name: 'John Smith',
+  firstName: 'John',
+  lastName: 'Smith',
   address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: 'SE28 0JE' } as Address,
   hasCorrespondenceAddress: false,
   dateOfBirth: {
@@ -46,7 +51,7 @@ describe('claimant as individual details page', () => {
       await request(app)
         .get(ClaimPaths.claimantIndividualDetailsPage.uri)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.successful.withText(heading))
+        .expect(res => expect(res).to.be.successful.withText(heading, theirTitle, theirFirstName, theirLastName))
     })
   })
 
@@ -61,12 +66,12 @@ describe('claimant as individual details page', () => {
 
       it('should render page with error when claimant name is invalid', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        const nameMissingInput = { ...input, ...{ name: '' } }
+        const nameMissingInput = { ...input, ...{ firstName: '', lastName: 'ok' } }
         await request(app)
           .post(ClaimPaths.claimantIndividualDetailsPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send(nameMissingInput)
-          .expect(res => expect(res).to.be.successful.withText(heading, 'div class="error-summary"', 'Enter name'))
+          .expect(res => expect(res).to.be.successful.withText(theirTitle, theirFirstName, theirLastName, 'div class="error-summary"', 'Enter first name'))
       })
       describe('should render page with error when address is invalid', () => {
         beforeEach(() => {

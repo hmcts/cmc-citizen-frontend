@@ -259,18 +259,18 @@
     on-finished "^2.3.0"
     winston "^2.4.1"
 
-"@hmcts/os-places-client@^1.1.2":
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/@hmcts/os-places-client/-/os-places-client-1.1.2.tgz#a075893a7c70ab8065d1ce1b94019f60e4c82e8b"
-  integrity sha512-XpZBxP37kuBIC/xon4F6qndRJsVe8j6jTt88pQHbGK4Kj62bxSNXF0SaaSHRuHDOsN0+4CXyZ5o8DCIqaUeccA==
+"@hmcts/os-places-client@^1.1.7":
+  version "1.1.7"
+  resolved "https://registry.yarnpkg.com/@hmcts/os-places-client/-/os-places-client-1.1.7.tgz#e8a5e32122f7f7af43c314e6026785535a8022d3"
+  integrity sha512-8OFZ6V03/Uz6uhMPjr4Wad2veA9Rr0VH1REFHrcUrZ6BTPwI6LhM/0FXPOem8JQLC5HbvtxACtJKx7Aa8mphow==
   dependencies:
     request "^2.83.0"
     request-promise-native "^1.0.5"
 
-"@hmcts/properties-volume@0.0.9":
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/@hmcts/properties-volume/-/properties-volume-0.0.9.tgz#1c2b29a563fcad9041231442476a4a3b7a8abf7d"
-  integrity sha512-qW6XDDnJT8wPfSrrFNFkoQXbtWS/KE55ifeRzXeHAXB8CB9r8e8H33jCql/3WYz/LX6PGQRlrZrU27mtQaNQ4g==
+"@hmcts/properties-volume@^0.0.13":
+  version "0.0.13"
+  resolved "https://registry.yarnpkg.com/@hmcts/properties-volume/-/properties-volume-0.0.13.tgz#d1baeab407d519505aeb2614fb91632a1a328366"
+  integrity sha512-WTz5KTQG3IXQnNZCb63fR44muNn++GxGWZad0k12iIYsNfgws+dMOw7QwhbuKOMhQ2sSWxNK882ZxchVihZN9w==
   dependencies:
     "@hmcts/nodejs-logging" "^3.0.0"
     lodash "^4.17.11"

@@ -77,7 +77,16 @@ describe('Dashboard - claimant page', () => {
           await request(app)
             .get(claimPagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('We’ve sent this case to the County Court Business Centre', 'Your online account won’t be updated - any further updates will be by post.', 'If you need to send any forms, letters or documents about the claim, send them to this address'))
+            .expect(res => expect(res).to.be.successful.withText('We’ve received a response that was not submitted through the online civil money claims service'))
+        })
+
+        it('should render page with correct email address when claim is in business queue', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId({ state: 'BUSINESS_QUEUE' })
+
+          await request(app)
+                  .get(claimPagePath)
+                  .set('Cookie', `${cookieName}=ABC`)
+                  .expect(res => expect(res).to.be.successful.withText('OCMCNton@justice.gov.uk'))
         })
 
         it('should render page when everything is fine and not show download defendant responds when response is via ocon9x', async () => {

@@ -83,6 +83,22 @@ describe('ClaimData', () => {
         expect(claimData.helpWithFeesNumber).to.equal(undefined)
         expect(claimData.helpWithFeesType).to.equal(undefined)
       })
+
+      it('should return feeCode undefined as not available', () => {
+        const claimData = new ClaimData().deserialize({})
+
+        // using to.equal to resolve typescript error
+        expect(claimData.feeCode).to.equal(undefined)
+      })
+
+      it('should return feeCode if provided', () => {
+        const claimData = new ClaimData().deserialize({
+          feeCode: 'FEE214'
+        })
+
+        // using to.equal to resolve typescript error
+        expect(claimData.feeCode).to.equal('FEE214')
+      })
     })
   })
 })
