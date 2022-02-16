@@ -13,4 +13,3 @@ jobs:
       - run: yarn global add gulp-cli
       - run: gulp copy-files
       - run: yarn lint
-      - run: yarn tests:a11y
