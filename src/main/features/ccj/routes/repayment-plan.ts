@@ -75,7 +75,7 @@ class RepaymentPlanPage {
 
               res.locals.draft.document.repaymentPlan = form.model
               res.locals.draft.document.payBySetDate = undefined
-              await this.saveDraft(res.locals)
+              await this.saveDraft(res.locals as { user: User; draft: DraftWrapper<DraftCCJ>; })
 
               res.redirect(this.buildPostSubmissionUri(req, res))
             }
