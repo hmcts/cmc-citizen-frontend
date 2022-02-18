@@ -12,7 +12,8 @@ const logger = Logger.getLogger('postcode-lookup')
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(AppPaths.postcodeLookupProxy.uri, (req, res) => {
-    if (!req.query.postcode || !req.query.postcode.trim()) {
+    const postcode = req.query.postcode as string
+    if (!postcode || !postcode.trim()) {
       return res.status(400).json({
         error: {
           status: 400,
@@ -20,7 +21,7 @@ export default express.Router()
         }
       })
     }
-    osPlacesClient.lookupByPostcodeAndDataSet(req.query.postcode, 'DPA,LPI')
+    osPlacesClient.lookupByPostcodeAndDataSet(postcode, 'DPA,LPI')
       .then((addressInfoResponse: AddressInfoResponse) => {
         addressInfoResponse.addresses
           = addressInfoResponse.addresses.filter((addresses, index, self) =>

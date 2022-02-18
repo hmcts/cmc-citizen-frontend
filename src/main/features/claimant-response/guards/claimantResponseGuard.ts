@@ -10,7 +10,7 @@ const logger = Logger.getLogger('claimant-response/guards/claimantResponseGuard'
 
 export class ClaimantResponseGuard {
 
-  static checkClaimantResponseDoesNotExist (): express.RequestHandler {
+  static checkClaimantResponseDoesNotExist () {
     const allowed = (res: express.Response) => {
       const claim: Claim = res.locals.claim
       return claim.claimantResponse === undefined
