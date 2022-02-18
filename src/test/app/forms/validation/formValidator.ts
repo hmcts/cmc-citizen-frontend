@@ -33,7 +33,6 @@ describe('FormValidator', () => {
 
   it('should deserialize request body to class instance using default mapper', async () => {
     req.body = { name: 'John Smith' }
-
     await FormValidator.requestHandler(Party)(req, res, next)
 
     chai.expect(req.body.model).to.be.instanceof(Party)
