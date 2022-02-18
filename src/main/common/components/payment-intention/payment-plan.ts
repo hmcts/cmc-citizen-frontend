@@ -74,7 +74,7 @@ export abstract class AbstractPaymentPlanPage<Draft> {
             } else {
               this.createModelAccessor().patch(res.locals.draft.document, model => model.paymentPlan = form.model)
 
-              await this.saveDraft(res.locals)
+              await this.saveDraft(res.locals as { user: User; draft: DraftWrapper<Draft>; })
 
               res.redirect(this.buildPostSubmissionUri(req, res))
             }
