@@ -1,6 +1,6 @@
 import * as config from 'config'
 import { request } from 'client/request'
-import { plainToClass } from 'class-transformer'
+import { plainToClass, plainToInstance } from 'class-transformer'
 import { ClaimValidator } from 'utils/claimValidator'
 import { FeeOutcome } from 'fees/models/feeOutcome'
 import { FeeRange } from 'fees/models/feeRange'
@@ -115,7 +115,7 @@ export class FeesClient {
       uri: uri
     }
     return request(options).then(function (response) {
-      return plainToClass(FeeRange, response as object[])
+      return plainToInstance(FeeRange, response as object[])
     })
 
   }

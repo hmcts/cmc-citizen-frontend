@@ -65,7 +65,7 @@ export abstract class AbstractPaymentOptionPage<Draft> {
               this.createModelAccessor().patch(res.locals.draft.document, model => model.paymentOption = form.model)
               this.deleteRedundantData(res, req)
 
-              await this.saveDraft(res.locals)
+              await this.saveDraft(res.locals as { user: User; draft: DraftWrapper<Draft>; claim: Claim; })
 
               res.redirect(this.buildPostSubmissionUri(path, req, res))
             }

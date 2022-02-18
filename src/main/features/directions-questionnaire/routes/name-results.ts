@@ -25,7 +25,7 @@ function renderPage (res: express.Response, form: Form<HearingLocation>, fallbac
 export default express.Router()
   .get(Paths.hearingLocationResultPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
     try {
-      const searchParam = req.query.name
+      const searchParam = req.query.name as string
 
       if (!searchParam) {
         renderPage(res, new Form<HearingLocation>(new HearingLocation()), true, [], searchParam)
