@@ -10,9 +10,9 @@ import { Frequency } from 'common/frequency/frequency'
 export default express.Router()
   .get(AppPaths.paymentPlanCalculation.uri, (req, res) => {
 
-    const totalAmount: string = req.query['total-amount']
-    const instalmentAmount: string = req.query['instalment-amount']
-    const frequencyInWeeks: string = req.query['frequency-in-weeks']
+    const totalAmount: string = req.query['total-amount'] as string
+    const instalmentAmount: string = req.query['instalment-amount'] as string
+    const frequencyInWeeks: string = req.query['frequency-in-weeks'] as string
 
     const error: string = validate(totalAmount, instalmentAmount, frequencyInWeeks)
 
