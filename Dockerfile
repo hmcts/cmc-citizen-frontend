@@ -1,12 +1,6 @@
 # ---- Base image ----
 FROM hmctspublic.azurecr.io/base/node:12-alpine as base
 
-# Add a new user "civil_user" with user id 8877
-RUN useradd -u 8877 civil_user
-
-# Change to non-root privilege
-USER civil_user
-
 RUN yarn config set proxy "$http_proxy" && yarn config set https-proxy "$https_proxy"
 COPY package.json yarn.lock ./
 RUN yarn install --production \
