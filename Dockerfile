@@ -1,7 +1,7 @@
 # ---- Base image ----
 FROM hmctspublic.azurecr.io/base/node:12-alpine as base
 
-# Add a new user "user_pantheon_ac" with user id 8877
+# Add a new user "civil_user" with user id 8877
 RUN useradd -u 8877 civil_user
 
 # Change to non-root privilege
