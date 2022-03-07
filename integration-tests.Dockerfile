@@ -1,10 +1,6 @@
 FROM hmctspublic.azurecr.io/base/node:12-alpine
 
-# Add a new user "civil_user" with user id 8877
-RUN useradd -u 8877 civil_user
-
-# Change to non-root privilege
-USER civil_user
+USER root
 
 WORKDIR /usr/src/app
 
