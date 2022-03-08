@@ -10,7 +10,7 @@ Scenario('Navigate Payment Page by providing claim details... @smoke-test', { re
 })
 
 // The @citizen-smoke-test tag used for running smoke tests with pre-registered user for help with fees
-Scenario(' Navigate Payment Page by Providing HWF reference...  @smoke-test', { retries: 3 }, async (I: I) => {
+xScenario(' Navigate Payment Page by Providing HWF reference...  @smoke-test', { retries: 3 }, async (I: I) => {
   await claimSteps.makeAHwfClaimAndNavigateUpToPayment(I)
 })
 
