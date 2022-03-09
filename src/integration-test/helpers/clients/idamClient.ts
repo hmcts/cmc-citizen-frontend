@@ -1,7 +1,11 @@
 import { request } from 'integration-test/helpers/clients/base/request'
 import * as url from 'url'
 import * as urlencode from 'urlencode'
+import { Logger } from '@hmcts/nodejs-logging'
+
 const NodeCache = require('node-cache')
+
+const logger = Logger.getLogger('idamClient')
 
 const idamTokenCache = new NodeCache({ stdTTL: 25200, checkperiod: 1800 })
 
@@ -98,8 +102,10 @@ export class IdamClient {
    */
   static async authenticateUser (username: string, password: string = undefined): Promise<string> {
     if (idamTokenCache.get(username) != null) {
+      logger.info('Access token from cache: ', username)
       return idamTokenCache.get(username)
     } else {
+      logger.info('Access token from idam: ', username)
       const accessToken = await IdamClient.getAccessTokenFromIdam(username, password)
       idamTokenCache.set(username, accessToken)
       return accessToken
