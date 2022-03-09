@@ -8,6 +8,8 @@ COPY package.json yarn.lock ./
 RUN yarn install --production \
   && yarn cache clean
 
+USER hmcts
+
 # ---- Build image ----
 FROM base as build
 RUN PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true yarn install
