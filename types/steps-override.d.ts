@@ -1,4 +1,5 @@
 declare const Scenario: (string: string, { retries: number }, callback: ICodeceptCallback) => void;
+declare const xScenario: (string: string, { retries: number }, callback: ICodeceptCallback) => void;
 
 declare namespace CodeceptJS {
   export interface I {
