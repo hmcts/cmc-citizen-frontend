@@ -1,9 +1,9 @@
 import { request } from 'integration-test/helpers/clients/base/request'
 import * as url from 'url'
 import * as urlencode from 'urlencode'
-const NodeCache = require('node-cache');
+const NodeCache = require('node-cache')
 
-const idamTokenCache = new NodeCache({ stdTTL: 25200, checkperiod: 1800 });
+const idamTokenCache = new NodeCache({ stdTTL: 25200, checkperiod: 1800 })
 
 const baseURL: string = process.env.IDAM_URL
 
@@ -89,20 +89,25 @@ export class IdamClient {
     })
   }
 
+  /**
+   * Authenticate user and get idam token from cache/idam
+   *
+   * @param {string} username the username to authenticate
+   * @param password the users password (optional, default will be used if none provided)
+   * @returns {Promise<string>} the users access token
+   */
   static async authenticateUser (username: string, password: string = undefined): Promise<string> {
     if (idamTokenCache.get(username) != null) {
-        console.log('User access token coming from cache', username);
-        return idamTokenCache.get(username);
+      return idamTokenCache.get(username)
     } else {
-        const accessToken = await IdamClient.getAccessTokenFromIdam(username, password);
-        idamTokenCache.set(username, accessToken);
-        console.log('user access token coming from idam', username);
-        return accessToken;
+      const accessToken = await IdamClient.getAccessTokenFromIdam(username, password)
+      idamTokenCache.set(username, accessToken)
+      return accessToken
     }
   }
 
   /**
-   * Authenticate user
+   * Get idam token from Idam
    *
    * @param {string} username the username to authenticate
    * @param password the users password (optional, default will be used if none provided)
