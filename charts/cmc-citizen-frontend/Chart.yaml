@@ -41,7 +41,7 @@ dependencies:
     condition: xui-webapp.enabled
 
   - name: elasticsearch
-    version: 8.0.0
+    version: 7.17.1
     repository: '@hmctspublic'
     condition: elastic.enabled
 
