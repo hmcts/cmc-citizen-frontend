@@ -46,7 +46,7 @@ dependencies:
     condition: elastic.enabled
 
   - name: logstash
-    version: 8.1.0
+    version: 2.4.1
     repository: '@hmctspublic'
     condition: elastic.enabled
 
