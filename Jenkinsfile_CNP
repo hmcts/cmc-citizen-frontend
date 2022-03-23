@@ -72,9 +72,6 @@ withPipeline("nodejs", product, component) {
   before('smoketest:preview'){
     log.info env.TEST_URL
     env.CLAIM_STORE_URL = generateClaimStoreUrl(env.TEST_URL)
-    sh """
-    ./bin/pull-latest-ccd-defintion.sh ${ccdDefBranch}
-    """
   }
 
   before('functionalTest:preview'){
