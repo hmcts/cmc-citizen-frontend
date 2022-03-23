@@ -5,8 +5,6 @@
 String product = "cmc"
 String component = "citizen-frontend"
 
-def ccdDefBranch = "master"
-
 def yarnBuilder = new uk.gov.hmcts.contino.YarnBuilder(this)
 
 def secrets = [
@@ -70,10 +68,8 @@ withPipeline("nodejs", product, component) {
   }
 
   before('smoketest:preview'){
-    log.info env.TEST_URL
-    env.CLAIM_STORE_URL = generateClaimStoreUrl(env.TEST_URL)
-  }
 
+  }
   before('functionalTest:preview'){
     onPR {
       log.info env.TEST_URL
