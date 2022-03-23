@@ -3,7 +3,7 @@
 branchName=$1
 
 #Checkout specific branch pf  cmc ccd definition 
-git clone https://github.com/hmcts/cmc-ccd-domain.git
+git clone git@github.com:hmcts/cmc-ccd-domain.git
 cd cmc-ccd-domain
 
 echo "Switch to ${branchName} branch on cmc-ccd-domain"
