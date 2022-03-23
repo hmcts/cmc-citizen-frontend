@@ -254,24 +254,6 @@ ccd:
       - civilmoneyclaims+judge@gmail.com|CMC|MoneyClaimCase|orderForJudgeReview
       - civilmoneyclaims+la@gmail.com|CMC|MoneyClaimCase|readyForDirections
 
-  ccd-definition-importer:
-    image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.10.24
-    environment:
-      CCD_DEF_CLAIM_STORE_BASE_URL: http://${SERVICE_NAME}-claim-store
-    definitionFilename: cmc-ccd.xlsx
-    userRoles:
-      - citizen
-      - caseworker-cmc
-      - caseworker-cmc-solicitor
-      - caseworker-cmc-systemupdate
-      - letter-holder
-      - caseworker-autotest1
-      - caseworker-cmc-anonymouscitizen
-      - caseworker-cmc-judge
-      - caseworker-cmc-legaladvisor
-      - caseworker-cmc-pcqextractor
-      - payments
-
 elastic:
   enabled: true
 
