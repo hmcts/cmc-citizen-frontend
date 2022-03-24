@@ -70,12 +70,10 @@ withPipeline("nodejs", product, component) {
   }
 
   before('smoketest:preview'){
-    // Part of temporary fix for Elasticsearch bug
-    log.info env.TEST_URL
-    env.CLAIM_STORE_URL = generateClaimStoreUrl(env.TEST_URL)
-    sh """
-    ./bin/pull-latest-ccd-definition.sh ${ccdDefBranch}
-    """
+    onPR {
+      log.info env.TEST_URL
+      env.CLAIM_STORE_URL = generateClaimStoreUrl(env.TEST_URL)
+    }
   }
 
   before('functionalTest:preview'){
