@@ -74,7 +74,7 @@ withPipeline("nodejs", product, component) {
     log.info env.TEST_URL
     env.CLAIM_STORE_URL = generateClaimStoreUrl(env.TEST_URL)
     sh """
-    ./bin/pull-latest-ccd-defintion.sh ${ccdDefBranch}
+    ./bin/pull-latest-ccd-definition.sh ${ccdDefBranch}
     """
   }
 
