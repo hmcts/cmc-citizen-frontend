@@ -15,4 +15,4 @@ cp -r ./cmc-ccd-domain/definition/bin .
 rm -rf ./cmc-ccd-domain
 
 #upload def files to environment
-#./bin/import-bpmn-diagram.sh .
+./bin/import-bpmn-diagram.sh .
