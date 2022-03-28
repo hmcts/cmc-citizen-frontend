@@ -1,9 +1,0 @@
-[
-  {"CaseTypeID": "MoneyClaimCase", "CaseFieldID": "previousServiceCaseReference", "Label": "Claim number", "DisplayOrder": 1},
-  {"CaseTypeID": "MoneyClaimCase", "CaseFieldID": "submitterEmail", "Label": "Claimant Email", "DisplayOrder": 2},
-  {"CaseTypeID": "MoneyClaimCase", "CaseFieldID": "issuedOn", "Label": "Issued date(dd-mm-yyyy)", "DisplayOrder": 3},
-  {"CaseTypeID": "MoneyClaimCase", "CaseFieldID": "evidenceHandled", "Label": "Scanned documents reviewed", "DisplayOrder": 5},
-  {"CaseTypeID": "MoneyClaimCase", "CaseFieldID": "[CASE_REFERENCE]", "Label": "CCD reference", "DisplayOrder": 6},
-  {"CaseTypeID": "MoneyClaimCase", "CaseFieldID": "assignedTo", "Label": "Assigned To", "DisplayOrder": 7},
-  {"CaseTypeID": "MoneyClaimCase", "CaseFieldID": "preferredDQPilotCourt", "Label": "Preferred Court", "DisplayOrder": 8}
-]
