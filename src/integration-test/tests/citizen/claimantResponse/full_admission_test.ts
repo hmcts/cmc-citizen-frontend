@@ -20,7 +20,8 @@ const confirmationPage: ClaimantConfirmation = new ClaimantConfirmation()
 
 let testData
 
-Feature('Claimant Response Fully Admit E2E Tests...')
+// Feature('Claimant Response Fully Admit E2E Tests...')
+// Commented out Temporarily
 
 Before(async (I: I) => {
   testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
@@ -28,20 +29,20 @@ Before(async (I: I) => {
 
 if (process.env.FEATURE_ADMISSIONS === 'true') {
 
-  Scenario('Defendant agreed to pay all of the claim via immediate payment route... @fullAdmission @citizen @admissions', { retries: 3 }, async (I: I) => {
-    testData.paymentOption = PaymentOption.IMMEDIATELY
-    // as defendant
-    helperSteps.finishResponseWithFullAdmission(testData)
-    I.click('Sign out')
-    // as claimant
-    userSteps.login(testData.claimantEmail)
-    claimantResponseSteps.viewClaimFromDashboard(testData.claimRef)
-    I.see(testData.claimRef)
-    I.see('The defendant said they’ll pay you immediately')
-    I.click('My account')
-    I.see(testData.claimRef)
-    I.see('Wait for the defendant to pay you')
-  })
+  // Scenario('Defendant agreed to pay all of the claim via immediate payment route... @fullAdmission @citizen @admissions', { retries: 3 }, async (I: I) => {
+  //   testData.paymentOption = PaymentOption.IMMEDIATELY
+  //   // as defendant
+  //   helperSteps.finishResponseWithFullAdmission(testData)
+  //   I.click('Sign out')
+  //   // as claimant
+  //   userSteps.login(testData.claimantEmail)
+  //   claimantResponseSteps.viewClaimFromDashboard(testData.claimRef)
+  //   I.see(testData.claimRef)
+  //   I.see('The defendant said they’ll pay you immediately')
+  //   I.click('My account')
+  //   I.see(testData.claimRef)
+  //   I.see('Wait for the defendant to pay you')
+  // })
 
   Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and accepting defendants payment method @citizen @admissions', { retries: 3 }, async (I: I) => {
     testData.paymentOption = PaymentOption.BY_SET_DATE
