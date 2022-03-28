@@ -11,8 +11,8 @@ git checkout ${branchName}
 cd ..
 
 #Copy cmc ccd definition folder to citizen frontend which contians def files
-cp -r ./cmc-ccd-domain/definition/bin .
+cp -r ./cmc-ccd-domain/definition/data/sheets ccd-definition
 rm -rf ./cmc-ccd-domain
 
 #upload def files to environment      
-./bin/import-bpmn-diagram.sh .
+./bin/import-ccd-definition.sh .
