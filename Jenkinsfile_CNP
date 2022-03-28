@@ -2,12 +2,18 @@
 
 @Library("Infrastructure")
 
+import uk.gov.hmcts.contino.GithubAPI
+
 String product = "cmc"
 String component = "citizen-frontend"
 
 def ccdDefBranch = "master"
 
 def yarnBuilder = new uk.gov.hmcts.contino.YarnBuilder(this)
+
+def checkForEnableHelmLabel(branch_name) {
+    return new GithubAPI(this).getLabelsbyPattern(branch_name, "enableHelm").contains("enableHelm")
+}
 
 def secrets = [
   'cmc-${env}':
@@ -74,11 +80,18 @@ withPipeline("nodejs", product, component) {
     yarnBuilder.yarn('setup')
   }
 
+  onPR {
+      if (!checkForEnableHelmLabel(env.BRANCH_NAME)) {
+        enableCleanupOfHelmReleaseOnSuccess();
+      }
+  }
+
   before('smoketest:preview'){
     log.info env.TEST_URL
     env.CLAIM_STORE_URL = generateClaimStoreUrl(env.TEST_URL)
     sh """
     eval \$(./bin/variables/load-preview-env-variables.sh ${CHANGE_ID})
+    ./bin/add-roles.sh
     ./bin/pull-latest-ccd-defintion.sh ${ccdDefBranch}
     """
   }
