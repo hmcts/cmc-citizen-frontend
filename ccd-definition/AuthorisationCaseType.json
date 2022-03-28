@@ -1,0 +1,12 @@
+[
+  {"CaseTypeID": "MoneyClaimCase", "UserRole": "caseworker-cmc", "CRUD": "CRUD"},
+  {"CaseTypeID": "MoneyClaimCase", "UserRole": "citizen", "CRUD": "CRUD"},
+  {"CaseTypeID": "MoneyClaimCase", "UserRole": "letter-holder", "CRUD": "CRUD"},
+  {"CaseTypeID": "MoneyClaimCase", "UserRole": "caseworker-cmc-judge", "CRUD": "CRUD"},
+  {"CaseTypeID": "MoneyClaimCase", "UserRole": "caseworker-cmc-legaladvisor", "CRUD": "CRUD"},
+  {"CaseTypeID": "MoneyClaimCase", "UserRole": "caseworker-cmc-anonymouscitizen", "CRUD": "CRUD"},
+  {"CaseTypeID": "MoneyClaimCase", "UserRole": "caseworker-cmc-systemupdate", "CRUD": "CRUD"},
+  {"CaseTypeID": "MoneyClaimCase", "UserRole": "caseworker-cmc-solicitor", "CRUD": "CRUD"},
+  {"CaseTypeID": "MoneyClaimCase", "UserRole": "caseworker-cmc-pcqextractor", "CRUD": "R"}
+
+]

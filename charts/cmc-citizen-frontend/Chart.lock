@@ -1,0 +1,27 @@
+dependencies:
+- name: nodejs
+  repository: https://hmctspublic.azurecr.io/helm/v1/repo/
+  version: 2.4.3
+- name: idam-pr
+  repository: https://hmctspublic.azurecr.io/helm/v1/repo/
+  version: 2.2.6
+- name: cmc-claim-store
+  repository: https://hmctspublic.azurecr.io/helm/v1/repo/
+  version: 4.1.38
+- name: postgresql
+  repository: https://charts.bitnami.com/bitnami
+  version: 10.4.3
+- name: ccd
+  repository: https://hmctspublic.azurecr.io/helm/v1/repo/
+  version: 7.1.0
+- name: xui-webapp
+  repository: https://hmctspublic.azurecr.io/helm/v1/repo/
+  version: 0.2.28
+- name: elasticsearch
+  repository: https://hmctspublic.azurecr.io/helm/v1/repo/
+  version: 7.8.1
+- name: logstash
+  repository: https://hmctspublic.azurecr.io/helm/v1/repo/
+  version: 2.4.1
+digest: sha256:54d8bb3d7d769e2570295ef0e909a827ff34aa4d415c9b00c8ed03e9ebb29505
+generated: "2022-03-28T14:23:15.185432+01:00"

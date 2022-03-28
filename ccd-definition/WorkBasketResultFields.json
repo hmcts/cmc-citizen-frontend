@@ -1,0 +1,10 @@
+[
+  {"CaseTypeID": "MoneyClaimCase", "CaseFieldID": "previousServiceCaseReference", "Label": "Claim number", "ListElementCode": "", "DisplayOrder": 1},
+  {"CaseTypeID": "MoneyClaimCase", "CaseFieldID": "[LAST_MODIFIED_DATE]", "Label": "Last modified date", "ListElementCode": "", "DisplayOrder": 2},
+  {"CaseTypeID": "MoneyClaimCase", "CaseFieldID": "caseName", "Label": "Claimant Vs Defendant", "ListElementCode": "", "DisplayOrder": 3},
+  {"CaseTypeID": "MoneyClaimCase", "CaseFieldID": "[CASE_REFERENCE]", "Label": "Case ID", "ListElementCode": "", "DisplayOrder": 4},
+  {"CaseTypeID": "MoneyClaimCase", "CaseFieldID": "assignedTo", "Label": "Assigned to", "ListElementCode": "", "DisplayOrder": 5},
+  {"CaseTypeID": "MoneyClaimCase", "CaseFieldID": "dateReferredForDirections", "Label": "Date referred for directions", "DisplayOrder": 6, "UserRole":  "caseworker-cmc-judge"},
+  {"CaseTypeID": "MoneyClaimCase", "CaseFieldID": "directionOrder", "Label": "Direction order created on", "ListElementCode": "createdOn", "DisplayOrder": 7},
+  {"CaseTypeID": "MoneyClaimCase", "CaseFieldID": "preferredDQCourt", "Label": "Preferred Court", "DisplayOrder": 8}
+]
