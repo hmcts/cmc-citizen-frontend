@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -eu
+set -ex
 
 dir=$(dirname ${0})
 
@@ -13,14 +13,17 @@ echo "Definition directory: ${definition_input_dir}"
 echo "Definition spreadsheet ${definition_output_file}"
 echo "Additional parameters: ${params}"
 
+
 mkdir -p $(dirname ${definition_output_file})
 
+if [[ ! -e ${definition_output_file} ]]; then
+   touch ${definition_output_file}
+fi
 
 docker run --rm --name json2xlsx \
   -v ${definition_input_dir}:/tmp/ccd-definition \
   -v ${definition_output_file}:/tmp/ccd-definition.xlsx \
-  -e CCD_DEF_CASE_SERVICE_BASE_URL=${CCD_DEF_CASE_SERVICE_BASE_URL:-http://docker.for.mac.localhost:4000} \
-  -e CCD_DEF_GEN_APP_SERVICE_BASE_URL=${CCD_DEF_GEN_APP_SERVICE_BASE_URL:-http://docker.for.mac.localhost:4550} \
+  -e CCD_DEF_CLAIM_STORE_BASE_URL=${CLAIM_STORE_URL:-http://docker.for.mac.localhost:4000} \
   hmctspublic.azurecr.io/ccd/definition-processor:${definition_processor_version} \
   json2xlsx -D /tmp/ccd-definition -o /tmp/ccd-definition.xlsx ${params}
 
