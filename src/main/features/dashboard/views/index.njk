@@ -6,7 +6,9 @@
 {% set heading = 'Your money claims account' %}
 
 {% block content %}
-
+  {% if claimsAsDefendant | length >=160 %}
+      {% include "./banner/banner-claim-threshold.njk" %}
+  {% endif %}
   <div class="grid-row">
     <div class="column-full">
       {% if not claimDraftSaved %}
@@ -113,7 +115,7 @@
           {% endfor %}
           </tbody>
         </table>
-        
+
         {% if paginationArgumentClaimant %}
           <div>
             {{ mojPagination(paginationArgumentClaimant)}}
@@ -180,7 +182,7 @@
             {{ mojPagination(paginationArgumentDefendant)}}
           </div>
         {% endif %}
-        
+
       </div>
     {% endif %}
   </div>
