@@ -1039,6 +1039,9 @@ export function resolveFind (draftType: string, draftOverride?: object): mock.Sc
     case 'orders':
       documentDocument = { ...sampleOrdersDraftObj, ...draftOverride }
       break
+    case 'paidInFull':
+      documentDocument = { ...samplePaidInFullDraftObj, ...draftOverride }
+      break
     default:
       documentDocument = { ...draftOverride }
   }
