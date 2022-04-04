@@ -1,3 +1,4 @@
+/*
 import I = CodeceptJS.I
 
 const I: I = actor()
@@ -23,3 +24,4 @@ export class SelfWitnessPage {
     I.click(buttons.submit)
   }
 }
+*/

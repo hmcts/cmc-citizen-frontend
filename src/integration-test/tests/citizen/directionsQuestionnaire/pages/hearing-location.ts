@@ -1,3 +1,4 @@
+/*
 import I = CodeceptJS.I
 
 const I: I = actor()
@@ -35,3 +36,4 @@ export class HearingLocationPage {
     I.click(buttons.submit)
   }
 }
+*/

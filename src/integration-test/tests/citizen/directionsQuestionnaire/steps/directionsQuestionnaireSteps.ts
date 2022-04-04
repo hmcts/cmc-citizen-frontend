@@ -1,3 +1,4 @@
+/*
 import { SupportRequiredPage } from 'integration-test/tests/citizen/directionsQuestionnaire/pages/support-required'
 import { HearingDatesPage } from 'integration-test/tests/citizen/directionsQuestionnaire/pages/hearing-dates'
 import { HearingLocationPage } from 'integration-test/tests/citizen/directionsQuestionnaire/pages/hearing-location'
@@ -64,3 +65,4 @@ export class DirectionsQuestionnaireSteps {
     }
   }
 }
+*/

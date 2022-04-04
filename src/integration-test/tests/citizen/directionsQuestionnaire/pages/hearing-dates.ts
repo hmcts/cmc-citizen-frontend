@@ -1,4 +1,5 @@
-/* tslint:disable:no-console */
+/*
+/!* tslint:disable:no-console *!/
 
 import I = CodeceptJS.I
 
@@ -44,3 +45,4 @@ export class HearingDatesPage {
     I.click(buttons.submit)
   }
 }
+*/

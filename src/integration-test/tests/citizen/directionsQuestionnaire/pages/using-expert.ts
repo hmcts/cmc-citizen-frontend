@@ -1,3 +1,4 @@
+/*
 import I = CodeceptJS.I
 
 const I: I = actor()
@@ -16,3 +17,4 @@ export class UsingExpertPage {
     I.click(buttons.submitExpertYes)
   }
 }
+*/
