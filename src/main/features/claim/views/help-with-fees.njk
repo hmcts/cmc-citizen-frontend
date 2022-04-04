@@ -22,7 +22,7 @@
           checked = form.valueFor('declared').option === YesNoOption.YES.option
         ) }}
         <div class="form-group panel panel-border-narrow js-hidden" id="declared-yes" aria-hidden="false">
-          {{ textInput('' if form.errorFor('helpWithFeesNumber') else 'Enter the Help With Fees number',
+          {{ textInput('' if form.errorFor('helpWithFeesNumber') else 'Enter the Help With Fees number test',
             'helpWithFeesNumber', form, hint = '') }}
         </div>
 
