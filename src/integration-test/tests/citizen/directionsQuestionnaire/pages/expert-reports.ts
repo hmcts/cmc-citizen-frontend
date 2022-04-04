@@ -1,4 +1,3 @@
-/*
 import I = CodeceptJS.I
 import { DateParser } from 'integration-test/utils/date-parser'
 
@@ -38,4 +37,3 @@ export class ExpertReportsPage {
     I.click(buttons.submit)
   }
 }
-*/

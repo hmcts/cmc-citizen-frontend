@@ -1,4 +1,3 @@
-/*
 import I = CodeceptJS.I
 
 const I: I = actor()
@@ -42,4 +41,3 @@ export class SupportRequiredPage {
     I.click(buttons.submit)
   }
 }
-*/

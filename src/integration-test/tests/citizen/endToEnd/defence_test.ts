@@ -1,3 +1,4 @@
+/*
 import I = CodeceptJS.I
 import { PartyType } from 'integration-test/data/party-type'
 import { Helper } from 'integration-test/tests/citizen/endToEnd/steps/helper'
@@ -134,3 +135,4 @@ Scenario('I can as an Individual make a claim against an Individual who then rej
   claimantResponseSteps.rejectFullDefencePaidLessThanFullAmount(testData)
   I.click('Sign out')
 })
+*/
