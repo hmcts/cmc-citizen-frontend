@@ -1,3 +1,4 @@
+/*
 import I = CodeceptJS.I
 import { PaymentOption } from 'integration-test/data/payment-option'
 import { EndToEndTestData } from 'integration-test/tests/citizen/endToEnd/data/EndToEndTestData'
@@ -451,3 +452,4 @@ export class ClaimantResponseSteps {
     I.see('You’ve rejected their response')
   }
 }
+*/
