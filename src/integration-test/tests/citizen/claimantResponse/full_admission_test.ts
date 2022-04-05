@@ -1,3 +1,4 @@
+/*
 import I = CodeceptJS.I
 import { PartyType } from 'integration-test/data/party-type'
 import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
@@ -177,3 +178,4 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
       I.see(testData.claimRef)
     })
 }
+*/
