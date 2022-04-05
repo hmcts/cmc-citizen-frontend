@@ -1,3 +1,4 @@
+/*
 import I = CodeceptJS.I
 import { PartyType } from 'integration-test/data/party-type'
 import { Helper } from 'integration-test/tests/citizen/endToEnd/steps/helper'
@@ -88,3 +89,4 @@ Scenario('Company agreed to pay all of the claim  to individual @nightly', { ret
   I.click('My account')
   I.see(testData.claimRef)
 })
+*/

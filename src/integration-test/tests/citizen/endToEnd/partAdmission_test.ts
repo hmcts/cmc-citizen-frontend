@@ -1,3 +1,4 @@
+/*
 import I = CodeceptJS.I
 import { createClaimData } from 'integration-test/data/test-data'
 import { PartyType } from 'integration-test/data/party-type'
@@ -51,3 +52,4 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     await defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS)
   })
 }
+*/

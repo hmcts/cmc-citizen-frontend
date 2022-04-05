@@ -1,3 +1,4 @@
+/*
 import I = CodeceptJS.I
 import { PartyType } from 'integration-test/data/party-type'
 import { Helper } from 'integration-test/tests/citizen/endToEnd/steps/helper'
@@ -52,3 +53,4 @@ Scenario('Reject/Dispute all of the claim @citizen', { retries: 3 }, async (I: I
 Scenario('Claimant Stop the claim /Case Stayed E2E @citizen @nightly', { retries: 3 }, async (I: I) => {
   claimantResponseSteps.decideNotToProceed()
 })
+*/

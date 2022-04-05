@@ -1,3 +1,4 @@
+/*
 import I = CodeceptJS.I
 import { createClaimData } from 'integration-test/data/test-data'
 import { PartyType } from 'integration-test/data/party-type'
@@ -45,3 +46,4 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     defenceSteps.makeFullAdmission(defendant, PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS, claimant, false, true)
   })
 }
+*/

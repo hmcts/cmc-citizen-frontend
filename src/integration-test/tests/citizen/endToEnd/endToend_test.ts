@@ -1,3 +1,4 @@
+/*
 import I = CodeceptJS.I
 import { PartyType } from 'integration-test/data/party-type'
 import { Helper } from 'integration-test/tests/citizen/endToEnd/steps/helper'
@@ -32,3 +33,4 @@ Scenario('I can as a Organisation make a claim against an Individual and are abl
   const testData = await EndToEndTestData.prepareData(I, PartyType.ORGANISATION, PartyType.INDIVIDUAL)
   await helperSteps.finishResponse(testData)
 })
+*/
