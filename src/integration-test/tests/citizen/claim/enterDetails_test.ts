@@ -1,3 +1,4 @@
+/*
 import I = CodeceptJS.I
 import { ClaimSteps } from 'integration-test/tests/citizen/claim/steps/claim'
 import { InterestSteps } from 'integration-test/tests/citizen/claim/steps/interest'
@@ -134,3 +135,4 @@ Scenario('I should be redirected to PCQ if "Your details" are filled in while ma
   I.see('Make a money claim')
 
 })
+*/

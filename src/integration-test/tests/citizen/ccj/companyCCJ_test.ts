@@ -1,3 +1,4 @@
+/*
 import I = CodeceptJS.I
 import { PartyType } from 'integration-test/data/party-type'
 import { InterestType } from 'integration-test/data/interest-type'
@@ -33,3 +34,4 @@ Scenario('Company Requested CCJ(Company Vs Sole Trader) @citizen @nightly', { re
   ccjSteps.checkCCJFactsAreTrueAndSubmit(claimantType, claimData.defendants[0], defendantType)
   I.see('County Court Judgment requested', 'h1.bold-large')
 })
+*/
