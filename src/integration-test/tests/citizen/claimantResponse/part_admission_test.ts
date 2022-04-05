@@ -1,3 +1,4 @@
+/*
 import I = CodeceptJS.I
 import { PartyType } from 'integration-test/data/party-type'
 import { DefenceType } from 'integration-test/data/defence-type'
@@ -134,3 +135,4 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.see('You’ve signed a settlement agreement.')
   })
 }
+*/
