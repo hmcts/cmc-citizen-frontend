@@ -7,7 +7,7 @@ import uk.gov.hmcts.contino.GithubAPI
 String product = "cmc"
 String component = "citizen-frontend"
 
-def ccdDefBranch = "master"
+def ccdDefBranch = "CIV-1168_UPDATE_HEARING_DURATION_TYPE"
 
 def yarnBuilder = new uk.gov.hmcts.contino.YarnBuilder(this)
 
