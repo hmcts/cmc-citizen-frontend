@@ -44,7 +44,7 @@
 {% endmacro %}
 
 {% macro _holidayWidget() %}
-  {% if (toDate() < toDate("2022-04-19") and toDate() >= toDate("2022-03-08")) %}
+  {% if (toDate() <= toDate("2022-04-06") and toDate() >= toDate("2022-03-08")) %}
     <h2 class="heading-medium contact-us"> {{ t('Easter opening times')}}</h2>
     <p>{{ t("14 April - 8:00am - 5:00pm")}}</p>
     <p>{{ t("15 April Closed")}}</p>
@@ -53,7 +53,7 @@
     <p>{{ t("18 April Closed")}}</p>
     <p>{{ t("19 April - Normal Times apply")}}</p>
   {% endif %}
-  {% if (toDate() < toDate("2022-06-06") and toDate() >= toDate("2022-03-26")) %}
+  {% if (toDate() <= toDate("2022-04-06") and toDate() >= toDate("2022-03-26")) %}
     <h2 class="heading-medium contact-us"> {{ t('Platinum Jubilee opening times')}}</h2>
     <p>{{ t("1 June - 8:30am - 5:00pm")}}</p>
     <p>{{ t("2 June Closed")}}</p>
