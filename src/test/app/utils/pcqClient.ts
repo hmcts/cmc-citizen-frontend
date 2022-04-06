@@ -6,7 +6,7 @@ import * as config from 'config'
 
 describe('PCQ Client', () => {
 
-  describe('is Eligible to for PCQ questionnaire', () => {
+  describe.skip('is Eligible to for PCQ questionnaire', () => {
     it('Should pass eligible (Returns true) ', () => {
       const pcqID = undefined
       const partyType = 'individual'
