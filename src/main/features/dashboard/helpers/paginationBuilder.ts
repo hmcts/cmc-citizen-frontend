@@ -82,12 +82,10 @@ function formItemswithHyperlink (hyperlinkText: string, selectedPageNo: number, 
     }
   }
 
-  let paginationToDisplay = {
+  return {
     results: results,
     previous: previousArrow,
     next: nextArrow,
     items: pagesItems
   }
-
-  return paginationToDisplay
 }
