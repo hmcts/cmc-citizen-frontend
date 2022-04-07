@@ -1,5 +1,5 @@
-import {AllowanceItem} from 'common/allowances/allowanceItem'
-import {MomentFactory} from 'shared/momentFactory'
+import { AllowanceItem } from 'common/allowances/allowanceItem'
+import { MomentFactory } from 'shared/momentFactory'
 import * as moment from 'moment'
 
 export enum DependantAllowanceType {
