@@ -96,8 +96,8 @@ async function retrieveRedirectForLandingPage (req: express.Request, res: expres
     return ClaimPaths.taskListPage.uri
   }
   const user: User = res.locals.user
-  let noClaimIssued: boolean = true
-  let noClaimReceived: boolean = true
+  let noClaimIssued: boolean
+  let noClaimReceived: boolean
   if (await featureToggles.isDashboardPaginationEnabled()) {
     logger.info('Receiver: Dashboard feature is enabled')
     noClaimIssued = (await claimStoreClient.retrieveByClaimantId(user, 1)).length === 0

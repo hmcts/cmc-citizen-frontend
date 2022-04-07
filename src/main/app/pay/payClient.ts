@@ -1,6 +1,6 @@
 import { ServiceAuthToken } from 'idam/serviceAuthToken'
 import { User } from 'idam/user'
-import { plainToClass } from 'class-transformer'
+import { plainToInstance } from 'class-transformer'
 import { request } from 'client/request'
 import { checkDefined, checkNotEmpty } from 'shared/preconditions'
 import * as config from 'config'
@@ -22,7 +22,6 @@ export interface PayClient {
    * Creates a payment within Reform Payment Hub
    *
    * @param user - user who make a call
-   * @param caseReference - reference number of the case associated with the payment
    * @param externalId - externalId of claim
    * @param fees - fees array used to calculate total fee amount
    * @param returnURL - the url the user should be redirected to
@@ -65,7 +64,7 @@ export class GovPayClient implements PayClient {
     const options = {
       method: 'POST',
       uri: baseURL,
-      body: this.preparePaymentRequest(externalId, fees),
+      body: GovPayClient.preparePaymentRequest(externalId, fees),
       headers: {
         Authorization: `Bearer ${user.bearerToken}`,
         ServiceAuthorization: `Bearer ${this.serviceAuthToken.bearerToken}`,
@@ -91,7 +90,7 @@ export class GovPayClient implements PayClient {
     }
 
     return request(options).then(function (response) {
-      return plainToClass(PaymentRetrieveResponse, response)
+      return plainToInstance(PaymentRetrieveResponse, response)
     }).catch(function (err) {
       if (err.statusCode === HttpStatus.NOT_FOUND) {
         return undefined
@@ -107,7 +106,7 @@ export class GovPayClient implements PayClient {
     checkNotEmpty(caseNumber, 'Case Number is required')
     return request.patch({
       uri: `${paymentURL}/${paymentReference}`,
-      body: this.preparePaymentUpdateRequest(caseReference, caseNumber),
+      body: GovPayClient.preparePaymentUpdateRequest(caseReference, caseNumber),
       headers: {
         Authorization: `Bearer ${user.bearerToken}`,
         ServiceAuthorization: `Bearer ${this.serviceAuthToken.bearerToken}`
@@ -116,14 +115,14 @@ export class GovPayClient implements PayClient {
       .catch(() => Promise.reject())
   }
 
-  private preparePaymentUpdateRequest (caseReference: string, caseNumber: string): object {
+  private static preparePaymentUpdateRequest (caseReference: string, caseNumber: string): object {
     return {
       case_reference: caseReference,
       ccd_case_number: caseNumber
     }
   }
 
-  private preparePaymentRequest (externalId: string, fees: Fee[]): object {
+  private static preparePaymentRequest (externalId: string, fees: Fee[]): object {
     return {
       case_reference: externalId,
       ccd_case_number: 'UNKNOWN',

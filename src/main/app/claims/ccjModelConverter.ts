@@ -1,21 +1,21 @@
-import { DraftCCJ } from 'ccj/draft/draftCCJ'
-import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
-import { RepaymentPlan as RepaymentPlanForm } from 'ccj/form/models/repaymentPlan'
-import { CCJPaymentOption, PaymentType } from 'ccj/form/models/ccjPaymentOption'
-import { RepaymentPlan } from 'claims/models/repaymentPlan'
-import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
-import { Moment } from 'moment'
-import { StatementOfTruth } from 'claims/models/statementOfTruth'
-import { PaymentOption } from 'claims/models/paymentOption'
-import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
-import { Claim } from 'claims/models/claim'
-import { RepaymentPlan as CoreRepaymentPlan } from 'claims/models/response/core/repaymentPlan'
-import { calculateMonthIncrement } from 'common/calculate-month-increment/calculateMonthIncrement'
-import { MomentFactory } from 'shared/momentFactory'
-import { LocalDate } from 'forms/models/localDate'
-import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
-import { Draft as DraftWrapper } from '@hmcts/draft-store-client'
-import { Offer } from 'claims/models/offer'
+import {DraftCCJ} from 'ccj/draft/draftCCJ'
+import {PaidAmountOption} from 'ccj/form/models/yesNoOption'
+import {RepaymentPlan as RepaymentPlanForm} from 'ccj/form/models/repaymentPlan'
+import {CCJPaymentOption, PaymentType} from 'ccj/form/models/ccjPaymentOption'
+import {RepaymentPlan} from 'claims/models/repaymentPlan'
+import {CountyCourtJudgment} from 'claims/models/countyCourtJudgment'
+import {Moment} from 'moment'
+import {StatementOfTruth} from 'claims/models/statementOfTruth'
+import {PaymentOption} from 'claims/models/paymentOption'
+import {CountyCourtJudgmentType} from 'claims/models/countyCourtJudgmentType'
+import {Claim} from 'claims/models/claim'
+import {RepaymentPlan as CoreRepaymentPlan} from 'claims/models/response/core/repaymentPlan'
+import {calculateMonthIncrement} from 'common/calculate-month-increment/calculateMonthIncrement'
+import {MomentFactory} from 'shared/momentFactory'
+import {LocalDate} from 'forms/models/localDate'
+import {PaymentSchedule} from 'ccj/form/models/paymentSchedule'
+import {Draft as DraftWrapper} from '@hmcts/draft-store-client'
+import {Offer} from 'claims/models/offer'
 
 function convertRepaymentPlan (repaymentPlan: RepaymentPlanForm): RepaymentPlan {
 
@@ -63,12 +63,11 @@ export function getRepaymentPlanForm (claim: Claim, draft: DraftWrapper<DraftCCJ
       const paymentSchedule: PaymentSchedule = PaymentSchedule.of(coreRepaymentPlan.paymentSchedule)
       const alreadyPaid: number = (draft.document.paidAmount.amount || 0)
       const remainingAmount: number = claim.totalAmountTillToday - alreadyPaid
-      const repaymentPlanForm: RepaymentPlanForm = new RepaymentPlanForm(
+      return new RepaymentPlanForm(
         remainingAmount,
         coreRepaymentPlan.instalmentAmount,
         new LocalDate(firstPaymentDate.year(), firstPaymentDate.month() + 1, firstPaymentDate.date()),
         paymentSchedule)
-      return repaymentPlanForm
     }
   }
   return draft.document.repaymentPlan

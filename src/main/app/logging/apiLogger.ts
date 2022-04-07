@@ -27,7 +27,7 @@ export class ApiLogger {
 
   _buildResponseEntry (responseData): string {
     return `API: Response ${responseData.responseCode} from ${responseData.uri} ` +
-      ((responseData.responseBody && this.isDebugLevel()) ? `| Body: ${this._stringifyObject(responseData.responseBody)} ` : '') +
+      ((responseData.responseBody && ApiLogger.isDebugLevel()) ? `| Body: ${this._stringifyObject(responseData.responseBody)} ` : '') +
       ((responseData.error) ? `| Error: ${this._stringifyObject(responseData.error)} ` : '')
   }
 
@@ -53,11 +53,11 @@ export class ApiLogger {
     }
   }
 
-  private isDebugLevel (): boolean {
-    return this.resolveLoggingLevel() === 'DEBUG' || this.resolveLoggingLevel() === 'SILLY'
+  private static isDebugLevel (): boolean {
+    return ApiLogger.resolveLoggingLevel() === 'DEBUG' || ApiLogger.resolveLoggingLevel() === 'SILLY'
   }
 
-  private resolveLoggingLevel (): string {
+  private static resolveLoggingLevel (): string {
     const currentLevel = process.env.LOG_LEVEL || 'INFO'
     return currentLevel.toUpperCase()
   }

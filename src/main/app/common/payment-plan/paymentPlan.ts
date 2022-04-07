@@ -7,7 +7,7 @@ import { Frequency } from 'common/frequency/frequency'
 import { FrequencyConversions } from 'common/frequency/frequencyConversions'
 
 export class PaymentPlan {
-  private numberOfInstalments: number
+  private readonly numberOfInstalments: number
 
   constructor (
     public totalAmount: number,
@@ -29,13 +29,13 @@ export class PaymentPlan {
     const paymentLength: Array<string> = []
     switch (this.frequency) {
       case (Frequency.WEEKLY):
-        paymentLength.push(this.pluralize(this.numberOfInstalments, 'week'))
+        paymentLength.push(PaymentPlan.pluralize(this.numberOfInstalments, 'week'))
         break
       case (Frequency.TWO_WEEKLY):
-        paymentLength.push(this.pluralize(2 * this.numberOfInstalments, 'week'))
+        paymentLength.push(PaymentPlan.pluralize(2 * this.numberOfInstalments, 'week'))
         break
       default:
-        paymentLength.push(this.pluralize(this.numberOfInstalments, 'month'))
+        paymentLength.push(PaymentPlan.pluralize(this.numberOfInstalments, 'month'))
     }
     return paymentLength.join(' ')
   }
@@ -79,7 +79,7 @@ export class PaymentPlan {
     return PaymentPlan.create(this.totalAmount, monthlyInstalmentAmount, frequency, paymentPlanStartDate)
   }
 
-  private pluralize (num: number, word: string) {
+  private static pluralize (num: number, word: string) {
     const plural: string = num < 2 ? '' : 's'
     return `${num} ${word}${plural}`
   }

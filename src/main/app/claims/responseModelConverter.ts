@@ -359,6 +359,11 @@ export class ResponseModelConverter {
         }
         break
     }
+
+    if (party === undefined) {
+      return undefined
+    }
+
     party.address = new Address().deserialize(defendant.partyDetails.address)
     if (defendant.partyDetails.hasCorrespondenceAddress) {
       party.correspondenceAddress = new Address().deserialize(defendant.partyDetails.correspondenceAddress)

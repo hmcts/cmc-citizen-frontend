@@ -1,5 +1,5 @@
-import { AllowanceItem } from 'common/allowances/allowanceItem'
-import { MomentFactory } from 'shared/momentFactory'
+import {AllowanceItem} from 'common/allowances/allowanceItem'
+import {MomentFactory} from 'shared/momentFactory'
 import * as moment from 'moment'
 
 export enum DependantAllowanceType {
@@ -44,8 +44,7 @@ export class Allowances {
   }
 
   private deserializeRows (rows: any): Allowance[] {
-    let allowanceRows: Allowance[] = rows.map(row => new Allowance().deserialize(row))
-    return allowanceRows
+    return rows.map(row => new Allowance().deserialize(row))
   }
 
 }
