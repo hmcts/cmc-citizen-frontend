@@ -29,7 +29,7 @@ const pagePath = PartAdmissionPaths.howMuchDoYouOwePage.evaluateUri({ externalId
 const redirectPath = Paths.taskListPage.evaluateUri({ externalId: externalId })
 
 const validFormData = { amount: 100, totalAmount: claimStoreServiceMock.sampleClaimObj.totalAmountTillToday }
-const header: string = 'How much money do you admit you owe?'
+const header = 'How much money do you admit you owe?'
 
 describe('Defendant: partial admission - ' + header, () => {
 

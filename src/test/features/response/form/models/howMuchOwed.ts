@@ -24,8 +24,8 @@ describe('HowMuchOwed', () => {
     })
 
     it('should return an instance from given object', () => {
-      const description: string = 'I do not owe full amount'
-      const amount: number = 300
+      const description = 'I do not owe full amount'
+      const amount = 300
       const result: HowMuchOwed = new HowMuchOwed().deserialize({
         amount: amount,
         text: description

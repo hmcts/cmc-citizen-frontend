@@ -6,7 +6,7 @@ export function localDateFrom (momentObject: moment.Moment): LocalDate {
 }
 
 export function daysFromNow (adjustment: number): LocalDate {
-  let mDate: moment.Moment = moment()
+  const mDate: moment.Moment = moment()
   mDate.add(adjustment, 'days')
   return LocalDate.fromMoment(mDate)
 }

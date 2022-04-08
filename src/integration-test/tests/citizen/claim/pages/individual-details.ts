@@ -62,7 +62,7 @@ export class IndividualDetailsPage {
     I.selectOption(fields.address.selectAddressList, postcodeLookupQuery.address)
   }
 
-  enterAddress (address: Address, clickManualLink: boolean = true): void {
+  enterAddress (address: Address, clickManualLink = true): void {
     if (clickManualLink) {
       I.click(fields.address.enterManually)
     }

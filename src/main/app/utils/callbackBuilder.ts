@@ -11,7 +11,7 @@ export function buildURL (req: express.Request, path: string): string {
   const protocol = 'https://'
   const host = req.headers.host
 
-  const baseURL: string = `${protocol}${host}`
+  const baseURL = `${protocol}${host}`
   if (path.startsWith('/')) {
     return baseURL + path
   } else {

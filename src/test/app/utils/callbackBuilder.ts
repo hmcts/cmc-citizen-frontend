@@ -10,7 +10,7 @@ describe('CallbackBuilder', () => {
       const expected = `https://localhost/${path}`
       req.secure = true
       req.headers = { host: 'localhost' }
-      let url = buildURL(req, path)
+      const url = buildURL(req, path)
 
       expect(url.length).gt(0)
       expect(url).to.eq(expected)
@@ -22,7 +22,7 @@ describe('CallbackBuilder', () => {
       req.secure = false
       req.headers = { host: 'localhost' }
 
-      let url = buildURL(req, path)
+      const url = buildURL(req, path)
       expect(url.length).gt(0)
       expect(url).to.eq(expected)
     })

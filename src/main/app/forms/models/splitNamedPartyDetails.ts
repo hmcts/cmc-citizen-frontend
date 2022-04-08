@@ -37,7 +37,7 @@ export class SplitNamedPartyDetails extends PartyDetails {
     if (input == null) {
       return input
     }
-    let deserialized = new SplitNamedPartyDetails()
+    const deserialized = new SplitNamedPartyDetails()
     Object.assign(deserialized, PartyDetails.fromObject(input))
     if (input.title) {
       deserialized.title = input.title

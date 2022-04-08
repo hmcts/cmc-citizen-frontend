@@ -229,7 +229,7 @@ describe('Directions Questionnaire - Hearing exceptional circumstances page', ()
     attachDefaultHooks(app)
 
     describe('on GET', () => {
-      const method: string = 'get'
+      const method = 'get'
       checkAuthorizationGuards(app, method, pagePath)
       checkAccessGuards(app, method)
 
@@ -270,7 +270,7 @@ describe('Directions Questionnaire - Hearing exceptional circumstances page', ()
     })
 
     describe('on POST', () => {
-      const method: string = 'post'
+      const method = 'post'
       checkAuthorizationGuards(app, method, pagePath)
       checkAccessGuards(app, method)
 

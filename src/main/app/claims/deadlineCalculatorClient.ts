@@ -6,7 +6,7 @@ import { MomentFactory } from 'shared/momentFactory'
 
 export class DeadlineCalculatorClient {
   static calculatePostponedDeadline (issueDate: Moment): Promise<Moment> {
-    const url: string = `${claimApiBaseUrl}/deadline`
+    const url = `${claimApiBaseUrl}/deadline`
 
     const from: string = MomentFormatter.formatDate(issueDate)
 

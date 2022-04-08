@@ -25,7 +25,7 @@ import {
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = ResponsePaths.defendantDateOfBirthPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
-const expectedText: string = 'Enter your date of birth'
+const expectedText = 'Enter your date of birth'
 
 describe('Defendant user details: your date of birth page', () => {
   attachDefaultHooks(app)

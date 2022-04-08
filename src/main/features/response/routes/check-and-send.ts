@@ -161,7 +161,7 @@ export default express.Router()
        if (await featureToggles.isPcqEnabled()) {
          const isEligible = await PcqClient.isEligibleRedirect(draft.document.defendantDetails.partyDetails.pcqId,draft.document.defendantDetails.partyDetails.type)
          if (draft.document.defendantDetails.partyDetails.pcqId === undefined) {
-           let pcqID = uuid()
+           const pcqID = uuid()
            draft.document.defendantDetails.partyDetails.pcqId = pcqID
            new DraftService().save(draft, user.bearerToken)
            if (isEligible) {

@@ -20,7 +20,7 @@ describe('WhenDidYouPay', () => {
     })
 
     it('should return an instance from given object', () => {
-      const description: string = 'Paid by cheque'
+      const description = 'Paid by cheque'
       const result: WhenDidYouPay = new WhenDidYouPay().deserialize({
         text: description
       })

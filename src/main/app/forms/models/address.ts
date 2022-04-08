@@ -103,9 +103,9 @@ export class Address implements CompletableTask {
                line3?: string,
                city?: string,
                postcode?: string,
-               addressVisible: boolean = true,
-               addressSelectorVisible: boolean = false,
-               enterManually: boolean = false) {
+               addressVisible = true,
+               addressSelectorVisible = false,
+               enterManually = false) {
     this.line1 = line1
     this.line2 = line2
     this.line3 = line3

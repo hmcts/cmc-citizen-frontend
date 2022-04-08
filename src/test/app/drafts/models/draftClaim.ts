@@ -24,7 +24,7 @@ describe('DraftClaim', () => {
   describe('constructor', () => {
 
     it('should have instance fields initialised where possible', () => {
-      let draftClaim = new DraftClaim()
+      const draftClaim = new DraftClaim()
       expect(draftClaim.claimant).to.be.instanceof(Claimant)
       expect(draftClaim.defendant).to.be.instanceof(Defendant)
     })

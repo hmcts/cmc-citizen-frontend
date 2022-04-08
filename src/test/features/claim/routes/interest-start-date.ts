@@ -14,7 +14,7 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pageContent: string = 'Enter the date you want to claim interest from'
+const pageContent = 'Enter the date you want to claim interest from'
 const pagePath: string = ClaimPaths.interestStartDatePage.uri
 
 describe('Claim issue: interest start date page', () => {

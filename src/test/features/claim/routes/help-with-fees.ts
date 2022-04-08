@@ -13,7 +13,7 @@ import { YesNoOption } from 'models/yesNoOption'
 const pagePath: string = ClaimPaths.helpWithFeesPage.uri
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pageContent: string = 'Do you have a Help With Fees reference number?'
+const pageContent = 'Do you have a Help With Fees reference number?'
 
 describe('Claim issue: help with fees page', () => {
   attachDefaultHooks(app)

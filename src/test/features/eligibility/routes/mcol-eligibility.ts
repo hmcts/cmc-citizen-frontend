@@ -8,7 +8,7 @@ import { Paths } from 'eligibility/paths'
 import { app } from 'main/app'
 
 const pagePath: string = Paths.mcolEligibilityPage.uri
-const expectedTextOnPage: string = 'You can use the existing MCOL service to claim'
+const expectedTextOnPage = 'You can use the existing MCOL service to claim'
 
 describe('Claim eligibility: Mcol eligibility', () => {
   attachDefaultHooks(app)

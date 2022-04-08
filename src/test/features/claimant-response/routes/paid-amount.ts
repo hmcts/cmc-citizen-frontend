@@ -28,7 +28,7 @@ const validFormData = {
   claimedAmount: 100
 }
 
-const heading: string = 'Has the defendant paid some of the amount owed?'
+const heading = 'Has the defendant paid some of the amount owed?'
 
 describe('Claimant Response - paid amount page', () => {
   attachDefaultHooks(app)

@@ -5,7 +5,7 @@ import { MadeBy } from 'claims/models/madeBy'
 import { StatementType } from 'offer/form/models/statementType'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
-const externalIdPattern: string = '[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'
+const externalIdPattern = '[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'
 
 export const sampleSettlementAgreementOffer = {
   partyStatements: [
@@ -79,7 +79,7 @@ export function resolveRejectSettlementAgreement () {
     .reply(HttpStatus.CREATED)
 }
 
-export function rejectRejectSettlementAgreement (reason: string = 'HTTP Error') {
+export function rejectRejectSettlementAgreement (reason = 'HTTP Error') {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp(`/${externalIdPattern}/settlement-agreement/reject`))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)

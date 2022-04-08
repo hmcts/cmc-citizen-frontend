@@ -40,12 +40,12 @@ export class DraftClaim extends DraftDocument {
   interestHowMuch: InterestHowMuch = new InterestHowMuch()
   helpWithFees: HelpWithFees = new HelpWithFees()
   reason: Reason = new Reason()
-  readResolveDispute: boolean = false
-  readCompletingClaim: boolean = false
+  readResolveDispute = false
+  readCompletingClaim = false
   qualifiedStatementOfTruth?: QualifiedStatementOfTruth
   timeline: ClaimantTimeline = new ClaimantTimeline()
   evidence: Evidence = new Evidence()
-  feeAmountInPennies: number = 0
+  feeAmountInPennies = 0
   breathingSpace: BreathingSpace = new BreathingSpace()
   feeCode?: string
 

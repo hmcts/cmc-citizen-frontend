@@ -38,7 +38,7 @@ export class DashboardFeature {
   enableFor (app: express.Express) {
     if (app.settings.nunjucksEnv) {
       if (app.settings.nunjucksEnv.filters) {
-        app.settings.nunjucksEnv.filters.renderPaymentSchedule = (value: string, adverbial: boolean = false) => {
+        app.settings.nunjucksEnv.filters.renderPaymentSchedule = (value: string, adverbial = false) => {
           switch (value) {
             case PaymentSchedule.EACH_WEEK:
               return adverbial ? 'Weekly' : 'Every week'

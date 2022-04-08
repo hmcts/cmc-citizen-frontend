@@ -30,7 +30,7 @@ function renderView (form: Form<BreathingSpaceLiftDate>, res: express.Response, 
 export default express.Router()
     .get(Paths.bsLiftPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const { externalId } = req.params
-      let draft: Draft<DraftClaim> = res.locals.Draft
+      const draft: Draft<DraftClaim> = res.locals.Draft
       breathingSpaceExternalId = externalId
       if (draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate === undefined) {
         const claim = externalId !== undefined ? await claimStoreClient.retrieveByExternalId(externalId, res.locals.user) : undefined
@@ -39,9 +39,9 @@ export default express.Router()
         await new DraftService().save(draft, res.locals.user.bearerToken)
       }
       if (draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate) {
-        let bsLiftDate: Date = new Date(draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate.toLocaleString())
-        let bsLiftDateSplit = bsLiftDate.toLocaleDateString().split('/')
-        let bsLiftDateBy: LocalDate = new LocalDate(parseInt(bsLiftDateSplit[2], 10),parseInt(bsLiftDateSplit[0], 10), parseInt(bsLiftDateSplit[1], 10))
+        const bsLiftDate: Date = new Date(draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate.toLocaleString())
+        const bsLiftDateSplit = bsLiftDate.toLocaleDateString().split('/')
+        const bsLiftDateBy: LocalDate = new LocalDate(parseInt(bsLiftDateSplit[2], 10),parseInt(bsLiftDateSplit[0], 10), parseInt(bsLiftDateSplit[1], 10))
         renderView(new Form(new BreathingSpaceLiftDate(bsLiftDateBy)), res, next)
       } else {
         renderView(new Form(new BreathingSpaceLiftDate()), res, next)
@@ -55,7 +55,7 @@ export default express.Router()
           if ((form.model.respiteLiftDate.day || form.model.respiteLiftDate.month || form.model.respiteLiftDate.year) && form.hasErrors()) {
             renderView(form, res, next)
           } else {
-            let draft: Draft<DraftClaim> = res.locals.Draft
+            const draft: Draft<DraftClaim> = res.locals.Draft
             const user: User = res.locals.user
             if (draft.document.breathingSpace !== undefined) {
               draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate = MomentFactory.parse(form.model.respiteLiftDate.toMoment().format())

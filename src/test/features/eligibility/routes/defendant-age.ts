@@ -14,7 +14,7 @@ import { DefendantAgeOption } from 'eligibility/model/defendantAgeOption'
 
 const pagePath: string = Paths.defendantAgePage.uri
 const pageRedirect: string = Paths.over18Page.uri
-const expectedTextOnPage: string = 'Do you believe the person you’re claiming against is 18 or over?'
+const expectedTextOnPage = 'Do you believe the person you’re claiming against is 18 or over?'
 const notEligibleReason: string = NotEligibleReason.UNDER_18_DEFENDANT
 
 describe('Claim eligibility: over 18 defendant page', () => {

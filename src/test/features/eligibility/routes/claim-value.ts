@@ -14,7 +14,7 @@ import { ClaimValue } from 'eligibility/model/claimValue'
 
 const pagePath: string = Paths.claimValuePage.uri
 const pageRedirect: string = Paths.singleDefendantPage.uri
-const expectedTextOnPage: string = 'Total amount you’re claiming'
+const expectedTextOnPage = 'Total amount you’re claiming'
 const notEligibleReason: string = NotEligibleReason.CLAIM_VALUE_NOT_KNOWN
 
 describe('Claim eligibility: claim value page', () => {

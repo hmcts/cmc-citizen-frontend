@@ -14,7 +14,7 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pageContent: string = 'What is the total interest for your claim?'
+const pageContent = 'What is the total interest for your claim?'
 const pagePath: string = ClaimPaths.interestTotalPage.uri
 
 describe('Claim issue: interest total page', () => {

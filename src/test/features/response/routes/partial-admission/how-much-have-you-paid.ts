@@ -25,7 +25,7 @@ const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = PartAdmissionPaths.howMuchHaveYouPaidPage.evaluateUri({ externalId: externalId })
 
 const validFormData = { amount: 100, date: { day: 1, month: 1, year: 1990 }, text: 'aaa' }
-const header: string = 'How much have you paid the claimant?'
+const header = 'How much have you paid the claimant?'
 
 describe('Defendant: partial admission - ' + header, () => {
 

@@ -15,7 +15,7 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const heading: string = 'Enter organisation details'
+const heading = 'Enter organisation details'
 const input = {
   name: 'ABC Ltd',
   type: 'organisation',

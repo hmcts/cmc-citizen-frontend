@@ -35,7 +35,7 @@ export function resolveInvalidateSession (token: string) {
     .reply(HttpStatus.OK)
 }
 
-export function rejectInvalidateSession (token: string = defaultAuthToken, reason: string = 'HTTP error') {
+export function rejectInvalidateSession (token: string = defaultAuthToken, reason = 'HTTP error') {
   mock(apiServiceBaseURL)
     .delete(`/session/${token}`)
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
@@ -53,7 +53,7 @@ export function resolveRetrieveServiceToken (token: string = defaultAuthToken) {
     .reply(HttpStatus.OK, token)
 }
 
-export function rejectRetrieveServiceToken (reason: string = 'HTTP error') {
+export function rejectRetrieveServiceToken (reason = 'HTTP error') {
   return mock(s2sAuthServiceBaseURL)
     .post('/lease')
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)

@@ -23,7 +23,7 @@ import {
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = ResponsePaths.defendantPhonePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
-const headerText: string = 'Enter a phone number (optional)'
+const headerText = 'Enter a phone number (optional)'
 
 describe('Defendant user details: your phone page', () => {
   attachDefaultHooks(app)

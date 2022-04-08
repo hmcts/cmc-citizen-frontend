@@ -57,7 +57,7 @@ describe('WhyExpertIsNeeded', () => {
     })
 
     it('should return instance of whyExpertIsNeeded when passed WhyExpertIsNeeded object', () => {
-      const explanation: string = 'Building needs inspecting'
+      const explanation = 'Building needs inspecting'
 
       expect(WhyExpertIsNeeded.fromObject({ explanation })).to.be.instanceOf(WhyExpertIsNeeded)
     })

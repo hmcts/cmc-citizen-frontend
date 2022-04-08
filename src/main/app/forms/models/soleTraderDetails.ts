@@ -20,7 +20,7 @@ export class SoleTraderDetails extends SplitNamedPartyDetails {
     if (input == null) {
       return input
     }
-    let deserialized = new SoleTraderDetails()
+    const deserialized = new SoleTraderDetails()
     Object.assign(deserialized, SplitNamedPartyDetails.fromObject(input))
     deserialized.businessName = input.businessName
     deserialized.type = PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value

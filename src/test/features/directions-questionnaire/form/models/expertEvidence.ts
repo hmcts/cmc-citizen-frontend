@@ -56,7 +56,7 @@ describe('ExpertEvidence', () => {
   describe('from object', () => {
     it('should return instance of expert evidence when passed ExpertEvidence object - Yes', () => {
       const yes: YesNoOption = YesNoOption.YES
-      const whatToExamine: string = 'bank statements'
+      const whatToExamine = 'bank statements'
 
       expect(ExpertEvidence.fromObject({ yes, whatToExamine })).to.be.instanceOf(ExpertEvidence)
     })

@@ -15,7 +15,7 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { InterestTypeOption } from 'claim/form/models/interestType'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pageContent: string = 'How do you want to claim interest?'
+const pageContent = 'How do you want to claim interest?'
 const pagePath: string = ClaimPaths.interestTypePage.uri
 
 describe('Claim issue: interest type page', () => {

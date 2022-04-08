@@ -23,7 +23,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.paymentPlanPage.evaluateUri({ externalId: externalId })
 
-const heading: string = 'Suggest instalments for the defendant'
+const heading = 'Suggest instalments for the defendant'
 
 const draftOverride: object = {
   alternatePaymentMethod: {

@@ -203,7 +203,7 @@ describe('Evidence', () => {
   })
 })
 
-function item (type: string = EvidenceType.OTHER.value, desc: string = 'OK'): object {
+function item (type: string = EvidenceType.OTHER.value, desc = 'OK'): object {
   return { type: { value: type }, description: desc }
 }
 

@@ -35,7 +35,7 @@ export class StatementOfMeansCalculations {
     const totalMonthlyIncome: number = this.calculateTotalMonthlyIncome(statementOfMeans) || 0
     const totalMonthlyExpense: number = this.calculateTotalMonthlyExpense(statementOfMeans) || 0
 
-    let totalMonthlyAllowance: number = 0
+    let totalMonthlyAllowance = 0
     if (this.allowanceCalculations) {
       totalMonthlyAllowance = defendantType === PartyType.INDIVIDUAL.value ?
         this.calculateTotalMonthlyAllowances(statementOfMeans, defendantAge) || 0 : 0

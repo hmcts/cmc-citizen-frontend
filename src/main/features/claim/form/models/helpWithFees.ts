@@ -5,7 +5,7 @@ import { YesNoOption } from 'models/yesNoOption'
 import { CompletableTask } from 'models/task'
 
 class ValidationErrors {
-  static HELP_WITH_FEES_NUMBER_REQUIRED: string = 'Enter your Help With Fees reference number'
+  static HELP_WITH_FEES_NUMBER_REQUIRED = 'Enter your Help With Fees reference number'
 }
 
 export class HelpWithFees implements CompletableTask {

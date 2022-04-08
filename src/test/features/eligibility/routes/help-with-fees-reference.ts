@@ -13,7 +13,7 @@ import { YesNoOption } from 'models/yesNoOption'
 
 const pagePath: string = Paths.helpWithFeesReferencePage.uri
 const pageRedirect: string = Paths.hwfEligibleReferencePage.uri
-const expectedTextOnPage: string = 'Do you have a Help With Fees reference number?'
+const expectedTextOnPage = 'Do you have a Help With Fees reference number?'
 
 describe('Claim eligibility: help with fees reference number page', () => {
   attachDefaultHooks(app)

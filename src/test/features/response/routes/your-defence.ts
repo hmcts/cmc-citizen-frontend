@@ -23,7 +23,7 @@ import {
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const expectedText: string = 'Why do you disagree with the claim'
+const expectedText = 'Why do you disagree with the claim'
 
 const pagePath = ResponsePaths.defencePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 describe('Defendant response: defence page', () => {

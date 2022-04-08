@@ -5,7 +5,7 @@ export class FeaturesBuilder {
 
   async features (amount: number): Promise<string> {
 
-    let features = []
+    const features = []
     for (const feature of FEATURES) {
       if (feature.validForAmount(amount)) {
         features.push(feature.feature)

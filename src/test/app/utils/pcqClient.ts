@@ -10,7 +10,7 @@ describe('PCQ Client', () => {
     it('Should pass eligible (Returns true) ', () => {
       const pcqID = undefined
       const partyType = 'individual'
-      let eligible = PcqClient.isEligibleRedirect(pcqID, partyType)
+      const eligible = PcqClient.isEligibleRedirect(pcqID, partyType)
       eligible.then(function (data) {
         expect(data).to.equal(true)
       })
@@ -19,7 +19,7 @@ describe('PCQ Client', () => {
     it('Should not eligible (Returns false) ', () => {
       const pcqID = '72927c05-7d52-4dcf-9759-7ff6236fbea4'
       const partyType = 'individual'
-      let eligible = PcqClient.isEligibleRedirect(pcqID, partyType)
+      const eligible = PcqClient.isEligibleRedirect(pcqID, partyType)
       eligible.then(function (data) {
         expect(data).to.equal(false)
       })
@@ -27,7 +27,7 @@ describe('PCQ Client', () => {
     it('Should not eligible (if party is not individual) ', () => {
       const pcqID = '72927c05-7d52-4dcf-9759-7ff6236fbea4'
       const partyType = 'Organisation'
-      let eligible = PcqClient.isEligibleRedirect(pcqID, partyType)
+      const eligible = PcqClient.isEligibleRedirect(pcqID, partyType)
       eligible.then(function (data) {
         expect(data).to.equal(false)
       })
@@ -36,7 +36,7 @@ describe('PCQ Client', () => {
 
   describe(`generator should create URL `, () => {
     it('for generate redirect URL request ', () => {
-      const pcqBaseUrl: string = `${config.get<string>('pcq.url')}`
+      const pcqBaseUrl = `${config.get<string>('pcq.url')}`
       const path = new RoutablePath('my/service/path')
       const externalId = '72927c05-7d52-4dcf-9759-7ff6236fbea4'
       const pcqID = '72927c05-7d52-4dcf-9759-7ff6236fbea4'
@@ -45,7 +45,7 @@ describe('PCQ Client', () => {
         '&partyId=test@test.com&returnUrl='
       req.secure = true
       req.headers = { host: 'localhost' }
-      let returnUrl = PcqClient.generateRedirectUrl(req, 'CLAIMANT', pcqID, 'test@test.com', 123, path, externalId)
+      const returnUrl = PcqClient.generateRedirectUrl(req, 'CLAIMANT', pcqID, 'test@test.com', 123, path, externalId)
       expect(returnUrl.length).gt(0)
       expect(returnUrl).to.contain(expected)
       expect(returnUrl).to.contain(expectedUrl)

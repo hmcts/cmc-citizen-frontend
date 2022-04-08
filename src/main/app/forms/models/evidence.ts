@@ -1,7 +1,7 @@
 import { EvidenceRow } from 'forms/models/evidenceRow'
 import { MultiRowForm } from 'forms/models/multiRowForm'
 
-export const INIT_ROW_COUNT: number = 4
+export const INIT_ROW_COUNT = 4
 
 export class Evidence extends MultiRowForm<EvidenceRow> {
 

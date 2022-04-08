@@ -17,7 +17,7 @@ const externalId = '400f4c57-9684-49c0-adb4-4cf46579d6dc'
 const declarationPage = OfferPaths.declarationPage.evaluateUri({ externalId: externalId })
 const acceptedPage = OfferPaths.acceptedPage.evaluateUri({ externalId: externalId })
 const settledPage = OfferPaths.settledPage.evaluateUri({ externalId: externalId })
-const pageHeading: string = 'Sign a settlement agreement'
+const pageHeading = 'Sign a settlement agreement'
 
 describe('declaration page', () => {
   attachDefaultHooks(app)

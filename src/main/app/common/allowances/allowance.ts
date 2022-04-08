@@ -44,7 +44,7 @@ export class Allowances {
   }
 
   private deserializeRows (rows: any): Allowance[] {
-    let allowanceRows: Allowance[] = rows.map(row => new Allowance().deserialize(row))
+    const allowanceRows: Allowance[] = rows.map(row => new Allowance().deserialize(row))
     return allowanceRows
   }
 

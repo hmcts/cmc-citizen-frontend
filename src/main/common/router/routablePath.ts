@@ -1,6 +1,6 @@
 import { StringUtils } from 'utils/stringUtils'
 
-const pathParameterRegex = /\/:[^\/]+/g
+const pathParameterRegex = /:[^]+/g
 
 /**
  *  Validates the path parameter value used in URI paths.

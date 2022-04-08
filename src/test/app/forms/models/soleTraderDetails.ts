@@ -42,7 +42,7 @@ describe('SoleTraderDetails', () => {
 
   describe('constructor', () => {
     it('should initialise fields with defaults', () => {
-      let soleTraderDetails: SoleTraderDetails = new SoleTraderDetails()
+      const soleTraderDetails: SoleTraderDetails = new SoleTraderDetails()
       expect(soleTraderDetails.address).to.be.instanceOf(Address)
       expect(soleTraderDetails.correspondenceAddress).to.be.instanceOf(Address)
       expect(soleTraderDetails.type).to.equal(PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value)
@@ -64,12 +64,12 @@ describe('SoleTraderDetails', () => {
 
     it('should return error when address is undefined', () => {
       soleTraderDetails.address = undefined
-      let errors: ValidationError[] = validator.validateSync(soleTraderDetails)
+      const errors: ValidationError[] = validator.validateSync(soleTraderDetails)
       expectValidationError(errors, PartyDetailsValidationErrors.ADDRESS_REQUIRED)
     })
 
     it('should return errors when required address fields are missing', () => {
-      let errors: ValidationError[] = validator.validateSync(soleTraderDetails)
+      const errors: ValidationError[] = validator.validateSync(soleTraderDetails)
       expectValidationError(errors, AddressValidationErrors.FIRST_LINE_REQUIRED)
       expectValidationError(errors, AddressValidationErrors.POSTCODE_REQUIRED)
     })
@@ -78,7 +78,7 @@ describe('SoleTraderDetails', () => {
       soleTraderDetails.name = undefined
       soleTraderDetails.firstName = undefined
       soleTraderDetails.lastName = undefined
-      let errors: ValidationError[] = validator.validateSync(soleTraderDetails)
+      const errors: ValidationError[] = validator.validateSync(soleTraderDetails)
       expectValidationError(errors, PartyDetailsValidationErrors.NAME_REQUIRED)
     })
 
@@ -86,7 +86,7 @@ describe('SoleTraderDetails', () => {
       soleTraderDetails.name = '  '
       soleTraderDetails.firstName = undefined
       soleTraderDetails.lastName = undefined
-      let errors: ValidationError[] = validator.validateSync(soleTraderDetails)
+      const errors: ValidationError[] = validator.validateSync(soleTraderDetails)
       expectValidationError(errors, PartyDetailsValidationErrors.NAME_REQUIRED)
     })
 
@@ -94,7 +94,7 @@ describe('SoleTraderDetails', () => {
       soleTraderDetails.name = generateString(256)
       soleTraderDetails.firstName = undefined
       soleTraderDetails.lastName = undefined
-      let errors: ValidationError[] = validator.validateSync(soleTraderDetails)
+      const errors: ValidationError[] = validator.validateSync(soleTraderDetails)
       expectValidationError(errors, SplitNamedPartyDetailsValidationErrors.errorTooLong('Name').replace('$constraint1','255'))
     })
 
@@ -102,7 +102,7 @@ describe('SoleTraderDetails', () => {
       soleTraderDetails.name = undefined
       soleTraderDetails.firstName = undefined
       soleTraderDetails.lastName = 'some name'
-      let errors: ValidationError[] = validator.validateSync(soleTraderDetails,{ groups: ['defendant'] })
+      const errors: ValidationError[] = validator.validateSync(soleTraderDetails,{ groups: ['defendant'] })
       expectValidationErrorNotPresent(errors, PartyDetailsValidationErrors.NAME_REQUIRED)
       expectValidationError(errors, SplitNamedPartyDetailsValidationErrors.FIRSTNAME_REQUIRED)
       expectValidationErrorNotPresent(errors, SplitNamedPartyDetailsValidationErrors.LASTNAME_REQUIRED)
@@ -112,7 +112,7 @@ describe('SoleTraderDetails', () => {
       soleTraderDetails.name = undefined
       soleTraderDetails.firstName = '  '
       soleTraderDetails.lastName = 'some name'
-      let errors: ValidationError[] = validator.validateSync(soleTraderDetails)
+      const errors: ValidationError[] = validator.validateSync(soleTraderDetails)
       expectValidationErrorNotPresent(errors, PartyDetailsValidationErrors.NAME_REQUIRED)
       expectValidationError(errors, SplitNamedPartyDetailsValidationErrors.FIRSTNAME_REQUIRED)
       expectValidationErrorNotPresent(errors, SplitNamedPartyDetailsValidationErrors.LASTNAME_REQUIRED)
@@ -122,7 +122,7 @@ describe('SoleTraderDetails', () => {
       soleTraderDetails.name = undefined
       soleTraderDetails.firstName = generateString(256)
       soleTraderDetails.lastName = 'some name'
-      let errors: ValidationError[] = validator.validateSync(soleTraderDetails)
+      const errors: ValidationError[] = validator.validateSync(soleTraderDetails)
       expectValidationError(errors, SplitNamedPartyDetailsValidationErrors.errorTooLong('First name').replace('$constraint1','255'))
     })
 
@@ -130,7 +130,7 @@ describe('SoleTraderDetails', () => {
       soleTraderDetails.name = undefined
       soleTraderDetails.firstName = 'some name'
       soleTraderDetails.lastName = undefined
-      let errors: ValidationError[] = validator.validateSync(soleTraderDetails, { groups: ['defendant'] })
+      const errors: ValidationError[] = validator.validateSync(soleTraderDetails, { groups: ['defendant'] })
       expectValidationErrorNotPresent(errors, PartyDetailsValidationErrors.NAME_REQUIRED)
       expectValidationErrorNotPresent(errors, SplitNamedPartyDetailsValidationErrors.FIRSTNAME_REQUIRED)
       expectValidationError(errors, SplitNamedPartyDetailsValidationErrors.LASTNAME_REQUIRED)
@@ -140,7 +140,7 @@ describe('SoleTraderDetails', () => {
       soleTraderDetails.name = undefined
       soleTraderDetails.firstName = 'some name'
       soleTraderDetails.lastName = '  '
-      let errors: ValidationError[] = validator.validateSync(soleTraderDetails)
+      const errors: ValidationError[] = validator.validateSync(soleTraderDetails)
       expectValidationErrorNotPresent(errors, PartyDetailsValidationErrors.NAME_REQUIRED)
       expectValidationErrorNotPresent(errors, SplitNamedPartyDetailsValidationErrors.FIRSTNAME_REQUIRED)
       expectValidationError(errors, SplitNamedPartyDetailsValidationErrors.LASTNAME_REQUIRED)
@@ -150,7 +150,7 @@ describe('SoleTraderDetails', () => {
       soleTraderDetails.name = undefined
       soleTraderDetails.firstName = 'some name'
       soleTraderDetails.lastName = generateString(256)
-      let errors: ValidationError[] = validator.validateSync(soleTraderDetails)
+      const errors: ValidationError[] = validator.validateSync(soleTraderDetails)
       expectValidationError(errors, SplitNamedPartyDetailsValidationErrors.errorTooLong('Last name').replace('$constraint1','255'))
     })
 
@@ -158,7 +158,7 @@ describe('SoleTraderDetails', () => {
       soleTraderDetails.title = generateString(36)
       soleTraderDetails.firstName = 'some name'
       soleTraderDetails.lastName = 'some name'
-      let errors: ValidationError[] = validator.validateSync(soleTraderDetails)
+      const errors: ValidationError[] = validator.validateSync(soleTraderDetails)
       expectValidationError(errors, SplitNamedPartyDetailsValidationErrors.errorTooLong('Title').replace('$constraint1','35'))
     })
 
@@ -167,7 +167,7 @@ describe('SoleTraderDetails', () => {
       soleTraderDetails.firstName = 'claimantName'
       soleTraderDetails.lastName = 'claimantName'
       soleTraderDetails.address = validAddress
-      let errors: ValidationError[] = validator.validateSync(soleTraderDetails)
+      const errors: ValidationError[] = validator.validateSync(soleTraderDetails)
       expect(errors.length).to.equal(0)
     })
 
@@ -176,7 +176,7 @@ describe('SoleTraderDetails', () => {
       soleTraderDetails.firstName = 'claimantName'
       soleTraderDetails.lastName = 'claimantName'
       soleTraderDetails.address = validAddress
-      let errors: ValidationError[] = validator.validateSync(soleTraderDetails)
+      const errors: ValidationError[] = validator.validateSync(soleTraderDetails)
       expectValidationError(errors, SoleTraderDetailsValidationErrors.ORGANISATION_NAME_TOO_LONG.replace('$constraint1','35'))
     })
 
@@ -191,19 +191,19 @@ describe('SoleTraderDetails', () => {
 
       it('should return error when correspondence address is undefined', () => {
         soleTraderDetails.correspondenceAddress = undefined
-        let errors: ValidationError[] = validator.validateSync(soleTraderDetails)
+        const errors: ValidationError[] = validator.validateSync(soleTraderDetails)
         expectValidationError(errors, PartyDetailsValidationErrors.CORRESPONDENCE_ADDRESS_REQUIRED)
       })
 
       it('should return errors when correspondence address required fields are missing', () => {
-        let errors: ValidationError[] = validator.validateSync(soleTraderDetails)
+        const errors: ValidationError[] = validator.validateSync(soleTraderDetails)
         expectValidationError(errors, CorrespondenceAddressValidationErrors.FIRST_LINE_REQUIRED)
         expectValidationError(errors, CorrespondenceAddressValidationErrors.POSTCODE_REQUIRED)
       })
 
       it('should return no errors when correspondence address is provided', () => {
         soleTraderDetails.correspondenceAddress = validAddress
-        let result = validator.validateSync(soleTraderDetails)
+        const result = validator.validateSync(soleTraderDetails)
         expect(result.length).to.equal(0)
       })
     })
@@ -215,7 +215,7 @@ describe('SoleTraderDetails', () => {
         soleTraderDetails.firstName = 'claimantName'
         soleTraderDetails.lastName = 'claimantName'
         soleTraderDetails.businessName = 'test'
-        let error = validator.validateSync(soleTraderDetails)
+        const error = validator.validateSync(soleTraderDetails)
         expect(error.length).to.equal(0)
       })
     })
@@ -223,7 +223,7 @@ describe('SoleTraderDetails', () => {
 
   describe('deserialize', () => {
     it('should return object initialized with default values when given undefined', () => {
-      let deserialized: SoleTraderDetails = new SoleTraderDetails().deserialize(undefined)
+      const deserialized: SoleTraderDetails = new SoleTraderDetails().deserialize(undefined)
       expect(deserialized.address).to.be.instanceOf(Address)
       expect(deserialized.hasCorrespondenceAddress).to.equal(false)
       expect(deserialized.correspondenceAddress).to.be.instanceOf(Address)
@@ -235,7 +235,7 @@ describe('SoleTraderDetails', () => {
     })
 
     it('should return object with values set from provided input json', () => {
-      let deserialized: SoleTraderDetails = new SoleTraderDetails().deserialize(input)
+      const deserialized: SoleTraderDetails = new SoleTraderDetails().deserialize(input)
       expect(deserialized.address.line1).to.equal('first line')
       expect(deserialized.address.postcode).to.equal('bb127nq')
       expect(deserialized.hasCorrespondenceAddress).to.equal(true)
@@ -256,7 +256,7 @@ describe('SoleTraderDetails', () => {
     })
 
     it('should deserialize all fields', () => {
-      let deserialized: SoleTraderDetails = SoleTraderDetails.fromObject(formInput)
+      const deserialized: SoleTraderDetails = SoleTraderDetails.fromObject(formInput)
       expect(deserialized.address.line1).to.equal('first line')
       expect(deserialized.address.postcode).to.equal('bb127nq')
       expect(deserialized.hasCorrespondenceAddress).to.equal(true)
@@ -272,7 +272,7 @@ describe('SoleTraderDetails', () => {
     it('should set correspondence address to undefined if "has correspondence address flag is set to false"', () => {
       formInput.hasCorrespondenceAddress = 'false'
 
-      let deserialized: SoleTraderDetails = SoleTraderDetails.fromObject(formInput)
+      const deserialized: SoleTraderDetails = SoleTraderDetails.fromObject(formInput)
 
       expect(deserialized.correspondenceAddress).to.equal(undefined)
     })

@@ -32,9 +32,9 @@ export default express.Router()
       } else {
         const courts: Court[] = await Court.getCourtsByName(searchParam)
         if (courts) {
-          let courtDetails: CourtDetails[] = []
+          const courtDetails: CourtDetails[] = []
 
-          for (let court of courts) {
+          for (const court of courts) {
             courtDetails.push(await Court.getCourtDetails(court.slug))
           }
           renderPage(res, new Form<HearingLocation>(new HearingLocation()), false, courtDetails, searchParam)

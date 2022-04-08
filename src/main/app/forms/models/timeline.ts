@@ -1,8 +1,8 @@
 import { MultiRowForm } from 'forms/models/multiRowForm'
 import { TimelineRow } from 'forms/models/timelineRow'
 
-export const INIT_ROW_COUNT: number = 4
-export const MAX_ROW_COUNT: number = 100
+export const INIT_ROW_COUNT = 4
+export const MAX_ROW_COUNT = 100
 
 export class Timeline extends MultiRowForm<TimelineRow> {
 

@@ -34,7 +34,7 @@ import { organisation, organisationWithPhone } from 'test/data/entity/party'
 import { Moment } from 'moment'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
-const externalIdPattern: string = '[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'
+const externalIdPattern = '[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'
 
 export const sampleClaimIssueCommonObj = {
   id: 1,
@@ -1043,13 +1043,13 @@ export function resolveRetrieveClaimByExternalIdWithFullAdmissionAndSettlementBy
     .reply(HttpStatus.OK, { ...sampleClaimObj, ...sampleFullAdmissionWithPaymentBySetDateResponseObj, ...override })
 }
 
-export function rejectRetrieveClaimByExternalId (reason: string = 'Error') {
+export function rejectRetrieveClaimByExternalId (reason = 'Error') {
   mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/' + externalIdPattern))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-export function resolveRetrieveClaimByExternalIdTo404HttpCode (reason: string = 'Claim not found') {
+export function resolveRetrieveClaimByExternalIdTo404HttpCode (reason = 'Claim not found') {
   mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/' + externalIdPattern))
     .reply(HttpStatus.NOT_FOUND, reason)
@@ -1175,7 +1175,7 @@ export function resolveSaveClaimForUser () {
     .reply(HttpStatus.OK, { ...sampleClaimObj })
 }
 
-export function rejectSaveClaimForUser (reason: string = 'HTTP error', status: number = HttpStatus.INTERNAL_SERVER_ERROR) {
+export function rejectSaveClaimForUser (reason = 'HTTP error', status: number = HttpStatus.INTERNAL_SERVER_ERROR) {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp('/[0-9]+'))
     .reply(status, reason)
@@ -1187,7 +1187,7 @@ export function resolveSaveHelpWithFeesClaimForUser () {
     .reply(HttpStatus.OK, { ...sampleClaimObj })
 }
 
-export function resolveSaveHelpWithFeesClaimWithError (reason: string = 'HTTP error') {
+export function resolveSaveHelpWithFeesClaimWithError (reason = 'HTTP error') {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp('/[0-9]+/hwf'))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
@@ -1199,7 +1199,7 @@ export function resolveUpdateHelpWithFeesClaimForUser () {
     .reply(HttpStatus.OK, { ...sampleClaimObj })
 }
 
-export function resolveUpdateHelpWithFeesClaimWithError (reason: string = 'HTTP error') {
+export function resolveUpdateHelpWithFeesClaimWithError (reason = 'HTTP error') {
   mock(`${serviceBaseURL}/claims`)
     .put('/resume-hwf')
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
@@ -1220,13 +1220,13 @@ export function resolveSaveReDeterminationForExternalId (explanation: string) {
     .reply(HttpStatus.OK, { explanation: explanation, partyType: MadeBy.CLAIMANT })
 }
 
-export function rejectSaveReDeterminationForExternalId (reason: string = 'HTTP error') {
+export function rejectSaveReDeterminationForExternalId (reason = 'HTTP error') {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp('/.+/re-determination'))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-export function rejectSaveOfferForDefendant (reason: string = 'HTTP error') {
+export function rejectSaveOfferForDefendant (reason = 'HTTP error') {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp('/.+/offers/defendant'))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
@@ -1258,31 +1258,31 @@ export function resolveSaveOrder () {
     .reply(HttpStatus.OK, expectedData)
 }
 
-export function resolveAcceptOffer (by: string = 'claimant') {
+export function resolveAcceptOffer (by = 'claimant') {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp(`/.+/offers/${by}/accept`))
     .reply(HttpStatus.CREATED)
 }
 
-export function resolveRejectOffer (by: string = 'claimant') {
+export function resolveRejectOffer (by = 'claimant') {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp(`/.+/offers/${by}/reject`))
     .reply(HttpStatus.CREATED)
 }
 
-export function rejectSaveClaimantResponse (reason: string = 'HTTP error') {
+export function rejectSaveClaimantResponse (reason = 'HTTP error') {
   mock(`${serviceBaseURL}/responses`)
     .post(new RegExp('/.+/claimant/[0-9]+'))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-export function resolveCountersignOffer (by: string = 'defendant') {
+export function resolveCountersignOffer (by = 'defendant') {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp(`/.+/offers/${by}/countersign`))
     .reply(HttpStatus.CREATED)
 }
 
-export function rejectSaveCcjForExternalId (reason: string = 'HTTP error') {
+export function rejectSaveCcjForExternalId (reason = 'HTTP error') {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp('/' + externalIdPattern +
       '/county-court-judgment'))
@@ -1307,7 +1307,7 @@ export function resolvePostponedDeadline (deadline: string): mock.Scope {
     .reply(HttpStatus.OK, deadline)
 }
 
-export function rejectPostponedDeadline (reason: string = 'HTTP error'): mock.Scope {
+export function rejectPostponedDeadline (reason = 'HTTP error'): mock.Scope {
   return mock(`${serviceBaseURL}/deadline`)
     .get(new RegExp('/\\d{4}-\\d{2}-\\d{2}'))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
@@ -1319,7 +1319,7 @@ export function resolveAddRolesToUser (role: string) {
     .reply(HttpStatus.CREATED, { role: role })
 }
 
-export function rejectAddRolesToUser (reason: string = 'HTTP error') {
+export function rejectAddRolesToUser (reason = 'HTTP error') {
   mock(`${serviceBaseURL}/user`)
     .post('/roles')
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)

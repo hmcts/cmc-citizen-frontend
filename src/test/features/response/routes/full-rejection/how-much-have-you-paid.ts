@@ -24,7 +24,7 @@ const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = FullRejectionPaths.howMuchHaveYouPaidPage.evaluateUri({ externalId: externalId })
 
 const validFormData = { amount: 100, date: { day: 1, month: 1, year: 1990 }, text: 'aaa' }
-const header: string = 'How much have you paid?'
+const header = 'How much have you paid?'
 
 describe('Defendant: reject all - ' + header, () => {
 

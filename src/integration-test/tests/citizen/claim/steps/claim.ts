@@ -110,7 +110,7 @@ export class ClaimSteps {
     citizenPhonePage.enterPhone(claimant.phone)
   }
 
-  async enterTheirDetails (I: I, defendantType: PartyType, enterDefendantEmail: boolean = true, byLookup: boolean = false): Promise<void> {
+  async enterTheirDetails (I: I, defendantType: PartyType, enterDefendantEmail = true, byLookup = false): Promise<void> {
     const defendant = await createDefendant(I, defendantType, enterDefendantEmail)
 
     let manualEntryLink = true
@@ -190,7 +190,7 @@ export class ClaimSteps {
     claimantEvidencePage.enterEvidenceRow('CONTRACTS_AND_AGREEMENTS', 'ok')
   }
 
-  async checkClaimFactsAreTrueAndSubmit (I: I, claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true): Promise<void> {
+  async checkClaimFactsAreTrueAndSubmit (I: I, claimantType: PartyType, defendantType: PartyType, enterDefendantEmail = true): Promise<void> {
     await claimantCheckAndSendPage.verifyCheckAndSendAnswers(I, claimantType, defendantType, enterDefendantEmail)
 
     if (claimantType === PartyType.COMPANY || claimantType === PartyType.ORGANISATION) {
@@ -200,7 +200,7 @@ export class ClaimSteps {
     }
   }
 
-  async makeAClaimAndSubmitStatementOfTruth (I: I, email: string, claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true) {
+  async makeAClaimAndSubmitStatementOfTruth (I: I, email: string, claimantType: PartyType, defendantType: PartyType, enterDefendantEmail = true) {
     userSteps.login(email)
     if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
       testingSupport.deleteClaimDraft()
@@ -232,7 +232,7 @@ export class ClaimSteps {
     await this.checkClaimFactsAreTrueAndSubmit(I, claimantType, defendantType, enterDefendantEmail)
   }
 
-  async makeAClaimAndSubmit (I: I, email: string, claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true): Promise<string> {
+  async makeAClaimAndSubmit (I: I, email: string, claimantType: PartyType, defendantType: PartyType, enterDefendantEmail = true): Promise<string> {
     await this.makeAClaimAndSubmitStatementOfTruth(I, email, claimantType, defendantType, enterDefendantEmail)
     await paymentSteps.payWithWorkingCard(I)
     I.waitForText('Claim submitted')
@@ -315,7 +315,7 @@ export class ClaimSteps {
     }
   }
 
-  async completeStartOfClaimJourney (I: I, claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true) {
+  async completeStartOfClaimJourney (I: I, claimantType: PartyType, defendantType: PartyType, enterDefendantEmail = true) {
     userSteps.selectResolvingThisDispute()
     this.resolveDispute()
     userSteps.selectCompletingYourClaim()

@@ -15,7 +15,7 @@ import { checkAuthorizationGuards } from 'test/routes/authorization-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = Paths.createClaimDraftPage.uri
-const pageText: string = 'Create Claim Draft'
+const pageText = 'Create Claim Draft'
 
 describe('Testing Support: Create Claim Draft', () => {
   attachDefaultHooks(app)

@@ -15,7 +15,7 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { YesNoOption } from 'models/yesNoOption'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pageContent: string = 'Continue to claim interest after you submit your claim?'
+const pageContent = 'Continue to claim interest after you submit your claim?'
 const pagePath: string = ClaimPaths.interestContinueClaimingPage.uri
 
 describe('Claim issue: interest continue claiming page', () => {

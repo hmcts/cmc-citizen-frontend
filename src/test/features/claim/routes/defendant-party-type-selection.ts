@@ -15,7 +15,7 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const expectedTextOnPage: string = 'Who are you making the claim against?'
+const expectedTextOnPage = 'Who are you making the claim against?'
 
 describe('Claim issue: defendant party type selection page', () => {
   attachDefaultHooks(app)

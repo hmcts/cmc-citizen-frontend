@@ -20,7 +20,7 @@ describe('ClaimAmountBreakdown', () => {
 
     it('should return initiated objects', () => {
       const actual: ClaimAmountBreakdown = new ClaimAmountBreakdown()
-      for (let row of actual.rows) {
+      for (const row of actual.rows) {
         expect(row).to.eql(new ClaimAmountRow(undefined, undefined))
       }
     })
@@ -56,27 +56,27 @@ describe('ClaimAmountBreakdown', () => {
   describe('deserialize', () => {
 
     it('should return a ClaimAmountBreakdown instance', () => {
-      let deserialized = new ClaimAmountBreakdown().deserialize({})
+      const deserialized = new ClaimAmountBreakdown().deserialize({})
       expect(deserialized).to.be.instanceof(ClaimAmountBreakdown)
     })
 
     it('should return a ClaimAmountBreakdown instance with "rows" is initialised with 4 ClaimAmountRow when given "undefined"', () => {
-      let deserialized = new ClaimAmountBreakdown().deserialize(undefined)
+      const deserialized = new ClaimAmountBreakdown().deserialize(undefined)
       expect(deserialized.rows).to.have.lengthOf(4)
     })
 
     it('should return a ClaimAmountBreakdown instance with "rows" is initialised with 4 ClaimAmountRow when given "null"', () => {
-      let deserialized = new ClaimAmountBreakdown().deserialize(null)
+      const deserialized = new ClaimAmountBreakdown().deserialize(null)
       expect(deserialized.rows).to.have.lengthOf(4)
     })
 
     it('should return a ClaimAmountBreakdown instance with "rows" is initialised with 4 ClaimAmountRow when given an empty object', () => {
-      let deserialized = new ClaimAmountBreakdown().deserialize({})
+      const deserialized = new ClaimAmountBreakdown().deserialize({})
       expect(deserialized.rows).to.have.lengthOf(4)
     })
 
     it('should return a ClaimAmountBreakdown instance with "rows" of length 4 with first populated when given an object of ClaimAmountRow', () => {
-      let deserialized = new ClaimAmountBreakdown().deserialize({ rows: [{ reason: 'reason', amount: 200 }] })
+      const deserialized = new ClaimAmountBreakdown().deserialize({ rows: [{ reason: 'reason', amount: 200 }] })
       expect(deserialized.rows).to.have.lengthOf(4)
       expect(deserialized.rows[0]).to.deep.eq(new ClaimAmountRow('reason', 200))
       expect(deserialized.rows[1]).to.deep.eq(new ClaimAmountRow(undefined, undefined))
@@ -95,7 +95,7 @@ describe('ClaimAmountBreakdown', () => {
         ]
       }
 
-      let deserialized = new ClaimAmountBreakdown().deserialize(input)
+      const deserialized = new ClaimAmountBreakdown().deserialize(input)
       expect(deserialized.rows).to.have.lengthOf(4)
       expect(deserialized.rows[0]).to.deep.eq(new ClaimAmountRow('reason', 200))
       expect(deserialized.rows[1]).to.deep.eq(new ClaimAmountRow('reason', 101.23))
@@ -117,7 +117,7 @@ describe('ClaimAmountBreakdown', () => {
     })
 
     it('should append three row when called thrice', () => {
-      let breakdown = new ClaimAmountBreakdown([])
+      const breakdown = new ClaimAmountBreakdown([])
       breakdown.appendRow()
       breakdown.appendRow()
       breakdown.appendRow()
@@ -220,40 +220,40 @@ describe('ClaimAmountBreakdown', () => {
   describe('totalAmount', () => {
 
     it('should return 0 if there are no rows', () => {
-      let breakdown = new ClaimAmountBreakdown([])
+      const breakdown = new ClaimAmountBreakdown([])
       expect(breakdown.totalAmount()).to.equal(0)
     })
 
     it('should return the sum of row amounts', () => {
-      let rows: ClaimAmountRow[] = []
+      const rows: ClaimAmountRow[] = []
       rows.push(new ClaimAmountRow('', 1.34))
       rows.push(new ClaimAmountRow('', 7.83))
       rows.push(new ClaimAmountRow('', 2.33))
 
-      let breakdown = new ClaimAmountBreakdown(rows)
+      const breakdown = new ClaimAmountBreakdown(rows)
       expect(breakdown.totalAmount()).to.equal(11.5)
     })
 
     it('should return the sum of row amounts excluding negatives', () => {
-      let rows: ClaimAmountRow[] = []
+      const rows: ClaimAmountRow[] = []
       rows.push(new ClaimAmountRow('', 1.34))
       rows.push(new ClaimAmountRow('', 7.83))
       rows.push(new ClaimAmountRow('', 2.33))
       rows.push(new ClaimAmountRow('', -2.33))
 
-      let breakdown = new ClaimAmountBreakdown(rows)
+      const breakdown = new ClaimAmountBreakdown(rows)
       expect(breakdown.totalAmount()).to.equal(11.5)
     })
 
     it('should raise an error for null values', () => {
-      let breakdown = new ClaimAmountBreakdown([
+      const breakdown = new ClaimAmountBreakdown([
         new ClaimAmountRow('', null)
       ])
       expect(breakdown.totalAmount).to.throw(Error)
     })
 
     it('should raise an error for undefined values', () => {
-      let breakdown = new ClaimAmountBreakdown([
+      const breakdown = new ClaimAmountBreakdown([
         new ClaimAmountRow('', undefined)
       ])
       expect(breakdown.totalAmount).to.throw(Error)

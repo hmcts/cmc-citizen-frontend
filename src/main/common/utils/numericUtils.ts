@@ -1,7 +1,7 @@
 import * as numeral from 'numeral'
 
 function containsAThousandSeparator (input: string): boolean {
-  const THOUSAND_SEPERATOR_REGULAR_EXPRESSION = /^[1-9]\d{0,2}(\,\d{3})+(\.\d*)?$/
+  const THOUSAND_SEPERATOR_REGULAR_EXPRESSION = /^[1-9]\d{0,2}(\d{3})+(\.\d*)?$/
   return THOUSAND_SEPERATOR_REGULAR_EXPRESSION.test(input.trim())
 }
 

@@ -14,7 +14,7 @@ import { NotEligibleReason } from 'eligibility/notEligibleReason'
 
 const pagePath: string = Paths.over18Page.uri
 const pageRedirect: string = Paths.helpWithFeesPage.uri
-const expectedTextOnPage: string = 'Are you 18 or over?'
+const expectedTextOnPage = 'Are you 18 or over?'
 const notEligibleReason: string = NotEligibleReason.UNDER_18
 
 describe('Claim eligibility: over 18 page', () => {

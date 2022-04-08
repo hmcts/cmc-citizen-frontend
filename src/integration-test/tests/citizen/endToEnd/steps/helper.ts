@@ -28,8 +28,8 @@ export class Helper {
 
   async finishResponse (
     testData: EndToEndTestData,
-    isRequestMoreTimeToRespond: boolean = true,
-    expectPhonePage: boolean = false
+    isRequestMoreTimeToRespond = true,
+    expectPhonePage = false
   ): Promise<void> {
     if (testData.defenceType === undefined) {
       testData.defenceType = DefenceType.FULL_REJECTION_WITH_DISPUTE

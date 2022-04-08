@@ -23,11 +23,11 @@ function renderView (form: Form<BreathingSpaceRespiteEnd>, res: express.Response
 /* tslint:disable:no-default-export */
 export default express.Router()
     .get(Paths.bsEndDatePage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      let draft: Draft<DraftClaim> = res.locals.Draft
+      const draft: Draft<DraftClaim> = res.locals.Draft
       if (draft.document.breathingSpace.breathingSpaceEndDate) {
-        let bsLiftDate: Date = new Date(draft.document.breathingSpace.breathingSpaceEndDate.toLocaleString())
-        let bsLiftDateSplit = bsLiftDate.toLocaleDateString().split('/')
-        let bsStartDate: LocalDate = new LocalDate(parseInt(bsLiftDateSplit[2], 10),parseInt(bsLiftDateSplit[0], 10), parseInt(bsLiftDateSplit[1], 10))
+        const bsLiftDate: Date = new Date(draft.document.breathingSpace.breathingSpaceEndDate.toLocaleString())
+        const bsLiftDateSplit = bsLiftDate.toLocaleDateString().split('/')
+        const bsStartDate: LocalDate = new LocalDate(parseInt(bsLiftDateSplit[2], 10),parseInt(bsLiftDateSplit[0], 10), parseInt(bsLiftDateSplit[1], 10))
         renderView(new Form(new BreathingSpaceRespiteEnd(bsStartDate)), res, next)
       } else {
         renderView(new Form(new BreathingSpaceRespiteEnd()), res, next)
@@ -41,7 +41,7 @@ export default express.Router()
           if ((form.model.respiteEnd.day || form.model.respiteEnd.month || form.model.respiteEnd.year) && form.hasErrors()) {
             renderView(form, res, next)
           } else {
-            let draft: Draft<DraftClaim> = res.locals.Draft
+            const draft: Draft<DraftClaim> = res.locals.Draft
             const user: User = res.locals.user
             if (draft.document.breathingSpace !== undefined) {
               draft.document.breathingSpace.breathingSpaceEndDate = MomentFactory.parse(form.model.respiteEnd.toMoment().format())

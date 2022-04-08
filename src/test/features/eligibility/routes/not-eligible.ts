@@ -10,7 +10,7 @@ import { app } from 'main/app'
 import { Paths } from 'eligibility/paths'
 
 const pagePath: string = Paths.notEligiblePage.uri
-const expectedTextOnPage: string = 'You can’t use this service'
+const expectedTextOnPage = 'You can’t use this service'
 
 describe('Claim eligibility: not eligible page', () => {
   attachDefaultHooks(app)

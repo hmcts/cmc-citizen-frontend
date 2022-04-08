@@ -45,7 +45,7 @@ import { MomentFactory } from 'shared/momentFactory'
 import * as moment from 'moment'
 import { CompanyDetails } from 'forms/models/companyDetails'
 
-const serviceBaseURL: string = `${config.get('draft-store.url')}`
+const serviceBaseURL = `${config.get('draft-store.url')}`
 
 export const samplePaidInFullDraftObj = {
   datePaid: moment()
@@ -1108,43 +1108,43 @@ export function resolveFindNoDraftFound (): mock.Scope {
     })
 }
 
-export function rejectFind (reason: string = 'HTTP error'): mock.Scope {
+export function rejectFind (reason = 'HTTP error'): mock.Scope {
   return mock(serviceBaseURL)
     .get(new RegExp('/drafts.*'))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-export function resolveUpdate (id: number = 100): mock.Scope {
+export function resolveUpdate (id = 100): mock.Scope {
   return mock(serviceBaseURL)
     .put(`/drafts/${id}`)
     .reply(HttpStatus.OK)
 }
 
-export function resolveSave (id: number = 100): mock.Scope {
+export function resolveSave (id = 100): mock.Scope {
   return mock(serviceBaseURL)
     .post(`/drafts`)
     .reply(HttpStatus.OK, sampleOrdersDraftObj)
 }
 
-export function rejectSave (id: number = 100, reason: string = 'HTTP error'): mock.Scope {
+export function rejectSave (id = 100, reason = 'HTTP error'): mock.Scope {
   return mock(serviceBaseURL)
     .post(`/drafts`)
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-export function rejectUpdate (id: number = 100, reason: string = 'HTTP error'): mock.Scope {
+export function rejectUpdate (id = 100, reason = 'HTTP error'): mock.Scope {
   return mock(serviceBaseURL)
     .put(`/drafts/${id}`)
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-export function resolveDelete (id: number = 100): mock.Scope {
+export function resolveDelete (id = 100): mock.Scope {
   return mock(serviceBaseURL)
     .delete(`/drafts/${id}`)
     .reply(HttpStatus.OK)
 }
 
-export function rejectDelete (id: number = 100, reason: string = 'HTTP error'): mock.Scope {
+export function rejectDelete (id = 100, reason = 'HTTP error'): mock.Scope {
   return mock(serviceBaseURL)
     .delete(`/drafts/${id}`)
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)

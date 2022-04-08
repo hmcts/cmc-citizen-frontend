@@ -14,7 +14,7 @@ import { ClaimType } from 'eligibility/model/claimType'
 
 const pagePath: string = Paths.claimTypePage.uri
 const pageRedirect: string = Paths.claimantAddressPage.uri
-const expectedTextOnPage: string = 'Who are you making the claim for?'
+const expectedTextOnPage = 'Who are you making the claim for?'
 
 describe('Claim eligibility: claim type page', () => {
   attachDefaultHooks(app)

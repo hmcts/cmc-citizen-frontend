@@ -16,7 +16,7 @@ const documentsClient: DocumentsClient = new DocumentsClient()
 const scannedDocumentsClient: ScannedDocumentsClient = new ScannedDocumentsClient()
 
 function getDocumentPath (path: string): string {
-  return path.match(`[^\/]+$`)[0]
+  return path.match(`[^]+$`)[0]
 }
 /* tslint:disable:no-default-export */
 export default express.Router()

@@ -55,7 +55,7 @@ describe('DraftClaim deserialization', () => {
   })
 
   it('should set the values of the fields to the ones from provided object', () => {
-    let deserialized = new DraftClaim().deserialize(input)
+    const deserialized = new DraftClaim().deserialize(input)
 
     expect(deserialized.claimant.partyDetails.name).to.equal('John Doe')
     expect(deserialized.claimant.partyDetails.address.line1).to.equal('Here')
@@ -78,7 +78,7 @@ describe('DraftClaim deserialization', () => {
   })
 
   it('should initialize the fields with appropriate class instances', () => {
-    let deserialized = new DraftClaim().deserialize(input)
+    const deserialized = new DraftClaim().deserialize(input)
 
     expect(deserialized.claimant).to.be.instanceof(Claimant)
     expect(deserialized.claimant.partyDetails).to.be.instanceof(IndividualDetails)
@@ -89,7 +89,7 @@ describe('DraftClaim deserialization', () => {
   })
 
   it('should convert legacy eligibility object into boolean value', () => {
-    let deserialized = new DraftClaim().deserialize({
+    const deserialized = new DraftClaim().deserialize({
       ...input,
       ...{
         eligibility: {

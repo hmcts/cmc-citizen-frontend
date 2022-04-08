@@ -75,7 +75,7 @@ export default express.Router()
   )
 
 function totalNumberOfChildren (dependants: Dependants): number {
-  let count: number = 0
+  let count = 0
   count += dependants.numberOfChildren.under11 || 0
   count += dependants.numberOfChildren.between11and15 || 0
   count += dependants.numberOfChildren.between16and19 || 0

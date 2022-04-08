@@ -7,9 +7,9 @@ const baseURL: string = process.env.CLAIM_STORE_URL
 class ClaimStoreHelper extends codecept_helper {
 
   async waitForOpenClaim (referenceNumber: string): Promise<boolean> {
-    const maxAttempts: number = 120 // 60 seconds
-    let isClaimOpen: boolean = false
-    let attempts: number = 0
+    const maxAttempts = 120 // 60 seconds
+    let isClaimOpen = false
+    let attempts = 0
     do {
       attempts++
       isClaimOpen = await ClaimStoreClient.isOpen(referenceNumber)
@@ -18,7 +18,7 @@ class ClaimStoreHelper extends codecept_helper {
     return isClaimOpen
   }
 
-  async createClaim (claimData: ClaimData, submitterEmail: string, linkDefendant: boolean = true, features: string[] = ['admissions','directionsQuestionnaire'], defendantEmail: string): Promise<string> {
+  async createClaim (claimData: ClaimData, submitterEmail: string, linkDefendant = true, features: string[] = ['admissions','directionsQuestionnaire'], defendantEmail: string): Promise<string> {
     const submitter: User = await this.prepareAuthenticatedUser(submitterEmail)
     const { referenceNumber } = await ClaimStoreClient.create(claimData, submitter, features)
     await this.waitForOpenClaim(referenceNumber)

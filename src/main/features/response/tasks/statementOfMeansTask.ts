@@ -52,7 +52,7 @@ export class StatementOfMeansTask {
       return isValid(statementOfMeans.unemployment)
     }
 
-    let valid: boolean = true
+    let valid = true
 
     if (statementOfMeans.employment.employed) {
       valid = valid && isValid(statementOfMeans.employers)

@@ -108,7 +108,7 @@ export class DefenceSteps {
     loginPage.login(defendantEmail, DEFAULT_PASSWORD)
   }
 
-  confirmYourDetails (defendant: Party, expectPhonePage: boolean = false): void {
+  confirmYourDetails (defendant: Party, expectPhonePage = false): void {
 
     defendantSteps.selectTaskConfirmYourDetails()
     defendantNameAndAddressPage.enterAddress(updatedAddress)
@@ -214,7 +214,7 @@ export class DefenceSteps {
 
   admitPartOfTheClaimAlreadyPaid (
     defence: PartialDefence,
-    isClaimAlreadyPaid: boolean = true
+    isClaimAlreadyPaid = true
   ): void {
     defendantSteps.selectTaskChooseAResponse()
     defendantDefenceTypePage.admitPartOfMoneyClaim()
@@ -292,9 +292,9 @@ export class DefenceSteps {
     defendantEmail: string,
     defendantType: PartyType,
     defenceType: DefenceType,
-    isRequestMoreTimeToRespond: boolean = true,
-    isClaimAlreadyPaid: boolean = true,
-    expectPhonePage: boolean = false
+    isRequestMoreTimeToRespond = true,
+    isClaimAlreadyPaid = true,
+    expectPhonePage = false
 ): Promise<void> {
     I.waitForText('Confirm your details')
     I.see('Decide if you need more time to respond')
@@ -371,7 +371,7 @@ export class DefenceSteps {
     defendantType: PartyType,
     paymentOption: PaymentOption,
     claimantName: string,
-    statementOfMeansFullDataSet: boolean = true,
+    statementOfMeansFullDataSet = true,
     respondToPCQ?: boolean
   ): void {
     this.confirmYourDetails(defendantParty)

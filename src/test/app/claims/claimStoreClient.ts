@@ -357,7 +357,7 @@ describe('ClaimStoreClient', () => {
       it('should fail while saving the Breathing space', async () => {
         mockInternalServerErrorforSaveBreathingSpaceOnAllAttempts()
         try {
-          let draft: DraftClaim = new DraftClaim()
+          const draft: DraftClaim = new DraftClaim()
           draft.breathingSpace.breathingSpaceType = 'STANDARD_BS_LIFTED'
           draft.breathingSpace.breathingSpaceEnteredDate = moment('9999-09-09')
           draft.breathingSpace.breathingSpaceEndDate = moment('9999-09-09')

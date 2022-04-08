@@ -3,7 +3,7 @@ import { User } from 'idam/user'
 import * as config from 'config'
 import { request } from 'client/request'
 
-export const claimStoreApiUrl: string = `${config.get<string>('claim-store.url')}/claims`
+export const claimStoreApiUrl = `${config.get<string>('claim-store.url')}/claims`
 
 export class SettlementAgreementClient {
 

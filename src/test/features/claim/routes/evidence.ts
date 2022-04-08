@@ -15,7 +15,7 @@ import { EvidenceType } from 'forms/models/evidenceType'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = Paths.evidencePage.uri
-const pageContent: string = 'List any evidence'
+const pageContent = 'List any evidence'
 import { FeatureToggles } from 'utils/featureToggles'
 
 describe('Claim issue: evidence', () => {

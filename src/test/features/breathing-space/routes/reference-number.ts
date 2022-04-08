@@ -14,7 +14,7 @@ import { attachDefaultHooks } from 'test/routes/hooks'
 import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const headerText: string = 'Reference number must not be more than 16 characters'
+const headerText = 'Reference number must not be more than 16 characters'
 const bsNumberPagePath = BreathingSpacePaths.referencNumberPage.evaluateUri({ externalId: draftStoreServiceMock.sampleClaimDraftObj.externalId })
 
 describe('Breathing space: reference number page page', () => {

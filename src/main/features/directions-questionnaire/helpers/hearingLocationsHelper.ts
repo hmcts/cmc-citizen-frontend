@@ -24,10 +24,10 @@ export function validateFormForErrors (form: Form<HearingLocation>, apiError: st
 }
 
 export async function searchByPostCodeForEdgecase (res: express.Response, form: Form<HearingLocation>, draft: Draft<DirectionsQuestionnaireDraft>, resultPage: boolean) {
-  let apiError = ''
+  const apiError = ''
   const court: Court = await Court.getNearestCourt(form.model.alternativePostcode)
   if (court !== undefined) {
-    let courtDetails: CourtDetails[] = []
+    const courtDetails: CourtDetails[] = []
     courtDetails.push(await Court.getCourtDetails(court.slug))
 
     draft.document.hearingLocation.courtName = court.name
@@ -45,10 +45,10 @@ export async function searchByPostCodeForEdgecase (res: express.Response, form: 
 }
 
 export async function postCodeSearch (res: express.Response, form: Form<HearingLocation>, draft: Draft<DirectionsQuestionnaireDraft>, resultPage: boolean) {
-  let apiError = ''
+  const apiError = ''
   const court: Court = await Court.getNearestCourt(form.model.alternativePostcode)
   if (court !== undefined) {
-    let courtDetails: CourtDetails[] = []
+    const courtDetails: CourtDetails[] = []
     courtDetails.push(await Court.getCourtDetails(court.slug))
     const nearestCourtDetails: CourtDetails = await getNearestCourtDetails(res)
 
@@ -67,8 +67,8 @@ export async function locationSearch (res: express.Response, form: Form<HearingL
   if (searchParam !== undefined) {
     const courts: Court[] = await Court.getCourtsByName(searchParam)
     if (courts) {
-      let courtDetails: CourtDetails[] = []
-      for (let court of courts) {
+      const courtDetails: CourtDetails[] = []
+      for (const court of courts) {
         courtDetails.push(await Court.getCourtDetails(court.slug))
       }
       const nearestCourtDetails: CourtDetails = await getNearestCourtDetails(res)
@@ -100,7 +100,7 @@ export async function handlePostCodeSearchError (res: express.Response, form: Fo
     if (searchParam !== undefined) {
       const court: Court = await Court.getNearestCourt(searchParam)
       if (court !== undefined) {
-        let courtDetails: CourtDetails[] = []
+        const courtDetails: CourtDetails[] = []
         courtDetails.push(await Court.getCourtDetails(court.slug))
         const nearestCourtDetails: CourtDetails = await getNearestCourtDetails(res)
 

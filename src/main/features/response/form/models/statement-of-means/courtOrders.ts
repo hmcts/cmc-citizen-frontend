@@ -9,7 +9,7 @@ export class ValidationErrors {
   static readonly ENTER_AT_LEAST_ONE_ROW: string = 'Enter at least one court order'
 }
 
-export const MAX_NUMBER_OF_ROWS: number = 10
+export const MAX_NUMBER_OF_ROWS = 10
 
 export class CourtOrders extends MultiRowForm<CourtOrderRow> {
 

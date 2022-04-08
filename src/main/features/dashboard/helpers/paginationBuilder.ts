@@ -3,7 +3,7 @@ import { ActorType } from 'claims/models/claim-states/actor-type'
 
 export function formPaginationToDisplay (pagingInfo: object, selectedPageNo: number, usertype: string): object {
 
-  let hyperlinkText: string = ''
+  let hyperlinkText = ''
   if (usertype === ActorType.CLAIMANT) {
     hyperlinkText = '?c_pid='
   } else if (usertype === ActorType.DEFENDANT) {
@@ -16,9 +16,9 @@ export function formPaginationToDisplay (pagingInfo: object, selectedPageNo: num
   const pagesItems: object = formItemswithHyperlink(hyperlinkText, selectedPageNo, totalClaimCount, totalPage)
 
   if (selectedPageNo !== 1) {
-    let updatedFromvalue: number = (10 * (selectedPageNo - 1) + 1)
-    let updatedToValueCalculate: number = (selectedPageNo * 10)
-    let updatedTovalue: number = updatedToValueCalculate > totalClaimCount ? totalClaimCount : updatedToValueCalculate
+    const updatedFromvalue: number = (10 * (selectedPageNo - 1) + 1)
+    const updatedToValueCalculate: number = (selectedPageNo * 10)
+    const updatedTovalue: number = updatedToValueCalculate > totalClaimCount ? totalClaimCount : updatedToValueCalculate
     pagesItems['results'].from = updatedFromvalue
     pagesItems['results'].to = updatedTovalue
   }
@@ -34,18 +34,18 @@ export function formPaginationToDisplay (pagingInfo: object, selectedPageNo: num
 }
 
 function formItemswithHyperlink (hyperlinkText: string, selectedPageNo: number, totalClaimCount: number, totalPage: number): object {
-  let pagesItems: Array<object> = []
+  const pagesItems: Array<object> = []
   let nextArrow: object
   let previousArrow: object
-  let results: object = {
+  const results: object = {
     from: 1,
     to: 10,
     count: totalClaimCount
   }
 
-  for (let i: number = 1; i <= totalPage; i++) {
+  for (let i = 1; i <= totalPage; i++) {
     let items: object
-    let href: string = hyperlinkText + i
+    const href: string = hyperlinkText + i
     if (i === selectedPageNo) {
       items = { text : i, href: href, 'selected': true }
     } else {
@@ -55,7 +55,7 @@ function formItemswithHyperlink (hyperlinkText: string, selectedPageNo: number, 
   }
 
   if (totalPage > 1 && selectedPageNo < totalPage) {
-    let nextPagetoSelect: number = 1
+    let nextPagetoSelect = 1
     pagesItems.some(item => {
       if (item['selected'] === true) {
         nextPagetoSelect = item['text'] + 1
@@ -69,7 +69,7 @@ function formItemswithHyperlink (hyperlinkText: string, selectedPageNo: number, 
   }
 
   if (selectedPageNo > 1) {
-    let previousPagetoSelect: number = 1
+    let previousPagetoSelect = 1
     pagesItems.some(item => {
       if (item['selected'] === true) {
         previousPagetoSelect = item['text'] - 1
@@ -82,7 +82,7 @@ function formItemswithHyperlink (hyperlinkText: string, selectedPageNo: number, 
     }
   }
 
-  let paginationToDisplay = {
+  const paginationToDisplay = {
     results: results,
     previous: previousArrow,
     next: nextArrow,

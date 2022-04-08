@@ -64,7 +64,7 @@ export class ClaimantCheckAndSendPage {
     I.see(claimReason)
   }
 
-  async verifyDefendantCheckAndSendAnswers (I: I, defendantType: PartyType, enterDefendantEmail: boolean = true): Promise<void> {
+  async verifyDefendantCheckAndSendAnswers (I: I, defendantType: PartyType, enterDefendantEmail = true): Promise<void> {
     const defendant: Party = await createDefendant(I, defendantType, enterDefendantEmail)
 
     I.see(defendant.address.line1)
@@ -102,7 +102,7 @@ export class ClaimantCheckAndSendPage {
     I.see(AmountHelper.formatMoney(claimAmount.getTotal()))
   }
 
-  async verifyCheckAndSendAnswers (I: I, claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true): Promise<void> {
+  async verifyCheckAndSendAnswers (I: I, claimantType: PartyType, defendantType: PartyType, enterDefendantEmail = true): Promise<void> {
     const claimant: Party = createClaimant(claimantType)
 
     I.waitForText('Check your answers')

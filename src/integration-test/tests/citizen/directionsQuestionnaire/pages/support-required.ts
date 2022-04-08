@@ -29,7 +29,7 @@ const buttons = {
 
 export class SupportRequiredPage {
   selectAll (): void {
-    const someText: string = 'Some Text'
+    const someText = 'Some Text'
     I.checkOption(fields.disabledAccess.input)
     I.checkOption(fields.hearingLoop.input)
     I.checkOption(fields.signLanguageInterpreter.input)

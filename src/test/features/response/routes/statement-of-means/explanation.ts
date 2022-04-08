@@ -23,7 +23,7 @@ import {
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const expectedText: string = 'Briefly explain why you can’t pay immediately'
+const expectedText = 'Briefly explain why you can’t pay immediately'
 
 const pagePath = StatementOfMeansPaths.explanationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 describe('Statement of means: Briefly explain why cannot pay immediately page', () => {

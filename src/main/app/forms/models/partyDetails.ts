@@ -43,7 +43,7 @@ export class PartyDetails {
   constructor (name?: string,
                pcqId?: string,
                address: Address = new Address(),
-               hasCorrespondenceAddress: boolean = false,
+               hasCorrespondenceAddress = false,
                correspondenceAddress: Address = new CorrespondenceAddress(),
                phone?: string) {
     this.address = address

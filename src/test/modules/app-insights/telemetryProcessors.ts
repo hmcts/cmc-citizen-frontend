@@ -19,7 +19,7 @@ describe('app-insights telemetryProcessors', () => {
     })
 
     it('should modify operation name tag with uuid when not a static file', () => {
-      let envelope: Envelope = {
+      const envelope: Envelope = {
         tags: { 'ai.operation.name': 'GET /somewhere/01234567-89ab-4cde-af01-23456789abcd/something' }
       } as Envelope
       expect(telemetryProcessors.operationNameUUIDHider()(envelope)).to.be.true
@@ -28,7 +28,7 @@ describe('app-insights telemetryProcessors', () => {
 
     it('should not modify operation name tag with uuid when a static file', () => {
       const operationName = 'GET /somewhere/01234567-89ab-4cde-af01-23456789abcd/something.file'
-      let envelope: Envelope = {
+      const envelope: Envelope = {
         tags: { 'ai.operation.name': operationName }
       } as Envelope
       expect(telemetryProcessors.operationNameUUIDHider()(envelope)).to.be.true
@@ -37,7 +37,7 @@ describe('app-insights telemetryProcessors', () => {
 
     it('should not modify operation name tag without uuid when not a static file', () => {
       const operationName = 'GET /somewhere/notauuid/something'
-      let envelope: Envelope = {
+      const envelope: Envelope = {
         tags: { 'ai.operation.name': operationName }
       } as Envelope
       expect(telemetryProcessors.operationNameUUIDHider()(envelope)).to.be.true

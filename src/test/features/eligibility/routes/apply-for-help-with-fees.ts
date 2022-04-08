@@ -10,7 +10,7 @@ import { Paths } from 'eligibility/paths'
 import { app } from 'main/app'
 
 const pagePath: string = Paths.applyForHelpWithFeesPage.uri
-const expectedTextOnPage: string = 'Apply for Help with Fees'
+const expectedTextOnPage = 'Apply for Help with Fees'
 
 describe('Claim eligibility: Apply for help with fees', () => {
   attachDefaultHooks(app)

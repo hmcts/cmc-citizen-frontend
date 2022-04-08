@@ -3,8 +3,8 @@ import { ValidateNested } from '@hmcts/class-validator'
 import { ClaimAmountRow } from 'features/claim/form/models/claimAmountRow'
 import { MinTotal } from '@hmcts/cmc-validators'
 
-export const INIT_ROW_COUNT: number = 4
-export const MAX_NUMBER_OF_ROWS: number = 1000
+export const INIT_ROW_COUNT = 4
+export const MAX_NUMBER_OF_ROWS = 1000
 
 export class ValidationErrors {
   static readonly AMOUNT_REQUIRED: string = 'Enter an amount of money'

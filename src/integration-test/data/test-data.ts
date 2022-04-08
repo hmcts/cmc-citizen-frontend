@@ -35,10 +35,10 @@ export const postcodeLookupQuery: PostcodeLookupQuery = {
 
 export const claimReason = 'My reasons for the claim are that I am owed this money for a variety of reason, these being...'
 
-export async function createClaimData (I: I, claimantType: PartyType, defendantType: PartyType, hasEmailAddress: boolean = true,
+export async function createClaimData (I: I, claimantType: PartyType, defendantType: PartyType, hasEmailAddress = true,
                                  interestType: InterestType = InterestType.STANDARD): Promise<ClaimData> {
   const defendant = await createDefendant(I, defendantType, hasEmailAddress)
-  let claimData = {
+  const claimData = {
     claimants: [createClaimant(claimantType)],
     defendants: [defendant],
     payment: {
@@ -136,7 +136,7 @@ export function createClaimant (type: PartyType): Party {
   return claimant
 }
 
-export async function createDefendant (I: I, type: PartyType, hasEmailAddress: boolean = false): Promise<Party> {
+export async function createDefendant (I: I, type: PartyType, hasEmailAddress = false): Promise<Party> {
   const defendant: Party = {
     type: type,
     name: undefined,

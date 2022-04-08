@@ -6,7 +6,7 @@ import { BaseParameters, InvokingParameters } from './models/pcqParameters'
 import { TokenGenerator } from './tokenGenerator'
 const request = require('request-promise-native')
 
-const pcqBaseUrl: string = `${config.get<string>('pcq.url')}`
+const pcqBaseUrl = `${config.get<string>('pcq.url')}`
 const serviceId = 'CMC'
 export interface GetServiceEndpointParameters {
   actor: string

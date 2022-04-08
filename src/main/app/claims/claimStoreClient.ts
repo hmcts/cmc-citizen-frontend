@@ -20,9 +20,9 @@ import { OrdersConverter } from 'claims/ordersConverter'
 import { ReviewOrder } from 'claims/models/reviewOrder'
 import moment = require('moment')
 
-export const claimApiBaseUrl: string = `${config.get<string>('claim-store.url')}`
-export const claimStoreApiUrl: string = `${claimApiBaseUrl}/claims`
-const claimStoreResponsesApiUrl: string = `${claimApiBaseUrl}/responses/claim`
+export const claimApiBaseUrl = `${config.get<string>('claim-store.url')}`
+export const claimStoreApiUrl = `${claimApiBaseUrl}/claims`
+const claimStoreResponsesApiUrl = `${claimApiBaseUrl}/responses/claim`
 
 const logger = Logger.getLogger('claims/claimStoreClient')
 

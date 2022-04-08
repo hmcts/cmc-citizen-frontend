@@ -51,7 +51,7 @@ describe('IndividualDetails', () => {
 
   describe('constructor', () => {
     it('should initialise fields with defaults', () => {
-      let individualDetails: IndividualDetails = new IndividualDetails()
+      const individualDetails: IndividualDetails = new IndividualDetails()
       expect(individualDetails.address).to.be.instanceOf(Address)
       expect(individualDetails.correspondenceAddress).to.be.instanceOf(Address)
       expect(individualDetails.type).to.equal(PartyType.INDIVIDUAL.value)
@@ -73,12 +73,12 @@ describe('IndividualDetails', () => {
 
     it('should return error when address is undefined', () => {
       individualDetails.address = undefined
-      let errors: ValidationError[] = validator.validateSync(individualDetails)
+      const errors: ValidationError[] = validator.validateSync(individualDetails)
       expectValidationError(errors, PartyDetailsValidationErrors.ADDRESS_REQUIRED)
     })
 
     it('should return errors when required address fields are missing', () => {
-      let errors: ValidationError[] = validator.validateSync(individualDetails)
+      const errors: ValidationError[] = validator.validateSync(individualDetails)
       expectValidationError(errors, AddressValidationErrors.FIRST_LINE_REQUIRED)
       expectValidationError(errors, AddressValidationErrors.POSTCODE_REQUIRED)
     })
@@ -87,7 +87,7 @@ describe('IndividualDetails', () => {
       individualDetails.name = undefined
       individualDetails.firstName = undefined
       individualDetails.lastName = undefined
-      let errors: ValidationError[] = validator.validateSync(individualDetails)
+      const errors: ValidationError[] = validator.validateSync(individualDetails)
       expectValidationError(errors, PartyDetailsValidationErrors.NAME_REQUIRED)
     })
 
@@ -95,7 +95,7 @@ describe('IndividualDetails', () => {
       individualDetails.name = '  '
       individualDetails.firstName = undefined
       individualDetails.lastName = undefined
-      let errors: ValidationError[] = validator.validateSync(individualDetails)
+      const errors: ValidationError[] = validator.validateSync(individualDetails)
       expectValidationError(errors, PartyDetailsValidationErrors.NAME_REQUIRED)
     })
 
@@ -103,7 +103,7 @@ describe('IndividualDetails', () => {
       individualDetails.name = generateString(256)
       individualDetails.firstName = undefined
       individualDetails.lastName = undefined
-      let errors: ValidationError[] = validator.validateSync(individualDetails)
+      const errors: ValidationError[] = validator.validateSync(individualDetails)
       expectValidationError(errors, SplitNamedPartyDetailsValidationErrors.errorTooLong('Name').replace('$constraint1','255'))
     })
 
@@ -111,7 +111,7 @@ describe('IndividualDetails', () => {
       individualDetails.name = undefined
       individualDetails.firstName = undefined
       individualDetails.lastName = 'some name'
-      let errors: ValidationError[] = validator.validateSync(individualDetails, { groups: ['defendant'] })
+      const errors: ValidationError[] = validator.validateSync(individualDetails, { groups: ['defendant'] })
       expectValidationErrorNotPresent(errors, PartyDetailsValidationErrors.NAME_REQUIRED)
       expectValidationError(errors, SplitNamedPartyDetailsValidationErrors.FIRSTNAME_REQUIRED)
       expectValidationErrorNotPresent(errors, SplitNamedPartyDetailsValidationErrors.LASTNAME_REQUIRED)
@@ -121,7 +121,7 @@ describe('IndividualDetails', () => {
       individualDetails.name = undefined
       individualDetails.firstName = '  '
       individualDetails.lastName = 'some name'
-      let errors: ValidationError[] = validator.validateSync(individualDetails)
+      const errors: ValidationError[] = validator.validateSync(individualDetails)
       expectValidationErrorNotPresent(errors, PartyDetailsValidationErrors.NAME_REQUIRED)
       expectValidationError(errors, SplitNamedPartyDetailsValidationErrors.FIRSTNAME_REQUIRED)
       expectValidationErrorNotPresent(errors, SplitNamedPartyDetailsValidationErrors.LASTNAME_REQUIRED)
@@ -131,7 +131,7 @@ describe('IndividualDetails', () => {
       individualDetails.name = undefined
       individualDetails.firstName = generateString(256)
       individualDetails.lastName = 'some name'
-      let errors: ValidationError[] = validator.validateSync(individualDetails)
+      const errors: ValidationError[] = validator.validateSync(individualDetails)
       expectValidationError(errors, SplitNamedPartyDetailsValidationErrors.errorTooLong('First name').replace('$constraint1','255'))
     })
 
@@ -139,7 +139,7 @@ describe('IndividualDetails', () => {
       individualDetails.name = undefined
       individualDetails.firstName = 'some name'
       individualDetails.lastName = undefined
-      let errors: ValidationError[] = validator.validateSync(individualDetails, { groups: ['defendant'] })
+      const errors: ValidationError[] = validator.validateSync(individualDetails, { groups: ['defendant'] })
       expectValidationErrorNotPresent(errors, PartyDetailsValidationErrors.NAME_REQUIRED)
       expectValidationErrorNotPresent(errors, SplitNamedPartyDetailsValidationErrors.FIRSTNAME_REQUIRED)
       expectValidationError(errors, SplitNamedPartyDetailsValidationErrors.LASTNAME_REQUIRED)
@@ -149,7 +149,7 @@ describe('IndividualDetails', () => {
       individualDetails.name = undefined
       individualDetails.firstName = 'some name'
       individualDetails.lastName = '  '
-      let errors: ValidationError[] = validator.validateSync(individualDetails)
+      const errors: ValidationError[] = validator.validateSync(individualDetails)
       expectValidationErrorNotPresent(errors, PartyDetailsValidationErrors.NAME_REQUIRED)
       expectValidationErrorNotPresent(errors, SplitNamedPartyDetailsValidationErrors.FIRSTNAME_REQUIRED)
       expectValidationError(errors, SplitNamedPartyDetailsValidationErrors.LASTNAME_REQUIRED)
@@ -159,7 +159,7 @@ describe('IndividualDetails', () => {
       individualDetails.name = undefined
       individualDetails.firstName = 'some name'
       individualDetails.lastName = generateString(256)
-      let errors: ValidationError[] = validator.validateSync(individualDetails)
+      const errors: ValidationError[] = validator.validateSync(individualDetails)
       expectValidationError(errors, SplitNamedPartyDetailsValidationErrors.errorTooLong('Last name').replace('$constraint1','255'))
     })
 
@@ -167,19 +167,19 @@ describe('IndividualDetails', () => {
       individualDetails.title = generateString(36)
       individualDetails.firstName = 'some name'
       individualDetails.lastName = 'some name'
-      let errors: ValidationError[] = validator.validateSync(individualDetails)
+      const errors: ValidationError[] = validator.validateSync(individualDetails)
       expectValidationError(errors, SplitNamedPartyDetailsValidationErrors.errorTooLong('Title').replace('$constraint1','35'))
     })
 
     it('should return error when dataOfBirth is undefined', () => {
       individualDetails.dateOfBirth = undefined
-      let errors: ValidationError[] = validator.validateSync(individualDetails)
+      const errors: ValidationError[] = validator.validateSync(individualDetails)
       expectValidationError(errors, PartyDetailsValidationErrors.NAME_REQUIRED)
     })
 
     it('should return error when dataOfBirth is null', () => {
       individualDetails.dateOfBirth = null
-      let errors: ValidationError[] = validator.validateSync(individualDetails)
+      const errors: ValidationError[] = validator.validateSync(individualDetails)
       expectValidationError(errors, PartyDetailsValidationErrors.NAME_REQUIRED)
     })
 
@@ -194,12 +194,12 @@ describe('IndividualDetails', () => {
 
       it('should return error when correspondence address is undefined', () => {
         individualDetails.correspondenceAddress = undefined
-        let errors: ValidationError[] = validator.validateSync(individualDetails)
+        const errors: ValidationError[] = validator.validateSync(individualDetails)
         expectValidationError(errors, PartyDetailsValidationErrors.CORRESPONDENCE_ADDRESS_REQUIRED)
       })
 
       it('should return errors when correspondence address required fields are missing', () => {
-        let errors: ValidationError[] = validator.validateSync(individualDetails)
+        const errors: ValidationError[] = validator.validateSync(individualDetails)
         expectValidationError(errors, CorrespondenceAddressValidationErrors.FIRST_LINE_REQUIRED)
         expectValidationError(errors, CorrespondenceAddressValidationErrors.POSTCODE_REQUIRED)
       })
@@ -216,7 +216,7 @@ describe('IndividualDetails', () => {
         individualDetails.hasCorrespondenceAddress = false
         individualDetails.firstName = 'ClaimantName'
         individualDetails.lastName = 'ClaimantName'
-        let error = validator.validateSync(individualDetails)
+        const error = validator.validateSync(individualDetails)
         expect(error.length).to.equal(0)
       })
     })
@@ -224,7 +224,7 @@ describe('IndividualDetails', () => {
 
   describe('deserialize', () => {
     it('should return object initialized with default values when given undefined', () => {
-      let deserialized: IndividualDetails = new IndividualDetails().deserialize(undefined)
+      const deserialized: IndividualDetails = new IndividualDetails().deserialize(undefined)
       expect(deserialized.address).to.be.instanceOf(Address)
       expect(deserialized.hasCorrespondenceAddress).to.equal(false)
       expect(deserialized.correspondenceAddress).to.be.instanceOf(Address)
@@ -237,7 +237,7 @@ describe('IndividualDetails', () => {
     })
 
     it('should return object with values set from provided input json', () => {
-      let deserialized: IndividualDetails = new IndividualDetails().deserialize(input)
+      const deserialized: IndividualDetails = new IndividualDetails().deserialize(input)
       expect(deserialized.address.line1).to.equal('first line')
       expect(deserialized.address.postcode).to.equal('bb127nq')
       expect(deserialized.hasCorrespondenceAddress).to.equal(true)
@@ -262,7 +262,7 @@ describe('IndividualDetails', () => {
 
     it('should deserialize all fields', () => {
       formInput.title = 'Mr.'
-      let deserialized: IndividualDetails = IndividualDetails.fromObject(formInput)
+      const deserialized: IndividualDetails = IndividualDetails.fromObject(formInput)
       expect(deserialized.address.line1).to.equal('first line')
       expect(deserialized.address.postcode).to.equal('bb127nq')
       expect(deserialized.hasCorrespondenceAddress).to.equal(true)
@@ -282,7 +282,7 @@ describe('IndividualDetails', () => {
     it('should set correspondence address to undefined if "has correspondence address flag is set to false"', () => {
       formInput.hasCorrespondenceAddress = 'false'
 
-      let deserialized: IndividualDetails = IndividualDetails.fromObject(formInput)
+      const deserialized: IndividualDetails = IndividualDetails.fromObject(formInput)
 
       expect(deserialized.correspondenceAddress).to.equal(undefined)
     })

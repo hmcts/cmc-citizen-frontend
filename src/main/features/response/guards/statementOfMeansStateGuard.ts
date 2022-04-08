@@ -16,7 +16,7 @@ export class StatementOfMeansStateGuard {
    *
    * @returns {e.RequestHandler}
    */
-  static requestHandler (requireInitiatedModel: boolean = true): express.RequestHandler {
+  static requestHandler (requireInitiatedModel = true): express.RequestHandler {
     return GuardFactory.create((res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       const claim: Claim = res.locals.claim

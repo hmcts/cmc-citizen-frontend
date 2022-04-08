@@ -50,7 +50,7 @@ export class OrganisationDetailsPage {
     I.selectOption(fields.address.addressList, postcodeLookupQuery.address)
   }
 
-  enterAddress (address: Address, clickManualLink: boolean = true): void {
+  enterAddress (address: Address, clickManualLink = true): void {
     if (clickManualLink) {
       I.click(fields.address.enterManually)
     }

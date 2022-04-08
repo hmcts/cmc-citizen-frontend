@@ -2,8 +2,8 @@ import { expect } from 'chai'
 
 import { AtLeastOnePopulatedRowConstraint } from 'forms/validation/validators/atLeastOnePopulatedRow'
 
-const EMPTY: boolean = true
-const POPULATED: boolean = false
+const EMPTY = true
+const POPULATED = false
 
 describe('AtLeastOnePopulatedRowConstraint', () => {
   const constraint: AtLeastOnePopulatedRowConstraint = new AtLeastOnePopulatedRowConstraint()

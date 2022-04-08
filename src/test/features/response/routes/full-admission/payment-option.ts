@@ -66,7 +66,7 @@ describe('Defendant - when will you pay options', () => {
       })
 
       context('when service is healthy', () => {
-        const fullAdmissionQuestion: string = 'When do you want to pay?'
+        const fullAdmissionQuestion = 'When do you want to pay?'
         it(`should render page asking '${fullAdmissionQuestion}' when full admission was selected`, async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission', {

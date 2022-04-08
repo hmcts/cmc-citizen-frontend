@@ -19,7 +19,7 @@ import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath: string = Paths.intentionToProceedPage.evaluateUri({ externalId: externalId })
-const pageContent: string = 'Do you want to proceed with the claim?'
+const pageContent = 'Do you want to proceed with the claim?'
 const defendantPartialAdmissionResponse = claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj
 
 describe('Claimant response: intention to proceed page', () => {

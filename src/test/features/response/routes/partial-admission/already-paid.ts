@@ -65,7 +65,7 @@ describe('Defendant: partial admission - already paid?', () => {
       })
 
       context('when service is healthy', () => {
-        const header: string = 'Have you paid the claimant the amount you admit you owe?'
+        const header = 'Have you paid the claimant the amount you admit you owe?'
         it(`should render page asking '${header}' when partial admission was selected`, async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:partial-admission', {

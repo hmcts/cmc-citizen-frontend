@@ -74,7 +74,7 @@ export class IdamClient {
    * @returns {Promise<void>}
    */
   static deleteUsers (usernames: string[]): Promise<void> {
-    let params = usernames.map(function (s) {
+    const params = usernames.map(function (s) {
       return `userNames=${encodeURIComponent(s)}`
     }).join('&')
 

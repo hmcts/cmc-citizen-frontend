@@ -6,7 +6,7 @@ import { Moment } from 'moment'
 export class InterestRateClient {
 
   static calculateInterestRate (amount: number, rate: number, startDate: Moment, endDate: Moment): Promise<number> {
-    const url: string = `${claimApiBaseUrl}/interest/calculate`
+    const url = `${claimApiBaseUrl}/interest/calculate`
 
     const from: string = MomentFormatter.formatDate(startDate)
     const to: string = MomentFormatter.formatDate(endDate)

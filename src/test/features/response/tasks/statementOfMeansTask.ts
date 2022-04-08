@@ -167,7 +167,7 @@ describe('StatementOfMeansTask', () => {
           })
 
           it('has children between 16 and 19 and they do not educate', () => {
-            const noOfChildrenBetween16and19: number = 2
+            const noOfChildrenBetween16and19 = 2
             responseDraft.statementOfMeans.dependants = new Dependants(
               true, new NumberOfChildren(0, 0, noOfChildrenBetween16and19)
             )
@@ -177,7 +177,7 @@ describe('StatementOfMeansTask', () => {
           })
 
           it('has children between 16 and 19 and they educate', () => {
-            const noOfChildrenBetween16and19: number = 2
+            const noOfChildrenBetween16and19 = 2
             responseDraft.statementOfMeans.dependants = new Dependants(
               true, new NumberOfChildren(0, 0, noOfChildrenBetween16and19)
             )

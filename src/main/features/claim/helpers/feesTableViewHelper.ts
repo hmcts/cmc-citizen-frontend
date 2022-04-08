@@ -2,7 +2,7 @@ import { FeesClient } from 'fees/feesClient'
 import { FeeRange as MergeableRange } from 'claim/helpers/feesTableViewHelper'
 import { FeeRange as ViewFeeRange } from 'fees/models/feeRange'
 
-const supportedFeeLimitInGBP: number = 10000
+const supportedFeeLimitInGBP = 10000
 
 interface RangePartial {
   minRange: number
@@ -66,7 +66,7 @@ export class FeeRangeMerge implements RangePartial {
 }
 
 export class FeesTableViewHelper {
-  static merge (firstFeesSet: FeeRange[], secondFeesSet: FeeRange[], increment: number = 0.01): FeeRangeMerge[] {
+  static merge (firstFeesSet: FeeRange[], secondFeesSet: FeeRange[], increment = 0.01): FeeRangeMerge[] {
     if (firstFeesSet === undefined || secondFeesSet === undefined) {
       throw new Error('Both fee sets are required for merge')
     }
@@ -125,7 +125,7 @@ export class FeesTableViewHelper {
     ].sort((lhs: Item, rhs: Item) => RangeUtils.compare(lhs.range, rhs.range))
 
     return items.reduce((feeRange: MergeableRange[], item: Item) => {
-      const increment: number = 0.01
+      const increment = 0.01
       const overlappedRows: MergeableRange[] = feeRange.filter((row: MergeableRange) => RangeUtils.areOverlap(item.range, row))
       if (overlappedRows.length === 0) {
         feeRange.push(new MergeableRange(item.range.minRange, item.range.maxRange, item.range.amount))

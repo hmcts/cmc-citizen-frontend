@@ -43,7 +43,7 @@ export class CompanyDetailsPage {
     I.fillField(fields.name, name)
   }
 
-  enterAddress (address: Address, clickManualLink: boolean = true): void {
+  enterAddress (address: Address, clickManualLink = true): void {
     if (clickManualLink) {
       I.click(fields.address.enterManually)
     }

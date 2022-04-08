@@ -14,7 +14,7 @@ import { YesNoOption } from 'models/yesNoOption'
 
 const pagePath: string = Paths.claimIsForTenancyDepositPage.uri
 const pageRedirect: string = Paths.governmentDepartmentPage.uri
-const expectedTextOnPage: string = 'Is your claim for a tenancy deposit?'
+const expectedTextOnPage = 'Is your claim for a tenancy deposit?'
 
 describe('Claim eligibility: is claim for tenancy deposit page', () => {
   attachDefaultHooks(app)

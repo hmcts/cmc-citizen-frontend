@@ -23,7 +23,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.paymentDatePage.evaluateUri({ externalId: externalId })
 
-const heading: string = 'When do you want the defendant to pay?'
+const heading = 'When do you want the defendant to pay?'
 
 const claimantResponseDraftOverrideWithDisposableIncome: object = {
   alternatePaymentMethod: {

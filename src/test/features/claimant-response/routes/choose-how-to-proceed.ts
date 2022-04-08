@@ -19,7 +19,7 @@ import { FormaliseRepaymentPlanOption } from 'features/claimant-response/form/mo
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath: string = Paths.chooseHowToProceedPage.evaluateUri({ externalId: externalId })
-const pageContent: string = 'Choose how to proceed'
+const pageContent = 'Choose how to proceed'
 const defendantPartialAdmissionResponse = claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj
 
 describe('Claimant response: choose how to proceed page', () => {

@@ -16,7 +16,7 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { YesNoOption } from 'models/yesNoOption'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pageContent: string = 'Do you want to claim interest?'
+const pageContent = 'Do you want to claim interest?'
 const pagePath: string = ClaimPaths.interestPage.uri
 
 describe('Claim issue: interest page', () => {

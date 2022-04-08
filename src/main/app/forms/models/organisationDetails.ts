@@ -27,7 +27,7 @@ export class OrganisationDetails extends PartyDetails {
     if (input == null) {
       return input
     }
-    let deserialized = new OrganisationDetails()
+    const deserialized = new OrganisationDetails()
     Object.assign(deserialized, PartyDetails.fromObject(input))
     deserialized.contactPerson = input.contactPerson
     deserialized.type = PartyType.ORGANISATION.value

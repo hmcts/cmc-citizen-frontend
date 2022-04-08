@@ -24,9 +24,9 @@ const input = {
   hasCorrespondenceAddress: false,
   businessName: 'businessName'
 } as SoleTraderDetails
-const theirFirstName: string = 'First name'
-const theirLastName: string = 'Last name'
-const theirTitle: string = 'Title'
+const theirFirstName = 'First name'
+const theirLastName = 'Last name'
+const theirTitle = 'Title'
 
 describe('defendant as soleTrader details page', () => {
   attachDefaultHooks(app)

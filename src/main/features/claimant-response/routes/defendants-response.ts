@@ -36,7 +36,7 @@ export default express.Router()
   .get(
     Paths.defendantsResponsePage.uri,
     (req: express.Request, res: express.Response) => {
-      const page: number = 0
+      const page = 0
       renderView(res, page)
     }
   )

@@ -14,7 +14,7 @@ import { YesNoOption } from 'models/yesNoOption'
 
 const pagePath: string = Paths.governmentDepartmentPage.uri
 const pageRedirect: string = Paths.defendantAgePage.uri
-const expectedTextOnPage: string = 'Are you claiming against a government department?'
+const expectedTextOnPage = 'Are you claiming against a government department?'
 
 describe('Claim eligibility: government department page', () => {
   attachDefaultHooks(app)

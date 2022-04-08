@@ -27,7 +27,7 @@ export class RequestLoggingHandler {
       query: options.qs,
       headers: options.headers
     })
-    let originalCallback = intercept(options.callback)
+    const originalCallback = intercept(options.callback)
     options.callback = (err, response, body) => {
       originalCallback(err, response, body)
       this.apiLogger.logResponse({

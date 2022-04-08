@@ -15,7 +15,7 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { InterestRateOption } from 'claim/form/models/interestRateOption'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pageContent: string = 'What annual rate of interest do you want to claim?'
+const pageContent = 'What annual rate of interest do you want to claim?'
 const pagePath: string = ClaimPaths.interestRatePage.uri
 
 describe('Claim issue: interest rate page', () => {

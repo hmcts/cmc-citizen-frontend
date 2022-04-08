@@ -10,7 +10,7 @@ import { LocalDate } from 'forms/models/localDate'
 
 describe('MinimumAgeValidatorConstraint', () => {
   const constraint: MinimumAgeValidatorConstraint = new MinimumAgeValidatorConstraint()
-  const minMessage: string = 'Min Years in the past has to be specified and positive value'
+  const minMessage = 'Min Years in the past has to be specified and positive value'
 
   describe('validate', () => {
     const today = moment()
@@ -55,7 +55,7 @@ describe('MinimumAgeValidatorConstraint', () => {
 
 describe('MaximumAgeValidatorConstraint', () => {
   const constraint: MaximumAgeValidatorConstraint = new MaximumAgeValidatorConstraint()
-  const maxMessage: string = 'Max Years in the past has to be specified and positive value'
+  const maxMessage = 'Max Years in the past has to be specified and positive value'
 
   describe('validate', () => {
     const today = moment()

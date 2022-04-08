@@ -40,7 +40,7 @@ import { Phone } from 'forms/models/phone'
 import * as config from 'config'
 import { Logger } from '@hmcts/nodejs-logging'
 
-export const paymentReturnUrlBase: string = `${config.get<string>('pay.return-url')}`
+export const paymentReturnUrlBase = `${config.get<string>('pay.return-url')}`
 
 const logger = Logger.getLogger('claims/ClaimModelConverter')
 

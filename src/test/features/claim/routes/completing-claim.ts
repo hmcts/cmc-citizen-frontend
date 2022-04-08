@@ -15,7 +15,7 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const expectedTextOnPage: string = 'Get the details right'
+const expectedTextOnPage = 'Get the details right'
 
 describe('Claim issue: completing claim page', () => {
   attachDefaultHooks(app)

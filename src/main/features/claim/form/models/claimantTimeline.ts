@@ -2,7 +2,7 @@ import { TimelineRow } from 'forms/models/timelineRow'
 import { Timeline } from 'forms/models/timeline'
 import { AtLeastOnePopulatedRow } from 'forms/validation/validators/atLeastOnePopulatedRow'
 
-export const MIN_NUMBER_OF_ROWS: number = 1
+export const MIN_NUMBER_OF_ROWS = 1
 
 export class ValidationErrors {
   static readonly ENTER_AT_LEAST_ONE_ROW: string = 'Enter at least one row'

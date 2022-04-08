@@ -47,7 +47,7 @@ export function prepareDefendantOffer (claim: Claim, draft: DraftClaimantRespons
   const amount = NumberFormatter.formatMoney(AmountHelper.calculateTotalAmount(claim, draft))
   if (response.paymentIntention.paymentDate) {
     const completionDate: Moment = response.paymentIntention.paymentDate
-    const content: string = `${response.defendant.name} will pay ${amount}, no later than ${MomentFormatter.formatLongDate(completionDate)}`
+    const content = `${response.defendant.name} will pay ${amount}, no later than ${MomentFormatter.formatLongDate(completionDate)}`
     return new Offer(content, completionDate, response.paymentIntention)
   } else if (response.paymentIntention.repaymentPlan) {
     const paymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim, draft)
@@ -55,7 +55,7 @@ export function prepareDefendantOffer (claim: Claim, draft: DraftClaimantRespons
     const paymentSchedule: string = PaymentScheduleTypeViewFilter.render(response.paymentIntention.repaymentPlan.paymentSchedule).toLowerCase()
     const firstPaymentDate: string = MomentFormatter.formatLongDate(paymentPlan.startDate)
     const completionDate: Moment = paymentPlan.calculateLastPaymentDate()
-    const content: string = `${response.defendant.name} will repay ${amount} in instalments of ${instalmentAmount} ${paymentSchedule}. The first instalment will be paid by ${firstPaymentDate}.`
+    const content = `${response.defendant.name} will repay ${amount} in instalments of ${instalmentAmount} ${paymentSchedule}. The first instalment will be paid by ${firstPaymentDate}.`
     return new Offer(content, completionDate, response.paymentIntention)
   }
   throw new Error('Invalid paymentIntention')

@@ -17,10 +17,10 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const heading: string = 'Enter your details'
-const theirFirstName: string = 'First name'
-const theirLastName: string = 'Last name'
-const theirTitle: string = 'Title'
+const heading = 'Enter your details'
+const theirFirstName = 'First name'
+const theirLastName = 'Last name'
+const theirTitle = 'Title'
 const input = {
   type: 'individual',
   name: 'John Smith',

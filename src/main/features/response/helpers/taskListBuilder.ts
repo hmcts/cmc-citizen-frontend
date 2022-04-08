@@ -53,7 +53,7 @@ export class TaskListBuilder extends TaskStatus {
       )
     )
 
-    let isDeadlinePassed: boolean = false
+    let isDeadlinePassed = false
     if (await featureToggles.isOCONEnhancementEnabled()) {
       isDeadlinePassed = isPastDeadline(now, claim.responseDeadline)
     } else {

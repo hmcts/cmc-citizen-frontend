@@ -4,7 +4,7 @@ import { IsDefined, IsIn } from '@hmcts/class-validator'
 import { Fractions, IsNotBlank, Min } from '@hmcts/cmc-validators'
 import { MonthlyIncomeType } from './monthlyIncomeType'
 
-export const INIT_ROW_COUNT: number = 0
+export const INIT_ROW_COUNT = 0
 
 export class ValidationErrors {
   static readonly NAME_REQUIRED = 'Enter other income source'

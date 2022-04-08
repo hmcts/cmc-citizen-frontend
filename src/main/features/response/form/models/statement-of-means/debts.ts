@@ -5,7 +5,7 @@ import * as toBoolean from 'to-boolean'
 import { DebtRow } from 'response/form/models/statement-of-means/debtRow'
 import { AtLeastOnePopulatedRow } from 'forms/validation/validators/atLeastOnePopulatedRow'
 
-export const INIT_ROW_COUNT: number = 2
+export const INIT_ROW_COUNT = 2
 
 export class ValidationErrors {
   static readonly ENTER_AT_LEAST_ONE_ROW: string = 'Enter at least one debt'

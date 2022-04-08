@@ -23,7 +23,7 @@ export async function getInterestDetails (claim: Claim): Promise<InterestData> {
   const numberOfDays: number = interestToDate.diff(interestFromDate, 'days')
 
   const rate = claim.claimData.interest.rate
-  let interest: number = claim.totalInterest
+  const interest: number = claim.totalInterest
 
   const specificDailyAmount = claim.claimData.interest.specificDailyAmount
   return { interestFromDate, interestToDate, numberOfDays, interest, rate, specificDailyAmount }

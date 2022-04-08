@@ -16,7 +16,7 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { InterestDateType } from 'common/interestDateType'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pageContent: string = 'When are you claiming interest from?'
+const pageContent = 'When are you claiming interest from?'
 const pagePath: string = ClaimPaths.interestDatePage.uri
 
 describe('Claim issue: interest date page', () => {

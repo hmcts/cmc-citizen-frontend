@@ -2,11 +2,11 @@ import * as express from 'express'
 import * as config from 'config'
 
 export class WebChat {
-  static main: string = '/webchat'
+  static main = '/webchat'
 
   static filterSecrets (accepted, secrets) {
-    let result = {}
-    for (let secret in secrets) {
+    const result = {}
+    for (const secret in secrets) {
       if (secret.search(accepted) > -1) {
         result[secret] = secrets[secret]
       }

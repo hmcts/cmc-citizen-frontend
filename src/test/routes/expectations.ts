@@ -5,12 +5,12 @@ import * as HttpStatus from 'http-status-codes'
 
 const Assertion = chai['Assertion']
 
-function stringifyWithoutPropertyQuotes (value: object, pretty: boolean = false): string {
+function stringifyWithoutPropertyQuotes (value: object, pretty = false): string {
   let result = JSON.stringify(value, null, 2)
   if (!pretty) {
     result = result.replace(/\n\s*/g, ' ') // remove new line characters and normalize spaces
   }
-  return result.replace(/\"([^(\")"]+)\":/g, '$1:')
+  return result.replace(/([^()"]+):/g, '$1:')
 }
 
 function errorMessageWithResponseExtract (msg: string, res: any): string {

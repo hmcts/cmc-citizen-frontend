@@ -13,7 +13,7 @@ describe('Email', () => {
   describe('constructor', () => {
 
     it('should set the primitive fields to undefined', () => {
-      let email = new Email()
+      const email = new Email()
       expect(email.address).to.be.undefined
     })
   })
@@ -29,7 +29,7 @@ describe('Email', () => {
     })
 
     it('should return a Email instance with set field "address" from given object', () => {
-      let result = new Email().deserialize({
+      const result = new Email().deserialize({
         address: 'myemail@domain.com'
       })
       expect(result.address).to.be.equals('myemail@domain.com')

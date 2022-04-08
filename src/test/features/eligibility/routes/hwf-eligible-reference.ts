@@ -10,7 +10,7 @@ import { Paths } from 'eligibility/paths'
 import { app } from 'main/app'
 
 const pagePath: string = Paths.hwfEligibleReferencePage.uri
-const expectedTextOnPage: string = 'Remember that you will not know about the fee until we have processed your Help with Fees application. Your claim will only be issued after Help with Fees is confirmed, or the fee is paid.'
+const expectedTextOnPage = 'Remember that you will not know about the fee until we have processed your Help with Fees application. Your claim will only be issued after Help with Fees is confirmed, or the fee is paid.'
 
 describe('Claim eligibility: You can use this Service HwF Eligible with reference number', () => {
   attachDefaultHooks(app)

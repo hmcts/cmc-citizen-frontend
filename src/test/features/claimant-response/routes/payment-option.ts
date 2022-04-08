@@ -21,7 +21,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.alternateRepaymentPlanPage.evaluateUri({ externalId: externalId })
 
-const heading: string = 'How do you want the defendant to pay?'
+const heading = 'How do you want the defendant to pay?'
 
 describe('Claimant response: payment options', () => {
   attachDefaultHooks(app)

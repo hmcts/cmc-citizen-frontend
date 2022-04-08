@@ -10,7 +10,7 @@ import { Paths } from 'eligibility/paths'
 import { app } from 'main/app'
 
 const pagePath: string = Paths.hwfEligiblePage.uri
-const expectedTextOnPage: string = 'You will have to pay court fees unless you are eligible for Help with Fees.'
+const expectedTextOnPage = 'You will have to pay court fees unless you are eligible for Help with Fees.'
 
 describe('Claim eligibility: You can use this Service HwF Eligible without reference number', () => {
   attachDefaultHooks(app)

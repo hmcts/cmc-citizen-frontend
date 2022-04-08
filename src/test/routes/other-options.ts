@@ -6,7 +6,7 @@ import 'test/routes/expectations'
 import { app } from 'main/app'
 import { Paths } from 'paths'
 
-const expectedTextOnPage: string = 'talk to the person or organisation you say owes you'
+const expectedTextOnPage = 'talk to the person or organisation you say owes you'
 
 describe('Defendant first contact: start page', () => {
   describe('on GET', () => {

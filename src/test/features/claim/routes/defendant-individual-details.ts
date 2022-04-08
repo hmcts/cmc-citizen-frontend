@@ -22,9 +22,9 @@ const input = {
   address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: 'SE28 0JE' } as Address,
   hasCorrespondenceAddress: false
 } as IndividualDetails
-const theirFirstName: string = 'First name'
-const theirLastName: string = 'Last name'
-const theirTitle: string = 'Title'
+const theirFirstName = 'First name'
+const theirLastName = 'Last name'
+const theirTitle = 'Title'
 
 describe('defendant as individual details page', () => {
   attachDefaultHooks(app)

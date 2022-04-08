@@ -16,7 +16,7 @@ describe('MediationDraft', () => {
     })
 
     it('should return a DraftMediation instance initialised with valid data', () => {
-      const myExternalId: String = 'b17af4d2-273f-4999-9895-bce382fa24c8'
+      const myExternalId = 'b17af4d2-273f-4999-9895-bce382fa24c8'
       const draft: MediationDraft = new MediationDraft().deserialize({
         externalId: myExternalId,
         willYouTryMediation: {
@@ -28,7 +28,7 @@ describe('MediationDraft', () => {
     })
 
     it('should return a DraftMediation instance initialised with valid data when mediation is said NO', () => {
-      const myExternalId: String = 'b17af4d2-273f-4999-9895-bce382fa24c8'
+      const myExternalId = 'b17af4d2-273f-4999-9895-bce382fa24c8'
       const draft: MediationDraft = new MediationDraft().deserialize({
         externalId: myExternalId,
         willYouTryMediation: {

@@ -49,7 +49,7 @@ describe('Defendant response task list builder', () => {
   describe('"Consider other options" section', () => {
     describe('"Do you need more time to respond?" task', () => {
       const responseDraft: ResponseDraft = new ResponseDraft().deserialize(defenceWithDisputeDraft)
-      const taskListItemText: string = 'Decide if you need more time to respond'
+      const taskListItemText = 'Decide if you need more time to respond'
 
       it('should be available when defendant tries to respond before due day', async () => {
         claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())

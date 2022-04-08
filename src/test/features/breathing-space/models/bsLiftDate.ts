@@ -70,7 +70,7 @@ describe('BreathingSpaceLiftDate', () => {
 
   describe('constructor', () => {
     it('should set fields to undefined', () => {
-      let date = new BreathingSpaceLiftDate()
+      const date = new BreathingSpaceLiftDate()
       expect(date.respiteLiftDate).to.be.undefined
     })
   })
@@ -85,7 +85,7 @@ describe('BreathingSpaceLiftDate', () => {
     })
 
     it('should set the values of given json on the deserialized instance', () => {
-      let deserialized = new BreathingSpaceLiftDate().deserialize({
+      const deserialized = new BreathingSpaceLiftDate().deserialize({
         respiteLiftDate: {
           day: 10,
           month: 11,

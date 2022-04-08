@@ -20,7 +20,7 @@ export default express.Router()
       const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
       const user: User = res.locals.user
 
-      const expertRequired: boolean = !!req.body.expertYes
+      const expertRequired = !!req.body.expertYes
 
       if (!expertRequired && draft.document.expertRequired && draft.document.expertRequired.option && draft.document.expertRequired.option.option === YesNoOption.YES.option) {
         draft.document.expertReports = new ExpertReports()

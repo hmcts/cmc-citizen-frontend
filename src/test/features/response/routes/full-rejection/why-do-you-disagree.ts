@@ -24,7 +24,7 @@ const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = FullRejectionPaths.whyDoYouDisagreePage.evaluateUri({ externalId: externalId })
 
 const validFormData = { text: 'I will not pay!' }
-const header: string = 'Why do you disagree with the claim amount?'
+const header = 'Why do you disagree with the claim amount?'
 
 describe('Defendant: full reject - why do you disagree?', () => {
 

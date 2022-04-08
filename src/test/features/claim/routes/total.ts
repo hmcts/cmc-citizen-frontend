@@ -24,7 +24,7 @@ import * as sinon from 'sinon'
 const mockLaunchDarklyClient: LaunchDarklyClient = mock(LaunchDarklyClient)
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pageContent: string = 'Total amount you’re claiming'
+const pageContent = 'Total amount you’re claiming'
 const pagePath: string = ClaimPaths.totalPage.uri
 
 describe('Claim issue: total page', () => {
