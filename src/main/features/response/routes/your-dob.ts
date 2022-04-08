@@ -30,7 +30,7 @@ export default express.Router()
     if (defendantPartyDetailsType === PartyType.INDIVIDUAL.value) {
       renderView(new Form((draft.document.defendantDetails.partyDetails as IndividualDetails).dateOfBirth), res)
     } else {
-      res.redirect(Paths.defendantPhonePage.evaluateUri({externalId: claim.externalId}))
+      res.redirect(Paths.defendantPhonePage.evaluateUri({ externalId: claim.externalId }))
     }
   })
   .post(

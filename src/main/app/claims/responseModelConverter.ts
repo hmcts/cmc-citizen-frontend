@@ -710,7 +710,7 @@ export class ResponseModelConverter {
     return DirectionsQuestionnaire.deserialize(directionsQuestionnaireDraft)
   }
 
-  private static checkSevereDisability(option) {
+  private static checkSevereDisability (option) {
     return (!option || option === SevereDisabilityOption.NO
         ? DisabilityStatus.YES
         : DisabilityStatus.SEVERE
