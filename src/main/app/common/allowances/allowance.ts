@@ -36,11 +36,11 @@ export class Allowances {
     }
 
     this.allowance = this.deserializeRows(input.allowances)
-    this.allowance = this.allowance.sort((a, b) => {
-      return a.startDate.diff(b.startDate, 'days')
-    })
 
     return this.allowance
+      .sort((a, b) => {
+        return a.startDate.diff(b.startDate, 'days')
+      })
       .filter(date => date.startDate.isSameOrBefore(moment()))
       .pop()
   }
