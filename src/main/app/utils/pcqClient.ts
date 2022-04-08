@@ -42,8 +42,7 @@ export class PcqClient {
       ccdId = ccdCaseId.toString()
     }
     const returnUri = (buildURL(req, receiver.uri).split('https://')[1]).replace(':externalId', externalId)
-    const redirectUri = this.getServiceEndpoint(ccdId, partyEmailId,pcqID,returnUri,serviceId,claimtype)
-    return redirectUri
+    return this.getServiceEndpoint(ccdId, partyEmailId,pcqID,returnUri,serviceId,claimtype)
   }
   static getServiceEndpoint (ccdCaseId: string, partyId: string, pcqId: string, returnUri: string, actorCmc: string, claimtype: string): string {
     const baseParameters: BaseParameters = {

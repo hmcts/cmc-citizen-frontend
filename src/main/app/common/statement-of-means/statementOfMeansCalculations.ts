@@ -186,7 +186,7 @@ export class StatementOfMeansCalculations {
   private calculateMonthlyRegularIncomesExpensesOrDebts (incomesExpensesOrDebts: FrequencyBasedAmount[]): number {
 
     const reducer = (total: number, incomeExpenseOrDebt: FrequencyBasedAmount) => {
-      const frequency: Frequency = this.toFrequency(incomeExpenseOrDebt.frequency)
+      const frequency: Frequency = StatementOfMeansCalculations.toFrequency(incomeExpenseOrDebt.frequency)
       const amount: number = incomeExpenseOrDebt.amount
 
       if (!frequency || !amount) {
@@ -199,7 +199,7 @@ export class StatementOfMeansCalculations {
     return incomesExpensesOrDebts.reduce(reducer, 0)
   }
 
-  private toFrequency (paymentFrequency: PaymentFrequency): Frequency {
+  private static toFrequency (paymentFrequency: PaymentFrequency): Frequency {
     try {
       return Frequency.of(paymentFrequency)
     } catch (error) {
