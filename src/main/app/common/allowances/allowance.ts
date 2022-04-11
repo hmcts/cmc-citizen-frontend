@@ -34,7 +34,9 @@ export class Allowances {
     if (!input) {
       return input
     }
+
     this.allowance = this.deserializeRows(input.allowances)
+
     return this.allowance
       .sort((a, b) => {
         return a.startDate.diff(b.startDate, 'days')

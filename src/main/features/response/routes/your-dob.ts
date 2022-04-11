@@ -26,13 +26,11 @@ export default express.Router()
   .get(Paths.defendantDateOfBirthPage.uri, (req: express.Request, res: express.Response) => {
     const claim: Claim = res.locals.claim
     const draft: Draft<ResponseDraft> = res.locals.responseDraft
-    switch (draft.document.defendantDetails.partyDetails.type) {
-      case PartyType.INDIVIDUAL.value:
-        renderView(new Form((draft.document.defendantDetails.partyDetails as IndividualDetails).dateOfBirth), res)
-        break
-      default:
-        res.redirect(Paths.defendantPhonePage.evaluateUri({ externalId: claim.externalId }))
-        break
+    const defendantPartyDetailsType = draft.document.defendantDetails.partyDetails.type
+    if (defendantPartyDetailsType === PartyType.INDIVIDUAL.value) {
+      renderView(new Form((draft.document.defendantDetails.partyDetails as IndividualDetails).dateOfBirth), res)
+    } else {
+      res.redirect(Paths.defendantPhonePage.evaluateUri({ externalId: claim.externalId }))
     }
   })
   .post(
@@ -50,12 +48,12 @@ export default express.Router()
       } else {
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
-        switch (draft.document.defendantDetails.partyDetails.type) {
-          case PartyType.INDIVIDUAL.value:
-            (draft.document.defendantDetails.partyDetails as IndividualDetails).dateOfBirth = form.model
-            break
-          default:
-            throw Error('Date of birth is only supported for defendant types individual and sole trader')
+        const defendantPartyDetailsType = draft.document.defendantDetails.partyDetails.type
+
+        if (defendantPartyDetailsType === PartyType.INDIVIDUAL.value) {
+          (draft.document.defendantDetails.partyDetails as IndividualDetails).dateOfBirth = form.model
+        } else {
+          throw Error('Date of birth is only supported for defendant types individual and sole trader')
         }
 
         await new DraftService().save(draft, user.bearerToken)

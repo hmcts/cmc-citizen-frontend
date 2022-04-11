@@ -23,7 +23,7 @@ export class Settlement {
     }
 
     const partyStatement: PartyStatement = this.partyStatements
-      .filter(this.isOfferMadeByDefendant)
+      .filter(Settlement.isOfferMadeByDefendant)
       .pop()
 
     return partyStatement ? partyStatement.offer : undefined
@@ -87,7 +87,7 @@ export class Settlement {
     return !!statement
   }
 
-  private isOfferMadeByDefendant (partyStatement: PartyStatement): boolean {
+  private static isOfferMadeByDefendant (partyStatement: PartyStatement): boolean {
     return partyStatement.type === StatementType.OFFER.value && partyStatement.madeBy === MadeBy.DEFENDANT.value
   }
 
@@ -103,7 +103,9 @@ export class Settlement {
       return undefined
     }
 
-    const reversePartyStatements: PartyStatement[] = this.partyStatements.reverse()
+    let reversePartyStatements: PartyStatement[] = this.partyStatements
+    reversePartyStatements = reversePartyStatements.reverse()
+
     return reversePartyStatements
       .find(statement => statement.type === StatementType.OFFER.value)
   }
