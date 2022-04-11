@@ -43,7 +43,8 @@ describe('ExpenseSource', () => {
     })
 
     it('should return a new instance initialised with name set to undefined', () => {
-      expect(ExpenseSource.fromObject(undefined)).to.eql(undefined, undefined)
+      const actual = ExpenseSource.fromObject(undefined)
+      expect(actual).to.equal(undefined)
     })
   })
 

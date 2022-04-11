@@ -6,3 +6,4 @@ rules:
   class-name-format: 0
   no-important: 0
   mixins-before-declarations: 0
+  quotes: 0
