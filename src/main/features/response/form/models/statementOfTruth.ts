@@ -36,10 +36,10 @@ export class StatementOfTruth {
       return input
     }
 
-    if (input && input.type === SignatureType.BASIC) {
+    if (input.type === SignatureType.BASIC) {
       return new StatementOfTruth(SignatureType.BASIC, input && input.signed === 'true')
-    } else if (input && input.type === SignatureType.DIRECTION_QUESTIONNAIRE) {
-      return new StatementOfTruth(SignatureType.DIRECTION_QUESTIONNAIRE, input && input.signed === 'true', input && input.directionsQuestionnaireSigned === 'true')
+    } else if (input.type === SignatureType.DIRECTION_QUESTIONNAIRE) {
+      return new StatementOfTruth(SignatureType.DIRECTION_QUESTIONNAIRE, input.signed === 'true', input.directionsQuestionnaireSigned === 'true')
     }
   }
 }

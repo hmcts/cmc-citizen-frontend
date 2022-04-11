@@ -29,7 +29,7 @@
     "test:crossbrowser": "./bin/run-crossbrowser-tests.sh",
     "test:crossbrowser-verbose": "TS_NODE_TRANSPILE_ONLY=true codeceptjs run-multiple ${BROWSER_GROUP:-'--all'} --verbose --config saucelabs.conf.js --grep @crossbrowser --reporter mocha-multi",
     "list-supported-browsers": "node -e 'Object.keys(require(\"@hmcts/cmc-supported-browsers\").supportedBrowsers).forEach(key => console.log(key))'",
-    "sonar-scan": "sonar-scanner -Dsonar.projectName='CMC :: Citizen Frontend' -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.exclusions=src/main/features/breathing-space/routes/reference-number.ts,src/main/routes/webchat.ts,src/main/features/dashboard/routes/claimant.ts,src/main/features/directions-questionnaire/routes/vulnerability-questions.ts,src/main/app/claims/models/claim.ts,src/main/public/**,src/main/app/mocks/mockPayClient.ts,src/main/features/claim/routes/pay.ts -Dsonar.javascript.lcov.reportPaths=coverage-report/lcov.info",
+    "sonar-scan": "sonar-scanner -Dsonar.projectName='CMC :: Citizen Frontend' -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.exclusions=src/main/features/breathing-space/routes/reference-number.ts,src/main/routes/webchat.ts,src/main/features/dashboard/routes/claimant.ts,src/main/app/claims/models/claim.ts,src/main/public/**,src/main/app/mocks/mockPayClient.ts,src/main/features/claim/routes/pay.ts -Dsonar.issue.ignore.multicriteria=e1,e2 -Dsonar.issue.ignore.multicriteria.e1.ruleKey=typescript:S2699 -Dsonar.issue.ignore.multicriteria.e1.resourceKey=**/*.ts -Dsonar.issue.ignore.multicriteria.e2.ruleKey=typescript:S1172 -Dsonar.issue.ignore.multicriteria.e2.resourceKey=**/*.ts -Dsonar.javascript.lcov.reportPaths=coverage-report/lcov.info",
     "test:file": "TS_NODE_TRANSPILE_ONLY=true NODE_ENV=mocha LOG_LEVEL=OFF mocha --opts mocha.opts --watch --watch-extensions ts"
   },
   "dependencies": {
@@ -87,7 +87,7 @@
     "ldclient-node": "^5.8.0",
     "lodash": "^4.17.21",
     "mime": "^2.4.6",
-    "moment": "^2.29.2",
+    "moment": "^2.29.1",
     "moment-precise-range-plugin": "^1.3.0",
     "nocache": "^3.0.1",
     "node-cache": "^5.1.2",
