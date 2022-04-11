@@ -234,10 +234,7 @@ export class ResponseModelConverter {
       } : undefined,
       disability: !draft.statementOfMeans.disability.option || draft.statementOfMeans.disability.option === DisabilityOption.NO
         ? DisabilityStatus.NO
-        : (!draft.statementOfMeans.severeDisability.option || draft.statementOfMeans.severeDisability.option === SevereDisabilityOption.NO
-            ? DisabilityStatus.YES
-            : DisabilityStatus.SEVERE
-        ),
+        : ResponseModelConverter.checkSevereDisability(draft.statementOfMeans.disability.option),
       employment: {
         employers: draft.statementOfMeans.employment.employed ? draft.statementOfMeans.employers.getPopulatedRowsOnly().map((employer: EmployerRow) => {
           return {
@@ -359,6 +356,11 @@ export class ResponseModelConverter {
         }
         break
     }
+
+    if (party === undefined) {
+      return undefined
+    }
+
     party.address = new Address().deserialize(defendant.partyDetails.address)
     if (defendant.partyDetails.hasCorrespondenceAddress) {
       party.correspondenceAddress = new Address().deserialize(defendant.partyDetails.correspondenceAddress)
@@ -706,5 +708,12 @@ export class ResponseModelConverter {
 
   private static convertDirectionsQuestionnaire (directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): DirectionsQuestionnaire {
     return DirectionsQuestionnaire.deserialize(directionsQuestionnaireDraft)
+  }
+
+  private static checkSevereDisability (option) {
+    return (!option || option === SevereDisabilityOption.NO
+        ? DisabilityStatus.YES
+        : DisabilityStatus.SEVERE
+    )
   }
 }

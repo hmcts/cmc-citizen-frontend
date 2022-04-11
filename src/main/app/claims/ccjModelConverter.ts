@@ -63,12 +63,11 @@ export function getRepaymentPlanForm (claim: Claim, draft: DraftWrapper<DraftCCJ
       const paymentSchedule: PaymentSchedule = PaymentSchedule.of(coreRepaymentPlan.paymentSchedule)
       const alreadyPaid: number = (draft.document.paidAmount.amount || 0)
       const remainingAmount: number = claim.totalAmountTillToday - alreadyPaid
-      const repaymentPlanForm: RepaymentPlanForm = new RepaymentPlanForm(
+      return new RepaymentPlanForm(
         remainingAmount,
         coreRepaymentPlan.instalmentAmount,
         new LocalDate(firstPaymentDate.year(), firstPaymentDate.month() + 1, firstPaymentDate.date()),
         paymentSchedule)
-      return repaymentPlanForm
     }
   }
   return draft.document.repaymentPlan

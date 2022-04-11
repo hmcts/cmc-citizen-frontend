@@ -2,7 +2,7 @@ import { TaskList } from 'drafts/tasks/taskList'
 
 export class TaskStatus {
   static getTaskStatus (tasks: TaskList[] = []): {completed: number, total: number} {
-    const status = tasks.reduce((accumulator, taskList) => {
+    return tasks.reduce((accumulator, taskList) => {
 
       if (taskList) {
         const completed = taskList.tasks.filter((task) => task.completed)
@@ -14,7 +14,5 @@ export class TaskStatus {
       }
       return accumulator
     }, { completed: 0, total: 0 })
-
-    return status
   }
 }

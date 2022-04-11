@@ -31,7 +31,7 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<Offer> = req.body
       if (form.hasErrors()) {
-        renderView(form, res, next)
+        await renderView(form, res, next)
       } else {
         const claim: Claim = res.locals.claim
         const user: User = res.locals.user

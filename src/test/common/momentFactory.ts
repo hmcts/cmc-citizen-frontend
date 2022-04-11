@@ -11,10 +11,10 @@ describe('MomentFactory', () => {
     it('should create a moment with current date', () => {
       const moment = MomentFactory.currentDate()
       assert.isNotNull(moment)
-      assert.equal(0, moment.hour())
-      assert.equal(0, moment.minute())
-      assert.equal(0, moment.second())
-      assert.equal(0, moment.millisecond())
+      assert.equal(moment.hour(), 0)
+      assert.equal(moment.minute(), 0)
+      assert.equal(moment.second(), 0)
+      assert.equal(moment.millisecond(), 0)
     })
 
     it('should create a moment with a date passed ', () => {
