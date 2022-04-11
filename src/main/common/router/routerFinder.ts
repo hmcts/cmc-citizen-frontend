@@ -18,11 +18,11 @@ const options: object = {
 
 export class RouterFinder {
 
-  static findAll (path: string): Router[] {
+  static findAll (path): Router[] {
     const routes: object = requireDirectory(module, path, options)
 
     const map = (value: object): Router[] => {
-      return Object.values(value).reduce((routes: Router[], value: Router | object) => {
+      return Object.values(value).reduce((routes, value) => {
         const type: string = typeof value
 
         switch (type) {

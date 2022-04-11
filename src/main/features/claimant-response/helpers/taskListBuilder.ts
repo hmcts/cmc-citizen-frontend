@@ -164,7 +164,7 @@ export class TaskListBuilder extends TaskStatus {
 
       await TaskListBuilder.buildMediationTaskListWhileIntendsToProceed(claim, draft, tasks, mediationDraft)
     } else if (claim.response.responseType === ResponseType.FULL_ADMISSION
-      && claim.response.paymentIntention.paymentOption !== PaymentOption.IMMEDIATELY) {
+      && claim.response.paymentIntention != null && claim.response.paymentIntention.paymentOption !== PaymentOption.IMMEDIATELY) {
       tasks.push(
         new TaskListItem(
           'Accept or reject their repayment plan',

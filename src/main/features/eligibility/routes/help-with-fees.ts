@@ -25,7 +25,7 @@ class HelpWithFeesEligibilityPage extends EligibilityPage<YesNoOption> {
 
   protected async nextPagePath (): Promise<RoutablePath> {
     return featureToggles.isHelpWithFeesEnabled()
-      .then(active => active ? Paths.infoAboutHwFeligibilityPage : Paths.eligiblePage)
+      .then(active => active ? Paths.infoAboutHwfEligibilityPage : Paths.eligiblePage)
   }
 }
 
