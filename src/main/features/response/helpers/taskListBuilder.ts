@@ -53,7 +53,7 @@ export class TaskListBuilder extends TaskStatus {
       )
     )
 
-    let isDeadlinePassed: boolean = false
+    let isDeadlinePassed: boolean
     if (await featureToggles.isOCONEnhancementEnabled()) {
       isDeadlinePassed = isPastDeadline(now, claim.responseDeadline)
     } else {
@@ -331,9 +331,8 @@ export class TaskListBuilder extends TaskStatus {
     if (FeatureToggles.isEnabled('directionsQuestionnaire') && ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire')) {
       resolveDirectionsQuestionnaireTaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(draft, claim, directionQuestionnaireDraft)
     }
-    const beforeYouStartSectionTasks = (await TaskListBuilder.buildBeforeYouStartSection(draft, claim, MomentFactory.currentDateTime())).tasks
     return [].concat(
-      beforeYouStartSectionTasks,
+      (await TaskListBuilder.buildBeforeYouStartSection(draft, claim, MomentFactory.currentDateTime())).tasks,
       TaskListBuilder.buildRespondToClaimSection(draft, claim).tasks,
       resolvingClaimTaskList !== undefined ? resolvingClaimTaskList.tasks : [],
       resolveDirectionsQuestionnaireTaskList !== undefined ? resolveDirectionsQuestionnaireTaskList.tasks : []

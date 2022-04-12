@@ -13,7 +13,7 @@ export function isCCBCCaseReference (referenceNumber?: string): boolean {
     return false
   }
 
-  return /[A-Z][0-9][A-Z0-9]{2}[0-9][A-Z0-9]{3}/i.test(referenceNumber)
+  return /[A-Z][\d][A-Z0-9]{2}[\d][A-Z0-9]{3}/i.test(referenceNumber)
     || (/^\d\d\d\D\D\d\d\d$/i.test(referenceNumber)
       && ccbcCaseIdentifiers.filter((id) => referenceNumber.toUpperCase().includes(id)).length > 0)
 }

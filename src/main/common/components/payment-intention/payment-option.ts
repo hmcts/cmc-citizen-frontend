@@ -63,7 +63,7 @@ export abstract class AbstractPaymentOptionPage<Draft> {
               this.renderView(form, res)
             } else {
               this.createModelAccessor().patch(res.locals.draft.document, model => model.paymentOption = form.model)
-              this.deleteRedundantData(res, req)
+              AbstractPaymentOptionPage.deleteRedundantData(res, req)
 
               await this.saveDraft(res.locals as { user: User; draft: DraftWrapper<Draft>; claim: Claim; })
 
@@ -72,7 +72,7 @@ export abstract class AbstractPaymentOptionPage<Draft> {
           }))
   }
 
-  private deleteRedundantData (res: express.Response, req: express.Request) {
+  private static deleteRedundantData (res: express.Response, req: express.Request) {
     if (res.locals.draft.alternatePaymentMethod) {
       switch (req.body.model.option) {
         case PaymentType.IMMEDIATELY:

@@ -6,7 +6,7 @@ import { EligibilityCheck, eligible, notEligible } from 'eligibility/model/eligi
 import { RoutablePath } from 'shared/router/routablePath'
 class InfoAboutHwFeligibilityPage extends EligibilityPage<YesNoOption> {
   constructor () {
-    super(Paths.infoAboutHwFeligibilityPage, 'infoAboutHwFeligibility')
+    super(Paths.infoAboutHwfEligibilityPage, 'infoAboutHwFeligibility')
   }
 
   checkEligibility (value: YesNoOption): Promise<EligibilityCheck> {

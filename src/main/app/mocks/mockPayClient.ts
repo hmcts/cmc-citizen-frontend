@@ -26,7 +26,7 @@ export class MockPayClient implements PayClient {
     const payCreateDelayInMs = 694
     await delay(payCreateDelayInMs)
 
-    const reference = `RC-${this.referencePart()}-${this.referencePart()}-${this.referencePart()}-${this.referencePart()}`
+    const reference = `RC-${MockPayClient.referencePart()}-${MockPayClient.referencePart()}-${MockPayClient.referencePart()}-${MockPayClient.referencePart()}`
     return Promise.resolve({
       reference: reference,
       date_created: MomentFactory.currentDateTime().toISOString(),
@@ -40,7 +40,7 @@ export class MockPayClient implements PayClient {
     })
   }
 
-  private referencePart (): number {
+  private static referencePart (): number {
     return Math.floor(1000 + Math.random() * 9000)
   }
 
