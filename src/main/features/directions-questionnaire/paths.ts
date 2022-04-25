@@ -17,6 +17,7 @@ export class Paths {
   static readonly expertGuidancePage = new RoutablePath(`${directionsQuestionnairePath}/expert-guidance`)
   static readonly permissionForExpertPage = new RoutablePath(`${directionsQuestionnairePath}/permission-for-expert`)
   static readonly claimantHearingRequirementsReceiver = new RoutablePath(`${directionsQuestionnairePath}/claimant-hearing-requirements-receiver`)
+  static readonly vulnerabilityQuestionsPage = new RoutablePath(`${directionsQuestionnairePath}/vulnerability-questions`)
 
   static readonly hearingDatesReplaceReceiver = new RoutablePath(`${Paths.hearingDatesPage.uri}/date-picker/replace`)
   // :index should actually be of the form 'date-N' where N is the numeric index,

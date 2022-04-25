@@ -270,7 +270,8 @@ export class TaskListBuilder extends TaskStatus {
         'Your hearing requirements', [
           new TaskListItem(
             `Give us details in case there’s a hearing`,
-            DirectionsQuestionnairePaths.supportPage.evaluateUri({ externalId: claim.externalId }),
+           // DirectionsQuestionnairePaths.supportPage.evaluateUri({ externalId: claim.externalId }),
+            DirectionsQuestionnairePaths.vulnerabilityQuestionsPage.evaluateUri({ externalId: claim.externalId }),
             DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft, claim)
           )
         ]
