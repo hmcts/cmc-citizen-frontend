@@ -7,7 +7,7 @@ import uk.gov.hmcts.contino.GithubAPI
 String product = "cmc"
 String component = "citizen-frontend"
 
-def ccdDefBranch = "master"
+def ccdDefBranch = "feat/CIV-1418-add-vulnerability-questions"
 
 def yarnBuilder = new uk.gov.hmcts.contino.YarnBuilder(this)
 
