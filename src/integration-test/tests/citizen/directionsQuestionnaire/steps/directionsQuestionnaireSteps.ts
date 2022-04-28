@@ -22,6 +22,7 @@ const vulnerabilityQuestionsPage: VulnerabilityQuestionsPage = new Vulnerability
 export class DirectionsQuestionnaireSteps {
   async acceptDirectionsQuestionnaireYesJourney (defendantType: PartyType = PartyType.INDIVIDUAL): Promise<void> {
     if (process.env.FEATURE_DIRECTIONS_QUESTIONNAIRE === 'true') {
+      vulnerabilityQuestionsPage.chooseYes()
       supportRequiredPage.selectAll()
       if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
         hearingExceptionalCircumstancesPage.chooseYes()
@@ -39,6 +40,7 @@ export class DirectionsQuestionnaireSteps {
 
   acceptDirectionsQuestionnaireNoJourney (defendantType: PartyType = PartyType.INDIVIDUAL): void {
     if (process.env.FEATURE_DIRECTIONS_QUESTIONNAIRE === 'true') {
+      vulnerabilityQuestionsPage.chooseYes()
       supportRequiredPage.selectAll()
       if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
         hearingExceptionalCircumstancesPage.chooseNo()
@@ -55,6 +57,7 @@ export class DirectionsQuestionnaireSteps {
 
   acceptDirectionsQuestionnaireNoJourneyAsClaimant (defendantType: PartyType = PartyType.INDIVIDUAL): void {
     if (process.env.FEATURE_DIRECTIONS_QUESTIONNAIRE === 'true') {
+      vulnerabilityQuestionsPage.chooseYes()
       supportRequiredPage.selectAll()
       if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
         hearingExceptionalCircumstancesPage.chooseNo()
