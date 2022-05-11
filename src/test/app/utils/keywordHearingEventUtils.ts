@@ -1,8 +1,8 @@
 import { expect } from 'chai'
 
-import { KeywordHearingEventUtils } from "utils/keywordHearingEventUtils";
+import { KeywordHearingEventUtils } from 'utils/keywordHearingEventUtils'
 
-describe("KeywordHearingEventUtils", () => {
+describe('KeywordHearingEventUtils', () => {
 
   it('should return correct keyword based on amount when given lower limit', () => {
     expect(KeywordHearingEventUtils.getKeywordHearingEvent(0.01)).to.eq('HearingFeeUpTo300')

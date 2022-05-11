@@ -1,8 +1,8 @@
 import { expect } from 'chai'
 
-import { KeywordIssueEventUtils } from "utils/keywordIssueEventUtils";
+import { KeywordIssueEventUtils } from 'utils/keywordIssueEventUtils'
 
-describe("KeywordIssueEventUtils", () => {
+describe('KeywordIssueEventUtils', () => {
 
   it('should return correct keyword based on amount when given lower limits', () => {
     expect(KeywordIssueEventUtils.getKeywordIssueEvent(0.01)).to.eq('PaperClaimUpTo300')

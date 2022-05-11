@@ -9,4 +9,4 @@ export const listIssueKeywords: string[] = [
   'PaperClaimUpTo200k',
   'PaperClaimAbove200k',
   'UnspecifiedClaim'
-];
+]

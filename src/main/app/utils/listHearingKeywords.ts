@@ -5,4 +5,4 @@ export const listHearingKeywords: string[] = [
   'HearingFeeUpTo1500',
   'HearingFeeUpTo3k',
   'HearingFeeAbove3k'
-];
+]
