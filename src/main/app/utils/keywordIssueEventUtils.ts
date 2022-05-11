@@ -1,5 +1,7 @@
 import { listIssueKeywords } from './listIssueKeywords'
 
+//If amount is blank, null or undefined then assign unspecified keyword
+
 export class KeywordIssueEventUtils {
   static getKeywordIssueEvent (amount: number) {
     let keyword: string = ''
@@ -22,7 +24,9 @@ export class KeywordIssueEventUtils {
       keyword = listIssueKeywords[7]
     } else if (amount >= 200000.01) {
       keyword = listIssueKeywords[8]
-    } else keyword = listIssueKeywords[9]
+    } else if (amount == null) {
+      keyword = listIssueKeywords[9]
+    } else throw new Error('Amount not allowed')
 
     return keyword
   }
