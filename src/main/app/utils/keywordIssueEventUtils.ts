@@ -1,6 +1,6 @@
 import { listIssueKeywords } from './listIssueKeywords'
 
-//If amount is blank, null or undefined then assign unspecified keyword
+// If amount is blank, null or undefined then assign unspecified keyword
 
 export class KeywordIssueEventUtils {
   static getKeywordIssueEvent (amount: number) {
