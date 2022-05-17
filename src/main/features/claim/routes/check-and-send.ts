@@ -51,7 +51,7 @@ async function getClaimIssuanceFeeCode (draft: DraftClaim): Promise<string> {
   const interest: number = await draftInterestAmount(draft)
   const totalAmount: number = draft.amount.totalAmount()
 
-  return FeesClient.retrieveClaimIssuanceFeeCode(totalAmount + interest)
+  return FeesClient.retreiveClaimIssuanceFeeCode(totalAmount + interest)
 }
 
 function getBusinessName (partyDetails: PartyDetails): string {
@@ -136,7 +136,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response, next: 
     .then(async (interestTotal: TotalAmount) => {
       const helpWithFeesFeature: boolean = await featureToggles.isHelpWithFeesEnabled()
       if (helpWithFeesFeature
-      && draft.document.helpWithFees && draft.document.helpWithFees.declared.option === YesNoOption.YES.option) {
+        && draft.document.helpWithFees && draft.document.helpWithFees.declared.option === YesNoOption.YES.option) {
         draft.document.feeAmountInPennies = MoneyConverter.convertPoundsToPennies(interestTotal.feeAmount)
         const user: User = res.locals.user
         await new DraftService().save(draft, user.bearerToken)
@@ -163,22 +163,22 @@ async function handleHelpwWithFees (draft: Draft<DraftClaim>, user: User): Promi
 
   // retrieve claim to check if the claimant initiated payment
   const existingClaim: void | Claim = await claimStoreClient.retrieveByExternalId(draft.document.externalId, user)
-  .catch((e) => {
-    logger.warn(`Unable to decide if payment has been initiated. ${e}`)
-  })
+    .catch((e) => {
+      logger.warn(`Unable to decide if payment has been initiated. ${e}`)
+    })
 
   let helpWithFeesClaim: void | Claim
   // if payment was initiated then use 'updateHelpWithFeesClaim'(put request) else use 'saveHelpWithFeesClaim' (post request)
   if (existingClaim && ClaimState[existingClaim.state] === ClaimState.AWAITING_CITIZEN_PAYMENT) {
     helpWithFeesClaim = await claimStoreClient.updateHelpWithFeesClaim(draft, user, features)
-    .catch((e) => {
-      logger.warn(`Help With Fees Claim ${draft.document.externalId} update was unsuccessful. ${e}`)
-    })
+      .catch((e) => {
+        logger.warn(`Help With Fees Claim ${draft.document.externalId} update was unsuccessful. ${e}`)
+      })
   } else {
     helpWithFeesClaim = await claimStoreClient.saveHelpWithFeesClaim(draft, user, features)
-    .catch((e) => {
-      logger.warn(`Help With Fees Claim ${draft.document.externalId} appears to have not been saved. ${e}`)
-    })
+      .catch((e) => {
+        logger.warn(`Help With Fees Claim ${draft.document.externalId} appears to have not been saved. ${e}`)
+      })
   }
   // finally if helpwWithFeesClaim is successfully updated/saved then consider it as successful
   if (helpWithFeesClaim) {
