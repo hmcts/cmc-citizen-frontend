@@ -24,7 +24,6 @@
         postcodeLookupWidget.querySelector('.postcode-select')
           .addEventListener('change', function (event) {
             enterManuallyLink(postcodeLookupWidget).classList.add('hidden')
-
             var addressDetails = JSON.parse(this.value)
             var addressElement = postcodeLookupWidget.querySelector('.address')
             addressLine1(addressElement).value = addressDetails.addressLines[0]
@@ -251,16 +250,27 @@
       var postcodeSelectDropdown = postcodeLookupWidget.querySelector('select')
 
       var nonSelectableOption = document.createElement("option")
-      nonSelectableOption.text = postcodeResponse.addresses.length + ' addresses found'
       nonSelectableOption.disabled = true
       nonSelectableOption.selected = true
       clearPostcodeDropdown(postcodeLookupWidget)
-      postcodeSelectDropdown.appendChild(nonSelectableOption)
 
+      var listOfUprns = [];
+      //declaring a list of UPRNS
       postcodeResponse.addresses.forEach(function (address) {
-        var option = postcodeDropdownOption(address)
-        postcodeSelectDropdown.appendChild(option)
+        //Going through each address
+        if(!listOfUprns.includes(address.uprn)){
+          //if list of uprns doesn't contain the address then add to list
+          listOfUprns.push(address.uprn)
+          var option = postcodeDropdownOption(address)
+          if(option != undefined){
+            postcodeSelectDropdown.appendChild(option)
+        }
+        }
       })
+      //If already in list we don't do above as already in list
+
+      nonSelectableOption.text = postcodeLookupWidget.querySelector('select').options.length + ' addresses found'
+      postcodeSelectDropdown.appendChild(nonSelectableOption)
 
       show(postcodeAddressPicker(postcodeLookupWidget))
       hideAddressError(postcodeLookupWidget)
@@ -279,6 +289,10 @@
     var streetLine = extractStreetLine(address)
     var localityLine = extractLocalityLine(address)
 
+    if(address.organisationName && address.organisationName !== ""){
+      valueFormattedAddress.addressLines.push(address.organisationName)
+    }
+
     if (!buildingNameLine && (!streetLine || !address.buildingNumber) && address.organisationName && address.organisationName !== '') {
       valueFormattedAddress.addressLines.push(address.organisationName)
     }
@@ -294,37 +308,81 @@
     while (valueFormattedAddress.addressLines.length < 3) {
       valueFormattedAddress.addressLines.push('')
     }
+    var valueFormattedAddressStr = (valueFormattedAddress.addressLines + " " + valueFormattedAddress.townOrCity + ", " + valueFormattedAddress.postCode)
+    //convert valueFormattedAddress addressLines, townOrCity and postcode into string
+    if(valueFormattedAddressStr.replaceAll(",","").replaceAll(" ","")
+      != formattedAddress.replaceAll(",","").replaceAll(" ","")){
+      var formattedAddressArr = formattedAddress.split(",");
+      var length = formattedAddressArr.length
+      if(length >= 5){
+        var formattedAddressJSON = {
+          'addressLines': [],
+          'townOrCity': formattedAddressArr[3],
+          'postCode': formattedAddressArr[length-1]
+        }
 
+        //if valueFormattedAddress (with spaces and commas removed) is not the same
+        // as not the same as formattedAddress (with spaces and commas removed)
+        //then enter if statement
+        //format formattedAddress into an array and separate with comma
+        //find the length of formattedAddressArr
+        //if the length of array is greater than/equal to 5
+        //array into JSON
+        //townorCity at array position 3 and postcode at length -1 as always last element in array
+
+        formattedAddressJSON.addressLines.push(formattedAddressArr[0]);
+        formattedAddressJSON.addressLines.push(formattedAddressArr[1]);
+        formattedAddressJSON.addressLines.push(formattedAddressArr[2]);
+        //changed to formattedAddress as this always displays correct info
+
+        var option = document.createElement('option')
+        option.value = JSON.stringify(formattedAddressJSON)
+        option.text = formattedAddress
+        return option
+
+        //JSON.stringify formattedAddress rather than valueFormattedAddress
+      }
+      return undefined
+
+    }
     var option = document.createElement('option')
     option.value = JSON.stringify(valueFormattedAddress)
     option.text = formattedAddress
     return option
-  }
+    //however, if formattedAddress does equal valueFormattedAddress then the code goes into here
 
-  function extractBuildingNameLine (address) {
-    if (address.buildingName && address.buildingName !== "") {
-      if (address.subBuildingName && address.subBuildingName !== "") {
-        return address.subBuildingName + ', ' + address.buildingName
+    function extractBuildingNameLine (address) {
+      if (address.buildingName && address.buildingName !== "") {
+        if (address.subBuildingName && address.subBuildingName !== "") {
+          return address.subBuildingName + ', ' + address.buildingName
+        }
+        return address.buildingName +", "
       }
-      return address.buildingName
+      if (address.subBuildingName && address.subBuildingName !== "") {
+        return address.subBuildingName+", "
+      }
+      return undefined
     }
-    if (address.subBuildingName && address.subBuildingName !== "") {
-      return address.subBuildingName
-    }
-    return undefined
-  }
 
-  function extractStreetLine (address) {
-    if (address.thoroughfareName && address.thoroughfareName !== '') {
-      return (address.buildingNumber ? address.buildingNumber + ', ' : '') + address.thoroughfareName
+    function extractStreetLine (address) {
+      if (address.thoroughfareName && address.thoroughfareName !== "") {
+        if(address.dependentThoroughfareName && address.dependentThoroughfareName !== ""){
+          return (address.organisationName ? ' ':'') +(address.buildingNumber ? address.buildingNumber + ', ' : ' ')
+            + address.dependentThoroughfareName + ', ' + address.thoroughfareName
+        }
+        return (address.organisationName ? ' ':'')+(address.buildingNumber ? address.buildingNumber + ', ' : ' ') + address.thoroughfareName
+      }
+      if (address.dependentThoroughfareName && address.dependentThoroughfareName !== "") {
+        return (address.organisationName ? ' ':'')+(address.buildingNumber ? address.buildingNumber + ', ' : ' ') + address.dependentThoroughfareName
+      }
+      return undefined
     }
-    return undefined
-  }
 
-  function extractLocalityLine (address) {
-    if (address.dependentLocality && address.dependentLocality !== "") {
-      return address.dependentLocality
+    function extractLocalityLine(address) {
+      if (address.dependentLocality && address.dependentLocality !== "") {
+        return ' ' + address.dependentLocality
+      }
+      return undefined
     }
-    return undefined
   }
 })()
