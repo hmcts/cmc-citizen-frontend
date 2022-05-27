@@ -255,12 +255,23 @@
       clearPostcodeDropdown(postcodeLookupWidget)
 
 
+      var listOfUprns = [];
+      //declaring a list of UPRNS
       postcodeResponse.addresses.forEach(function (address) {
-        var option = postcodeDropdownOption(address)
-        if(option != undefined){
-          postcodeSelectDropdown.appendChild(option)
+        //Going through each address
+        if(!listOfUprns.includes(address.uprn)){
+          //if list of uprns doesn't contain the address then add to list
+          listOfUprns.push(address.uprn)
+          var option = postcodeDropdownOption(address)
+          if(option != undefined){
+            postcodeSelectDropdown.appendChild(option)
+           }   
         }
       })
+      //If already in list we don't do above as already in list
+
+      nonSelectableOption.text = postcodeLookupWidget.querySelector('select').options.length + ' addresses found'
+      postcodeSelectDropdown.appendChild(nonSelectableOption)
 
       nonSelectableOption.text = postcodeLookupWidget.querySelector('select').options.length + ' addresses found'
       postcodeSelectDropdown.appendChild(nonSelectableOption)
@@ -283,7 +294,7 @@
     var localityLine = extractLocalityLine(address)
 
     if(address.organisationName && address.organisationName !== ""){
-    valueFormattedAddress.addressLines.push(address.organisationName)
+       valueFormattedAddress.addressLines.push(address.organisationName)
     }
 
     if (!buildingNameLine && (!streetLine || !address.buildingNumber) && address.organisationName && address.organisationName !== '') {
@@ -307,11 +318,12 @@
       != formattedAddress.replaceAll(",","").replaceAll(" ","")){
       var formattedAddressArr = formattedAddress.split(",");
       var length = formattedAddressArr.length
-      if(length == 5){
+
+      if(length >= 5){
         var formattedAddressJSON = {
           'addressLines': [],
           'townOrCity': formattedAddressArr[3],
-          'postCode': formattedAddressArr[4]
+          'postCode': formattedAddressArr[length-1]
         }
 
         //if valueFormattedAddress (with spaces and commas removed) is not the same
@@ -319,9 +331,9 @@
         //then enter if statement
         //format formattedAddress into an array and separate with comma
         //find the length of formattedAddressArr
-        //if the length of array is equal to 5
+        //if the length of array is greater than/equal to 5
         //array into JSON
-        //townorCity at array position 3 and postcode at 4
+        //townorCity at array position 3 and postcode at length -1 as always last element in array
 
         formattedAddressJSON.addressLines.push(formattedAddressArr[0]);
         formattedAddressJSON.addressLines.push(formattedAddressArr[1]);
@@ -333,16 +345,17 @@
         option.text = formattedAddress
         return option
 
-        //JSON.stringify formattedAddress rather than valueFormattedAddress
+ 
       }
       return undefined
 
     }
-      var option = document.createElement('option')
-      option.value = JSON.stringify(valueFormattedAddress)
-      option.text = formattedAddress
-      return option
+    var option = document.createElement('option')
+    option.value = JSON.stringify(valueFormattedAddress)
+    option.text = formattedAddress
+    return option
     //however, if formattedAddress does equal valueFormattedAddress then the code goes into here
+
 
     function extractBuildingNameLine (address) {
       if (address.buildingName && address.buildingName !== "") {
@@ -357,16 +370,17 @@
       return undefined
     }
 
-   function extractStreetLine (address) {
+
+    function extractStreetLine (address) {
       if (address.thoroughfareName && address.thoroughfareName !== "") {
-      if(address.dependentThoroughfareName && address.dependentThoroughfareName !== ""){
-      return (address.organisationName ? ' ':'') +(address.buildingNumber ? address.buildingNumber + ', ' : ' ')
-        + address.dependentThoroughfareName + ', ' + address.thoroughfareName
-      }
-      return (address.organisationName ? ' ':'')+(address.buildingNumber ? address.buildingNumber + ', ' : ' ') + address.thoroughfareName
+        if(address.dependentThoroughfareName && address.dependentThoroughfareName !== ""){
+          return (address.organisationName ? ' ':'') +(address.buildingNumber ? address.buildingNumber + ', ' : ' ')
+            + address.dependentThoroughfareName + ', ' + address.thoroughfareName
+        }
+        return (address.organisationName ? ' ':'')+(address.buildingNumber ? address.buildingNumber + ', ' : ' ') + address.thoroughfareName
       }
       if (address.dependentThoroughfareName && address.dependentThoroughfareName !== "") {
-      return (address.organisationName ? ' ':'')+(address.buildingNumber ? address.buildingNumber + ', ' : ' ') + address.dependentThoroughfareName
+        return (address.organisationName ? ' ':'')+(address.buildingNumber ? address.buildingNumber + ', ' : ' ') + address.dependentThoroughfareName
       }
       return undefined
     }
