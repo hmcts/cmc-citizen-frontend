@@ -254,6 +254,7 @@
       nonSelectableOption.selected = true
       clearPostcodeDropdown(postcodeLookupWidget)
 
+
       var listOfUprns = [];
       //declaring a list of UPRNS
       postcodeResponse.addresses.forEach(function (address) {
@@ -264,10 +265,13 @@
           var option = postcodeDropdownOption(address)
           if(option != undefined){
             postcodeSelectDropdown.appendChild(option)
-        }
+           }   
         }
       })
       //If already in list we don't do above as already in list
+
+      nonSelectableOption.text = postcodeLookupWidget.querySelector('select').options.length + ' addresses found'
+      postcodeSelectDropdown.appendChild(nonSelectableOption)
 
       nonSelectableOption.text = postcodeLookupWidget.querySelector('select').options.length + ' addresses found'
       postcodeSelectDropdown.appendChild(nonSelectableOption)
@@ -290,7 +294,7 @@
     var localityLine = extractLocalityLine(address)
 
     if(address.organisationName && address.organisationName !== ""){
-      valueFormattedAddress.addressLines.push(address.organisationName)
+       valueFormattedAddress.addressLines.push(address.organisationName)
     }
 
     if (!buildingNameLine && (!streetLine || !address.buildingNumber) && address.organisationName && address.organisationName !== '') {
@@ -314,6 +318,7 @@
       != formattedAddress.replaceAll(",","").replaceAll(" ","")){
       var formattedAddressArr = formattedAddress.split(",");
       var length = formattedAddressArr.length
+
       if(length >= 5){
         var formattedAddressJSON = {
           'addressLines': [],
@@ -340,7 +345,7 @@
         option.text = formattedAddress
         return option
 
-        //JSON.stringify formattedAddress rather than valueFormattedAddress
+ 
       }
       return undefined
 
@@ -350,6 +355,7 @@
     option.text = formattedAddress
     return option
     //however, if formattedAddress does equal valueFormattedAddress then the code goes into here
+
 
     function extractBuildingNameLine (address) {
       if (address.buildingName && address.buildingName !== "") {
@@ -363,6 +369,7 @@
       }
       return undefined
     }
+
 
     function extractStreetLine (address) {
       if (address.thoroughfareName && address.thoroughfareName !== "") {
