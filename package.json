@@ -176,6 +176,7 @@
     "all": true
   },
   "resolutions": {
+    "**/async": "^3.2.4",
     "**/download": "^8.0.0",
     "**/async": "^2.6.4",
     "sass-lint/eslint": "^5.0.0",
