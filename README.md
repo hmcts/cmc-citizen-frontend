@@ -12,9 +12,9 @@ Service delegates most of the non UI responsibilities to underlying services e.g
 
 ### Getting Started
 
-### Prerequisites
+### Prerequisites\
 
-* [Node.js](https://nodejs.org/) >= 12.17.0
+* [Node.js](https://nodejs.org/) >= 16.15.0
 * [yarn](https://yarnpkg.com/)
 * [Gulp](http://gulpjs.com/)
 * [Docker](https://www.docker.com)
