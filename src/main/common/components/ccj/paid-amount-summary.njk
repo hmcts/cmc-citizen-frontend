@@ -51,12 +51,21 @@
           </td>
         </tr>
         {% endif %}
-        <tr>
-          <th scope="row">{{ t('Claim fee amount') }}</th>
-          <td class="numeric last">
-            <span class="font-small">{{ claimFee | pennies2pounds | numeral }}</span>
-          </td>
-        </tr>
+        {% if claimFee > 0 %}
+          <tr>
+            <th scope="row">{{ t('Claim fee amount') }}</th>
+              <td class="numeric last">
+                <span class="font-small">{{ claimFee | pennies2pounds | numeral }}</span>
+            </td>
+          </tr>
+        {% else %}
+          <tr>
+            <th scope="row">{{ t('Claim fee amount') }}</th>
+            <td class="numeric last">
+              <span class="font-small">{{ claimFee | numeral }}</span>
+            </td>
+          </tr>
+        {% endif %}
         {% if alreadyPaid %}
           <tr>
             <th scope="col" class="bold-small">{{ t('Subtotal') }}</th>
