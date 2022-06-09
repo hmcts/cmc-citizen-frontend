@@ -847,7 +847,7 @@ describe('Claim', () => {
       await claim.respondToMediationDeadline()
 
       claim.respondToMediationDeadline().then(
-        function(res){
+        function (res) {
           expect(res.format('YYYY-MM-DD'))
             .to.equal(MomentFactory.parse('2019-06-28').format('YYYY-MM-DD'))
         }
