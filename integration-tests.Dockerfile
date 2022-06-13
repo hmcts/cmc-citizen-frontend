@@ -1,4 +1,4 @@
-FROM hmctspublic.azurecr.io/base/node:12-alpine
+FROM hmctspublic.azurecr.io/base/node:14-alpine
 
 USER root
 
@@ -8,7 +8,7 @@ RUN yarn config set proxy "$http_proxy" && yarn config set https-proxy "$https_p
 
 COPY --chown=hmcts:hmcts package.json yarn.lock /usr/src/app/
 
-RUN yarn install && yarn cache clean
+RUN PUPPETEER_SKIP_DOWNLOAD=true yarn install && yarn cache clean
 USER hmcts
 
 COPY tsconfig.json types default.conf.js saucelabs.conf.js /usr/src/app/
