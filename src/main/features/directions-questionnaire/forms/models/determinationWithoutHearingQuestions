@@ -1,0 +1,61 @@
+import { CompletableTask } from 'models/task'
+import {
+  ValidationErrors as DefaultValidationErrors,
+  ValidationErrors as GlobalValidationErrors
+} from 'forms/validation/validationErrors'
+import { IsDefined, IsIn, IsNotEmpty, MaxLength, ValidateIf } from '@hmcts/class-validator'
+import { YesNoOption } from 'models/yesNoOption'
+import { ValidationConstraints } from 'forms/validation/validationConstraints'
+
+export class ValidationErrors {
+  static readonly REASON_REQUIRED: string = 'Tell us why'
+}
+
+export class DeterminationWithoutHearingQuestions implements CompletableTask {
+
+  @IsDefined({ message: GlobalValidationErrors.YES_NO_REQUIRED })
+  @IsIn(YesNoOption.all(), { message: GlobalValidationErrors.YES_NO_REQUIRED })
+  determinationWithoutHearingQuestions?: YesNoOption
+
+  @ValidateIf(o => o.determinationWithoutHearingQuestions && o.determinationWithoutHearingQuestions.option === YesNoOption.YES.option)
+  @IsNotEmpty({ message: ValidationErrors.REASON_REQUIRED })
+  @IsDefined({ message: ValidationErrors.REASON_REQUIRED })
+  @MaxLength(ValidationConstraints.STANDARD_TEXT_INPUT_MAX_LENGTH, { message: DefaultValidationErrors.TEXT_TOO_LONG })
+  vulnerabilityDetails?: string
+
+  constructor (determinationWithoutHearingQuestions?: YesNoOption, determinationWithoutHearingDetails?: string) {
+    this.determinationWithoutHearingQuestions = determinationWithoutHearingQuestions
+    this.determinationWithoutHearingDetails = determinationWithoutHearingDetails
+  }
+
+  static fromObject (input: any): DeterminationWithoutHearingQuestions {
+    if (!input) {
+      return input
+    }
+
+    return new DeterminationWithoutHearingQuestions(YesNoOption.fromObject(input.DeterminationWithoutHearingQuestions), input.determinationWithoutHearingDetails)
+  }
+
+  deserialize (input: any): DeterminationWithoutHearingQuestions {
+    if (input && input.determinationWithoutHearingQuestions) {
+      this.vulnerabilityQuestions = YesNoOption.fromObject(input.vulnerabilityQuestions.option)
+      if (this.vulnerabilityQuestions === YesNoOption.NO) {
+        this.determinationWithoutHearingDetails = ' '
+      } else {
+        this.determinationWithoutHearingDetails = input.determinationWithoutHearingQuestions
+      }
+    }
+
+    return this
+  }
+
+  isCompleted (): boolean {
+    if (!this.determinationWithoutHearingQuestions) {
+      return false
+    } else if (this.determinationWithoutHearingQuestions === YesNoOption.YES) {
+      return this.vulnerabilityDetails !== undefined
+    } else {
+      return true
+    }
+  }
+}

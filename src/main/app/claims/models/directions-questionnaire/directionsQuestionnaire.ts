@@ -8,8 +8,10 @@ import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/dir
 import { UnavailableDate } from 'claims/models/directions-questionnaire/unavailableDate'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { LocalDate } from 'forms/models/localDate'
+import { DeterminationWithoutHearingQuestions } from 'claims/models/directions-questionnaire/vulnerabilityQuestions'
 
 export interface DirectionsQuestionnaire {
+  determinationWithoutHearingQuestions?: DeterminationWithoutHearingQuestions,
   requireSupport?: RequireSupport,
   hearingLocation?: HearingLocation,
   witness?: Witness,
@@ -57,7 +59,11 @@ export namespace DirectionsQuestionnaire {
         directionsQuestionnaire.expertEvidence.expertEvidence.option === YesNoOption.YES) ? {
           expertEvidenceToExamine: directionsQuestionnaire.expertEvidence.whatToExamine,
           reasonForExpertAdvice: directionsQuestionnaire.whyExpertIsNeeded.explanation
-        } : undefined
+        } : undefined,
+      determinationWithoutHearingQuestions: directionsQuestionnaire.determinationWithoutHearingQuestions && {
+        determinationWithoutHearingQuestions: directionsQuestionnaire.determinationWithoutHearingQuestions.determinationWithoutHearingQuestions.option as YesNoOption,
+        determinationWithoutHearingQuestions: directionsQuestionnaire.determinationWithoutHearingQuestions.determinationWithoutHearingDetails ? directionsQuestionnaire.determinationWithoutHearingQuestions.determinationWithoutHearingQuestionDetails : undefined
+      }
     }
   }
 
