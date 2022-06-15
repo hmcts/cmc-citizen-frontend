@@ -8,7 +8,7 @@ import { ErrorHandling } from 'shared/errorHandling'
 import { DraftService } from 'services/draftService'
 import { Paths } from 'directions-questionnaire/paths'
 import { User } from 'idam/user'
-import { determinationWithoutHearingQuestions } from 'directions-questionnaire/forms/models/determinationWithoutHearingQuestions'
+import { DeterminationWithoutHearingQuestions } from 'directions-questionnaire/forms/models/determinationWithoutHearingQuestions'
 
 function renderPage (res: express.Response, form: Form<DeterminationWithoutHearingQuestions>) {
   res.render(Paths.determinationWithoutHearingQuestionsPage.associatedView, { form: form })

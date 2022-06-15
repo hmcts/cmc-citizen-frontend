@@ -8,7 +8,7 @@ import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/dir
 import { UnavailableDate } from 'claims/models/directions-questionnaire/unavailableDate'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { LocalDate } from 'forms/models/localDate'
-import { DeterminationWithoutHearingQuestions } from 'claims/models/directions-questionnaire/vulnerabilityQuestions'
+import { DeterminationWithoutHearingQuestions } from 'claims/models/directions-questionnaire/determinationWithoutHearingQuestions'
 
 export interface DirectionsQuestionnaire {
   determinationWithoutHearingQuestions?: DeterminationWithoutHearingQuestions,
@@ -23,12 +23,10 @@ export interface DirectionsQuestionnaire {
 }
 
 export namespace DirectionsQuestionnaire {
-
   export function deserialize (directionsQuestionnaire: DirectionsQuestionnaireDraft): DirectionsQuestionnaire {
     if (!directionsQuestionnaire) {
       return undefined
     }
-
     return {
       requireSupport: directionsQuestionnaire.supportRequired && {
         languageInterpreter: directionsQuestionnaire.supportRequired.languageInterpreted,
@@ -53,19 +51,19 @@ export namespace DirectionsQuestionnaire {
         })),
       expertRequired: directionsQuestionnaire.expertRequired.option.option as YesNoOption,
       permissionForExpert: directionsQuestionnaire.permissionForExpert &&
-        directionsQuestionnaire.permissionForExpert.option ?
+      directionsQuestionnaire.permissionForExpert.option ?
         directionsQuestionnaire.permissionForExpert.option.option as YesNoOption : undefined,
       expertRequest: (directionsQuestionnaire.expertEvidence.expertEvidence &&
         directionsQuestionnaire.expertEvidence.expertEvidence.option === YesNoOption.YES) ? {
-          expertEvidenceToExamine: directionsQuestionnaire.expertEvidence.whatToExamine,
-          reasonForExpertAdvice: directionsQuestionnaire.whyExpertIsNeeded.explanation
-        } : undefined,
-      determinationWithoutHearingQuestions: directionsQuestionnaire.determinationWithoutHearingQuestions && {
-        determinationWithoutHearingQuestions: directionsQuestionnaire.determinationWithoutHearingQuestions.determinationWithoutHearingQuestions.option as YesNoOption,
-        determinationWithoutHearingQuestions: directionsQuestionnaire.determinationWithoutHearingQuestions.determinationWithoutHearingDetails ? directionsQuestionnaire.determinationWithoutHearingQuestions.determinationWithoutHearingQuestionDetails : undefined
-      }
+        expertEvidenceToExamine: directionsQuestionnaire.expertEvidence.whatToExamine,
+        reasonForExpertAdvice: directionsQuestionnaire.whyExpertIsNeeded.explanation
+      } : undefined,
+    determinationWithoutHearingQuestions: directionsQuestionnaire.determinationWithoutHearingQuestions && {
+      determinationWithoutHearingQuestions: directionsQuestionnaire.determinationWithoutHearingQuestions.determinationWithoutHearingQuestions.option as YesNoOption,
+      determinationWithoutHearingQuestionsDetails: directionsQuestionnaire.determinationWithoutHearingQuestions.determinationWithoutHearingQuestionsDetails ? directionsQuestionnaire.determinationWithoutHearingQuestions.determinationWithoutHearingQuestionsDetails : undefined
     }
   }
+}
 
   function toHearingLocation (directionsQuestionnaire: DirectionsQuestionnaireDraft): HearingLocation {
 

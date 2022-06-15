@@ -8,7 +8,7 @@ import { YesNoOption } from 'models/yesNoOption'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
 export class ValidationErrors {
-  static readonly REASON_REQUIRED: string = 'Tell us why'
+  static readonly REASON_REQUIRED: string = 'Question 2: If you have answered “yes” to question 1, in what way/s are you/ the witness vulnerable and what steps, support or adjustments do you wish the Court to consider?'
 }
 
 export class DeterminationWithoutHearingQuestions implements CompletableTask {
@@ -21,28 +21,28 @@ export class DeterminationWithoutHearingQuestions implements CompletableTask {
   @IsNotEmpty({ message: ValidationErrors.REASON_REQUIRED })
   @IsDefined({ message: ValidationErrors.REASON_REQUIRED })
   @MaxLength(ValidationConstraints.STANDARD_TEXT_INPUT_MAX_LENGTH, { message: DefaultValidationErrors.TEXT_TOO_LONG })
-  vulnerabilityDetails?: string
+  determinationWithoutHearingQuestionsDetails?: string
 
-  constructor (determinationWithoutHearingQuestions?: YesNoOption, determinationWithoutHearingDetails?: string) {
+  constructor (determinationWithoutHearingQuestions?: YesNoOption, determinationWithoutHearingQuestionsDetails?: string) {
     this.determinationWithoutHearingQuestions = determinationWithoutHearingQuestions
-    this.determinationWithoutHearingDetails = determinationWithoutHearingDetails
+    this.determinationWithoutHearingQuestionsDetails = determinationWithoutHearingQuestionsDetails
   }
 
-  static fromObject (input: any): DeterminationWithoutHearingQuestions {
+  static fromObject (input: any): VulnerabilityQuestions {
     if (!input) {
       return input
     }
 
-    return new DeterminationWithoutHearingQuestions(YesNoOption.fromObject(input.DeterminationWithoutHearingQuestions), input.determinationWithoutHearingDetails)
+    return new determinationWithoutHearingQuestions(YesNoOption.fromObject(input.determinationWithoutHearingQuestions), input.determinationWithoutHearingQuestionsDetails)
   }
 
   deserialize (input: any): DeterminationWithoutHearingQuestions {
     if (input && input.determinationWithoutHearingQuestions) {
-      this.vulnerabilityQuestions = YesNoOption.fromObject(input.vulnerabilityQuestions.option)
-      if (this.vulnerabilityQuestions === YesNoOption.NO) {
-        this.determinationWithoutHearingDetails = ' '
+      this.determinationWithoutHearingQuestions = YesNoOption.fromObject(input.determinationWithoutHearingQuestions.option)
+      if (this.determinationWithoutHearingQuestions === YesNoOption.NO) {
+        this.determinationWithoutHearingQuestionsDetails = ' '
       } else {
-        this.determinationWithoutHearingDetails = input.determinationWithoutHearingQuestions
+        this.determinationWithoutHearingQuestionsDetails = input.determinationWithoutHearingQuestionsDetails
       }
     }
 
@@ -53,7 +53,7 @@ export class DeterminationWithoutHearingQuestions implements CompletableTask {
     if (!this.determinationWithoutHearingQuestions) {
       return false
     } else if (this.determinationWithoutHearingQuestions === YesNoOption.YES) {
-      return this.vulnerabilityDetails !== undefined
+      return this.determinationWithoutHearingQuestionsDetails !== undefined
     } else {
       return true
     }
