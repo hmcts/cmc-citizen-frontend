@@ -16,7 +16,12 @@ FROM base as build
 RUN PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true yarn install
 COPY tsconfig.json gulpfile.js server.js ./
 COPY --chown=hmcts:hmcts src/main ./src/main
+
+USER root
+
 RUN yarn setup
+
+USER hmcts
 
 # ---- Runtime image ----
 FROM base as runtime
