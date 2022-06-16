@@ -55,15 +55,15 @@ export namespace DirectionsQuestionnaire {
         directionsQuestionnaire.permissionForExpert.option.option as YesNoOption : undefined,
       expertRequest: (directionsQuestionnaire.expertEvidence.expertEvidence &&
         directionsQuestionnaire.expertEvidence.expertEvidence.option === YesNoOption.YES) ? {
-        expertEvidenceToExamine: directionsQuestionnaire.expertEvidence.whatToExamine,
-        reasonForExpertAdvice: directionsQuestionnaire.whyExpertIsNeeded.explanation
-      } : undefined,
-    determinationWithoutHearingQuestions: directionsQuestionnaire.determinationWithoutHearingQuestions && {
-      determinationWithoutHearingQuestions: directionsQuestionnaire.determinationWithoutHearingQuestions.determinationWithoutHearingQuestions.option as YesNoOption,
-      determinationWithoutHearingQuestionsDetails: directionsQuestionnaire.determinationWithoutHearingQuestions.determinationWithoutHearingQuestionsDetails ? directionsQuestionnaire.determinationWithoutHearingQuestions.determinationWithoutHearingQuestionsDetails : undefined
+          expertEvidenceToExamine: directionsQuestionnaire.expertEvidence.whatToExamine,
+          reasonForExpertAdvice: directionsQuestionnaire.whyExpertIsNeeded.explanation
+        } : undefined,
+      determinationWithoutHearingQuestions: directionsQuestionnaire.determinationWithoutHearingQuestions && {
+        determinationWithoutHearingQuestions: directionsQuestionnaire.determinationWithoutHearingQuestions.determinationWithoutHearingQuestions.option as YesNoOption,
+        determinationWithoutHearingQuestionsDetails: directionsQuestionnaire.determinationWithoutHearingQuestions.determinationWithoutHearingQuestionsDetails ? directionsQuestionnaire.determinationWithoutHearingQuestions.determinationWithoutHearingQuestionsDetails : undefined
+      }
     }
   }
-}
 
   function toHearingLocation (directionsQuestionnaire: DirectionsQuestionnaireDraft): HearingLocation {
 

@@ -8,7 +8,7 @@ import { YesNoOption } from 'models/yesNoOption'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
 export class ValidationErrors {
-  static readonly REASON_REQUIRED: string = 'Question 2: If you have answered “yes” to question 1, in what way/s are you/ the witness vulnerable and what steps, support or adjustments do you wish the Court to consider?'
+  static readonly REASON_REQUIRED: string = 'Tell us why'
 }
 
 export class DeterminationWithoutHearingQuestions implements CompletableTask {
@@ -28,12 +28,12 @@ export class DeterminationWithoutHearingQuestions implements CompletableTask {
     this.determinationWithoutHearingQuestionsDetails = determinationWithoutHearingQuestionsDetails
   }
 
-  static fromObject (input: any): VulnerabilityQuestions {
+  static fromObject (input: any): DeterminationWithoutHearingQuestions {
     if (!input) {
       return input
     }
 
-    return new determinationWithoutHearingQuestions(YesNoOption.fromObject(input.determinationWithoutHearingQuestions), input.determinationWithoutHearingQuestionsDetails)
+    return new DeterminationWithoutHearingQuestions(YesNoOption.fromObject(input.determinationWithoutHearingQuestions), input.determinationWithoutHearingQuestionsDetails)
   }
 
   deserialize (input: any): DeterminationWithoutHearingQuestions {
