@@ -839,18 +839,15 @@ describe('Claim', () => {
 
   describe('respondToMediationDeadline', () => {
 
-    it('should return mediation deadline date', async () => {
+    it('should return mediation deadline date', () => {
       const claim = new Claim()
       claim.respondedAt = moment()
 
       claimStoreMock.mockNextWorkingDay(MomentFactory.parse('2019-06-28'))
-      await claim.respondToMediationDeadline()
 
       claim.respondToMediationDeadline().then(
-        function (res) {
-          expect(res.format('YYYY-MM-DD'))
-            .to.equal(MomentFactory.parse('2019-06-28').format('YYYY-MM-DD'))
-        }
+        res => expect(res.format('YYYY-MM-DD'))
+          .to.equal(MomentFactory.parse('2019-06-28').format('YYYY-MM-DD'))
       )
     })
 
@@ -925,7 +922,7 @@ describe('Claim', () => {
       claim.respondToOnlineOconReconsiderationDeadline().then(
         res => {
           expect(res.format('YYYY-MM-DD'))
-          .to.equal(MomentFactory.parse('2020-12-01').format('YYYY-MM-DD'))
+            .to.equal(MomentFactory.parse('2020-12-01').format('YYYY-MM-DD'))
         })
     })
 
