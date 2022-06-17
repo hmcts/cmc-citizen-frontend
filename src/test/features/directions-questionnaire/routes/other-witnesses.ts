@@ -29,8 +29,8 @@ const claimWithDQ = {
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
 const cookieName: string = config.get<string>('session.cookieName')
-const datesPage = Paths.hearingDatesPage.evaluateUri({ externalId: externalId })
 const pagePath = Paths.otherWitnessesPage.evaluateUri({ externalId: externalId })
+const vulnerabilityQuestionsPage = Paths.vulnerabilityQuestionsPage.evaluateUri({ externalId: externalId })
 
 function checkAccessGuard (app: any, method: string) {
   it(`should redirect to dashboard page when DQ is not enabled for claim`, async () => {
@@ -153,7 +153,7 @@ describe('Directions Questionnaire - other witnesses page', () => {
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should redirect to dates page', async () => {
+          it('should redirect to vulnerability questions page', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
             draftStoreServiceMock.resolveFind('response')
@@ -163,7 +163,7 @@ describe('Directions Questionnaire - other witnesses page', () => {
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send(validFormData)
-              .expect(res => expect(res).to.be.redirect.toLocation(datesPage))
+              .expect(res => expect(res).to.be.redirect.toLocation(vulnerabilityQuestionsPage))
           })
         })
 
