@@ -13,3 +13,4 @@
 ./bin/ccd-add-role.sh "caseworker-cmc-judge"
 ./bin/ccd-add-role.sh "payments-refund"
 ./bin/ccd-add-role.sh "payments-refund-approver"
+./bin/ccd-add-role.sh "TTL-admin"
