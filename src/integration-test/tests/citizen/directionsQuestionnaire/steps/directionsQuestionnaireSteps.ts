@@ -22,7 +22,6 @@ const vulnerabilityQuestionsPage: VulnerabilityQuestionsPage = new Vulnerability
 export class DirectionsQuestionnaireSteps {
   async acceptDirectionsQuestionnaireYesJourney (defendantType: PartyType = PartyType.INDIVIDUAL): Promise<void> {
     if (process.env.FEATURE_DIRECTIONS_QUESTIONNAIRE === 'true') {
-      vulnerabilityQuestionsPage.chooseYes()
       supportRequiredPage.selectAll()
       if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
         hearingExceptionalCircumstancesPage.chooseYes()
@@ -33,13 +32,13 @@ export class DirectionsQuestionnaireSteps {
         '2019-01-01')
       selfWitnessPage.chooseYes()
       otherWitnessPage.chooseYes()
+      vulnerabilityQuestionsPage.chooseYes()
       await hearingDatesPage.chooseYes()
     }
   }
 
   acceptDirectionsQuestionnaireNoJourney (defendantType: PartyType = PartyType.INDIVIDUAL): void {
     if (process.env.FEATURE_DIRECTIONS_QUESTIONNAIRE === 'true') {
-      vulnerabilityQuestionsPage.chooseNo()
       supportRequiredPage.selectAll()
       if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
         hearingExceptionalCircumstancesPage.chooseNo()
@@ -49,13 +48,13 @@ export class DirectionsQuestionnaireSteps {
       usingExpertPage.chooseExpertNo()
       selfWitnessPage.chooseNo()
       otherWitnessPage.chooseNo()
+      vulnerabilityQuestionsPage.chooseNo()
       hearingDatesPage.chooseNo()
     }
   }
 
   acceptDirectionsQuestionnaireNoJourneyAsClaimant (defendantType: PartyType = PartyType.INDIVIDUAL): void {
     if (process.env.FEATURE_DIRECTIONS_QUESTIONNAIRE === 'true') {
-      vulnerabilityQuestionsPage.chooseNo()
       supportRequiredPage.selectAll()
       if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
         hearingExceptionalCircumstancesPage.chooseNo()
@@ -65,6 +64,7 @@ export class DirectionsQuestionnaireSteps {
       usingExpertPage.chooseExpertNo()
       selfWitnessPage.chooseNo()
       otherWitnessPage.chooseNo()
+      vulnerabilityQuestionsPage.chooseNo()
       hearingDatesPage.chooseNo()
     }
   }
