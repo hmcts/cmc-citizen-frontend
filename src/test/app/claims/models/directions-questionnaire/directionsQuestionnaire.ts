@@ -29,6 +29,11 @@ describe('DirectionsQuestionnaire', () => {
       selfWitness: 'yes',
       noOfOtherWitness: 1
     },
+    vulnerabilityQuestions:
+    {
+      vulnerabilityQuestions: 'yes',
+      vulnerabilityDetails: 'vulnerable'
+    },
     expertReports: [
       {
         expertName: 'Prof. McGonagall',

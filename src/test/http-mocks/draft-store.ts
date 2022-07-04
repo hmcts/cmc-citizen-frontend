@@ -744,6 +744,12 @@ export const sampleDirectionsQuestionnaireDraftObj = {
   },
   whyExpertIsNeeded: {
     explanation: 'for expert opinion'
+  },
+  vulnerabilityQuestions: {
+    vulnerabilityQuestions: {
+      option: 'yes'
+    },
+    vulnerabilityDetails: 'vulnerable'
   }
 }
 
@@ -817,6 +823,12 @@ export const sampleDirectionsQuestionnaireNearestCourtDraftObj = {
   },
   whyExpertIsNeeded: {
     explanation: 'for expert opinion'
+  },
+  vulnerabilityQuestions: {
+    vulnerabilityQuestions: {
+      option: 'yes'
+    },
+    vulnerabilityDetails: 'vulnerable'
   }
 }
 
@@ -892,6 +904,12 @@ export const sampleDirectionsQuestionnaireDraftAltCourtObj = {
   },
   whyExpertIsNeeded: {
     explanation: 'for expert opinion'
+  },
+  vulnerabilityQuestions: {
+    vulnerabilityQuestions: {
+      option: 'yes'
+    },
+    vulnerabilityDetails: 'vulnerable'
   }
 }
 
@@ -973,6 +991,12 @@ export const sampleDirectionsQuestionnaireDraftWithNameObj = {
   },
   whyExpertIsNeeded: {
     explanation: 'for expert opinion'
+  },
+  vulnerabilityQuestions: {
+    vulnerabilityQuestions: {
+      option: 'yes'
+    },
+    vulnerabilityDetails: 'vulnerable'
   }
 }
 

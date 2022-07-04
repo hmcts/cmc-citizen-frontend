@@ -123,6 +123,10 @@ describe('ResponseModelConverter', () => {
       expertRequest: {
         expertEvidenceToExamine: 'Photographs',
         reasonForExpertAdvice: 'for expert opinion'
+      },
+      vulnerabilityQuestions: {
+        vulnerabilityQuestions: 'yes',
+        vulnerabilityDetails: 'vulnerable'
       }
     }
   }
