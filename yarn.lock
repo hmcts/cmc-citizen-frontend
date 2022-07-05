@@ -9456,7 +9456,7 @@ webdriverio@^5.15.2:
     serialize-error "^5.0.0"
     webdriver "5.23.0"
 
-webdriverio@^7.20.5:
+webdriverio@^7.7.4:
   version "7.20.5"
   resolved "https://registry.yarnpkg.com/webdriverio/-/webdriverio-7.20.5.tgz#55e0b702bacb0214a7cb20c8155924f4a28c3deb"
   integrity sha512-GcONsT2eOTXnjwMxvilc95uWTUlzWRBpdbxC1M+664uTfzomCFDMHMsa+evPSKG5+pFMSCrEL67nwRtoLXhh9Q==
