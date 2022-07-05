@@ -233,6 +233,8 @@ ccd:
       imagePullPolicy: Always
       image: hmctspublic.azurecr.io/ccd/data-store-api:latest
       keyVaults: []
+      ingressHost: ccd-data-store-api-${SERVICE_FQDN}
+      ingressIP: ${INGRESS_IP}
       environment:
         DATA_STORE_IDAM_KEY: ${DATA_STORE_S2S_KEY}
         IDAM_OAUTH2_DATA_STORE_CLIENT_SECRET: ${IDAM_OAUTH2_DATA_STORE_CLIENT_SECRET}
