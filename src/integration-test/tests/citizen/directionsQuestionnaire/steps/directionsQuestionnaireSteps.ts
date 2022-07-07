@@ -7,7 +7,7 @@ import { SelfWitnessPage } from 'integration-test/tests/citizen/directionsQuesti
 import { OtherWitnessPage } from 'integration-test/tests/citizen/directionsQuestionnaire/pages/other-wtiness'
 import { HearingExceptionalCircumstancesPage } from 'integration-test/tests/citizen/directionsQuestionnaire/pages/hearing-exceptional-circumstances'
 import { PartyType } from 'integration-test/data/party-type'
-import { DeterminationWithoutHearingQuestionsPage } from 'integration-test/tests/citizen/directionsQuestionnaire/pages/determinationWithoutHearingQuestions'
+import { DeterminationWithoutHearingQuestionsPage } from 'integration-test/tests/citizen/directionsQuestionnaire/pages/determination-without-hearing-questions'
 
 const supportRequiredPage: SupportRequiredPage = new SupportRequiredPage()
 const hearingLocationPage: HearingLocationPage = new HearingLocationPage()

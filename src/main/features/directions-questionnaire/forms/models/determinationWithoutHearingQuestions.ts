@@ -8,7 +8,7 @@ import { YesNoOption } from 'models/yesNoOption'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
 export class ValidationErrors {
-  static readonly REASON_REQUIRED: string = 'Tell us why'
+  static readonly REASON_REQUIRED: string = 'Please tell us why'
 }
 
 export class DeterminationWithoutHearingQuestions implements CompletableTask {
@@ -17,7 +17,7 @@ export class DeterminationWithoutHearingQuestions implements CompletableTask {
   @IsIn(YesNoOption.all(), { message: GlobalValidationErrors.YES_NO_REQUIRED })
   determinationWithoutHearingQuestions?: YesNoOption
 
-  @ValidateIf(o => o.determinationWithoutHearingQuestions && o.determinationWithoutHearingQuestions.option === YesNoOption.YES.option)
+  @ValidateIf(o => o.determinationWithoutHearingQuestions && o.determinationWithoutHearingQuestions.option === YesNoOption.NO.option)
   @IsNotEmpty({ message: ValidationErrors.REASON_REQUIRED })
   @IsDefined({ message: ValidationErrors.REASON_REQUIRED })
   @MaxLength(ValidationConstraints.STANDARD_TEXT_INPUT_MAX_LENGTH, { message: DefaultValidationErrors.TEXT_TOO_LONG })
@@ -39,7 +39,7 @@ export class DeterminationWithoutHearingQuestions implements CompletableTask {
   deserialize (input: any): DeterminationWithoutHearingQuestions {
     if (input && input.determinationWithoutHearingQuestions) {
       this.determinationWithoutHearingQuestions = YesNoOption.fromObject(input.determinationWithoutHearingQuestions.option)
-      if (this.determinationWithoutHearingQuestions === YesNoOption.NO) {
+      if (this.determinationWithoutHearingQuestions === YesNoOption.YES) {
         this.determinationWithoutHearingQuestionsDetails = ' '
       } else {
         this.determinationWithoutHearingQuestionsDetails = input.determinationWithoutHearingQuestionsDetails
@@ -52,7 +52,7 @@ export class DeterminationWithoutHearingQuestions implements CompletableTask {
   isCompleted (): boolean {
     if (!this.determinationWithoutHearingQuestions) {
       return false
-    } else if (this.determinationWithoutHearingQuestions === YesNoOption.YES) {
+    } else if (this.determinationWithoutHearingQuestions === YesNoOption.NO) {
       return this.determinationWithoutHearingQuestionsDetails !== undefined
     } else {
       return true
