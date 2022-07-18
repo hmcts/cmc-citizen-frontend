@@ -26,8 +26,8 @@ describe('determinationWithoutHearingQuestions', () => {
       expectValidationError(errors, GlobalValidationErrors.YES_NO_REQUIRED)
     })
 
-    it('should reject determination questions with yes option and no determination details', () => {
-      const errors = validator.validateSync(new DeterminationWithoutHearingQuestions(YesNoOption.YES))
+    it('should reject determination questions with no option and no determination details', () => {
+      const errors = validator.validateSync(new DeterminationWithoutHearingQuestions(YesNoOption.NO))
 
       expect(errors).to.not.be.empty
       expectValidationError(errors, ValidationErrors.REASON_REQUIRED)
@@ -85,14 +85,14 @@ describe('determinationWithoutHearingQuestions', () => {
       expect(determinationWithoutHearingQuestions.isCompleted()).to.be.true
     })
 
-    it('Should be marked not complete when the yes option is selected and nothing is entered', () => {
-      const determinationWithoutHearingQuestions: DeterminationWithoutHearingQuestions = new DeterminationWithoutHearingQuestions(YesNoOption.YES)
+    it('Should be marked not complete when the no option is selected and nothing is entered', () => {
+      const determinationWithoutHearingQuestions: DeterminationWithoutHearingQuestions = new DeterminationWithoutHearingQuestions(YesNoOption.NO)
 
       expect(determinationWithoutHearingQuestions.isCompleted()).to.be.false
     })
 
-    it('Should be marked complete when the yes option is selected and determination detail is present', () => {
-      const determinationWithoutHearingQuestions: DeterminationWithoutHearingQuestions = new DeterminationWithoutHearingQuestions(YesNoOption.YES, 'determination')
+    it('Should be marked complete when the no option is selected and determination detail is present', () => {
+      const determinationWithoutHearingQuestions: DeterminationWithoutHearingQuestions = new DeterminationWithoutHearingQuestions(YesNoOption.NO, 'determination')
       expect(determinationWithoutHearingQuestions.isCompleted()).to.be.true
     })
 
