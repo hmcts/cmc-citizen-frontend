@@ -33,7 +33,7 @@ describe('determinationWithoutHearingQuestions', () => {
       expectValidationError(errors, ValidationErrors.REASON_REQUIRED)
     })
 
-    it('should accept determination questions with option and what to expect reason', () => {
+    it('should accept determination questions with no option and what to expect reason', () => {
       const errors = validator.validateSync(new DeterminationWithoutHearingQuestions(YesNoOption.NO, 'determination details'))
 
       expect(errors).to.be.empty
@@ -80,7 +80,7 @@ describe('determinationWithoutHearingQuestions', () => {
     })
 
     it('should be marked complete when yes option is selected', () => {
-      const determinationWithoutHearingQuestions: DeterminationWithoutHearingQuestions = new DeterminationWithoutHearingQuestions(YesNoOption.NO)
+      const determinationWithoutHearingQuestions: DeterminationWithoutHearingQuestions = new DeterminationWithoutHearingQuestions(YesNoOption.YES)
 
       expect(determinationWithoutHearingQuestions.isCompleted()).to.be.true
     })
