@@ -17,13 +17,13 @@ export class DeterminationWithoutHearingQuestionsPage {
   chooseYes (): void {
     I.waitForText(heading.text)
     I.checkOption('Yes')
-    I.fillField(fields.determinationWithoutHearingQuestionsDetails, 'determination')
     I.click(buttons.submit)
   }
 
   chooseNo (): void {
     I.waitForText(heading.text)
     I.checkOption('No')
+    I.fillField(fields.determinationWithoutHearingQuestionsDetails, 'determination')
     I.click(buttons.submit)
   }
 }
