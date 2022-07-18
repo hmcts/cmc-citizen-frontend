@@ -79,8 +79,8 @@ describe('determinationWithoutHearingQuestions', () => {
       expect(determinationWithoutHearingQuestions.isCompleted()).to.be.false
     })
 
-    it('should be marked complete when no option is selected', () => {
-      const determinationWithoutHearingQuestions: DeterminationWithoutHearingQuestions = new DeterminationWithoutHearingQuestions(YesNoOption.NO)
+    it('should be marked complete when yes option is selected', () => {
+      const determinationWithoutHearingQuestions: DeterminationWithoutHearingQuestions = new DeterminationWithoutHearingQuestions(YesNoOption.YES)
 
       expect(determinationWithoutHearingQuestions.isCompleted()).to.be.true
     })

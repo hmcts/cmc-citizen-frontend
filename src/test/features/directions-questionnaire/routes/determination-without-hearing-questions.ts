@@ -91,7 +91,7 @@ describe('Directions questionnaire - determination questions', () => {
     })
 
     describe('on Post', () => {
-      const validFormData = { determinationWithoutHearingQuestions: YesNoOption.YES.option, determinationWithoutHearingQuestionsDetails: 'determination details' }
+      const validFormData = { determinationWithoutHearingQuestions: YesNoOption.NO.option, determinationWithoutHearingQuestionsDetails: 'determination details' }
       const invalidFormData = { expertEvidence: undefined }
 
       const method = 'post'

@@ -201,7 +201,7 @@ describe('Details In case of hearing task', () => {
       exceptionalCircumstances: { option: 'no' },
       reason: 'No Disable Access'
     })
-    directionsQuestionnaireDraft.determinationWithoutHearingQuestions = new DeterminationWithoutHearingQuestions().deserialize({ determinationWithoutHearingQuestions: { option: 'no' }, rows: [] })
+    directionsQuestionnaireDraft.determinationWithoutHearingQuestions = new DeterminationWithoutHearingQuestions().deserialize({ determinationWithoutHearingQuestions: { option: 'yes' }, rows: [] })
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
     directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
     directionsQuestionnaireDraft.expertRequired = new ExpertRequired().deserialize({ option: 'yes' })
@@ -235,7 +235,7 @@ describe('Details In case of hearing task', () => {
       whatToExamine: 'documents'
     })
     directionsQuestionnaireDraft.determinationWithoutHearingQuestions = new DeterminationWithoutHearingQuestions().deserialize({
-      determinationWithoutHearingQuestions: { option: 'yes' },
+      determinationWithoutHearingQuestions: { option: 'no' },
       determinationWithoutHearingQuestionsDetails: 'witness'
     })
     directionsQuestionnaireDraft.whyExpertIsNeeded = new WhyExpertIsNeeded()
@@ -252,7 +252,7 @@ describe('Details In case of hearing task', () => {
       exceptionalCircumstances: { option: 'no' },
       reason: 'No Disable Access'
     })
-    directionsQuestionnaireDraft.determinationWithoutHearingQuestions = new DeterminationWithoutHearingQuestions().deserialize({ determinationWithoutHearingQuestions: { option: 'no' }, rows: [] })
+    directionsQuestionnaireDraft.determinationWithoutHearingQuestions = new DeterminationWithoutHearingQuestions().deserialize({ determinationWithoutHearingQuestions: { option: 'yes' }, rows: [] })
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
     directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
     directionsQuestionnaireDraft.expertRequired = new ExpertRequired().deserialize({ option: 'yes' })
@@ -318,7 +318,7 @@ describe('Details In case of hearing task', () => {
       exceptionalCircumstances: { option: 'no' },
       reason: 'No Disable Access'
     })
-    directionsQuestionnaireDraft.determinationWithoutHearingQuestions = new DeterminationWithoutHearingQuestions().deserialize({ determinationWithoutHearingQuestions: { option: 'no' }, rows: [] })
+    directionsQuestionnaireDraft.determinationWithoutHearingQuestions = new DeterminationWithoutHearingQuestions().deserialize({ determinationWithoutHearingQuestions: { option: 'yes' }, rows: [] })
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
     directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
     directionsQuestionnaireDraft.expertRequired = new ExpertRequired().deserialize({ option: 'yes' })
@@ -357,7 +357,7 @@ describe('Details In case of hearing task', () => {
       exceptionalCircumstances: { option: 'no' },
       reason: 'No Disable Access'
     })
-    directionsQuestionnaireDraft.determinationWithoutHearingQuestions = new DeterminationWithoutHearingQuestions().deserialize({ determinationWithoutHearingQuestions: { option: 'no' }, rows: [] })
+    directionsQuestionnaireDraft.determinationWithoutHearingQuestions = new DeterminationWithoutHearingQuestions().deserialize({ determinationWithoutHearingQuestions: { option: 'yes' }, rows: [] })
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
     directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
     directionsQuestionnaireDraft.expertRequired = new ExpertRequired().deserialize({ option: 'yes' })
@@ -408,7 +408,7 @@ describe('Details In case of hearing task', () => {
       whatToExamine: 'documents'
     })
     directionsQuestionnaireDraft.determinationWithoutHearingQuestions = new ExpertEvidence().deserialize({
-      determinationWithoutHearingQuestions: { determinationWithoutHearingQuestions: 'yes' },
+      determinationWithoutHearingQuestions: { determinationWithoutHearingQuestions: 'no' },
       determinationWithoutHearingQuestionsDetails: 'witness'
     })
     directionsQuestionnaireDraft.whyExpertIsNeeded = new WhyExpertIsNeeded().deserialize({ explanation: 'report document' })
