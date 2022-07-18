@@ -125,8 +125,8 @@ describe('ResponseModelConverter', () => {
         reasonForExpertAdvice: 'for expert opinion'
       },
       determinationWithoutHearingQuestions: {
-        determinationWithoutHearingQuestions: 'yes',
-        determinationWithoutHearingQuestionsDetails: 'vulnerable'
+        determinationWithoutHearingQuestions: 'no',
+        determinationWithoutHearingQuestionsDetails: 'determination'
       }
     }
   }

@@ -31,8 +31,8 @@ describe('DirectionsQuestionnaire', () => {
     },
     determinationWithoutHearingQuestions:
     {
-      determinationWithoutHearingQuestions: 'yes',
-      determinationWithoutHearingQuestionsDetails: 'vulnerable'
+      determinationWithoutHearingQuestions: 'no',
+      determinationWithoutHearingQuestionsDetails: 'determination'
     },
     expertReports: [
       {
