@@ -281,7 +281,7 @@ describe('Details In case of hearing task', () => {
       exceptionalCircumstances: { option: 'no' },
       reason: 'No Disable Access'
     })
-    directionsQuestionnaireDraft.determinationWithoutHearingQuestions = new DeterminationWithoutHearingQuestions().deserialize({ determinationWithoutHearingQuestions: { option: 'no' }, rows: [] })
+    directionsQuestionnaireDraft.determinationWithoutHearingQuestions = new DeterminationWithoutHearingQuestions().deserialize({ determinationWithoutHearingQuestions: { option: 'yes' }, rows: [] })
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
     directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
     directionsQuestionnaireDraft.expertRequired = new ExpertRequired().deserialize({ option: 'yes' })

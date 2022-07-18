@@ -747,7 +747,7 @@ export const sampleDirectionsQuestionnaireDraftObj = {
   },
   determinationWithoutHearingQuestions: {
     determinationWithoutHearingQuestions: {
-      option: 'yes'
+      option: 'no'
     },
     determinationWithoutHearingQuestionsDetails: 'determination'
   }
@@ -826,7 +826,7 @@ export const sampleDirectionsQuestionnaireNearestCourtDraftObj = {
   },
   determinationWithoutHearingQuestions: {
     determinationWithoutHearingQuestions: {
-      option: 'yes'
+      option: 'no'
     },
     determinationWithoutHearingQuestionsDetails: 'determination'
   }
@@ -907,7 +907,7 @@ export const sampleDirectionsQuestionnaireDraftAltCourtObj = {
   },
   determinationWithoutHearingQuestions: {
     determinationWithoutHearingQuestions: {
-      option: 'yes'
+      option: 'no'
     },
     determinationWithoutHearingQuestionsDetails: 'determination'
   }
@@ -994,7 +994,7 @@ export const sampleDirectionsQuestionnaireDraftWithNameObj = {
   },
   determinationWithoutHearingQuestions: {
     determinationWithoutHearingQuestions: {
-      option: 'yes'
+      option: 'no'
     },
     determinationWithoutHearingQuestionsDetails: 'determination'
   }

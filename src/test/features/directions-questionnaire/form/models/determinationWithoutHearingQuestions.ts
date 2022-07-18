@@ -34,7 +34,7 @@ describe('determinationWithoutHearingQuestions', () => {
     })
 
     it('should accept determination questions with option and what to expect reason', () => {
-      const errors = validator.validateSync(new DeterminationWithoutHearingQuestions(YesNoOption.YES, 'determination details'))
+      const errors = validator.validateSync(new DeterminationWithoutHearingQuestions(YesNoOption.NO, 'determination details'))
 
       expect(errors).to.be.empty
     })
@@ -46,7 +46,7 @@ describe('determinationWithoutHearingQuestions', () => {
     })
 
     it('should deserialize determination questions to return instance of determination questions', () => {
-      const determinationWithoutHearingQuestions: DeterminationWithoutHearingQuestions = new DeterminationWithoutHearingQuestions(YesNoOption.YES, 'determination details')
+      const determinationWithoutHearingQuestions: DeterminationWithoutHearingQuestions = new DeterminationWithoutHearingQuestions(YesNoOption.NO, 'determination details')
 
       expect(determinationWithoutHearingQuestions.deserialize(determinationWithoutHearingQuestions)).to.be.instanceOf(DeterminationWithoutHearingQuestions)
     })
@@ -67,8 +67,8 @@ describe('determinationWithoutHearingQuestions', () => {
     })
 
     it(`valid object when values provided`, () => {
-      const model = DeterminationWithoutHearingQuestions.fromObject({ determinationWithoutHearingQuestions: 'yes' })
-      expect(model.determinationWithoutHearingQuestions).to.be.eq(YesNoOption.YES)
+      const model = DeterminationWithoutHearingQuestions.fromObject({ determinationWithoutHearingQuestions: 'no' })
+      expect(model.determinationWithoutHearingQuestions).to.be.eq(YesNoOption.NO)
     })
   })
 
@@ -80,7 +80,7 @@ describe('determinationWithoutHearingQuestions', () => {
     })
 
     it('should be marked complete when yes option is selected', () => {
-      const determinationWithoutHearingQuestions: DeterminationWithoutHearingQuestions = new DeterminationWithoutHearingQuestions(YesNoOption.YES)
+      const determinationWithoutHearingQuestions: DeterminationWithoutHearingQuestions = new DeterminationWithoutHearingQuestions(YesNoOption.NO)
 
       expect(determinationWithoutHearingQuestions.isCompleted()).to.be.true
     })

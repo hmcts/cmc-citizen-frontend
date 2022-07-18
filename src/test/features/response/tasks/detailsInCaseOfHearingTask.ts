@@ -234,11 +234,11 @@ describe('Details In case of hearing task', () => {
     const claim: Claim = new Claim().deserialize({
       ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
     })
-    directionsQuestionnaireDraft.determinationWithoutHearingQuestions = new DeterminationWithoutHearingQuestions().deserialize({ option: 'yes' })
+    directionsQuestionnaireDraft.determinationWithoutHearingQuestions = new DeterminationWithoutHearingQuestions().deserialize({ option: 'no' })
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
     directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
+    directionsQuestionnaireDraft.determinationWithoutHearingQuestions = new DeterminationWithoutHearingQuestions().deserialize({ determinationWithoutHearingQuestions: { option: 'yes' }, rows: [] })
     directionsQuestionnaireDraft.expertRequired = new ExpertRequired().deserialize({ option: 'yes' })
-    directionsQuestionnaireDraft.determinationWithoutHearingQuestions = new DeterminationWithoutHearingQuestions().deserialize({ determinationWithoutHearingQuestions: { option: 'no' }, rows: [] })
     directionsQuestionnaireDraft.expertReports = new ExpertReports().deserialize({ declared: { option: 'no' }, rows: [] })
     directionsQuestionnaireDraft.permissionForExpert = new PermissionForExpert().deserialize({ option: { option: 'yes' } })
     directionsQuestionnaireDraft.expertEvidence = new ExpertEvidence().deserialize({
