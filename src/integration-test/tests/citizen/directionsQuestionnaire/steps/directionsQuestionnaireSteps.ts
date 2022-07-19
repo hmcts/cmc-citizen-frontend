@@ -39,7 +39,7 @@ export class DirectionsQuestionnaireSteps {
 
   acceptDirectionsQuestionnaireNoJourney (defendantType: PartyType = PartyType.INDIVIDUAL): void {
     if (process.env.FEATURE_DIRECTIONS_QUESTIONNAIRE === 'true') {
-      determinationWithoutHearingQuestionsPage.chooseNo()
+      determinationWithoutHearingQuestionsPage.chooseYes()
       supportRequiredPage.selectAll()
       if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
         hearingExceptionalCircumstancesPage.chooseNo()
@@ -55,10 +55,10 @@ export class DirectionsQuestionnaireSteps {
 
   acceptDirectionsQuestionnaireNoJourneyAsClaimant (defendantType: PartyType = PartyType.INDIVIDUAL): void {
     if (process.env.FEATURE_DIRECTIONS_QUESTIONNAIRE === 'true') {
-      determinationWithoutHearingQuestionsPage.chooseNo()
+      determinationWithoutHearingQuestionsPage.chooseYes()
       supportRequiredPage.selectAll()
       if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
-        hearingExceptionalCircumstancesPage.chooseNo()
+        hearingExceptionalCircumstancesPage.chooseYes()
       } else {
         hearingLocationPage.chooseNoAsClaimant()
       }
