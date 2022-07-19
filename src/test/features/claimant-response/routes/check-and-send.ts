@@ -308,7 +308,6 @@ describe('Claimant response: check and send page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Check your answers'))
         })
-        
         if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
           it(`should render page with hearing requirements when Defendant's part admit pay immediately response is rejected`, async () => {
             const dqPartAdmit = {
