@@ -19,12 +19,12 @@ export class DetailsInCaseOfHearingTask {
           if (!directionsQuestionnaireDraft.permissionForExpert.isCompleted()) {
             return false
           } else if (directionsQuestionnaireDraft.permissionForExpert.option.option === YesNoOption.YES.option) {
-            if ((!directionsQuestionnaireDraft.expertEvidence.isCompleted()) || (directionsQuestionnaireDraft.expertEvidence.expertEvidence.option === YesNoOption.NO.option && !directionsQuestionnaireDraft.whyExpertIsNeeded.isCompleted())) {
+            if ((!directionsQuestionnaireDraft.expertEvidence.isCompleted()) || (directionsQuestionnaireDraft.expertEvidence.expertEvidence.option === YesNoOption.YES.option && !directionsQuestionnaireDraft.whyExpertIsNeeded.isCompleted())) {
               return false
-            }
-          } else if (directionsQuestionnaireDraft.determinationWithoutHearingQuestions.determinationWithoutHearingQuestions.option === YesNoOption.NO.option) {
-            if ((!directionsQuestionnaireDraft.determinationWithoutHearingQuestions.isCompleted()) || (directionsQuestionnaireDraft.determinationWithoutHearingQuestions.determinationWithoutHearingQuestions.option === YesNoOption.NO.option && !directionsQuestionnaireDraft.determinationWithoutHearingQuestions.isCompleted())) {
-              return false
+            } else if (directionsQuestionnaireDraft.determinationWithoutHearingQuestions.determinationWithoutHearingQuestions.option === YesNoOption.NO.option) {
+              if ((!directionsQuestionnaireDraft.determinationWithoutHearingQuestions.isCompleted()) || (directionsQuestionnaireDraft.determinationWithoutHearingQuestions.determinationWithoutHearingQuestions.option === YesNoOption.NO.option && !directionsQuestionnaireDraft.determinationWithoutHearingQuestions.isCompleted())) {
+                return false
+              }
             }
           }
         }
