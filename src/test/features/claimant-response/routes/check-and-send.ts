@@ -334,7 +334,6 @@ describe('Claimant response: check and send page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Check your answers'))
         })
-        
         it(`should render page without hearing requirements when Defendant's part admit pay immediately response is accepted`, async () => {
           const dqPartAdmit = {
             ...claimStoreServiceMock.samplePartialAdmissionWithPayImmediatelyData(),
