@@ -52,6 +52,7 @@ export default express.Router()
       }
       logger.info(`FINISH PAYMENT COMPLETED, for external id (${externalId}):`)
     } catch (err) {
+      logger.info(`ERROR OCCURED, for external id (${externalId}):`)
       if (err.statusCode === HttpStatus.NOT_FOUND) {
         logger.log(`claim with external id ${externalId} not found, redirecting user to check and send`)
         res.redirect(Paths.checkAndSendPage.uri)
