@@ -29,6 +29,8 @@ export default express.Router()
     const user: User = res.locals.user
     const draft: Draft<DraftClaim> = res.locals.claimDraft
 
+    logger.info(`IN FINISH PAYMENT, WAITING FOR PAYMENT TO COMPLETE, for external id (${externalId}):`)
+
     try {
       const claim: Claim = await claimStoreClient.retrieveByExternalId(externalId, user)
       logger.info(`CLAIM IN FINISH PAYMENT, Payment state for external id (${externalId}): `, claim.state)
@@ -48,6 +50,7 @@ export default express.Router()
         }
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId }))
       }
+      logger.info(`FINISH PAYMENT COMPLETED, for external id (${externalId}):`)
     } catch (err) {
       if (err.statusCode === HttpStatus.NOT_FOUND) {
         logger.log(`claim with external id ${externalId} not found, redirecting user to check and send`)
