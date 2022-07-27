@@ -480,6 +480,22 @@
                 bold = true
               ) }}
             {% endif %}
+            {% if directionsQuestionnaireDraft.vulnerabilityQuestions.vulnerabilityQuestions %}
+                    {{ partyDetailRow(
+                      label = 'Do you believe you, or a witness who will give evidence on your behalf, are vulnerable in anyway which the Court needs to consider?',
+                      value = t(directionsQuestionnaireDraft.vulnerabilityQuestions.vulnerabilityQuestions.option) | capitalize,
+                      changeLink = DirectionsQuestionnairePaths.vulnerabilityQuestionsPage.evaluateUri({ externalId: claim.externalId }),
+                      bottomBorder = false,
+                      bold = true
+                    ) }}
+            {% if directionsQuestionnaireDraft.vulnerabilityQuestions.vulnerabilityQuestions.option === YesNoOption.YES.option %}
+                    {{ partyDetailRow(
+                      label = 'If you have answered “yes” to question 1, in what way/s are you/ the witness vulnerable and what steps, support or adjustments do you wish the Court to consider?',
+                      value = t(directionsQuestionnaireDraft.vulnerabilityQuestions.vulnerabilityDetails),
+                      bold = true
+                    ) }}
+                      {% endif %}
+                  {% endif %}
             {% if directionsQuestionnaireDraft.availability.hasUnavailableDates %}
               {{ partyDetailRow(
                 label = 'Dates unavailable',

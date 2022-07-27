@@ -21,6 +21,10 @@ export class DetailsInCaseOfHearingTask {
           } else if (directionsQuestionnaireDraft.permissionForExpert.option.option === YesNoOption.YES.option) {
             if ((!directionsQuestionnaireDraft.expertEvidence.isCompleted()) || (directionsQuestionnaireDraft.expertEvidence.expertEvidence.option === YesNoOption.YES.option && !directionsQuestionnaireDraft.whyExpertIsNeeded.isCompleted())) {
               return false
+            } else if (directionsQuestionnaireDraft.vulnerabilityQuestions.vulnerabilityQuestions.option === YesNoOption.YES.option) {
+              if ((!directionsQuestionnaireDraft.vulnerabilityQuestions.isCompleted()) || (directionsQuestionnaireDraft.vulnerabilityQuestions.vulnerabilityQuestions.option === YesNoOption.YES.option && !directionsQuestionnaireDraft.vulnerabilityQuestions.isCompleted())) {
+                return false
+              }
             }
           }
         }

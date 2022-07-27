@@ -10,6 +10,7 @@ import { WhyExpertIsNeeded } from 'directions-questionnaire/forms/models/whyExpe
 import { ExpertReports } from 'directions-questionnaire/forms/models/expertReports'
 import { PermissionForExpert } from 'directions-questionnaire/forms/models/permissionForExpert'
 import { HearingLocation } from 'directions-questionnaire/forms/models/hearingLocation'
+import { VulnerabilityQuestions } from 'directions-questionnaire/forms/models/vulnerabilityQuestions'
 
 export class DirectionsQuestionnaireDraft extends DraftDocument {
 
@@ -25,6 +26,7 @@ export class DirectionsQuestionnaireDraft extends DraftDocument {
   permissionForExpert: PermissionForExpert = new PermissionForExpert()
   expertEvidence: ExpertEvidence = new ExpertEvidence()
   whyExpertIsNeeded: WhyExpertIsNeeded
+  vulnerabilityQuestions: VulnerabilityQuestions = new VulnerabilityQuestions()
 
   deserialize (input: any): DirectionsQuestionnaireDraft {
     if (input) {
@@ -41,6 +43,8 @@ export class DirectionsQuestionnaireDraft extends DraftDocument {
       this.permissionForExpert = new PermissionForExpert().deserialize(input.permissionForExpert)
       this.expertEvidence = new ExpertEvidence().deserialize(input.expertEvidence)
       this.whyExpertIsNeeded = new WhyExpertIsNeeded().deserialize(input.whyExpertIsNeeded)
+      this.vulnerabilityQuestions = new VulnerabilityQuestions().deserialize(input.vulnerabilityQuestions)
+
     }
     return this
   }
