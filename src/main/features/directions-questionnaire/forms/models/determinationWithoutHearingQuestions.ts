@@ -6,6 +6,7 @@ import {
 import { IsDefined, IsIn, IsNotEmpty, MaxLength, ValidateIf } from '@hmcts/class-validator'
 import { YesNoOption } from 'models/yesNoOption'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
+import {IsNotBlank} from "@hmcts/cmc-validators";
 
 export class ValidationErrors {
   static readonly REASON_REQUIRED: string = 'Please tell us why'
@@ -17,9 +18,10 @@ export class DeterminationWithoutHearingQuestions implements CompletableTask {
   @IsIn(YesNoOption.all(), { message: GlobalValidationErrors.YES_NO_REQUIRED })
   determinationWithoutHearingQuestions?: YesNoOption
 
-  @ValidateIf(o => o.determinationWithoutHearingQuestions && o.determinationWithoutHearingQuestions.option === YesNoOption.NO.option)
+  @ValidateIf(o => o.determinationWithoutHearingQuestions.option === YesNoOption.NO.option)
   @IsNotEmpty({ message: ValidationErrors.REASON_REQUIRED })
   @IsDefined({ message: ValidationErrors.REASON_REQUIRED })
+  @IsNotBlank({ message: ValidationErrors.REASON_REQUIRED })
   @MaxLength(ValidationConstraints.STANDARD_TEXT_INPUT_MAX_LENGTH, { message: DefaultValidationErrors.TEXT_TOO_LONG })
   determinationWithoutHearingQuestionsDetails?: string
 
