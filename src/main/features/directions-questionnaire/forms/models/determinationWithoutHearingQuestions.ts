@@ -6,7 +6,7 @@ import {
 import { IsDefined, IsIn, IsNotEmpty, MaxLength, ValidateIf } from '@hmcts/class-validator'
 import { YesNoOption } from 'models/yesNoOption'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
-import {IsNotBlank} from "@hmcts/cmc-validators";
+import { IsNotBlank } from '@hmcts/cmc-validators'
 
 export class ValidationErrors {
   static readonly REASON_REQUIRED: string = 'Please tell us why'
