@@ -14,7 +14,7 @@
     <dl class="govuk-summary-list govuk-!-margin-bottom-9">
       {% if directionsQuestionnaireDraft.determinationWithoutHearingQuestions.determinationWithoutHearingQuestions %}
         {{ partyDetailRow(
-          label = 'Do you consider that this claim is suitable for determination without a hearing, i.e. by a judge and considering the case papers, witness statements and other documents filed by the parties, making a decision and giving a note of reasons for that decision?',
+          label = 'Do you consider that this claim is suitable for determination without a hearing?',
           value = t(directionsQuestionnaireDraft.determinationWithoutHearingQuestions.determinationWithoutHearingQuestions.option) | capitalize,
           changeLink = DirectionsQuestionnairePaths.determinationWithoutHearingQuestionsPage.evaluateUri({ externalId: claim.externalId }),
           bottomBorder = false,

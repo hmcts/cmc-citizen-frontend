@@ -22,7 +22,7 @@ const determinationWithoutHearingQuestionsPage: DeterminationWithoutHearingQuest
 export class DirectionsQuestionnaireSteps {
   async acceptDirectionsQuestionnaireYesJourney (defendantType: PartyType = PartyType.INDIVIDUAL): Promise<void> {
     if (process.env.FEATURE_DIRECTIONS_QUESTIONNAIRE === 'true') {
-      determinationWithoutHearingQuestionsPage.chooseNo()
+      determinationWithoutHearingQuestionsPage.chooseYes()
       supportRequiredPage.selectAll()
       if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
         hearingExceptionalCircumstancesPage.chooseYes()
