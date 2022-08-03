@@ -85,7 +85,7 @@ describe('Directions questionnaire - determination questions', () => {
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Do you consider that this claim is suitable for determination without a hearing, i.e. by a judge reading and considering the case papers, witness statements and other documents filed by the parties, making a decision, and giving a note of reasons for that decision?'))
+            .expect(res => expect(res).to.be.successful.withText('Do you consider that this claim is suitable for determination without a hearing'))
         })
       })
     })
