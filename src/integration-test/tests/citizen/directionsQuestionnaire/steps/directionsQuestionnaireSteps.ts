@@ -7,6 +7,7 @@ import { SelfWitnessPage } from 'integration-test/tests/citizen/directionsQuesti
 import { OtherWitnessPage } from 'integration-test/tests/citizen/directionsQuestionnaire/pages/other-wtiness'
 import { HearingExceptionalCircumstancesPage } from 'integration-test/tests/citizen/directionsQuestionnaire/pages/hearing-exceptional-circumstances'
 import { PartyType } from 'integration-test/data/party-type'
+import { DeterminationWithoutHearingQuestionsPage } from 'integration-test/tests/citizen/directionsQuestionnaire/pages/determination-without-hearing-questions'
 
 const supportRequiredPage: SupportRequiredPage = new SupportRequiredPage()
 const hearingLocationPage: HearingLocationPage = new HearingLocationPage()
@@ -16,10 +17,12 @@ const expertReportsPage: ExpertReportsPage = new ExpertReportsPage()
 const selfWitnessPage: SelfWitnessPage = new SelfWitnessPage()
 const otherWitnessPage: OtherWitnessPage = new OtherWitnessPage()
 const hearingDatesPage: HearingDatesPage = new HearingDatesPage()
+const determinationWithoutHearingQuestionsPage: DeterminationWithoutHearingQuestionsPage = new DeterminationWithoutHearingQuestionsPage()
 
 export class DirectionsQuestionnaireSteps {
   async acceptDirectionsQuestionnaireYesJourney (defendantType: PartyType = PartyType.INDIVIDUAL): Promise<void> {
     if (process.env.FEATURE_DIRECTIONS_QUESTIONNAIRE === 'true') {
+      determinationWithoutHearingQuestionsPage.chooseNo()
       supportRequiredPage.selectAll()
       if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
         hearingExceptionalCircumstancesPage.chooseYes()
@@ -36,6 +39,7 @@ export class DirectionsQuestionnaireSteps {
 
   acceptDirectionsQuestionnaireNoJourney (defendantType: PartyType = PartyType.INDIVIDUAL): void {
     if (process.env.FEATURE_DIRECTIONS_QUESTIONNAIRE === 'true') {
+      determinationWithoutHearingQuestionsPage.chooseYes()
       supportRequiredPage.selectAll()
       if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
         hearingExceptionalCircumstancesPage.chooseNo()
@@ -51,6 +55,7 @@ export class DirectionsQuestionnaireSteps {
 
   acceptDirectionsQuestionnaireNoJourneyAsClaimant (defendantType: PartyType = PartyType.INDIVIDUAL): void {
     if (process.env.FEATURE_DIRECTIONS_QUESTIONNAIRE === 'true') {
+      determinationWithoutHearingQuestionsPage.chooseYes()
       supportRequiredPage.selectAll()
       if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
         hearingExceptionalCircumstancesPage.chooseNo()

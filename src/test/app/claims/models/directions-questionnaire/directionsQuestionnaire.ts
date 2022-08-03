@@ -29,6 +29,11 @@ describe('DirectionsQuestionnaire', () => {
       selfWitness: 'yes',
       noOfOtherWitness: 1
     },
+    determinationWithoutHearingQuestions:
+    {
+      determinationWithoutHearingQuestions: 'no',
+      determinationWithoutHearingQuestionsDetails: 'determination'
+    },
     expertReports: [
       {
         expertName: 'Prof. McGonagall',
