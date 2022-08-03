@@ -42,7 +42,7 @@ export class DeterminationWithoutHearingQuestions implements CompletableTask {
     if (input && input.determinationWithoutHearingQuestions) {
       this.determinationWithoutHearingQuestions = YesNoOption.fromObject(input.determinationWithoutHearingQuestions.option)
       if (this.determinationWithoutHearingQuestions === YesNoOption.YES) {
-        this.determinationWithoutHearingQuestionsDetails = ' '
+        this.determinationWithoutHearingQuestionsDetails = undefined
       } else {
         this.determinationWithoutHearingQuestionsDetails = input.determinationWithoutHearingQuestionsDetails
       }
