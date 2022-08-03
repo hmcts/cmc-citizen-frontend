@@ -18,7 +18,7 @@ export class DeterminationWithoutHearingQuestions implements CompletableTask {
   @IsIn(YesNoOption.all(), { message: GlobalValidationErrors.YES_NO_REQUIRED })
   determinationWithoutHearingQuestions?: YesNoOption
 
-  @ValidateIf(o => o.determinationWithoutHearingQuestions.option === YesNoOption.NO.option)
+  @ValidateIf(o => o.determinationWithoutHearingQuestions && o.determinationWithoutHearingQuestions.option === YesNoOption.NO.option)
   @IsNotEmpty({ message: ValidationErrors.REASON_REQUIRED })
   @IsDefined({ message: ValidationErrors.REASON_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.REASON_REQUIRED })
