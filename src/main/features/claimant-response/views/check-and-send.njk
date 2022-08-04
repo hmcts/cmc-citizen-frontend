@@ -20,12 +20,12 @@
           bottomBorder = false,
           bold = true
         ) }}
-        {% if directionsQuestionnaireDraft.determinationWithoutHearingQuestions.determinationWithoutHearingQuestions.option === YesNoOption.No.option %}
+        {% if directionsQuestionnaireDraft.determinationWithoutHearingQuestions.determinationWithoutHearingQuestions.option === YesNoOption.NO.option %}
           {{ partyDetailRow(
             label = 'Tell us why',
             value = t(directionsQuestionnaireDraft.determinationWithoutHearingQuestions.determinationWithoutHearingQuestionsDetails),
             bold = true
-          ) }}
+            ) }}
         {% endif %}
       {% endif %}
       {% if directionsQuestionnaireDraft.supportRequired.languageSelected or directionsQuestionnaireDraft.supportRequired.signLanguageSelected or
