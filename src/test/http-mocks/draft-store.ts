@@ -745,6 +745,12 @@ export const sampleDirectionsQuestionnaireDraftObj = {
   whyExpertIsNeeded: {
     explanation: 'for expert opinion'
   },
+  determinationWithoutHearingQuestions: {
+    determinationWithoutHearingQuestions: {
+      option: 'no'
+    },
+    determinationWithoutHearingQuestionsDetails: 'determination'
+  },
   vulnerabilityQuestions: {
     vulnerabilityQuestions: {
       option: 'yes'
@@ -823,6 +829,12 @@ export const sampleDirectionsQuestionnaireNearestCourtDraftObj = {
   },
   whyExpertIsNeeded: {
     explanation: 'for expert opinion'
+  },
+  determinationWithoutHearingQuestions: {
+    determinationWithoutHearingQuestions: {
+      option: 'no'
+    },
+    determinationWithoutHearingQuestionsDetails: 'determination'
   },
   vulnerabilityQuestions: {
     vulnerabilityQuestions: {
@@ -904,6 +916,12 @@ export const sampleDirectionsQuestionnaireDraftAltCourtObj = {
   },
   whyExpertIsNeeded: {
     explanation: 'for expert opinion'
+  },
+  determinationWithoutHearingQuestions: {
+    determinationWithoutHearingQuestions: {
+      option: 'no'
+    },
+    determinationWithoutHearingQuestionsDetails: 'determination'
   },
   vulnerabilityQuestions: {
     vulnerabilityQuestions: {
@@ -991,6 +1009,12 @@ export const sampleDirectionsQuestionnaireDraftWithNameObj = {
   },
   whyExpertIsNeeded: {
     explanation: 'for expert opinion'
+  },
+  determinationWithoutHearingQuestions: {
+    determinationWithoutHearingQuestions: {
+      option: 'no'
+    },
+    determinationWithoutHearingQuestionsDetails: 'determination'
   },
   vulnerabilityQuestions: {
     vulnerabilityQuestions: {

@@ -124,6 +124,10 @@ describe('ResponseModelConverter', () => {
         expertEvidenceToExamine: 'Photographs',
         reasonForExpertAdvice: 'for expert opinion'
       },
+      determinationWithoutHearingQuestions: {
+        determinationWithoutHearingQuestions: 'no',
+        determinationWithoutHearingQuestionsDetails: 'determination'
+      },
       vulnerabilityQuestions: {
         vulnerabilityQuestions: 'yes',
         vulnerabilityDetails: 'vulnerable'
