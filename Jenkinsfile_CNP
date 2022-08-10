@@ -81,6 +81,7 @@ withPipeline("nodejs", product, component) {
   }
 
   onPR {
+    env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
       if (!checkForEnableHelmLabel(env.BRANCH_NAME)) {
         enableCleanupOfHelmReleaseOnSuccess();
       }
