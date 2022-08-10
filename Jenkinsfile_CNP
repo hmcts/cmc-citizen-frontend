@@ -50,7 +50,7 @@ def String generateClaimStoreUrl(String testUrl) {
   String claimStoreUrl = 'http://cmc-claim-store-aat.service.core-compute-aat.internal'
   String startOfClaimStoreServiceName = 'claim-store-'
   if (testUrl?.trim()) {
-     claimStoreUrl = 'http://' + startOfClaimStoreServiceName + testUrl.minus('https://')
+     claimStoreUrl = 'https://' + startOfClaimStoreServiceName + testUrl.minus('https://')
      println('generateClaimStoreUrl -> ' + claimStoreUrl)
   }
   return claimStoreUrl
