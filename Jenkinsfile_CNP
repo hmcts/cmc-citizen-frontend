@@ -79,7 +79,8 @@ withPipeline("nodejs", product, component) {
 
   before('smoketest:preview'){
     log.info env.TEST_URL
-    env.CLAIM_STORE_URL = "http://cmc-citizen-frontend-pr-${CHANGE_ID}-claim-store"
+    env.CLAIM_STORE_URL = "https://claim-store-cmc-citizen-frontend-pr-${CHANGE_ID}.service.core-compute-preview.internal"
+    env.CCD_DEFINITION_CLAIM_STORE_URL = "http://cmc-citizen-frontend-pr-${CHANGE_ID}-claim-store"
     sh """
     eval \$(./bin/variables/load-preview-env-variables.sh ${CHANGE_ID})
     ./bin/add-roles.sh
@@ -89,7 +90,8 @@ withPipeline("nodejs", product, component) {
 
   before('functionalTest:preview'){
       log.info env.TEST_URL
-      env.CLAIM_STORE_URL = "http://cmc-citizen-frontend-pr-${CHANGE_ID}-claim-store"
+      env.CLAIM_STORE_URL = "https://claim-store-cmc-citizen-frontend-pr-${CHANGE_ID}.service.core-compute-preview.internal"
+      env.CCD_DEFINITION_CLAIM_STORE_URL = "http://cmc-citizen-frontend-pr-${CHANGE_ID}-claim-store"
   }
 
   after('test') {
