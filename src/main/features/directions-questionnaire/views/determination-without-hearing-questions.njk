@@ -1,0 +1,33 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, radioOption, textArea, saveAndContinueButton %}
+
+{% set heading = 'Determination without Hearing Questions' %}
+
+{% block content %}
+
+<div class="grid-row">
+  <div class="column-two-thirds">
+    <form method="post" class="analytics-submit-event-trigger" data-event-action="DQ: Determination Without Hearing Questions" data-event-label-from="determinationWithoutHearingQuestions" novalidate>
+      {{ csrfProtection(csrf) }}
+
+      {% set error = form.errorFor('determinationWithoutHearingQuestions') %}
+      <fieldset id="determinationQuestions[label]" class="form-group {% if error %} form-group-error {% endif %}">
+        <legend class="visually-hidden">{{ t(heading) }}</legend>
+
+        <p><span style="font-weight: bold">{{ t('Do you consider that this claim is suitable for determination without a hearing, ') }}</span>{{ t('i.e. by a judge reading and considering the case papers, witness statements and other documents filed by the parties, making a decision, and giving a note of reasons for that decision?') }}</p>
+        {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
+
+        {{ radioOption(label = 'Yes', name = 'determinationWithoutHearingQuestions', value = YesNoOption.YES.option, checked = form.valueFor('determinationWithoutHearingQuestions').option === YesNoOption.YES.option) }}
+
+        {{ radioOption(label = 'No', name = 'determinationWithoutHearingQuestions', value = YesNoOption.NO.option, checked = form.valueFor('determinationWithoutHearingQuestions').option === YesNoOption.NO.option) }}
+
+        <div class="form-group panel panel-border-narrow js-hidden" id="determinationWithoutHearingQuestions-no" aria-hidden="false">
+          {{ textArea(label = 'Tell us why', name = 'determinationWithoutHearingQuestionsDetails', form = form) }}
+        </div>
+
+      </fieldset>
+        {{ saveAndContinueButton() }}
+    </form>
+  </div>
+</div>
+{% endblock %}
