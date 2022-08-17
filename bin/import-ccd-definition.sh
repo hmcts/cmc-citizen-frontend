@@ -20,10 +20,11 @@ if [[ ! -e ${definition_output_file} ]]; then
    touch ${definition_output_file}
 fi
 
+IMPORTER_CLAIM_STORE_URL=${CCD_DEFINITION_CLAIM_STORE_URL:-$CLAIM_STORE_URL}
 docker run --rm --name json2xlsx \
   -v ${definition_input_dir}:/tmp/ccd-definition \
   -v ${definition_output_file}:/tmp/ccd-definition.xlsx \
-  -e CCD_DEF_CLAIM_STORE_BASE_URL=${CLAIM_STORE_URL:-http://docker.for.mac.localhost:4000} \
+  -e CCD_DEF_CLAIM_STORE_BASE_URL=${IMPORTER_CLAIM_STORE_URL:-http://docker.for.mac.localhost:4000} \
   hmctspublic.azurecr.io/ccd/definition-processor:${definition_processor_version} \
   json2xlsx -D /tmp/ccd-definition -o /tmp/ccd-definition.xlsx ${params}
 
