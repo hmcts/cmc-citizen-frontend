@@ -925,7 +925,7 @@ describe('Claim', () => {
       claim.respondToOnlineOconReconsiderationDeadline().then(
         res => {
           expect(res.format('YYYY-MM-DD'))
-          .to.equal(MomentFactory.parse('2020-12-01').format('YYYY-MM-DD'))
+            .to.equal(MomentFactory.parse('2020-12-01').format('YYYY-MM-DD'))
         })
     })
 
