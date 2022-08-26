@@ -1,0 +1,18 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: "cmc-citizen-frontend"
+  annotations:
+    # This must match folder-name/job-name in Jenkins.
+    jenkins.io/job-full-name: cft:HMCTS_a_to_c/cmc-citizen-frontend
+    github.com/project-slug: hmcts/cmc-citizen-frontend
+  tags:
+    - nodejs
+  links:
+    - url: https://hmcts-reform.slack.com/app_redirect?channel=cmc-tech
+      title: "#cmc-tech on Slack"
+      icon: chat
+spec:
+  type: service
+  lifecycle: production
+  owner: dts_civil
