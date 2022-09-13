@@ -1,15 +1,23 @@
 # CMC Frontend
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/hmcts/cmc-citizen-frontend.svg)](https://greenkeeper.io/)
-
-[![Standard - JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
-
-[![codecov](https://codecov.io/gh/hmcts/cmc-citizen-frontend/branch/master/graph/badge.svg)](https://codecov.io/gh/hmcts/cmc-citizen-frontend)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cmc-citizen-frontend&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=cmc-citizen-frontend) [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=cmc-citizen-frontend&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=cmc-citizen-frontend) [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=cmc-citizen-frontend&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=cmc-citizen-frontend) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=cmc-citizen-frontend&metric=coverage)](https://sonarcloud.io/summary/new_code?id=cmc-citizen-frontend)
 
 This is the frontend application for CMC. Service provides web UI for citizens, presented as sequence of HTML 5 web pages designed to GDS Service Design guidelines, so that they can make money claims and / or perform associated actions e.g submitting defence or requesting default judgement.
 
-Service delegates most of the non UI responsibilities to underlying services e.g. claim-store or pdf-service.
- 
+Service delegates most of the non UI responsibilities to underlying services e.g. claim-store or pdf-service. 
+
+## Overview
+
+<p align="center">
+<b><a href="https://github.com/hmcts/cmc-citizen-frontend">cmc-citizen-frontend</a></b> • <a href="https://github.com/hmcts/cmc-legal-rep-frontend">cmc-legal-rep-frontend</a> • <a href="https://github.com/hmcts/cmc-claim-store">cmc-claim-store</a>
+</p>
+
+<br>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/hmcts/reform-api-docs/master/docs/c4/cmc/images/structurizr-cmc-overview.png" width="550"/>
+</p>
+
 ### Getting Started
 
 ### Prerequisites
