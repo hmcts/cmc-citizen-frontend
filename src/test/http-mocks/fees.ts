@@ -356,7 +356,7 @@ export function resolveCalculateFee (eventType: string, channel: string): mock.S
       jurisdiction2: `${jurisdiction2}`,
       channel: `${channel}`,
       event: `${eventType}`,
-      keyword: 'PaperClaimUpTo300',
+      keyword: new RegExp(`/[\\s\\S]/`),
       amount_or_volume: new RegExp(`[\\d]+`)
     })
     .reply(HttpStatus.OK, feeOutcome)
@@ -371,7 +371,7 @@ export function rejectCalculateFee (eventType: string, channel: string, reason: 
       jurisdiction2: `${jurisdiction2}`,
       channel: `${channel}`,
       event: `${eventType}`,
-      keyword: 'PaperClaimUpTo300',
+      keyword: new RegExp(`/[\\s\\S]/`),
       amount_or_volume: new RegExp(`[\\d]+`)
     })
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
