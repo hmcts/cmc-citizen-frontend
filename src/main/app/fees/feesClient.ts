@@ -92,9 +92,9 @@ export class FeesClient {
   static getKeyword (eventType: string, amount: number) {
     let keyword: string = ''
     if (eventType === 'hearing') {
-      keyword = KeywordIssueEventUtils.getKeywordIssueEvent(amount)
-    } else if (eventType === 'issue') {
       keyword = KeywordHearingEventUtils.getKeywordHearingEvent(amount)
+    } else if (eventType === 'issue') {
+      keyword = KeywordIssueEventUtils.getKeywordIssueEvent(amount)
     } else {
       throw new Error('Event type must be hearing or issue')
     }
