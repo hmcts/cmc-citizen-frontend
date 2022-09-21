@@ -146,6 +146,7 @@ const excludedPaths: Paths[] = [
   DirectionQuestionnairePaths.hearingDatesDeleteReceiver,
   DirectionQuestionnairePaths.hearingDatesReplaceReceiver,
   DirectionQuestionnairePaths.hearingDatesPage,
+  DirectionQuestionnairePaths.vulnerabilityQuestionsPage,
   OrdersPaths.reviewOrderReceiver,
   OrdersPaths.directionsOrderDocument,
   MediationPaths.mediationAgreementDocument,

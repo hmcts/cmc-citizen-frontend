@@ -273,9 +273,6 @@
       nonSelectableOption.text = postcodeLookupWidget.querySelector('select').options.length + ' addresses found'
       postcodeSelectDropdown.appendChild(nonSelectableOption)
 
-      nonSelectableOption.text = postcodeLookupWidget.querySelector('select').options.length + ' addresses found'
-      postcodeSelectDropdown.appendChild(nonSelectableOption)
-
       show(postcodeAddressPicker(postcodeLookupWidget))
       hideAddressError(postcodeLookupWidget)
     }
