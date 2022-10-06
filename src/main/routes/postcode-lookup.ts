@@ -35,11 +35,11 @@ export default express.Router()
         if (err.message === 'Authentication failed') {
           trackCustomEvent(`Ordnance Survey keys stopped working`, { error: err })
         }
-        logger.error(err.stack)
-        res.status(500).json({
+        logger.error('Response Address Information not valid \n', err.stack)
+        res.status(422).json({
           error: {
-            status: 500,
-            message: err.message
+            status: 422,
+            message: 'AddressInfoResponse: \n' + err.message
           }
         })
       })
