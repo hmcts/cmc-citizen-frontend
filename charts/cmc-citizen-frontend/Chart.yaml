@@ -1,7 +1,7 @@
 apiVersion: v2
 name: cmc-citizen-frontend
 home: https://github.com/hmcts/cmc-citizen-frontend
-version: 3.3.37
+version: 3.3.38
 description: Helm chart for the HMCTS CMC Citizen Frontend service
 # be aware when bumping version that it is used elsewhere, e.g.:
 # chart-cmc - demo: https://github.com/hmcts/chart-cmc/tree/master/cmc
@@ -13,16 +13,16 @@ maintainers:
 dependencies:
   - name: nodejs
     version: 2.4.3
-    repository: '@hmctspublic'
+    repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
 
   - name: idam-pr
     version: 2.2.7
-    repository: '@hmctspublic'
+    repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
     condition: idam-pr.enabled
 
   - name: cmc-claim-store
     version: 4.1.39
-    repository: '@hmctspublic'
+    repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
     condition: cmc-claim-store.enabled
 
   - name: postgresql
@@ -32,22 +32,22 @@ dependencies:
 
   - name: ccd
     version: 8.0.0
-    repository: '@hmctspublic'
+    repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
     condition: ccd.enabled
 
   - name: xui-webapp
     version: ~0.2.1
-    repository: '@hmctspublic'
+    repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
     condition: xui-webapp.enabled
 
   - name: elasticsearch
     version: 7.8.2
-    repository: '@hmctspublic'
+    repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
     condition: elastic.enabled
 
   - name: logstash
     version: 2.4.1
-    repository: '@hmctspublic'
+    repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
     condition: elastic.enabled
 
 
