@@ -5,7 +5,7 @@ import { ClaimAmountBreakdown } from 'claim/form/models/claimAmountBreakdown'
 import { InterestRate } from 'claim/form/models/interestRate'
 import { InterestDate } from 'claim/form/models/interestDate'
 import { Reason } from 'claim/form/models/reason'
-import { v4 as uuid } from 'uuid';
+import { v4 as uuid } from 'uuid'
 import { Defendant } from 'drafts/models/defendant'
 import { DraftDocument } from '@hmcts/cmc-draft-store-middleware'
 import { QualifiedStatementOfTruth } from 'forms/models/qualifiedStatementOfTruth'
