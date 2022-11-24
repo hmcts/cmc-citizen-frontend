@@ -75,6 +75,9 @@ import { ResponseType as DomainResponseType } from 'claims/models/response/respo
 import { FeaturesBuilder } from 'claim/helpers/featuresBuilder'
 import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
 
+const { v4: uuidv4 } = require('uuid')
+const nonce = uuidv4().replace(/-/g, '')
+
 const packageDotJson = require('../../../../package.json')
 
 const appAssetPaths = {
@@ -211,6 +214,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('toDate', function (date) {
       return date ? new Date(date) : new Date()
     })
+    nunjucksEnv.addGlobal('nonce', nonce)
   }
 
   private convertPropertiesToBoolean (featureToggles: { [key: string]: any }): { [key: string]: boolean } {
