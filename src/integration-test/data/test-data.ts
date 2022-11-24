@@ -1,6 +1,6 @@
 import { PartyType } from 'integration-test/data/party-type'
 import { InterestType } from 'integration-test/data/interest-type'
-import * as uuid from 'uuid'
+import { v4 as uuid } from 'uuid'
 import * as moment from 'moment'
 import I = CodeceptJS.I
 

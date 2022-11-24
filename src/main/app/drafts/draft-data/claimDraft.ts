@@ -1,4 +1,4 @@
-import * as uuid from 'uuid'
+import { v4 as uuid } from 'uuid'
 import { PartyType } from 'common/partyType'
 import { YesNoOption } from 'models/yesNoOption'
 

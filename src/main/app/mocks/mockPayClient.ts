@@ -3,7 +3,7 @@ import * as config from 'config'
 import { Fee } from 'payment-hub-client/fee'
 import { Payment } from 'payment-hub-client/payment'
 import { PaymentRetrieveResponse } from 'payment-hub-client/paymentRetrieveResponse'
-import * as uuid from 'uuid'
+import { v4 as uuid } from 'uuid'
 import { MomentFactory } from 'shared/momentFactory'
 import { PayClient } from 'payment-hub-client/payClient'
 
