@@ -1,7 +1,6 @@
 import * as express from 'express'
 import * as helmet from 'helmet'
 
-const none = '\'none\''
 const self = '\'self\''
 
 export class ContentSecurityPolicy {
