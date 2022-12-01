@@ -17,6 +17,7 @@ export class ContentSecurityPolicy {
       additionalClassName,
       inlineJsWindowGOVUKClassName,
       self,
+      '\'unsafe-inline\'',
       (_req, res) => `'nonce-${res.locals.nonce}'`,
       '*.google-analytics.com',
       'www.googletagmanager.com',
