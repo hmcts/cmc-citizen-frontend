@@ -5,13 +5,26 @@ const self = '\'self\''
 
 export class ContentSecurityPolicy {
 
-  constructor (public developmentMode: boolean) {}
+  constructor (public developmentMode: boolean) {
+  }
 
   enableFor (app: express.Express) {
     const inlineJsEnabledBodyClassName = '\'sha256-+6WnXIl4mbFTCARd8N3COQmT3bJJmo32N8q8ZSQAIcU=\''
     const inlineJsWindowGOVUKClassName = '\'sha256-G29/qSW/JHHANtFhlrZVDZW1HOkCDRc78ggbqwwIJ2g=\''
     const additionalClassName = '\'sha256-AaA9Rn5LTFZ5vKyp3xOfFcP4YbyOjvWn2up8IKHVAKk=\''
-    const scriptSrc = [inlineJsEnabledBodyClassName, additionalClassName, inlineJsWindowGOVUKClassName, self, '*.google-analytics.com', 'www.googletagmanager.com', 'vcc-eu4.8x8.com','vcc-eu4b.8x8.com','www.apply-for-probate.service.gov.uk', 'https://webchat-client.ctsc.hmcts.net']
+    const scriptSrc = [
+      inlineJsEnabledBodyClassName,
+      additionalClassName,
+      inlineJsWindowGOVUKClassName,
+      self,
+      (_req, res) => `'nonce-${res.locals.nonce}'`,
+      '*.google-analytics.com',
+      'www.googletagmanager.com',
+      'vcc-eu4.8x8.com',
+      'vcc-eu4b.8x8.com',
+      'www.apply-for-probate.service.gov.uk',
+      'https://webchat-client.ctsc.hmcts.net'
+    ]
     const connectSrc = [self, '*.gov.uk', 'https://webchat-client.ctsc.hmcts.net', 'wss://webchat.ctsc.hmcts.net', 'https://webchat.ctsc.hmcts.net', '*.google-analytics.com', 'www.google-analytics.com']
     const scriptSrcElem = [self, '*.google-analytics.com', 'https://webchat-client.ctsc.hmcts.net', 'wss://webchat.ctsc.hmcts.net', 'https://webchat.ctsc.hmcts.net']
 
