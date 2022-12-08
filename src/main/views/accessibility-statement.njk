@@ -14,6 +14,7 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
+
       <p>
         {{ t('This service allows you to make a money claim against an individual or an organisation for £10,000 or less. ') }}
       </p>
@@ -31,13 +32,10 @@
 
        <h2 class="heading-medium">{{ t('How accessible this website is') }}</h2>
       <p>
-        {{ t('This service was audited by the Digital Accessibility Centre (DAC) in January 2020 for compliance with the Web Content Accessibility Guidelines V2.1 using a combination of technical auditing and feedback from users with accessibility needs.') }}
+        {{ t('This website is compliant with the '+externalLink('Web Content Accessibility Guidelines version 2.1', wcaStandard)+' AA standard.') | safe }}
       </p>
       <p>
-        {{ t('Except where stated below, all issues and recommendations from DAC have been implemented.') }}
-      </p>
-       <p>
-        {{ t('Parts of this website are not fully accessible.') }}
+        {{ t('There are no known accessibility issues within this service.') }}
       </p>
 
        <h2 class="heading-medium">{{ t('Feedback and contact information') }}</h2>
@@ -45,9 +43,9 @@
         {{ t('If you need information on this website in a different format like accessible PDF, large print, easy read, audio recording or braille:') }}
       </p>
 
-      {{ supportWidget('Email') }}
+      {{ supportWidgetaccessibility('Email') }}
 
-      <p>Alternatively, contact your service representative.</p>
+      <p>{{ t('We’ll consider your request and get back to you in 10 days.') }}</p>
 
 
       <h2 class="heading-medium">{{ t('Reporting accessibility problems with this website') }}</h2>
@@ -66,27 +64,24 @@
       <h2 class="heading-large">{{ t('Contacting us by phone or visiting us in person') }}</h2>
 
       <p>
-        {{ t('We provide a text relay service for people who are D/deaf, hearing impaired or have a speech impediment') }}
+        {{ t('We provide a text relay service for people who are D/deaf, hearing impaired or have a speech impediment.') }}
       </p>
        <p>
-        {{ t('Our offices and Tribunal venues have audio induction loops, or if you contact us before your visit we can arrange a British Sign Language (BSL) interpreter.') }}
-      </p>
-       <p>
-        {{ t('You can also request step-free access or a foreign language interpreter.') }}
+        {{ t('Our offices have audio induction loops, or if you contact us before your visit, we can arrange a British Sign Language (BSL) interpreter.') }}
       </p>
       <p>
-      {{externalLink('Find out how to contact us', access) | safe}}
+      {{ t('Find out how to contact us using the contact details above.')}}
       </p>
 
       <h2 class="heading-large">{{ t('Technical information about this website’s accessibility') }}</h2>
       <p>
-        {{ t('Online Civil Money Claims (OCMC) service is committed to making its website accessible, in accordance with the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018.') }}
+        {{ t('HMCTS is committed to making its website accessible, in accordance with the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018.') }}
       </p>
 
       <h2 class="heading-medium">{{ t('Compliance status') }}</h2>
 
-      <p> {{ t('This website is partially compliant with the'
-       + externalLink('Web Content Accessibility Guidelines version 2.1 AA standard', wcaStandards) + ', due to the non-compliances listed below.') | safe }}</p>
+      <p> {{ t('This website is fully compliant with the '
+       + externalLink('Web Content Accessibility Guidelines version 2.1', wcaStandards) + ' AA standard') | safe }}</p>
 
       <h2 class="heading-large">{{ t('Non-accessible content') }}</h2>
       <p>
@@ -109,10 +104,6 @@
 
       <p>{{ t('Links within some emails cannot be read by screen readers. This fails WCAG 2.1A [2.4.4] success criterion (Link Purpose in Context). We plan to fix this by February 2021.') }}
       </p>
-
-      <h2 class="heading-medium">{{ t('Content that’s not within the scope of the accessibility regulations') }}</h2>
-
-      <p>{{ t('Some PDFs, documents and email attachments might not meet accessibility standards, such as being screen reader compatible.') }}</p>
 
       <h2 class="heading-large">{{ t('How we tested this website') }}</h2>
 
@@ -140,12 +131,22 @@
 
       <h2 class="heading-large">{{ t('What we’re doing to improve accessibility') }}</h2>
 
-      <p>{{ t('We plan to fix identified issues according to the timescales shown for each area above.') }}</p>
-      <p>{{ t('We will continue to test this website using accessibility software for any new features which are introduced.') }}</p>
-      <p>{{ t('We also endeavour to fix any issues identified by our users or any new issues that we identify as part of our internal testing or external audits.') }}</p>
+      <p>{{ t('We continually run automated accessibility testing as part of our development practices. This helps us to resolve issues before we launch new pages or features.') }}</p>
 
       <h2 class="heading-large">{{ t('Preparation of this accessibility statement') }}</h2>
-      <p>{{ t('This statement was prepared on 23 September 2019. It was last updated on 25 November 2020.') }}</p>
+      <p>{{ t('This statement was prepared on 23 September 2019. It was last updated on 22 November 2022.') }}</p>
+      <p>
+         {{ t('This website was last tested by the Digital Accessibility Centre (DAC) in January 2020 against WCAG 2.1 standards.') }}
+         </p>
+         <p>
+         {{ t('To give a more accurate review of the service the DAC team employed two differing testing processes:') }}
+         </p>
+      <ul class="list list-bullet">
+         <li>{{ t('a manual technical audit using automated tools')}}
+         </li>
+         <li>{{ t('a dedicated team of users with differing disabilities tested the service using a range of adaptive technologies')}}
+         </li>
+      </ul>
     </div>
   </div>
 {% endblock %}
