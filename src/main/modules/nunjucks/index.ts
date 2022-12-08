@@ -74,6 +74,7 @@ import { PaymentOption } from 'claims/models/paymentOption'
 import { ResponseType as DomainResponseType } from 'claims/models/response/responseType'
 import { FeaturesBuilder } from 'claim/helpers/featuresBuilder'
 import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
+import * as uuid from 'uuid'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -87,6 +88,7 @@ const appAssetPaths = {
   images_vendor: '/img/lib',
   pdf: '/pdf'
 }
+const nonce = uuid().replace(/-/g, '')
 
 export class Nunjucks {
 
@@ -113,6 +115,7 @@ export class Nunjucks {
     app.use((req, res, next) => {
       res.removeHeader('Server')
       res.locals.pagePath = req.path
+      res.locals.nonce = nonce
       next()
     })
 
@@ -211,6 +214,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('toDate', function (date) {
       return date ? new Date(date) : new Date()
     })
+    nunjucksEnv.addGlobal('nonce', nonce)
   }
 
   private convertPropertiesToBoolean (featureToggles: { [key: string]: any }): { [key: string]: boolean } {
