@@ -7,8 +7,6 @@ import { FeeRange } from 'fees/models/feeRange'
 import { StringUtils } from 'utils/stringUtils'
 import { FeatureToggles } from 'utils/featureToggles'
 import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
-import { KeywordIssueEventUtils } from 'utils/keywordIssueEventUtils'
-import { KeywordHearingEventUtils } from 'utils/keywordHearingEventUtils'
 
 const feesUrl = config.get<string>('fees.url')
 const service = config.get<string>('fees.service')
@@ -78,7 +76,7 @@ export class FeesClient {
     if (StringUtils.isBlank(channel)) {
       throw new Error('Fee channel is required')
     }
-    const keyword: string = FeesClient.getKeyword(eventType, amount)
+    const keyword: string = FeesClient.getKeyword(eventType)
     ClaimValidator.claimAmount(amount)
     const feeUri: string = `${feesUrl}/fees-register/fees/lookup?service=${service}&jurisdiction1=${jurisdiction1}&jurisdiction2=${jurisdiction2}&channel=${channel}&event=${eventType}&keyword=${keyword}&amount_or_volume=${amount}`
     const options = {
@@ -89,12 +87,12 @@ export class FeesClient {
     })
   }
 
-  static getKeyword (eventType: string, amount: number) {
+  static getKeyword (eventType: string) {
     let keyword: string = ''
     if (eventType === 'hearing') {
-      keyword = KeywordHearingEventUtils.getKeywordHearingEvent(amount)
+      keyword = 'HearingSmallClaims'
     } else if (eventType === 'issue') {
-      keyword = KeywordIssueEventUtils.getKeywordIssueEvent(amount)
+      keyword = 'MoneyClaim'
     } else {
       throw new Error('Event type must be hearing or issue')
     }
