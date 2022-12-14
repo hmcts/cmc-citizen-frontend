@@ -54,9 +54,6 @@
     <p>{{ t("19 Sep - Closed")}}</p>
     <p>{{ t("20 Sep - 8.30am - 5.00pm (Normal Times)")}}</p>
   {% endif %}
-{% endmacro %}
-
-{% macro _christmasHolidaysWidget() %}
   {% if (toDate() < toDate("2023-01-03") and toDate() >= toDate("2022-12-22")) %}
     <h2 class="heading-medium contact-us"> {{ t('Christmas and New Year opening times')}}</h2>
     <p>{{ t("23 Dec - 8.30am - 5.00pm (Normal Times)")}}</p>
@@ -98,7 +95,6 @@
     {{ _emailWidget('contactocmc@justice.gov.uk') }}
     {{ _phoneWidget('0300 123 7050') }}
     {{ _holidayWidget() }}
-    {{ _christmasHolidaysWidget() }}
 {% endmacro %}
 
 {% macro mcolSupportWidget(label = 'Help and advice') %}
