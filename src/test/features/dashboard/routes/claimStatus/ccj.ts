@@ -106,8 +106,9 @@ function testData () {
       },
       claimantAssertions: ['000MC000',
         'County Court Judgment (CCJ) requested',
-        'We’ll process your request and post a copy of the judgment to you and to John Doe. We aim to do this within 10 working days.',
-        'Your online account will not be updated with the progress of this claim - any further updates will be by post.',
+        'We’ll process your request and post a copy of the judgment to you and to John Doe. We aim to process this request as soon as possible.',
+        'Please do not call the Court and Tribunal Service Centre (CTSC) about the progress of your request.',
+        'Your online account will not be updated with the progress of this claim and any further updates will be by post.',
         'John Doe can no longer respond to your claim online.',
         'If a postal response is received before the judgment is issued your request will be rejected.'
       ],
