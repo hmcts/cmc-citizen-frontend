@@ -60,6 +60,7 @@
     "body-parser": "^1.19.0",
     "bootstrap-datepicker": "1.9.0",
     "build-url": "^2.0.0",
+    "chardet": "^1.5.0",
     "class-transformer": "^0.5.1",
     "classlist-polyfill": "^1.2.0",
     "cmc-cookies-manager": "github:hmcts/cmc-cookies-manager#3.0.2",
@@ -106,6 +107,7 @@
     "tsconfig-paths": "^3.9.0",
     "tslint-microsoft-contrib": "^6.2.0",
     "typescript": "^3.9.8",
+    "urllib3": "^0.0.1",
     "uuid": "^3.4.0",
     "webdriverio": "^7.7.4"
   },
