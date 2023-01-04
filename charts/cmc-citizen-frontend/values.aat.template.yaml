@@ -5,28 +5,3 @@ nodejs:
     FEATURE_TESTING_SUPPORT: true
     FEATURE_RETURN_ERROR_TO_USER: true
     PAY_RETURN_URL: https://${SERVICE_FQDN}
-
-postgresql:
-  enabled: true
-  image:
-    registry: hmctspublic.azurecr.io
-    repository: imported/bitnami/postgresql
-    tag: '11.6.0'
-  primary:
-    persistence:
-      enabled: false
-    resources:
-      requests:
-        cpu: 25m
-    initdb:
-      scripts:
-        init.sql: |
-          CREATE DATABASE cmc WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
-          CREATE DATABASE "claimstore" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
-          CREATE DATABASE "data-store" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
-          CREATE DATABASE "definition-store" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
-          CREATE DATABASE "user-profile" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
-          CREATE DATABASE "role_assignment" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
-  auth:
-    username: hmcts
-    password: hmcts
