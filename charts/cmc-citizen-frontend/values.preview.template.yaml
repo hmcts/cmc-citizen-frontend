@@ -56,8 +56,8 @@ postgresql:
           CREATE DATABASE "user-profile" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
           CREATE DATABASE "role_assignment" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
   auth:
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
+    username: hmcts
+    password: hmcts
 
 # sub-charts configuration
 

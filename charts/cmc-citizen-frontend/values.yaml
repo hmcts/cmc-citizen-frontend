@@ -73,8 +73,6 @@ nodejs:
 
 idam-pr:
   enabled: false
-postgresql:
-  enabled: false
 ccd:
   enabled: false
 cmc-claim-store:
