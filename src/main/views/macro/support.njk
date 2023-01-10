@@ -54,6 +54,21 @@
     <p>{{ t("19 Sep - Closed")}}</p>
     <p>{{ t("20 Sep - 8.30am - 5.00pm (Normal Times)")}}</p>
   {% endif %}
+  {% if (toDate() < toDate("2023-01-04") and toDate() >= toDate("2022-12-16")) %}
+    <h2 class="heading-medium contact-us"> {{ t('Christmas and New Year opening times')}}</h2>
+    <p>{{ t("23 Dec - 8.30am - 5.00pm (Normal Times)")}}</p>
+    <p>{{ t("24 Dec - Closed")}}</p>
+    <p>{{ t("25 Dec - Closed")}}</p>
+    <p>{{ t("26 Dec - Closed")}}</p>
+    <p>{{ t("27 Dec - Closed")}}</p>
+    <p>{{ t("28 Dec - Closed")}}</p>
+    <p>{{ t("29 Dec - 8.30am - 5.00pm (Normal Times)")}}</p>
+    <p>{{ t("30 Dec - 8.30am - 5.00pm (Normal Times)")}}</p>
+    <p>{{ t("31 Dec - Closed")}}</p>
+    <p>{{ t("1 Jan - Closed")}}</p>
+    <p>{{ t("2 Jan - Closed")}}</p>
+    <p>{{ t("3 Jan - 8.30am - 5.00pm (Normal Times)")}}</p>
+  {% endif %}
 {% endmacro %}
 
 {% macro supportWidget(label = 'Help and support') %}
