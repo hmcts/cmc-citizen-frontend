@@ -315,3 +315,4 @@ logstash:
     es.data.nodes.url: http://${SERVICE_NAME}-es-master:9200
   livenessProbe:
     initialDelaySeconds: 90
+
