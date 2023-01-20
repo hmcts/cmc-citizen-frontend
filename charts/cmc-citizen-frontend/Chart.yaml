@@ -12,7 +12,7 @@ maintainers:
     email: cmc-developers@HMCTS.NET
 dependencies:
   - name: nodejs
-    version: 2.4.8
+    version: 2.4.11
     repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
 
   - name: idam-pr
