@@ -14,11 +14,9 @@ import { FeaturesBuilder } from 'claim/helpers/featuresBuilder'
 import * as HttpStatus from 'http-status-codes'
 import { ErrorHandling } from 'shared/errorHandling'
 import { noRetryRequest } from 'client/request'
-import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient(noRetryRequest)
-const launchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
-const featuresBuilder: FeaturesBuilder = new FeaturesBuilder(claimStoreClient, launchDarklyClient)
+const featuresBuilder: FeaturesBuilder = new FeaturesBuilder()
 
 const logger = Logger.getLogger('router/finish-payment')
 
@@ -31,11 +29,13 @@ export default express.Router()
     const user: User = res.locals.user
     const draft: Draft<DraftClaim> = res.locals.claimDraft
 
+    logger.info(`IN FINISH PAYMENT, WAITING FOR PAYMENT TO COMPLETE, for external id (${externalId}):`)
+
     try {
       const claim: Claim = await claimStoreClient.retrieveByExternalId(externalId, user)
       logger.info(`CLAIM IN FINISH PAYMENT, Payment state for external id (${externalId}): `, claim.state)
       if (ClaimState[claim.state] === ClaimState.AWAITING_CITIZEN_PAYMENT) {
-        const features = await featuresBuilder.features(claim.claimData.amount.totalAmount(), user)
+        const features = await featuresBuilder.features(claim.claimData.amount.totalAmount())
 
         const createdClaim = await claimStoreClient.createCitizenClaim(draft, user, features)
         if (ClaimState[createdClaim.state] === ClaimState.AWAITING_CITIZEN_PAYMENT) {
@@ -50,7 +50,9 @@ export default express.Router()
         }
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId }))
       }
+      logger.info(`FINISH PAYMENT COMPLETED, for external id (${externalId}):`)
     } catch (err) {
+      logger.info(`ERROR OCCURED, for external id (${externalId}):`)
       if (err.statusCode === HttpStatus.NOT_FOUND) {
         logger.log(`claim with external id ${externalId} not found, redirecting user to check and send`)
         res.redirect(Paths.checkAndSendPage.uri)

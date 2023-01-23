@@ -16,8 +16,7 @@ function renderView (form: Form<ReDetermination>, req: express.Request, res: exp
   let paymentIntention: PaymentIntention
 
   if (claim.hasClaimantAcceptedDefendantResponseWithCCJ()) {
-    const ccjRepaymentPlan = claim.countyCourtJudgment.repaymentPlan
-    paymentIntention = PaymentIntention.retrievePaymentIntention(ccjRepaymentPlan, claim)
+    paymentIntention = PaymentIntention.retrievePaymentIntention(claim.countyCourtJudgment.repaymentPlan, claim)
 
   } else if (claim.hasClaimantAcceptedDefendantResponseWithSettlement()) {
     paymentIntention = claim.settlement.getLastOffer().paymentIntention

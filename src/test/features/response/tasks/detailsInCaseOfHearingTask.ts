@@ -16,6 +16,8 @@ import { WhyExpertIsNeeded } from 'directions-questionnaire/forms/models/whyExpe
 import { Claim } from 'claims/models/claim'
 import * as claimStoreMock from '../../../http-mocks/claim-store'
 import { ExceptionalCircumstances } from 'directions-questionnaire/forms/models/exceptionalCircumstances'
+import { DeterminationWithoutHearingQuestions } from 'directions-questionnaire/forms/models/determinationWithoutHearingQuestions'
+import { VulnerabilityQuestions } from 'directions-questionnaire/forms/models/vulnerabilityQuestions'
 
 describe('Details In case of hearing task', () => {
   it('should not be completed when all directions questionnaire are not filled', () => {
@@ -233,8 +235,12 @@ describe('Details In case of hearing task', () => {
     const claim: Claim = new Claim().deserialize({
       ...claimStoreMock.sampleClaimObj, ...{ features: ['directionsQuestionnaire'] }
     })
+    directionsQuestionnaireDraft.determinationWithoutHearingQuestions = new DeterminationWithoutHearingQuestions().deserialize({ option: 'no' })
+    directionsQuestionnaireDraft.vulnerabilityQuestions = new VulnerabilityQuestions().deserialize({ option: 'yes' })
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
     directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
+    directionsQuestionnaireDraft.determinationWithoutHearingQuestions = new DeterminationWithoutHearingQuestions().deserialize({ determinationWithoutHearingQuestions: { option: 'yes' }, rows: [] })
+    directionsQuestionnaireDraft.vulnerabilityQuestions = new VulnerabilityQuestions().deserialize({ vulnerabilityQuestions: { option: 'no' }, rows: [] })
     directionsQuestionnaireDraft.expertRequired = new ExpertRequired().deserialize({ option: 'yes' })
     directionsQuestionnaireDraft.expertReports = new ExpertReports().deserialize({ declared: { option: 'no' }, rows: [] })
     directionsQuestionnaireDraft.permissionForExpert = new PermissionForExpert().deserialize({ option: { option: 'yes' } })

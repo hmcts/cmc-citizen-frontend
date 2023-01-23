@@ -24,6 +24,6 @@ export default express.Router()
         totalMonthlyIncomeExpense: totalMonthlyIncomeExpense
       })
     } catch (err) {
-      return res.status(HttpStatus.UNPROCESSABLE_ENTITY).send(err)
+      return res.status(HttpStatus.UNPROCESSABLE_ENTITY).send('UNPROCESSABLE_ENTITY')
     }
   })

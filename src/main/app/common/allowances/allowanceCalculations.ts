@@ -20,9 +20,9 @@ export class AllowanceCalculations {
     const isDefendantPensioner = income.filter(incomeType => incomeType.type === IncomeType.PENSION).pop() !== undefined
     if (isDefendantPensioner) {
       if (partner && partner.pensioner) {
-        return this.getMonthlyAmount(this.allowances.getPensionAllowance(PensionAllowanceType.DEFENDANT_AND_PARTNER))
+        return AllowanceCalculations.getMonthlyAmount(this.allowances.getPensionAllowance(PensionAllowanceType.DEFENDANT_AND_PARTNER))
       } else {
-        return this.getMonthlyAmount(this.allowances.getPensionAllowance(PensionAllowanceType.DEFENDANT_ONLY))
+        return AllowanceCalculations.getMonthlyAmount(this.allowances.getPensionAllowance(PensionAllowanceType.DEFENDANT_ONLY))
       }
     }
     return 0
@@ -35,7 +35,7 @@ export class AllowanceCalculations {
     let numberOfDependants = 0
     if (dependants.children) {
       const reducer = (total: number, children: Child) => {
-        const numberOfDependants: number =
+        numberOfDependants =
           children.ageGroupType !== AgeGroupType.BETWEEN_16_AND_19 ?
             children.numberOfChildren : children.numberOfChildrenLivingWithYou
 
@@ -50,7 +50,7 @@ export class AllowanceCalculations {
     if (dependants.otherDependants) {
       numberOfDependants += dependants.otherDependants.numberOfPeople
     }
-    const monthlyAmount: number = this.getMonthlyAmount(this.allowances.getDependantAllowance(DependantAllowanceType.PER_DEPENDANT))
+    const monthlyAmount: number = AllowanceCalculations.getMonthlyAmount(this.allowances.getDependantAllowance(DependantAllowanceType.PER_DEPENDANT))
     return (numberOfDependants * monthlyAmount)
   }
 
@@ -69,7 +69,7 @@ export class AllowanceCalculations {
           LivingAllowanceType.DEFENDANT_OVER_25_PARTNER_UNDER_18
       }
     }
-    return this.getMonthlyAmount(this.allowances.getLivingAllowance(cohabitationStatus))
+    return AllowanceCalculations.getMonthlyAmount(this.allowances.getLivingAllowance(cohabitationStatus))
   }
 
   getCarerDisableDependantAmount (dependant: Dependant, isCarer: boolean): number {
@@ -101,7 +101,7 @@ export class AllowanceCalculations {
           break
       }
     }
-    return this.getMonthlyAmount(this.allowances.getDisabilityAllowance(disabledStatus))
+    return AllowanceCalculations.getMonthlyAmount(this.allowances.getDisabilityAllowance(disabledStatus))
   }
 
   private getDisabledDependantAmount (dependant: Dependant): number {
@@ -121,7 +121,7 @@ export class AllowanceCalculations {
     return isCarer ? this.allowances.getDisabilityAllowance(DisabilityAllowanceType.CARER).monthly : 0
   }
 
-  private getMonthlyAmount (allowanceItem: AllowanceItem): number {
+  private static getMonthlyAmount (allowanceItem: AllowanceItem): number {
     if (!allowanceItem || !allowanceItem.monthly) {
       return 0
     }

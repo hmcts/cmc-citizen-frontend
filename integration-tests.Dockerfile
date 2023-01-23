@@ -1,6 +1,7 @@
-FROM hmctspublic.azurecr.io/base/node:12-alpine
+FROM hmctspublic.azurecr.io/base/node:14-alpine
 
 USER root
+
 WORKDIR /usr/src/app
 
 RUN yarn config set proxy "$http_proxy" && yarn config set https-proxy "$https_proxy"

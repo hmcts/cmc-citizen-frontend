@@ -130,6 +130,8 @@ const commonIndividualClaimant = {
     partyDetails: {
       type: 'individual',
       name: 'John Smith',
+      firstName: 'John',
+      lastName: 'Smith',
       address: {
         line1: 'Apt 99',
         line2: '',
@@ -742,6 +744,18 @@ export const sampleDirectionsQuestionnaireDraftObj = {
   },
   whyExpertIsNeeded: {
     explanation: 'for expert opinion'
+  },
+  determinationWithoutHearingQuestions: {
+    determinationWithoutHearingQuestions: {
+      option: 'no'
+    },
+    determinationWithoutHearingQuestionsDetails: 'determination'
+  },
+  vulnerabilityQuestions: {
+    vulnerabilityQuestions: {
+      option: 'yes'
+    },
+    vulnerabilityDetails: 'vulnerable'
   }
 }
 
@@ -815,6 +829,18 @@ export const sampleDirectionsQuestionnaireNearestCourtDraftObj = {
   },
   whyExpertIsNeeded: {
     explanation: 'for expert opinion'
+  },
+  determinationWithoutHearingQuestions: {
+    determinationWithoutHearingQuestions: {
+      option: 'no'
+    },
+    determinationWithoutHearingQuestionsDetails: 'determination'
+  },
+  vulnerabilityQuestions: {
+    vulnerabilityQuestions: {
+      option: 'yes'
+    },
+    vulnerabilityDetails: 'vulnerable'
   }
 }
 
@@ -890,6 +916,18 @@ export const sampleDirectionsQuestionnaireDraftAltCourtObj = {
   },
   whyExpertIsNeeded: {
     explanation: 'for expert opinion'
+  },
+  determinationWithoutHearingQuestions: {
+    determinationWithoutHearingQuestions: {
+      option: 'no'
+    },
+    determinationWithoutHearingQuestionsDetails: 'determination'
+  },
+  vulnerabilityQuestions: {
+    vulnerabilityQuestions: {
+      option: 'yes'
+    },
+    vulnerabilityDetails: 'vulnerable'
   }
 }
 
@@ -971,6 +1009,18 @@ export const sampleDirectionsQuestionnaireDraftWithNameObj = {
   },
   whyExpertIsNeeded: {
     explanation: 'for expert opinion'
+  },
+  determinationWithoutHearingQuestions: {
+    determinationWithoutHearingQuestions: {
+      option: 'no'
+    },
+    determinationWithoutHearingQuestionsDetails: 'determination'
+  },
+  vulnerabilityQuestions: {
+    vulnerabilityQuestions: {
+      option: 'yes'
+    },
+    vulnerabilityDetails: 'vulnerable'
   }
 }
 
@@ -1036,6 +1086,9 @@ export function resolveFind (draftType: string, draftOverride?: object): mock.Sc
       break
     case 'orders':
       documentDocument = { ...sampleOrdersDraftObj, ...draftOverride }
+      break
+    case 'paidInFull':
+      documentDocument = { ...samplePaidInFullDraftObj, ...draftOverride }
       break
     default:
       documentDocument = { ...draftOverride }

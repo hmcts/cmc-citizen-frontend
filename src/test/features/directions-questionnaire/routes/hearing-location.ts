@@ -306,7 +306,7 @@ describe('Directions Questionnaire - hearing location', () => {
           })
 
           it('should display the search result for edge case', async () => {
-            const searchWithPostCodeFirstLoopFormData = { courtAccepted: undefined, alternativeCourtSelected: undefined, alternativeOption: 'postcode', alternativePostcode: 'AB1 2CD' }
+            const searchWithPostCodeFirstLoopFormData = { courtAccepted: undefined, alternativeCourtSelected: undefined, alternativeOption: 'postcode', alternativePostcode: 'B46DS' }
 
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
@@ -708,7 +708,7 @@ describe('Directions Questionnaire - hearing location', () => {
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send(alternativeCourtSelectedFormData)
-              .expect(res => expect(res).to.be.serverError.withText('Error'))
+              .expect(res => expect(res).to.be.notFound.withText('Error'))
           })
 
           it('should retain previous postcode search results when court finder is not functioning for location search', async () => {

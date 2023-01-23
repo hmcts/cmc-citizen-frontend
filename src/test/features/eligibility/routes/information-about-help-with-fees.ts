@@ -11,7 +11,7 @@ import { app } from 'main/app'
 
 import { YesNoOption } from 'models/yesNoOption'
 
-const pagePath: string = Paths.infoAboutHwFeligibilityPage.uri
+const pagePath: string = Paths.infoAboutHwfEligibilityPage.uri
 const pageRedirect: string = Paths.helpWithFeesPage.uri
 const expectedTextOnPage: string = 'Some useful information about Help with Fees'
 

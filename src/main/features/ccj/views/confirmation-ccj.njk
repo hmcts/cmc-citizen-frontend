@@ -15,16 +15,15 @@
         <h1 class="bold-large">{{ t('County Court Judgment requested') }}</h1>
       </div>
 
-      <h2 class="heading-medium">{{ t('What happens next') }}</h2>
+      <p>{{ t('We’ll process your request and post a copy of the judgment to you and to {{ defendantName }}. We aim to process this request as soon as possible.', { defendantName: defendantName }) }}</p>
+      <p>{{ t('Please do not call the Court and Tribunal Service Centre (CTSC) about the progress of your request.') }}</p>
+      <p>{{ t('Your online account will not be updated with the progress of this claim and any further updates will be by post.') }}</p>
+      <p>{{ t('{{ defendantName }} can no longer respond to your claim online.', { defendantName: defendantName }) }}</p>
+      <p class="govuk-details govuk-dashboard-details__text">{{ t('If a postal response is received before the judgment is issued your request will be rejected.') }}</p>
 
-      <p>{{ t('You requested a County Court Judgment on {{ ccjRequestedAt }}.',
-          { ccjRequestedAt: ccjRequestedAt | date }) }}
-      </p>
-      <p>{{ t('We’ll contact you to tell you whether the judgment has been entered. We aim to do this within 10 working days') }}</p>
-      <p>{{ t('{{ defendantName }} can no longer respond to the claim using this service.', { defendantName: defendantName }) }}</p>
-      <p>{{ t('If we receive a postal response that they sent before the deadline we’ll reject your request for judgment.') }}</p>
+      <p><a target="_blank" rel="noreferrer noopener" href="https://www.gov.uk/make-court-claim-for-money/enforce-a-judgment">{{  t('Find out about actions you can take after a CCJ is issued (opens in new tab).') }}</a></p>
 
-      {% include "includes/service-survey-link-claimant.njk" %}
+      <p><a target="_blank" rel="noreferrer noopener" href="https://www.smartsurvey.co.uk/s/CMCMVPT1/">{{  t('What did you think of this service? (opens in new tab).') }}</a></p>
 
       <p>{{ internalLink('Go to your account', DashboardPaths.dashboardPage.uri, 'button') | safe }}</p>
 

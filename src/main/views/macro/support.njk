@@ -11,7 +11,7 @@
    {% if antennawebChat %}
       <h2 class="heading-medium contact-us">{{ t(label)}}</h2>
       <button class="webChat">Talk to an Agent</button>
-      <p> 
+      <p>
       <p id="metrics"></p>
         <web-chat class="hidden"
             chat-title="Money Claims Web Chat"
@@ -21,6 +21,7 @@
             api-version="1.0"
             Language="English"
             Service="OCMC"
+            User="Chat"
             page-name="Money Claims"
             route-point-identifier="Default" work-flow-type lease-time="24" priority="5" secure-connections="true" metrics-polling-interval="15">
         </web-chat>
@@ -43,9 +44,30 @@
 {% endmacro %}
 
 {% macro _holidayWidget() %}
-  {% if (toDate() < toDate("2021-01-02") and toDate() >= toDate("2020-12-01")) %}
-    <h2 class="heading-medium contact-us"> {{ t('Christmas hours')}}</h2>
-    <p>{{ t("We're closed from 24 to 28 December and 1 January.")}}</p>
+  {% if (toDate() < toDate("2022-09-20") and toDate() >= toDate("2022-09-13")) %}
+    <h2 class="heading-medium contact-us"> {{ t('Additional Bank Holiday Opening Times')}}</h2>
+    <p>{{ t("14 Sep - 8.30am - 5.00pm (Normal Times)")}}</p>
+    <p>{{ t("15 Sep - 8.30am - 5.00pm (Normal Times)")}}</p>
+    <p>{{ t("16 Sep - 8.30am - 5.00pm (Normal Times)")}}</p>
+    <p>{{ t("17 Sep - Closed")}}</p>
+    <p>{{ t("18 Sep - Closed")}}</p>
+    <p>{{ t("19 Sep - Closed")}}</p>
+    <p>{{ t("20 Sep - 8.30am - 5.00pm (Normal Times)")}}</p>
+  {% endif %}
+  {% if (toDate() < toDate("2023-01-04") and toDate() >= toDate("2022-12-16")) %}
+    <h2 class="heading-medium contact-us"> {{ t('Christmas and New Year opening times')}}</h2>
+    <p>{{ t("23 Dec - 8.30am - 5.00pm (Normal Times)")}}</p>
+    <p>{{ t("24 Dec - Closed")}}</p>
+    <p>{{ t("25 Dec - Closed")}}</p>
+    <p>{{ t("26 Dec - Closed")}}</p>
+    <p>{{ t("27 Dec - Closed")}}</p>
+    <p>{{ t("28 Dec - Closed")}}</p>
+    <p>{{ t("29 Dec - 8.30am - 5.00pm (Normal Times)")}}</p>
+    <p>{{ t("30 Dec - 8.30am - 5.00pm (Normal Times)")}}</p>
+    <p>{{ t("31 Dec - Closed")}}</p>
+    <p>{{ t("1 Jan - Closed")}}</p>
+    <p>{{ t("2 Jan - Closed")}}</p>
+    <p>{{ t("3 Jan - 8.30am - 5.00pm (Normal Times)")}}</p>
   {% endif %}
 {% endmacro %}
 

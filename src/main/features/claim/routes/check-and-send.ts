@@ -37,8 +37,7 @@ import { MoneyConverter } from 'fees/moneyConverter'
 const logger = Logger.getLogger('claims/claimStoreClient')
 const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient(noRetryRequest)
-const launchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
-const featuresBuilder: FeaturesBuilder = new FeaturesBuilder(claimStoreClient, launchDarklyClient)
+const featuresBuilder: FeaturesBuilder = new FeaturesBuilder()
 
 async function getClaimAmountTotal (draft: DraftClaim): Promise<TotalAmount> {
   const interest: number = await draftInterestAmount(draft)
@@ -46,6 +45,13 @@ async function getClaimAmountTotal (draft: DraftClaim): Promise<TotalAmount> {
 
   return FeesClient.calculateIssueFee(totalAmount + interest)
     .then((feeAmount: number) => new TotalAmount(totalAmount, interest, feeAmount))
+}
+
+async function getClaimIssuanceFeeCode (draft: DraftClaim): Promise<string> {
+  const interest: number = await draftInterestAmount(draft)
+  const totalAmount: number = draft.amount.totalAmount()
+
+  return FeesClient.retreiveClaimIssuanceFeeCode(totalAmount + interest)
 }
 
 function getBusinessName (partyDetails: PartyDetails): string {
@@ -153,7 +159,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response, next: 
 }
 
 async function handleHelpwWithFees (draft: Draft<DraftClaim>, user: User): Promise<boolean> {
-  const features = await featuresBuilder.features(draft.document.amount.totalAmount(), user)
+  const features = await featuresBuilder.features(draft.document.amount.totalAmount())
 
   // retrieve claim to check if the claimant initiated payment
   const existingClaim: void | Claim = await claimStoreClient.retrieveByExternalId(draft.document.externalId, user)
@@ -208,6 +214,13 @@ export default express.Router()
         if (await featureToggles.isHelpWithFeesEnabled()
           && draft.document.helpWithFees && draft.document.helpWithFees.declared.option === YesNoOption.YES.option) {
 
+          try {
+            draft.document.feeCode = await getClaimIssuanceFeeCode(draft.document)
+          } catch (err) {
+            // redirect to tasklist page if fails to retrieve the fee code
+            res.redirect(Paths.taskListPage.uri)
+          }
+          await new DraftService().save(draft, user.bearerToken)
           // handle helpWithFees
           const helpWithFeesSuccessful = await handleHelpwWithFees(draft, user)
 

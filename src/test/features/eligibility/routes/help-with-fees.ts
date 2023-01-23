@@ -52,7 +52,7 @@ describe('Claim eligibility: help with fees page', () => {
       await request(app)
         .post(pagePath)
         .send({ helpWithFees: YesNoOption.YES.option })
-        .expect(res => expect(res).to.be.redirect.toLocation(Paths.infoAboutHwFeligibilityPage.uri))
+        .expect(res => expect(res).to.be.redirect.toLocation(Paths.infoAboutHwfEligibilityPage.uri))
     })
   })
 })

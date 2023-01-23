@@ -34,7 +34,9 @@ export class Allowances {
     if (!input) {
       return input
     }
+
     this.allowance = this.deserializeRows(input.allowances)
+
     return this.allowance
       .sort((a, b) => {
         return a.startDate.diff(b.startDate, 'days')
@@ -44,8 +46,7 @@ export class Allowances {
   }
 
   private deserializeRows (rows: any): Allowance[] {
-    let allowanceRows: Allowance[] = rows.map(row => new Allowance().deserialize(row))
-    return allowanceRows
+    return rows.map(row => new Allowance().deserialize(row))
   }
 
 }

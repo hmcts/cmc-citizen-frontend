@@ -1,6 +1,6 @@
 export const mockCountryLookupResponse = {
   'header': {
-    'uri': 'https://api.ordnancesurvey.co.uk/opennames/v1/find?query=SW2%201AN&maxresults=1&fq=LOCAL_TYPE%3APostcode',
+    'uri': 'https://api.os.uk/search/names/v1/find?query=SW2%201AN&dataset=DPA,LPI&maxresults=1&fq=LOCAL_TYPE%3APostcode',
     'query': 'SW2 1AN',
     'format': 'JSON',
     'maxresults': 1,
@@ -40,7 +40,7 @@ export const mockCountryLookupResponse = {
 
 export const mockScottishCountryLookupResponse = {
   'header': {
-    'uri': 'https://api.ordnancesurvey.co.uk/opennames/v1/find?query=EH9%201SH&maxresults=1&fq=LOCAL_TYPE%3APostcode',
+    'uri': 'https://api.os.uk/search/names/v1/find?query=EH9%201SH&dataset=DPA,LPI&maxresults=1&fq=LOCAL_TYPE%3APostcode',
     'query': 'EH9 1SH',
     'format': 'JSON',
     'maxresults': 1,

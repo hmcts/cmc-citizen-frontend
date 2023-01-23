@@ -1,22 +1,3 @@
-postgresql:
-  enabled: true
-  image:
-    tag: '11.3.0'
-  resources:
-    requests:
-      cpu: 25m
-  initdbScripts:
-    init.sql: |-
-      CREATE DATABASE cmc WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
-      CREATE DATABASE "claimstore" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
-      CREATE DATABASE "data-store" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
-      CREATE DATABASE "definition-store" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
-      CREATE DATABASE "user-profile" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
-  postgresqlUsername: hmcts
-  postgresqlPassword: hmcts
-  persistence:
-    enabled: false
-
 nodejs:
   image: ${IMAGE_NAME}
   ingressIP: ${INGRESS_IP}
@@ -64,8 +45,6 @@ idam-pr:
       - https://${SERVICE_FQDN}/receiver
     XUI:
       - https://xui-${SERVICE_FQDN}/oauth2/callback
-    CCD:
-      - https://case-management-web-${SERVICE_FQDN}/oauth2redirect
 
 xui-webapp:
   enabled: true
@@ -128,9 +107,9 @@ cmc-claim-store:
       DOC_ASSEMBLY_URL: http://dg-docassembly-aat.service.core-compute-aat.internal
       FRONTEND_BASE_URL: https://${SERVICE_FQDN}
       RESPOND_TO_CLAIM_URL: https://${SERVICE_FQDN}/first-contact/start
-      CMC_DB_HOST: ${SERVICE_NAME}-postgresql
-      CMC_DB_USERNAME: hmcts
-      CMC_DB_PASSWORD: hmcts
+      CMC_DB_HOST: "{{ .Values.postgresql.releaseNameOverride}}"
+      CMC_DB_USERNAME: "{{ .Values.postgresql.auth.username}}"
+      CMC_DB_PASSWORD: "{{ .Values.postgresql.auth.password}}"
       CMC_DB_CONNECTION_OPTIONS: ''
       CORE_CASE_DATA_API_URL: http://${SERVICE_NAME}-ccd-data-store-api
       STAFF_NOTIFICATIONS_LEGAL_RECIPIENT: moneyclaims@justice.gov.uk
@@ -145,7 +124,32 @@ cmc-claim-store:
       FEATURE_TOGGLES_BREATHING_SPACE: true
       FEATURE_AUTO_CANCEL_PAYMENTS: true
       OIDC_ISSUER: https://forgerock-am.service.core-compute-idam-aat2.internal:8443/openam/oauth2/realms/root/realms/hmcts
-
+      COURT_FINDER_API_URL: http://fact-api-aat.service.core-compute-aat.internal
+    postgresql:
+      enabled: true
+      releaseNameOverride: ${SERVICE_NAME}-postgresql
+      image:
+        tag: '11.6.0'
+        registry: hmctspublic.azurecr.io
+        repository: imported/bitnami/postgresql
+      primary:
+        persistence:
+          enabled: false
+        resources:
+          requests:
+            cpu: 25m
+        initdb:
+          scripts:
+            init.sql: |
+              CREATE DATABASE cmc WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
+              CREATE DATABASE "claimstore" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
+              CREATE DATABASE "data-store" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
+              CREATE DATABASE "definition-store" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
+              CREATE DATABASE "user-profile" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
+              CREATE DATABASE "role_assignment" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
+      auth:
+        username: hmcts
+        password: hmcts
 ccd:
   enabled: true
   ccd:
@@ -158,7 +162,7 @@ ccd:
     adminWeb:
       enabled: true
     managementWeb:
-      enabled: true
+      enabled: false
 
   ingressHost: ${SERVICE_FQDN}
   ingressIP: ${INGRESS_IP}
@@ -167,7 +171,6 @@ ccd:
   global:
     ccdApiGatewayIngress: gateway-${SERVICE_FQDN}
     ccdAdminWebIngress: ccd-admin-web-${SERVICE_FQDN}
-    ccdCaseManagementWebIngress: case-management-web-${SERVICE_FQDN}
     ccdDataStoreUrl: http://${SERVICE_NAME}-ccd-data-store-api
     idamApiUrl: https://idam-api.aat.platform.hmcts.net
     idamWebUrl: https://idam-web-public.aat.platform.hmcts.net
@@ -199,17 +202,6 @@ ccd:
       ingressHost: gateway-${SERVICE_FQDN}
       ingressIP: ${INGRESS_IP}
 
-  ccd-case-management-web:
-    nodejs:
-      imagePullPolicy: Always
-      environment:
-        CCD_ACTIVITY_URL: null
-        DM_URL: https://gateway-${SERVICE_FQDN}/documents
-        DM_URL_REMOTE: https?://(gateway-${SERVICE_FQDN}:443|dm-store-aat.service.core-compute-aat.internal)/documents
-        NODE_TLS_REJECT_UNAUTHORIZED: 0
-      ingressHost: case-management-web-${SERVICE_FQDN}
-      ingressIP: ${INGRESS_IP}
-
   ccd-user-profile-api:
     java:
       imagePullPolicy: Always
@@ -217,6 +209,13 @@ ccd:
       keyVaults: []
       environment:
         USER_PROFILE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_definition,ccd_admin,cmc_claim_store,xui_webapp,xuiwebapp
+
+  am-role-assignment-service:
+    java:
+      keyVaults:
+        am:
+          secrets:
+            - role-assignment-service-LD-SDK-KEY
 
   ccd-definition-store-api:
     java:
@@ -240,12 +239,17 @@ ccd:
       keyVaults: []
       environment:
         DATA_STORE_IDAM_KEY: ${DATA_STORE_S2S_KEY}
+        IDAM_OAUTH2_DATA_STORE_CLIENT_SECRET: ${IDAM_OAUTH2_DATA_STORE_CLIENT_SECRET}
+        IDAM_DATA_STORE_SYSTEM_USER_USERNAME: ${IDAM_DATA_STORE_SYSTEM_USER_USERNAME}
+        IDAM_DATA_STORE_SYSTEM_USER_PASSWORD: ${IDAM_DATA_STORE_SYSTEM_USER_PASSWORD}
         IDAM_S2S_URL: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
-        IDAM_USER_URL: https://idam-web-public.aat.platform.hmcts.net
+        IDAM_API_BASE_URL: https://idam-api.aat.platform.hmcts.net
+        IDAM_OIDC_URL: https://idam-web-public.aat.platform.hmcts.net
         OIDC_ISSUER: https://forgerock-am.service.core-compute-idam-aat2.internal:8443/openam/oauth2/hmcts
         ELASTIC_SEARCH_ENABLED: true
         ELASTIC_SEARCH_HOSTS: ${SERVICE_NAME}-es-master:9200
         ELASTIC_SEARCH_DATA_NODES_HOSTS:  http://${SERVICE_NAME}-es-master:9200
+        CASE_DOCUMENT_AM_URL: http://ccd-case-document-am-api-aat.service.core-compute-aat.internal
 
   ccd-user-profile-importer:
     image: hmctspublic.azurecr.io/ccd/user-profile-importer:db2r9a
@@ -254,30 +258,13 @@ ccd:
       - civilmoneyclaims+judge@gmail.com|CMC|MoneyClaimCase|orderForJudgeReview
       - civilmoneyclaims+la@gmail.com|CMC|MoneyClaimCase|readyForDirections
 
-  ccd-definition-importer:
-    image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.10.5
-    environment:
-      CCD_DEF_CLAIM_STORE_BASE_URL: http://${SERVICE_NAME}-claim-store
-    definitionFilename: cmc-ccd.xlsx
-    userRoles:
-      - citizen
-      - caseworker-cmc
-      - caseworker-cmc-solicitor
-      - caseworker-cmc-systemupdate
-      - letter-holder
-      - caseworker-autotest1
-      - caseworker-cmc-anonymouscitizen
-      - caseworker-cmc-judge
-      - caseworker-cmc-legaladvisor
-      - caseworker-cmc-pcqextractor
-      - payments
-
 elastic:
   enabled: true
 
 elasticsearch:
+  nameOverride: ${SERVICE_NAME}-es
   clusterName: "es"
-  imageTag: "6.4.2"
+  imageTag: "7.17.1"
   replicas: 1
   minimumMasterNodes: 1
   antiAffinity: "soft"

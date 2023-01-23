@@ -2,8 +2,6 @@ import * as express from 'express'
 
 import { Draft } from '@hmcts/draft-store-client'
 import { Paths } from 'mediation/paths'
-import { Paths as ResponsePaths } from 'response/paths'
-import { Paths as ClaimantResponsePaths } from 'claimant-response/paths'
 import { ErrorHandling } from 'main/common/errorHandling'
 import { FormValidator } from 'main/app/forms/validation/formValidator'
 import { Form } from 'main/app/forms/form'
@@ -12,21 +10,8 @@ import { User } from 'main/app/idam/user'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { FreeMediation, FreeMediationOption } from 'main/app/forms/models/freeMediation'
 import { Claim } from 'claims/models/claim'
-import { FeatureToggles } from 'utils/featureToggles'
-import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
-
-async function isEnhancedMediationJourneyEnabled () {
-  const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
-  if (await featureToggles.isEnhancedMediationJourneyEnabled()) {
-    return true
-  }
-
-  return false
-}
 
 async function renderView (form: Form<FreeMediation>, res: express.Response) {
-  const enhancedMediationJourney = await isEnhancedMediationJourneyEnabled()
-
   const user: User = res.locals.user
   const claim: Claim = res.locals.claim
 
@@ -35,8 +20,7 @@ async function renderView (form: Form<FreeMediation>, res: express.Response) {
   res.render(Paths.mediationDisagreementPage.associatedView, {
     form: form,
     defendant: user.id === claim.defendantId,
-    hint: hint,
-    enhancedMediationJourney: enhancedMediationJourney
+    hint: hint
   })
 }
 
@@ -74,31 +58,13 @@ export default express.Router()
         await new DraftService().save(draft, user.bearerToken)
 
         const claim: Claim = res.locals.claim
-        const externalId: string = req.params.externalId
-        const enhancedMediationJourney = await isEnhancedMediationJourneyEnabled()
 
-        handleMediationJourney(enhancedMediationJourney, form, user, claim, res, externalId)
+        handleMediationJourney(form, user, claim, res)
       }
     })
   )
 
-function handleMediationJourney (enhancedMediationJourney: boolean, form: Form<FreeMediation>, user: User, claim: Claim, res: express.Response, externalId: string) {
-  if (enhancedMediationJourney) {
-    handleEnhancedMediationJourney(form, user, claim, res)
-  } else {
-    if (form.model.option === FreeMediationOption.YES) {
-      res.redirect(Paths.mediationAgreementPage.evaluateUri({ externalId: externalId }))
-    } else {
-      if (!claim.isResponseSubmitted()) {
-        res.redirect(ResponsePaths.taskListPage.evaluateUri({ externalId: externalId }))
-      } else {
-        res.redirect(ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: externalId }))
-      }
-    }
-  }
-}
-
-function handleEnhancedMediationJourney (form: Form<FreeMediation>, user: User, claim: Claim, res: express.Response) {
+function handleMediationJourney (form: Form<FreeMediation>, user: User, claim: Claim, res: express.Response) {
   if (form.model.option === FreeMediationOption.YES) {
     if (isBusinessUser(user, claim)) {
       res.redirect(Paths.canWeUseCompanyPage.evaluateUri({ externalId: claim.externalId }))

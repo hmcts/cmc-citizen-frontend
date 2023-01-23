@@ -61,7 +61,9 @@ async function runPa11y (url: string): Promise<Issue[]> {
       Cookie: `${cookieName}=ABC`
     },
     chromeLaunchConfig: {
-      args: ['--no-sandbox']
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      ignoreHTTPSErrors: false
     }
   })
   return result.issues
@@ -144,6 +146,7 @@ const excludedPaths: Paths[] = [
   DirectionQuestionnairePaths.hearingDatesDeleteReceiver,
   DirectionQuestionnairePaths.hearingDatesReplaceReceiver,
   DirectionQuestionnairePaths.hearingDatesPage,
+  DirectionQuestionnairePaths.vulnerabilityQuestionsPage,
   OrdersPaths.reviewOrderReceiver,
   OrdersPaths.directionsOrderDocument,
   MediationPaths.mediationAgreementDocument,

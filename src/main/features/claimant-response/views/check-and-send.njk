@@ -12,7 +12,38 @@
   {% if(directionsQuestionnaireEnabled) %}
     <h2 class="govuk-heading-m">{{ t("Your hearing requirements") }}</h2>
     <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-
+      {% if directionsQuestionnaireDraft.determinationWithoutHearingQuestions.determinationWithoutHearingQuestions %}
+        {{ partyDetailRow(
+          label = 'Do you consider that this claim is suitable for determination without a hearing?',
+          value = t(directionsQuestionnaireDraft.determinationWithoutHearingQuestions.determinationWithoutHearingQuestions.option) | capitalize,
+          changeLink = DirectionsQuestionnairePaths.determinationWithoutHearingQuestionsPage.evaluateUri({ externalId: claim.externalId }),
+          bottomBorder = false,
+          bold = true
+        ) }}
+        {% if directionsQuestionnaireDraft.determinationWithoutHearingQuestions.determinationWithoutHearingQuestions.option === YesNoOption.NO.option %}
+          {{ partyDetailRow(
+            label = 'Tell us why',
+            value = t(directionsQuestionnaireDraft.determinationWithoutHearingQuestions.determinationWithoutHearingQuestionsDetails),
+            bold = true
+          ) }}
+        {% endif %}
+      {% endif %}
+    {% if directionsQuestionnaireDraft.vulnerabilityQuestions.vulnerabilityQuestions %}
+                    {{ partyDetailRow(
+                      label = 'Do you believe you, or a witness who will give evidence on your behalf, are vulnerable in anyway which the Court needs to consider?',
+                      value = t(directionsQuestionnaireDraft.vulnerabilityQuestions.vulnerabilityQuestions.option) | capitalize,
+                      changeLink = DirectionsQuestionnairePaths.vulnerabilityQuestionsPage.evaluateUri({ externalId: claim.externalId }),
+                      bottomBorder = false,
+                      bold = true
+                    ) }}
+            {% if directionsQuestionnaireDraft.vulnerabilityQuestions.vulnerabilityQuestions.option === YesNoOption.YES.option %}
+                    {{ partyDetailRow(
+                      label = 'If you have answered “yes” to question 1, in what way/s are you/ the witness vulnerable and what steps, support or adjustments do you wish the Court to consider?',
+                      value = t(directionsQuestionnaireDraft.vulnerabilityQuestions.vulnerabilityDetails),
+                      bold = true
+                    ) }}
+                      {% endif %}
+                  {% endif %}
       {% if directionsQuestionnaireDraft.supportRequired.languageSelected or directionsQuestionnaireDraft.supportRequired.signLanguageSelected or
         directionsQuestionnaireDraft.supportRequired.disabledAccessSelected or directionsQuestionnaireDraft.supportRequired.hearingLoopSelected or
         directionsQuestionnaireDraft.supportRequired.otherSupportSelected %}
@@ -193,14 +224,12 @@
             }}
           </dl>
 
-          {% if mediationEnabled %}
-              {% if draft.intentionToProceed.proceed.option === YesNoOption.YES.option and claim.response.freeMediation === YesNoOption.YES.option %}
-                {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot, mediationEnabled, enhancedMediationJourney) }}
-              {% endif %}
+          {% if draft.intentionToProceed.proceed.option === YesNoOption.YES.option and claim.response.freeMediation === YesNoOption.YES.option %}
+            {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber) }}
           {% endif %}
 
           {{ directionsQuestionnaire() }}
-          
+
         {% elseif alreadyPaid %}
           <dl class="govuk-summary-list govuk-!-margin-bottom-9">
             {% if draft.partPaymentReceived %}
@@ -227,7 +256,7 @@
 
           {% if claim.response.freeMediation === YesNoOption.YES.option and (draft.accepted.accepted.option === YesNoOption.NO.option
             or draft.partPaymentReceived.received.option === YesNoOption.NO.option) %}
-            {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot, mediationEnabled, enhancedMediationJourney) }}
+            {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber) }}
           {% endif %}
 
           {{ directionsQuestionnaire() }}
@@ -237,7 +266,7 @@
             {{ partyDetailRow(label = 'Do you want to proceed with the claim?', bold = true, value = draft.intentionToProceed.proceed | yesNo,
               changeLink = ClaimantResponsePaths.intentionToProceedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
               {% if draft.intentionToProceed.proceed === YesNoOption.YES and claim.response.freeMediation === YesNoOption.YES.option %}
-              {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot, mediationEnabled, enhancedMediationJourney) }}
+              {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber) }}
           {% endif %}
           </dl>
 
@@ -258,7 +287,7 @@
                 changeLink = ClaimantResponsePaths.settleAdmittedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
             </dl>
             {% if draft.settleAdmitted.admitted === YesNoOption.NO and claim.response.freeMediation === YesNoOption.YES.option %}
-                {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot, mediationEnabled, enhancedMediationJourney) }}
+                {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber) }}
             {% endif %}
             {{ directionsQuestionnaire() }}
           {% endif %}
@@ -436,7 +465,7 @@
 
           {% endif %}
         {% endif %}
-        
+
         {{ submitButton('Submit response') }}
       </form>
     </div>

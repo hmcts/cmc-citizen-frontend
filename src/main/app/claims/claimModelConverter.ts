@@ -71,6 +71,7 @@ export class ClaimModelConverter {
       claimData.helpWithFeesNumber = draftClaim.helpWithFees.helpWithFeesNumber
       claimData.feeAmountInPennies = draftClaim.feeAmountInPennies
       claimData.helpWithFeesType = 'Claim Issue'
+      claimData.feeCode = draftClaim.feeCode
     }
     return claimData
   }
@@ -259,6 +260,7 @@ export class ClaimModelConverter {
    * long term the intention is to send only payment reference and creation date to backend API.
    *
    * @param {Payment} payment - payment object retrieved from Payment HUB using {@link PayClient#retrieve}
+   * @param {string} externalId - for a provided external id
    * @returns {Payment} - simplified payment object required by the backend API
    */
   private static makeShallowCopy (payment: Payment, externalId: string): Payment {

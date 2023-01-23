@@ -29,6 +29,9 @@ export function prepareClaimDraft (userEmailAddress: string, helpWithFees: boole
           enterManually: false
         },
         name: 'Jan Clark',
+        title: 'Mr.',
+        firstName: 'Jan',
+        lastName: 'Clark',
         type: PartyType.INDIVIDUAL.value,
         dateOfBirth: {
           known: true,

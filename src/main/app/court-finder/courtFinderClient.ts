@@ -1,6 +1,5 @@
 import * as requestDefault from 'request'
 import * as requestPromise from 'request-promise-native'
-import { Address } from './address'
 import { Court } from './court'
 import { CourtFinderResponse } from './courtFinderResponse'
 import * as config from 'config'
@@ -33,7 +32,7 @@ export class CourtFinderClient {
       return Promise.reject('Missing court name')
     }
 
-    return this.performRequest(this.nameSearchUrl + `${name}`)
+    return this.performRequest(this.nameSearchUrl + encodeURIComponent(name))
   }
 
   public getCourtDetails (slug: string): Promise<CourtDetailsResponse> {
@@ -65,11 +64,7 @@ export class CourtFinderClient {
           return new Court(
             court.name,
             court.slug,
-            new Address(
-              court.address.address_lines,
-              court.address.postcode,
-              court.address.town,
-              court.address.type)
+            court.addresses
             )
         }))
       return courtFinderResponse

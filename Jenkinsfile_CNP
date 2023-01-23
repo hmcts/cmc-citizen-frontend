@@ -2,22 +2,38 @@
 
 @Library("Infrastructure")
 
+import uk.gov.hmcts.contino.GithubAPI
+
 String product = "cmc"
 String component = "citizen-frontend"
 
+def ccdDefBranch = "master"
+
 def yarnBuilder = new uk.gov.hmcts.contino.YarnBuilder(this)
+
+def checkForEnableHelmLabel(branch_name) {
+    return new GithubAPI(this).getLabelsbyPattern(branch_name, "enableHelm").contains("enableHelm")
+}
 
 def secrets = [
   'cmc-${env}':
     [
       secret('citizen-oauth-client-secret', 'OAUTH_CLIENT_SECRET'),
       secret('smoke-test-citizen-username', 'SMOKE_TEST_CITIZEN_USERNAME'),
-      secret('smoke-test-user-password', 'SMOKE_TEST_USER_PASSWORD')
+      secret('smoke-test-user-password', 'SMOKE_TEST_USER_PASSWORD'),
+      secret('ccd-importer-username', 'CCD_CONFIGURER_IMPORTER_USERNAME'),
+      secret('ccd-importer-password', 'CCD_CONFIGURER_IMPORTER_PASSWORD'),
     ],
   'ccd-${env}': [
     secret('ccd-data-s2s-secret', 'DATA_STORE_S2S_KEY'),
     secret('ccd-definition-s2s-secret', 'DEFINITION_STORE_S2S_KEY'),
-    secret('ccd-admin-web-oauth2-client-secret', 'ADMIN_WEB_IDAM_SECRET')
+    secret('ccd-admin-web-oauth2-client-secret', 'ADMIN_WEB_IDAM_SECRET'),
+    secret('idam-data-store-client-secret','IDAM_OAUTH2_DATA_STORE_CLIENT_SECRET'),
+    secret('idam-data-store-system-user-username','IDAM_DATA_STORE_SYSTEM_USER_USERNAME'),
+    secret('idam-data-store-system-user-password','IDAM_DATA_STORE_SYSTEM_USER_PASSWORD'),
+    secret('microservicekey-ccd-gw', 'CCD_API_GATEWAY_S2S_SECRET'),
+    secret('ccd-api-gateway-oauth2-client-secret', 'CCD_API_GATEWAY_IDAM_CLIENT_SECRET'),
+    secret('ccd-api-gateway-oauth2-client-secret', 'CCD_API_GATEWAY_OAUTH2_CLIENT_SECRET'),
   ]
 ]
 
@@ -30,32 +46,23 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
   ]
 }
 
-def String generateClaimStoreUrl(String testUrl) {
-  String claimStoreUrl = 'http://cmc-claim-store-aat.service.core-compute-aat.internal'
-  String startOfClaimStoreServiceName = 'claim-store-'
-  if (testUrl?.trim()) {
-     claimStoreUrl = 'http://' + startOfClaimStoreServiceName + testUrl.minus('https://')
-     println('generateClaimStoreUrl -> ' + claimStoreUrl)
-  }
-  return claimStoreUrl
-}
-
 // Vars needed for AKS testing - keep values in sync with: charts/cmc-citizen-frontend/...
 // THESE WILL BE OVERWRITTEN IN ASE DEPLOYMENTS WITH TERRAFORM OUTPUTS.TF
 // THESE CAN BE PICKED UP IN INTEGRATION-TEST CODE DIRECTLY
 env.IDAM_URL = 'https://idam-api.aat.platform.hmcts.net'
 env.CLAIM_STORE_URL = 'http://cmc-claim-store-aat.service.core-compute-aat.internal'
 env.FEATURE_ADMISSIONS = 'true'
-env.FEATURE_MEDIATION = 'true'
 env.FEATURE_DIRECTIONS_QUESTIONNAIRE = 'true'
 env.FEATURE_TESTING_SUPPORT = 'true'
 env.FEATURE_INVERSION_OF_CONTROL = 'true'
 env.FEATURE_PCQ = 'true'
 env.FEATURE_BREATHING_SPACE = 'true'
-env.ENHANCED_MEDIATION_JOURNEY = 'true'
 // add any others needed to selective testing...
 
 String notificationsChannel = '#cmc-tech-notification'
+
+def branchesToSync = ['demo', 'perftest', 'ithc']
+
 
 withPipeline("nodejs", product, component) {
 
@@ -63,18 +70,28 @@ withPipeline("nodejs", product, component) {
     yarnBuilder.yarn('setup')
   }
 
+  onPR {
+    env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+      if (!checkForEnableHelmLabel(env.BRANCH_NAME)) {
+        enableCleanupOfHelmReleaseOnSuccess();
+      }
+  }
+
   before('smoketest:preview'){
-    onPR {
-      log.info env.TEST_URL
-      env.CLAIM_STORE_URL = generateClaimStoreUrl(env.TEST_URL)
-    }
+    log.info env.TEST_URL
+    env.CLAIM_STORE_URL = "https://claim-store-cmc-citizen-frontend-pr-${CHANGE_ID}.service.core-compute-preview.internal"
+    env.CCD_DEFINITION_CLAIM_STORE_URL = "http://cmc-citizen-frontend-pr-${CHANGE_ID}-claim-store"
+    sh """
+    eval \$(./bin/variables/load-preview-env-variables.sh ${CHANGE_ID})
+    ./bin/add-roles.sh
+    ./bin/pull-latest-ccd-defintion.sh ${ccdDefBranch}
+    """
   }
 
   before('functionalTest:preview'){
-    onPR {
       log.info env.TEST_URL
-      env.CLAIM_STORE_URL = generateClaimStoreUrl(env.TEST_URL)
-    }
+      env.CLAIM_STORE_URL = "https://claim-store-cmc-citizen-frontend-pr-${CHANGE_ID}.service.core-compute-preview.internal"
+      env.CCD_DEFINITION_CLAIM_STORE_URL = "http://cmc-citizen-frontend-pr-${CHANGE_ID}-claim-store"
   }
 
   after('test') {
@@ -88,4 +105,5 @@ withPipeline("nodejs", product, component) {
 
   loadVaultSecrets(secrets)
   enableSlackNotifications(notificationsChannel)
+  syncBranchesWithMaster(branchesToSync)
 }

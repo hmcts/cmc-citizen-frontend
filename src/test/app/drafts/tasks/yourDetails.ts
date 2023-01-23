@@ -14,7 +14,8 @@ describe('Your details', () => {
           partyDetails: {
             type : 'individual',
             address: { line1: 'Here',line2: 'There',line3: '',city: 'London',postcode: 'BB12 7NQ' },
-            name: 'John Doe',
+            firstName: 'John',
+            lastName: 'Doe',
             dateOfBirth: {
               known: 'true',
               date: {

@@ -1,6 +1,6 @@
 import * as config from 'config'
 import { request } from 'client/request'
-import { plainToClass } from 'class-transformer'
+import { plainToClass, plainToInstance } from 'class-transformer'
 import { ClaimValidator } from 'utils/claimValidator'
 import { FeeOutcome } from 'fees/models/feeOutcome'
 import { FeeRange } from 'fees/models/feeRange'
@@ -34,6 +34,17 @@ export class FeesClient {
       return this.calculateFee(issueFeeEvent, claimValue, onlineChannel)
       .then((outcome: FeeOutcome) => outcome.amount)
     }
+  }
+
+  /**
+   * Retrieves the fee code for claim issuance fee for HWF claims
+   *
+   * @param {number} claimValue the amount claiming for in pounds
+   * @returns {Promise.<string>} promise containing the fee code
+   */
+  static async retreiveClaimIssuanceFeeCode (claimValue: number): Promise<string> {
+    return this.calculateFee(issueFeeEvent, claimValue, paperChannel)
+    .then((outcome: FeeOutcome) => outcome.code)
   }
 
   /**
@@ -104,7 +115,7 @@ export class FeesClient {
       uri: uri
     }
     return request(options).then(function (response) {
-      return plainToClass(FeeRange, response as object[])
+      return plainToInstance(FeeRange, response as object[])
     })
 
   }

@@ -839,15 +839,18 @@ describe('Claim', () => {
 
   describe('respondToMediationDeadline', () => {
 
-    it('should return mediation deadline date', () => {
+    it('should return mediation deadline date', async () => {
       const claim = new Claim()
       claim.respondedAt = moment()
 
       claimStoreMock.mockNextWorkingDay(MomentFactory.parse('2019-06-28'))
+      await claim.respondToMediationDeadline()
 
       claim.respondToMediationDeadline().then(
-        res => expect(res.format('YYYY-MM-DD'))
-          .to.equal(MomentFactory.parse('2019-06-28').format('YYYY-MM-DD'))
+        function (res) {
+          expect(res.format('YYYY-MM-DD'))
+            .to.equal(MomentFactory.parse('2019-06-28').format('YYYY-MM-DD'))
+        }
       )
     })
 
@@ -922,7 +925,7 @@ describe('Claim', () => {
       claim.respondToOnlineOconReconsiderationDeadline().then(
         res => {
           expect(res.format('YYYY-MM-DD'))
-          .to.equal(MomentFactory.parse('2020-12-01').format('YYYY-MM-DD'))
+            .to.equal(MomentFactory.parse('2020-12-01').format('YYYY-MM-DD'))
         })
     })
 
@@ -1136,22 +1139,20 @@ describe('Claim', () => {
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.OFFER_SETTLEMENT_REACHED)
     })
 
-    if (FeatureToggles.isEnabled('mediation')) {
-      it('should contain CLAIMANT_REJECTED_DEFENDANT_DEFENCE status when claimant has reject defence and DQs is enabled', () => {
-        claim.respondedAt = moment()
-        claim.features = ['directionsQuestionnaire']
-        claim.response = {
-          responseType: ResponseType.FULL_DEFENCE,
-          defenceType: DefenceType.DISPUTE
-        }
-        claim.claimantResponse = {
-          type: ClaimantResponseType.REJECTION
-        }
-        expect(claim.stateHistory).to.have.lengthOf(2)
-        expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE)
-        expect(claim.stateHistory[1].status).to.equal(ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE)
-      })
-    }
+    it('should contain CLAIMANT_REJECTED_DEFENDANT_DEFENCE status when claimant has reject defence and DQs is enabled', () => {
+      claim.respondedAt = moment()
+      claim.features = ['directionsQuestionnaire']
+      claim.response = {
+        responseType: ResponseType.FULL_DEFENCE,
+        defenceType: DefenceType.DISPUTE
+      }
+      claim.claimantResponse = {
+        type: ClaimantResponseType.REJECTION
+      }
+      expect(claim.stateHistory).to.have.lengthOf(2)
+      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE)
+      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE)
+    })
 
     it('should contain CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ status when claimant has reject defence and DQs is not enabled', () => {
       claim.respondedAt = moment()
