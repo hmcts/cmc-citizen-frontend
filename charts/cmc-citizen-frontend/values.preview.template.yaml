@@ -21,7 +21,7 @@ nodejs:
     REFORM_TEAM: cmc
     REFORM_SERVICE_NAME: citizen-frontend
     LOG_LEVEL: DEBUG
-    HTTP_TIMEOUT: 80000
+    HTTP_TIMEOUT: 60000
     FEATURE_TOGGLES_API_URL: http://${SERVICE_NAME}-ftr-tgl
     CLAIM_STORE_URL: http://${SERVICE_NAME}-claim-store
     PAY_RETURN_URL: https://${SERVICE_FQDN}
