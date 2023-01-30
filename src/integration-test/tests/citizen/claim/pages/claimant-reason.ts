@@ -17,6 +17,7 @@ export class ClaimantReasonPage {
   }
 
   enterReason (reason: string): void {
+    I.click(fields.reason)
     I.fillField(fields.reason, reason)
     I.click(buttons.submit)
   }
