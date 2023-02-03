@@ -94,7 +94,7 @@ withPipeline("nodejs", product, component) {
       env.CCD_DEFINITION_CLAIM_STORE_URL = "http://cmc-citizen-frontend-pr-${CHANGE_ID}-claim-store"
   }
 
-  after('test') {
+  afterSuccess('test') {
     onMaster {
       yarnBuilder.yarn('tests:a11y')
     }
