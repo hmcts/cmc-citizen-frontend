@@ -71,7 +71,7 @@ export function initialTransitions (claim: Claim): StateMachine {
       },
       {
         name: 'checkSettled',
-        from: [InitialStates.INIT, InitialStates.HWF_APPLICATION_PENDING, InitialStates.HWF_INVALID_REFERENCE, InitialStates.HWF_Part_Remitted, InitialStates.HWF_CLOSED, InitialStates.HWF_More_Info, InitialStates.HWF_Rejected],
+        from: [InitialStates.HWF_APPLICATION_PENDING, InitialStates.HWF_INVALID_REFERENCE, InitialStates.HWF_Part_Remitted, InitialStates.HWF_CLOSED, InitialStates.HWF_More_Info, InitialStates.HWF_Rejected],
         to: InitialStates.SETTLED
       }
     ],
