@@ -81,7 +81,7 @@
                {% if claim.helpWithFeesNumber %}
                   -
                 {% else %}
-                  {{ claim.responseDeadline is empty ? '-' : claim.responseDeadline | date }}
+                  {{ claim.responseDeadline is empty ? '' : claim.responseDeadline | date }}
                 {% endif %}
               </td>
               <td class="mobile-hide">{{ internalLink('View', '/dashboard/' + claim.externalId + '/claimant') }}</td>
@@ -105,7 +105,7 @@
                 {% if claim.helpWithFeesNumber %}
                   -
                 {% else %}
-                  {{ claim.responseDeadline is empty ? '-' : claim.responseDeadline | date }}
+                  {{ claim.responseDeadline is empty ? '' : claim.responseDeadline | date }}
                 {% endif %}
                 <br>
                 {{ t('Actions:')}} {{ internalLink('View', '/dashboard/' + claim.externalId + '/claimant') }}
