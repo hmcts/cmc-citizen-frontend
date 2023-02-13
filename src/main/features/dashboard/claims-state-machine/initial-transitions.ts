@@ -68,11 +68,6 @@ export function initialTransitions (claim: Claim): StateMachine {
         name: 'checkHwfInvalid',
         from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.HWF_APPLICATION_PENDING],
         to: InitialStates.HWF_INVALID_REFERENCE
-      },
-      {
-        name: 'checkSettled',
-        from: [InitialStates.HWF_APPLICATION_PENDING, InitialStates.HWF_INVALID_REFERENCE, InitialStates.HWF_Part_Remitted, InitialStates.HWF_CLOSED, InitialStates.HWF_More_Info, InitialStates.HWF_Rejected],
-        to: InitialStates.SETTLED
       }
     ],
     data: {
@@ -100,10 +95,6 @@ export function initialTransitions (claim: Claim): StateMachine {
 
       onBeforeCheckCCJEnabled () {
         return this.state !== 'init' && claim.responseDeadline && isPastDeadline(MomentFactory.currentDateTime(), claim.responseDeadline)
-      },
-
-      onBeforeCheckSettled () {
-        return claim.state && (claim.state === 'settled' || claim.state === 'SETTLED')
       },
 
       onBeforeCheckHwf () {
