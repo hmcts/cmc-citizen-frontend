@@ -52,10 +52,10 @@ withNightlyPipeline("nodejs", product, component) {
   enableSecurityScan()
   enableFullFunctionalTest(200)
 
-  after('crossBrowserTest') {
+  afterSuccess('crossBrowserTest') {
     steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'functional-output/**/*'
   }
-  after('fortify-scan') {
+  afterSuccess('fortify-scan') {
     steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
   }
 }
