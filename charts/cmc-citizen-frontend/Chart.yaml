@@ -37,7 +37,7 @@ dependencies:
 
   - name: elasticsearch
     version: 7.17.3
-    repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
+    repository: 'https://helm.elastic.co'
     condition: elastic.enabled
 
   - name: logstash
