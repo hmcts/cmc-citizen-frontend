@@ -187,10 +187,10 @@ ccd:
 
   ccd-admin-web:
     nodejs:
+      disableKeyVaults: true
       imagePullPolicy: Always
       image: hmctspublic.azurecr.io/ccd/admin-web:latest
       ingressHost: ccd-admin-web-${SERVICE_FQDN}
-      keyVaults: []
       environment:
       IDAM_OAUTH2_AW_CLIENT_SECRET: ${ADMIN_WEB_IDAM_SECRET}
     idam-pr:
@@ -204,9 +204,9 @@ ccd:
 
   ccd-user-profile-api:
     java:
+      disableKeyVaults: true
       imagePullPolicy: Always
       image: hmctspublic.azurecr.io/ccd/user-profile-api:latest
-      keyVaults: []
       environment:
         USER_PROFILE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_definition,ccd_admin,cmc_claim_store,xui_webapp,xuiwebapp
 
@@ -219,9 +219,9 @@ ccd:
 
   ccd-definition-store-api:
     java:
+      disableKeyVaults: true
       imagePullPolicy: Always
       image: hmctspublic.azurecr.io/ccd/definition-store-api:latest
-      keyVaults: []
       environment:
         DEFINITION_STORE_IDAM_KEY: ${DEFINITION_STORE_S2S_KEY}
         DEFINITION_STORE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_gw,ccd_admin,xui_webapp,xuiwebapp,cmc_claim_store
@@ -234,9 +234,9 @@ ccd:
 
   ccd-data-store-api:
     java:
+      disableKeyVaults: true
       imagePullPolicy: Always
       image: hmctspublic.azurecr.io/ccd/data-store-api:latest
-      keyVaults: []
       environment:
         DATA_STORE_IDAM_KEY: ${DATA_STORE_S2S_KEY}
         IDAM_OAUTH2_DATA_STORE_CLIENT_SECRET: ${IDAM_OAUTH2_DATA_STORE_CLIENT_SECRET}
