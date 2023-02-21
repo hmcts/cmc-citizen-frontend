@@ -73,7 +73,7 @@ cmc-claim-store:
   enabled: true
   java:
     imagePullPolicy: Always
-    image: hmctspublic.azurecr.io/cmc/claim-store:latest
+    image: hmctspublic.azurecr.io/cmc/claim-store:pr-2705
     releaseNameOverride: ${SERVICE_NAME}-claim-store
     ingressHost: claim-store-${SERVICE_FQDN}
     readinessDelay: 250  # ccd-stack will start much slower
@@ -260,33 +260,10 @@ ccd:
       - civilmoneyclaims+judge@gmail.com|CMC|MoneyClaimCase|orderForJudgeReview
       - civilmoneyclaims+la@gmail.com|CMC|MoneyClaimCase|readyForDirections
 
-elastic:
-  enabled: true
-
-elasticsearch:
-  nameOverride: ${SERVICE_NAME}-es
-  clusterName: "es"
-  imageTag: "7.17.1"
-  replicas: 1
-  minimumMasterNodes: 1
-  antiAffinity: "soft"
-  esJavaOpts: "-Xmx512m -Xms512m"
-  initResources:
-    limits:
-      cpu: "500m"
-      memory: "512Mi"
-    requests:
-      cpu: "25m"
-      memory: "512Mi"
-  persistence:
-    enabled: false
-  ingress:
-    enabled: true
-    annotations:
-      kubernetes.io/ingress.class: traefik
-    path: /
-    hosts:
-      - es-${SERVICE_FQDN}
+  elasticsearch:
+    nameOverride: ${SERVICE_NAME}-es
+    clusterName: "es"
+    replicas: 1
 
 logstash:
   image:
