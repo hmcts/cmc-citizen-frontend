@@ -67,4 +67,8 @@ export class FeatureToggles {
   async isNewClaimFeesEnabled (): Promise<boolean> {
     return this.launchDarklyClient.serviceVariation('new-claim-fees', toBoolean(config.get<boolean>(`featureToggles.newClaimFees`)))
   }
+
+  async isFeeKeywordsEnabled (): Promise<boolean> {
+    return this.launchDarklyClient.serviceVariation('fee-keywords-enable', toBoolean(config.get<boolean>(`featureToggles.feeKeywordsEnable`)))
+  }
 }

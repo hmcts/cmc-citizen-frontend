@@ -76,9 +76,14 @@ export class FeesClient {
     if (StringUtils.isBlank(channel)) {
       throw new Error('Fee channel is required')
     }
-    const keyword: string = FeesClient.getKeyword(eventType)
     ClaimValidator.claimAmount(amount)
-    const feeUri: string = `${feesUrl}/fees-register/fees/lookup?service=${service}&jurisdiction1=${jurisdiction1}&jurisdiction2=${jurisdiction2}&channel=${channel}&event=${eventType}&keyword=${keyword}&amount_or_volume=${amount}`
+    let feeUri
+    if (await featureToggles.isFeeKeywordsEnabled()) {
+      const keyword: string = FeesClient.getKeyword(eventType)
+      feeUri = `${feesUrl}/fees-register/fees/lookup?service=${service}&jurisdiction1=${jurisdiction1}&jurisdiction2=${jurisdiction2}&channel=${channel}&event=${eventType}&keyword=${keyword}&amount_or_volume=${amount}`
+    } else {
+      feeUri = `${feesUrl}/fees-register/fees/lookup?service=${service}&jurisdiction1=${jurisdiction1}&jurisdiction2=${jurisdiction2}&channel=${channel}&event=${eventType}&amount_or_volume=${amount}`
+    }
     const options = {
       uri: feeUri
     }

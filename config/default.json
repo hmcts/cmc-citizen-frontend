@@ -98,7 +98,8 @@
     "oconEnhancements": false,
     "dashboard_pagination_enabled": false,
     "breathingSpace": true,
-    "newClaimFees": true
+    "newClaimFees": true,
+    "feeKeywordsEnable": false
   },
   "oauth": {
     "clientId": "cmc_citizen"
