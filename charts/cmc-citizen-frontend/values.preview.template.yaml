@@ -163,6 +163,8 @@ ccd:
       enabled: true
     managementWeb:
       enabled: false
+    elastic:
+      enabled: true
 
   ingressHost: ${SERVICE_FQDN}
   ingressIP: ${INGRESS_IP}
@@ -187,10 +189,10 @@ ccd:
 
   ccd-admin-web:
     nodejs:
+      disableKeyVaults: true
       imagePullPolicy: Always
       image: hmctspublic.azurecr.io/ccd/admin-web:latest
       ingressHost: ccd-admin-web-${SERVICE_FQDN}
-      keyVaults: []
       environment:
       IDAM_OAUTH2_AW_CLIENT_SECRET: ${ADMIN_WEB_IDAM_SECRET}
     idam-pr:
@@ -204,9 +206,9 @@ ccd:
 
   ccd-user-profile-api:
     java:
+      disableKeyVaults: true
       imagePullPolicy: Always
       image: hmctspublic.azurecr.io/ccd/user-profile-api:latest
-      keyVaults: []
       environment:
         USER_PROFILE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_definition,ccd_admin,cmc_claim_store,xui_webapp,xuiwebapp
 
@@ -219,9 +221,9 @@ ccd:
 
   ccd-definition-store-api:
     java:
+      disableKeyVaults: true
       imagePullPolicy: Always
       image: hmctspublic.azurecr.io/ccd/definition-store-api:latest
-      keyVaults: []
       environment:
         DEFINITION_STORE_IDAM_KEY: ${DEFINITION_STORE_S2S_KEY}
         DEFINITION_STORE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_gw,ccd_admin,xui_webapp,xuiwebapp,cmc_claim_store
@@ -234,9 +236,9 @@ ccd:
 
   ccd-data-store-api:
     java:
+      disableKeyVaults: true
       imagePullPolicy: Always
       image: hmctspublic.azurecr.io/ccd/data-store-api:latest
-      keyVaults: []
       environment:
         DATA_STORE_IDAM_KEY: ${DATA_STORE_S2S_KEY}
         IDAM_OAUTH2_DATA_STORE_CLIENT_SECRET: ${IDAM_OAUTH2_DATA_STORE_CLIENT_SECRET}
@@ -258,60 +260,10 @@ ccd:
       - civilmoneyclaims+judge@gmail.com|CMC|MoneyClaimCase|orderForJudgeReview
       - civilmoneyclaims+la@gmail.com|CMC|MoneyClaimCase|readyForDirections
 
-elastic:
-  enabled: true
-
-elasticsearch:
-  nameOverride: ${SERVICE_NAME}-es
-  clusterName: "es"
-  imageTag: "7.17.1"
-  replicas: 1
-  minimumMasterNodes: 1
-  antiAffinity: "soft"
-  esJavaOpts: "-Xmx512m -Xms512m"
-  initResources:
-    limits:
-      cpu: "500m"
-      memory: "512Mi"
-    requests:
-      cpu: "25m"
-      memory: "512Mi"
-  persistence:
-    enabled: false
-  ingress:
-    enabled: true
-    annotations:
-      kubernetes.io/ingress.class: traefik
-    path: /
-    hosts:
-      - es-${SERVICE_FQDN}
-
-logstash:
-  image:
-    repository: hmctspublic.azurecr.io/ccd/logstash
-    tag: latest
-    pullPolicy: Always
-  logstashJavaOpts: -Xmx1g -Xms512m
-  resources:
-    limits:
-      cpu: 2500m
-      memory: 1024Mi
-    requests:
-      cpu: 500m
-      memory: 1024Mi
-  persistence:
-    enabled: false
-  volumeMounts:
-    - name: pipeline
-      mountPath: /usr/share/logstash/files
   elasticsearch:
-    host: ${SERVICE_NAME}-es-master
-    port: 9200
-  configTpl:
-    xpack.monitoring.enabled: "false"
-    db.url: jdbc:postgresql://${SERVICE_NAME}-postgresql:5432/data-store?ssl=disable&stringtype=unspecified
-    db.user: hmcts
-    db.pwd: hmcts
-    es.data.nodes.url: http://${SERVICE_NAME}-es-master:9200
-  livenessProbe:
-    initialDelaySeconds: 90
+    nameOverride: ${SERVICE_NAME}-es
+    clusterName: "es"
+    replicas: 1
+  logstash:
+    image:
+    tag: ccd-cmc-logstash-latest
