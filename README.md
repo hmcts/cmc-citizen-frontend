@@ -1,3 +1,8 @@
+
+```
+Test
+```
+
 # CMC Frontend
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/hmcts/cmc-citizen-frontend.svg)](https://greenkeeper.io/)
@@ -9,7 +14,7 @@
 This is the frontend application for CMC. Service provides web UI for citizens, presented as sequence of HTML 5 web pages designed to GDS Service Design guidelines, so that they can make money claims and / or perform associated actions e.g submitting defence or requesting default judgement.
 
 Service delegates most of the non UI responsibilities to underlying services e.g. claim-store or pdf-service.
- 
+
 ### Getting Started
 
 ### Prerequisites
@@ -23,9 +28,9 @@ Service delegates most of the non UI responsibilities to underlying services e.g
 
 Install dependencies by executing the following command:
 
- ```bash
+```bash
 $ yarn install
- ```
+```
 
 Run:
 
@@ -108,7 +113,7 @@ For more details on the dockerized environment please refer to integration-tests
 
 ## Troubleshooting
 
-### Warnings while running ```yarn install``` on yarn version 1.0.1
+### Warnings while running ``yarn install`` on yarn version 1.0.1
 
 There is currently an open issue : https://github.com/yarnpkg/yarn/issues/3751
 
@@ -119,11 +124,11 @@ warning The case-insensitive file ..\cmc-citizen-frontend\node_modules\nyc\node_
 warning The case-insensitive file ..\cmc-citizen-frontend\node_modules\nyc\node_modules\ansi-regex shouldn't be copied twice in one bulk copy
 ```
 
-## Preview Environment ##
+## Preview Environment
 
 We get a fully functional environment in Azure Kubernetes (AKS) per pull request. For more
 info see: https://tools.hmcts.net/confluence/display/ROC/AKS+-+Azure+Managed+Kubernetes
 
-## License ##
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) file for details
