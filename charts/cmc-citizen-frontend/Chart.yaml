@@ -35,14 +35,4 @@ dependencies:
     repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
     condition: xui-webapp.enabled
 
-  - name: elasticsearch
-    version: 7.8.2
-    repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
-    condition: elastic.enabled
-
-  - name: logstash
-    version: 2.4.1
-    repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
-    condition: elastic.enabled
-
 
