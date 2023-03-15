@@ -22,7 +22,7 @@ def secrets = [
       secret('smoke-test-citizen-username', 'SMOKE_TEST_CITIZEN_USERNAME'),
       secret('smoke-test-user-password', 'SMOKE_TEST_USER_PASSWORD'),
       secret('ccd-importer-username', 'CCD_CONFIGURER_IMPORTER_USERNAME'),
-      secret('ccd-importer-password', 'CCD_CONFIGURER_IMPORTER_PASSWORD')
+      secret('ccd-importer-password', 'CCD_CONFIGURER_IMPORTER_PASSWORD'),
     ],
   'ccd-${env}': [
     secret('ccd-data-s2s-secret', 'DATA_STORE_S2S_KEY'),
@@ -66,7 +66,7 @@ def branchesToSync = ['demo', 'perftest', 'ithc']
 
 withPipeline("nodejs", product, component) {
 
-  after('build') {
+  afterSuccess('build') {
     yarnBuilder.yarn('setup')
   }
 
@@ -94,7 +94,7 @@ withPipeline("nodejs", product, component) {
       env.CCD_DEFINITION_CLAIM_STORE_URL = "http://cmc-citizen-frontend-pr-${CHANGE_ID}-claim-store"
   }
 
-  after('test') {
+  afterSuccess('test') {
     onMaster {
       yarnBuilder.yarn('tests:a11y')
     }
