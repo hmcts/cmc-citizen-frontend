@@ -18,7 +18,7 @@
       <p>
         {{ t('This service allows you to make a money claim against an individual or an organisation for £10,000 or less. ') }}
       </p>
-      <p>{{ t('This website is run by HM Courts and Tribunals Services (HMCTS). We want as many people as possible to be able to use it, so we’ve designed it to be accessible. For example, you should be able to:') }}</p>
+      <p>{{ t('This website is run by HM Courts and Tribunals Services (HMCTS). We want as many people as possible to be able to use this website. For example, you should be able to:') }}</p>
 
       <ul class="list list-bullet">
         <li>{{ t('change colours, contrast levels and fonts') }}</li>
@@ -32,10 +32,12 @@
 
        <h2 class="heading-medium">{{ t('How accessible this website is') }}</h2>
       <p>
-        {{ t('This website is compliant with the ' + externalLink('Web Content Accessibility Guidelines version 2.1', wcaStandards) + ' AA standard.') | safe }}
+        {{ t('We know some parts of this service are not fully accessible.  The digital service is accessible and meets the WCAG 2.1 AA standard. However, some emails are not accessible because:') }}
       </p>
       <p>
-        {{ t('There are no known accessibility issues within this service.') }}
+        <ul class="list list-bullet">
+          <li>{{ t('Some images and links within some emails do not have a text alternative')}}</li>
+        </ul>
       </p>
 
        <h2 class="heading-medium">{{ t('Feedback and contact information') }}</h2>
@@ -54,6 +56,8 @@
       </p>
 
        {{ supportWidgetaccessibility('Email') }}
+
+      <p>{{ t('We’ll consider your request and get back to you in 10 days.') }}</p>
 
     <h2 class="heading-medium">{{ t('Enforcement procedure') }}</h2>
       <p>
@@ -80,8 +84,8 @@
 
       <h2 class="heading-medium">{{ t('Compliance status') }}</h2>
 
-      <p> {{ t('This website is fully compliant with the '
-       + externalLink('Web Content Accessibility Guidelines version 2.1', wcaStandards) + ' AA standard') | safe }}</p>
+      <p> {{ t('This website is partially compliant with the '
+       + externalLink('Web Content Accessibility Guidelines version 2.1', wcaStandards) + ' AA standard, due to the non-compliances listed below.') | safe }}</p>
 
       <h2 class="heading-large">{{ t('Non-accessible content') }}</h2>
       <p>
@@ -90,7 +94,7 @@
 
       <h2 class="heading-medium">{{ t('Non-compliance with the accessibility regulations') }}</h2>
       <p>
-        {{ t('Online Civil Money Claims (OCMC) service has been tested for accessibility. The content that is not accessible is outlined below with details of:') }}
+        {{ t('Online Civil Money Claims (OCMC) digital service has been tested for accessibility, and does meet the WCAG 2.1 AA requirement.  However some emails are not accessible because:') }}
       </p>
        <ul class="list list-bullet">
         <li>{{ t('where it fails the success criteria')}}
@@ -99,10 +103,13 @@
         </li>
 
       </ul>
-    <p>{{ t('Images within some emails cannot be read by screen readers. This fails WCAG 2.1A [1.1.1] success criterion (Non-text Content). We plan to fix this by February 2021.') }}
+    <p>{{ t('Images within some emails cannot be read by screen readers. This fails WCAG 2.1A [1.1.1] success criterion (Non-text Content). We plan to fix this by June 2023.') }}
       </p>
 
-      <p>{{ t('Links within some emails cannot be read by screen readers. This fails WCAG 2.1A [2.4.4] success criterion (Link Purpose in Context). We plan to fix this by February 2021.') }}
+      <p>{{ t('Links within some emails cannot be read by screen readers. This fails WCAG 2.1A [2.4.4] success criterion (Link Purpose in Context). We plan to fix this by June 2023.') }}
+      </p>
+
+      <p>{{ t('We plan to add text alternatives for all images and links on emails by June 2023. When we publish new content, we’ll make sure our use of images and links meets accessibility standards.') }}
       </p>
 
       <h2 class="heading-large">{{ t('How we tested this website') }}</h2>
@@ -134,7 +141,7 @@
       <p>{{ t('We continually run automated accessibility testing as part of our development practices. This helps us to resolve issues before we launch new pages or features.') }}</p>
 
       <h2 class="heading-large">{{ t('Preparation of this accessibility statement') }}</h2>
-      <p>{{ t('This statement was prepared on 23 September 2019. It was last updated on 22 November 2022.') }}</p>
+      <p>{{ t('This statement was prepared on 23 September 2019. It was last reviewed on 08 March 2023.') }}</p>
       <p>
          {{ t('This website was last tested by the Digital Accessibility Centre (DAC) in January 2020 against WCAG 2.1 standards.') }}
          </p>
