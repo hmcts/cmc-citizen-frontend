@@ -14,7 +14,6 @@ export function initialTransitions (claim: Claim): StateMachine {
   return new StateMachine({
     init: 'init',
     transitions: [
-
       {
         name: 'checkNoResponse',
         from: InitialStates.INIT,
@@ -95,7 +94,7 @@ export function initialTransitions (claim: Claim): StateMachine {
       },
 
       onBeforeCheckCCJEnabled () {
-        return this.state !== 'init' && isPastDeadline(MomentFactory.currentDateTime(), claim.responseDeadline)
+        return this.state !== 'init' && claim.responseDeadline && isPastDeadline(MomentFactory.currentDateTime(), claim.responseDeadline)
       },
 
       onBeforeCheckHwf () {
