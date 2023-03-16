@@ -10,13 +10,14 @@
 {% set wcaStandards = 'https://www.w3.org/TR/WCAG21/' %}
 {% set wcaGuidline = 'https://www.w3.org/TR/WCAG21/' %}
 {% set access = 'https://hmcts-access.service.gov.uk/contact-us' %}
+{% set claimsServiceLink = 'https://www.moneyclaims.service.gov.uk/'  %}
 
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
 
       <p>
-        {{ t('This accessibility statement applies to https://www.moneyclaims.service.gov.uk/. This service allows you to make a money claim against an individual or an organisation for £10,000 or less. ') | safe }}
+        {{ t('This accessibility statement applies to' + externalLink('https://www.moneyclaims.service.gov.uk/', claimsServiceLink) + '. This service allows you to make a money claim against an individual or an organisation for £10,000 or less. ') | safe }}
       </p>
       <p>{{ t('This website is run by HM Courts and Tribunals Services (HMCTS). We want as many people as possible to be able to use this website. For example, you should be able to:') }}</p>
 
