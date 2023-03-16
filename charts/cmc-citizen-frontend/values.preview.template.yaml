@@ -270,3 +270,4 @@ ccd:
   logstash:
     image:
     tag: ccd-cmc-logstash-latest
+
