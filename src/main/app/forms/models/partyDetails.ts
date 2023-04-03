@@ -4,6 +4,9 @@ import { Address } from 'forms/models/address'
 import { CorrespondenceAddress } from 'forms/models/correspondenceAddress'
 import { PartyType } from 'common/partyType'
 import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
+import { ValidationErrors as CountryValidationErrors } from 'forms/models/correspondenceAddress'
+import { IsCountrySupported } from 'forms/validation/validators/isCountrySupported'
+import { Country } from 'common/country'
 
 export class ValidationErrors {
   static readonly ADDRESS_REQUIRED = 'Enter an address'
@@ -38,6 +41,10 @@ export class PartyDetails {
   @ValidateIf(partyDetails => partyDetails.hasCorrespondenceAddress === true, { groups: ['claimant', 'defendant', 'response'] })
   @IsDefined({ message: ValidationErrors.CORRESPONDENCE_ADDRESS_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @ValidateNested({ groups: ['claimant', 'defendant', 'response'] })
+  @IsCountrySupported(Country.defendantCountries(), {
+    message: CountryValidationErrors.DEFENDANT_COUNTRY_NOT_SUPPORTED,
+    groups: ['defendant', 'response']
+  })
   correspondenceAddress?: CorrespondenceAddress
 
   constructor (name?: string,
