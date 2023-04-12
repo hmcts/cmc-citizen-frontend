@@ -37,3 +37,12 @@ smoke-output/
 functional-output/
 acb.yaml
 /src/main/public/webchat/sass/
+
+# Yarn 3 files
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
