@@ -33,6 +33,7 @@ import { OrdersFeature } from 'orders/index'
 import { trackCustomEvent } from 'logging/customEventTracker'
 import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 import { Feature as BreathingSpaceFeature } from 'breathing-space/index'
+import { injectGtm } from 'routes/google-tag-manager'
 
 logger.info('Creating express server object')
 
@@ -53,6 +54,9 @@ new Helmet(config.get<HelmetConfig>('security'), developmentMode)
 // Before the page routers themselves, inject custom variables
 logger.info('Creating LaunchDarkly Client')
 const launchDarklyClient = new LaunchDarklyClient()
+
+logger.info('injecting Google Tag Manager')
+app.use(injectGtm)
 
 logger.info('Loading feature toggles')
 const featureToggles = new FeatureToggles(launchDarklyClient)
