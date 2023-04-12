@@ -10,6 +10,6 @@ jobs:
         with:
           node-version: '14.x'
       - run: yarn install
-      - run: yarn global add gulp-cli
+      - run: npm install --global gulp-cli
       - run: gulp copy-files
       - run: yarn lint
