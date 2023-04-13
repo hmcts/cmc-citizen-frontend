@@ -29,10 +29,10 @@ export class FeesClient {
   static async calculateIssueFee (claimValue: number): Promise<number> {
     if (await featureToggles.isNewClaimFeesEnabled()) {
       return this.calculateFee(issueFeeEvent, claimValue, paperChannel)
-      .then((outcome: FeeOutcome) => outcome.amount)
+        .then((outcome: FeeOutcome) => outcome.amount)
     } else {
       return this.calculateFee(issueFeeEvent, claimValue, onlineChannel)
-      .then((outcome: FeeOutcome) => outcome.amount)
+        .then((outcome: FeeOutcome) => outcome.amount)
     }
   }
 
@@ -42,9 +42,9 @@ export class FeesClient {
    * @param {number} claimValue the amount claiming for in pounds
    * @returns {Promise.<string>} promise containing the fee code
    */
-  static async retreiveClaimIssuanceFeeCode (claimValue: number): Promise<string> {
+  static async retrieveClaimIssuanceFeeCode (claimValue: number): Promise<string> {
     return this.calculateFee(issueFeeEvent, claimValue, paperChannel)
-    .then((outcome: FeeOutcome) => outcome.code)
+      .then((outcome: FeeOutcome) => outcome.code)
   }
 
   /**
@@ -70,17 +70,38 @@ export class FeesClient {
     if (StringUtils.isBlank(eventType)) {
       throw new Error('Fee eventType is required')
     }
+    if (amount < 0.01) {
+      throw new Error('Amount cannot be 0 or negative')
+    }
     if (StringUtils.isBlank(channel)) {
       throw new Error('Fee channel is required')
     }
     ClaimValidator.claimAmount(amount)
-    const feeUri: string = `${feesUrl}/fees-register/fees/lookup?service=${service}&jurisdiction1=${jurisdiction1}&jurisdiction2=${jurisdiction2}&channel=${channel}&event=${eventType}&amount_or_volume=${amount}`
+    let feeUri
+    if (await featureToggles.isFeeKeywordsEnabled()) {
+      const keyword: string = FeesClient.getKeyword(eventType)
+      feeUri = `${feesUrl}/fees-register/fees/lookup?service=${service}&jurisdiction1=${jurisdiction1}&jurisdiction2=${jurisdiction2}&channel=${channel}&event=${eventType}&keyword=${keyword}&amount_or_volume=${amount}`
+    } else {
+      feeUri = `${feesUrl}/fees-register/fees/lookup?service=${service}&jurisdiction1=${jurisdiction1}&jurisdiction2=${jurisdiction2}&channel=${channel}&event=${eventType}&amount_or_volume=${amount}`
+    }
     const options = {
       uri: feeUri
     }
     return request(options).then(function (response) {
       return plainToClass(FeeOutcome, response as object)
     })
+  }
+
+  static getKeyword (eventType: string) {
+    let keyword: string = ''
+    if (eventType === 'hearing') {
+      keyword = 'HearingSmallClaims'
+    } else if (eventType === 'issue') {
+      keyword = 'MoneyClaim'
+    } else {
+      throw new Error('Event type must be hearing or issue')
+    }
+    return keyword
   }
 
   /**

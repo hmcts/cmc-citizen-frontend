@@ -87,7 +87,8 @@
     "oconEnhancements": "FEATURE_OCON_ENHANCEMENTS",
     "dashboard_pagination_enabled": "dashboard_pagination_enabled",
     "breathingSpace": "FEATURE_BREATHING_SPACE",
-    "newClaimFees": "FEATURE_NEW_CLAIM_FEES"
+    "newClaimFees": "FEATURE_NEW_CLAIM_FEES",
+    "feeKeywordsEnable": "FEES_API_KEYWORDS_ENABLE"
   },
 
   "oauth": {

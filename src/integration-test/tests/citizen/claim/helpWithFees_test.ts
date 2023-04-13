@@ -5,7 +5,7 @@ const claimSteps: ClaimSteps = new ClaimSteps()
 Feature('Smoke Tests...')
 
 // The @citizen-smoke-test tag used for running smoke tests with pre-registered user
-Scenario('Navigate Payment Page by providing claim details... @smoke-test', { retries: 3 }, async (I: I) => {
+Scenario('Navigate Payment Page by providing claim details... @smoke-test', { retries: 0 }, async (I: I) => {
   await claimSteps.makeAClaimAndNavigateUpToPayment(I)
 })
 
