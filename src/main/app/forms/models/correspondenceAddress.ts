@@ -1,9 +1,10 @@
 import { IsDefined, MaxLength } from '@hmcts/class-validator'
 
 import { Address } from 'forms/models/address'
-import { IsCountrySupported } from 'forms/validation/validators/isCountrySupported'
-import { Country } from 'common/country'
-import { IsNotBlank, IsValidPostcode } from '@hmcts/cmc-validators'
+// import { IsCountrySupported } from 'forms/validation/validators/isCountrySupported'
+// import { Country } from 'common/country'
+// import { IsNotBlank, IsValidPostcode } from '@hmcts/cmc-validators'
+import { IsNotBlank } from '@hmcts/cmc-validators'
 
 export class ValidationErrors {
   static readonly FIRST_LINE_REQUIRED: string = 'Enter first correspondence address line'
@@ -44,7 +45,7 @@ export class CorrespondenceAddress extends Address {
   city?: string
   @IsDefined({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @IsNotBlank({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
-  @IsValidPostcode({
+  /* @IsValidPostcode({
     message: ValidationErrors.POSTCODE_NOT_VALID,
     groups: ['claimant']
   })
@@ -56,6 +57,6 @@ export class CorrespondenceAddress extends Address {
   @IsCountrySupported(Country.defendantCountries(), {
     message: ValidationErrors.DEFENDANT_COUNTRY_NOT_SUPPORTED,
     groups: ['defendant', 'response']
-  })
+  }) */
   postcode?: string
 }
