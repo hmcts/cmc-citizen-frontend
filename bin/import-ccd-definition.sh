@@ -7,7 +7,7 @@ dir=$(dirname ${0})
 definition_input_dir=$(realpath 'ccd-definition')
 definition_output_file="$(realpath ".")/build/ccd-development-config/ccd-cmc-dev.xlsx"
 params="$@"
-definition_processor_version=latest
+definition_processor_version=dbyccu
 
 echo "Definition directory: ${definition_input_dir}"
 echo "Definition spreadsheet ${definition_output_file}"
