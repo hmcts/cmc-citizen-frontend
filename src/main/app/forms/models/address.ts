@@ -6,7 +6,6 @@ import * as toBoolean from 'to-boolean'
 // import { IsCountrySupported } from 'forms/validation/validators/isCountrySupported'
 // import { Country } from 'common/country'
 import { IsNotBlank, IsValidPostcode, ExtraFormFieldsArePopulated } from '@hmcts/cmc-validators'
-//import { IsNotBlank, ExtraFormFieldsArePopulated } from '@hmcts/cmc-validators'
 
 const validator: Validator = new Validator()
 
