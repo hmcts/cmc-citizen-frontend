@@ -3,8 +3,7 @@ import { IsDefined, MaxLength } from '@hmcts/class-validator'
 import { Address } from 'forms/models/address'
 // import { IsCountrySupported } from 'forms/validation/validators/isCountrySupported'
 // import { Country } from 'common/country'
-// import { IsNotBlank, IsValidPostcode } from '@hmcts/cmc-validators'
-import { IsNotBlank } from '@hmcts/cmc-validators'
+import { IsNotBlank, IsValidPostcode } from '@hmcts/cmc-validators'
 
 export class ValidationErrors {
   static readonly FIRST_LINE_REQUIRED: string = 'Enter first correspondence address line'
@@ -20,8 +19,8 @@ export class ValidationErrors {
   static readonly POSTCODE_NOT_VALID: string = 'Postcode must be in United Kingdom'
   static readonly DEFENDANT_POSTCODE_NOT_VALID: string = 'Postcode must be in England or Wales'
 
-  static readonly CLAIMANT_COUNTRY_NOT_SUPPORTED = 'Postcode must be in United Kingdom'
-  static readonly DEFENDANT_COUNTRY_NOT_SUPPORTED = 'Postcode must be in England or Wales'
+  // static readonly CLAIMANT_COUNTRY_NOT_SUPPORTED = 'Postcode must be in United Kingdom'
+  // static readonly DEFENDANT_COUNTRY_NOT_SUPPORTED = 'Postcode must be in England or Wales'
 
 }
 
@@ -45,14 +44,14 @@ export class CorrespondenceAddress extends Address {
   city?: string
   @IsDefined({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @IsNotBlank({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
-  /* @IsValidPostcode({
+  @IsValidPostcode({
     message: ValidationErrors.POSTCODE_NOT_VALID,
     groups: ['claimant']
   })
   @IsValidPostcode({
     message: ValidationErrors.DEFENDANT_POSTCODE_NOT_VALID,
     groups: ['defendant', 'response']
-  })
+  }) /*
   @IsCountrySupported(Country.all(), { message: ValidationErrors.CLAIMANT_COUNTRY_NOT_SUPPORTED, groups: ['claimant'] })
   @IsCountrySupported(Country.defendantCountries(), {
     message: ValidationErrors.DEFENDANT_COUNTRY_NOT_SUPPORTED,

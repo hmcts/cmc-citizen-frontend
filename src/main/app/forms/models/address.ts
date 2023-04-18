@@ -5,8 +5,8 @@ import { Address as ClaimAddress } from 'claims/models/address'
 import * as toBoolean from 'to-boolean'
 // import { IsCountrySupported } from 'forms/validation/validators/isCountrySupported'
 // import { Country } from 'common/country'
-// import { IsNotBlank, IsValidPostcode, ExtraFormFieldsArePopulated } from '@hmcts/cmc-validators'
-import { IsNotBlank, ExtraFormFieldsArePopulated } from '@hmcts/cmc-validators'
+import { IsNotBlank, IsValidPostcode, ExtraFormFieldsArePopulated } from '@hmcts/cmc-validators'
+//import { IsNotBlank, ExtraFormFieldsArePopulated } from '@hmcts/cmc-validators'
 
 const validator: Validator = new Validator()
 
@@ -73,11 +73,11 @@ export class Address implements CompletableTask {
   @IsCountrySupported(Country.defendantCountries(), {
     message: ValidationErrors.DEFENDANT_COUNTRY_NOT_SUPPORTED,
     groups: ['defendant', 'response']
-  })
+  }) */
   @IsValidPostcode({
     message: ValidationErrors.POSTCODE_NOT_VALID,
     groups: ['claimant']
-  })
+  }) /*
   @IsValidPostcode({
     message: ValidationErrors.DEFENDANT_COUNTRY_NOT_SUPPORTED,
     groups: ['defendant', 'response']
