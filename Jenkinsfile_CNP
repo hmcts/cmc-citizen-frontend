@@ -7,7 +7,7 @@ import uk.gov.hmcts.contino.GithubAPI
 String product = "cmc"
 String component = "citizen-frontend"
 
-def ccdDefBranch = "ccdprocessordowngrade"
+def ccdDefBranch = "master"
 
 def yarnBuilder = new uk.gov.hmcts.contino.YarnBuilder(this)
 
