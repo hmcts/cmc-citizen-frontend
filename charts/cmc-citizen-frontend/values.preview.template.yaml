@@ -2,7 +2,7 @@ nodejs:
   image: ${IMAGE_NAME}
   ingressIP: ${INGRESS_IP}
   consulIP: ${CONSUL_LB_IP}
-  ingressHost: ${SERVICE_FQDN}
+  ingressHost: ${SERVICE_NAME}.preview.platform.hmcts.net
   readinessDelay: 130  # claim-store will start much slower
   livenessDelay: 130  # claim-store will start much slower
   memoryRequests: 512Mi
@@ -24,7 +24,7 @@ nodejs:
     HTTP_TIMEOUT: 60000
     FEATURE_TOGGLES_API_URL: http://${SERVICE_NAME}-ftr-tgl
     CLAIM_STORE_URL: http://${SERVICE_NAME}-claim-store
-    PAY_RETURN_URL: https://${SERVICE_FQDN}
+    PAY_RETURN_URL: https://${SERVICE_NAME}.preview.platform.hmcts.net
 
     # config to make non prod testing easier
     FEATURE_TESTING_SUPPORT: true
@@ -43,9 +43,9 @@ idam-pr:
   enabled: true
   redirect_uris:
     Money Claims - Citizen:
-      - https://${SERVICE_FQDN}/receiver
+      - https://${SERVICE_NAME}.preview.platform.hmcts.net/receiver
     XUI:
-      - https://xui-${SERVICE_FQDN}/oauth2/callback
+      - https://xui-${SERVICE_NAME}.preview.platform.hmcts.net/oauth2/callback
 
 xui-webapp:
   enabled: true
@@ -53,14 +53,14 @@ xui-webapp:
     imagePullPolicy: Always
     releaseNameOverride: ${SERVICE_NAME}-xui-webapp
     image: hmctspublic.azurecr.io/xui/webapp:latest
-    ingressHost: xui-${SERVICE_FQDN}
+    ingressHost: xui-${SERVICE_NAME}.preview.platform.hmcts.net
     environment:
-      HEALTH_CCD_COMPONENT_API: http://gateway-${SERVICE_FQDN}/health
+      HEALTH_CCD_COMPONENT_API: http://gateway-${SERVICE_NAME}.preview.platform.hmcts.net/health
       HEALTH_CCD_DATA_API: http://${SERVICE_NAME}-ccd-data-store-api/health
-      HEALTH_TERMS_AND_CONDITIONS_API: http://xui-terms-and-conditions-${SERVICE_FQDN}.service.core-compute-preview.internal/health
-      SERVICES_CCD_COMPONENT_API: http://gateway-${SERVICE_FQDN}
+      HEALTH_TERMS_AND_CONDITIONS_API: http://xui-terms-and-conditions-${SERVICE_NAME}.preview.platform.hmcts.net.service.core-compute-preview.internal/health
+      SERVICES_CCD_COMPONENT_API: http://gateway-${SERVICE_NAME}.preview.platform.hmcts.net
       SERVICES_CCD_DATA_STORE_API: http://${SERVICE_NAME}-ccd-data-store-api
-      SERVICES_TERMS_AND_CONDITIONS: http://xui-terms-and-conditions-${SERVICE_FQDN}.service.core-compute-preview.internal
+      SERVICES_TERMS_AND_CONDITIONS: http://xui-terms-and-conditions-${SERVICE_NAME}.preview.platform.hmcts.net.service.core-compute-preview.internal
       JURISDICTIONS: CMC
       FEATURE_REDIS_ENABLED: false
       FEATURE_APP_INSIGHTS_ENABLED: false
@@ -76,7 +76,7 @@ cmc-claim-store:
     imagePullPolicy: Always
     image: hmctspublic.azurecr.io/cmc/claim-store:latest
     releaseNameOverride: ${SERVICE_NAME}-claim-store
-    ingressHost: claim-store-${SERVICE_FQDN}
+    ingressHost: claim-store-${SERVICE_NAME}.preview.platform.hmcts.net
     readinessDelay: 250  # ccd-stack will start much slower
     livenessDelay:  250  # ccd-stack will start much slower
     keyVaults:
@@ -106,8 +106,8 @@ cmc-claim-store:
     environment:
       LOG_LEVEL: DEBUG
       DOC_ASSEMBLY_URL: http://dg-docassembly-aat.service.core-compute-aat.internal
-      FRONTEND_BASE_URL: https://${SERVICE_FQDN}
-      RESPOND_TO_CLAIM_URL: https://${SERVICE_FQDN}/first-contact/start
+      FRONTEND_BASE_URL: https://${SERVICE_NAME}.preview.platform.hmcts.net
+      RESPOND_TO_CLAIM_URL: https://${SERVICE_NAME}.preview.platform.hmcts.net/first-contact/start
       CMC_DB_HOST: "{{ .Values.postgresql.releaseNameOverride}}"
       CMC_DB_USERNAME: "{{ .Values.postgresql.auth.username}}"
       CMC_DB_PASSWORD: "{{ .Values.postgresql.auth.password}}"
@@ -169,13 +169,13 @@ ccd:
     elastic:
       enabled: true
 
-  ingressHost: ${SERVICE_FQDN}
+  ingressHost: ${SERVICE_NAME}.preview.platform.hmcts.net
   ingressIP: ${INGRESS_IP}
   consulIP: ${CONSUL_LB_IP}
 
   global:
-    ccdApiGatewayIngress: gateway-${SERVICE_FQDN}
-    ccdAdminWebIngress: ccd-admin-web-${SERVICE_FQDN}
+    ccdApiGatewayIngress: gateway-${SERVICE_NAME}.preview.platform.hmcts.net
+    ccdAdminWebIngress: ccd-admin-web-${SERVICE_NAME}.preview.platform.hmcts.net
     ccdDataStoreUrl: http://${SERVICE_NAME}-ccd-data-store-api
     idamApiUrl: https://idam-api.aat.platform.hmcts.net
     idamWebUrl: https://idam-web-public.aat.platform.hmcts.net
@@ -195,7 +195,7 @@ ccd:
       disableKeyVaults: true
       imagePullPolicy: Always
       image: hmctspublic.azurecr.io/ccd/admin-web:latest
-      ingressHost: ccd-admin-web-${SERVICE_FQDN}
+      ingressHost: ccd-admin-web-${SERVICE_NAME}.preview.platform.hmcts.net
       environment:
       IDAM_OAUTH2_AW_CLIENT_SECRET: ${ADMIN_WEB_IDAM_SECRET}
     idam-pr:
@@ -204,7 +204,7 @@ ccd:
   ccd-api-gateway-web:
     nodejs:
       imagePullPolicy: Always
-      ingressHost: gateway-${SERVICE_FQDN}
+      ingressHost: gateway-${SERVICE_NAME}.preview.platform.hmcts.net
       ingressIP: ${INGRESS_IP}
 
   ccd-user-profile-api:
@@ -234,7 +234,7 @@ ccd:
         OIDC_ISSUER: https://forgerock-am.service.core-compute-idam-aat2.internal:8443/openam/oauth2/hmcts
         ELASTIC_SEARCH_ENABLED: true
         ELASTIC_SEARCH_HOST: ${SERVICE_NAME}-es-master
-      ingressHost: ccd-definition-store-${SERVICE_FQDN}
+      ingressHost: ccd-definition-store-${SERVICE_NAME}.preview.platform.hmcts.net
       ingressIP: ${INGRESS_IP}
 
   ccd-data-store-api:
