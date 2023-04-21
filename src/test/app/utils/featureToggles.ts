@@ -106,4 +106,14 @@ describe('FeatureToggles', () => {
       expect(result).to.equal(actual)
     })
   })
+
+  describe('isFeeKeywordsEnabled', () => {
+    it('should return toggle if fee keywords enable toggle exists', async () => {
+      const mockLaunchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
+      const featureToggles = new FeatureToggles(mockLaunchDarklyClient)
+      let actual = toBoolean(config.get<boolean>(`featureToggles.feeKeywordsEnable`))
+      let result = await featureToggles.isFeeKeywordsEnabled()
+      expect(result).to.equal(actual)
+    })
+  })
 })

@@ -33,6 +33,7 @@
     "test:file": "TS_NODE_TRANSPILE_ONLY=true NODE_ENV=mocha LOG_LEVEL=OFF mocha --opts mocha.opts --watch --watch-extensions ts"
   },
   "dependencies": {
+    "@analytics/google-tag-manager": "^0.5.3",
     "@hmcts/class-validator": "^0.9.1-e",
     "@hmcts/cmc-draft-store-middleware": "^2.0.1",
     "@hmcts/cmc-validators": "^0.2.6",
@@ -56,6 +57,7 @@
     "@types/nunjucks": "^3.1.4",
     "@types/request-promise-native": "^1.0.16",
     "@types/shortid": "^0.0.29",
+    "analytics": "^0.8.1",
     "applicationinsights": "^2.0.0",
     "body-parser": "^1.19.0",
     "bootstrap-datepicker": "1.9.0",
@@ -178,15 +180,8 @@
     "all": true
   },
   "resolutions": {
-    "**/async": "^3.2.4",
-    "**/download": "^8.0.0",
     "sass-lint/eslint": "^5.0.0",
-    "**/ajv": "^8.10.0",
-    "**/sass-lint/**/ansi-regex": "^5.0.1",
-    "**/validator": "^13.7.0 ",
-    "**/url-parse": "^1.5.10",
     "bootstrap-datepicker/jquery": "^3.5.0",
-    "**/minimist": "^1.2.6",
     "lodash": "^4.17.21",
     "yargs-parser": "^20.2.7",
     "ini": "^1.3.6",
@@ -211,5 +206,6 @@
       "pre-commit": "yarn lint",
       "pre-push": "yarn tests && yarn test:routes"
     }
-  }
+  },
+  "packageManager": "yarn@3.5.0"
 }

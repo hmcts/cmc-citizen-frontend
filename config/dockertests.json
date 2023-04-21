@@ -10,7 +10,8 @@
     "helpWithFees": false,
     "dashboard_pagination_enabled": false,
     "breathingSpace": true,
-    "newClaimFees": true
+    "newClaimFees": true,
+    "feeKeywordsEnable": false
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"
