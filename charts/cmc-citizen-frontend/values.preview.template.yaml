@@ -2,7 +2,7 @@ nodejs:
   image: ${IMAGE_NAME}
   ingressIP: ${INGRESS_IP}
   consulIP: ${CONSUL_LB_IP}
-  ingressHost: ${SERVICE_FQDN}
+  ingressHost: ${SERVICE_NAME}.preview.platform.hmcts.net
   readinessDelay: 130  # claim-store will start much slower
   livenessDelay: 130  # claim-store will start much slower
   memoryRequests: 512Mi
@@ -24,7 +24,7 @@ nodejs:
     HTTP_TIMEOUT: 60000
     FEATURE_TOGGLES_API_URL: http://${SERVICE_NAME}-ftr-tgl
     CLAIM_STORE_URL: http://${SERVICE_NAME}-claim-store
-    PAY_RETURN_URL: https://${SERVICE_FQDN}
+    PAY_RETURN_URL: https://${SERVICE_NAME}.preview.platform.hmcts.net
 
     # config to make non prod testing easier
     FEATURE_TESTING_SUPPORT: true
@@ -45,7 +45,7 @@ idam-pr:
     Money Claims - Citizen:
       - https://${SERVICE_FQDN}/receiver
     XUI:
-      - https://xui-${SERVICE_FQDN}/oauth2/callback
+      - https://xui-${SERVICE_NAME}.preview.platform.hmcts.net/oauth2/callback
 
 xui-webapp:
   enabled: true
