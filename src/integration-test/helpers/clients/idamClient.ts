@@ -64,7 +64,7 @@ export class IdamClient {
       return Promise.resolve()
     }).catch(function (err) {
       // tslint:disable-next-line:no-console
-      console.log('error deleting user: ' + err)
+      console.log(`error deleting user: ${username}` + err)
     })
   }
 
@@ -89,7 +89,7 @@ export class IdamClient {
       return Promise.resolve()
     }).catch(function (err) {
       // tslint:disable-next-line:no-console
-      console.log('error deleting user: ' + err)
+      console.log(`error deleting user/s ${params}: ` + err)
     })
   }
 
