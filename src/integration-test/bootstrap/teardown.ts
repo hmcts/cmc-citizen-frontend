@@ -16,7 +16,7 @@ module.exports = {
         }
       }
     } catch (error) {
-      handleError(error)
+      console.error('Error during teardown, exiting', error)
     }
   }
 }
