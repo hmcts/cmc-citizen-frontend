@@ -30,6 +30,8 @@ export class IdamClient {
    * @returns {Promise<void>}
    */
   static createUser (email: string, userRoleCode: string, password: string = process.env.SMOKE_TEST_USER_PASSWORD): Promise<void> {
+    logger.info(`Create user: ${email}`)
+
     const options = {
       method: 'POST',
       uri: `${baseURL}/testing-support/accounts`,
