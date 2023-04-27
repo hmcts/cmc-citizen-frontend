@@ -80,7 +80,7 @@ export class IdamClient {
 
     const options = {
       method: 'DELETE',
-      uri: `${baseURL}/testing-support/test-data?${params}`
+      uri: `${baseURL}/testing-support/test-data?${params}&async=true`
     }
 
     return request(options).then(function (resp) {
