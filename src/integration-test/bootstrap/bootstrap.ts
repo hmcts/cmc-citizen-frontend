@@ -83,8 +83,15 @@ async function createSmokeTestsUserIfDoesntExist (username: string, userRole: st
     if (!(username || password)) {
       return
     }
-
-    await IdamClient.createUser(username, userRole, password)
+    try {
+      await IdamClient.createUser(username, userRole, password)
+    } catch (err) {
+      if (err && err.statusCode === 409) {
+        console.log(`ERROR:: User ${username} already exists.`)
+        console.log(`Error during create user ${username}, `, err)
+      }
+      throw err
+    }
     bearerToken = await IdamClient.authenticateUser(username, password)
   }
 
@@ -92,10 +99,10 @@ async function createSmokeTestsUserIfDoesntExist (username: string, userRole: st
     await ClaimStoreClient.addRoleToUser(bearerToken, 'cmc-new-features-consent-given')
   } catch (err) {
     if (err && err.statusCode === 409) {
-      console.log('User already has user consent role')
+      console.log(`User ${username} already has user consent role`)
       return
     }
-    console.log('Failed to add user consent role')
+    console.log(`Failed to add user ${username} consent role`)
     throw err
   }
   console.log(`Test user created: ${username}`)
