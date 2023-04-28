@@ -30,6 +30,8 @@ export class IdamClient {
    * @returns {Promise<void>}
    */
   static createUser (email: string, userRoleCode: string, password: string = process.env.SMOKE_TEST_USER_PASSWORD): Promise<void> {
+    logger.info(`Create user: ${email}`)
+
     const options = {
       method: 'POST',
       uri: `${baseURL}/testing-support/accounts`,
@@ -64,7 +66,7 @@ export class IdamClient {
       return Promise.resolve()
     }).catch(function (err) {
       // tslint:disable-next-line:no-console
-      console.log('error deleting user: ' + err)
+      console.log(`error deleting user: ${username}` + err)
     })
   }
 
@@ -80,7 +82,7 @@ export class IdamClient {
 
     const options = {
       method: 'DELETE',
-      uri: `${baseURL}/testing-support/test-data?${params}`
+      uri: `${baseURL}/testing-support/test-data?${params}&async=true`
     }
 
     return request(options).then(function (resp) {
@@ -89,7 +91,7 @@ export class IdamClient {
       return Promise.resolve()
     }).catch(function (err) {
       // tslint:disable-next-line:no-console
-      console.log('error deleting user: ' + err)
+      console.log(`error deleting user/s ${params}: ` + err)
     })
   }
 
