@@ -43,9 +43,10 @@ idam-pr:
   enabled: true
   redirect_uris:
     Money Claims - Citizen:
-      - https://${SERVICE_FQDN}/receiver
+      - https://${SERVICE_NAME}.preview.platform.hmcts.net/receiver
     XUI:
       - https://xui-${SERVICE_FQDN}/oauth2/callback
+      - https://xui-${SERVICE_NAME}.preview.platform.hmcts.net/oauth2/callback
 
 xui-webapp:
   enabled: true
