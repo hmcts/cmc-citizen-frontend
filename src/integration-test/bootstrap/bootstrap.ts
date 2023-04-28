@@ -5,8 +5,10 @@ import { request } from 'integration-test/helpers/clients/base/request'
 import { RequestResponse } from 'request'
 import { IdamClient } from 'integration-test/helpers/clients/idamClient'
 import { ClaimStoreClient } from 'integration-test/helpers/clients/claimStoreClient'
+import { Logger } from '@hmcts/nodejs-logging'
 
 const citizenAppURL = process.env.CITIZEN_APP_URL
+const logger = Logger.getLogger('idamClient')
 
 class Client {
   static checkHealth (appURL: string): Promise<RequestResponse> {
@@ -63,7 +65,6 @@ async function waitTillHealthy (appURL: string) {
       console.log(`AUTO_ENROLL_INTO_NEW_FEATURE=${process.env.AUTO_ENROLL_INTO_NEW_FEATURE}`)
       console.log(`FEATURE_HELP_WITH_FEES=${process.env.FEATURE_HELP_WITH_FEES}`)
       console.log(`FEATURE_BREATHING_SPACE=${process.env.FEATURE_BREATHING_SPACE}`)
-      console.log(`SMOKE_TEST_CITIZEN_USERNAME=${process.env.SMOKE_TEST_CITIZEN_USERNAME}`)
       return Promise.resolve()
     } else {
       logStartupProblem(response)
@@ -81,16 +82,17 @@ async function createSmokeTestsUserIfDoesntExist (username: string, userRole: st
   try {
     console.log(`Authenticate user: ${username} `)
     bearerToken = await IdamClient.authenticateUser(username, password)
-  } catch {
+  } catch (error) {
+    logger.warning(`Failed authenticate User for: ${username}`, error)
     if (!(username || password)) {
       return
     }
     try {
       await IdamClient.createUser(username, userRole, password)
     } catch (err) {
-      console.log(`Error during create user ${username}, `, err)
+      logger.warning(`Error during create user ${username}, `, err)
       if (err && err.statusCode === 409) {
-        console.log(`ERROR:: User ${username} already exists.`)
+        logger.info(`ERROR:: User ${username} already exists.`)
       } else {
         throw err
       }
@@ -102,13 +104,13 @@ async function createSmokeTestsUserIfDoesntExist (username: string, userRole: st
     await ClaimStoreClient.addRoleToUser(bearerToken, 'cmc-new-features-consent-given')
   } catch (err) {
     if (err && err.statusCode === 409) {
-      console.log(`User ${username} already has user consent role`)
+      logger.log(`User ${username} already has user consent role`)
       return
     }
-    console.log(`Failed to add user ${username} consent role`)
+    logger.log(`Failed to add user ${username} consent role`)
     throw err
   }
-  console.log(`Test user created: ${username}`)
+  logger.info(`Test user created: ${username}`)
 }
 
 module.exports = {
