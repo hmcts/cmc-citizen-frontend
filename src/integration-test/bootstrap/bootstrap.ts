@@ -63,6 +63,7 @@ async function waitTillHealthy (appURL: string) {
       console.log(`AUTO_ENROLL_INTO_NEW_FEATURE=${process.env.AUTO_ENROLL_INTO_NEW_FEATURE}`)
       console.log(`FEATURE_HELP_WITH_FEES=${process.env.FEATURE_HELP_WITH_FEES}`)
       console.log(`FEATURE_BREATHING_SPACE=${process.env.FEATURE_BREATHING_SPACE}`)
+      console.log(`SMOKE_TEST_CITIZEN_USERNAME=${process.env.SMOKE_TEST_CITIZEN_USERNAME}`)
       return Promise.resolve()
     } else {
       logStartupProblem(response)
@@ -78,13 +79,22 @@ async function waitTillHealthy (appURL: string) {
 async function createSmokeTestsUserIfDoesntExist (username: string, userRole: string, password: string): Promise<void> {
   let bearerToken
   try {
+    console.log(`Authenticate user: ${username} `)
     bearerToken = await IdamClient.authenticateUser(username, password)
   } catch {
     if (!(username || password)) {
       return
     }
-
-    await IdamClient.createUser(username, userRole, password)
+    try {
+      await IdamClient.createUser(username, userRole, password)
+    } catch (err) {
+      console.log(`Error during create user ${username}, `, err)
+      if (err && err.statusCode === 409) {
+        console.log(`ERROR:: User ${username} already exists.`)
+      } else {
+        throw err
+      }
+    }
     bearerToken = await IdamClient.authenticateUser(username, password)
   }
 
@@ -92,10 +102,10 @@ async function createSmokeTestsUserIfDoesntExist (username: string, userRole: st
     await ClaimStoreClient.addRoleToUser(bearerToken, 'cmc-new-features-consent-given')
   } catch (err) {
     if (err && err.statusCode === 409) {
-      console.log('User already has user consent role')
+      console.log(`User ${username} already has user consent role`)
       return
     }
-    console.log('Failed to add user consent role')
+    console.log(`Failed to add user ${username} consent role`)
     throw err
   }
   console.log(`Test user created: ${username}`)
