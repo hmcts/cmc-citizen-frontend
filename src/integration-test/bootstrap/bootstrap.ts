@@ -83,14 +83,14 @@ async function createSmokeTestsUserIfDoesntExist (username: string, userRole: st
     console.log(`Authenticate user: ${username} `)
     bearerToken = await IdamClient.authenticateUser(username, password)
   } catch (error) {
-    logger.warning(`Failed authenticate User for: ${username}`, error)
+    logger.warn(`Failed authenticate User for: ${username}`, error)
     if (!(username || password)) {
       return
     }
     try {
       await IdamClient.createUser(username, userRole, password)
     } catch (err) {
-      logger.warning(`Error during create user ${username}, `, err)
+      logger.warn(`Error during create user ${username}, `, err)
       if (err && err.statusCode === 409) {
         logger.info(`ERROR:: User ${username} already exists.`)
       } else {
