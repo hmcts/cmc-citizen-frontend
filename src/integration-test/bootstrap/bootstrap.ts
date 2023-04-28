@@ -120,7 +120,7 @@ module.exports = {
       if (process.env.IDAM_URL) {
         if (process.env.SMOKE_TEST_CITIZEN_USERNAME) {
           await Promise.all([
-            // createSmokeTestsUserIfDoesntExist(process.env.SMOKE_TEST_CITIZEN_USERNAME, 'citizen', process.env.SMOKE_TEST_USER_PASSWORD),
+            createSmokeTestsUserIfDoesntExist(process.env.SMOKE_TEST_CITIZEN_USERNAME, 'citizen', process.env.SMOKE_TEST_USER_PASSWORD),
             createSmokeTestsUserIfDoesntExist(claimantEmail, 'citizen', process.env.SMOKE_TEST_USER_PASSWORD),
             createSmokeTestsUserIfDoesntExist(defendantEmail, 'citizen', process.env.SMOKE_TEST_USER_PASSWORD)
           ])
