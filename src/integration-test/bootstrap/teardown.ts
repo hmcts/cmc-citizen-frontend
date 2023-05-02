@@ -16,11 +16,12 @@ module.exports = {
         }
       }
     } catch (error) {
-      handleError(error)
+      console.error('Error during teardown, exiting', error)
     }
   }
 }
 
+// @ts-ignore
 function handleError (error) {
   console.log('Error during teardown, exiting', error)
   process.exit(1)

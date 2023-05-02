@@ -5,8 +5,10 @@ import { request } from 'integration-test/helpers/clients/base/request'
 import { RequestResponse } from 'request'
 import { IdamClient } from 'integration-test/helpers/clients/idamClient'
 import { ClaimStoreClient } from 'integration-test/helpers/clients/claimStoreClient'
+import { Logger } from '@hmcts/nodejs-logging'
 
 const citizenAppURL = process.env.CITIZEN_APP_URL
+const logger = Logger.getLogger('idamClient')
 
 class Client {
   static checkHealth (appURL: string): Promise<RequestResponse> {
@@ -78,13 +80,24 @@ async function waitTillHealthy (appURL: string) {
 async function createSmokeTestsUserIfDoesntExist (username: string, userRole: string, password: string): Promise<void> {
   let bearerToken
   try {
+    console.log(`Authenticate user: ${username} `)
     bearerToken = await IdamClient.authenticateUser(username, password)
-  } catch {
+  } catch (error) {
+    logger.warn(`Failed authenticate User for: ${username}`)
+    logger.warn(`Status Code: ${error.statusCode}`)
+    logger.warn(`Status Message: ${error.statusMessage}`)
     if (!(username || password)) {
       return
     }
-
-    await IdamClient.createUser(username, userRole, password)
+    try {
+      await IdamClient.createUser(username, userRole, password)
+    } catch (err) {
+      if (err && err.statusCode === 409) {
+        logger.info(`ERROR:: User ${username} already exists.`)
+      } else {
+        throw err
+      }
+    }
     bearerToken = await IdamClient.authenticateUser(username, password)
   }
 
@@ -92,13 +105,13 @@ async function createSmokeTestsUserIfDoesntExist (username: string, userRole: st
     await ClaimStoreClient.addRoleToUser(bearerToken, 'cmc-new-features-consent-given')
   } catch (err) {
     if (err && err.statusCode === 409) {
-      console.log('User already has user consent role')
+      logger.log(`User ${username} already has user consent role`)
       return
     }
-    console.log('Failed to add user consent role')
+    logger.log(`Failed to add user ${username} consent role`)
     throw err
   }
-  console.log(`Test user created: ${username}`)
+  logger.info(`Test user created: ${username}`)
 }
 
 module.exports = {
