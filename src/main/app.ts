@@ -34,6 +34,7 @@ import { trackCustomEvent } from 'logging/customEventTracker'
 import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 import { Feature as BreathingSpaceFeature } from 'breathing-space/index'
 import { injectGtm } from 'routes/google-tag-manager'
+import { expressCspHeader, INLINE, SELF} from 'express-csp-header'
 
 logger.info('Creating express server object')
 
@@ -57,6 +58,34 @@ const launchDarklyClient = new LaunchDarklyClient()
 
 logger.info('injecting Google Tag Manager')
 app.use(injectGtm)
+// app.use(expressCspHeader({
+//   directives: {
+//     'default-src': [SELF, INLINE,
+//       '*.google-analytics.com',
+//       '*.googletagmanager.com',
+//       '*.google-analytics.com',
+//       '*.g.doubleclick.net',
+//       '*.localhost:35729',
+//       '*.webchat-client.cts'
+//     ],
+//     'script-src': [SELF, INLINE,
+//       '*.google-analytics.com',
+//       '*.googletagmanager.com',
+//       '*.google-analytics.com',
+//       '*.g.doubleclick.net',
+//       '*.localhost:35729',
+//       '*.webchat-client.cts'
+//     ],
+//     'script-src-elem': [SELF, INLINE,
+//       '*.google-analytics.com',
+//       '*.googletagmanager.com',
+//       '*.google-analytics.com',
+//       '*.g.doubleclick.net',
+//       '*.localhost:35729',
+//       '*.webchat-client.cts'
+//     ]
+//   }
+// }));
 
 logger.info('Loading feature toggles')
 const featureToggles = new FeatureToggles(launchDarklyClient)
