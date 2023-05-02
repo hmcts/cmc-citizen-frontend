@@ -26,7 +26,7 @@ export class ContentSecurityPolicy {
       'www.apply-for-probate.service.gov.uk',
       'https://webchat-client.ctsc.hmcts.net'
     ]
-    const connectSrc = [self, '*.gov.uk', 'https://webchat-client.ctsc.hmcts.net', 'wss://webchat.ctsc.hmcts.net', 'https://webchat.ctsc.hmcts.net', '*.google-analytics.com', 'www.google-analytics.com']
+    const connectSrc = [self, '*.gov.uk', 'https://webchat-client.ctsc.hmcts.net', 'wss://webchat.ctsc.hmcts.net', 'https://webchat.ctsc.hmcts.net', '*.google-analytics.com', 'www.google-analytics.com','*.google-analytics.com','*.analytics.google.com']
     const scriptSrcElem = [self, '*.google-analytics.com', 'https://webchat-client.ctsc.hmcts.net', 'wss://webchat.ctsc.hmcts.net', 'https://webchat.ctsc.hmcts.net']
 
     if (this.developmentMode) {
@@ -59,14 +59,18 @@ export class ContentSecurityPolicy {
           'ssl.gstatic.com',
           'www.gstatic.com',
           'stats.g.doubleclick.net',
-          'https://webchat-client.ctsc.hmcts.net'
+          'https://webchat-client.ctsc.hmcts.net',
+          '*.google-analytics.com',
+          '*.analytics.google.com'
         ],
         styleSrc: [
           '\'self\'',
           '\'unsafe-inline\'',
           'https://webchat-client.ctsc.hmcts.net',
           'tagmanager.google.com',
-          'fonts.googleapis.com'
+          'fonts.googleapis.com',
+          '*.google-analytics.com',
+          '*.analytics.google.com'
         ],
         objectSrc: [self],
         frameAncestors: ['\'self\'']

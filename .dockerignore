@@ -25,3 +25,9 @@
 !Dockerfile
 !integration-tests.Dockerfile
 !bin/**
+
+# Yarn 3 files
+!.yarn/**
+!.yarnrc.yml
+.yarn/cache
+.yarn/install-state.gz

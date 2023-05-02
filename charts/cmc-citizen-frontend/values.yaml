@@ -50,6 +50,7 @@ nodejs:
     FEATURE_OCON_ENHANCEMENTS: false
     AUTO_ENROLL_INTO_NEW_FEATURE: true
     FEATURE_BREATHING_SPACE: false
+    FEES_API_KEYWORDS_ENABLE: false
 
   keyVaults:
     cmc:
