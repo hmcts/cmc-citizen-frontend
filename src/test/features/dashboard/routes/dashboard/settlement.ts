@@ -29,7 +29,7 @@ const defendantContext = {
   id: claimStoreServiceMock.sampleClaimObj.defendantId,
   ownMock: override => claimStoreServiceMock.resolveRetrieveByDefendantId(
     claimStoreServiceMock.sampleClaimObj.referenceNumber,
-    this.id,
+    claimStoreServiceMock.sampleClaimObj.defendantId,
     override
   ),
   otherMock: claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList

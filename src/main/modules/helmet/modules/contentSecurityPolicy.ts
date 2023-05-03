@@ -1,7 +1,5 @@
 import * as express from 'express'
-import * as helmet from 'helmet'
-
-const self = '\'self\''
+import { expressCspHeader, INLINE, SELF, NONCE } from 'express-csp-header'
 
 export class ContentSecurityPolicy {
 
@@ -12,68 +10,100 @@ export class ContentSecurityPolicy {
     const inlineJsEnabledBodyClassName = '\'sha256-+6WnXIl4mbFTCARd8N3COQmT3bJJmo32N8q8ZSQAIcU=\''
     const inlineJsWindowGOVUKClassName = '\'sha256-G29/qSW/JHHANtFhlrZVDZW1HOkCDRc78ggbqwwIJ2g=\''
     const additionalClassName = '\'sha256-AaA9Rn5LTFZ5vKyp3xOfFcP4YbyOjvWn2up8IKHVAKk=\''
+    const localHttp = '\'https://localhost:35729\''
+    const localWss = '\'wss://localhost:35729\''
     const scriptSrc = [
       inlineJsEnabledBodyClassName,
-      additionalClassName,
       inlineJsWindowGOVUKClassName,
-      self,
-      '\'unsafe-inline\'',
-      (_req, res) => `'nonce-${res.locals.nonce}'`,
+      additionalClassName,
+      SELF,
+      INLINE,
+      NONCE,
       '*.google-analytics.com',
-      'www.googletagmanager.com',
+      '*.googletagmanager.com',
       'vcc-eu4.8x8.com',
       'vcc-eu4b.8x8.com',
-      'www.apply-for-probate.service.gov.uk',
-      'https://webchat-client.ctsc.hmcts.net'
+      'www.apply-for-probate.service.gov.uk'
     ]
-    const connectSrc = [self, '*.gov.uk', 'https://webchat-client.ctsc.hmcts.net', 'wss://webchat.ctsc.hmcts.net', 'https://webchat.ctsc.hmcts.net', '*.google-analytics.com', 'www.google-analytics.com','*.google-analytics.com','*.analytics.google.com']
-    const scriptSrcElem = [self, '*.google-analytics.com', 'https://webchat-client.ctsc.hmcts.net', 'wss://webchat.ctsc.hmcts.net', 'https://webchat.ctsc.hmcts.net']
+    const scriptSrcElem = [
+      SELF,
+      INLINE,
+      '*.google-analytics.com',
+      '*.googletagmanager.com'
+    ]
+    const connectSrc = [
+      SELF,
+      INLINE,
+      '*.gov.uk',
+      '*.google-analytics.com',
+      '*.analytics.google.com'
+    ]
+    const imgSrc = [
+      SELF,
+      INLINE,
+      '*.google-analytics.com',
+      '*.analytics.google.com',
+      'vcc-eu4.8x8.com',
+      'vcc-eu4b.8x8.com',
+      'ssl.gstatic.com',
+      'www.gstatic.com',
+      'stats.g.doubleclick.net'
+    ]
+    const styleSrc = [
+      SELF,
+      INLINE,
+      'tagmanager.google.com',
+      'fonts.googleapis.com',
+      '*.google-analytics.com',
+      '*.analytics.google.com'
+    ]
+    const mediaSrc = [
+      SELF,
+      INLINE,
+      'vcc-eu4.8x8.com',
+      'vcc-eu4b.8x8.com',
+      'ssl.gstatic.com',
+      'www.gstatic.com',
+      'stats.g.doubleclick.net',
+      '*.google-analytics.com',
+      '*.analytics.google.com'
+    ]
 
     if (this.developmentMode) {
-      scriptSrc.push('https://localhost:35729')
-      connectSrc.push('wss://localhost:35729')
+      scriptSrc.push(localHttp)
+      connectSrc.push(localWss)
+      scriptSrcElem.push(localHttp)
     }
 
-    app.use(helmet.contentSecurityPolicy({
+    app.use(expressCspHeader({
       directives: {
-        defaultSrc: [
-          '\'self\''
+        'default-src': [
+          SELF,
+          INLINE
         ],
-        fontSrc: [
+        'script-src': scriptSrc,
+        'script-src-elem': scriptSrcElem,
+        'img-src': imgSrc,
+        'style-src': styleSrc,
+        'connect-src': connectSrc,
+        'font-src': [
           '\'self\' data:',
-          'fonts.gstatic.com'
+          'fonts.gstatic.com',
+          INLINE
         ],
-        scriptSrc: scriptSrc,
-        scriptSrcElem: scriptSrcElem,
-        connectSrc: connectSrc,
-        mediaSrc: ['\'self\''],
-        frameSrc: [
+        'media-src': mediaSrc,
+        'frame-src': [
+          INLINE,
           'vcc-eu4.8x8.com',
           'vcc-eu4b.8x8.com'
         ],
-        imgSrc: [
-          '\'self\'',
-          '*.google-analytics.com',
-          'vcc-eu4.8x8.com',
-          'vcc-eu4b.8x8.com',
-          'ssl.gstatic.com',
-          'www.gstatic.com',
-          'stats.g.doubleclick.net',
-          'https://webchat-client.ctsc.hmcts.net',
-          '*.google-analytics.com',
-          '*.analytics.google.com'
+        'object-src': [
+          SELF,
+          INLINE
         ],
-        styleSrc: [
-          '\'self\'',
-          '\'unsafe-inline\'',
-          'https://webchat-client.ctsc.hmcts.net',
-          'tagmanager.google.com',
-          'fonts.googleapis.com',
-          '*.google-analytics.com',
-          '*.analytics.google.com'
-        ],
-        objectSrc: [self],
-        frameAncestors: ['\'self\'']
+        'frame-ancestors': [
+          SELF
+        ]
       },
       reportOnly: false
     }))

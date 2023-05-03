@@ -90,6 +90,7 @@ export class StatementOfMeansTask {
       }
 
       const defendantIsDisabled: boolean = statementOfMeans.disability.option === DisabilityOption.YES
+      // @ts-ignore
       const defendantIsSeverelyDisabled: boolean = defendantIsDisabled && statementOfMeans.severeDisability === SevereDisabilityOption.YES
 
       if (defendantIsDisabled && !isValid(statementOfMeans.partnerDisability)) {
