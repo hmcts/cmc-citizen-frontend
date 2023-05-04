@@ -69,6 +69,18 @@
     <p>{{ t("2 Jan - Closed")}}</p>
     <p>{{ t("3 Jan - 8.30am - 5.00pm (Normal Times)")}}</p>
   {% endif %}
+  {% if (toDate() < toDate("2023-05-09") and toDate() >= toDate("2023-04-28")) %}
+      <h2 class="heading-medium contact-us"> {{ t('May Bank Holiday Opening Times')}}</h2>
+      <p>{{ t("1 May - Closed")}}</p>
+      <p>{{ t("2 May - 8.30am - 5.00pm (Normal Times)")}}</p>
+      <p>{{ t("3 May - 8.30am - 5.00pm (Normal Times)")}}</p>
+      <p>{{ t("4 May - 8.30am - 5.00pm (Normal Times)")}}</p>
+      <p>{{ t("5 May - 8.30am - 5.00pm (Normal Times)")}}</p>
+      <p>{{ t("6 May - Closed")}}</p>
+      <p>{{ t("7 May - Closed")}}</p>
+      <p>{{ t("8 May - Closed")}}</p>
+      <p>{{ t("9 May - 8.30am - 5.00pm (Normal Times)")}}</p>
+  {% endif %}
 {% endmacro %}
 
 {% macro supportWidget(label = 'Help and support') %}
@@ -83,11 +95,13 @@
 {% macro supportWidget(label = 'Email') %}
     {{ _emailWidget('contactocmc@justice.gov.uk') }}
     {{ _phoneWidget('0300 123 7050') }}
+    {{ _holidayWidget() }}
 {% endmacro %}
 
 {% macro supportWidgetaccessibility(label = 'Email') %}
     {{ _emailWidget('HMCTSforms@justice.gov.uk') }}
     {{ _phoneWidget('0300 123 7050') }}
+    {{ _holidayWidget() }}
 {% endmacro %}
 
 {% macro supportWidgetContactus(label = 'Email') %}
