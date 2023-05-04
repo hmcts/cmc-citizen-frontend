@@ -3,8 +3,6 @@ import { CompletableTask } from 'models/task'
 
 import { Address as ClaimAddress } from 'claims/models/address'
 import * as toBoolean from 'to-boolean'
-// import { IsCountrySupported } from 'forms/validation/validators/isCountrySupported'
-// import { Country } from 'common/country'
 import { IsNotBlank, IsValidPostcode, ExtraFormFieldsArePopulated } from '@hmcts/cmc-validators'
 
 const validator: Validator = new Validator()
@@ -22,9 +20,6 @@ export class ValidationErrors {
   static readonly POSTCODE_REQUIRED: string = 'Enter postcode'
   static readonly POSTCODE_NOT_VALID: string = 'Postcode must be in United Kingdom'
   static readonly ADDRESS_DROPDOWN_REQUIRED: string = 'Select an address'
-  static readonly CLAIMANT_COUNTRY_NOT_SUPPORTED = 'Postcode must be in United Kingdom'
-  static readonly DEFENDANT_COUNTRY_NOT_SUPPORTED = 'Postcode must be in England or Wales'
-
 }
 
 export class ValidationConstants {
@@ -68,19 +63,10 @@ export class Address implements CompletableTask {
   @ValidateIf(o => o.addressVisible, { groups: ['claimant', 'defendant', 'response'] })
   @IsDefined({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @IsNotBlank({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
-  /* @IsCountrySupported(Country.all(), { message: ValidationErrors.CLAIMANT_COUNTRY_NOT_SUPPORTED, groups: ['claimant'] })
-  @IsCountrySupported(Country.defendantCountries(), {
-    message: ValidationErrors.DEFENDANT_COUNTRY_NOT_SUPPORTED,
-    groups: ['defendant', 'response']
-  }) */
   @IsValidPostcode({
     message: ValidationErrors.POSTCODE_NOT_VALID,
     groups: ['claimant']
-  }) /*
-  @IsValidPostcode({
-    message: ValidationErrors.DEFENDANT_COUNTRY_NOT_SUPPORTED,
-    groups: ['defendant', 'response']
-  }) */
+  })
   postcode?: string
 
   @ValidateIf(o => !o.addressVisible && !o.addressSelectorVisible, { groups: ['claimant', 'defendant', 'response'] })
