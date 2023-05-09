@@ -1252,7 +1252,7 @@ export function resolveCreateClaimCitizen (claimOverride?: object): mock.Scope {
 
 export function resolveSaveOrder () {
   const expectedData = {
-    sampleClaimIssueObj,
+    ...sampleClaimIssueObj,
     reviewOrder: {
       reason: 'some reason',
       requestedBy: MadeBy.CLAIMANT,
