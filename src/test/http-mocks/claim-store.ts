@@ -701,12 +701,14 @@ export const partySettlementWithSetDateAndAcceptation = {
 
 export const settlementAndSettlementReachedAt: object = {
   settlementReachedAt: '2017-07-25T22:45:51.785',
+  // @ts-ignore
   ...this.settlementWithInstalmentsAndAcceptation
 
 }
 
 export const settlementBySetDateAndSettlementReachedAt: object = {
   settlementReachedAt: '2017-07-25T22:45:51.785',
+  // @ts-ignore
   ...this.settlementWithSetDateAndAcceptation
 
 }
@@ -832,6 +834,7 @@ export const samplePaginationInfoObj = {
 }
 
 export const sampleDefendantResponseAlreadyPaidWithMediationObj = {
+  // @ts-ignore
   ...this.sampleClaimIssueObj,
   respondedAt: '2017-07-25T22:45:51.785',
   response: {
@@ -858,6 +861,7 @@ export const sampleDefendantResponseAlreadyPaidWithMediationObj = {
 }
 
 export const sampleDefendantResponseAlreadyPaidWithNoMediationObj = {
+  // @ts-ignore
   ...this.sampleClaimIssueObj,
   respondedAt: '2017-07-25T22:45:51.785',
   response: {
@@ -884,6 +888,7 @@ export const sampleDefendantResponseAlreadyPaidWithNoMediationObj = {
 }
 
 export const samplePartialAdmissionWithPaymentBySetDateResponseObj = {
+  // @ts-ignore
   ...this.sampleClaimIssueObj,
   respondedAt: '2017-07-25T22:45:51.785',
   claimantRespondedAt: '2017-07-25T22:45:51.785',
@@ -955,6 +960,7 @@ export const sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithUnReasona
 }
 
 export const sampleFullDefenceRejectEntirely = {
+  // @ts-ignore
   ...this.sampleClaimIssueObj,
   respondedAt: '2017-07-25T22:45:51.785',
   response: defenceWithDisputeData
@@ -1246,7 +1252,7 @@ export function resolveCreateClaimCitizen (claimOverride?: object): mock.Scope {
 
 export function resolveSaveOrder () {
   const expectedData = {
-    ...this.sampleClaimIssueObj,
+    sampleClaimIssueObj,
     reviewOrder: {
       reason: 'some reason',
       requestedBy: MadeBy.CLAIMANT,

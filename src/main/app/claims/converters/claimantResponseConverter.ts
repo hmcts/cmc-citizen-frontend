@@ -1,5 +1,5 @@
-import { DraftClaimantResponse } from 'features/claimant-response/draft/draftClaimantResponse.ts'
-import { ResponseRejection } from 'claims/models/response/core/responseRejection.ts'
+import { DraftClaimantResponse } from 'features/claimant-response/draft/draftClaimantResponse'
+import { ResponseRejection } from 'claims/models/response/core/responseRejection'
 import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
 import { ClaimantResponse } from 'claims/models/response/core/claimantResponse'
 import { ResponseAcceptance } from 'claims/models/response/core/responseAcceptance'

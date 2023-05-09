@@ -31,6 +31,7 @@ export default express.Router()
 
         draft.document.otherWitnesses = form.model
 
+        // @ts-ignore
         if (draft.document.otherWitnesses.otherWitnesses === false) {
           draft.document.otherWitnesses.howMany = undefined
         }
