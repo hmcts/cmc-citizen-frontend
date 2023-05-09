@@ -33,9 +33,9 @@ nodejs:
     UV_THREADPOOL_SIZE: 64
 
     GA_TRACKING_ID: UA-00000000-0
-    SERVICE_SURVEY_URL: http://www.smartsurvey.co.uk/s/not-a-real-citizen-service-survey/
-    FEEDBACK_SURVEY_URL: http://www.smartsurvey.co.uk/s/not-a-real-citizen-service-survey/
-    REPORT_PROBLEM_SURVEY_URL: http://www.smartsurvey.co.uk/s/not-a-real-citizen-service-survey/
+    SERVICE_SURVEY_URL: https://www.smartsurvey.co.uk/s/CMC_Feedback/?pageurl=/eligibility
+    FEEDBACK_SURVEY_URL: https://www.smartsurvey.co.uk/s/CMC_Feedback/?pageurl=/eligibility
+    REPORT_PROBLEM_SURVEY_URL: https://www.smartsurvey.co.uk/s/CMC_Feedback/?pageurl=/eligibility
 
     # feature toggles should be removed when they are no longer needed
     # add them here if they are to be enabled everywhere
