@@ -3063,7 +3063,7 @@ __metadata:
     tslint: ^5.20.1
     tslint-config-standard: ^9.0.0
     tslint-microsoft-contrib: ^6.2.0
-    typescript: ^4.6 4
+    typescript: ^4.6.4
     urlencode: ^1.1.0
     urllib3: ^0.0.1
     uuid: ^3.4.0
@@ -12720,7 +12720,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^4.6 4":
+"typescript@npm:^4.6.4":
   version: 4.9.5
   resolution: "typescript@npm:4.9.5"
   bin:
@@ -12730,7 +12730,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^4.6 4#~builtin<compat/typescript>":
+"typescript@patch:typescript@^4.6.4#~builtin<compat/typescript>":
   version: 4.9.5
   resolution: "typescript@patch:typescript@npm%3A4.9.5#~builtin<compat/typescript>::version=4.9.5&hash=23ec76"
   bin:
