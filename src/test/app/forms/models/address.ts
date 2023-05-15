@@ -36,7 +36,7 @@ describe('Address/CorrespondenceAddress', () => {
 
     describe('constructor', () => {
       it('should set primitive type fields to undefined', () => {
-        let address = new ClassFunction()
+        const address = new ClassFunction()
         expect(address.line1).to.be.undefined
         expect(address.line2).to.be.undefined
         expect(address.line3).to.be.undefined
@@ -55,7 +55,7 @@ describe('Address/CorrespondenceAddress', () => {
       })
 
       it('should return a Address instance with set fields from given object', () => {
-        let result = new ClassFunction().deserialize({
+        const result = new ClassFunction().deserialize({
           line1: 'AddressLine1',
           line2: 'AddressLine2',
           line3: 'AddressLine3',

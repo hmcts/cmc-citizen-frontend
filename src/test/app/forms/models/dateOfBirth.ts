@@ -116,7 +116,7 @@ describe('DateOfBirth', () => {
 
   describe('constructor', () => {
     it('should set fields to undefined', () => {
-      let dateOfBirth = new DateOfBirth()
+      const dateOfBirth = new DateOfBirth()
       expect(dateOfBirth.known).to.be.undefined
       expect(dateOfBirth.date).to.be.undefined
     })
@@ -132,7 +132,7 @@ describe('DateOfBirth', () => {
     })
 
     it('should set the values of given json on the deserialized instance', () => {
-      let deserialized = new DateOfBirth().deserialize({
+      const deserialized = new DateOfBirth().deserialize({
         known: true,
         date: {
           day: 10,

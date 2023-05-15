@@ -32,7 +32,7 @@ export class PaymentPlanHelper {
 
     switch (responseType) {
       case ResponseType.PART_ADMISSION:
-        let partialAdmissionResponse = response as PartialAdmissionResponse
+        const partialAdmissionResponse = response as PartialAdmissionResponse
         return PaymentPlanHelper.createPaymentPlanFromClaimAdmission(partialAdmissionResponse,
           partialAdmissionResponse.amount,
           draft

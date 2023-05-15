@@ -11,7 +11,7 @@ describe('TransferContents', () => {
   describe('constructor', () => {
 
     it('should set the primitive fields to undefined', () => {
-      let transferContents = new TransferContents()
+      const transferContents = new TransferContents()
       expect(transferContents.dateOfTransfer).to.be.undefined
       expect(transferContents.reasonForTransfer).to.be.undefined
       expect(transferContents.hearingCourtName).to.be.undefined
@@ -30,28 +30,28 @@ describe('TransferContents', () => {
     })
 
     it('should return a TransferContents instance with set field "dateOfTransfer" from given object', () => {
-      let result = new TransferContents().deserialize({
+      const result = new TransferContents().deserialize({
         dateOfTransfer: '2020-01-01'
       })
       expect(result.dateOfTransfer.toISOString()).to.be.deep.equal(MomentFactory.parse('2020-01-01').toISOString())
     })
 
     it('should return a TransferContents instance with set field "reasonForTransfer" from given object', () => {
-      let result = new TransferContents().deserialize({
+      const result = new TransferContents().deserialize({
         reasonForTransfer: 'Reason'
       })
       expect(result.reasonForTransfer).to.be.equals('Reason')
     })
 
     it('should return a TransferContents instance with set field "hearingCourtName" from given object', () => {
-      let result = new TransferContents().deserialize({
+      const result = new TransferContents().deserialize({
         hearingCourtName: 'Hearing Court Name'
       })
       expect(result.hearingCourtName).to.be.equals('Hearing Court Name')
     })
 
     it('should return a TransferContents instance with set field "hearingCourtAddress" from given object', () => {
-      let result = new TransferContents().deserialize({
+      const result = new TransferContents().deserialize({
         hearingCourtAddress: {
           line1: 'first line',
           postcode: 'bb127nq'

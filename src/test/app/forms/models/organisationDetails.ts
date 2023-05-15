@@ -37,7 +37,7 @@ describe('OrganisationDetails', () => {
 
   describe('constructor', () => {
     it('should initialise fields with defaults', () => {
-      let organisationDetails: OrganisationDetails = new OrganisationDetails()
+      const organisationDetails: OrganisationDetails = new OrganisationDetails()
       expect(organisationDetails.address).to.be.instanceOf(Address)
       expect(organisationDetails.correspondenceAddress).to.be.instanceOf(Address)
       expect(organisationDetails.type).to.equal(PartyType.ORGANISATION.value)
@@ -56,25 +56,25 @@ describe('OrganisationDetails', () => {
 
     it('should return error when address is undefined', () => {
       organisationDetails.address = undefined
-      let errors: ValidationError[] = validator.validateSync(organisationDetails)
+      const errors: ValidationError[] = validator.validateSync(organisationDetails)
       expectValidationError(errors, PartydDetailsValidationErrors.ADDRESS_REQUIRED)
     })
 
     it('should return errors when required address fields are missing', () => {
-      let errors: ValidationError[] = validator.validateSync(organisationDetails)
+      const errors: ValidationError[] = validator.validateSync(organisationDetails)
       expectValidationError(errors, AddressValidationErrors.FIRST_LINE_REQUIRED)
       expectValidationError(errors, AddressValidationErrors.POSTCODE_REQUIRED)
     })
 
     it('should return error when company name is undefined', () => {
       organisationDetails.name = undefined
-      let errors: ValidationError[] = validator.validateSync(organisationDetails)
+      const errors: ValidationError[] = validator.validateSync(organisationDetails)
       expectValidationError(errors, PartydDetailsValidationErrors.NAME_REQUIRED)
     })
 
     it('should return error when company name is blank', () => {
       organisationDetails.name = '  '
-      let errors: ValidationError[] = validator.validateSync(organisationDetails)
+      const errors: ValidationError[] = validator.validateSync(organisationDetails)
       expectValidationError(errors, PartydDetailsValidationErrors.NAME_REQUIRED)
     })
 
@@ -82,7 +82,7 @@ describe('OrganisationDetails', () => {
       organisationDetails.name = generateString(256)
       organisationDetails.contactPerson = 'contactPerson'
       organisationDetails.address = validAddress
-      let errors: ValidationError[] = validator.validateSync(organisationDetails)
+      const errors: ValidationError[] = validator.validateSync(organisationDetails)
       expectValidationError(errors, PartydDetailsValidationErrors.NAME_TOO_LONG.replace('$constraint1', '255'))
     })
 
@@ -90,7 +90,7 @@ describe('OrganisationDetails', () => {
       organisationDetails.contactPerson = generateString(OrganisationDetailsValidationConstraints.CONTACT_PERSON_MAX_LENGTH + 1)
       organisationDetails.name = 'claimantPerson'
       organisationDetails.address = validAddress
-      let errors: ValidationError[] = validator.validateSync(organisationDetails)
+      const errors: ValidationError[] = validator.validateSync(organisationDetails)
       expectValidationError(errors, OrganisationDetailsValidationErrors.CONTACT_PERSON_NAME_TOO_LONG.replace('$constraint1', '30'))
     })
 
@@ -104,19 +104,19 @@ describe('OrganisationDetails', () => {
 
       it('should return error when correspondence address is undefined', () => {
         organisationDetails.correspondenceAddress = undefined
-        let errors: ValidationError[] = validator.validateSync(organisationDetails)
+        const errors: ValidationError[] = validator.validateSync(organisationDetails)
         expectValidationError(errors, PartydDetailsValidationErrors.CORRESPONDENCE_ADDRESS_REQUIRED)
       })
 
       it('should return errors when correspondence address required fields are missing', () => {
-        let errors: ValidationError[] = validator.validateSync(organisationDetails)
+        const errors: ValidationError[] = validator.validateSync(organisationDetails)
         expectValidationError(errors, CorrespondenceAddressValidationErrors.FIRST_LINE_REQUIRED)
         expectValidationError(errors, CorrespondenceAddressValidationErrors.POSTCODE_REQUIRED)
       })
 
       it('should return no errors when correspondence address is provided', () => {
         organisationDetails.correspondenceAddress = validAddress
-        let result = validator.validateSync(organisationDetails)
+        const result = validator.validateSync(organisationDetails)
         expect(result.length).to.equal(0)
       })
     })
@@ -127,7 +127,7 @@ describe('OrganisationDetails', () => {
         organisationDetails.hasCorrespondenceAddress = false
         organisationDetails.contactPerson = 'ClaimantName'
         organisationDetails.name = 'test'
-        let error = validator.validateSync(organisationDetails)
+        const error = validator.validateSync(organisationDetails)
         expect(error.length).to.equal(0)
       })
     })
@@ -135,7 +135,7 @@ describe('OrganisationDetails', () => {
 
   describe('deserialize', () => {
     it('should return object initialized with default values when given undefined', () => {
-      let deserialized: OrganisationDetails = new OrganisationDetails().deserialize(undefined)
+      const deserialized: OrganisationDetails = new OrganisationDetails().deserialize(undefined)
       expect(deserialized.address).to.be.instanceOf(Address)
       expect(deserialized.hasCorrespondenceAddress).to.equal(false)
       expect(deserialized.correspondenceAddress).to.be.instanceOf(Address)
@@ -144,7 +144,7 @@ describe('OrganisationDetails', () => {
     })
 
     it('should return object with values set from provided input json', () => {
-      let deserialized: OrganisationDetails = new OrganisationDetails().deserialize(input)
+      const deserialized: OrganisationDetails = new OrganisationDetails().deserialize(input)
       expect(deserialized.address.line1).to.equal('first line')
       expect(deserialized.address.postcode).to.equal('bb127nq')
       expect(deserialized.hasCorrespondenceAddress).to.equal(true)
@@ -162,7 +162,7 @@ describe('OrganisationDetails', () => {
     })
 
     it('should deserialize all fields', () => {
-      let deserialized: OrganisationDetails = OrganisationDetails.fromObject(formInput)
+      const deserialized: OrganisationDetails = OrganisationDetails.fromObject(formInput)
       expect(deserialized.address.line1).to.equal('first line')
       expect(deserialized.address.postcode).to.equal('bb127nq')
       expect(deserialized.hasCorrespondenceAddress).to.equal(true)
@@ -176,7 +176,7 @@ describe('OrganisationDetails', () => {
     it('should set correspondence address to undefined if "has correspondence address flag is set to false"', () => {
       formInput.hasCorrespondenceAddress = 'false'
 
-      let deserialized: OrganisationDetails = OrganisationDetails.fromObject(formInput)
+      const deserialized: OrganisationDetails = OrganisationDetails.fromObject(formInput)
 
       expect(deserialized.correspondenceAddress).to.equal(undefined)
     })

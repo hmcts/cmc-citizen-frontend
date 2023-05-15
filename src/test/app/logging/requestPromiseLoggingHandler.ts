@@ -15,7 +15,7 @@ describe('RequestLoggingHandler', () => {
   let options
 
   /* tslint:disable:no-empty allow empty for mocking */
-  let requestPromise = {
+  const requestPromise = {
     get: (options) => { },
     post: (options) => { },
     put: (options) => { },
@@ -26,7 +26,7 @@ describe('RequestLoggingHandler', () => {
     another: (options) => { }
   }
 
-  let apiLogger = {
+  const apiLogger = {
     logRequest: (requestData) => { },
     logResponse: (responseData) => { }
   }

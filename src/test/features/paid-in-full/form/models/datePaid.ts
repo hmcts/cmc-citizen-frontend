@@ -88,7 +88,7 @@ describe('DatePaid', () => {
 
   describe('constructor', () => {
     it('should set fields to undefined', () => {
-      let datePaid = new DatePaid()
+      const datePaid = new DatePaid()
       expect(datePaid.date).to.be.undefined
     })
   })
@@ -103,7 +103,7 @@ describe('DatePaid', () => {
     })
 
     it('should set the values of given json on the deserialized instance', () => {
-      let deserialized = new DatePaid().deserialize({
+      const deserialized = new DatePaid().deserialize({
         known: true,
         date: {
           day: 10,

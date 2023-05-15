@@ -31,13 +31,13 @@ describe('PartyDetails', () => {
 
   describe('constructor', () => {
     it('should initialise object fields with new instances', () => {
-      let partyDetails: PartyDetails = new PartyDetails()
+      const partyDetails: PartyDetails = new PartyDetails()
       expect(partyDetails.address).to.be.instanceOf(Address)
       expect(partyDetails.correspondenceAddress).to.be.instanceOf(Address)
     })
 
     it('should initialise hasCorrespondenceAddress to false by default', () => {
-      let partyDetails: PartyDetails = new PartyDetails()
+      const partyDetails: PartyDetails = new PartyDetails()
       expect(partyDetails.hasCorrespondenceAddress).to.equal(false)
     })
   })
@@ -52,12 +52,12 @@ describe('PartyDetails', () => {
 
     it('should return error when address is undefined', () => {
       partyDetails.address = undefined
-      let errors: ValidationError[] = validator.validateSync(partyDetails)
+      const errors: ValidationError[] = validator.validateSync(partyDetails)
       expectValidationError(errors, ValidationErrors.ADDRESS_REQUIRED)
     })
 
     it('should return errors when required address fields are missing', () => {
-      let errors: ValidationError[] = validator.validateSync(partyDetails)
+      const errors: ValidationError[] = validator.validateSync(partyDetails)
       expectValidationError(errors, AddressValidationErrors.FIRST_LINE_REQUIRED)
       expectValidationError(errors, AddressValidationErrors.CITY_REQUIRED)
       expectValidationError(errors, AddressValidationErrors.POSTCODE_REQUIRED)
@@ -71,19 +71,19 @@ describe('PartyDetails', () => {
 
       it('should return error when correspondence address is undefined', () => {
         partyDetails.correspondenceAddress = undefined
-        let errors: ValidationError[] = validator.validateSync(partyDetails)
+        const errors: ValidationError[] = validator.validateSync(partyDetails)
         expectValidationError(errors, ValidationErrors.CORRESPONDENCE_ADDRESS_REQUIRED)
       })
 
       it('should return errors when correspondence address required fields are missing', () => {
-        let errors: ValidationError[] = validator.validateSync(partyDetails)
+        const errors: ValidationError[] = validator.validateSync(partyDetails)
         expectValidationError(errors, CorrespondenceAddressValidationErrors.FIRST_LINE_REQUIRED)
         expectValidationError(errors, CorrespondenceAddressValidationErrors.CITY_REQUIRED)
         expectValidationError(errors, CorrespondenceAddressValidationErrors.POSTCODE_REQUIRED)
       })
 
       it('should return errors when correspondence address fields have too long values', () => {
-        let errors: ValidationError[] = validator.validateSync(partyDetails)
+        const errors: ValidationError[] = validator.validateSync(partyDetails)
         expectValidationError(errors, CorrespondenceAddressValidationErrors.FIRST_LINE_REQUIRED)
         expectValidationError(errors, CorrespondenceAddressValidationErrors.CITY_REQUIRED)
         expectValidationError(errors, CorrespondenceAddressValidationErrors.POSTCODE_REQUIRED)
@@ -108,14 +108,14 @@ describe('PartyDetails', () => {
 
   describe('deserialize', () => {
     it('should return object initialized with default values when given undefined', () => {
-      let deserialized: PartyDetails = new PartyDetails().deserialize(undefined)
+      const deserialized: PartyDetails = new PartyDetails().deserialize(undefined)
       expect(deserialized.address).to.be.instanceOf(Address)
       expect(deserialized.hasCorrespondenceAddress).to.equal(false)
       expect(deserialized.correspondenceAddress).to.be.instanceOf(Address)
     })
 
     it('should return object with values set from provided input json', () => {
-      let deserialized: PartyDetails = new PartyDetails().deserialize(input)
+      const deserialized: PartyDetails = new PartyDetails().deserialize(input)
       expect(deserialized.address.line1).to.equal('first line')
       expect(deserialized.address.postcode).to.equal('bb127nq')
       expect(deserialized.hasCorrespondenceAddress).to.equal(true)
@@ -131,7 +131,7 @@ describe('PartyDetails', () => {
     })
 
     it('should deserialize all fields', () => {
-      let deserialized: PartyDetails = PartyDetails.fromObject(formInput)
+      const deserialized: PartyDetails = PartyDetails.fromObject(formInput)
       expect(deserialized.address.line1).to.equal('first line')
       expect(deserialized.address.postcode).to.equal('bb127nq')
       expect(deserialized.hasCorrespondenceAddress).to.equal(true)
@@ -144,7 +144,7 @@ describe('PartyDetails', () => {
     it('should set correspondence address to undefined if "has correspondence address flag is set to false"', () => {
       formInput.hasCorrespondenceAddress = 'false'
 
-      let deserialized: PartyDetails = PartyDetails.fromObject(formInput)
+      const deserialized: PartyDetails = PartyDetails.fromObject(formInput)
 
       expect(deserialized.correspondenceAddress).to.equal(undefined)
     })

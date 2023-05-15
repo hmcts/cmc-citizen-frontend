@@ -4,7 +4,7 @@ import { IsTodayOrInFuture } from 'forms/validation/validators/isTodayOrInFuture
 
 export class ValidationErrors {
   static readonly DATE_NOT_VALID: string = 'Please enter a valid date'
-  static readonly DATE_TODAY_OR_IN_FUTURE: string = "Expected end date must not be before today's date"
+  static readonly DATE_TODAY_OR_IN_FUTURE: string = 'Expected end date must not be before today\'s date'
 }
 
 export class BreathingSpaceRespiteEnd {

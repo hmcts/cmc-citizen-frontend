@@ -13,7 +13,7 @@ import { Draft } from '@hmcts/draft-store-client'
 /*  tslint:disable:no-default-export */
 export default express.Router()
     .get(Paths.bsLiftCheckAnswersPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      let draft: Draft<DraftClaim> = res.locals.Draft
+      const draft: Draft<DraftClaim> = res.locals.Draft
       let breathingSpaceLiftedData: any
       let breathingSpaceExternalId: any
       if (draft.document.breathingSpace !== undefined) {
@@ -30,8 +30,8 @@ export default express.Router()
       Paths.bsLiftCheckAnswersPage.uri,
       FormValidator.requestHandler(BreathingSpaceLiftDate),
       ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-        let draftBS: Draft<DraftClaim> = res.locals.Draft
-        let draft: DraftClaim = new DraftClaim()
+        const draftBS: Draft<DraftClaim> = res.locals.Draft
+        const draft: DraftClaim = new DraftClaim()
         try {
           draft.breathingSpace.breathingSpaceLiftedFlag = 'Yes'
           draft.breathingSpace.breathingSpaceExternalId = draftBS.document.breathingSpace.breathingSpaceExternalId

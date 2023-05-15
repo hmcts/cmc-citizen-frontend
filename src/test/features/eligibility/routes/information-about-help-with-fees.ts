@@ -21,7 +21,7 @@ describe('Claim eligibility: information about help with fees', () => {
   context('on GET', () => {
     checkAuthorizationMiddleware(app, 'get', pagePath)
 
-    it("should render page with 'Some useful information about Help with Fees' ", async () => {
+    it('should render page with \'Some useful information about Help with Fees\' ', async () => {
 
       await request(app)
         .get(pagePath)
@@ -39,7 +39,7 @@ describe('Claim eligibility: information about help with fees', () => {
         .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage, 'div class="error-summary"'))
     })
 
-    it("should display the 'help with fees page' page when NO is submitted", async () => {
+    it('should display the \'help with fees page\' page when NO is submitted', async () => {
 
       await request(app)
         .post(pagePath)
@@ -47,7 +47,7 @@ describe('Claim eligibility: information about help with fees', () => {
         .expect(res => expect(res).to.be.redirect.toLocation(pageRedirect))
     })
 
-    it("should display the 'apply for help with fees' page when YES is submitted", async () => {
+    it('should display the \'apply for help with fees\' page when YES is submitted', async () => {
 
       await request(app)
         .post(pagePath)

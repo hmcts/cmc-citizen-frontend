@@ -21,7 +21,7 @@ describe('Claim eligibility: help with fees reference number page', () => {
   context('on GET', () => {
     checkAuthorizationMiddleware(app, 'get', pagePath)
 
-    it("Should render page with 'Do you have a Help With Fees reference number?' ", async () => {
+    it('Should render page with \'Do you have a Help With Fees reference number?\' ', async () => {
 
       await request(app)
         .get(pagePath)

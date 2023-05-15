@@ -26,7 +26,7 @@ describe('DateNotInFutureConstraint', () => {
       })
 
       it('given today date', () => {
-        let now = moment()
+        const now = moment()
         expect(constraint.validate(new LocalDate(now.year(), now.month() + 1, now.date()))).to.equal(true)
       })
     })
@@ -38,7 +38,7 @@ describe('DateNotInFutureConstraint', () => {
       })
 
       it('given a valid date in the future', () => {
-        let inFuture = moment().add(10, 'years')
+        const inFuture = moment().add(10, 'years')
         expect(constraint.validate(new LocalDate(inFuture.year(), 1, 1))).to.equal(false)
       })
     })

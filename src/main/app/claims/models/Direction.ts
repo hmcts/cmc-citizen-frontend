@@ -18,7 +18,7 @@ export namespace Direction {
       return input
     }
 
-    let directions = []
+    const directions = []
     _.each(input, function (eachDirection) {
       directions.push({
         directionParty: eachDirection.directionParty,

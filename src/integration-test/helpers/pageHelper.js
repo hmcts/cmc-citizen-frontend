@@ -12,7 +12,7 @@ function normalizeURL (url) {
 const citizenAppBaseURL = normalizeURL(process.env.CITIZEN_APP_URL || 'https://localhost:3000')
 
 // eslint-disable-next-line camelcase
-let Helper = codecept_helper
+const Helper = codecept_helper
 
 // eslint-disable-next-line no-unused-vars
 class PageHelper extends Helper {

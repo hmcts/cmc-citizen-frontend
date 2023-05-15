@@ -43,8 +43,8 @@ export default express.Router()
       const user: User = res.locals.user
 
       if (form.model.amount > claim.totalAmountTillToday) {
-        let totalAmount: string = NumberFormatter.formatMoney(claim.totalAmountTillToday)
-        let error = new ValidationError()
+        const totalAmount: string = NumberFormatter.formatMoney(claim.totalAmountTillToday)
+        const error = new ValidationError()
         error.property = 'amount'
         error.constraints = { amount: 'Enter a valid amount between £1 and ' + totalAmount }
         form.errors.push(new FormValidationError(error))

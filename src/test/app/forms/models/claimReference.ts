@@ -12,7 +12,7 @@ describe('ClaimReference', () => {
 
   describe('constructor', () => {
     it('should have the primitive field set to undefined', () => {
-      let claimReference = new ClaimReference()
+      const claimReference = new ClaimReference()
       expect(claimReference.reference).to.be.undefined
     })
   })
@@ -27,7 +27,7 @@ describe('ClaimReference', () => {
     })
 
     it('should return a ClaimReference instance with set fields from given object', () => {
-      let result = new ClaimReference().deserialize({
+      const result = new ClaimReference().deserialize({
         reference: '000MC001'
       })
       expect(result.reference).to.equal('000MC001')

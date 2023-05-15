@@ -40,7 +40,7 @@ export class Feature {
           const drafts = await new DraftService().find('bs', '100', res.locals.user.bearerToken, (value) => value)
           res.locals.Draft = drafts.length !== 0 ? drafts[drafts.length - 1] : res.locals.bsDraft
         } else {
-          let draft: Draft<DraftClaim> = res.locals.bsDraft
+          const draft: Draft<DraftClaim> = res.locals.bsDraft
           draft.document.breathingSpace = new BreathingSpace()
           res.locals.Draft = draft
         }

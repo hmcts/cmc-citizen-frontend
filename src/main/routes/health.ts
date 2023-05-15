@@ -7,9 +7,9 @@ import { FeatureToggles } from 'utils/featureToggles'
 
 /* tslint:disable:no-default-export */
 
-let healthCheckRouter = express.Router()
+const healthCheckRouter = express.Router()
 
-let healthCheckConfig = {
+const healthCheckConfig = {
   checks: {
     'claimstore': basicHealthCheck('claim-store'),
     'draft-store': basicHealthCheck('draft-store'),

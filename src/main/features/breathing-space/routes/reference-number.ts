@@ -22,7 +22,7 @@ function renderView (form: Form<BreathingSpaceReferenceNumber>, res: express.Res
 export default express.Router()
 .get(Paths.referencNumberPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
   const { externalId } = req.params
-  let bsDraft: Draft<DraftClaim> = res.locals.Draft
+  const bsDraft: Draft<DraftClaim> = res.locals.Draft
 
   if (bsDraft.document.breathingSpace.breathingSpaceReferenceNumber === undefined &&
     bsDraft.document.breathingSpace.breathingSpaceEnteredbyInsolvencyTeamDate === undefined &&
@@ -44,7 +44,7 @@ export default express.Router()
     if (form.hasErrors()) {
       renderView(form, res, next)
     } else {
-      let draft: Draft<DraftClaim> = res.locals.Draft
+      const draft: Draft<DraftClaim> = res.locals.Draft
       const user: User = res.locals.user
       if (draft.document.breathingSpace !== undefined) {
         draft.document.breathingSpace.breathingSpaceReferenceNumber = form.model.bsNumber

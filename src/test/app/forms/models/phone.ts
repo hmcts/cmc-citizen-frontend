@@ -13,7 +13,7 @@ describe('Phone', () => {
 
   describe('constructor', () => {
     it('should have the primitive fields set to undefined', () => {
-      let phone = new Phone()
+      const phone = new Phone()
       expect(phone.number).to.be.undefined
     })
   })
@@ -28,7 +28,7 @@ describe('Phone', () => {
     })
 
     it('should return a Phone instance with set fields from given object', () => {
-      let result = new Phone().deserialize({
+      const result = new Phone().deserialize({
         number: '+447123456789'
       })
       expect(result.number).to.equal('+447123456789')

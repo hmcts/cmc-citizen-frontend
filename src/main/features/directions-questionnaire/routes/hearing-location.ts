@@ -45,7 +45,7 @@ async function handleFormError (res: express.Response, form: Form<HearingLocatio
 export default express.Router()
   .get(Paths.hearingLocationPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
     try {
-      let apiError = ''
+      const apiError = ''
       const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
 
       if (draft.document.hearingLocation.alternativeOption !== undefined

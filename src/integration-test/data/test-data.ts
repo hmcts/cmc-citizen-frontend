@@ -38,7 +38,7 @@ export const claimReason = 'My reasons for the claim are that I am owed this mon
 export async function createClaimData (I: I, claimantType: PartyType, defendantType: PartyType, hasEmailAddress: boolean = true,
                                  interestType: InterestType = InterestType.STANDARD): Promise<ClaimData> {
   const defendant = await createDefendant(I, defendantType, hasEmailAddress)
-  let claimData = {
+  const claimData = {
     claimants: [createClaimant(claimantType)],
     defendants: [defendant],
     payment: {

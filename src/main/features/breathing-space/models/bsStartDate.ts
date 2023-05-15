@@ -5,7 +5,7 @@ import { IsNotInFuture } from 'forms/validation/validators/notInFuture'
 
 export class ValidationErrors {
   static readonly DATE_NOT_VALID: string = 'Please enter a valid date'
-  static readonly DATE_IN_FUTURE: string = "Start date must not be after today's date"
+  static readonly DATE_IN_FUTURE: string = 'Start date must not be after today\'s date'
 }
 
 export class BreathingSpaceRespiteStart {

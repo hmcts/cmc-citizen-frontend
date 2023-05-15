@@ -50,7 +50,7 @@ describe('Claimant response: confirmation page', () => {
         })
 
         it('should render page when everything is fine', async () => {
-          let claimantResponseData = {
+          const claimantResponseData = {
             ...claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj,
             ...{ claimantResponse: rejectionClaimantResponseData }
           }
@@ -64,7 +64,7 @@ describe('Claimant response: confirmation page', () => {
         })
 
         it('should render page when claim is ended', async () => {
-          let claimantResponseData = {
+          const claimantResponseData = {
             ...claimStoreServiceMock.sampleFullDefenceRejectEntirely,
             ...{ claimantRespondedAt: '2017-07-25T22:45:51.785' },
             ...{ claimantResponse: baseAcceptationClaimantResponseData }
@@ -80,7 +80,7 @@ describe('Claimant response: confirmation page', () => {
         })
 
         it('should render page when claim is settled', async () => {
-          let claimantResponseData = {
+          const claimantResponseData = {
             ...claimStoreServiceMock.sampleFullDefenceWithStatesPaidGreaterThanClaimAmount,
             ...{ claimantRespondedAt: '2017-07-25T22:45:51.785' },
             ...{ claimantResponse: { ...baseDeterminationAcceptationClaimantResponseData, ...{ settleForAmount: YesNoOption.YES.option } } }
@@ -96,7 +96,7 @@ describe('Claimant response: confirmation page', () => {
         })
 
         it('should render page with hearing requirement', async () => {
-          let claimantResponseData = {
+          const claimantResponseData = {
             ...claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj,
             ...{ claimantResponse: rejectionClaimantResponseWithDQ },
             features: ['directionsQuestionnaire']

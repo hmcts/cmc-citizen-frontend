@@ -18,7 +18,7 @@ describe('Claim eligibility: You can use this Service HwF Eligible without refer
   context('on GET', () => {
     checkAuthorizationMiddleware(app, 'get', pagePath)
 
-    it("should render page with 'You can use this service' ", async () => {
+    it('should render page with \'You can use this service\' ', async () => {
 
       await request(app)
         .get(pagePath)
