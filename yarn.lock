@@ -1035,17 +1035,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:<14.14.26":
-  version: 14.14.25
-  resolution: "@types/node@npm:14.14.25"
-  checksum: 2140b0229c8563135c59d03e84c8a52e195fcf875f07c4f1e4738c3e8af85e858093fc60aaba76ab422cb17307b2dac8cd60667734e219db310d211ff0b3fc08
-  languageName: node
-  linkType: hard
-
 "@types/node@npm:^14.14.41":
   version: 14.18.12
   resolution: "@types/node@npm:14.18.12"
   checksum: 8a0273caa0584020adb8802784fc7d4f18f05e6c205335b7f3818a91d6b0c22736b9f51da3428d5bc54076ad47f1a4d6d57990a3ce8489a520ac66b2b3ff24bc
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^18.15.0":
+  version: 18.16.9
+  resolution: "@types/node@npm:18.16.9"
+  checksum: 7fe0ef372ba8b157bd646efe29b0ece92ccb9f455171a7ceb4c92d6b490789ff0f14411b1dc6ad203351a0efa2b435072dfab5566fb6eaaaa5cd549e1fb22afa
   languageName: node
   linkType: hard
 
@@ -2969,7 +2969,7 @@ __metadata:
     "@types/jsonwebtoken": ^8.3.7
     "@types/lodash": ^4.14.170
     "@types/mocha": "*"
-    "@types/node": <14.14.26
+    "@types/node": ^18.15.0
     "@types/nunjucks": ^3.1.4
     "@types/request-promise-native": ^1.0.16
     "@types/shortid": ^0.0.29
