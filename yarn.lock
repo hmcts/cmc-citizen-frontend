@@ -2921,9 +2921,9 @@ __metadata:
   linkType: hard
 
 "caniuse-lite@npm:^1.0.30001313":
-  version: 1.0.30001314
-  resolution: "caniuse-lite@npm:1.0.30001314"
-  checksum: d82e1b8b287b1b2d2ed25c4495fe293276853dd9c77553c722929a6142fc49b3dd5ea21a95f6410d93319434a5bd071c304ea92e93debbcf292a9156cf08b35d
+  version: 1.0.30001488
+  resolution: "caniuse-lite@npm:1.0.30001488"
+  checksum: ef0caf2914f9fca700b75d22921f500241f4e988ded9985e62737136031787052185d8136a65a3a6d6d12b559cf75ab99f5488931f8bd060f1b7810a2c1ee1d1
   languageName: node
   linkType: hard
 
@@ -3125,13 +3125,6 @@ __metadata:
   version: 2.0.0
   resolution: "ci-info@npm:2.0.0"
   checksum: 3b374666a85ea3ca43fa49aa3a048d21c9b475c96eb13c133505d2324e7ae5efd6a454f41efe46a152269e9b6a00c9edbe63ec7fa1921957165aae16625acd67
-  languageName: node
-  linkType: hard
-
-"circular-json@npm:^0.5.9":
-  version: 0.5.9
-  resolution: "circular-json@npm:0.5.9"
-  checksum: a52a8ace55dbffd769cab749e2bce53fbd881f11dfdfe2b015e0770b83f01ca753e3d24f36d2a94ecb2ea840806b5386ef5c587ce533869951b96b79c058540b
   languageName: node
   linkType: hard
 
@@ -3387,7 +3380,6 @@ __metadata:
     mocha: ^10.2.0
     mocha-junit-reporter: ^2.2.0
     mocha-multi: ^1.1.7
-    mocha-parallel-tests: ^2.3.0
     mochawesome: ^7.1.2
     mock-require: ^3.0.3
     moment: ^2.29.4
@@ -9478,22 +9470,6 @@ __metadata:
   peerDependencies:
     mocha: ">=2.2.0 <7 || >=9"
   checksum: 1718fccd9178ac38fad0fc63de436b3ece9e688818a1fe3a44bdea9ac26b4a3f6e731e35f19857fd6c769b01bb57b30f4f095902189031a372f1a556a96a1cbc
-  languageName: node
-  linkType: hard
-
-"mocha-parallel-tests@npm:^2.3.0":
-  version: 2.3.0
-  resolution: "mocha-parallel-tests@npm:2.3.0"
-  dependencies:
-    circular-json: ^0.5.9
-    debug: ^4.1.1
-    uuid: ^3.4.0
-    yargs: ^13.3.0
-  peerDependencies:
-    mocha: 3.0.0 - 7.x.x
-  bin:
-    mocha-parallel-tests: dist/bin/cli.js
-  checksum: a8beaf376b80b9667275ece249b9d4420fc1f3bdd0e92e2e26412ee3ab8bd73afa4bb0906415a830a6835b5594e4516e59c9fbc1043284d1ccaf5d71bd871f9f
   languageName: node
   linkType: hard
 
