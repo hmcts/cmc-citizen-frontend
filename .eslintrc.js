@@ -31,6 +31,7 @@ module.exports = {
         'linebreak-style': ['error', 'unix'],
         '@typescript-eslint/no-var-requires': 0,
         '@typescript-eslint/no-explicit-any': 0,
+        '@typescript-eslint/no-empty-interface': 0,
         '@typescript-eslint/ban-types': 'warn',
         '@typescript-eslint/no-empty-function': 'warn',
         '@typescript-eslint/no-inferrable-types': 0,
