@@ -1,5 +1,5 @@
 # ---- Base image ----
-FROM hmctspublic.azurecr.io/base/node:14-alpine as base
+FROM hmctspublic.azurecr.io/base/node:16-alpine as base
 
 USER root
 RUN corepack enable
@@ -9,7 +9,7 @@ COPY --chown=hmcts:hmcts .yarn ./.yarn
 COPY --chown=hmcts:hmcts config ./config
 COPY --chown=hmcts:hmcts package.json yarn.lock .yarnrc.yml tsconfig.json ./
 
-RUN yarn install && yarn workspaces focus --all --production && yarn cache clean
+RUN yarn workspaces focus --all --production && yarn cache clean
 
 # ---- Build image ----
 FROM base as build
