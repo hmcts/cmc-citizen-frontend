@@ -9,7 +9,7 @@ COPY --chown=hmcts:hmcts .yarn ./.yarn
 COPY --chown=hmcts:hmcts config ./config
 COPY --chown=hmcts:hmcts package.json yarn.lock .yarnrc.yml tsconfig.json ./
 
-RUN yarn workspaces focus --all --production && yarn cache clean
+RUN yarn install && yarn workspaces focus --all --production && yarn cache clean
 
 # ---- Build image ----
 FROM base as build
