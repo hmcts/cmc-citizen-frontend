@@ -4,7 +4,7 @@ module.exports = {
   'globals': { 'Atomics': 'readonly', 'SharedArrayBuffer': 'readonly' },
   'rules': {
     'linebreak-style': ['error', 'unix'],
-    'quotes': ['warn', 'single', { 'avoidEscape': true }],
+    'quotes': [0, 'single', { 'avoidEscape': true }],
     'semi': ['error', 'never']
   },
   'parserOptions': {
