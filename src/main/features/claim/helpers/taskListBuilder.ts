@@ -10,6 +10,7 @@ import { YourDetails } from 'drafts/tasks/yourDetails'
 import { TheirDetails } from 'drafts/tasks/theirDetails'
 import { TaskStatus } from 'utils/taskStatus'
 
+
 export class TaskListBuilder extends TaskStatus {
   static buildBeforeYouStartSection (draft: DraftClaim): TaskList {
     return new TaskList('Consider other options', [
@@ -26,7 +27,9 @@ export class TaskListBuilder extends TaskStatus {
         new TaskListItem('Claim amount', Paths.amountPage.uri, claimAmountCompleted),
         new TaskListItem('Claim details', Paths.reasonPage.uri, ClaimDetails.isCompleted(draft))
       ])
-    )
+    ).catch(error => {
+      throw new Error(`Build prepare your claim section - ${error}`)
+    })
   }
 
   static buildSubmitSection (): TaskList {
@@ -40,5 +43,8 @@ export class TaskListBuilder extends TaskStatus {
       .then(prepareYourClaimSection => []
         .concat(TaskListBuilder.buildBeforeYouStartSection(draft).tasks, prepareYourClaimSection.tasks)
         .filter(item => !item.completed))
+      .catch(error => {
+        throw new Error(`Build remaining task error - ${error}`)
+      })
   }
 }
