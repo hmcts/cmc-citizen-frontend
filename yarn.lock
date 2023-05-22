@@ -525,7 +525,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hmcts/nodejs-logging@npm:^3.0.0, @hmcts/nodejs-logging@npm:^3.0.1":
+"@hmcts/nodejs-logging@npm:^3.0.0":
   version: 3.0.4
   resolution: "@hmcts/nodejs-logging@npm:3.0.4"
   dependencies:
@@ -2035,12 +2035,35 @@ __metadata:
   languageName: node
   linkType: hard
 
-"async@npm:2.6.0, async@npm:^2.6.3, async@npm:^2.6.4, async@npm:^3.1.0, async@npm:^3.2.0, async@npm:~1.0.0":
+"async@npm:2.6.0":
+  version: 2.6.0
+  resolution: "async@npm:2.6.0"
+  dependencies:
+    lodash: ^4.14.0
+  checksum: 1cb5dddf9a50e1e6f73a7f52753894a9f42dcc249b5b9b24a04e25f4f1b50fbd3d3cd9792b02ca280611ed5c489c07913c55bcdca186827c5909b01eb6d6813e
+  languageName: node
+  linkType: hard
+
+"async@npm:^2.6.3, async@npm:^2.6.4, async@npm:^3.2.0":
   version: 2.6.4
   resolution: "async@npm:2.6.4"
   dependencies:
     lodash: ^4.17.14
   checksum: a52083fb32e1ebe1d63e5c5624038bb30be68ff07a6c8d7dfe35e47c93fc144bd8652cbec869e0ac07d57dde387aa5f1386be3559cdee799cb1f789678d88e19
+  languageName: node
+  linkType: hard
+
+"async@npm:^3.2.4":
+  version: 3.2.4
+  resolution: "async@npm:3.2.4"
+  checksum: 43d07459a4e1d09b84a20772414aa684ff4de085cbcaec6eea3c7a8f8150e8c62aa6cd4e699fe8ee93c3a5b324e777d34642531875a0817a35697522c1b02e89
+  languageName: node
+  linkType: hard
+
+"async@npm:~1.0.0":
+  version: 1.0.0
+  resolution: "async@npm:1.0.0"
+  checksum: 04d4e57806b1a46b1635a3d821a9bcc06f893d6828a0468ceb494d1857b565754cbbaed22529aef79749dbbe7cf5080bfdb346b54be0e9cd35c41d7ef8d7911f
   languageName: node
   linkType: hard
 
@@ -2074,7 +2097,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"aws4@npm:^1.6.0, aws4@npm:^1.8.0":
+"aws4@npm:^1.6.0":
+  version: 1.12.0
+  resolution: "aws4@npm:1.12.0"
+  checksum: 68f79708ac7c335992730bf638286a3ee0a645cf12575d557860100767c500c08b30e24726b9f03265d74116417f628af78509e1333575e9f8d52a80edfe8cbc
+  languageName: node
+  linkType: hard
+
+"aws4@npm:^1.8.0":
   version: 1.11.0
   resolution: "aws4@npm:1.11.0"
   checksum: 5a00d045fd0385926d20ebebcfba5ec79d4482fe706f63c27b324d489a04c68edb0db99ed991e19eda09cb8c97dc2452059a34d97545cebf591d7a2b5a10999f
@@ -2680,7 +2710,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chardet@npm:^1.5.0":
+"chardet@npm:^1.5.1":
   version: 1.5.1
   resolution: "chardet@npm:1.5.1"
   checksum: e9a76aea2981eddc8c5738bafa0dac0c49ea913c466120d8b3b79873eea0c35f041364a328b0a4879662703c738c4f6245f0a8ffcd9a6f85bf15c7dcee979076
@@ -2965,7 +2995,7 @@ __metadata:
     "@hmcts/draft-store-client": ^1.2.1
     "@hmcts/info-provider": ^1.0.0
     "@hmcts/nodejs-healthcheck": ^1.8.0
-    "@hmcts/nodejs-logging": ^3.0.1
+    "@hmcts/nodejs-logging": ^4.0.4
     "@hmcts/os-places-client": ^1.1.7
     "@hmcts/properties-volume": ^0.0.13
     "@hmcts/requestretry": ^1.1.2
@@ -2994,7 +3024,7 @@ __metadata:
     build-url: ^2.0.0
     chai: ^4.2.0
     chai-as-promised: ^7.1.1
-    chardet: ^1.5.0
+    chardet: ^1.5.1
     class-transformer: ^0.5.1
     classlist-polyfill: ^1.2.0
     cmc-cookies-manager: "github:hmcts/cmc-cookies-manager#3.0.2"
@@ -3032,7 +3062,7 @@ __metadata:
     js-base64: ^2.5.1
     jsdom: ^16.6.0
     jsonwebtoken: ^8.5.1
-    launchdarkly-node-server-sdk: ^6.3.0
+    launchdarkly-node-server-sdk: ^7.0.0
     ldclient-node: ^5.8.0
     lodash: ^4.17.21
     mime: ^2.4.6
@@ -7872,27 +7902,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"launchdarkly-eventsource@npm:1.4.2":
-  version: 1.4.2
-  resolution: "launchdarkly-eventsource@npm:1.4.2"
-  dependencies:
-    original: ^1.0.2
-  checksum: 9abd4058d17489c8529ff2f82ea25d6671390f6fc0e4ea7c846e62f72f7f18184d40cad0e09d98d722263c83615a7b31967f00005190cf6257b6ec2c9830de66
+"launchdarkly-eventsource@npm:1.4.4":
+  version: 1.4.4
+  resolution: "launchdarkly-eventsource@npm:1.4.4"
+  checksum: 7d153b1523b27236057d8155c50a785b7838637c4283b4d984fdf3a7f7a6bb7afc384a0e84275d2ae50bcf38a180731e86c74455ba3ed110ffcbfade0c8a7f33
   languageName: node
   linkType: hard
 
-"launchdarkly-node-server-sdk@npm:^6.3.0":
-  version: 6.3.0
-  resolution: "launchdarkly-node-server-sdk@npm:6.3.0"
+"launchdarkly-node-server-sdk@npm:^7.0.0":
+  version: 7.0.1
+  resolution: "launchdarkly-node-server-sdk@npm:7.0.1"
   dependencies:
-    async: ^3.1.0
-    launchdarkly-eventsource: 1.4.2
+    async: ^3.2.4
+    launchdarkly-eventsource: 1.4.4
     lru-cache: ^6.0.0
     node-cache: ^5.1.0
     semver: ^7.3.0
     tunnel: 0.0.6
     uuid: ^8.3.2
-  checksum: 2b0f668522baf24a1f40462e4648dcc77633fe6df3d577a0be9e02ce5dc9dcb818683bff84b780a876a82f726153fca6f34458f7279d52f831f43d17a3d8f1da
+  checksum: 83a24c6157088c19dbe31c7e3369a852a9cc24336778790f173869a0a3f29ed74e6babe9f31e7672ef6a374b5f7880c3c4dc6d9d1eefbf67239d15747491ea2e
   languageName: node
   linkType: hard
 
@@ -8498,19 +8526,28 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mime-db@npm:^1.28.0":
+"mime-db@npm:1.52.0, mime-db@npm:^1.28.0":
   version: 1.52.0
   resolution: "mime-db@npm:1.52.0"
   checksum: 0d99a03585f8b39d68182803b12ac601d9c01abfa28ec56204fa330bc9f3d1c5e14beb049bafadb3dbdf646dfb94b87e24d4ec7b31b7279ef906a8ea9b6a513f
   languageName: node
   linkType: hard
 
-"mime-types@npm:^2.1.12, mime-types@npm:~2.1.17, mime-types@npm:~2.1.19, mime-types@npm:~2.1.24, mime-types@npm:~2.1.34":
+"mime-types@npm:^2.1.12, mime-types@npm:~2.1.19, mime-types@npm:~2.1.24, mime-types@npm:~2.1.34":
   version: 2.1.34
   resolution: "mime-types@npm:2.1.34"
   dependencies:
     mime-db: 1.51.0
   checksum: 67013de9e9d6799bde6d669d18785b7e18bcd212e710d3e04a4727f92f67a8ad4e74aee24be28b685adb794944814bde649119b58ee3282ffdbee58f9278d9f3
+  languageName: node
+  linkType: hard
+
+"mime-types@npm:~2.1.17":
+  version: 2.1.35
+  resolution: "mime-types@npm:2.1.35"
+  dependencies:
+    mime-db: 1.52.0
+  checksum: 89a5b7f1def9f3af5dad6496c5ed50191ae4331cc5389d7c521c8ad28d5fdad2d06fd81baf38fed813dc4e46bb55c8145bb0ff406330818c9cf712fb2e9b3836
   languageName: node
   linkType: hard
 
@@ -9619,15 +9656,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"original@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "original@npm:1.0.2"
-  dependencies:
-    url-parse: ^1.4.3
-  checksum: 8dca9311dab50c8953366127cb86b7c07bf547d6aa6dc6873a75964b7563825351440557e5724d9c652c5e99043b8295624f106af077f84bccf19592e421beb9
-  languageName: node
-  linkType: hard
-
 "os-locale@npm:^1.4.0":
   version: 1.4.0
   resolution: "os-locale@npm:1.4.0"
@@ -10411,13 +10439,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"querystringify@npm:^2.1.1":
-  version: 2.2.0
-  resolution: "querystringify@npm:2.2.0"
-  checksum: 5641ea231bad7ef6d64d9998faca95611ed4b11c2591a8cae741e178a974f6a8e0ebde008475259abe1621cb15e692404e6b6626e927f7b849d5c09392604b15
-  languageName: node
-  linkType: hard
-
 "quick-lru@npm:^5.1.1":
   version: 5.1.1
   resolution: "quick-lru@npm:5.1.1"
@@ -10912,13 +10933,6 @@ __metadata:
     rc: ~1.2.7
     resolve: ~1.7.1
   checksum: 99b420a02e7272717153cdf75891cbb133c02c04b287721eb1bdb0668b6a98aa1da38c08d8148fc8b1443a668d939eeb622d390538ac8da17b18a977ebe998ae
-  languageName: node
-  linkType: hard
-
-"requires-port@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "requires-port@npm:1.0.0"
-  checksum: eee0e303adffb69be55d1a214e415cf42b7441ae858c76dfc5353148644f6fd6e698926fc4643f510d5c126d12a705e7c8ed7e38061113bdf37547ab356797ff
   languageName: node
   linkType: hard
 
@@ -13047,16 +13061,6 @@ __metadata:
   dependencies:
     prepend-http: ^2.0.0
   checksum: 1040e357750451173132228036aff1fd04abbd43eac1fb3e4fca7495a078bcb8d33cb765fe71ad7e473d9c94d98fd67adca63bd2716c815a2da066198dd37217
-  languageName: node
-  linkType: hard
-
-"url-parse@npm:^1.4.3":
-  version: 1.5.10
-  resolution: "url-parse@npm:1.5.10"
-  dependencies:
-    querystringify: ^2.1.1
-    requires-port: ^1.0.0
-  checksum: fbdba6b1d83336aca2216bbdc38ba658d9cfb8fc7f665eb8b17852de638ff7d1a162c198a8e4ed66001ddbf6c9888d41e4798912c62b4fd777a31657989f7bdf
   languageName: node
   linkType: hard
 
