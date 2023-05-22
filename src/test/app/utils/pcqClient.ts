@@ -7,7 +7,7 @@ import * as config from 'config'
 describe('PCQ Client', () => {
 
   describe('is Eligible to for PCQ questionnaire', () => {
-    it.skip('Should pass eligible (Returns true) ', () => {
+    it('Should pass eligible (Returns true) ', () => {
       const pcqID = undefined
       const partyType = 'individual'
       let eligible = PcqClient.isEligibleRedirect(pcqID, partyType)
