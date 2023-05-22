@@ -1,4 +1,4 @@
-FROM hmctspublic.azurecr.io/base/node:16-alpine
+FROM hmctspublic.azurecr.io/base/node:18-alpine
 
 USER root
 

@@ -1044,10 +1044,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^16.0.0":
-  version: 16.18.32
-  resolution: "@types/node@npm:16.18.32"
-  checksum: c5966c8e671205b2971ae66ae548ce92235cef89ae1a0f2ecbf118e775923259dc85f57c58cfc56267089d56dfce967700c058276199c6ed9510d0a0b077af2d
+"@types/node@npm:^18.15.0":
+  version: 18.16.14
+  resolution: "@types/node@npm:18.16.14"
+  checksum: c11cb3c787236414efe58240ae71854971592554d82ff9d201876ce7cafd51c37aaa001c63602d002e8238614d7331bd6d48ac4c1c0caa826799980b6846fb08
   languageName: node
   linkType: hard
 
@@ -2981,7 +2981,7 @@ __metadata:
     "@types/jsonwebtoken": ^8.3.7
     "@types/lodash": ^4.14.170
     "@types/mocha": "*"
-    "@types/node": ^16.0.0
+    "@types/node": ^18.15.0
     "@types/nunjucks": ^3.1.4
     "@types/request-promise-native": ^1.0.16
     "@types/shortid": ^0.0.29

@@ -1,5 +1,5 @@
 # ---- Base image ----
-FROM hmctspublic.azurecr.io/base/node:16-alpine as base
+FROM hmctspublic.azurecr.io/base/node:18-alpine as base
 
 USER root
 RUN corepack enable
