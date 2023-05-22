@@ -594,7 +594,6 @@ describe('Claim issue: check and send page', () => {
           declared: YesNoOption.YES,
           helpWithFeesNumber: 'HWF123456'
         } })
-        draftStoreServiceMock.resolveUpdate()
         feesServiceMock.rejectRetreiveClaimIssuanceFeeCode()
         const nextPage = ClaimPaths.taskListPage.uri
         await request(app)
