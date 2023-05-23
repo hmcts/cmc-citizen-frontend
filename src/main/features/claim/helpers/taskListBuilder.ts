@@ -10,6 +10,7 @@ import { YourDetails } from 'drafts/tasks/yourDetails'
 import { TheirDetails } from 'drafts/tasks/theirDetails'
 import { TaskStatus } from 'utils/taskStatus'
 
+
 export class TaskListBuilder extends TaskStatus {
   static buildBeforeYouStartSection (draft: DraftClaim): TaskList {
     return new TaskList('Consider other options', [
