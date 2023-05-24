@@ -27,9 +27,9 @@ export class TaskListBuilder extends TaskStatus {
         new TaskListItem('Claim amount', Paths.amountPage.uri, claimAmountCompleted),
         new TaskListItem('Claim details', Paths.reasonPage.uri, ClaimDetails.isCompleted(draft))
       ])
-    ).catch(error => {
-      throw new Error(`Build prepare your claim section - ${error}`)
-    })
+      ).catch(error => {
+        throw new Error(`Build prepare your claim section - ${error}`)
+      })
   }
 
   static buildSubmitSection (): TaskList {
