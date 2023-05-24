@@ -2710,13 +2710,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chardet@npm:^1.5.1":
-  version: 1.5.1
-  resolution: "chardet@npm:1.5.1"
-  checksum: e9a76aea2981eddc8c5738bafa0dac0c49ea913c466120d8b3b79873eea0c35f041364a328b0a4879662703c738c4f6245f0a8ffcd9a6f85bf15c7dcee979076
-  languageName: node
-  linkType: hard
-
 "charenc@npm:0.0.2":
   version: 0.0.2
   resolution: "charenc@npm:0.0.2"
@@ -3024,7 +3017,6 @@ __metadata:
     build-url: ^2.0.0
     chai: ^4.2.0
     chai-as-promised: ^7.1.1
-    chardet: ^1.5.1
     class-transformer: ^0.5.1
     classlist-polyfill: ^1.2.0
     cmc-cookies-manager: "github:hmcts/cmc-cookies-manager#3.0.2"
