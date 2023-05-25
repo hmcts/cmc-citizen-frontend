@@ -32,7 +32,14 @@ export class ClaimantTaskListPage {
     I.click('Claim details')
   }
 
-  selectTaskCheckAndSubmitYourClaim (): void {
-    I.click('Check and submit your claim')
+  async selectTaskCheckAndSubmitYourClaim () {
+    try {
+      await I.click('Check and submit your claim')
+      return true
+    } catch (error) {
+      // tslint:disable-next-line:no-console
+      console.error('Error occurred during: Click and submit your claim', error)
+      return false
+    }
   }
 }

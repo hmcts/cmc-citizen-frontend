@@ -300,7 +300,7 @@ export class ClaimSteps {
     interestSteps.skipClaimantInterestTotalPage()
     this.enterClaimDetails()
     I.bypassPCQ()
-    this.asyncSelectCheckAndSubmitYourClaim()
+    await userSteps.selectCheckAndSubmitYourClaim()
     I.see('Mr. John Smith')
     I.see('10, DALBERG')
     I.see('LONDON')
@@ -313,15 +313,6 @@ export class ClaimSteps {
     if (!process.env.CITIZEN_APP_URL.includes('sprod')) {
       claimantCheckAndSendPage.checkFactsTrueAndSubmit()
       I.waitForText('Enter card details')
-    }
-  }
-
-  async asyncSelectCheckAndSubmitYourClaim () {
-    try {
-      await userSteps.selectCheckAndSubmitYourClaim()
-    } catch (error) {
-      // tslint:disable-next-line: no-console
-      console.error('An error occurred while processing selection check and submit claim', error)
     }
   }
 
