@@ -41,7 +41,7 @@ export class UserSteps {
     taskListPage.selectTaskClaimDetails()
   }
 
-  async selectCheckAndSubmitYourClaim () {
-    await taskListPage.selectTaskCheckAndSubmitYourClaim()
+  selectCheckAndSubmitYourClaim (): void {
+    taskListPage.selectTaskCheckAndSubmitYourClaim()
   }
 }

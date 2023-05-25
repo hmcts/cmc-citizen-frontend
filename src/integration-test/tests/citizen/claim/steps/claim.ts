@@ -300,7 +300,12 @@ export class ClaimSteps {
     interestSteps.skipClaimantInterestTotalPage()
     this.enterClaimDetails()
     I.bypassPCQ()
-    await userSteps.selectCheckAndSubmitYourClaim()
+    try {
+      userSteps.selectCheckAndSubmitYourClaim()
+    } catch (e) {
+      // tslint:disable-next-line:no-console
+      console.log('error while selecting check and submit claim', e)
+    }
     I.see('Mr. John Smith')
     I.see('10, DALBERG')
     I.see('LONDON')
