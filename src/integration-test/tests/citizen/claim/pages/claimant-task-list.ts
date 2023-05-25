@@ -32,7 +32,7 @@ export class ClaimantTaskListPage {
     I.click('Claim details')
   }
 
-  selectTaskCheckAndSubmitYourClaim (): void {
-    I.click('Check and submit your claim')
+  async selectTaskCheckAndSubmitYourClaim () {
+    await I.click('Check and submit your claim')
   }
 }

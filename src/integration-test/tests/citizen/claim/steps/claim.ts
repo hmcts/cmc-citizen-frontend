@@ -300,7 +300,7 @@ export class ClaimSteps {
     interestSteps.skipClaimantInterestTotalPage()
     this.enterClaimDetails()
     I.bypassPCQ()
-    userSteps.selectCheckAndSubmitYourClaim()
+    await userSteps.selectCheckAndSubmitYourClaim()
     I.see('Mr. John Smith')
     I.see('10, DALBERG')
     I.see('LONDON')
