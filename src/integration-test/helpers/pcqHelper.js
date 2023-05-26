@@ -25,7 +25,7 @@ class PcqHelper extends codecept_helper {
     } else if (heading === 'Make a money claim') {
       // silently move on.
       console.log('PCQ is disabled');
-      Promise.reject(false)
+      await Promise.reject(false)
     } else if (heading === 'Sorry, there is a problem with the service') {
       // silently move on.
       console.log('Error in PCQ Service, hence Continuing to CMC');
