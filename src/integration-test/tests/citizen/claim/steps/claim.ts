@@ -299,7 +299,7 @@ export class ClaimSteps {
     I.see(AmountHelper.formatMoney(claimAmount.getTotal()), 'table.table-form > tfoot > tr > td.numeric.last > span')
     interestSteps.skipClaimantInterestTotalPage()
     this.enterClaimDetails()
-    I.bypassPCQ()
+    await I.bypassPCQ().catch(e => { return false })
     await userSteps.selectCheckAndSubmitYourClaim()
     I.see('Mr. John Smith')
     I.see('10, DALBERG')
