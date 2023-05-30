@@ -292,6 +292,7 @@ export class ClaimSteps {
     if (isHwfEnabled) {
       hwfSteps.noHWF()
     }
+    I.clearCookie('cm_cookie_notification')
     I.see('Total amount you’re claiming')
     I.see('£35')
     I.see(AmountHelper.formatMoney(claimAmount.getClaimTotal()), 'table.table-form > tbody > tr:nth-of-type(1) >td.numeric.last > span')
