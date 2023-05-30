@@ -56,7 +56,8 @@ async function runPa11y (url: string): Promise<Issue[]> {
       'WCAG2AA.Principle1.Guideline1_3.1_3_1_A.G141',  // DAC have rated Semantically Incorrect Headings as AAA, not AA
       'WCAG2AA.Principle1.Guideline1_4.1_4_3.G18.Alpha', // DAC for This element's text or background contains transparency
       'WCAG2AA.Principle1.Guideline1_1.1_1_1.H30.2',   // CTSC Web_Chat fnding
-      'WCAG2AA.Principle1.Guideline1_4.1_4_10.C32,C31,C33,C38,SCR34,G206'   // CTSC Web_Chat fnding
+      'WCAG2AA.Principle1.Guideline1_4.1_4_10.C32,C31,C33,C38,SCR34,G206',   // CTSC Web_Chat fnding
+      'WCAG2AA.Principle2.Guideline2_5.2_5_3.F96'   // CTSC Web_Chat fnding
     ],
     headers: {
       Cookie: `${cookieName}=ABC`
