@@ -31,7 +31,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
   Scenario('Defendant agreed to pay all of the claim via immediate payment route... @fullAdmission @citizen @admissions', { retries: 3 }, async (I: I) => {
     testData.paymentOption = PaymentOption.IMMEDIATELY
     // as defendant
-    helperSteps.finishResponseWithFullAdmission(testData)
+    await helperSteps.finishResponseWithFullAdmission(testData)
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
@@ -47,7 +47,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     testData.paymentOption = PaymentOption.BY_SET_DATE
     const claimantResponseTestData = new ClaimantResponseTestData()
     // as defendant
-    helperSteps.finishResponseWithFullAdmission(testData)
+    await helperSteps.finishResponseWithFullAdmission(testData)
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
@@ -65,7 +65,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     testData.claimantPaymentOption = PaymentOption.IMMEDIATELY
     const claimantResponseTestData = new ClaimantResponseTestData()
     // as defendant
-    helperSteps.finishResponseWithFullAdmission(testData)
+    await helperSteps.finishResponseWithFullAdmission(testData)
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
@@ -82,7 +82,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     testData.claimantPaymentOption = PaymentOption.BY_SET_DATE
     const claimantResponseTestData = new ClaimantResponseTestData()
     // as defendant
-    helperSteps.finishResponseWithFullAdmission(testData)
+    await helperSteps.finishResponseWithFullAdmission(testData)
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
@@ -100,7 +100,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     testData.claimantPaymentOption = PaymentOption.INSTALMENTS
     const claimantResponseTestData = new ClaimantResponseTestData()
     // as defendant
-    helperSteps.finishResponseWithFullAdmission(testData)
+    await helperSteps.finishResponseWithFullAdmission(testData)
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
@@ -118,7 +118,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     testData.claimantPaymentOption = PaymentOption.INSTALMENTS
     const unreasonableClaimantResponseTestDate = new UnreasonableClaimantResponseTestData()
     // as defendant
-    helperSteps.finishResponseWithFullAdmission(testData)
+    await helperSteps.finishResponseWithFullAdmission(testData)
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
@@ -134,7 +134,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
   Scenario('I can as a claimant accept the defendants full admission by set date with CCJ and no previous payments made @admissions @citizen', { retries: 3 }, async (I: I) => {
     testData.paymentOption = PaymentOption.BY_SET_DATE
     // as defendant
-    helperSteps.finishResponseWithFullAdmission(testData)
+    await helperSteps.finishResponseWithFullAdmission(testData)
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
@@ -148,7 +148,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
   Scenario('I can as a claimant accept the defendants full admission by set date with CCJ and a previous payment made @admissions @citizen', { retries: 3 }, async (I: I) => {
     testData.paymentOption = PaymentOption.BY_SET_DATE
     // as defendant
-    helperSteps.finishResponseWithFullAdmission(testData)
+    await helperSteps.finishResponseWithFullAdmission(testData)
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
@@ -167,7 +167,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
       claimantResponseTestData.isExpectingToSeeCourtOfferedInstalmentsPage = true
       claimantResponseTestData.pageSpecificValues.settleClaimEnterDate = '2019-01-01'
     // as defendant
-      helperSteps.finishResponseWithFullAdmission(testData)
+      await helperSteps.finishResponseWithFullAdmission(testData)
       I.click('Sign out')
     // as claimant
       userSteps.login(testData.claimantEmail)
