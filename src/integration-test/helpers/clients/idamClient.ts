@@ -62,7 +62,7 @@ export class IdamClient {
       uri: `${baseURL}/testing-support/accounts/${username}`
     }
 
-    return request(options)
+    request(options)
       .then(function (resp) {
         // tslint:disable-next-line:no-console
         console.log(`deleteUser for ${username} got response: ${resp}`)
@@ -72,6 +72,7 @@ export class IdamClient {
         // tslint:disable-next-line:no-console
         console.log(`error deleting user: ${username}` + err)
       })
+    return Promise.resolve()
   }
 
   /**
@@ -89,7 +90,7 @@ export class IdamClient {
       uri: `${baseURL}/testing-support/test-data?${params}&async=true`
     }
 
-    return request(options).then(function (resp) {
+    request(options).then(function (resp) {
       // tslint:disable-next-line:no-console
       console.log(`deleteUsers for ${JSON.stringify(usernames)} got response: ${resp}`)
       return Promise.resolve()
@@ -97,6 +98,7 @@ export class IdamClient {
       // tslint:disable-next-line:no-console
       console.log(`error deleting user/s ${params}: ` + err)
     })
+    return Promise.resolve()
   }
 
   /**
