@@ -7,12 +7,10 @@ module.exports = {
     try {
       if (process.env.IDAM_URL) {
         if (process.env.SMOKE_TEST_CITIZEN_USERNAME) {
-          await Promise.all([
-            console.log('Deleting test users...'),
-            IdamClient.deleteUser(claimantEmail),
-            IdamClient.deleteUser(defendantEmail),
-            IdamClient.deleteUsers([claimantEmail, defendantEmail])
-          ]).catch(err => console.log('ERROR: ' + err))
+          console.log('Deleting test users...')
+          await IdamClient.deleteUser(claimantEmail)
+          await IdamClient.deleteUser(defendantEmail)
+          await IdamClient.deleteUsers([claimantEmail, defendantEmail])
         }
       }
     } catch (error) {
