@@ -20,9 +20,11 @@ describe('ScannedDocumentsClient', () => {
     url: 'http://localhost/scanneddoc'
   }
 
-  nock(mockClient)
-  .get(/\/scanned-documents\/.+/)
-  .reply(200, expectedPayload)
+  beforeEach(() => {
+    nock(mockClient)
+      .get(/\/scanned-documents\/.+/)
+      .reply(200, expectedPayload)
+  })
 
   chai.use(chaiAsPromised)
 
