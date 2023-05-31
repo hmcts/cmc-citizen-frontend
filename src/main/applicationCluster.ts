@@ -1,5 +1,5 @@
 import { cpus } from 'os'
-import * as cluster from 'cluster'
+import cluster from 'cluster'
 import { Logger } from '@hmcts/nodejs-logging'
 
 const logger = Logger.getLogger('applicationCluster')
@@ -8,7 +8,7 @@ export type EntryPoint = () => void
 
 export class ApplicationCluster {
   static execute (applicationEntryPoint: EntryPoint): void {
-    if (cluster.isMaster) {
+    if (cluster.isPrimary) {
       logger.info(`Master process running on ${process.pid}`)
       const numberOfCores = cpus().length
       this.forkListenerProcesses(numberOfCores)
