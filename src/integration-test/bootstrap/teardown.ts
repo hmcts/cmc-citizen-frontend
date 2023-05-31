@@ -12,7 +12,7 @@ module.exports = {
             IdamClient.deleteUser(claimantEmail),
             IdamClient.deleteUser(defendantEmail),
             IdamClient.deleteUsers([claimantEmail, defendantEmail])
-          ]).catch(err => console.log(err))
+          ]).catch(err => console.log('ERROR: ' + err))
         }
       }
     } catch (error) {
