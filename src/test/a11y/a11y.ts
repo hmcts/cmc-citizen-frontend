@@ -87,7 +87,6 @@ function check (uri: string, customTests: CustomChecks = [], requestDetails: Req
     describe(`Pa11y tests for ${uri}`, () => {
       let issues: Issue[]
       before(async () => {
-        this.enableTimeouts(false)
         issues = await runPa11y(agent.get(uri).url)
       })
 
