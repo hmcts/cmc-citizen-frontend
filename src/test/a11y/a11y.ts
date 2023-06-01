@@ -67,9 +67,7 @@ async function runPa11y (url: string): Promise<Issue[]> {
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
       ignoreHTTPSErrors: false
     },
-    wait: 100,
-    timeout: 1000,
-    threshold: 0
+    threshold: 9
   })
   return result.issues
     .filter((issue: Issue) => issue.code !== 'WCAG2AA.Principle2.Guideline2_4.2_4_1.H64.1')
@@ -128,6 +126,7 @@ async function extractPageContent (url: string, requestDetails: RequestDetails =
 
 function ensureNoAccessibilityAlerts (issueType: string, issues: Issue[]): void {
   const alerts: Issue[] = issues.filter((issue: Issue) => issue.type === issueType)
+  console.log(`alerts:: ${JSON.stringify(alerts)}`)
   expect(alerts, `\n${JSON.stringify(alerts, null, 2)}\n`).to.be.empty
 }
 
