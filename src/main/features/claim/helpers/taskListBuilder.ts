@@ -26,7 +26,9 @@ export class TaskListBuilder extends TaskStatus {
         new TaskListItem('Claim amount', Paths.amountPage.uri, claimAmountCompleted),
         new TaskListItem('Claim details', Paths.reasonPage.uri, ClaimDetails.isCompleted(draft))
       ])
-    )
+      ).catch(error => {
+        throw new Error(`Build prepare your claim section - ${error}`)
+      })
   }
 
   static async buildSubmitSection (): Promise<TaskList> {
@@ -43,5 +45,8 @@ export class TaskListBuilder extends TaskStatus {
       .then(prepareYourClaimSection => []
         .concat(TaskListBuilder.buildBeforeYouStartSection(draft).tasks, prepareYourClaimSection.tasks)
         .filter(item => !item.completed))
+      .catch(error => {
+        throw new Error(`Build remaining task error - ${error}`)
+      })
   }
 }
