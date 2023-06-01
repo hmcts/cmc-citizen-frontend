@@ -29,7 +29,7 @@ export default express.Router()
               (t.formattedAddress === addresses.formattedAddress)
             )
           )
-        throw new Error("Something went wrong")
+        throw new Error('Something went wrong')
         res.json(addressInfoResponse)
       })
       .catch(err => {
