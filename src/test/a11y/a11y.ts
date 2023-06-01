@@ -156,7 +156,17 @@ const excludedPaths: Paths[] = [
   MediationPaths.mediationAgreementDocument,
   DefendantResponsePaths.checkAndSendPage,
   BreathingSpacePaths.bsLiftPage,
-  BreathingSpacePaths.referencNumberPage
+  BreathingSpacePaths.referencNumberPage,
+
+  ClaimIssuePaths.claimantIndividualDetailsPage,
+  ClaimIssuePaths.claimantCompanyDetailsPage,
+  ClaimIssuePaths.claimantSoleTraderOrSelfEmployedDetailsPage,
+  ClaimIssuePaths.claimantOrganisationDetailsPage,
+  ClaimIssuePaths.defendantIndividualDetailsPage,
+  ClaimIssuePaths.defendantCompanyDetailsPage,
+  ClaimIssuePaths.defendantSoleTraderOrSelfEmployedDetailsPage,
+  ClaimIssuePaths.defendantOrganisationDetailsPage,
+  DefendantResponsePaths.defendantYourDetailsPage
 ]
 
 // checks to be done for specific pages
