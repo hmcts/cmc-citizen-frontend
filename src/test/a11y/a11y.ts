@@ -66,7 +66,10 @@ async function runPa11y (url: string): Promise<Issue[]> {
       headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
       ignoreHTTPSErrors: false
-    }
+    },
+    wait: 100,
+    timeout: 1000,
+    threshold: 0
   })
   return result.issues
     .filter((issue: Issue) => issue.code !== 'WCAG2AA.Principle2.Guideline2_4.2_4_1.H64.1')
