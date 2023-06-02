@@ -101,7 +101,7 @@ describe('ClaimStoreClient', () => {
       function mockTimeoutOnFirstSaveAttemptAndConflictOnSecondOne () {
         mock(`${claimStoreApiUrl}`)
           .post(`/${claimant.id}`)
-          .socketDelay(requestDelayInMillis + 10)
+          .delayConnection(requestDelayInMillis + 10)
         mock(`${claimStoreApiUrl}`)
           .post(`/${claimant.id}`)
           .reply(HttpStatus.CONFLICT, `Duplicate claim for external id ${claimDraftData.externalId}`)
@@ -172,7 +172,7 @@ describe('ClaimStoreClient', () => {
       function mockTimeoutOnFirstSaveAttemptAndConflictOnSecondOne () {
         mock(`${claimStoreApiUrl}`)
           .post(`/${claimant.id}/hwf`)
-          .socketDelay(requestDelayInMillis + 10)
+          .delayConnection(requestDelayInMillis + 10)
         mock(`${claimStoreApiUrl}`)
           .post(`/${claimant.id}/hwf`)
           .reply(HttpStatus.CONFLICT, `Duplicate claim for external id ${claimDraftData.externalId}`)
