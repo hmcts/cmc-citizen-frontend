@@ -48,7 +48,11 @@ const setupConfig = {
     await bootstrapAll(claimantEmail, defendantEmail)
   },
   async teardownAll() {
-    await teardownAll(claimantEmail, defendantEmail)
+    if (claimantEmail !== undefined || defendantEmail !== undefined) {
+      await teardownAll(claimantEmail, defendantEmail)
+    } else {
+      console.log('claimantEmail or defendantEmail is undefined')
+    }
   },
   tests: './src/integration-test/tests/**/*_test.*',
   output: `${process.cwd()}/${outputDir}`,
