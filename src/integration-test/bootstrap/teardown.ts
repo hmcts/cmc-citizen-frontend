@@ -4,15 +4,19 @@ import { IdamClient } from 'integration-test/helpers/clients/idamClient'
 
 module.exports = {
   teardownAll: async function (claimantEmail, defendantEmail) {
-    console.log('teardownAll...')
-    if (process.env.IDAM_URL) {
-      if (process.env.SMOKE_TEST_CITIZEN_USERNAME) {
-        console.log('Deleting test users...')
-        claimantEmail !== undefined ? await IdamClient.deleteUser(claimantEmail) : console.log("claimantEmail is undefined")
-        defendantEmail !== undefined ? await IdamClient.deleteUser(defendantEmail) : console.log("defendantEmail is undefined")
-        claimantEmail !== undefined && defendantEmail !== undefined ?
-          await IdamClient.deleteUsers([claimantEmail, defendantEmail]) : console.log("claimantEmail and defendantEmail is undefined")
+    try {
+      if (process.env.IDAM_URL) {
+        if (process.env.SMOKE_TEST_CITIZEN_USERNAME) {
+          await Promise.all([
+            console.log('Deleting test users...'),
+            IdamClient.deleteUser(claimantEmail),
+            IdamClient.deleteUser(defendantEmail),
+            IdamClient.deleteUsers([claimantEmail, defendantEmail])
+          ])
+        }
       }
+    } catch (error) {
+      console.error('Error during teardown, exiting', error)
     }
   }
 }
