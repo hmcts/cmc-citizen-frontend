@@ -29,6 +29,7 @@ module.exports = {
       'plugins': ['@typescript-eslint'],
       'rules': {
         'linebreak-style': ['error', 'unix'],
+        'linebreak-style': ['error', 'windows'],
         '@typescript-eslint/no-var-requires': 0,
         '@typescript-eslint/no-explicit-any': 0,
         '@typescript-eslint/no-empty-interface': 0,
