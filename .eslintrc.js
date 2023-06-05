@@ -3,7 +3,7 @@ module.exports = {
   'extends': ['eslint:recommended'],
   'globals': { 'Atomics': 'readonly', 'SharedArrayBuffer': 'readonly' },
   'rules': {
-    'linebreak-style': ['error', 'unix'],
+    'linebreak-style': 0,
     'quotes': [0, 'single', { 'avoidEscape': true }],
     'semi': ['error', 'never']
   },
@@ -28,7 +28,7 @@ module.exports = {
       },
       'plugins': ['@typescript-eslint'],
       'rules': {
-        'linebreak-style': ['error', 'unix'],
+        'linebreak-style': 0,
         '@typescript-eslint/no-var-requires': 0,
         '@typescript-eslint/no-explicit-any': 0,
         '@typescript-eslint/no-empty-interface': 0,
