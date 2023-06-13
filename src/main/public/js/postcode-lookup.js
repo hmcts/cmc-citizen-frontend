@@ -18,8 +18,31 @@
             hide(postcodeAddressPicker(postcodeLookupWidget))
             clearAddressFields(postcodeLookupWidget)
             hide(addressSection(postcodeLookupWidget))
-            lookupPostcode(this.previousElementSibling.value, postcodeLookupWidget)
+            var enteredPostcode = this.previousElementSibling.value;
+
+            if (isUKPostcode(enteredPostcode) && !isScotlandOrWalesPostcode(enteredPostcode)) {
+              lookupPostcode(enteredPostcode, postcodeLookupWidget);
+            } else {
+              displayPostcodeError(postcodeLookupWidget);
+            }
           })
+
+        function isUKPostcode(postcode) {
+          var ukPostcodePattern = /^[A-Z]{1,2}\d[A-Z\d]? \d[A-Z]{2}$/i;
+          return ukPostcodePattern.test(postcode);
+        }
+
+        function isScotlandOrWalesPostcode(postcode) {
+          var scotlandPostcodePattern = /^(AB|DD|DG|EH|FK|G|HS|IV|KA|KW|KY|ML|PA|PH|TD|ZE)/i;
+          var walesPostcodePattern = /^(CF|CH|HR|LD|LL|NP|SA|SY)/i;
+          return scotlandPostcodePattern.test(postcode) || walesPostcodePattern.test(postcode);
+        }
+
+        function displayPostcodeError(postcodeLookupWidget) {
+          var errorMessageElement = postcodeLookupWidget.querySelector('.postcode-search-error-message');
+          errorMessageElement.textContent = "Invalid postcode or postcode from Scotland/Wales.";
+          errorMessageElement.classList.remove('hidden');
+        }
 
         postcodeLookupWidget.querySelector('.postcode-select')
           .addEventListener('change', function (event) {
@@ -30,19 +53,9 @@
             addressLine2(addressElement).value = addressDetails.addressLines[1]
             addressLine3(addressElement).value = addressDetails.addressLines[2]
             addressTownOrCity(addressElement).value = addressDetails.townOrCity
-            var postcode = addressDetails.postCode;
-            if (!isValidUKPostcode(postcode)) {
-              console.log("invalid postcode");
-            } else {
-              addressPostcode(addressElement).value = postcode;
-              show(addressSection(postcodeLookupWidget));
-            }
+            addressPostcode(addressElement).value = addressDetails.postCode
+            show(addressSection(postcodeLookupWidget))
           })
-
-        function isValidUKPostcode(postcode) {
-          var englandWalesPattern = /^[A-PR-UWYZ][A-HK-Y]?[0-9][ABEHMNPRVWXY0-9]? [0-9][ABD-HJLN-UW-Z]{2}$/;
-          return englandWalesPattern.test(postcode);
-        }
 
         enterManuallyLink(postcodeLookupWidget)
           .addEventListener('click', function (event) {
