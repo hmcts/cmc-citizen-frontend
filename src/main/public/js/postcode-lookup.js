@@ -30,9 +30,19 @@
             addressLine2(addressElement).value = addressDetails.addressLines[1]
             addressLine3(addressElement).value = addressDetails.addressLines[2]
             addressTownOrCity(addressElement).value = addressDetails.townOrCity
-            addressPostcode(addressElement).value = addressDetails.postCode
-            show(addressSection(postcodeLookupWidget))
+            var postcode = addressDetails.postCode;
+            if (!isValidUKPostcode(postcode)) {
+              console.log("invalid postcode");
+            } else {
+              addressPostcode(addressElement).value = postcode;
+              show(addressSection(postcodeLookupWidget));
+            }
           })
+
+        function isValidUKPostcode(postcode) {
+          var englandWalesPattern = /^[A-PR-UWYZ][A-HK-Y]?[0-9][ABEHMNPRVWXY0-9]? [0-9][ABD-HJLN-UW-Z]{2}$/;
+          return englandWalesPattern.test(postcode);
+        }
 
         enterManuallyLink(postcodeLookupWidget)
           .addEventListener('click', function (event) {
@@ -265,7 +275,7 @@
           var option = postcodeDropdownOption(address)
           if(option != undefined){
             postcodeSelectDropdown.appendChild(option)
-           }   
+           }
         }
       })
       //If already in list we don't do above as already in list
@@ -342,7 +352,7 @@
         option.text = formattedAddress
         return option
 
- 
+
       }
       return undefined
 
