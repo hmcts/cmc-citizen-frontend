@@ -1,10 +1,10 @@
-import { IsDefined, MaxLength, ValidateIf, Validator } from '@hmcts/class-validator'
+import { IsDefined, MaxLength, ValidateIf, Validator, ValidatorConstraint } from '@hmcts/class-validator'
 import { CompletableTask } from 'models/task'
 
 import { Address as ClaimAddress } from 'claims/models/address'
 import * as toBoolean from 'to-boolean'
 import { IsNotBlank, ExtraFormFieldsArePopulated } from '@hmcts/cmc-validators'
-import {IsValidPostcodeConstraint} from "forms/validation/isValidPostcode";
+import { IsValidPostcodeConstraint } from 'forms/validation/isValidPostcode'
 
 const validator: Validator = new Validator()
 
@@ -60,15 +60,7 @@ export class Address implements CompletableTask {
     groups: ['claimant', 'defendant', 'response']
   })
   city?: string
-
-  @ValidateIf(o => o.addressVisible, { groups: ['claimant', 'defendant', 'response'] })
-  @IsDefined({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
-  @IsNotBlank({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
-  @IsValidPostcode({
-    message: ValidationErrors.POSTCODE_NOT_VALID,
-    groups: ['claimant', 'defendant', 'response'],
-  })
-  postcode?: string;
+  postcode?: string
 
   @ValidateIf(o => !o.addressVisible && !o.addressSelectorVisible, { groups: ['claimant', 'defendant', 'response'] })
   @ExtraFormFieldsArePopulated(['postcode', 'postcodeLookup'], {
@@ -118,6 +110,13 @@ export class Address implements CompletableTask {
       input.city,
       input.postcode
     )
+  }
+
+  @ValidateIf(o => o.addressVisible, { groups: ['claimant', 'defendant', 'response'] })
+  @IsDefined({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
+  @IsNotBlank({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
+  isValidPostcode (value: any): boolean {
+    return new IsValidPostcodeConstraint().validate(value)
   }
 
   deserialize (input?: any): Address {
