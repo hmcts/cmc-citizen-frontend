@@ -1,5 +1,8 @@
 # ---- Base image ----
-FROM hmctspublic.azurecr.io/base/node:14-alpine as base
+FROM hmctspublic.azurecr.io/base/node:18-alpine as base
+
+ENV PUPPETEER_SKIP_DOWNLOAD=true
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 
 USER root
 RUN corepack enable
