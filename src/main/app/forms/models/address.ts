@@ -8,11 +8,11 @@ import {
   ValidatorConstraint,
   ValidatorConstraintInterface
 } from '@hmcts/class-validator'
-import {CompletableTask} from 'models/task'
+import { CompletableTask } from 'models/task'
 
-import {Address as ClaimAddress} from 'claims/models/address'
+import { Address as ClaimAddress } from 'claims/models/address'
 import * as toBoolean from 'to-boolean'
-import {ExtraFormFieldsArePopulated, IsNotBlank, IsValidPostcode} from '@hmcts/cmc-validators'
+import { ExtraFormFieldsArePopulated, IsNotBlank, IsValidPostcode } from '@hmcts/cmc-validators'
 
 const validator: Validator = new Validator()
 
@@ -38,7 +38,7 @@ export class ValidationConstants {
 
 @ValidatorConstraint({ name: 'postcodeNotInScotlandOrNI', async: false })
 export class PostcodeNotInScotlandOrNIValidator implements ValidatorConstraintInterface {
-  validate(value: any, args: ValidationArguments) {
+  validate (value: any, args: ValidationArguments) {
     const postcode: string = value
 
     const scotlandPrefixes: string[] = ['KW', 'IV', 'HS', 'PH', 'AB', 'DD', 'KY', 'FK', 'EH', 'G', 'KA', 'ML', 'PA', 'TD', 'DG', 'ZE']
@@ -47,7 +47,7 @@ export class PostcodeNotInScotlandOrNIValidator implements ValidatorConstraintIn
     return !isScotlandPostcode && !isNIPostcode
   }
 
-  defaultMessage(args: ValidationArguments) {
+  defaultMessage (args: ValidationArguments) {
     return ValidationErrors.POSTCODE_NOT_IN_UK
   }
 }
