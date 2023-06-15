@@ -3,16 +3,14 @@ import {
   MaxLength,
   Validate,
   ValidateIf,
-  ValidationArguments,
   Validator,
-  ValidatorConstraint,
-  ValidatorConstraintInterface
 } from '@hmcts/class-validator'
 import { CompletableTask } from 'models/task'
 
 import { Address as ClaimAddress } from 'claims/models/address'
 import * as toBoolean from 'to-boolean'
 import { ExtraFormFieldsArePopulated, IsNotBlank, IsValidPostcode } from '@hmcts/cmc-validators'
+import { PostcodeNotInScotlandOrNIValidator } from "forms/validation/validators/postCodeNotInScotlandOrNI";
 
 const validator: Validator = new Validator()
 
@@ -34,22 +32,6 @@ export class ValidationErrors {
 
 export class ValidationConstants {
   static readonly ADDRESS_MAX_LENGTH: number = 35
-}
-
-@ValidatorConstraint({ name: 'postcodeNotInScotlandOrNI', async: false })
-export class PostcodeNotInScotlandOrNIValidator implements ValidatorConstraintInterface {
-  validate (value: any, args: ValidationArguments) {
-    const postcode: string = value
-
-    const scotlandPrefixes: string[] = ['KW', 'IV', 'HS', 'PH', 'AB', 'DD', 'KY', 'FK', 'EH', 'G', 'KA', 'ML', 'PA', 'TD', 'DG', 'ZE']
-    const isScotlandPostcode: boolean = scotlandPrefixes.some(prefix => postcode.startsWith(prefix))
-    const isNIPostcode: boolean = postcode.startsWith('BT')
-    return !isScotlandPostcode && !isNIPostcode
-  }
-
-  defaultMessage (args: ValidationArguments) {
-    return ValidationErrors.POSTCODE_NOT_IN_UK
-  }
 }
 
 export class Address implements CompletableTask {
