@@ -1,9 +1,18 @@
-import { IsDefined, MaxLength, ValidateIf, Validator } from '@hmcts/class-validator'
-import { CompletableTask } from 'models/task'
+import {
+  IsDefined,
+  MaxLength,
+  Validate,
+  ValidateIf,
+  ValidationArguments,
+  Validator,
+  ValidatorConstraint,
+  ValidatorConstraintInterface
+} from '@hmcts/class-validator'
+import {CompletableTask} from 'models/task'
 
-import { Address as ClaimAddress } from 'claims/models/address'
+import {Address as ClaimAddress} from 'claims/models/address'
 import * as toBoolean from 'to-boolean'
-import { IsNotBlank, IsValidPostcode, ExtraFormFieldsArePopulated } from '@hmcts/cmc-validators'
+import {ExtraFormFieldsArePopulated, IsNotBlank, IsValidPostcode} from '@hmcts/cmc-validators'
 
 const validator: Validator = new Validator()
 
@@ -19,11 +28,28 @@ export class ValidationErrors {
 
   static readonly POSTCODE_REQUIRED: string = 'Enter postcode'
   static readonly POSTCODE_NOT_VALID: string = 'Postcode must be in United Kingdom'
+  static readonly POSTCODE_NOT_IN_UK: string = 'Postcode must be in United Kingdom, excluding Scotland and Northern Ireland'
   static readonly ADDRESS_DROPDOWN_REQUIRED: string = 'Select an address'
 }
 
 export class ValidationConstants {
   static readonly ADDRESS_MAX_LENGTH: number = 35
+}
+
+@ValidatorConstraint({ name: 'postcodeNotInScotlandOrNI', async: false })
+export class PostcodeNotInScotlandOrNIValidator implements ValidatorConstraintInterface {
+  validate(value: any, args: ValidationArguments) {
+    const postcode: string = value
+
+    const scotlandPrefixes: string[] = ['KW', 'IV', 'HS', 'PH', 'AB', 'DD', 'KY', 'FK', 'EH', 'G', 'KA', 'ML', 'PA', 'TD', 'DG', 'ZE']
+    const isScotlandPostcode: boolean = scotlandPrefixes.some(prefix => postcode.startsWith(prefix))
+    const isNIPostcode: boolean = postcode.startsWith('BT')
+    return !isScotlandPostcode && !isNIPostcode
+  }
+
+  defaultMessage(args: ValidationArguments) {
+    return ValidationErrors.POSTCODE_NOT_IN_UK
+  }
 }
 
 export class Address implements CompletableTask {
@@ -66,6 +92,10 @@ export class Address implements CompletableTask {
   @IsValidPostcode({
     message: ValidationErrors.POSTCODE_NOT_VALID,
     groups: ['claimant']
+  })
+  @Validate(PostcodeNotInScotlandOrNIValidator, {
+    message: ValidationErrors.POSTCODE_NOT_IN_UK,
+    groups: ['claimant', 'defendant', 'response']
   })
   postcode?: string
 
