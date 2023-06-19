@@ -6,6 +6,9 @@ export class PostcodeNotInScotlandOrNIValidator implements ValidatorConstraintIn
   validate (value: any, args: ValidationArguments) {
     const postcode: string = value
 
+    if (!postcode || !postcode.startsWith) {
+      return false
+    }
     const scotlandPrefixes: string[] = ['KW', 'IV', 'HS', 'PH', 'AB', 'DD', 'KY', 'FK', 'EH', 'G', 'KA', 'ML', 'PA', 'TD', 'DG', 'ZE']
     const isScotlandPostcode: boolean = scotlandPrefixes.some(prefix => postcode.startsWith(prefix))
     const isNIPostcode: boolean = postcode.startsWith('BT')
