@@ -48,14 +48,14 @@ export class Helper {
   }
 
   // TODO: refactor with above ^^^
-  finishResponseWithFullAdmission (testData: EndToEndTestData): void {
+  async finishResponseWithFullAdmission (testData: EndToEndTestData): Promise<void> {
     if (testData.paymentOption === undefined) {
       testData.paymentOption = PaymentOption.IMMEDIATELY
     }
     defenceSteps.loginAsDefendant(testData.defendantEmail)
     I.click(testData.claimRef)
     I.click('Respond to claim')
-    defenceSteps.makeFullAdmission(testData.defendant, testData.defendantPartyType, testData.paymentOption, testData.claimantName, false)
+    await defenceSteps.makeFullAdmission(testData.defendant, testData.defendantPartyType, testData.paymentOption, testData.claimantName, false)
   }
 
   finishResponseWithHandOff (claimRef: string, defendant: Party, claimant: Party, defendantEmail: string, defenceType: DefenceType): void {

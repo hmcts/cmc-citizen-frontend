@@ -4,15 +4,14 @@ import { IdamClient } from 'integration-test/helpers/clients/idamClient'
 
 module.exports = {
   teardownAll: async function (claimantEmail, defendantEmail) {
+    console.log('teardownAll...')
     try {
       if (process.env.IDAM_URL) {
         if (process.env.SMOKE_TEST_CITIZEN_USERNAME) {
-          await Promise.all([
-            console.log('Deleting test users...'),
-            IdamClient.deleteUser(claimantEmail),
-            IdamClient.deleteUser(defendantEmail),
-            IdamClient.deleteUsers([claimantEmail, defendantEmail])
-          ])
+          console.log('Deleting test users...')
+          await IdamClient.deleteUser(claimantEmail)
+          await IdamClient.deleteUser(defendantEmail)
+          await IdamClient.deleteUsers([claimantEmail, defendantEmail])
         }
       }
     } catch (error) {

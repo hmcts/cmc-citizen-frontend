@@ -366,14 +366,14 @@ export class DefenceSteps {
     I.waitForText('You’ve submitted your response')
   }
 
-  makeFullAdmission (
+  async makeFullAdmission (
     defendantParty: Party,
     defendantType: PartyType,
     paymentOption: PaymentOption,
     claimantName: string,
     statementOfMeansFullDataSet: boolean = true,
     respondToPCQ?: boolean
-  ): void {
+  ): Promise<void> {
     this.confirmYourDetails(defendantParty)
 
     this.requestMoreTimeToRespond()
@@ -407,7 +407,7 @@ export class DefenceSteps {
     }
 
     defendantSteps.selectCheckAndSubmitYourDefence()
-    I.bypassPCQ()
+    await I.bypassPCQ()
     this.checkAndSendAndSubmit(defendantType, DefenceType.FULL_ADMISSION)
 
     I.see('You’ve submitted your response')

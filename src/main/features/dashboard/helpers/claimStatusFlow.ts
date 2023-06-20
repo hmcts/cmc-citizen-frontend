@@ -25,6 +25,7 @@ export class ClaimStatusFlow {
       }
       if (nextPossibleConditions.length === 0) {
         if (!flow.dashboard) {
+          logger.error(`No dashboard for flow: ${JSON.stringify(flow)}`)
           throw new Error(`Trying to render an intermediate state with no dashboard, check the flow's logic`)
         }
         return flow.dashboard
