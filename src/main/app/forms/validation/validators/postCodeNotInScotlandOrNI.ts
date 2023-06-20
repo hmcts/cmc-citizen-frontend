@@ -9,7 +9,7 @@ export class PostcodeNotInScotlandOrNIValidator implements ValidatorConstraintIn
     if (!postcode || !postcode.startsWith) {
       return false
     }
-    const ukPostcodeRegex = /^[A-Za-z]{1,2}\d[A-Za-z\d]?\s?\d[A-Za-z]{2}$/
+    const ukPostcodeRegex = /^[A-Za-z]{1,2}\d{1,2}\s?\d[A-Za-z]{2}$/
     const isValidFormat = ukPostcodeRegex.test(postcode)
 
     if (!isValidFormat) {
