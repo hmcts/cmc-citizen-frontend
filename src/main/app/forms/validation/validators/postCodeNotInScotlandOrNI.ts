@@ -5,13 +5,15 @@ import { ValidationErrors } from "forms/models/address"
 export class PostcodeNotInScotlandOrNIValidator implements ValidatorConstraintInterface {
   validate (value: any, args: ValidationArguments) {
     const postcode: string = value
-
-    if (!postcode || !postcode.startsWith) {
+    const ukPostcodeRegex: RegExp = /^[A-Z]{1,2}[0-9R][0-9A-Z]? [0-9][A-Z]{2}$/i
+    if (!ukPostcodeRegex.test(postcode)) {
       return false
     }
+
     const scotlandPrefixes: string[] = ['KW', 'IV', 'HS', 'PH', 'AB', 'DD', 'KY', 'FK', 'EH', 'G', 'KA', 'ML', 'PA', 'TD', 'DG', 'ZE']
     const isScotlandPostcode: boolean = scotlandPrefixes.some(prefix => postcode.startsWith(prefix))
     const isNIPostcode: boolean = postcode.startsWith('BT')
+
     return !isScotlandPostcode && !isNIPostcode
   }
 
