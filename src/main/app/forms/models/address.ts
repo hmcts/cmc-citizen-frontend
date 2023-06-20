@@ -73,7 +73,7 @@ export class Address implements CompletableTask {
   @IsNotBlank({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @IsValidPostcode({
     message: ValidationErrors.POSTCODE_NOT_VALID,
-    groups: ['claimant']
+    groups: ['claimant','defendant', 'response']
   })
   @Validate(PostcodeNotInScotlandOrNIValidator, {
     message: ValidationErrors.POSTCODE_NOT_IN_UK,
