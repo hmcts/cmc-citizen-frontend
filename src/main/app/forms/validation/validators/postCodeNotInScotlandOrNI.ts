@@ -6,7 +6,7 @@ export class PostcodeNotInScotlandOrNIValidator implements ValidatorConstraintIn
   validate (value: any, args: ValidationArguments) {
     const postcode: string = value
     const ukPostcodeRegex: RegExp = /^[A-Z]{1,2}[0-9R][0-9A-Z]? [0-9][A-Z]{2}$/i
-    if (!ukPostcodeRegex.test(postcode)) {
+    if (!ukPostcodeRegex.test(postcode) || !postcode.startsWith) {
       return false
     }
 
