@@ -125,4 +125,4 @@ We get a fully functional environment in Azure Kubernetes (AKS) per pull request
 info see: https://tools.hmcts.net/confluence/display/ROC/AKS+-+Azure+Managed+Kubernetes
 
 ## License ##
-This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) file for details
+This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) file for details.
