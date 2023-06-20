@@ -13,8 +13,8 @@ export class PostcodeNotInScotlandOrNIValidator implements ValidatorConstraintIn
     const isScotlandPostcode: boolean = scotlandPrefixes.some(prefix => postcode.startsWith(prefix))
     const isNIPostcode: boolean = postcode.startsWith('BT')
 
-    const ukPostcodeRegex: RegExp = /^[A-Z]{1,2}[0-9R][0-9A-Z]? [0-9][A-Z]{2}$/i
-    const isValidUKPostcode: boolean = ukPostcodeRegex.test(postcode)
+    const ukPostcodePattern = /^(([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z]))))[0-9][A-Za-z]{2}))$/
+    const isValidUKPostcode: boolean = ukPostcodePattern.test(postcode)
 
     return !isScotlandPostcode && !isNIPostcode && isValidUKPostcode
   }
