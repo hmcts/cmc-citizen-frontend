@@ -28,7 +28,7 @@ describe('Address', () => {
         postcode: 'G12 8AA'
       }
       const add: Address = new Address().deserialize(input)
-      expect(add.isCompleted()).to.equal(false)
+      expect(add.isCompleted('defendant')).to.equal(false)
     })
 
     it('should return false when the postcode is from Northern Ireland', () => {
@@ -40,7 +40,7 @@ describe('Address', () => {
         postcode: 'BT1 1AB'
       }
       const add: Address = new Address().deserialize(input)
-      expect(add.isCompleted()).to.equal(false)
+      expect(add.isCompleted('defendant')).to.equal(false)
     })
   })
 })
