@@ -12,7 +12,7 @@ describe('Address', () => {
         postcode: 'BB12 7NQ'
       }
       const add: Address = new Address().deserialize(input)
-      expect(add.isCompleted()).to.equal(true)
+      expect(add.isCompleted('claimant')).to.equal(true)
     })
 
     it('should return false when there is no postcode', () => {
