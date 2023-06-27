@@ -44,36 +44,9 @@ gulp.task('copy-files', (done) => {
   copyDatePickerDependencies()
   copyComponents()
   copyGovukFrontendFonts()
-  copyCookieBanner()
   done()
 })
 
-function copyCookieBanner() {
-  gulp.src([
-    `./node_modules/cmc-cookies-manager/shared-component/components/cookie-manager/**/*.js`
-  ])
-    .pipe(gulp.dest(`${assetsDirectory}/js/`))
-
-  gulp.src([
-    `./node_modules/cmc-cookies-manager/shared-component/components/cookie-manager/**/*.njk`
-  ])
-    .pipe(gulp.dest(`${appDirectory}/cookie-manager/`))
-
-  gulp.src([
-    `./node_modules/cmc-cookies-manager/shared-component/components/button/**/*.*`
-  ])
-    .pipe(gulp.dest(`${appDirectory}/button/`))
-
-  gulp.src([
-    `./node_modules/cmc-cookies-manager/shared-component/components/styles/**/*.css`,
-  ])
-    .pipe(gulp.dest(`${stylesheetsDirectory}/`))
-
-  gulp.src([
-    `./node_modules/cmc-cookies-manager/shared-component/components/cookie-banner/**/*.*`
-  ])
-    .pipe(gulp.dest(`${appDirectory}/cookie-banner/`))
-}
 
 gulp.task('sass-govuk-frontend', (done) => {
   gulp.src(govUkFrontendRoot + '/*.scss')
