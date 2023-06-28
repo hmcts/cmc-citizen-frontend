@@ -640,6 +640,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@hmcts/cookie-manager@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@hmcts/cookie-manager@npm:1.0.0"
+  checksum: 7b9aacd5510f296fad664cbce2ad3bde1dfbe6276f79e05ecd7f3a437fd6b5415b95a202354a4ad2d2bb41ad4ddda436202e757eca8d106ddf1d28d801169657
+  languageName: node
+  linkType: hard
+
 "@hmcts/ctsc-web-chat@npm:^0.3.10":
   version: 0.3.12
   resolution: "@hmcts/ctsc-web-chat@npm:0.3.12"
@@ -3383,6 +3390,7 @@ __metadata:
     "@hmcts/cmc-supported-browsers": ^1.0.1
     "@hmcts/cmc-validators": ^0.2.6
     "@hmcts/cookie-encrypter": ^1.0.1
+    "@hmcts/cookie-manager": ^1.0.0
     "@hmcts/ctsc-web-chat": ^0.3.10
     "@hmcts/draft-store-client": ^1.2.1
     "@hmcts/info-provider": ^1.0.0
