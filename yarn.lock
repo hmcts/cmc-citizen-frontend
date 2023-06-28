@@ -640,13 +640,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hmcts/cookie-manager@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@hmcts/cookie-manager@npm:1.0.0"
-  checksum: 7b9aacd5510f296fad664cbce2ad3bde1dfbe6276f79e05ecd7f3a437fd6b5415b95a202354a4ad2d2bb41ad4ddda436202e757eca8d106ddf1d28d801169657
-  languageName: node
-  linkType: hard
-
 "@hmcts/ctsc-web-chat@npm:^0.3.10":
   version: 0.3.12
   resolution: "@hmcts/ctsc-web-chat@npm:0.3.12"
@@ -3390,7 +3383,6 @@ __metadata:
     "@hmcts/cmc-supported-browsers": ^1.0.1
     "@hmcts/cmc-validators": ^0.2.6
     "@hmcts/cookie-encrypter": ^1.0.1
-    "@hmcts/cookie-manager": ^1.0.0
     "@hmcts/ctsc-web-chat": ^0.3.10
     "@hmcts/draft-store-client": ^1.2.1
     "@hmcts/info-provider": ^1.0.0
@@ -3430,6 +3422,7 @@ __metadata:
     chai-as-promised: ^7.1.1
     class-transformer: ^0.5.1
     classlist-polyfill: ^1.2.0
+    cmc-cookies-manager: "github:hmcts/cmc-cookies-manager#3.0.2"
     codacy-coverage: 3.4.0
     codeceptjs: ^2.6.11
     codecov: ^3.8.2
@@ -3513,6 +3506,15 @@ __metadata:
     webdriverio: ^7.7.4
   languageName: unknown
   linkType: soft
+
+"cmc-cookies-manager@github:hmcts/cmc-cookies-manager#3.0.2":
+  version: 1.0.6
+  resolution: "cmc-cookies-manager@https://github.com/hmcts/cmc-cookies-manager.git#commit=b41d9321c8c0b12ed36a550a0859b75c7c75467b"
+  dependencies:
+    govuk-frontend: ^3.11.0
+  checksum: aff8b2cf57f19e328b4b28dd00856d244895b1e0be8e235910df7d26f179f4fc719dcbba3b9b71e71fea14376eafa54ca471853f3de37df9b49af673fe6a6bae
+  languageName: node
+  linkType: hard
 
 "codacy-coverage@npm:3.4.0":
   version: 3.4.0
