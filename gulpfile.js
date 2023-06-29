@@ -44,7 +44,6 @@ gulp.task('copy-files', (done) => {
   copyDatePickerDependencies()
   copyComponents()
   copyGovukFrontendFonts()
-  copyCookieBanner()
   done()
 })
 
