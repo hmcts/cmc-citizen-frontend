@@ -18,6 +18,7 @@
             hide(postcodeAddressPicker(postcodeLookupWidget))
             clearAddressFields(postcodeLookupWidget)
             hide(addressSection(postcodeLookupWidget))
+            lookupPostcode(this.previousElementSibling.value, postcodeLookupWidget)
             var enteredPostcode = this.previousElementSibling.value;
 
             if (isUKPostcode(enteredPostcode) && !isScotlandOrWalesPostcode(enteredPostcode)) {
