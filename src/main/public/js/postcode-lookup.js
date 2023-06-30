@@ -18,13 +18,12 @@
             hide(postcodeAddressPicker(postcodeLookupWidget))
             clearAddressFields(postcodeLookupWidget)
             hide(addressSection(postcodeLookupWidget))
-            lookupPostcode(this.previousElementSibling.value, postcodeLookupWidget)
             var enteredPostcode = this.previousElementSibling.value;
 
             if (isUKPostcode(enteredPostcode) && !isScotlandOrWalesPostcode(enteredPostcode)) {
               lookupPostcode(enteredPostcode, postcodeLookupWidget);
             } else {
-              displayPostcodeError(postcodeLookupWidget);
+              handlePostcodeError(postcodeLookupWidget);
             }
           })
 
@@ -43,6 +42,8 @@
           var errorMessageElement = postcodeLookupWidget.querySelector('.postcode-search-error-message');
           errorMessageElement.textContent = "Invalid postcode or postcode from Scotland/Wales.";
           errorMessageElement.classList.remove('hidden');
+
+          postcodeLookupWidget.querySelector('.postcode-search-container').classList.add('form-group-error')
         }
 
         postcodeLookupWidget.querySelector('.postcode-select')
@@ -247,6 +248,7 @@
   }
 
   function handlePostcodeError (isNorthernIrelandPostcode, postcodeLookupWidget) {
+    displayPostcodeError(postcodeLookupWidget)
     showAddressError(isNorthernIrelandPostcode, postcodeLookupWidget)
     show(addressSection(postcodeLookupWidget))
     enterManuallyHiddenInput(postcodeLookupWidget).value = 'true'
