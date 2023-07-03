@@ -18,33 +18,8 @@
             hide(postcodeAddressPicker(postcodeLookupWidget))
             clearAddressFields(postcodeLookupWidget)
             hide(addressSection(postcodeLookupWidget))
-            var enteredPostcode = this.previousElementSibling.value;
-
-            if (isUKPostcode(enteredPostcode) && !isScotlandOrWalesPostcode(enteredPostcode)) {
-              lookupPostcode(enteredPostcode, postcodeLookupWidget);
-            } else {
-              handlePostcodeError(postcodeLookupWidget);
-            }
+            lookupPostcode(this.previousElementSibling.value, postcodeLookupWidget)
           })
-
-        function isUKPostcode(postcode) {
-          var ukPostcodePattern = /^[A-Z]{1,2}\d[A-Z\d]? \d[A-Z]{2}$/i;
-          return ukPostcodePattern.test(postcode);
-        }
-
-        function isScotlandOrWalesPostcode(postcode) {
-          var scotlandPostcodePattern = /^(AB|DD|DG|EH|FK|G|HS|IV|KA|KW|KY|ML|PA|PH|TD|ZE)/i;
-          var walesPostcodePattern = /^(CF|CH|HR|LD|LL|NP|SA|SY)/i;
-          return scotlandPostcodePattern.test(postcode) || walesPostcodePattern.test(postcode);
-        }
-
-        function displayPostcodeError(postcodeLookupWidget) {
-          var errorMessageElement = postcodeLookupWidget.querySelector('.postcode-search-error-message');
-          errorMessageElement.textContent = "Invalid postcode or postcode from Scotland/Wales.";
-          errorMessageElement.classList.remove('hidden');
-
-          postcodeLookupWidget.querySelector('.postcode-search-container').classList.add('form-group-error')
-        }
 
         postcodeLookupWidget.querySelector('.postcode-select')
           .addEventListener('change', function (event) {
@@ -248,7 +223,6 @@
   }
 
   function handlePostcodeError (isNorthernIrelandPostcode, postcodeLookupWidget) {
-    displayPostcodeError(postcodeLookupWidget)
     showAddressError(isNorthernIrelandPostcode, postcodeLookupWidget)
     show(addressSection(postcodeLookupWidget))
     enterManuallyHiddenInput(postcodeLookupWidget).value = 'true'
@@ -291,7 +265,7 @@
           var option = postcodeDropdownOption(address)
           if(option != undefined){
             postcodeSelectDropdown.appendChild(option)
-           }
+          }
         }
       })
       //If already in list we don't do above as already in list
@@ -317,7 +291,7 @@
     var localityLine = extractLocalityLine(address)
 
     if(address.organisationName && address.organisationName !== ""){
-       valueFormattedAddress.addressLines.push(address.organisationName)
+      valueFormattedAddress.addressLines.push(address.organisationName)
     }
 
     if (!buildingNameLine && (!streetLine || !address.buildingNumber) && address.organisationName && address.organisationName !== '') {
