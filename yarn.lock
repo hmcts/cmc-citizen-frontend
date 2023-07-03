@@ -3422,7 +3422,7 @@ __metadata:
     chai-as-promised: ^7.1.1
     class-transformer: ^0.5.1
     classlist-polyfill: ^1.2.0
-    cmc-cookies-manager: "github:hmcts/cmc-cookies-manager#3.0.2"
+    cmc-cookies-manager: "github:hmcts/cmc-cookies-manager#3.0.3"
     codacy-coverage: 3.4.0
     codeceptjs: ^2.6.11
     codecov: ^3.8.2
@@ -3507,12 +3507,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"cmc-cookies-manager@github:hmcts/cmc-cookies-manager#3.0.2":
+"cmc-cookies-manager@github:hmcts/cmc-cookies-manager#3.0.3":
   version: 1.0.6
-  resolution: "cmc-cookies-manager@https://github.com/hmcts/cmc-cookies-manager.git#commit=b41d9321c8c0b12ed36a550a0859b75c7c75467b"
+  resolution: "cmc-cookies-manager@https://github.com/hmcts/cmc-cookies-manager.git#commit=9ed2186df5b5d03853756f6cee914e24778cf662"
   dependencies:
-    govuk-frontend: ^3.11.0
-  checksum: aff8b2cf57f19e328b4b28dd00856d244895b1e0be8e235910df7d26f179f4fc719dcbba3b9b71e71fea14376eafa54ca471853f3de37df9b49af673fe6a6bae
+    govuk-frontend: ^4.6.0
+  checksum: 9630ee94c1133b09d3cc5da82eb676f0f167918e2a6d193088d609c032cf6599325941da94281471c3a1e8f38821f14f5816786654d56cad4e845da7ab419e6f
   languageName: node
   linkType: hard
 
@@ -6578,6 +6578,13 @@ __metadata:
   version: 3.14.0
   resolution: "govuk-frontend@npm:3.14.0"
   checksum: 14db4c8fad243c09a89178a2ea932e04a79a6e36ea1a10d3499f783a4d024cab1ecb6879ad6cb5ebdadda8cd3e2b16b1508a7873414be7cdcddc311cf6814bdf
+  languageName: node
+  linkType: hard
+
+"govuk-frontend@npm:^4.6.0":
+  version: 4.6.0
+  resolution: "govuk-frontend@npm:4.6.0"
+  checksum: 025a5b99f59aa84586a221b227c66c9ccf48d1b71e6df69ebd39e055b181328dd59ba392cef9f6a38b108c0b1276ba888619cc51343b2e2f35c668772f2ec472
   languageName: node
   linkType: hard
 
