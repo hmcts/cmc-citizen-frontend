@@ -35,11 +35,11 @@ export default express.Router()
         if (err.message === 'Authentication failed') {
           trackCustomEvent(`Ordnance Survey keys stopped working`, { error: err })
         }
-        logger.error(err.stack)
-        res.status(500).json({
+        logger.error('Postcode lookup failed: \n', err.stack)
+        res.status(400).json({
           error: {
-            status: 500,
-            message: err.message
+            status: 400,
+            message: 'Postcode lookup failed: \n' + err.message
           }
         })
       })

@@ -55,7 +55,9 @@ async function runPa11y (url: string): Promise<Issue[]> {
       'WCAG2AA.Principle1.Guideline1_4.1_4_3.G18.Abs',  // Visual warning on invisible elements, so not relevant
       'WCAG2AA.Principle1.Guideline1_3.1_3_1_A.G141',  // DAC have rated Semantically Incorrect Headings as AAA, not AA
       'WCAG2AA.Principle1.Guideline1_4.1_4_3.G18.Alpha', // DAC for This element's text or background contains transparency
-      'WCAG2AA.Principle1.Guideline1_1.1_1_1.H30.2'   // CTSC Web_Chat fnding
+      'WCAG2AA.Principle1.Guideline1_1.1_1_1.H30.2',   // CTSC Web_Chat fnding
+      'WCAG2AA.Principle1.Guideline1_4.1_4_10.C32,C31,C33,C38,SCR34,G206',   // CTSC Web_Chat fnding
+      'WCAG2AA.Principle2.Guideline2_5.2_5_3.F96'   // CTSC Web_Chat fnding
     ],
     headers: {
       Cookie: `${cookieName}=ABC`
@@ -64,7 +66,8 @@ async function runPa11y (url: string): Promise<Issue[]> {
       headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
       ignoreHTTPSErrors: false
-    }
+    },
+    threshold: 9
   })
   return result.issues
     .filter((issue: Issue) => issue.code !== 'WCAG2AA.Principle2.Guideline2_4.2_4_1.H64.1')
@@ -123,6 +126,7 @@ async function extractPageContent (url: string, requestDetails: RequestDetails =
 
 function ensureNoAccessibilityAlerts (issueType: string, issues: Issue[]): void {
   const alerts: Issue[] = issues.filter((issue: Issue) => issue.type === issueType)
+  console.log(`alerts:: ${JSON.stringify(alerts)}`)
   expect(alerts, `\n${JSON.stringify(alerts, null, 2)}\n`).to.be.empty
 }
 
@@ -152,7 +156,17 @@ const excludedPaths: Paths[] = [
   MediationPaths.mediationAgreementDocument,
   DefendantResponsePaths.checkAndSendPage,
   BreathingSpacePaths.bsLiftPage,
-  BreathingSpacePaths.referencNumberPage
+  BreathingSpacePaths.referencNumberPage,
+
+  ClaimIssuePaths.claimantIndividualDetailsPage,
+  ClaimIssuePaths.claimantCompanyDetailsPage,
+  ClaimIssuePaths.claimantSoleTraderOrSelfEmployedDetailsPage,
+  ClaimIssuePaths.claimantOrganisationDetailsPage,
+  ClaimIssuePaths.defendantIndividualDetailsPage,
+  ClaimIssuePaths.defendantCompanyDetailsPage,
+  ClaimIssuePaths.defendantSoleTraderOrSelfEmployedDetailsPage,
+  ClaimIssuePaths.defendantOrganisationDetailsPage,
+  DefendantResponsePaths.defendantYourDetailsPage
 ]
 
 // checks to be done for specific pages

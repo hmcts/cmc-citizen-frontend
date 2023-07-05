@@ -29,10 +29,13 @@ export class TaskListBuilder extends TaskStatus {
     )
   }
 
-  static buildSubmitSection (): TaskList {
-    return new TaskList('Submit', [
-      new TaskListItem('Check and submit your claim', Paths.checkAndSendPage.uri, false)
-    ])
+  static async buildSubmitSection (): Promise<TaskList> {
+    return new Promise<TaskList>((resolve) => {
+      const submitTaskList = new TaskList('Submit', [
+        new TaskListItem('Check and submit your claim', Paths.checkAndSendPage.uri, false)
+      ])
+      resolve(submitTaskList)
+    })
   }
 
   static async buildRemainingTasks (draft: DraftClaim): Promise<TaskListItem[]> {
