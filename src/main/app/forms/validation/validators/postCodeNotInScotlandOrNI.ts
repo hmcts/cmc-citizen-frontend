@@ -10,7 +10,7 @@ export class PostcodeNotInScotlandOrNIValidator implements ValidatorConstraintIn
       return false
     }
     const ukPostcodeRegex = /^([Gg][Ii][Rr]\s?0[Aa]{2}|[A-Za-z]{1,2}\d[A-Za-z\d]?(\s?\d[A-Za-z]{2})?)$/
-    const normalised = value.toString().replace(/\s/g,'')
+    const normalised = value.toString().replace(/\s/g,'').toUpperCase()
     const isValidFormat = ukPostcodeRegex.test(normalised)
 
     if (!isValidFormat) {
