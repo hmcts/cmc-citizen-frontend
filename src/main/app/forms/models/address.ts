@@ -77,7 +77,7 @@ export class Address implements CompletableTask {
   })
   @Validate(PostcodeNotInScotlandOrNIValidator, {
     message: ValidationErrors.POSTCODE_NOT_IN_UK,
-    groups: ['defendant']
+    groups: ['defendant', 'response']
   })
   postcode?: string
 
