@@ -17,8 +17,8 @@ export class PostcodeNotInScotlandOrNIValidator implements ValidatorConstraintIn
       return false
     }
     const scotlandPrefixes: string[] = ['KW', 'IV', 'HS', 'PH', 'AB', 'DD', 'KY', 'FK', 'EH', 'G', 'KA', 'ML', 'PA', 'TD', 'DG', 'ZE']
-    const isScotlandPostcode: boolean = scotlandPrefixes.some(prefix => postcode.startsWith(prefix))
-    const isNIPostcode: boolean = postcode.startsWith('BT')
+    const isScotlandPostcode: boolean = scotlandPrefixes.some(prefix => postcode.toUpperCase().startsWith(prefix))
+    const isNIPostcode: boolean = postcode.toUpperCase().startsWith('BT')
     return !isScotlandPostcode && !isNIPostcode
   }
 
