@@ -26,7 +26,7 @@ export class ValidationErrors {
 
   static readonly POSTCODE_REQUIRED: string = 'Enter postcode'
   static readonly POSTCODE_NOT_VALID: string = 'Postcode must be in United Kingdom'
-  static readonly POSTCODE_NOT_IN_UK: string = 'Postcode must be in England or Wales'
+  static readonly DEFENDANT_POSTCODE_NOT_VALID: string = 'Postcode must be in England or Wales'
   static readonly ADDRESS_DROPDOWN_REQUIRED: string = 'Select an address'
 }
 
@@ -76,7 +76,7 @@ export class Address implements CompletableTask {
     groups: ['claimant']
   })
   @Validate(PostcodeNotInScotlandOrNIValidator, {
-    message: ValidationErrors.POSTCODE_NOT_IN_UK,
+    message: ValidationErrors.DEFENDANT_POSTCODE_NOT_VALID,
     groups: ['defendant', 'response']
   })
   postcode?: string

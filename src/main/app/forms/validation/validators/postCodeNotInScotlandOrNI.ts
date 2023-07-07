@@ -1,5 +1,5 @@
-import { ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from "@hmcts/class-validator"
-import { ValidationErrors } from "forms/models/address"
+import { ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from '@hmcts/class-validator'
+import { ValidationErrors } from 'forms/validation/validationErrors'
 
 @ValidatorConstraint({ name: 'postcodeNotInScotlandOrNI', async: false })
 export class PostcodeNotInScotlandOrNIValidator implements ValidatorConstraintInterface {
@@ -23,6 +23,6 @@ export class PostcodeNotInScotlandOrNIValidator implements ValidatorConstraintIn
   }
 
   defaultMessage (args: ValidationArguments) {
-    return ValidationErrors.POSTCODE_NOT_IN_UK
+    return ValidationErrors.DEFENDANT_POSTCODE_NOT_VALID
   }
 }
