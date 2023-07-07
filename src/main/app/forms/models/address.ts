@@ -3,14 +3,14 @@ import {
   MaxLength,
   Validate,
   ValidateIf,
-  Validator,
+  Validator
 } from '@hmcts/class-validator'
 import { CompletableTask } from 'models/task'
 
 import { Address as ClaimAddress } from 'claims/models/address'
 import * as toBoolean from 'to-boolean'
 import { ExtraFormFieldsArePopulated, IsNotBlank, IsValidPostcode } from '@hmcts/cmc-validators'
-import { PostcodeNotInScotlandOrNIValidator } from "forms/validation/validators/postCodeNotInScotlandOrNI"
+import { PostcodeNotInScotlandOrNIValidator } from 'forms/validation/validators/postCodeNotInScotlandOrNI'
 
 const validator: Validator = new Validator()
 
