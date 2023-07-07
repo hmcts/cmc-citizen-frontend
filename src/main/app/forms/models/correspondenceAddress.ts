@@ -1,8 +1,7 @@
-import { IsDefined, MaxLength, Validate } from '@hmcts/class-validator'
+import { IsDefined, MaxLength } from '@hmcts/class-validator'
 
 import { Address } from 'forms/models/address'
 import { IsNotBlank, IsValidPostcode } from '@hmcts/cmc-validators'
-import { PostcodeNotInScotlandOrNIValidator } from 'forms/validation/validators/postCodeNotInScotlandOrNI'
 
 export class ValidationErrors {
   static readonly FIRST_LINE_REQUIRED: string = 'Enter first correspondence address line'
@@ -16,7 +15,7 @@ export class ValidationErrors {
 
   static readonly POSTCODE_REQUIRED: string = 'Enter correspondence address postcode'
   static readonly POSTCODE_NOT_VALID: string = 'Postcode must be in United Kingdom'
-  static readonly POSTCODE_NOT_IN_UK: string = 'Postcode must be in England or Wales'
+  static readonly DEFENDANT_POSTCODE_NOT_VALID: string = 'Postcode must be in England or Wales'
 }
 
 export class ValidationConstants {
@@ -43,8 +42,8 @@ export class CorrespondenceAddress extends Address {
     message: ValidationErrors.POSTCODE_NOT_VALID,
     groups: ['claimant']
   })
-  @Validate(PostcodeNotInScotlandOrNIValidator, {
-    message: ValidationErrors.POSTCODE_NOT_IN_UK,
+  @IsValidPostcode({
+    message: ValidationErrors.DEFENDANT_POSTCODE_NOT_VALID,
     groups: ['defendant', 'response']
   })
   postcode?: string
