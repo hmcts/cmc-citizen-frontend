@@ -13,8 +13,8 @@ export const addressCorrespondenceAddress = {
     line1: 'Flat 20',
     line2: 'Street 20',
     line3: 'Cooler house name',
-    city: 'Belfast',
-    postcode: 'BT2 5GB'
+    city: 'London',
+    postcode: 'SE1 8ST'
   }
 }
 
