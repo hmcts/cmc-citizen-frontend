@@ -33,7 +33,7 @@ import { OrdersFeature } from 'orders/index'
 import { trackCustomEvent } from 'logging/customEventTracker'
 import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 import { Feature as BreathingSpaceFeature } from 'breathing-space/index'
-import { injectGtm } from 'routes/google-tag-manager'
+import { injectGtm, userPreferencesLoaded, userPreferencesSaved } from 'routes/google-tag-manager'
 
 logger.info('Creating express server object')
 
@@ -55,8 +55,10 @@ new Helmet(config.get<HelmetConfig>('security'), developmentMode)
 logger.info('Creating LaunchDarkly Client')
 const launchDarklyClient = new LaunchDarklyClient()
 
-logger.info('injecting Google Tag Manager')
+logger.info('injecting Cookies Manager and Google Tag Manager')
 app.use(injectGtm)
+app.use(userPreferencesLoaded)
+app.use(userPreferencesSaved)
 
 logger.info('Loading feature toggles')
 const featureToggles = new FeatureToggles(launchDarklyClient)
