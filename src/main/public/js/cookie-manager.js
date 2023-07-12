@@ -1,4 +1,4 @@
-         import cookieManager from '@hmcts/cookie-manager';
+const cookieManager = require('@hmcts/cookie-manager');
 
 cookieManager.on('UserPreferencesLoaded', (preferences) => {
   const dataLayer = window.dataLayer || [];

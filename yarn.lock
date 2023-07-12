@@ -546,13 +546,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dynatrace/dtrum-api-types@npm:^1.263.3":
-  version: 1.263.3
-  resolution: "@dynatrace/dtrum-api-types@npm:1.263.3"
-  checksum: ea67bb1446a6310d49e70035508abf7c9f085c41a3acb123b44f71d7700fa9a1d7d608c2910e2a9d41d04af4060d99204eb4a92738c13f20efdbc3dbf7657f34
-  languageName: node
-  linkType: hard
-
 "@eslint-community/eslint-utils@npm:^4.2.0":
   version: 4.4.0
   resolution: "@eslint-community/eslint-utils@npm:4.4.0"

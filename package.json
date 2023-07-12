@@ -34,7 +34,6 @@
   },
   "dependencies": {
     "@analytics/google-tag-manager": "^0.5.3",
-    "@dynatrace/dtrum-api-types": "^1.263.3",
     "@hmcts/class-validator": "^0.9.1-e",
     "@hmcts/cmc-draft-store-middleware": "^2.0.1",
     "@hmcts/cmc-validators": "^0.2.6",
