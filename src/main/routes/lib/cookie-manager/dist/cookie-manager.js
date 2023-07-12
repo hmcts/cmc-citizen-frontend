@@ -111,6 +111,7 @@ var CookieHandler = /** @class */ (function () {
 
 var EventProcessor = /** @class */ (function () {
     function EventProcessor() {
+        console.log("**********************************something is being loaded here******************************************");
     }
     /**
     * Adds a callback/event listener to the specified event, which will be called when the event occurs.

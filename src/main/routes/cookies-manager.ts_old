@@ -1,4 +1,4 @@
-import cookiesManager  from './lib/cookie-manager/dist/cookie-manager'
+import cookieManager  from './lib/cookie-manager/dist/cookie-manager'
 import { DtrumApi } from '@dynatrace/dtrum-api-types'
 import * as express from 'express'
 
@@ -43,16 +43,16 @@ export class CookiePreferencesManager {
 
   constructor() {
     this.setupEventListeners();
-    cookiesManager.init(this.config);
+    cookieManager.init(this.config);
   }
 
   private setupEventListeners(): void {
-    cookiesManager.on('UserPreferencesLoaded', (preferences: any) => {
+    cookieManager.on('UserPreferencesLoaded', (preferences: any) => {
       const dataLayer = window.dataLayer || [];
       dataLayer.push({ 'event': 'Cookie Preferences', 'cookiePreferences': preferences });
     });
 
-    cookiesManager.on('UserPreferencesSaved', (preferences: any) => {
+    cookieManager.on('UserPreferencesSaved', (preferences: any) => {
       const dataLayer = window.dataLayer || [];
       const dtrum = window.dtrum;
       dataLayer.push({ 'event': 'Cookie Preferences', 'cookiePreferences': preferences });
