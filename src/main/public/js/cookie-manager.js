@@ -28,6 +28,15 @@ const config = {
   },
   cookieManifest: [
     {
+      categoryName: 'essential',
+      optional: false,
+      cookies: [
+        'i18next',
+        'cmc-cookie-preferences',
+        '_oauth2_proxy'
+      ]
+    },
+    {
       categoryName: 'analytics',
       cookies: [
         '_ga',
