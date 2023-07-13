@@ -23,7 +23,7 @@ src/main/public/webchat/css/*.css
 src/main/public/stylesheets/lib/*
 src/main/public/apple-touch-icon.png
 src/main/public/assets/fonts/*
-src/main/common/components/imported/**/*
+src/main/common/components/imported/tabs/**/*
 
 node-rpm-packaging/
 mochawesome-report/

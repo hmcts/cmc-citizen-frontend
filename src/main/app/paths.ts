@@ -12,6 +12,8 @@ export class Paths {
   static readonly contactUsPage = new RoutablePath('/contact-us', false)
   static readonly accessibilityPage = new RoutablePath('/accessibility-statement', false)
   static readonly webChatPage = new RoutablePath('/web-chat', false)
+  static readonly cookieBanner = new RoutablePath('/cookie-banner', false)
+  static readonly cookiePreferences = new RoutablePath('/cookie-preferences', false)
 
   // Ajax endpoints
   static readonly postcodeLookupProxy = new RoutablePath('/postcode-lookup', false)
