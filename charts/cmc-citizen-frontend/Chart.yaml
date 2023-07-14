@@ -16,12 +16,12 @@ dependencies:
     repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
 
   - name: idam-pr
-    version: 2.2.7
+    version: 2.3.0
     repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
     condition: idam-pr.enabled
 
   - name: cmc-claim-store
-    version: 4.1.43
+    version: 4.1.44
     repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
     condition: cmc-claim-store.enabled
 
