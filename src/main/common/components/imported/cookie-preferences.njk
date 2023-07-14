@@ -1,0 +1,54 @@
+{% from "cmc-cookies-manager/shared-component/components/radios/macro.njk" import govukRadios %}
+{% from "cmc-cookies-manager/shared-component/components/button/macro.njk" import govukButton %}
+
+<form class="cookie-preferences-form">
+  {{ govukRadios({
+    classes: 'govuk-radios',
+    idPrefix: 'analytics',
+    name: 'analytics',
+    fieldset: {
+      legend: {
+        text: "Allow cookies that measure website use?",
+        classes: "govuk-fieldset__legend--s"
+      }
+    },
+    items: [
+      {
+        value: 'on',
+        text: 'Use cookies that measure my website use'
+      },
+      {
+        value: 'off',
+        text: 'Do not use cookies that measure my website use',
+        checked: true
+      }
+    ]
+  }) }}
+
+  {{ govukRadios({
+    classes: 'govuk-radios',
+    idPrefix: 'apm',
+    name: 'apm',
+    fieldset: {
+      legend: {
+        text: "Allow cookies that measure website application performance monitoring?",
+        classes: "govuk-fieldset__legend--s"
+      }
+    },
+    items: [
+      {
+        value: 'on',
+        text: 'Use cookies that measure website application performance monitoring'
+      },
+      {
+        value: 'off',
+        text: 'Do not use cookies that measure website application performance monitoring',
+        checked: true
+      }
+    ]
+  }) }}
+
+  {{ govukButton({
+    text: 'Save'
+  }) }}
+</form>
