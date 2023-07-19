@@ -44,7 +44,7 @@ export class CorrespondenceAddress extends Address {
   @IsNotBlank({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @Validate(PostcodeNotInScotlandOrNIValidator, {
     message: ValidationErrors.DEFENDANT_POSTCODE_NOT_VALID,
-    groups: ['claimant', 'response']
+    groups: ['claimant']
   })
   postcode?: string
 }
