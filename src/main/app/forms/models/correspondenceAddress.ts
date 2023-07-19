@@ -4,7 +4,7 @@ import {
   Validate
 } from '@hmcts/class-validator'
 import { Address } from 'forms/models/address'
-import { IsNotBlank, IsValidPostcode } from '@hmcts/cmc-validators'
+import { IsNotBlank } from '@hmcts/cmc-validators'
 import { PostcodeNotInScotlandOrNIValidator } from 'forms/validation/validators/postCodeNotInScotlandOrNI'
 
 export class ValidationErrors {
