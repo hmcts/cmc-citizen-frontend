@@ -12,7 +12,7 @@ export const addressCorrespondenceAddress = {
   correspondenceAddress: {
     line1: 'Flat 2',
     line2: 'Street 2',
-    line3: 'Cool house name',
+    line3: 'Cooler house name',
     city: 'London',
     postcode: 'E2 8FA'
   }
