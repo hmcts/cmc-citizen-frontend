@@ -42,10 +42,6 @@ export class CorrespondenceAddress extends Address {
   city?: string
   @IsDefined({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
   @IsNotBlank({ message: ValidationErrors.POSTCODE_REQUIRED, groups: ['claimant', 'defendant', 'response'] })
-  @IsValidPostcode({
-    message: ValidationErrors.POSTCODE_NOT_VALID,
-    groups: ['claimant']
-  })
   @Validate(PostcodeNotInScotlandOrNIValidator, {
     message: ValidationErrors.DEFENDANT_POSTCODE_NOT_VALID,
     groups: ['claimant', 'response']
