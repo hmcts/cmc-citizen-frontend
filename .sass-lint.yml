@@ -2,6 +2,8 @@ options:
   max-warnings: 0
 files:
   include: 'src/**/*.scss'
+  ignore:
+     - 'src/**/imported/**/*.scss'
 rules:
   class-name-format: 0
   no-important: 0
