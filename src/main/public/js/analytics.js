@@ -13,7 +13,8 @@ xhttp.onreadystatechange = function() {
     })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
     var cookiesPolicy = getCookie("cookies_policy");
-    if (cookiesPolicy.split(',')[1].split(':')[1] === 'true') {
+
+    if (cookiesPolicy !== undefined && cookiesPolicy !== '' && (cookiesPolicy.split(',')[1].split(':')[1] === 'true')) {
       window['ga-disable-'+json.gaTrackingId] = false
       ga('create', json.gaTrackingId, 'auto');
       ga('send', 'pageview');
