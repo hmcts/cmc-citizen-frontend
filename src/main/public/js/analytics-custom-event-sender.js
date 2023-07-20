@@ -67,7 +67,10 @@ $(function () {
   // Send a google analytics event when an element that has the 'analytics-click-event-trigger' class is clicked.
   $('.analytics-click-event-trigger').on('click', function () {
     var cookies_policy = getCookie("cookies_policy");
-    var json = JSON.parse(this.response);
+    var json = null;
+    if (typeof this.reponse !== 'undefined' || this.response !== undefined){
+      json = JSON.parse(this.response);
+    }
     if (!cookies_policy && cookies_policy.split(',')[1].split(':')[1] === 'true')
     {
       var label = $(this).data('eventLabel')
