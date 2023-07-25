@@ -4,6 +4,7 @@ import { CompletableTask } from 'models/task'
 import { Address as ClaimAddress } from 'claims/models/address'
 import * as toBoolean from 'to-boolean'
 import { IsNotBlank, IsValidPostcode, ExtraFormFieldsArePopulated } from '@hmcts/cmc-validators'
+import { IsPostCodeLengthValid } from '../validation/validators/defendantPostcodeValidation'
 
 const validator: Validator = new Validator()
 
@@ -67,6 +68,7 @@ export class Address implements CompletableTask {
     message: ValidationErrors.POSTCODE_NOT_VALID,
     groups: ['claimant']
   })
+  @IsPostCodeLengthValid({ message: ValidationErrors.POSTCODE_NOT_VALID, groups: ['claimant', 'defendant', 'response'] })
   postcode?: string
 
   @ValidateIf(o => !o.addressVisible && !o.addressSelectorVisible, { groups: ['claimant', 'defendant', 'response'] })
