@@ -9,7 +9,7 @@ import {
 @ValidatorConstraint()
 export class DefendantPostcodeValidation implements ValidatorConstraintInterface {
     validate(value: any, validationArguments?: ValidationArguments): boolean | Promise<boolean> {
-        if (value == undefined || value.length < 5){
+        if (value == undefined || value.toString().replace(/[' ']?[\s]/g,'').length < 5) {
             return false
         }
         return true
