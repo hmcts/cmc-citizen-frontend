@@ -25,4 +25,6 @@ export class ValidationErrors {
   static readonly AMOUNT_NOT_VALID: string = 'Enter a valid amount'
 
   static readonly DECLARATION_REQUIRED: string = 'Please select I confirm I’ve read and accept the terms of the agreement.'
+
+  static readonly DEFENDANT_POSTCODE_NOT_VALID: string = 'Postcode must be in England or Wales'
 }
