@@ -1,9 +1,17 @@
-import { IsDefined, MaxLength, ValidateIf, Validator } from '@hmcts/class-validator'
+import {
+  IsDefined,
+  MaxLength,
+  Validate,
+  ValidateIf,
+  Validator
+} from '@hmcts/class-validator'
 import { CompletableTask } from 'models/task'
 
 import { Address as ClaimAddress } from 'claims/models/address'
 import * as toBoolean from 'to-boolean'
-import { IsNotBlank, IsValidPostcode, ExtraFormFieldsArePopulated } from '@hmcts/cmc-validators'
+import { ExtraFormFieldsArePopulated, IsNotBlank, IsValidPostcode } from '@hmcts/cmc-validators'
+import { PostcodeNotInScotlandOrNIValidator } from 'forms/validation/validators/postCodeNotInScotlandOrNI'
+import { IsPostCodeLengthValid } from '../validation/validators/defendantPostcodeValidation'
 
 const validator: Validator = new Validator()
 
@@ -18,7 +26,8 @@ export class ValidationErrors {
   static readonly CITY_NOT_VALID: string = 'The city must be no longer than $constraint1 characters'
 
   static readonly POSTCODE_REQUIRED: string = 'Enter postcode'
-  static readonly POSTCODE_NOT_VALID: string = 'Postcode must be in United Kingdom'
+  static readonly POSTCODE_NOT_VALID: string = 'Please enter a valid United Kingdom postcode'
+  static readonly DEFENDANT_POSTCODE_NOT_VALID: string = 'Postcode must be in England or Wales'
   static readonly ADDRESS_DROPDOWN_REQUIRED: string = 'Select an address'
 }
 
@@ -66,6 +75,12 @@ export class Address implements CompletableTask {
   @IsValidPostcode({
     message: ValidationErrors.POSTCODE_NOT_VALID,
     groups: ['claimant']
+  })
+
+  @IsPostCodeLengthValid({ message: ValidationErrors.POSTCODE_NOT_VALID, groups: ['claimant', 'defendant', 'response'] })
+  @Validate(PostcodeNotInScotlandOrNIValidator, {
+    message: ValidationErrors.DEFENDANT_POSTCODE_NOT_VALID,
+    groups: ['defendant', 'response']
   })
   postcode?: string
 
