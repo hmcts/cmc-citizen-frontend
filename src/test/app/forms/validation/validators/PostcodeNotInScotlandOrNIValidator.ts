@@ -13,6 +13,34 @@ describe('PostcodeNotInScotlandOrNIValidator', () => {
       const result = validator.validate('TD9 9WX', null)
       expect(result).to.be.true
     })
+    it('should return true for a valid postcode in England starts with TD', () => {
+      const result = validator.validate('TD9 0TS', null)
+      expect(result).to.be.true
+    })
+    it('should return true for a valid postcode in England starts with TD', () => {
+      const result = validator.validate('TD12 4TJ', null)
+      expect(result).to.be.true
+    })
+    it('should return true for a valid postcode in England starts with TD', () => {
+      const result = validator.validate('TD15 2PA', null)
+      expect(result).to.be.true
+    })
+    it('should return true for a valid postcode in England starts with TD', () => {
+      const result = validator.validate('TD15 1BN', null)
+      expect(result).to.be.true
+    })
+    it('should return true for a valid postcode in England starts with TD', () => {
+      const result = validator.validate('TD15 1SY', null)
+      expect(result).to.be.true
+    })
+    it('should return true for a valid postcode in England starts with TD', () => {
+      const result = validator.validate('TD15 1UB', null)
+      expect(result).to.be.true
+    })
+    it('should return true for a valid postcode in England starts with TD', () => {
+      const result = validator.validate('TD15 1BN', null)
+      expect(result).to.be.true
+    })
     it('should return true for a valid postcode in England starts with DG', () => {
       const result = validator.validate('DG16 5HZ', null)
       expect(result).to.be.true
