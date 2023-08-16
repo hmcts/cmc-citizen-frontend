@@ -41,6 +41,10 @@ describe('PostcodeNotInScotlandOrNIValidator', () => {
       const result = validator.validate('TD15 1BN', null)
       expect(result).to.be.true
     })
+    it('should return true for a valid postcode in England starts with TD', () => {
+      const result = validator.validate('TD5 8AR', null)
+      expect(result).to.be.true
+    })
     it('should return true for a valid postcode in England starts with DG', () => {
       const result = validator.validate('DG16 5HZ', null)
       expect(result).to.be.true

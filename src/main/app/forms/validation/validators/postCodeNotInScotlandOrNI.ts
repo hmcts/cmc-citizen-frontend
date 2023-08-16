@@ -31,7 +31,7 @@ export class PostcodeNotInScotlandOrNIValidator implements ValidatorConstraintIn
       normalised.startsWith('KA') ||
       normalised.startsWith('ML') ||
       normalised.startsWith('PA') ||
-      (normalised.startsWith('TD') && !normalised.startsWith('TD9') && !normalised.startsWith('TD12') && !normalised.startsWith('TD15')) ||
+      (normalised.startsWith('TD') && !normalised.startsWith('TD9') && !normalised.startsWith('TD12') && !normalised.startsWith('TD15') && !normalised.match('TD58AR')) ||
       (normalised.startsWith('DG') && !normalised.startsWith('DG16')) ||
       (normalised.startsWith('G') && !normalised.startsWith('GU') && !normalised.startsWith('GL'))
 
