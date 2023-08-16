@@ -21,7 +21,6 @@
 
   {% if addressSection %}
     <h2 class="heading-medium">{{ t(addressSection.heading) }}</h2>
-    <p>{{ t('If your address is not correct you can change it here. Any changes will be shared with the claimant when you submit your response.') }}</p>
     {% if addressSection.hint %}
       <p>{{ t(addressSection.hint) }}</p>
     {% endif %}
@@ -118,7 +117,7 @@
 {% endmacro %}
 
 {% macro partyDetail(partyDetails, showCorrespondenceAddressSection = true, changeLinks = {}, claim) %}
-  
+
   {% set linkHref = changeLinks.partyDetails or changeLinks.name  or changeLinks.contactPerson %}
   {{ partyDetailRow('Full name', partyDetails.name, changeLink = linkHref) }}
 
@@ -166,7 +165,7 @@
   {% if claim and claim.claimData.defendant.phone %}
     {{ partyDetailRow('Contact number', partyDetails.phone, changeLink = linkHref) }}
   {% endif %}
-  
+
   {% if (partyDetails.type === 'individual' and partyDetails.dateOfBirth and partyDetails.dateOfBirth.date) %}
     {{ partyDetailRow('Date of birth', partyDetails.dateOfBirth.date.toMoment() | date, changeLinks.dateOfBirth) }}
   {% endif %}
@@ -185,7 +184,7 @@
       {% else %}
         {{ t(value) }}
       {% endif %}
-      
+
     </dd>
     <dd class="govuk-summary-list__actions">
       {% if changeLink %}
@@ -193,6 +192,6 @@
       {% endif %}
     </dd>
   </div>
-  
+
 {% endmacro %}
 
