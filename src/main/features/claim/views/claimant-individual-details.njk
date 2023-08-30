@@ -14,7 +14,7 @@
       <form method="post" novalidate>
         {{ csrfProtection(csrf) }}
 
-        <p><strong><span class="icon-information">!</span> All details will be shared with the other parties involved in the claim.</strong></p>
+        <p><strong><span class="icon-important"> </span> All details will be shared with the other parties involved in the claim.</strong></p>
 
         <p>{{ t('These details are shared with the person, business or organisation you are claiming from (the defendant).') }}</p>
 
@@ -29,7 +29,7 @@
             addressSection = {
               heading: 'Your postal address',
               name: 'address',
-              postcodeLookup: true
+              postcodeLookup = true
             },
             showCorrespondenceAddressSection = true
           )
