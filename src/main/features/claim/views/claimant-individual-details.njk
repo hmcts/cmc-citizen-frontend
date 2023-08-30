@@ -14,11 +14,9 @@
       <form method="post" novalidate>
         {{ csrfProtection(csrf) }}
 
-        <p>{{ t('These details are shared with the person, business or organisation you are claiming from (the defendant).') }}</p>
+        <p><strong><span class="icon-information">!</span> All details will be shared with the other parties involved in the claim.</strong></p>
 
-        <div class="exclamation-circle">
-          <p><strong><span class="exclamation-circle">!</span> <span style="font-weight: bold;">All details will be shared with the other parties involved in the claim.</span></strong></p>
-        </div>
+        <p>{{ t('These details are shared with the person, business or organisation you are claiming from (the defendant).') }}</p>
 
         {{
           partyDetailsFragment(
@@ -41,5 +39,4 @@
       </form>
     </div>
   </div>
-
-   {% endblock %}
+{% endblock %}
