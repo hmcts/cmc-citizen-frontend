@@ -17,7 +17,7 @@
         <p>{{ t('These details are shared with the person, business or organisation you are claiming from (the defendant).') }}</p>
 
         <div class="additional-info">
-          <p><strong><i class="fas fa-exclamation-circle"></i> All details will be shared with the other parties involved in the claim.</strong></p>
+          <p><strong><span class="exclamation-icon">!</span> <span style="font-weight: bold;">All details will be shared with the other parties involved in the claim.</span></strong></p>
         </div>
 
         {{
@@ -41,4 +41,13 @@
       </form>
     </div>
   </div>
+
+  <style>
+    .exclamation-icon {
+      font-weight: bold;
+      font-size: 20px;
+      color: red;
+      margin-right: 5px;
+    }
+  </style>
 {% endblock %}
