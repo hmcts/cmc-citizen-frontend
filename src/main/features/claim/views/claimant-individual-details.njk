@@ -16,7 +16,10 @@
 
         <p>{{ t('These details are shared with the person, business or organisation you are claiming from (the defendant).') }}</p>
 
-        <p><span class="icon-important">___</span><span style="font-weight: bold;">All details will be shared with the other parties involved in the claim.</span></strong></p>
+        <div class="icon-container">
+          <span class="icon-important"></span>
+          <p><span style="font-weight: bold;">All details will be shared with the other parties involved in the claim.</span></p>
+        </div>
 
         {{
           partyDetailsFragment(
