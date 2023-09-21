@@ -29,7 +29,7 @@
         ) }}
         {{ partyDetailRow('Contact number (optional)', draftClaim.claimant.phone.number, paths.claimantPhonePage.uri) }}
       </dl>
-      
+
       <h2 class="govuk-heading-m">{{ t("Their details (defendant)") }}</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-9">
         {{ partyDetail(
@@ -127,7 +127,7 @@
         {% for details in draftClaim.timeline.getPopulatedRowsOnly() %}
           {{ partyDetailRow(label = details.date, value = details.description, changeLink = paths.timelinePage.uri) }}
         {% endfor %}
-        
+
         {{ partyDetailRow(label = 'Your evidence (optional)', value = '', changeLink = paths.evidencePage.uri) }}
 
         {% for details in draftClaim.evidence.getPopulatedRowsOnly() %}
@@ -136,6 +136,9 @@
 
       </dl>
       <div class="form-group">
+
+          <p><span class="icon-important" style=" display: inline-block; width: 35px; height: 35px;"></span><span style="font-weight: bold;"> All details will be shared with the other parties involved in the claim.</span></p>
+
         {{ statementOfTruthUpdated(
             form,
             statementOfTruthType = SignatureType.CLAIM,
