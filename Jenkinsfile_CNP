@@ -100,6 +100,7 @@ withPipeline("nodejs", product, component) {
   syncBranchesWithMaster(branchesToSync)
 
   onMaster {
+    env.ENVIRONMENT="aat"
     loadVaultSecrets(secrets)
   }
   
