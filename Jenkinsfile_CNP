@@ -96,7 +96,17 @@ withPipeline("nodejs", product, component) {
   enableAksStagingDeployment()
   disableLegacyDeployment()
 
-  loadVaultSecrets(secrets)
   enableSlackNotifications(notificationsChannel)
   syncBranchesWithMaster(branchesToSync)
+
+  onMaster {
+    env.ENVIRONMENT="aat"
+    loadVaultSecrets(secrets)
+  }
+  
+  onPR {
+    env.ENVIRONMENT = "preview"
+    env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+    loadVaultSecrets(secrets)
+  }
 }
