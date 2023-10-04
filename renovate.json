@@ -1,8 +1,8 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "gradle-wrapper": {
-    "enabled": true
-  },
+  "extends": [
+    "github>hmcts/.github//renovate/global"
+  ],
   "helm-requirements": {
     "enabled": true,
     "fileMatch": [
@@ -11,8 +11,5 @@
     "aliases": {
       "hmctspublic": "https://hmctspublic.azurecr.io/helm/v1/repo/"
     }
-  },
-  "extends": [
-    "github>hmcts/.github//renovate/global"
-  ]
+  }
 }
