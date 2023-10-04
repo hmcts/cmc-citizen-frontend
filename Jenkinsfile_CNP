@@ -96,7 +96,7 @@ withPipeline("nodejs", product, component) {
   enableAksStagingDeployment()
   disableLegacyDeployment()
 
-  // enableSlackNotifications(notificationsChannel)
+  enableSlackNotifications(notificationsChannel)
   syncBranchesWithMaster(branchesToSync)
 
   onMaster {
