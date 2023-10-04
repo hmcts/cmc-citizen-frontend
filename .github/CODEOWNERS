@@ -2,3 +2,11 @@
 # When someone submits a pull request, @hmcts/pet will be
 # requested for review.
 *       @hmcts/pet
+
+# Renovate
+.pnp.cjs
+.yarn/**
+package.json
+yarn.lock
+charts/**/Chart.yaml
+.github/workflows/*.yaml
