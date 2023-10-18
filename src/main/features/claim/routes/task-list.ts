@@ -15,7 +15,7 @@ export default express.Router()
 
     const beforeYouStartSection: TaskList = TaskListBuilder.buildBeforeYouStartSection(draft.document)
     const prepareYourClaimSection: TaskList = await TaskListBuilder.buildPrepareYourClaimSection(draft.document)
-    const submitSection: TaskList = TaskListBuilder.buildSubmitSection()
+    const submitSection: TaskList = await TaskListBuilder.buildSubmitSection()
     const status = TaskListBuilder.getTaskStatus([beforeYouStartSection, prepareYourClaimSection, submitSection])
 
     res.render(Paths.taskListPage.associatedView,

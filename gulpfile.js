@@ -65,6 +65,31 @@ function copyCookieBanner() {
     .pipe(gulp.dest(`${appDirectory}/button/`))
 
   gulp.src([
+    `./node_modules/cmc-cookies-manager/shared-component/components/radios/**/*.*`
+  ])
+    .pipe(gulp.dest(`${appDirectory}/radios/`))
+  
+  gulp.src([
+    `./node_modules/govuk-frontend/govuk/components/error-message/**/*.*`
+  ])
+    .pipe(gulp.dest(`${appDirectory}/error-message/`))
+
+  gulp.src([
+      `./node_modules/govuk-frontend/govuk/components/fieldset/**/*.*`
+    ])
+      .pipe(gulp.dest(`${appDirectory}/fieldset/`))
+  
+  gulp.src([
+    `./node_modules/govuk-frontend/govuk/components/hint/**/*.*`
+  ])
+    .pipe(gulp.dest(`${appDirectory}/hint/`))
+
+  gulp.src([
+    `./node_modules/govuk-frontend/govuk/components/label/**/*.*`
+  ])
+    .pipe(gulp.dest(`${appDirectory}/label/`))
+  
+  gulp.src([
     `./node_modules/cmc-cookies-manager/shared-component/components/styles/**/*.css`,
   ])
     .pipe(gulp.dest(`${stylesheetsDirectory}/`))

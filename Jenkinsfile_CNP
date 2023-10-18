@@ -69,17 +69,10 @@ withPipeline("nodejs", product, component) {
   afterSuccess('build') {
     yarnBuilder.yarn('setup')
   }
-
-  onPR {
-    env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-      if (!checkForEnableHelmLabel(env.BRANCH_NAME)) {
-        enableCleanupOfHelmReleaseOnSuccess();
-      }
-  }
-
+  
   before('smoketest:preview'){
     log.info env.TEST_URL
-    env.CLAIM_STORE_URL = "https://claim-store-cmc-citizen-frontend-pr-${CHANGE_ID}.service.core-compute-preview.internal"
+    env.CLAIM_STORE_URL = "https://claim-store-cmc-citizen-frontend-pr-${CHANGE_ID}.preview.platform.hmcts.net"
     env.CCD_DEFINITION_CLAIM_STORE_URL = "http://cmc-citizen-frontend-pr-${CHANGE_ID}-claim-store"
     sh """
     eval \$(./bin/variables/load-preview-env-variables.sh ${CHANGE_ID})
@@ -90,7 +83,7 @@ withPipeline("nodejs", product, component) {
 
   before('functionalTest:preview'){
       log.info env.TEST_URL
-      env.CLAIM_STORE_URL = "https://claim-store-cmc-citizen-frontend-pr-${CHANGE_ID}.service.core-compute-preview.internal"
+      env.CLAIM_STORE_URL = "https://claim-store-cmc-citizen-frontend-pr-${CHANGE_ID}.preview.platform.hmcts.net"
       env.CCD_DEFINITION_CLAIM_STORE_URL = "http://cmc-citizen-frontend-pr-${CHANGE_ID}-claim-store"
   }
 
@@ -103,7 +96,17 @@ withPipeline("nodejs", product, component) {
   enableAksStagingDeployment()
   disableLegacyDeployment()
 
-  loadVaultSecrets(secrets)
   enableSlackNotifications(notificationsChannel)
   syncBranchesWithMaster(branchesToSync)
+
+  onMaster {
+    env.ENVIRONMENT="aat"
+    loadVaultSecrets(secrets)
+  }
+  
+  onPR {
+    env.ENVIRONMENT = "preview"
+    env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+    loadVaultSecrets(secrets)
+  }
 }

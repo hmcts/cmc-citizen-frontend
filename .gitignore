@@ -5,6 +5,7 @@ node_modules/
 .sass-cache
 .cache
 *.css
+.history
 
 .idea/
 *.iml
