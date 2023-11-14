@@ -38,7 +38,11 @@ export class OtherWitnesses implements CompletableTask {
     if (input && input.otherWitnesses) {
       this.otherWitnesses = YesNoOption.fromObject(input.otherWitnesses.option)
       if (input.otherWitnesses) {
-        this.howMany = toNumberOrUndefined(input.howMany)
+        if (input.otherWitnesses.option === YesNoOption.NO.option){
+          this.howMany = undefined
+        } else {
+          this.howMany = toNumberOrUndefined(input.howMany)
+        }
       }
     }
     return this
