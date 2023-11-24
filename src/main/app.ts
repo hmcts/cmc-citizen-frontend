@@ -34,6 +34,7 @@ import { trackCustomEvent } from 'logging/customEventTracker'
 import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 import { Feature as BreathingSpaceFeature } from 'breathing-space/index'
 import { injectGtm } from 'routes/google-tag-manager'
+import { logRoutes } from 'routes/routes-logger'
 
 logger.info('Creating express server object')
 
@@ -146,6 +147,9 @@ moment.prototype.toISOString = function () {
   return this.format('YYYY-MM-DD[T]HH:mm:ss.SSS')
 }
 
+// log routes
+app.use(logRoutes)
+
 logger.info('Loading routes')
 app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
 
@@ -179,3 +183,4 @@ export const errorHandler = (err, req, res, next) => {
   next()
 }
 app.use(errorHandler)
+
