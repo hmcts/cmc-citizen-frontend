@@ -44,9 +44,9 @@ __metadata:
   linkType: hard
 
 "@analytics/google-tag-manager@npm:^0.5.3":
-  version: 0.5.3
-  resolution: "@analytics/google-tag-manager@npm:0.5.3"
-  checksum: 699b37e291a7a50825a53bb159074b73e7bedc63e09e7dd3b217278a53738e7ef88c05af1fae5bc0b148780a83c8a3c41621ee19f504c9e0781ed85f215a39c5
+  version: 0.5.5
+  resolution: "@analytics/google-tag-manager@npm:0.5.5"
+  checksum: afd97a2dbe15039764d69756ae9c6429e4ffbbc1a791e1a293e3b5a4ddc174a0f6b82853280fe829f1b159cb777215f57aff0a02dfecb463e9fc7036d7963697
   languageName: node
   linkType: hard
 
