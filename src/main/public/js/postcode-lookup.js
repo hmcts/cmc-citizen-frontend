@@ -265,7 +265,7 @@
           var option = postcodeDropdownOption(address)
           if(option != undefined){
             postcodeSelectDropdown.appendChild(option)
-           }   
+          }
         }
       })
       //If already in list we don't do above as already in list
@@ -291,7 +291,7 @@
     var localityLine = extractLocalityLine(address)
 
     if(address.organisationName && address.organisationName !== ""){
-       valueFormattedAddress.addressLines.push(address.organisationName)
+      valueFormattedAddress.addressLines.push(address.organisationName)
     }
 
     if (!buildingNameLine && (!streetLine || !address.buildingNumber) && address.organisationName && address.organisationName !== '') {
@@ -342,7 +342,7 @@
         option.text = formattedAddress
         return option
 
- 
+
       }
       return undefined
 

@@ -160,6 +160,14 @@ describe('Address/CorrespondenceAddress', () => {
         expect(errors.length).to.equal(1)
       })
 
+      it('should reject address with postcode not meeting minimim length', () => {
+        const errors = validator.validateSync(new ClassFunction('Apartment 99', '', '', 'town', 'bb'))
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(
+          errors, ValidationErrors.POSTCODE_NOT_VALID)
+      })
+
       it('should accept valid address', () => {
         const errors = validator.validateSync(new ClassFunction('Apartment 99', '', '', 'Town', 'bb127nq'))
 
