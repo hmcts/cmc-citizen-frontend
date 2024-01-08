@@ -7,7 +7,7 @@ import uk.gov.hmcts.contino.GithubAPI
 String product = "cmc"
 String component = "citizen-frontend"
 
-def ccdDefBranch = "master"
+def ccdDefBranch = "PR-3793"
 
 def yarnBuilder = new uk.gov.hmcts.contino.YarnBuilder(this)
 
@@ -69,7 +69,7 @@ withPipeline("nodejs", product, component) {
   afterSuccess('build') {
     yarnBuilder.yarn('setup')
   }
-  
+
   before('smoketest:preview'){
     log.info env.TEST_URL
     env.CLAIM_STORE_URL = "https://claim-store-cmc-citizen-frontend-pr-${CHANGE_ID}.preview.platform.hmcts.net"
@@ -103,7 +103,7 @@ withPipeline("nodejs", product, component) {
     env.ENVIRONMENT="aat"
     loadVaultSecrets(secrets)
   }
-  
+
   onPR {
     env.ENVIRONMENT = "preview"
     env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
