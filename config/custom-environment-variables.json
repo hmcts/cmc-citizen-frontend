@@ -124,5 +124,9 @@
   "pcq":
   {
     "url":"PCQ_URL"
+  },
+  "cui" :
+  {
+    "url":"CUI_URL"
   }
 }

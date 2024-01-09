@@ -5,3 +5,4 @@ nodejs:
     FEATURE_TESTING_SUPPORT: true
     FEATURE_RETURN_ERROR_TO_USER: true
     PAY_RETURN_URL: https://${SERVICE_FQDN}
+    CUI_URL: https://civil-citizen-ui.{{ .Values.global.environment }}.platform.hmcts.net

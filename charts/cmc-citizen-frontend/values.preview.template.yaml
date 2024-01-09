@@ -25,6 +25,7 @@ nodejs:
     FEATURE_TOGGLES_API_URL: http://${SERVICE_NAME}-ftr-tgl
     CLAIM_STORE_URL: http://${SERVICE_NAME}-claim-store
     PAY_RETURN_URL: https://${SERVICE_FQDN}
+    CUI_URL: https://civil-citizen-ui.{{ .Values.global.environment }}.platform.hmcts.net
 
     # config to make non prod testing easier
     FEATURE_TESTING_SUPPORT: true
