@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure")
+@Library("Infrastructure@DTSPO-15526/yarnrc")
 
 import uk.gov.hmcts.contino.GithubAPI
 
