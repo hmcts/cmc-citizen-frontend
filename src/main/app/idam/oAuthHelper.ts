@@ -9,7 +9,7 @@ import { User } from 'idam/user'
 
 const clientId = config.get<string>('oauth.clientId')
 
-const loginPath = `${config.get('idam.authentication-web.url')}/login`
+const loginPath = `${config.get('idam.authentication-web.url')}/o/authorize`
 
 export class OAuthHelper {
 
