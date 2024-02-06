@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ex
 
-pip uninstall docker-compose
+pip uninstall -y docker-compose
 
 sudo apt-get update
 sudo apt-get install ca-certificates curl
