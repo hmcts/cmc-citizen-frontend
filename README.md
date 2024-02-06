@@ -104,6 +104,8 @@ If you didn't have a dockerized environment running it will be started up for yo
 $ ./bin/start-local-environment.sh
 ```
 
+Blanket update trigger
+
 For more details on the dockerized environment please refer to integration-tests repository's[`README`](https://github.com/hmcts/cmc-integration-tests/blob/master/README.md) file.
 
 ## Troubleshooting
