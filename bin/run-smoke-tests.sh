@@ -1,6 +1,8 @@
 #!/bin/bash
 set -ex
 
+pip3 install --upgrade requests
+
 ADDITIONAL_COMPOSE_FILE="docker-compose.smoke-tests.yml -f docker-compose.yml"
 
 function shutdownDocker() {
