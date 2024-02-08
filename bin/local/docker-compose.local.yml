@@ -1,0 +1,170 @@
+---
+version: '2.1'
+
+services:
+    citizen-integration-tests:
+      environment:
+        - http_proxy=
+        - https_proxy=
+        - no_proxy=
+        - SMOKE_TEST_CITIZEN_USERNAME=civilmoneyclaims+citizensmoke@gmail.com
+        - SMOKE_TEST_USER_PASSWORD=Password12
+        - CLAIM_STORE_URL=${CLAIM_STORE_URL:-http://host.docker.internal:4400}
+    remote-webdriver:
+      image: selenium/standalone-chrome-debug:3.8.1
+      ports:
+        - "5900:5900"
+      environment:
+        - http_proxy=
+        - https_proxy=
+        - no_proxy=
+    claim-store-api:
+      environment:
+        - FRONTEND_BASE_URL=${FRONTEND_BASE_URL:-https://localhost:3000}
+        - RESPOND_TO_CLAIM_URL=${FRONTEND_BASE_URL:-https://localhost:3000}/first-contact/start
+        - http_proxy=
+        - https_proxy=
+        - no_proxy=
+      ports:
+        - "4400:4400"
+    citizen-frontend:
+      ports:
+        - "3000:3000"
+      environment:
+        - http_proxy=
+        - https_proxy=
+        - no_proxy=
+        - CLAIM_STORE_URL=${CLAIM_STORE_URL:-http://host.docker.internal:4400}
+    legal-frontend:
+      ports:
+        - "4000:4000"
+      environment:
+        - CLAIM_STORE_URL=${CLAIM_STORE_URL:-http://host.docker.internal:4400}
+    fr-am:
+      ports:
+        - "8080:8080"
+        - "1389:1389"
+    fr-idm:
+      ports:
+        - "18080:18080"
+        - "9010:9010"
+    shared-db:
+      ports:
+        - "5429:5432"
+      volumes:
+        - shared-db-data:/var/lib/postgresql/data
+    idam-api:
+      ports:
+        - "5000:5000"
+      environment:
+        - JAVA_OPTS=-Xms128m -Xms512m
+    idam-web-public:
+      ports:
+        - 9002:8080
+      environment:
+        - JAVA_OPTS=-Xms128m -Xms512m
+    idam-web-admin:
+      ports:
+        - "8082:8080"
+      environment:
+        - JAVA_OPTS=-Xms128m -Xms512m
+    fees-api:
+      ports:
+        - "4182:8080"
+    draft-store-api:
+      ports:
+        - "8800:8800"
+    service-auth-provider-api:
+      ports:
+        - "4552:8080"
+    payments-api:
+      environment:
+        - http_proxy=
+        - https_proxy=
+        - no_proxy=
+      ports:
+       - "4421:8080"
+    pdf-service-api:
+      environment:
+        - http_proxy=
+        - https_proxy=
+        - no_proxy=
+      ports:
+        - "5500:5500"
+    shared-database:
+      ports:
+        - "5430:5432"
+      volumes:
+        - shared-database-data:/var/lib/postgresql/data
+    ccd-definition-store-api:
+      ports:
+        - "4451:4451"
+    ccd-data-store-api:
+      ports:
+        - "4452:4452"
+    ccd-user-profile-api:
+      ports:
+        - "4453:4453"
+    ccd-api-gateway:
+      ports:
+        - "3453:3453"
+    ccd-logstash:
+      ports:
+        - "5044:9600"
+    ccd-elasticsearch:
+      ports:
+        - "9200:9200"
+      volumes:
+        - esdata1:/usr/share/elasticsearch/data
+    ccd-case-document-am-api:
+      environment:
+        - http_proxy=
+        - https_proxy=
+        - no_proxy=
+      ports:
+        - "4455:4455"
+    xui:
+      ports:
+        - "3333:3000"
+    wiremock:
+      ports:
+        - "8765:8080"
+    azure-storage-emulator-azurite:
+      ports:
+        - "10000:10000"
+    dm-store:
+      environment:
+        - http_proxy=
+        - https_proxy=
+        - no_proxy=
+      ports:
+        - "4584:4584"
+    doc-assembly-api:
+      environment:
+        - http_proxy=
+        - https_proxy=
+        - no_proxy=
+      ports:
+        - "4666:8080"
+    send-letter-api:
+      ports:
+        - "8485:8485"
+    ccd-importer:
+      environment:
+        - CCD_DEF_CLAIM_STORE_BASE_URL=http://host.docker.internal:4400
+
+    pcq-frontend:
+      ports:
+        - "4001:4000"
+    pcq-backend:
+      ports:
+        - "4550:4550"
+    bulkscanning-api:
+      ports:
+        - "4002:8080"
+
+volumes:
+  shared-db-data:
+  shared-database-data:
+  esdata1:
+    driver: local

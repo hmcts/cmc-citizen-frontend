@@ -1,0 +1,830 @@
+---
+version: '2.1'
+
+services:
+    citizen-integration-tests:
+      image: hmctspublic.azurecr.io/cmc/citizen-integration-tests:${CITIZEN_INTEGRATION_TESTS_VERSION:-latest}
+      environment:
+        - FEATURE_TESTING_SUPPORT=true
+        - WEB_DRIVER_HOST=remote-webdriver
+        - CITIZEN_APP_URL=https://www-citizen.moneyclaim.reform.hmcts.net:3000
+        - IDAM_URL=http://idam-api:5000
+        - CLAIM_STORE_URL=${CLAIM_STORE_URL:-http://host.docker.internal:4400}
+        - SMOKE_TEST_CITIZEN_USERNAME
+        - SMOKE_TEST_USER_PASSWORD
+        - OAUTH_CLIENT_SECRET=12345678
+        - FEATURE_ADMISSIONS=true
+        - FEATURE_MEDIATION=true
+        - FEATURE_DIRECTIONS_QUESTIONNAIRE=true
+        - FEATURE_INVERSION_OF_CONTROL=true
+        - http_proxy
+        - https_proxy
+        - no_proxy=www-citizen.moneyclaim.reform.hmcts.net,idam-api,remote-webdriver,idam-web-public,claim-store-api
+      depends_on:
+        remote-webdriver:
+          condition: service_started
+        citizen-frontend:
+          condition: service_started
+        claim-store-api:
+          condition: service_started
+      volumes:
+        - ./output:/usr/src/app/output
+    remote-webdriver:
+      image: selenium/standalone-chrome:3.8.1
+      environment:
+        - JAVA_OPTS=-Xms8m -Xmx256m -Djava.security.egd=file:/dev/./urandom -XX:MaxMetaspaceSize=128m
+    citizen-frontend:
+      image: hmctspublic.azurecr.io/cmc/citizen-frontend:${CITIZEN_FRONTEND_VERSION:-latest}
+      environment:
+        - TESTING_SUPPORT_ENABLED=true
+        - NODE_ENV=dockertests
+        - IDAM_API_URL=http://idam-api:5000
+        - IDAM_AUTHENTICATION_WEB_URL=http://idam-web-public:9002
+        - IDAM_S2S_AUTH=http://service-auth-provider-api:8080
+        - PAY_URL=http://payments-api:8080
+        - CLAIM_STORE_URL=${CLAIM_STORE_URL:-http://claim-store-api:4400}
+        - FEES_URL=http://fees-api:8080
+        - PDF_SERVICE_URL=http://pdf-service-api:5500
+        - DRAFT_STORE_URL=http://draft-store-api:8800
+        - POSTCODE_LOOKUP_API_KEY
+        - LOG_LEVEL
+        - UV_THREADPOOL_SIZE=64
+        - WEBCHAT_CHAT_ID=17284281475d5519274e25a3.69472655
+        - WEBCHAT_TENANT=aG1jdHNzdGFnaW5nMDE
+        - WEBCHAT_BUTTON_NO_AGENTS=7732814745cac6f4603c4d1.53357933
+        - WEBCHAT_BUTTON_AGENTS_BUSY=2042157415cc19c95669039.65793052
+        - WEBCHAT_BUTTON_SERVICE_CLOSED=20199488815cc1a89e0861d5.73103009
+        - http_proxy
+        - https_proxy
+        - no_proxy=claim-store-api, fees-api, payments-api, idam-api, service-auth-provider-api, draft-store-api
+        - LAUNCH_DARKLY_SDK_KEY=${LAUNCH_DARKLY_SDK_KEY:-sdk-c732c882-b5df-4e9b-9ec1-679836b93907}
+        - LAUNCH_DARKLY_OFFLINE_MODE
+      depends_on:
+        draft-store-api:
+          condition: service_started
+        fees-api:
+          condition: service_started
+        payments-api:
+          condition: service_started
+        pdf-service-api:
+          condition: service_started
+      networks:
+        default:
+          aliases:
+            - www-citizen.moneyclaim.reform.hmcts.net
+    legal-frontend:
+      image: hmctspublic.azurecr.io/cmc/legal-frontend:${LEGAL_FRONTEND_VERSION:-latest}
+      environment:
+        - NODE_ENV=dockertests
+        - IDAM_SECRET_KEY=cmc_it_test_secret_key
+        - IDAM_HEALTH_CHECK_URL=http://idam-api:5000/health
+        - IDAM_API_URL=http://idam-api:5000
+        - IDAM_AUTHENTICATION_WEB_URL=http://idam-web-public:9002
+        - IDAM_S2S_AUTH=http://service-auth-provider-api:8080
+        - PAY_URL=http://payments-api:8080
+        - FEES_URL=http://fees-api:8080
+        - DRAFT_STORE_URL=http://draft-store-api:8800
+        - CLAIM_STORE_URL=${CLAIM_STORE_URL:-http://host.docker.internal:4400}
+        - PDF_SERVICE_URL=http://pdf-service-api:5500
+        - OAUTH_CLIENT_SECRET=12345678
+        - LOG_LEVEL
+        - http_proxy=
+        - https_proxy=
+        - no_proxy=
+      depends_on:
+        claim-store-api:
+          condition: service_started
+        draft-store-api:
+          condition: service_started
+        fees-api:
+          condition: service_started
+        pdf-service-api:
+          condition: service_started
+        payments-api:
+          condition: service_started
+      networks:
+        default:
+          aliases:
+            - www-legal.moneyclaim.reform.hmcts.net
+    fr-am:
+      image: hmctsprivate.azurecr.io/idam/idam-fr-am:latest
+      hostname: localam
+      depends_on:
+        shared-db:
+          condition: service_started
+    fr-idm:
+      image: hmctsprivate.azurecr.io/idam/idam-fr-idm:latest
+      hostname: localidm
+      depends_on:
+        fr-am:
+          condition: service_started
+        shared-db:
+          condition: service_started
+    shared-db:
+      image: hmctsprivate.azurecr.io/idam/shared-db:latest
+    idam-api:
+      image: hmctspublic.azurecr.io/idam/api:stable
+      environment:
+        - JAVA_OPTS=-Xms128m -Xms512m
+        - SPRING_PROFILES_ACTIVE=local
+        - CACHING_ENABLED=false
+        - SPRING_DATA_ELASTICSEARCH_PROPERTIES_PATH_HOME=/tmp/es
+        - TESTING_SUPPORT_ENABLED=true
+        - IDAMHEALTHCHECK_AM_ENABLED=false
+        - IDAMHEALTHCHECK_IDM_ENABLED=false
+        - STRATEGIC_ADMIN_URL=http://idam-web-admin:8082
+        - STRATEGIC_WEBPUBLIC_URL=http://idam-web-public:9002
+        - SPRING_DATASOURCE_URL=jdbc:postgresql://shared-db:5432/openidm?currentSchema=fridam
+        - SPRING_DATASOURCE_USERNAME=openidm
+        - SPRING_DATASOURCE_PASSWORD=openidm
+        - SECURITY_OAUTH2_CLIENT_CLIENTSECRET=password
+        - SECURITY_OAUTH2_CLIENT_PRE_ESTABLISHED_REDIRECT_URI=http://idam-web-public:9002/login
+        - SECURITY_OAUTH2_CLIENT_REGISTERED_REDIRECT_URI=http://idam-web-public:9002/login
+        - IDAM_SPI_FORGEROCK_AM_ROOT=http://fr-am:8080/openam
+        - IDAM_SPI_FORGEROCK_AM_TOPLEVELHOST=fr-am
+        - IDAM_SPI_FORGEROCK_AM_USERNAME=amadmin
+        - IDAM_SPI_FORGEROCK_AM_PASSWORD=Pa55word11
+        - IDAM_SPI_FORGEROCK_AM_JWKSURIFOROAUTH2CLIENTS=http://fr-am:8080/openam/oauth2/hmcts/connect/jwk_uri
+        - IDAM_SPI_FORGEROCK_IDM_ROOT=http://fr-idm:18080/openidm
+        - IDAM_SPI_FORGEROCK_IDM_USERNAME=openidm-admin
+        - IDAM_SPI_FORGEROCK_IDM_PASSWORD=openidm-admin
+        - IDAM_SPI_FORGEROCK_IDM_PIN_DEFAULTPASSWORD=BlaBlaBlackSh33p
+        - APPINSIGHTS_INSTRUMENTATIONKEY=fake-key
+        - NOTIFY-API-KEY=genericteam-37ba0bfe-68ed-4e8e-9e19-f3a4cc331d80-f3254537-8758-457d-8c8f-41cc2833bea4
+      depends_on:
+        fr-am:
+          condition: service_started
+        fr-idm:
+          condition: service_started
+        shared-db:
+          condition: service_started
+    idam-web-public:
+      image: hmctspublic.azurecr.io/idam/web-public:stable
+      environment:
+        - JAVA_OPTS=-Xms128m -Xms512m
+        - STRATEGIC_SERVICE_URL=http://idam-api:5000
+      depends_on:
+        idam-api:
+          condition: service_started
+    idam-web-admin:
+      image: hmctspublic.azurecr.io/idam/web-admin:stable
+      environment:
+        - JAVA_OPTS=-Xms128m -Xms512m
+        - STRATEGIC_SERVICE_URL=http://idam-api:5000
+        - STRATEGIC_PUBLIC_URL=http://idam-web-public:9002
+      depends_on:
+        idam-api:
+          condition: service_started
+    idam-importer:
+      build:
+        context: docker/idam-importer  # local
+      environment:
+        - IDAM_API_URL=http://idam-api:5000
+        - IDAM_ADMIN_USER=idamowner%40hmcts.net
+        - IDAM_ADMIN_PASSWORD=Ref0rmIsFun
+        - WAIT_HOSTS=idam-api:5000
+        - WAIT_HOSTS_TIMEOUT=900
+    claim-store-api:
+      image: hmctspublic.azurecr.io/cmc/claim-store:${CLAIM_STORE_API_VERSION:-latest}
+      healthcheck:
+        retries: 40
+      environment:
+        - JAVA_OPTS=-Xms256m -Xmx512m -Djava.security.egd=file:/dev/./urandom -XX:MaxMetaspaceSize=128m
+        - COURT_FINDER_API_URL=http://fact-api-aat.service.core-compute-aat.internal
+        - CMC_DB_HOST=shared-database
+        - CMC_DB_PORT=5432
+        - CMC_DB_USERNAME=cmc
+        - CMC_DB_PASSWORD=cmc
+        - IDAM_API_URL=http://idam-api:5000
+        - IDAM_S2S_AUTH_URL=http://service-auth-provider-api:8080
+        - GOV_NOTIFY_API_KEY=genericteam-37ba0bfe-68ed-4e8e-9e19-f3a4cc331d80-f3254537-8758-457d-8c8f-41cc2833bea4
+        - FRONTEND_BASE_URL=https://www-citizen.moneyclaim.reform.hmcts.net:3000
+        - RESPOND_TO_CLAIM_URL=https://www-citizen.moneyclaim.reform.hmcts.net:3000/first-contact/start
+        - CLAIM_STORE_TEST_SUPPORT_ENABLED=true
+        - STAFF_NOTIFICATIONS_SENDER=noreply@mail-money-claims-nonprod.platform.hmcts.net
+        - STAFF_NOTIFICATIONS_RECIPIENT=${STAFF_NOTIFICATIONS_RECIPIENT:-civilmoneyclaims+staff-int-tests@gmail.com}
+        - RPA_NOTIFICATIONS_SENDER=noreply@mail-money-claims-nonprod.platform.hmcts.net
+        - STAFF_NOTIFICATIONS_LEGAL_RECIPIENT=${STAFF_NOTIFICATIONS_LEGAL_RECIPIENT:-civilmoneyclaims+staff-int-tests@gmail.com}
+        - RPA_NOTIFICATIONS_SEALEDCLAIMRECIPIENT=${RPA_NOTIFICATIONS_SEALEDCLAIMRECIPIENT:-civilmoneyclaimsdemo@gmail.com}
+        - RPA_NOTIFICATIONS_LEGALSEALEDCLAIMRECIPIENT=${RPA_NOTIFICATIONS_LEGALSEALEDCLAIMRECIPIENT:-civilmoneyclaimsdemo@gmail.com}
+        - RPA_NOTIFICATIONS_MORETIMEREQUESTEDRECIPIENT=${RPA_NOTIFICATIONS_MORETIMEREQUESTEDRECIPIENT:-civilmoneyclaimsdemo@gmail.com}
+        - RPA_NOTIFICATIONS_RESPONSERECIPIENT=${RPA_NOTIFICATIONS_RESPONSERECIPIENT:-civilmoneyclaimsdemo@gmail.com}
+        - RPA_NOTIFICATIONS_COUNTYCOURTJUDGEMENTRECIPIENT=${RPA_NOTIFICATIONS_COUNTYCOURTJUDGEMENTRECIPIENT:-civilmoneyclaimsdemo@gmail.com}
+        - RPA_NOTIFICATIONS_PAIDINFULLRECIPIENT=${RPA_NOTIFICATIONS_PAIDINFULLRECIPIENT:-civilmoneyclaimsdemo@gmail.com}
+        - SPRING_MAIL_PORT=1025
+        - PDF_SERVICE_URL=http://pdf-service-api:5500
+        - DOCUMENT_MANAGEMENT_URL=http://dm-store:4460
+        - CORE_CASE_DATA_API_URL=http://ccd-data-store-api:4452
+        - FEATURE_TOGGLES_SAVE_CLAIM_STATE_ENABLED=true
+        - FEATURE_TOGGLES_DIRECTIONS_QUESTIONNAIRE_ENABLED=true
+        - DOC_ASSEMBLY_URL=http://doc-assembly-api:8080
+        - JSON_CONSOLE_PRETTY_PRINT
+        - ROOT_LOGGING_LEVEL
+        - REFORM_SERVICE_NAME=claim-store
+        - REFORM_TEAM
+        - REFORM_ENVIRONMENT
+        - http_proxy
+        - https_proxy
+        - no_proxy=idam-api,service-auth-provider-api,pdf-service-api,ccd-data-store-api,dm-store
+        - IDAM_CASEWORKER_ANONYMOUS_USERNAME=civilmoneyclaims+anonymouscitizen@gmail.com
+        - IDAM_CASEWORKER_ANONYMOUS_PASSWORD=Password12
+        - IDAM_CASEWORKER_SYSTEM_USERNAME=civilmoneyclaims+systemupdate@gmail.com
+        - IDAM_CASEWORKER_SYSTEM_PASSWORD=Password12
+        - OIDC_ISSUER=http://fr-am:8080/openam/oauth2/hmcts
+        - IDAM_WEB_URL=http://idam-web-public:9002
+        - SEND_LETTER_URL=http://send-letter-api:8485
+        - APPINSIGHTS_INSTRUMENTATIONKEY=${APPINSIGHTS_INSTRUMENTATIONKEY:-fake-key}
+        - OAUTH2_CLIENT_SECRET=12345678
+        - DOCUMENT_MANAGEMENT_USERROLES=caseworker-cmc,citizen
+        - PAY_URL=http://payments-api:8080
+        - FEES_URL=http://fees-api:8080
+        - SCHEDULE_STATE_TRANSITION_STAY_CLAIM
+        - SCHEDULE_STATE_TRANSITION_WAITING_TRANSFER
+        - MILO_CSV_RECIPIENT=${MILO_CSV_RECIPIENT:-civilmoneyclaims+milorecipient@gmail.com}
+        - MILO_CSV_SENDER=civilmoneyclaims+milosender@gmail.com
+        - FEATURE_TOGGLES_CTSC_ENABLED=${FEATURE_TOGGLES_CTSC_ENABLED:-false}
+        - FEATURE_TOGGLES_STAFF_EMAILS_ENABLED=${FEATURE_TOGGLES_STAFF_EMAILS_ENABLED:-true}
+        - FEATURE_TOGGLES_BULK_PRINT_TRANSFER_ENABLED=${FEATURE_TOGGLES_BULK_PRINT_TRANSFER_ENABLED:-false}
+        - RPA_NOTIFICATIONS_BREATHINGSPACERECIPIENT=${RPA_NOTIFICATIONS_SEALEDCLAIMRECIPIENT:-civilmoneyclaimsdemo@gmail.com}
+        - LAUNCH_DARKLY_SDK_KEY=${LAUNCH_DARKLY_SDK_KEY:-sdk-c732c882-b5df-4e9b-9ec1-679836b93907}
+        - SENDGRID_API_KEY
+      depends_on:
+        idam-web-public:
+          condition: service_started
+        shared-database:
+          condition: service_healthy
+        pdf-service-api:
+          condition: service_started
+        send-letter-api:
+          condition: service_started
+    fees-api:
+      image: hmctspublic.azurecr.io/fees-register/api
+      healthcheck:
+        retries: 40
+      environment:
+        - ENABLE_FEE_LOADER=true
+        - SPRING_LIQUIBASE_ENABLED=true
+        - JAVA_OPTS=-Xms8m -Xmx256m -Djava.security.egd=file:/dev/./urandom -XX:MaxMetaspaceSize=128m
+        - AUTH_IDAM_CLIENT_BASEURL=http://idam-api:5000/
+        - SPRING_DATASOURCE_URL=jdbc:postgresql://shared-database:5432/fee
+        - SPRING_DATASOURCE_USERNAME=fee
+        - SPRING_DATASOURCE_PASSWORD=fee
+      depends_on:
+        shared-database:
+          condition: service_healthy
+    draft-store-api:
+      image: hmctspublic.azurecr.io/draft-store/service:${DRAFT_STORE_API_VERSION:-latest}
+      healthcheck:
+        retries: 40
+      environment:
+        - JAVA_OPTS=-Xms8m -Xmx256m -Djava.security.egd=file:/dev/./urandom -XX:MaxMetaspaceSize=128m
+        - DRAFT_STORE_DB_HOST=shared-database
+        - DRAFT_STORE_DB_PASSWORD=draftstore
+        - IDAM_URL=http://idam-api:5000
+        - S2S_URL=http://service-auth-provider-api:8080
+        - ROOT_APPENDER
+        - JSON_CONSOLE_PRETTY_PRINT
+        - ROOT_LOGGING_LEVEL
+      depends_on:
+        shared-database:
+          condition: service_healthy
+        service-auth-provider-api:
+          condition: service_started
+    pdf-service-api:
+      image: hmctspublic.azurecr.io/cmc/pdf-service
+      environment:
+        - JAVA_OPTS=-Xms8m -Xmx256m -Djava.security.egd=file:/dev/./urandom -XX:MaxMetaspaceSize=128m
+        - S2S_URL=http://service-auth-provider-api:8080
+        - ROOT_APPENDER
+        - JSON_CONSOLE_PRETTY_PRINT
+        - ROOT_LOGGING_LEVEL
+        - REFORM_SERVICE_NAME=pdf-service
+        - REFORM_TEAM
+        - REFORM_ENVIRONMENT
+        - APPINSIGHTS_INSTRUMENTATIONKEY=fake-key
+      healthcheck:
+        retries: 40
+    service-auth-provider-api:
+      image: hmctspublic.azurecr.io/rpe/service-auth-provider
+      environment:
+        - SERVER_PORT=8080
+        - JAVA_OPTS=-Xms8m -Xmx256m -Djava.security.egd=file:/dev/./urandom -XX:MaxMetaspaceSize=128m
+        - JWT_KEY=wThK0f0/lh3FlxFcL4xUWDMI5C1J9KyQBgXV4wseh1e5J1uYJIjvTvArHxQDrYoHJ23xFxjHkOnvNbR5dXRoxA==
+        - MICROSERVICEKEYS_CMC=AAAAAAAAAAAAAAAA
+        - MICROSERVICEKEYS_CMC_CLAIM_SUBMIT_API=AAAAAAAAAAAAAAAA
+        - MICROSERVICEKEYS_CMC_LEGAL_FRONTEND=AAAAAAAAAAAAAAAA
+        - MICROSERVICEKEYS_CMC_CLAIM_STORE=AAAAAAAAAAAAAAAA
+        - MICROSERVICEKEYS_EM_GW=AAAAAAAAAAAAAAAA
+        - MICROSERVICEKEYS_CCD_DATA=AAAAAAAAAAAAAAAA
+        - MICROSERVICEKEYS_CCD_DEFINITION=AAAAAAAAAAAAAAAA
+        - MICROSERVICEKEYS_CCD_GATEWAY=AAAAAAAAAAAAAAAA
+        - MICROSERVICEKEYS_DG_DOCASSEMBLY_API=AAAAAAAAAAAAAAAA
+        - MICROSERVICEKEYS_XUI_WEBAPP=XUIXUIXUIXUIXUIX
+        - MICROSERVICEKEYS_CCD_CASE_DOCUMENT_AM_API=AAAAAAAAAAAAAAAA
+        - TESTING_SUPPORT_ENABLED=true
+    payments-api:
+      image: hmctspublic.azurecr.io/payment/api:latest
+      environment:
+        - payments.report.file.location=.
+        - PAYMENT_AUDIT_FILE=/tmp/payment-audit.log
+        - ASB_CONNECTION_STRING=false
+        - FEES_REGISTER_URL=http://fees-api:8080
+        - TRUSTED_S2S_SERVICE_NAMES=cmc_claim_store,cmc,probate_frontend,divorce_frontend,ccd_gateway,bar_api,api_gw
+        - JAVA_OPTS=-Xms8m -Xmx256m -Djava.security.egd=file:/dev/./urandom -XX:MaxMetaspaceSize=128m
+        - SPRING_DATASOURCE_URL=jdbc:postgresql://shared-database:5432/payment
+        - AUTH_PROVIDER_SERVICE_CLIENT_BASEURL=http://service-auth-provider-api:8080/
+        - AUTH_IDAM_CLIENT_BASEURL=http://idam-api:5000/
+        - GOV_PAY_AUTH_KEY_CMC
+        - GOV_PAY_URL=https://publicapi.payments.service.gov.uk/v1/payments
+        - http_proxy
+        - https_proxy
+        - no_proxy=idam-api,service-auth-provider-api,$no_proxy
+        - MANAGEMENT_SECURITY_DISABLED=false
+        - SPRING_DATASOURCE_USERNAME=payment
+        - SPRING_DATASOURCE_PASSWORD=payment
+        - SPRING_DATASOURCE_DRIVER=org.postgresql.Driver
+        - SPRING_MAIL_PORT=1025
+        - CCD_CLIENT_URL=http://ccd-data-store-api:4452
+        - CORE_CASE_DATA_API_URL=http://ccd-data-store-api:4452
+        - CARD_PAYMENTS_REPORT_SCHEDULER_ENABLED=false
+        - CARD_PAYMENTS_EMAIL_FROM=no-reply@reform.hmcts.net
+        - CARD_PAYMENTS_EMAIL_TO=nowhere@example.com
+        - CARD_PAYMENTS_EMAIL_SUBJECT=Local Env:Card Payments Reconciliation Report
+        - CARD_PAYMENTS_EMAIL_MESSAGE=Hi <br/><br/>Please find attached today''s reconciliation report. <br/><br/>Regards <br/><br/>Payments team<br/><br/>
+        - PBA_CMC_PAYMENTS_REPORT_SCHEDULER_ENABLED=false
+        - PBA_CMC_PAYMENTS_EMAIL_FROM=no-reply@reform.hmcts.net
+        - PBA_CMC_PAYMENTS_EMAIL_TO=pepito@grillo.com
+        - PBA_CMC_PAYMENTS_EMAIL_MESSAGE=hi
+        - PBA_CMC_PAYMENTS_EMAIL_SUBJECT=Docker Env Card Payments Reconciliation Report
+        - PBA_DIVORCE_PAYMENTS_REPORT_SCHEDULER_ENABLED=false
+        - PBA_DIVORCE_PAYMENTS_EMAIL_FROM=no-reply@reform.hmcts.net
+        - PBA_DIVORCE_PAYMENTS_EMAIL_TO=pepito@grillo.com
+        - PBA_DIVORCE_PAYMENTS_EMAIL_MESSAGE=hi
+        - PBA_DIVORCE_PAYMENTS_EMAIL_SUBJECT=Docker Env Card Payments Reconciliation Report
+        - BAR_PAYMENTS_REPORT_SCHEDULER_ENABLED=true
+        - BAR_PAYMENTS_EMAIL_FROM=no-reply@reform.hmcts.net
+        - BAR_PAYMENTS_EMAIL_TO=pepito@grillo.com
+        - BAR_PAYMENTS_EMAIL_MESSAGE=hi
+        - BAR_PAYMENTS_EMAIL_SUBJECT=Docker Env Bar Payments Reconciliation Report
+        - PBA_PROBATE_PAYMENTS_REPORT_SCHEDULER_ENABLED=false
+        - PBA_PROBATE_PAYMENTS_EMAIL_FROM=no-reply@reform.hmcts.net
+        - PBA_PROBATE_PAYMENTS_EMAIL_TO=pepito@grillo.com
+        - PBA_PROBATE_PAYMENTS_EMAIL_MESSAGE=hi
+        - PBA_PROBATE_PAYMENTS_EMAIL_SUBJECT=Docker Env Card Payments Reconciliation Report
+        - PBA_FINREM_PAYMENTS_REPORT_SCHEDULER_ENABLED=false
+        - PBA_FINREM_PAYMENTS_EMAIL_FROM=no-reply@reform.hmcts.net
+        - PBA_FINREM_PAYMENTS_EMAIL_TO=pepito@grillo.com
+        - PBA_FINREM_PAYMENTS_EMAIL_MESSAGE=hi
+        - PBA_FINREM_PAYMENTS_EMAIL_SUBJECT=Docker Env Card Payments Reconciliation Report
+        - APPINSIGHTS_INSTRUMENTATIONKEY=fake-key
+      depends_on:
+        shared-database:
+          condition: service_healthy
+        service-auth-provider-api:
+          condition: service_started
+    shared-database:
+      image: postgres:10.3-alpine
+      command: postgres -c 'max_connections=250'
+      volumes:
+        - ./docker/database/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
+      healthcheck:
+        test: psql -c 'select 1' -d postgres -U postgres
+        retries: 40
+    ccd-user-profile-api:
+        image: hmctspublic.azurecr.io/ccd/user-profile-api
+        environment:
+          - JAVA_OPTS=-Xms8m -Xmx256m -Djava.security.egd=file:/dev/./urandom -XX:MaxMetaspaceSize=128m
+          - USER_PROFILE_DB_HOST=shared-database
+          - USER_PROFILE_DB_PORT=5432
+          - USER_PROFILE_DB_USERNAME=ccd_user_profile
+          - USER_PROFILE_DB_PASSWORD=ccd_user_profile
+          - USER_PROFILE_S2S_AUTHORISED_SERVICES=ccd_data,ccd_definition,cmc_claim_store
+          - IDAM_S2S_URL=http://service-auth-provider-api:8080
+          - REFORM_SERVICE_NAME=ccd-user-profile-api
+          - REFORM_TEAM=ccd
+          - REFORM_ENVIRONMENT=local
+          - APPINSIGHTS_INSTRUMENTATIONKEY=fake-key
+          - USER_PROFILE_DB_USE_SSL=false
+          - IDAM_KEY_AM_ROLE_ASSIGNMENT=AAAAAAAAAAAAAAAA
+        depends_on:
+          shared-database:
+            condition: service_healthy
+    ccd-definition-store-api:
+      image: hmctspublic.azurecr.io/ccd/definition-store-api
+      environment:
+        - JAVA_OPTS=-Xms8m -Xmx256m -Djava.security.egd=file:/dev/./urandom -XX:MaxMetaspaceSize=128m
+        - DEFINITION_STORE_DB_HOST=shared-database
+        - DEFINITION_STORE_DB_PORT=5432
+        - DEFINITION_STORE_DB_USERNAME=ccd_definition_store
+        - DEFINITION_STORE_DB_PASSWORD=ccd_definition_store
+        - SPRING_DATASOURCE_URL=jdbc:postgresql://shared-database:5432/ccd_definition_store
+        - DEFINITION_STORE_IDAM_KEY=AAAAAAAAAAAAAAAA
+        - DEFINITION_STORE_S2S_AUTHORISED_SERVICES=ccd_data,cmc_claim_store,ccd_gateway,fpl_case_service,xui_webapp
+        - USER_PROFILE_HOST=http://ccd-user-profile-api:4453
+        - IDAM_USER_URL=http://idam-api:5000
+        - IDAM_S2S_URL=http://service-auth-provider-api:8080
+        - REFORM_SERVICE_NAME=ccd-definition-store-api
+        - REFORM_TEAM=ccd
+        - REFORM_ENVIRONMENT=local
+        - APPINSIGHTS_INSTRUMENTATIONKEY=fake-key
+        - ELASTIC_SEARCH_ENABLED=${ELASTIC_SEARCH_ENABLED:-false}
+        - ELASTIC_SEARCH_HOST=ccd-elasticsearch
+        - ELASTIC_SEARCH_FAIL_ON_IMPORT=true
+      depends_on:
+        shared-database:
+          condition: service_healthy
+    ccd-data-store-api:
+      image: hmctspublic.azurecr.io/ccd/data-store-api
+      environment:
+        - JAVA_OPTS=-Xms8m -Xmx256m -Djava.security.egd=file:/dev/./urandom -XX:MaxMetaspaceSize=128m
+        - DATA_STORE_DB_HOST=shared-database
+        - DATA_STORE_DB_PORT=5432
+        - DATA_STORE_DB_USERNAME=ccd_data_store
+        - DATA_STORE_DB_PASSWORD=ccd_data_store
+        - DATA_STORE_IDAM_KEY=AAAAAAAAAAAAAAAA
+        - IDAM_KEY_AM_ROLE_ASSIGNMENT=AAAAAAAAAAAAAAAA
+        - IDAM_KEY_CASE_DOCUMENT=CNTOE7D2NX6XHBKT
+        - SPRING_DATASOURCE_URL=jdbc:postgresql://shared-database:5432/ccd_data_store?stringtype=unspecified
+        - DATA_STORE_TOKEN_SECRET=sdsadahjsadhgaskjhdhasghgkjasd
+        - DATA_STORE_S2S_AUTHORISED_SERVICES=cmc_claim_submit_api,cmc_claim_store,ccd_gateway,ccd_data,ccd_admin,ccd_case_document_am_api,xui_webapp,am_role_assignment_service
+        - DEFINITION_STORE_HOST=http://ccd-definition-store-api:4451
+        - USER_PROFILE_HOST=http://ccd-user-profile-api:4453
+        - IDAM_USER_URL=http://idam-api:5000
+        - IDAM_S2S_URL=http://service-auth-provider-api:8080
+        - REFORM_SERVICE_NAME=ccd-data-store-api
+        - REFORM_TEAM=ccd
+        - REFORM_ENVIRONMENT=local
+        - APPINSIGHTS_INSTRUMENTATIONKEY=fake-key
+        - CCD_DM_DOMAIN=http://dm-store:4584
+        - ELASTIC_SEARCH_ENABLED=${ELASTIC_SEARCH_ENABLED:-false}
+        - ELASTIC_SEARCH_HOSTS=ccd-elasticsearch:9200
+        - ELASTIC_SEARCH_DATA_NODES_HOSTS=http://ccd-elasticsearch:9200
+        - IDAM_API_BASE_URL=http://idam-api:5000
+        - IDAM_OIDC_URL=http://idam-api:5000
+        - CCD_DOCUMENT_URL_PATTERN=http://dm-store.*
+        - CASE_DOCUMENT_AM_URL=http://ccd-case-document-am-api:4455
+        - ROLE_ASSIGNMENT_URL=http://am-role-assignment-service:4096
+        - IDAM_DATA_STORE_SYSTEM_USER_USERNAME=datastoreidamsystemuser@gmail.com
+        - IDAM_DATA_STORE_SYSTEM_USER_PASSWORD=Password12
+      depends_on:
+        shared-database:
+          condition: service_healthy
+    ccd-importer:
+      image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:${CMC_CCD_DEFINITION_VERSION:-1.10.33}
+      environment:
+        - VERBOSE=${VERBOSE:-false}
+        - WAIT_HOSTS=ccd-user-profile-api:4453, ccd-definition-store-api:4451, service-auth-provider-api:8080, ccd-api-gateway:3453, idam-api:5000
+        - WAIT_HOSTS_TIMEOUT=900
+        - IMPORTER_USERNAME=ccd-importer@server.net
+        - IMPORTER_PASSWORD=Password12
+        - CCD_STORE_BASE_URL=http://ccd-definition-store-api:4451
+        - IDAM_URI=http://idam-api:5000
+        - AUTH_PROVIDER_BASE_URL=http://service-auth-provider-api:8080
+        - MICROSERVICE=ccd_gateway
+        - REDIRECT_URI=https://localhost:3000/receiver
+        - CLIENT_ID=cmc_citizen
+        - CLIENT_SECRET=12345678
+        - CCD_DEF_FILENAME=cmc-ccd.xlsx
+        - CCD_DEF_CLAIM_STORE_BASE_URL=${CLAIM_STORE_URL:-http://claim-store-api:4400}
+        - IDAM_KEY_AM_ROLE_ASSIGNMENT=AAAAAAAAAAAAAAAA
+        - USER_ROLES=citizen, caseworker-cmc, caseworker-cmc-solicitor, caseworker-cmc-systemupdate, letter-holder, caseworker-autotest1, caseworker-cmc-judge, caseworker-cmc-legaladvisor, caseworker-cmc-anonymouscitizen, caseworker-cmc-pcqextractor, payments
+    ccd-api-gateway:
+      image: hmctspublic.azurecr.io/ccd/api-gateway-web
+      environment:
+        - IDAM_BASE_URL=http://idam-api:5000
+        - IDAM_USER_URL=http://idam-api:5000
+        - IDAM_LOGOUT_URL=http://localhost:9002/login/logout
+        - IDAM_OAUTH2_TOKEN_ENDPOINT=http://idam-api:5000/oauth2/token
+        - IDAM_S2S_URL=http://service-auth-provider-api:8080
+        - IDAM_SERVICE_KEY=AAAAAAAAAAAAAAAA
+        - IDAM_SERVICE_NAME=ccd_gateway
+        - IDAM_OAUTH2_CLIENT_SECRET=12345678
+        - PROXY_AGGREGATED=http://ccd-data-store-api:4452
+        - PROXY_DATA=http://ccd-data-store-api:4452
+        - PROXY_DEFINITION_IMPORT=http://ccd-definition-store-api:4451
+        - PROXY_DOCUMENT_MANAGEMENT=http://dm-store:4584
+        - ADDRESS_LOOKUP_TOKEN
+        - APPINSIGHTS_INSTRUMENTATIONKEY=fake-key
+        - PROXY_PAYMENTS=http://payments-api:8080
+        - PROXY_PAY_BULKSCAN=http://bulkscanning-api:8080
+      depends_on:
+        ccd-user-profile-api:
+          condition: service_started
+        ccd-definition-store-api:
+          condition: service_started
+        ccd-data-store-api:
+          condition: service_started
+        service-auth-provider-api:
+          condition: service_started
+    ccd-elasticsearch:
+      image: docker.elastic.co/elasticsearch/elasticsearch:6.4.2
+      environment:
+        - CLUSTER_NAME=ccd-docker-es-cluster
+        - DISCOVERY_TYPE=single-node
+        - discovery.type=single-node
+        - BOOTSTRAP_MEMORY_LOCK=true
+        - action.auto_create_index=.security*,.watches,.triggered_watches,.watcher-history-*,.logstash_dead_letter,.ml*
+        - JAVA_OPTS=-Xms512m -Xmx512m
+      ulimits:
+        memlock:
+          soft: -1
+          hard: -1
+    ccd-logstash:
+      image: hmcts/ccd-logstash:cmc  # dockerhub - should be changed
+      environment:
+        - XPACK_MONITORING_ENABLED=false
+        - DB_URL=jdbc:postgresql://shared-database:5432/ccd_data_store?stringtype=unspecified&ssl=false
+        - DB_USER=ccd_data_store
+        - DB_PWD=ccd_data_store
+        - ES_DATA_NODES_URL=http://ccd-elasticsearch:9200
+      depends_on:
+        - ccd-elasticsearch
+    dm-store:
+      image: hmctspublic.azurecr.io/dm/store:latest
+      environment:
+        - SERVER_PORT=4584
+        - IDAM_SUPERUSER_EMAIL=
+        - IDAM_SECRET_KEY=AAAAAAAAAAAAAAAA
+        - GOV_NOTIFY_API_KEY=
+        - SPRING_DATASOURCE_URL=jdbc:postgresql://shared-database:5432/evidence
+        - SPRING_DATASOURCE_USERNAME=evidence
+        - SPRING_DATASOURCE_PASSWORD=evidence
+        - ENABLE_AZURE_STORAGE_CONTAINER=true
+        - ENABLE_METADATA_MIGRATION=true
+        - ENABLE_POSTGRES_BLOB_STORAGE=false
+        - STORAGEACCOUNT_PRIMARY_CONNECTION_STRING=${STORAGEACCOUNT_PRIMARY_CONNECTION_STRING:-DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azure-storage-emulator-azurite:10000/devstoreaccount1}
+        - STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME=${STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:-hmctstestcontainer}
+        - BLOBSTORE_MIGRATE_CCD_PUBLIC_KEY_REQUIRED=${BLOBSTORE_MIGRATE_CCD_PUBLIC_KEY_REQUIRED:-false}
+        - BLOBSTORE_MIGRATE_CCD_PUBLIC_KEY=${BLOBSTORE_MIGRATE_CCD_PUBLIC_KEY:-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDiQ//gc/G53d9dLCtf123fIYo49gUySuJuxOcw2GtieWTMSy+O7RNtsAIjVf3mCOdDNuN69tZNPEWMdaW8n11s9MwYFahtxDecyn0KIP9MvPsfSMSbxhp/f7kfbdB/H/S5eYea66JTyeJS6uNd76RdHttx0mLO30ZkRcXB25c2SIXhRYsdoeKS5GXHDdNejkQM0S/Ev94x2UunApmYHjWN1XcDhsEsAeF4WHnvYh2XiMn9vHY44AqvbWLlAmCgzaXpz8Xhl0fO7jDKSeReDyuM3UTMaiFFaxuvliGol7aIXq/aVe/miiD2SLxHZ6RxAPW80bhXrzJMTLTCqhCEhzfv someone@somewhere.sometime}
+        - SPRING_PROFILES_ACTIVE=dev
+        - IDAM_TESTING_SUPPORT_ENABLED=true
+        - LOGGING_LEVEL_UK_GOV_HMCTS_IDAM=DEBUG
+        - IDAM_USER_BASE_URI=http://idam-api:5000
+        - IDAM_S2S_BASE_URI=http://service-auth-provider-api:8080
+        - S2S_NAMES_WHITELIST=ccd_gateway,cmc,cmc_claim_store,ccd_data,dg_docassembly_api,xui_webapp,ccd_case_document_am_api
+        - http_proxy=
+        - https_proxy=
+        - no_proxy=
+        - REFORM_SERVICE_TYPE=java
+        - REFORM_SERVICE_NAME=document-management-store
+        - REFORM_TEAM=evidence
+        - REFORM_ENVIRONMENT=docker
+          #      healthcheck env vars
+        - PACKAGES_ENVIRONMENT=docker
+        - PACKAGES_PROJECT=evidence
+        - PACKAGES_NAME=document-management-store
+        - PACKAGES_VERSION=unknown
+        - ENABLE_DB_MIGRATE=true
+          #      debug mode
+          #    JAVA_OPTS: -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005
+      depends_on:
+        - service-auth-provider-api
+        - azure-storage-emulator-azurite
+        - shared-database
+      ports:
+        - "4460:4460"
+    azure-storage-emulator-azurite:
+      image: arafato/azurite
+      ports:
+        - "10000:10000"
+      environment:
+        executable: "blob"
+    ccd-user-profile-importer:
+      image: hmctspublic.azurecr.io/ccd/user-profile-importer
+      environment:
+        - VERBOSE=false
+        - MICROSERVICE=ccd_definition
+        - CCD_USERS=civilmoneyclaims+ccd@gmail.com|CMC|MoneyClaimCase|open,civilmoneyclaims+judge@gmail.com|CMC|MoneyClaimCase|orderForJudgeReview,civilmoneyclaims+la@gmail.com|CMC|MoneyClaimCase|readyForDirections
+        - CCD_JURISDICTIONS=CMC
+        - AUTH_PROVIDER_BASE_URL=http://service-auth-provider-api:8080
+        - CCD_USER_PROFILE_URL=http://ccd-user-profile-api:4453
+        - CCD_USER_PROFILE_DB_HOST=shared-database
+        - CCD_USER_PROFILE_DB_PORT=5432
+        - CCD_USER_PROFILE_DB_USERNAME=ccd_user_profile
+        - CCD_USER_PROFILE_DB_PASSWORD=ccd_user_profile
+        - CCD_USER_PROFILE_DB_DATABASE=ccd_user_profile
+        - WAIT_HOSTS=ccd-user-profile-api:4453
+        - WAIT_HOSTS_TIMEOUT=900
+        - IDAM_KEY_AM_ROLE_ASSIGNMENT=AAAAAAAAAAAAAAAA
+      depends_on:
+        ccd-user-profile-api:
+          condition: service_started
+    ccd-case-document-am-api:
+      image: hmctspublic.azurecr.io/ccd/case-document-am-api:latest
+      container_name: ccd-case-document-am-api
+      environment:
+        - MICROSERVICE=ccd_case_document_am_api
+        - CASE_DOCUMENT_AM_API_S2S_SECRET=AAAAAAAAAAAAAAAA
+        - CASE_DOCUMENT_S2S_AUTHORISED_SERVICES=ccd_case_document_am_api,ccd_gw,xui_webapp,ccd_data,bulk_scan_processor,cmc_claim_store
+        - IDAM_API_URL=http://idam-api:5000
+        - IDAM_OIDC_URL=http://idam-api:5000
+        - S2S_URL=http://service-auth-provider-api:8080
+        - DM_STORE_BASE_URL=http://dm-store:4584
+        - CCD_DATA_STORE_API_BASE_URL=http://ccd-data-store-api:4452
+        - REFORM_SERVICE_NAME=ccd-case-document-am-api
+        - REFORM_TEAM=ccd
+        - REFORM_ENVIRONMENT=local
+        - APPINSIGHTS_INSTRUMENTATIONKEY=key
+        - DOCUMENT_TTL=3600000
+        - IDAM_KEY_AM_ROLE_ASSIGNMENT=AAAAAAAAAAAAAAAA
+      ports:
+        - "4455:4455"
+      depends_on:
+        - ccd-data-store-api
+        - dm-store
+        - service-auth-provider-api
+    xui:
+      image: hmctspublic.azurecr.io/xui/webapp:latest
+      environment:
+        MICROSERVICE: xui_webapp
+        PROTOCOL: http
+        XUI_ENV: local
+        SERVICES_CCD_COMPONENT_API: http://ccd-api-gateway:3453
+        SERVICES_CCD_DATA_STORE_API: http://ccd-data-store-api:4452
+        SERVICES_DOCUMENTS_API: http://dm-store:4584
+        SERVICES_S2S: http://service-auth-provider-api:8080
+        SERVICES_IDAM_LOGIN_URL: http://localhost:9002
+        SERVICES_IDAM_API_URL: http://idam-api:5000
+        SERVICES_IDAM_INDEX_URL: /
+        SERVICES_IDAM_OAUTH_CALLBACK_URL: /oauth2/callback
+        SERVICES_IDAM_CLIENT_ID: xui_webapp
+        SERVICES_PAYMENTS_URL: http://wiremock:8080
+        SERVICES_PRD_API: http://wiremock:8080
+        SERVICES_EM_ANNO_API: http://ccd-api-gateway:3453
+        SERVICES_ROLE_ASSIGNMENT_API: http://am-role-assignment-service:4096
+        REDISCLOUD_URL: http://dummyrediscloudurl
+        LAUNCH_DARKLY_CLIENT_ID: 5de6610b23ce5408280f2268
+        FEATURE_REDIS_ENABLED: "false"
+        FEATURE_APP_INSIGHTS_ENABLED: "false"
+        FEATURE_SECURE_COOKIE_ENABLED: "false"
+        APPINSIGHTS_INSTRUMENTATIONKEY: fake
+        IDAM_SECRET: OOOOOOOOOOOOOOOO
+        IDAM_KEY_AM_ROLE_ASSIGNMENT: AAAAAAAAAAAAAAAA
+        S2S_SECRET: XUIXUIXUIXUIXUIX
+        JURISDICTIONS: "CMC"
+        SYSTEM_USER_NAME: "dummy"
+        SYSTEM_USER_PASSWORD: "dummy"
+      ports:
+        - "3333:3000"
+      depends_on:
+        ccd-data-store-api:
+          condition: service_started
+
+    wiremock:
+      container_name: wiremock
+      image: rodolpheche/wiremock
+      volumes:
+        - ./../mocks/wiremock:/home/wiremock:rw
+      ports:
+        - "8765:8080"
+
+    doc-assembly-api:
+      image: hmctspublic.azurecr.io/dg/docassembly
+      environment:
+        - no_proxy=idam-api,service-auth-provider-api,$no_proxy
+        - IDAM_API_BASE_URI=http://idam-api:5000
+        - S2S_BASE_URI=http://service-auth-provider-api:8080
+        - DM_STORE_APP_URL=http://dm-store:4584
+        - REFORM_ENVIRONMENT=local
+        - S2S_NAMES_WHITELIST=em_api,em_gw,ccd_gw,ccd_data,sscs,dg_tmpl_mgmt,dg_docassembly,dm-store,cmc,cmc_claim_store
+        - CASE_WORKER_ROLES=caseworker-cmc,caseworker-cmc-judge,caseworker-cmc-legaladvisor
+        - DOCMOSIS_ACCESS_KEY=${DOCMOSIS_ACCESS_KEY}
+        - OPEN_ID_API_BASE_URI=http://idam-api:5000/o
+        - OIDC_ISSUER_BASE_URI=http://fr-am:8080/openam/oauth2/hmcts
+        - DOCMOSIS_TEMPLATES_ENDPOINT_AUTH=${DOCMOSIS_TEMPLATES_ENDPOINT_AUTH}
+        - DOCMOSIS_TEMPLATES_ENDPOINT= https://docmosis.demo.platform.hmcts.net
+        - DOCMOSIS_CONVERT_ENDPOINT= https://docmosis.demo.platform.hmcts.net/rs/convert
+        - DOCMOSIS_RENDER_ENDPOINT= https://docmosis.demo.platform.hmcts.net/rs/render
+      depends_on:
+        service-auth-provider-api:
+          condition: service_started
+        dm-store:
+          condition: service_started
+
+    send-letter-api:
+      image: hmctspublic.azurecr.io/rpe/send-letter-service
+      environment:
+        APPINSIGHTS_INSTRUMENTATIONKEY: fake-key
+        ACTIONS_API_KEY: ${ACTIONS_API_KEY}
+        STORAGE_ACCOUNT_CONNECTION_STRING: UseDevelopmentStorage=true
+        # db
+        LETTER_TRACKING_DB_NAME: letter_tracking
+        LETTER_TRACKING_DB_HOST: shared-database
+        LETTER_TRACKING_DB_PORT: "5432"
+        LETTER_TRACKING_DB_USER_NAME: letter_tracking
+        LETTER_TRACKING_DB_PASSWORD: letter_tracking
+        # db - migration
+        FLYWAY_URL: "jdbc:postgresql://shared-database:5432/letter_tracking"
+        FLYWAY_NOOP_STRATEGY: "false"
+        # encryption
+        ENCRYPTION_ENABLED: "false"
+        ENCRYPTION_PUBLIC_KEY: ""
+        # schedules
+        SCHEDULING_ENABLED: "true"
+        # inherited
+        LOGBACK_REQUIRE_ALERT_LEVEL: "false"
+        LOGBACK_REQUIRE_ERROR_CODE: "false"
+        S2S_NAME: "send_letter_tests"
+        S2S_URL: "http://service-auth-provider-api:8080"
+        # mails
+        SPRING_MAIL_HOST: "false"
+        # ftp
+        FTP_HOSTNAME: localhost
+        FTP_PORT: 22
+        FTP_TARGET_FOLDER: TARGET
+        FTP_REPORTS_FOLDER: REPORTS
+        FTP_FINGERPRINT: fingerprint
+        FTP_USER: user
+        FTP_PRIVATE_KEY: private
+        FTP_PUBLIC_KEY: public
+      depends_on:
+        service-auth-provider-api:
+          condition: service_started
+
+    pcq-frontend:
+      image: hmctspublic.azurecr.io/pcq/frontend:latest
+      environment:
+        - LAUNCHDARKLY_KEY=sdk-e97f48f2-0492-43fe-b881-12695a051846
+        - PCQ_BACKEND_ENABLED=false
+
+    pcq-backend:
+      image: hmctspublic.azurecr.io/pcq/backend
+      environment:
+        # database configuration
+        - SPRING_DATASOURCE_URL=jdbc:postgresql://shared-database:5432/pcq
+        - SPRING_DATASOURCE_USERNAME=pcq
+        - SPRING_DATASOURCE_PASSWORD=pcq
+        # JWT configuration
+        - JWT_SECRET=JwtSecretKey
+        # PGP Encryption configuration
+        - DB_ENCRYPTION_KEY=ThisIsATestKeyForEncryption
+      depends_on:
+        shared-database:
+          condition: service_healthy
+
+    bulkscanning-api:
+      image: hmctspublic.azurecr.io/ccpay/bulkscanning-api:latest
+      environment:
+        - APPINSIGHTS_INSTRUMENTATIONKEY=fake-key
+        - SPRING_DATASOURCE_URL=jdbc:postgresql://shared-database:5432/ccpay
+        - SPRING_DATASOURCE_USERNAME=ccpay
+        - SPRING_DATASOURCE_PASSWORD=ccpay
+        - AUTH_PROVIDER_SERVICE_CLIENT_BASEURL=http://service-auth-provider-api:8080/
+        - AUTH_IDAM_CLIENT_BASEURL=http://idam-api:5000/
+        - TRUSTED_S2S_SERVICE_NAMES=cmc_claim_store,cmc,probate_frontend,divorce_frontend,ccd_gateway,bar_api,api_gw
+        - S2S_AUTHORISED_SERVICES=ccd_gateway, cmc, ccd_gw
+        - REFORM_SERVICE_NAME=ccpay-bulkscanning
+        - REFORM_TEAM=ccpay
+        - OIDC_ISSUER_BASE_URI=http://fr-am:8080/openam/oauth2/hmcts
+        - no_proxy=idam-api,service-auth-provider-api,$no_proxy
+      depends_on:
+        shared-database:
+          condition: service_healthy
+    am-role-assignment-service:
+      image: "${AM_ROLE_ASSIGNMENT_SERVICE_USE_LOCAL-hmctspublic.azurecr.io/}am/role-assignment-service:${AM_ROLE_ASSIGNMENT_SERVICE_TAG:-latest}"
+      environment:
+        ROLE_ASSIGNMENT_DB_HOST: shared-database
+        ROLE_ASSIGNMENT_DB_NAME: role_assignment
+        ROLE_ASSIGNMENT_DB_PORT: 5432
+        ROLE_ASSIGNMENT_DB_USERNAME: role_assignment
+        ROLE_ASSIGNMENT_DB_PASSWORD: role_assignment
+        ROLE_ASSIGNMENT_DB_OPTIONS:
+        AM_ROLE_ASSIGNMENT_SERVICE_SECRET: "${IDAM_KEY_AM_ROLE_ASSIGNMENT}"
+        LD_SDK_KEY: sdk-b1310c4a-e522-4512-9e68-d75d23b04c5d
+        ROLE_ASSIGNMENT_IDAM_KEY: AAAAAAAAAAAAAAAA
+        ROLE_ASSIGNMENT_TOKEN_SECRET:
+        ROLE_ASSIGNMENT_S2S_AUTHORISED_SERVICES: ccd_gw,am_role_assignment_service,am_org_role_mapping_service,wa_task_management_api,xui_webapp,ccd_data,civil_service
+        IDAM_USER_URL: "${IDAM_STUB_SERVICE_NAME:-http://idam-api:5000}"
+        IDAM_S2S_URL: http://service-auth-provider-api:8080
+        OPEN_ID_API_BASE_URI: "${IDAM_STUB_SERVICE_NAME:-http://idam-api:5000}/o"
+        OIDC_ISSUER_URL: "${IDAM_STUB_SERVICE_NAME:-http://idam-api:5000}/openam/oauth2/hmcts"
+        ROLE_ASSIGNMENT_IDAM_CLIENT_ID: am_role_assignment
+        ROLE_ASSIGNMENT_IDAM_CLIENT_SECRET: am_role_assignment_secret
+        ROLE_ASSIGNMENT_IDAM_ADMIN_USERID: role.assignment.admin@gmail.com
+        ROLE_ASSIGNMENT_IDAM_ADMIN_PASSWORD: "${AM_ROLE_AADMINGMENT_ADMIN_PWD:-Pa55word11}"
+        ROLE_ASSIGNMENT_IDAM_ADMIN_SCOPE: profile openid roles search-user
+        CCD_DATA_STORE_URL: http://ccd-data-store-api:4452
+        AZURE_APPLICATIONINSIGHTS_INSTRUMENTATIONKEY: key
+        REFORM_SERVICE_NAME: am-role-assignment-service
+        REFORM_TEAM: am
+        REFORM_ENVIRONMENT: local
+        # Uncomment this line to enable JVM debugging and uncomment the port mapping below
+        #  JAVA_TOOL_OPTIONS: -XX:InitialRAMPercentage=30.0 -XX:MaxRAMPercentage=65.0 -XX:MinRAMPercentage=30.0 -XX:+UseConcMarkSweepGC -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
+      ports:
+        - "4096:4096"
+        # Uncomment this and the JAVA_TOOL_OPTIONS flag for JVM debugging
+        # - 5005:5005
+      depends_on:
+        # Uncomment this line to enable ccd test stub service
+        #     ccd-test-stubs-service:
+        #       condition: service_started
+        idam-api:
+          condition: service_started
+        shared-database:
+          condition: service_started
+        # Uncomment this line to enable ccd-shared-database with Postgres version 11
+        #      ccd-shared-database-v11:
+        #        condition: service_started
+        ccd-data-store-api:
+          condition: service_started
+
