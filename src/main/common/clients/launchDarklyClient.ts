@@ -1,6 +1,6 @@
 import * as config from 'config'
 import { User } from 'idam/user'
-import * as ld from 'ldclient-node'
+import * as ld from 'launchdarkly-node-server-sdk'
 
 const sdkKey: string = config.get<string>('secrets.cmc.launchDarkly-sdk-key')
 const ldConfig = {

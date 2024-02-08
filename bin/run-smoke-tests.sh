@@ -1,6 +1,11 @@
 #!/bin/bash
 set -ex
 
+pip3 install --upgrade requests
+pip3 install docker==6.1.3
+
+# trigger a rebuild including static checks
+
 ADDITIONAL_COMPOSE_FILE="docker-compose.smoke-tests.yml -f docker-compose.yml"
 
 function shutdownDocker() {

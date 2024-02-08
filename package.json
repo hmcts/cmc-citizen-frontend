@@ -86,7 +86,6 @@
     "jquery": "3.6.0",
     "js-base64": "^2.5.1",
     "launchdarkly-node-server-sdk": "^7.0.0",
-    "ldclient-node": "^5.8.0",
     "lodash": "^4.17.21",
     "mime": "^2.4.6",
     "moment": "^2.29.4",
