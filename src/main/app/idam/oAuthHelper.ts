@@ -20,7 +20,7 @@ export class OAuthHelper {
     const state = uuid()
     OAuthHelper.storeStateCookie(req, res, state)
 
-    return `${loginPath}?response_type=code&state=${state}&client_id=${clientId}&redirect_uri=${redirectUri}&scope=openid profile roles`
+    return `${loginPath}?response_type=code&state=${state}&client_id=${clientId}&redirect_uri=${redirectUri}&scope=openid%profile%roles`
   }
 
   static forPin (req: express.Request, res: express.Response, claimReference: string): string {
@@ -28,7 +28,7 @@ export class OAuthHelper {
     const state = claimReference
     OAuthHelper.storeStateCookie(req, res, state)
 
-    return `${loginPath}/pin?response_type=code&state=${state}&client_id=${clientId}&redirect_uri=${redirectUri}&scope=openid profile roles`
+    return `${loginPath}/pin?response_type=code&state=${state}&client_id=${clientId}&redirect_uri=${redirectUri}&scope=openid%profile%roles`
   }
 
   static forUplift (req: express.Request, res: express.Response): string {
@@ -36,7 +36,7 @@ export class OAuthHelper {
     const user: User = res.locals.user
     OAuthHelper.storeStateCookie(req, res, user.id)
 
-    return `${loginPath}/uplift?response_type=code&state=${user.id}&client_id=${clientId}&redirect_uri=${redirectUri}&scope=openid profile roles`
+    return `${loginPath}/uplift?response_type=code&state=${user.id}&client_id=${clientId}&redirect_uri=${redirectUri}&scope=openid%profile%roles`
   }
 
   static getStateCookie (req: express.Request): string {
