@@ -90,7 +90,7 @@ describe('Defendant first contact: claim summary page', () => {
     checkAuthorizationGuards(app, 'post', Paths.claimSummaryPage.uri)
 
     it('should redirect to registration page when everything is fine', async () => {
-      const registrationPagePattern = new RegExp(`${config.get('idam.authentication-web.url')}/o/authorize/uplift\\?response_type=code&state=1&client_id=cmc_citizen&redirect_uri=https://127.0.0.1:[0-9]{5}/receiver&jwt=ABC&scope=openid%20profile%20roles`)
+      const registrationPagePattern = new RegExp(`${config.get('idam.authentication-web.url')}/o/authorize/uplift\\?response_type=code&state=1&client_id=cmc_citizen&redirect_uri=https://127.0.0.1:[0-9]{5}/receiver&scope=openid%20profile%20roles&jwt=ABC`)
 
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-holder')
 
