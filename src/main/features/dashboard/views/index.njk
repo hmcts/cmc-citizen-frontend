@@ -156,7 +156,7 @@
           {% for claim in claimsAsDefendant %}
             {% set defendantDashboardStatus = claim | dashboardStatusForDefendant %}
             <tr class="mobile-table">
-              <td>{{ internalLink(claim.claimNumber, DashboardPaths.defendantPage.evaluateUri({ externalId: claim.externalId }),ariaLabel= claim.claimNumber + ' (Claim number) Claims made against you') }}</td>
+              <td>{{ internalLink(claim.claimNumber, DashboardPaths.baseCuiUrl + '/dashboard/' + claim.ccdCaseId + '/defendant' ,ariaLabel= claim.claimNumber + ' (Claim number) Claims made against you') }}</td>
               <td>{{ claim.claimData.claimant.name }}</td>
               <td>{{ claim.totalAmountTillToday | numeral }}</td>
               <td class="mobile-hide">
