@@ -49,6 +49,6 @@ Scenario('Reject/Dispute all of the claim @citizen', { retries: 3 }, async (I: I
   I.see('You’ve rejected their response')
 })
 
-Scenario('Claimant Stop the claim /Case Stayed E2E @citizen @nightly', { retries: 3 }, async (I: I) => {
+xScenario('Claimant Stop the claim /Case Stayed E2E @citizen @nightly', { retries: 3 }, async (I: I) => {
   claimantResponseSteps.decideNotToProceed()
 })

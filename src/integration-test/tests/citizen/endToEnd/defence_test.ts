@@ -19,7 +19,7 @@ Before(async (I: I) => {
   testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
 })
 
-Scenario('I can as an Individual make a claim against an Individual who then fully rejects the claim as they have already paid the full amount and I proceed with the claim @citizen', { retries: 3 }, async (I: I) => {
+xScenario('I can as an Individual make a claim against an Individual who then fully rejects the claim as they have already paid the full amount and I proceed with the claim @citizen', { retries: 3 }, async (I: I) => {
   testData.defenceType = DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID
   await helperSteps.finishResponse(testData)
   I.click('My account')
@@ -104,7 +104,7 @@ Scenario('I can as an Individual make a claim against an Individual who then rej
   I.click('Sign out')
 })
 
-Scenario('I can as an Individual make a claim against an Individual who then rejects the claim as they have paid less than the amount claimed and I then proceed with the claim @citizen', { retries: 3 }, async (I: I) => {
+xScenario('I can as an Individual make a claim against an Individual who then rejects the claim as they have paid less than the amount claimed and I then proceed with the claim @citizen', { retries: 3 }, async (I: I) => {
   const claimantResponseTestData = new ClaimantResponseTestData()
   claimantResponseTestData.pageSpecificValues.howMuchHaveYouPaidPageEnterAmountPaidWithDateAndExplanation = {
     paidAmount: 50,

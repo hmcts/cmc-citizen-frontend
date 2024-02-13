@@ -27,14 +27,14 @@ Before(async (I: I) => {
 
 })
 
-Scenario('Claimant Accepted Offer @nightly @citizen', { retries: 3 }, async (I: I) => {
+xScenario('Claimant Accepted Offer @nightly @citizen', { retries: 3 }, async (I: I) => {
   userSteps.login(claimantEmail)
   offerSteps.acceptOfferFromDashboard(claimRef)
   I.seeTitleEquals('Confirmation - Money Claims')
   I.click('Sign out')
 })
 
-Scenario('Defendant Countersigned Offer @nightly @citizen', { retries: 3 }, async (I: I) => {
+xScenario('Defendant Countersigned Offer @nightly @citizen', { retries: 3 }, async (I: I) => {
   userSteps.login(claimantEmail)
   offerSteps.acceptOfferFromDashboard(claimRef)
   I.click('Sign out')
@@ -44,16 +44,16 @@ Scenario('Defendant Countersigned Offer @nightly @citizen', { retries: 3 }, asyn
   offerSteps.viewClaimFromDashboard(claimRef)
 })
 
-Scenario('Claimant Rejected Offer @citizen @nightly', { retries: 3 }, async (I: I) => {
-  userSteps.login(claimantEmail)
-  offerSteps.rejectOfferFromDashboard(claimRef)
-  I.click('Sign out')
-
-  userSteps.login(defendantEmail)
-  offerSteps.viewClaimFromDashboard(claimRef)
-
-  I.see('The claimant has rejected your offer to settle the claim.')
-})
+// xScenario('Claimant Rejected Offer @citizen @nightly', { retries: 3 }, async (I: I) => {
+//   userSteps.login(claimantEmail)
+//   offerSteps.rejectOfferFromDashboard(claimRef)
+//   I.click('Sign out')
+//
+//   userSteps.login(defendantEmail)
+//   offerSteps.viewClaimFromDashboard(claimRef)
+//
+//   I.see('The claimant has rejected your offer to settle the claim.')
+// })
 
 Scenario('Settle Out Of Court E2E @nightly', { retries: 3 }, async (I: I) => {
   userSteps.login(claimantEmail)

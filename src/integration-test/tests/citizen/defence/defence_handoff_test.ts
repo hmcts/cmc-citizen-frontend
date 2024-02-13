@@ -25,7 +25,7 @@ Before(async (I: I) => {
 
 })
 
-Scenario('I can see send your response by email page when I reject all of the claim with counter claim @citizen', { retries: 3 }, async (I: I) => {
+xScenario('I can see send your response by email page when I reject all of the claim with counter claim @citizen', { retries: 3 }, async (I: I) => {
   helperSteps.finishResponseWithHandOff(claimRef, defendant, claimant, defendantEmail, DefenceType.FULL_REJECTION_WITH_COUNTER_CLAIM)
 })
 

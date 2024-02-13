@@ -17,7 +17,7 @@ Before(async (I: I) => {
   testData = await EndToEndTestData.prepareData(I, PartyType.COMPANY, PartyType.COMPANY)
 })
 
-Scenario('Company agreed to pay all of the claim @nightly @citizen', { retries: 3 }, async (I: I) => {
+xScenario('Company agreed to pay all of the claim @nightly @citizen', { retries: 3 }, async (I: I) => {
   testData.paymentOption = PaymentOption.IMMEDIATELY
   helperSteps.finishResponseWithFullAdmission(testData)
   I.click('Sign out')

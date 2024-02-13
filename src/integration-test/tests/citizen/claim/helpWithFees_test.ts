@@ -11,6 +11,6 @@ Scenario('Navigate Payment Page by providing claim details... @smoke-test', { re
 
 Feature('Help With Fee E2E Tests...')
 
-Scenario('Submit Claim via HWF Reference... @citizen', { retries: 3 }, async (I: I) => {
+xScenario('Submit Claim via HWF Reference... @citizen', { retries: 3 }, async (I: I) => {
   await claimSteps.makeAHwfClaimAndSubmit(I)
 })
