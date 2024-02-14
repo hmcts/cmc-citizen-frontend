@@ -139,5 +139,9 @@
   "pcq":
   {
     "url":"http://localhost:4001"
+  },
+  "cui" :
+  {
+    "url":"CUI_URL"
   }
 }

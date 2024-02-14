@@ -62,9 +62,9 @@
             <tr class="claims default mobile-table">
               <td>
                 {% if claim.helpWithFeesNumber %}
-                  {{ internalLink(claim.ccdCaseId, '/dashboard/' + claim.externalId + '/claimant',ariaLabel= claim.claimNumber + ' (Claim number) Claims you’ve made')}}
+                  {{ internalLink(claim.ccdCaseId, DashboardPaths.baseCuiUrl +  '/dashboard/' + claim.ccdCaseId + '/claimant',ariaLabel= claim.claimNumber + ' (Claim number) Claims you’ve made')}}
                     {% else %}
-                      {{ internalLink(claim.claimNumber, '/dashboard/' + claim.externalId + '/claimant',ariaLabel= claim.claimNumber + ' (Claim number) Claims you’ve made')}}
+                      {{ internalLink(claim.claimNumber, DashboardPaths.baseCuiUrl + '/dashboard/' + claim.ccdCaseId + '/claimant',ariaLabel= claim.claimNumber + ' (Claim number) Claims you’ve made')}}
                 {% endif %}
               </td>
               <td>{{ claim.claimData.defendant.name }}</td>
@@ -86,7 +86,7 @@
                     -
                 {% endif %}
               </td>
-              <td class="mobile-hide">{{ internalLink('View', '/dashboard/' + claim.externalId + '/claimant') }}</td>
+              <td class="mobile-hide">{{ internalLink('View', DashboardPaths.baseCuiUrl + '/dashboard/' + claim.ccdCaseId + '/claimant') }}</td>
               {% endif %}
             </tr>
             <tr>
@@ -156,7 +156,7 @@
           {% for claim in claimsAsDefendant %}
             {% set defendantDashboardStatus = claim | dashboardStatusForDefendant %}
             <tr class="mobile-table">
-              <td>{{ internalLink(claim.claimNumber, DashboardPaths.defendantPage.evaluateUri({ externalId: claim.externalId }),ariaLabel= claim.claimNumber + ' (Claim number) Claims made against you') }}</td>
+              <td>{{ internalLink(claim.claimNumber, DashboardPaths.baseCuiUrl + '/dashboard/' + claim.ccdCaseId + '/defendant' ,ariaLabel= claim.claimNumber + ' (Claim number) Claims made against you') }}</td>
               <td>{{ claim.claimData.claimant.name }}</td>
               <td>{{ claim.totalAmountTillToday | numeral }}</td>
               <td class="mobile-hide">
