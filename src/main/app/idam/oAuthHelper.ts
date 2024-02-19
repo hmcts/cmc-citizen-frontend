@@ -9,7 +9,8 @@ import { User } from 'idam/user'
 
 const clientId = config.get<string>('oauth.clientId')
 
-const loginPath = `${config.get('idam.authentication-web.url')}/o/authorize`
+const loginPath = `${config.get('idam.authentication-web.url')}/login`
+const authorizePath = `${config.get('idam.authentication-web.url')}/o/authorize`
 
 export class OAuthHelper {
 
@@ -20,7 +21,7 @@ export class OAuthHelper {
     const state = uuid()
     OAuthHelper.storeStateCookie(req, res, state)
 
-    return `${loginPath}?response_type=code&state=${state}&client_id=${clientId}&redirect_uri=${redirectUri}&scope=openid profile roles`
+    return `${authorizePath}?response_type=code&state=${state}&client_id=${clientId}&redirect_uri=${redirectUri}&scope=openid profile roles`
   }
 
   static forPin (req: express.Request, res: express.Response, claimReference: string): string {
@@ -28,7 +29,7 @@ export class OAuthHelper {
     const state = claimReference
     OAuthHelper.storeStateCookie(req, res, state)
 
-    return `${loginPath}/pin?response_type=code&state=${state}&client_id=${clientId}&redirect_uri=${redirectUri}&scope=openid profile roles`
+    return `${loginPath}/pin?response_type=code&state=${state}&client_id=${clientId}&redirect_uri=${redirectUri}`
   }
 
   static forUplift (req: express.Request, res: express.Response): string {
@@ -36,7 +37,7 @@ export class OAuthHelper {
     const user: User = res.locals.user
     OAuthHelper.storeStateCookie(req, res, user.id)
 
-    return `${loginPath}/uplift?response_type=code&state=${user.id}&client_id=${clientId}&redirect_uri=${redirectUri}&scope=openid profile roles`
+    return `${loginPath}/uplift?response_type=code&state=${user.id}&client_id=${clientId}&redirect_uri=${redirectUri}`
   }
 
   static getStateCookie (req: express.Request): string {
