@@ -68,7 +68,7 @@ function copyCookieBanner() {
     `./node_modules/cmc-cookies-manager/shared-component/components/radios/**/*.*`
   ])
     .pipe(gulp.dest(`${appDirectory}/radios/`))
-  
+
   gulp.src([
     `./node_modules/govuk-frontend/govuk/components/error-message/**/*.*`
   ])
@@ -78,7 +78,7 @@ function copyCookieBanner() {
       `./node_modules/govuk-frontend/govuk/components/fieldset/**/*.*`
     ])
       .pipe(gulp.dest(`${appDirectory}/fieldset/`))
-  
+
   gulp.src([
     `./node_modules/govuk-frontend/govuk/components/hint/**/*.*`
   ])
@@ -88,7 +88,7 @@ function copyCookieBanner() {
     `./node_modules/govuk-frontend/govuk/components/label/**/*.*`
   ])
     .pipe(gulp.dest(`${appDirectory}/label/`))
-  
+
   gulp.src([
     `./node_modules/cmc-cookies-manager/shared-component/components/styles/**/*.css`,
   ])
@@ -170,7 +170,8 @@ function copyGovUkTemplate () {
 
   gulp.src([
     './node_modules/govuk_frontend_toolkit/images/**/*',
-    './node_modules/govuk_template_jinja/assets/images/*.*'
+    './node_modules/govuk_template_jinja/assets/images/*.*',
+    './node_modules/govuk-frontend/govuk/assets/images/*.*'
   ])
     .pipe(gulp.dest(`${assetsDirectory}/img/lib/`))
 
