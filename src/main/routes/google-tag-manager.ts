@@ -5,7 +5,7 @@ import { RoutablePath } from 'shared/router/routablePath'
 export function injectGtm (req: Request, res: Response, next: NextFunction): void {
 
   const gtmArgs: GTMArgs = {
-    id: 'GTM-MRTZLBZ&nojscript=true',
+    id: 'GTM-MRTZLBZ',
     dataLayer: {
       pageType: new RoutablePath('/*', false)
     }
