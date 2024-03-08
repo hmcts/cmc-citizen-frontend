@@ -11,7 +11,7 @@ services:
         - SMOKE_TEST_USER_PASSWORD=Password12
         - CLAIM_STORE_URL=${CLAIM_STORE_URL:-http://host.docker.internal:4400}
     remote-webdriver:
-      image: selenium/standalone-chrome-debug:3.8.1
+      image: selenium/standalone-chrome:4.1.2
       ports:
         - "5900:5900"
       environment:
