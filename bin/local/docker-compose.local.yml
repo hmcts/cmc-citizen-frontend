@@ -138,7 +138,7 @@ services:
         - https_proxy=
         - no_proxy=
       ports:
-        - "4584:4584"
+        - "4460:4460"
     doc-assembly-api:
       environment:
         - http_proxy=

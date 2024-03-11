@@ -25,8 +25,6 @@ services:
           condition: service_started
         citizen-frontend:
           condition: service_started
-        claim-store-api:
-          condition: service_started
       volumes:
         - ./output:/usr/src/app/output
     remote-webdriver:
@@ -79,7 +77,7 @@ services:
         - IDAM_SECRET_KEY=cmc_it_test_secret_key
         - IDAM_HEALTH_CHECK_URL=http://idam-api:5000/health
         - IDAM_API_URL=http://idam-api:5000
-        - IDAM_AUTHENTICATION_WEB_URL=http://idam-web-public:9002
+        - IDAM_AUTHENTICATION_WEB_URL=http://idam-web-public:8080
         - IDAM_S2S_AUTH=http://service-auth-provider-api:8080
         - PAY_URL=http://payments-api:8080
         - FEES_URL=http://fees-api:8080
@@ -211,6 +209,7 @@ services:
         - RPA_NOTIFICATIONS_RESPONSERECIPIENT=${RPA_NOTIFICATIONS_RESPONSERECIPIENT:-civilmoneyclaimsdemo@gmail.com}
         - RPA_NOTIFICATIONS_COUNTYCOURTJUDGEMENTRECIPIENT=${RPA_NOTIFICATIONS_COUNTYCOURTJUDGEMENTRECIPIENT:-civilmoneyclaimsdemo@gmail.com}
         - RPA_NOTIFICATIONS_PAIDINFULLRECIPIENT=${RPA_NOTIFICATIONS_PAIDINFULLRECIPIENT:-civilmoneyclaimsdemo@gmail.com}
+        - SPRING_MAIL_HOST=smtp-server
         - SPRING_MAIL_PORT=1025
         - PDF_SERVICE_URL=http://pdf-service-api:5500
         - DOCUMENT_MANAGEMENT_URL=http://dm-store:4460
@@ -249,10 +248,10 @@ services:
         - LAUNCH_DARKLY_SDK_KEY=${LAUNCH_DARKLY_SDK_KEY:-sdk-c732c882-b5df-4e9b-9ec1-679836b93907}
         - SENDGRID_API_KEY
       depends_on:
-        idam-web-public:
-          condition: service_started
         shared-database:
           condition: service_healthy
+        smtp-server:
+          condition: service_started
         pdf-service-api:
           condition: service_started
         send-letter-api:
@@ -343,6 +342,7 @@ services:
         - SPRING_DATASOURCE_USERNAME=payment
         - SPRING_DATASOURCE_PASSWORD=payment
         - SPRING_DATASOURCE_DRIVER=org.postgresql.Driver
+        - SPRING_MAIL_HOST=smtp-server
         - SPRING_MAIL_PORT=1025
         - CCD_CLIENT_URL=http://ccd-data-store-api:4452
         - CORE_CASE_DATA_API_URL=http://ccd-data-store-api:4452
@@ -380,6 +380,8 @@ services:
       depends_on:
         shared-database:
           condition: service_healthy
+        smtp-server:
+          condition: service_started
         service-auth-provider-api:
           condition: service_started
     shared-database:
@@ -390,6 +392,8 @@ services:
       healthcheck:
         test: psql -c 'select 1' -d postgres -U postgres
         retries: 40
+    smtp-server:
+      image: mailhog/mailhog
     ccd-user-profile-api:
         image: hmctspublic.azurecr.io/ccd/user-profile-api
         environment:
@@ -455,7 +459,7 @@ services:
         - REFORM_TEAM=ccd
         - REFORM_ENVIRONMENT=local
         - APPINSIGHTS_INSTRUMENTATIONKEY=fake-key
-        - CCD_DM_DOMAIN=http://dm-store:4584
+        - CCD_DM_DOMAIN=http://dm-store:4460
         - ELASTIC_SEARCH_ENABLED=${ELASTIC_SEARCH_ENABLED:-false}
         - ELASTIC_SEARCH_HOSTS=ccd-elasticsearch:9200
         - ELASTIC_SEARCH_DATA_NODES_HOSTS=http://ccd-elasticsearch:9200
@@ -502,7 +506,7 @@ services:
         - PROXY_AGGREGATED=http://ccd-data-store-api:4452
         - PROXY_DATA=http://ccd-data-store-api:4452
         - PROXY_DEFINITION_IMPORT=http://ccd-definition-store-api:4451
-        - PROXY_DOCUMENT_MANAGEMENT=http://dm-store:4584
+        - PROXY_DOCUMENT_MANAGEMENT=http://dm-store:4460
         - ADDRESS_LOOKUP_TOKEN
         - APPINSIGHTS_INSTRUMENTATIONKEY=fake-key
         - PROXY_PAYMENTS=http://payments-api:8080
@@ -542,7 +546,7 @@ services:
     dm-store:
       image: hmctspublic.azurecr.io/dm/store:latest
       environment:
-        - SERVER_PORT=4584
+        - SERVER_PORT=4460
         - IDAM_SUPERUSER_EMAIL=
         - IDAM_SECRET_KEY=AAAAAAAAAAAAAAAA
         - GOV_NOTIFY_API_KEY=
@@ -619,7 +623,7 @@ services:
         - IDAM_API_URL=http://idam-api:5000
         - IDAM_OIDC_URL=http://idam-api:5000
         - S2S_URL=http://service-auth-provider-api:8080
-        - DM_STORE_BASE_URL=http://dm-store:4584
+        - DM_STORE_BASE_URL=http://dm-store:4460
         - CCD_DATA_STORE_API_BASE_URL=http://ccd-data-store-api:4452
         - REFORM_SERVICE_NAME=ccd-case-document-am-api
         - REFORM_TEAM=ccd
@@ -641,7 +645,7 @@ services:
         XUI_ENV: local
         SERVICES_CCD_COMPONENT_API: http://ccd-api-gateway:3453
         SERVICES_CCD_DATA_STORE_API: http://ccd-data-store-api:4452
-        SERVICES_DOCUMENTS_API: http://dm-store:4584
+        SERVICES_DOCUMENTS_API: http://dm-store:4460
         SERVICES_S2S: http://service-auth-provider-api:8080
         SERVICES_IDAM_LOGIN_URL: http://localhost:9002
         SERVICES_IDAM_API_URL: http://idam-api:5000
@@ -677,14 +681,13 @@ services:
         - ./../mocks/wiremock:/home/wiremock:rw
       ports:
         - "8765:8080"
-
     doc-assembly-api:
       image: hmctspublic.azurecr.io/dg/docassembly
       environment:
         - no_proxy=idam-api,service-auth-provider-api,$no_proxy
         - IDAM_API_BASE_URI=http://idam-api:5000
         - S2S_BASE_URI=http://service-auth-provider-api:8080
-        - DM_STORE_APP_URL=http://dm-store:4584
+        - DM_STORE_APP_URL=http://dm-store:4460
         - REFORM_ENVIRONMENT=local
         - S2S_NAMES_WHITELIST=em_api,em_gw,ccd_gw,ccd_data,sscs,dg_tmpl_mgmt,dg_docassembly,dm-store,cmc,cmc_claim_store
         - CASE_WORKER_ROLES=caseworker-cmc,caseworker-cmc-judge,caseworker-cmc-legaladvisor
@@ -700,7 +703,6 @@ services:
           condition: service_started
         dm-store:
           condition: service_started
-
     send-letter-api:
       image: hmctspublic.azurecr.io/rpe/send-letter-service
       environment:
@@ -740,13 +742,11 @@ services:
       depends_on:
         service-auth-provider-api:
           condition: service_started
-
     pcq-frontend:
       image: hmctspublic.azurecr.io/pcq/frontend:latest
       environment:
         - LAUNCHDARKLY_KEY=sdk-e97f48f2-0492-43fe-b881-12695a051846
         - PCQ_BACKEND_ENABLED=false
-
     pcq-backend:
       image: hmctspublic.azurecr.io/pcq/backend
       environment:
@@ -761,7 +761,6 @@ services:
       depends_on:
         shared-database:
           condition: service_healthy
-
     bulkscanning-api:
       image: hmctspublic.azurecr.io/ccpay/bulkscanning-api:latest
       environment:
