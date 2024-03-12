@@ -180,8 +180,8 @@ function copyGovUkTemplate () {
   ])
     .pipe(replace('images/', '/stylesheets/lib/images/', { skipBinary: true }))
     // govuk_template_jinja using old crown
-    .pipe(replace('stylesheets/lib/images/gov.uk_logotype_crown.png',
-      'img/lib/govuk-logotype-tudor-crown.png',
+    .pipe(replace('stylesheets/lib/images/gov.uk_logotype_crown.png?0.26.0',
+      'img/govuk-mask-icon-white.svg',
       { skipBinary: true }))
     .pipe(gulp.dest(`${assetsDirectory}/stylesheets/lib/`))
 }
