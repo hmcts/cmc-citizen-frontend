@@ -76,7 +76,7 @@ withPipeline("nodejs", product, component) {
     env.CCD_DEFINITION_CLAIM_STORE_URL = "http://cmc-citizen-frontend-pr-${CHANGE_ID}-claim-store"
     sh """
     eval \$(./bin/variables/load-preview-env-variables.sh ${CHANGE_ID})
-    export CCD_DEFINITION_STORE_API_BASE_URL=https://ccd-definition-store-civil-citizen-ui-pr-3350.preview.platform.hmcts.net
+    export CCD_DEFINITION_STORE_API_BASE_URL=https://ccd-definition-store-civil-citizen-ui-pr-3357.preview.platform.hmcts.net
     ./bin/add-roles.sh
     ./bin/pull-latest-ccd-defintion.sh ${ccdDefBranch}
     """
