@@ -1,7 +1,7 @@
 import I = CodeceptJS.I
 import * as codeceptjs from 'codeceptjs'
 
-const I = codeceptjs.actoour()
+const I = codeceptjs.actor()
 
 const fields = {
   username: { css: '#username' },
