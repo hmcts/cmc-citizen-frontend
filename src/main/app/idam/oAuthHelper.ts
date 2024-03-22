@@ -10,6 +10,7 @@ import { User } from 'idam/user'
 const clientId = config.get<string>('oauth.clientId')
 
 const loginPath = `${config.get('idam.authentication-web.url')}/login`
+const authorizePath = `${config.get('idam.authentication-web.url')}/o/authorize`
 
 export class OAuthHelper {
 
@@ -20,7 +21,7 @@ export class OAuthHelper {
     const state = uuid()
     OAuthHelper.storeStateCookie(req, res, state)
 
-    return `${loginPath}?response_type=code&state=${state}&client_id=${clientId}&redirect_uri=${redirectUri}`
+    return `${authorizePath}?response_type=code&state=${state}&client_id=${clientId}&redirect_uri=${redirectUri}&scope=openid profile roles`
   }
 
   static forPin (req: express.Request, res: express.Response, claimReference: string): string {
