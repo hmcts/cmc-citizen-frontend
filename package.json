@@ -34,6 +34,7 @@
   },
   "dependencies": {
     "@analytics/google-tag-manager": "^0.5.3",
+    "@codeceptjs/configure": "^0.10.0",
     "@hmcts/class-validator": "^0.9.1-e",
     "@hmcts/cmc-draft-store-middleware": "^2.0.1",
     "@hmcts/cmc-validators": "^0.2.6",
@@ -127,7 +128,7 @@
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "codacy-coverage": "3.4.0",
-    "codeceptjs": "^2.6.11",
+    "codeceptjs": "^3.3.7",
     "codecov": "^3.8.2",
     "debug": "^4.1.1",
     "eslint": "^8.20.0",

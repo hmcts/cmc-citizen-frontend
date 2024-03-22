@@ -1,6 +1,7 @@
 import I = CodeceptJS.I
+import * as codeceptjs from 'codeceptjs'
 
-const I: I = actor()
+const I = codeceptjs.actoour()
 
 const fields = {
   username: { css: '#username' },
@@ -17,7 +18,7 @@ export class LoginPage {
   }
 
   login (email: string, password: string): void {
-    I.waitForText('Email address')
+    I.waitForText('Email address', 60)
     I.waitForVisible(fields.username)
     I.fillField(fields.username, email)
     I.fillField(fields.password, password)
