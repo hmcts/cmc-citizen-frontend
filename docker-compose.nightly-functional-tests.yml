@@ -22,6 +22,6 @@ services:
         - FEATURE_BREATHING_SPACE
         - NODE_TLS_REJECT_UNAUTHORIZED=0
       volumes:
-        - ./functional-output:/usr/src/app/output
+        - ./functional-output:/tmp/output
     remote-webdriver:
       image: selenium/standalone-chrome:3.141.59-20210607
