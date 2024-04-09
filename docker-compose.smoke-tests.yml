@@ -23,6 +23,6 @@ services:
         - FEATURE_BREATHING_SPACE
         - NODE_TLS_REJECT_UNAUTHORIZED=0
       volumes:
-        - ./smoke-output:/tmp/output
+        - ./smoke-output:/usr/src/app/output
     remote-webdriver:
       image: selenium/standalone-chrome:3.141.59-20210607
