@@ -8,7 +8,7 @@ RUN yarn config set proxy "$http_proxy" && yarn config set https-proxy "$https_p
 
 COPY --chown=hmcts:hmcts package.json yarn.lock /usr/src/app/
 
-RUN yarn install && yarn cache clean
+RUN PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true yarn install && yarn cache clean
 USER hmcts
 
 COPY tsconfig.json types default.conf.js saucelabs.conf.js /usr/src/app/
