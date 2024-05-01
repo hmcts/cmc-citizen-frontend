@@ -211,6 +211,7 @@
     "xml2js": "0.5.0",
     "cookiejar": "2.1.4",
     "ajv": "6.12.3",
+    "formidable": "^3.2.4",
     "tar": "6.2.1",
     "tough-cookie": "4.1.3"
   },
