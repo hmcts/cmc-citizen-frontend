@@ -252,8 +252,7 @@ ccd:
       keyVaults:
         am:
           secrets:
-            - name: role-assignment-service-LD-SDK-KEY
-              alias: LD_SDK_KEY
+            - role-assignment-service-LD-SDK-KEY
 
   ccd-definition-store-api:
     java:
