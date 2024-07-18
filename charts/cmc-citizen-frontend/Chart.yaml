@@ -1,7 +1,7 @@
 apiVersion: v2
 name: cmc-citizen-frontend
 home: https://github.com/hmcts/cmc-citizen-frontend
-version: 4.1.53
+version: 4.1.54
 description: Helm chart for the HMCTS CMC Citizen Frontend service
 # be aware when bumping version that it is used elsewhere, e.g.:
 # chart-cmc - demo: https://github.com/hmcts/chart-cmc/tree/master/cmc
@@ -12,7 +12,7 @@ maintainers:
     email: cmc-developers@HMCTS.NET
 dependencies:
   - name: nodejs
-    version: 3.0.0
+    version: 3.1.1
     repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
 
   - name: idam-pr
