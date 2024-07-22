@@ -110,11 +110,9 @@ async function retrieveRedirectForLandingPage (req: express.Request, res: expres
   const noDraftClaims: boolean = (await draftService.find('claim', '100', user.bearerToken, value => value)).length === 0
   const noDraftResponses: boolean = (await draftService.find('response', '100', user.bearerToken, value => value)).length === 0
 
-  if (noClaimReceived && noClaimIssued && noDraftClaims && noDraftResponses) {
-    return EligibilityPaths.startPage.uri
-  } else {
-    return DashboardPaths.dashboardPage.uri
-  }
+  const redirectUri = (noClaimReceived && noClaimIssued && noDraftClaims && noDraftResponses) ? EligibilityPaths.startPage.uri : DashboardPaths.dashboardPage.uri
+  logger.info('Redirect to:' + redirectUri)
+  return redirectUri
 }
 
 function setAuthCookie (cookies: Cookies, authenticationToken: string): void {
@@ -152,6 +150,8 @@ export default express.Router()
           if (await featureToggles.isDashboardPaginationEnabled()) {
             if (cookies.get('lid') && cookies.get('lid') !== undefined && cookies.get('lid') !== '') {
               await claimStoreClient.linkDefendant(user, cookies.get('lid'))
+            } else {
+              logger.info('No lid cookie' + cookies.get('lid'))
             }
             cookies.set('lid', '')
           } else {
