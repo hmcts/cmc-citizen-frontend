@@ -18,6 +18,7 @@ export class ClaimReferenceMatchesGuard {
 
       const user: User = res.locals.user
       new Cookies(req, res).set('lid', user.id)
+      logger.info(`Set lid cookie: ${user.id}`)
       const claim: Claim = await claimStoreClient.retrieveByLetterHolderId(user.id, user.bearerToken)
       res.locals.claim = claim
 
