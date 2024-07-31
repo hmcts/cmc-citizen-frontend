@@ -93,7 +93,9 @@ function loginErrorHandler (req: express.Request,
 async function retrieveRedirectForLandingPage (req: express.Request, res: express.Response): Promise<string> {
   const eligibility: Eligibility = eligibilityStore.read(req, res)
   if (eligibility.eligible) {
-    return ClaimPaths.taskListPage.uri
+    const redirectUri = ClaimPaths.taskListPage.uri
+    logger.info('Redirect to:' + redirectUri)
+    return redirectUri
   }
   const user: User = res.locals.user
   let noClaimIssued: boolean
@@ -111,7 +113,7 @@ async function retrieveRedirectForLandingPage (req: express.Request, res: expres
   const noDraftResponses: boolean = (await draftService.find('response', '100', user.bearerToken, value => value)).length === 0
 
   const redirectUri = (noClaimReceived && noClaimIssued && noDraftClaims && noDraftResponses) ? EligibilityPaths.startPage.uri : DashboardPaths.dashboardPage.uri
-  logger.info('Redirect to:' + redirectUri)
+  logger.info('Redirect to: ' + redirectUri)
   return redirectUri
 }
 
@@ -151,7 +153,7 @@ export default express.Router()
             if (cookies.get('lid') && cookies.get('lid') !== undefined && cookies.get('lid') !== '') {
               await claimStoreClient.linkDefendant(user, cookies.get('lid'))
             } else {
-              logger.info('No lid cookie' + cookies.get('lid'))
+              logger.info(`No lid cookie: ${cookies.get('lid')}, userId: ${user.id}`)
             }
             cookies.set('lid', '')
           } else {
