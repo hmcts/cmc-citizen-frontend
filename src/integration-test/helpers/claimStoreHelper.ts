@@ -13,7 +13,7 @@ class ClaimStoreHelper extends codecept_helper {
     do {
       attempts++
       isClaimOpen = await ClaimStoreClient.isOpen(referenceNumber)
-      await this.sleep(2000)
+      await this.sleep(20000)
     } while (!isClaimOpen && attempts < maxAttempts)
     return isClaimOpen
   }
