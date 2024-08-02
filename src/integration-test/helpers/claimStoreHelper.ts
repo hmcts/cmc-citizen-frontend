@@ -7,13 +7,13 @@ const baseURL: string = process.env.CLAIM_STORE_URL
 class ClaimStoreHelper extends codecept_helper {
 
   async waitForOpenClaim (referenceNumber: string): Promise<boolean> {
-    const maxAttempts: number = 3
+    const maxAttempts: number = 120 // 60 seconds
     let isClaimOpen: boolean = false
     let attempts: number = 0
     do {
       attempts++
       isClaimOpen = await ClaimStoreClient.isOpen(referenceNumber)
-      await this.sleep(2000)
+      await this.sleep(500)
     } while (!isClaimOpen && attempts < maxAttempts)
     return isClaimOpen
   }
