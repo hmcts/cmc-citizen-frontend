@@ -21,7 +21,6 @@ services:
         - FEATURE_HELP_WITH_FEES
         - FEATURE_BREATHING_SPACE
         - NODE_TLS_REJECT_UNAUTHORIZED=0
-        - CHUNKS=1
       volumes:
         - ./functional-output:/usr/src/app/output
     remote-webdriver:
