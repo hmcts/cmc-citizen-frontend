@@ -8,8 +8,9 @@ import { RoutablePath } from 'shared/router/routablePath'
 import { User } from 'idam/user'
 
 const clientId = config.get<string>('oauth.clientId')
+const scope = config.get('idam.authentication-web.scope')
 
-const loginPath = `${config.get('idam.authentication-web.url')}/login`
+const loginPath = `${config.get('idam.authentication-web.url')}/o/authorize`
 
 export class OAuthHelper {
 
@@ -20,7 +21,7 @@ export class OAuthHelper {
     const state = uuid()
     OAuthHelper.storeStateCookie(req, res, state)
 
-    return `${loginPath}?response_type=code&state=${state}&client_id=${clientId}&redirect_uri=${redirectUri}`
+    return `${loginPath}?response_type=code&state=${state}&client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`
   }
 
   static forPin (req: express.Request, res: express.Response, claimReference: string): string {

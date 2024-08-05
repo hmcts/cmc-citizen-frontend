@@ -4,7 +4,8 @@
   },
   "idam": {
     "authentication-web": {
-      "url": "http://localhost:9002"
+      "url": "http://localhost:9002",
+      "scope": "openid profile roles"
     },
     "api": {
       "url": "http://localhost:5000"
