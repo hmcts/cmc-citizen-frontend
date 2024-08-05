@@ -29,7 +29,7 @@ describe('Defendant first contact: claim reference page', () => {
     })
 
     it('should redirect to pin validation page when form is valid and everything is fine', async () => {
-      const redirectPattern = new RegExp(`${config.get('idam.authentication-web.url')}/o/authorize/pin\\?.+redirect_uri=https://127.0.0.1:[0-9]{1,5}/receiver`)
+      const redirectPattern = new RegExp(`${config.get('idam.authentication-web.url')}/login/pin\\?.+redirect_uri=https://127.0.0.1:[0-9]{1,5}/receiver`)
       claimStoreServiceMock.resolveIsClaimLinked(false)
 
       await request(app)
