@@ -44,7 +44,7 @@
     "@hmcts/nodejs-healthcheck": "^1.8.0",
     "@hmcts/nodejs-logging": "^4.0.4",
     "@hmcts/os-places-client": "^1.1.7",
-    "@hmcts/properties-volume": "^0.0.13",
+    "@hmcts/properties-volume": "^0.0.14",
     "@hmcts/requestretry": "^1.1.2",
     "@taoqf/javascript-state-machine": "^3.1.6",
     "@types/config": "^0.0.38",
