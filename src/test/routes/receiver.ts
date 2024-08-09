@@ -148,7 +148,7 @@ describe('Login receiver', async () => {
         await request(app)
           .get(`${AppPaths.receiver.uri}?code=ABC&state=123`)
           .set('Cookie', 'state=123')
-          .expect(res => expect(res).to.be.redirect.toLocation(/.*\/login.*/))
+          .expect(res => expect(res).to.be.redirect.toLocation(/.*\/o\/authorize.*/))
       })
 
       it('For expired user credentials should return error otherwise', async () => {
@@ -242,7 +242,7 @@ describe('Defendant link receiver', () => {
 
         await request(app)
           .get(`${pagePath}?code=123`)
-          .expect(res => expect(res).to.be.redirect.toLocation(/.*\/login.*/))
+          .expect(res => expect(res).to.be.redirect.toLocation(/.*\/o\/authorize.*/))
       })
     })
   })

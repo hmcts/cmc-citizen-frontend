@@ -4,7 +4,8 @@
   },
   "idam": {
     "authentication-web": {
-      "url": "http://localhost:9002"
+      "url": "http://localhost:9002",
+      "scope": "openid profile roles"
     },
     "api": {
       "url": "http://localhost:5000"
@@ -139,5 +140,9 @@
   "pcq":
   {
     "url":"http://localhost:4001"
+  },
+  "civil-citizen-ui": {
+    "url": "http://localhost:ENTER_PORT_HERE/logout",
+    "sign-out-redirect": false
   }
 }
