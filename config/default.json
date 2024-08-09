@@ -140,5 +140,9 @@
   "pcq":
   {
     "url":"http://localhost:4001"
+  },
+  "civil-citizen-ui": {
+    "url": "http://localhost:ENTER_PORT_HERE/logout",
+    "sign-out-redirect": false
   }
 }
