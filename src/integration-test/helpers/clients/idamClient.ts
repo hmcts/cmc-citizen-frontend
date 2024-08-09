@@ -187,12 +187,14 @@ export class IdamClient {
 
     const options = {
       method: 'POST',
-      uri: `${baseURL}/oauth2/token`,
-      auth: {
-        username: oauth2.client_id,
-        password: oauth2.client_secret
-      },
-      form: { grant_type: 'authorization_code', code: code, redirect_uri: oauth2.redirect_uri }
+      uri: `${baseURL}/o/token`,
+      form: {
+        client_id: oauth2.client_id,
+        client_secret: oauth2.client_secret,
+        grant_type: 'authorization_code',
+        code: code,
+        redirect_uri: oauth2.redirect_uri
+      }
     }
 
     return request(options).then(function (response) {

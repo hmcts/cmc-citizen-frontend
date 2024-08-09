@@ -15,7 +15,7 @@ export function resolveRetrieveUserFor (id: string, ...roles: string[]) {
 
 export function resolveExchangeCode (token: string) {
   mock(apiServiceBaseURL)
-    .post(new RegExp('/oauth2/token.*'))
+    .post(new RegExp('/o/token.*'))
     .reply(HttpStatus.OK, {
       access_token: token,
       token_type: 'Bearer',
@@ -25,7 +25,7 @@ export function resolveExchangeCode (token: string) {
 
 export function rejectExchangeCode (token: string) {
   mock(apiServiceBaseURL)
-    .post(new RegExp('/oauth2/token.*'))
+    .post(new RegExp('/o/token.*'))
     .reply(HttpStatus.UNAUTHORIZED)
 }
 
