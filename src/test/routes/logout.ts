@@ -23,31 +23,31 @@ describe('Logout receiver', () => {
 
   describe('on GET', () => {
     it('should remove session cookie', async () => {
-      idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-      idamServiceMock.resolveInvalidateSession('ABC')
-
       await request(app)
         .get(AppPaths.logoutReceiver.uri)
         .set('Cookie', `${cookieName}=ABC`)
         .expect(res => expect(res).to.have.cookie(cookieName, ''))
     })
 
-    it('should remove session cookie even when session invalidation is failed ', async () => {
-      idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-      idamServiceMock.rejectInvalidateSession(idamServiceMock.defaultAuthToken, 'bearerToken')
-
+    it('should remove session cookie even when session invalidation is failed', async () => {
       await request(app)
         .get(AppPaths.logoutReceiver.uri)
         .set('Cookie', `${cookieName}=${idamServiceMock.defaultAuthToken}`)
         .expect(res => expect(res).to.have.cookie(cookieName, ''))
     })
 
-    it('should not remove session cookie or invalidate auth token when session cookie is missing ', async () => {
-
+    it('should not remove session cookie or invalidate auth token when session cookie is missing', async () => {
       await request(app)
         .get(AppPaths.logoutReceiver.uri)
         .set('Cookie', null)
         .expect(res => expect(res).not.to.have.cookie)
+    })
+
+    it('should redirect to idam endSession endpoint', async () => {
+      await request(app)
+        .get(AppPaths.logoutReceiver.uri)
+        .set('Cookie', null)
+        .expect(res => expect(res).to.be.redirect.toLocation(/.*\/o\/endSession.*/))
     })
   })
 })
