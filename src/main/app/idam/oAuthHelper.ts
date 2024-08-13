@@ -12,8 +12,10 @@ const scope = config.get('idam.authentication-web.scope')
 const baseCivilCitizenUrl = config.get('civil-citizen-ui.url')
 const redirectToCivil = config.get('civil-citizen-ui.sign-out-redirect')
 
-const loginPath = `${config.get('idam.authentication-web.url')}/o/authorize`
-const logoutPath = `${config.get('idam.authentication-web.url')}/o/endSession`
+const idamWebUrl = config.get('idam.authentication-web.url')
+const loginPath = `${idamWebUrl}/login`
+const authorizePath = `${idamWebUrl}/o/authorize`
+const logoutPath = `${idamWebUrl}/o/endSession`
 
 export class OAuthHelper {
 
@@ -24,7 +26,7 @@ export class OAuthHelper {
     const state = uuid()
     OAuthHelper.storeStateCookie(req, res, state)
 
-    return `${loginPath}?response_type=code&state=${state}&client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`
+    return `${authorizePath}?response_type=code&state=${state}&client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`
   }
 
   static forLogout (req: express.Request,
