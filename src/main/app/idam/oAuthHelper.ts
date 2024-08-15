@@ -16,6 +16,7 @@ const idamWebUrl = config.get('idam.authentication-web.url')
 const loginPath = `${idamWebUrl}/login`
 const authorizePath = `${idamWebUrl}/o/authorize`
 const logoutPath = `${idamWebUrl}/o/endSession`
+import { Base64 } from 'js-base64'
 
 export class OAuthHelper {
 
@@ -23,10 +24,15 @@ export class OAuthHelper {
                    res: express.Response,
                    receiver: RoutablePath = Paths.receiver): string {
     const redirectUri = buildURL(req, receiver.uri)
-    const state = uuid()
-    OAuthHelper.storeStateCookie(req, res, state)
+    const stateId = uuid()
+    OAuthHelper.storeStateCookie(req, res, stateId)
+    let stateObj = { 'state': stateId }
+    if (req.originalUrl.match(/^\/dashboard\/\d+\/(claimant|defendant)$/)) {
+      stateObj['redirectToClaim'] = req.originalUrl
+    }
+    stateObj = Base64.encode(JSON.stringify(stateObj))
 
-    return `${authorizePath}?response_type=code&state=${state}&client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`
+    return `${authorizePath}?response_type=code&state=${stateObj}&client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`
   }
 
   static forLogout (req: express.Request,
@@ -40,16 +46,18 @@ export class OAuthHelper {
     const redirectUri = buildURL(req, Paths.receiver.uri)
     const state = claimReference
     OAuthHelper.storeStateCookie(req, res, state)
+    const stateObj = Base64.encode(JSON.stringify({ state }))
 
-    return `${loginPath}/pin?response_type=code&state=${state}&client_id=${clientId}&redirect_uri=${redirectUri}`
+    return `${loginPath}/pin?response_type=code&state=${stateObj}&client_id=${clientId}&redirect_uri=${redirectUri}`
   }
 
   static forUplift (req: express.Request, res: express.Response): string {
     const redirectUri = buildURL(req, Paths.receiver.uri)
     const user: User = res.locals.user
     OAuthHelper.storeStateCookie(req, res, user.id)
+    const stateObj = Base64.encode(JSON.stringify({ 'state': user.id }))
 
-    return `${loginPath}/uplift?response_type=code&state=${user.id}&client_id=${clientId}&redirect_uri=${redirectUri}`
+    return `${loginPath}/uplift?response_type=code&state=${stateObj}&client_id=${clientId}&redirect_uri=${redirectUri}`
   }
 
   static getStateCookie (req: express.Request): string {

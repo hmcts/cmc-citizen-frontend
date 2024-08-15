@@ -17,6 +17,7 @@ import { attachDefaultHooks } from 'test/routes/hooks'
 import { FeatureToggles } from 'utils/featureToggles'
 import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 import * as toBoolean from 'to-boolean'
+import { Base64 } from 'js-base64'
 
 let isDashboardPaginationEnabledStub: sinon.SinonStub
 const cookieName: string = config.get<string>('session.cookieName')
@@ -107,22 +108,36 @@ describe('Login receiver', async () => {
           .expect(res => expect(res).to.be.redirect
             .toLocation(DashboardPaths.dashboardPage.uri))
       })
+
+      it('should redirect to claim details when redirect from CUI', async () => {
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+
+        const redirectToClaim = '/dashboard/123456789/claimant'
+        const state = Base64.decode(JSON.stringify({ state: 'ABC', redirectToClaim }))
+        await request(app)
+          .get(AppPaths.receiver.uri + `?state=${state}`)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.redirect.toLocation(redirectToClaim))
+      })
     })
 
     describe('when defendant starts response journey', () => {
       it('when claim is valid claim summary page to be displayed', async () => {
         idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-1')
+        const state = Base64.decode(JSON.stringify({ state: '000MC027' }))
 
         await request(app)
-          .get(AppPaths.receiver.uri + '?state=000MC027')
+          .get(AppPaths.receiver.uri + `?state=${state}`)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.redirect
             .toLocation(FirstContactPaths.claimSummaryPage.uri))
       })
 
       it('when defendant tries to link and authentication is required', async () => {
+        const state = Base64.decode(JSON.stringify({ state: '123' }))
+
         await request(app)
-          .get(AppPaths.receiver.uri + '?state=123')
+          .get(AppPaths.receiver.uri + `?state=${state}`)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError)
       })
@@ -135,8 +150,10 @@ describe('Login receiver', async () => {
         draftStoreServiceMock.resolveFind('claim')
         claimStoreServiceMock.resolveLinkDefendant()
 
+        const state = Base64.decode(JSON.stringify({ state: '123' }))
+
         await request(app)
-          .get(AppPaths.receiver.uri + '?state=123')
+          .get(AppPaths.receiver.uri + `?state=${state}`)
           .set('Cookie', [`${cookieName}=ABC`, 'lid=lasjlfkkjlef'])
           .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
       })
@@ -144,16 +161,19 @@ describe('Login receiver', async () => {
       it('For expired user credentials with valid input should redirect to login', async () => {
         const token = 'I am dummy access token'
         idamServiceMock.rejectExchangeCode(token)
+        const state = Base64.decode(JSON.stringify({ state: '123' }))
 
         await request(app)
-          .get(`${AppPaths.receiver.uri}?code=ABC&state=123`)
+          .get(`${AppPaths.receiver.uri}?code=ABC&state=${state}`)
           .set('Cookie', 'state=123')
           .expect(res => expect(res).to.be.redirect.toLocation(/.*\/o\/authorize.*/))
       })
 
       it('For expired user credentials should return error otherwise', async () => {
+        const state = Base64.decode(JSON.stringify({ state: '123' }))
+
         await request(app)
-          .get(`${AppPaths.receiver.uri}?code=ABC&state=123`)
+          .get(`${AppPaths.receiver.uri}?code=ABC&state=${state}`)
           .set('Cookie', 'state=123')
           .expect(res => expect(res).to.be.serverError)
       })
@@ -177,8 +197,10 @@ describe('Login receiver', async () => {
         draftStoreServiceMock.resolveFind('claim')
         claimStoreServiceMock.resolveLinkDefendant()
 
+        const state = Base64.decode(JSON.stringify({ state: '123' }))
+
         await request(app)
-          .get(AppPaths.receiver.uri + '?state=123')
+          .get(AppPaths.receiver.uri + `?state=${state}`)
           .set('Cookie', [`${cookieName}=ABC`, 'lid=lasjlfkkjlef'])
           .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
       })
