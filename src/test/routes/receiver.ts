@@ -115,7 +115,7 @@ describe('Login receiver', async () => {
         const redirectToClaim = '/dashboard/123456789/claimant'
         const state = Base64.decode(JSON.stringify({ state: 'ABC', redirectToClaim }))
         await request(app)
-          .get(AppPaths.receiver.uri + `?state=${state}`)
+          .get(AppPaths.receiver.uri + `?state=${encodeURIComponent(state)}`)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.redirect.toLocation(redirectToClaim))
       })
