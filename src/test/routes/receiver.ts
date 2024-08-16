@@ -113,11 +113,9 @@ describe('Login receiver', async () => {
         idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
 
         const redirectToClaim = '/dashboard/123456789/claimant'
-        const state = Base64.decode(JSON.stringify({ state: 'ABC', redirectToClaim }))
-        console.log('State url decode value: ' + state)
-        console.log('encoded url: ' + encodeURIComponent(AppPaths.receiver.uri + `?state=${state}`))
+        const state = Base64.encode(JSON.stringify({ state: 'ABC', redirectToClaim }))
         await request(app)
-          .get(encodeURIComponent(AppPaths.receiver.uri + `?state=${state}`))
+          .get(AppPaths.receiver.uri + `?state=${state}`)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.redirect.toLocation(redirectToClaim))
       })
