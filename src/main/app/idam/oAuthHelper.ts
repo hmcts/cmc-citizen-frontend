@@ -27,7 +27,7 @@ export class OAuthHelper {
     const stateId = uuid()
     OAuthHelper.storeStateCookie(req, res, stateId)
     let stateObj = { 'state': stateId }
-    if (req.originalUrl.match(/^\/dashboard\/\d{16}\/(claimant|defendant)$/)) {
+    if (req.originalUrl.match(/^\/dashboard\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\/(claimant|defendant)$/)) {
       stateObj['redirectToClaim'] = req.originalUrl
     }
     const state = Base64.encode(JSON.stringify(stateObj))

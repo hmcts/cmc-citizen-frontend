@@ -7,6 +7,7 @@ import { expect } from 'chai'
 import * as config from 'config'
 import { Base64 } from 'js-base64'
 import { beforeEach } from 'mocha'
+import * as uuid from 'uuid'
 
 function extractStateValue (inputString: string): string {
   const match = inputString.match(/state=([^\s&]+)/)
@@ -37,7 +38,7 @@ describe('oAuthHelper', () => {
     })
 
     it('should return login Idam page with redirectToClaim to claimant claims detail', () => {
-      const redirectToClaim = '/dashboard/1234567890123456/claimant'
+      const redirectToClaim = `/dashboard/${uuid()}/claimant`
       const req = {
         headers: {
           host: 'localhost:3000'
@@ -51,7 +52,7 @@ describe('oAuthHelper', () => {
     })
 
     it('should return login Idam page with redirectToClaim to defendant claims detail', () => {
-      const redirectToClaim = '/dashboard/1234567890123456/defendant'
+      const redirectToClaim = `/dashboard/${uuid()}/defendant`
       const req = {
         headers: {
           host: 'localhost:3000'
