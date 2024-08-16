@@ -114,8 +114,14 @@ describe('Login receiver', async () => {
 
         const redirectToClaim = '/dashboard/123456789/claimant'
         const state = Base64.encode(JSON.stringify({ state: 'ABC', redirectToClaim }))
+        console.log('State object: ' + { state: 'ABC', redirectToClaim })
+        console.log('State encoded value: ' + state)
+        console.log('normal url: ' + AppPaths.receiver.uri + `?state=${state}`)
+        console.log('encoded url (1): ' + encodeURIComponent(AppPaths.receiver.uri + `?state=${state}`))
+        console.log('encoded url (2): ' + AppPaths.receiver.uri + encodeURIComponent(`?state=${state}`))
+        console.log('encoded url (3): ' + AppPaths.receiver.uri + `?state=${encodeURIComponent(state)}`)
         await request(app)
-          .get(AppPaths.receiver.uri + `?state=${state}`)
+          .get(AppPaths.receiver.uri + `?state=${encodeURIComponent(state)}`)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.redirect.toLocation(redirectToClaim))
       })
