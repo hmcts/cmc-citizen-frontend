@@ -114,12 +114,6 @@ describe('Login receiver', async () => {
 
         const redirectToClaim = '/dashboard/123456789/claimant'
         const state = Base64.encode(JSON.stringify({ state: 'ABC', redirectToClaim }))
-        console.log('State object: ' + { state: 'ABC', redirectToClaim })
-        console.log('State encoded value: ' + state)
-        console.log('normal url: ' + AppPaths.receiver.uri + `?state=${state}`)
-        console.log('encoded url (1): ' + encodeURIComponent(AppPaths.receiver.uri + `?state=${state}`))
-        console.log('encoded url (2): ' + AppPaths.receiver.uri + encodeURIComponent(`?state=${state}`))
-        console.log('encoded url (3): ' + AppPaths.receiver.uri + `?state=${encodeURIComponent(state)}`)
         await request(app)
           .get(AppPaths.receiver.uri + `?state=${encodeURIComponent(state)}`)
           .set('Cookie', `${cookieName}=ABC`)
@@ -130,7 +124,7 @@ describe('Login receiver', async () => {
     describe('when defendant starts response journey', () => {
       it('when claim is valid claim summary page to be displayed', async () => {
         idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-1')
-        const state = Base64.decode(JSON.stringify({ state: '000MC027' }))
+        const state = Base64.encode(JSON.stringify({ state: '000MC027' }))
 
         await request(app)
           .get(AppPaths.receiver.uri + `?state=${state}`)
@@ -140,7 +134,7 @@ describe('Login receiver', async () => {
       })
 
       it('when defendant tries to link and authentication is required', async () => {
-        const state = Base64.decode(JSON.stringify({ state: '123' }))
+        const state = Base64.encode(JSON.stringify({ state: '123' }))
 
         await request(app)
           .get(AppPaths.receiver.uri + `?state=${state}`)
@@ -156,7 +150,7 @@ describe('Login receiver', async () => {
         draftStoreServiceMock.resolveFind('claim')
         claimStoreServiceMock.resolveLinkDefendant()
 
-        const state = Base64.decode(JSON.stringify({ state: '123' }))
+        const state = Base64.encode(JSON.stringify({ state: '123' }))
 
         await request(app)
           .get(AppPaths.receiver.uri + `?state=${state}`)
@@ -167,7 +161,7 @@ describe('Login receiver', async () => {
       it('For expired user credentials with valid input should redirect to login', async () => {
         const token = 'I am dummy access token'
         idamServiceMock.rejectExchangeCode(token)
-        const state = Base64.decode(JSON.stringify({ state: '123' }))
+        const state = Base64.encode(JSON.stringify({ state: '123' }))
 
         await request(app)
           .get(`${AppPaths.receiver.uri}?code=ABC&state=${state}`)
@@ -176,7 +170,7 @@ describe('Login receiver', async () => {
       })
 
       it('For expired user credentials should return error otherwise', async () => {
-        const state = Base64.decode(JSON.stringify({ state: '123' }))
+        const state = Base64.encode(JSON.stringify({ state: '123' }))
 
         await request(app)
           .get(`${AppPaths.receiver.uri}?code=ABC&state=${state}`)
@@ -203,7 +197,7 @@ describe('Login receiver', async () => {
         draftStoreServiceMock.resolveFind('claim')
         claimStoreServiceMock.resolveLinkDefendant()
 
-        const state = Base64.decode(JSON.stringify({ state: '123' }))
+        const state = Base64.encode(JSON.stringify({ state: '123' }))
 
         await request(app)
           .get(AppPaths.receiver.uri + `?state=${state}`)
