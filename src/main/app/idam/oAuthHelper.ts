@@ -6,6 +6,7 @@ import { buildURL } from 'utils/callbackBuilder'
 import { Paths } from 'paths'
 import { RoutablePath } from 'shared/router/routablePath'
 import { User } from 'idam/user'
+import { Base64 } from 'js-base64'
 
 const clientId = config.get<string>('oauth.clientId')
 const scope = config.get('idam.authentication-web.scope')
@@ -16,7 +17,6 @@ const idamWebUrl = config.get('idam.authentication-web.url')
 const loginPath = `${idamWebUrl}/login`
 const authorizePath = `${idamWebUrl}/o/authorize`
 const logoutPath = `${idamWebUrl}/o/endSession`
-import { Base64 } from 'js-base64'
 export const redirectToClaimRegex = /^\/dashboard\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\/(claimant|defendant)$/
 
 export class OAuthHelper {
