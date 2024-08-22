@@ -189,10 +189,8 @@ describe('Login receiver', async () => {
         draftStoreServiceMock.resolveFind('claim')
         claimStoreServiceMock.resolveLinkDefendant()
 
-        const state = Base64.encode(JSON.stringify({ state: '123' }))
-
         await request(app)
-          .get(AppPaths.receiver.uri + `?state=${state}`)
+          .get(AppPaths.receiver.uri + '?state=123')
           .set('Cookie', [`${cookieName}=ABC`, 'lid=lasjlfkkjlef'])
           .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
       })
