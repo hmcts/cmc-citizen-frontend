@@ -17,6 +17,7 @@ const loginPath = `${idamWebUrl}/login`
 const authorizePath = `${idamWebUrl}/o/authorize`
 const logoutPath = `${idamWebUrl}/o/endSession`
 import { Base64 } from 'js-base64'
+export const redirectToClaimRegex = /^\/dashboard\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\/(claimant|defendant)$/
 
 export class OAuthHelper {
 
@@ -27,7 +28,7 @@ export class OAuthHelper {
     const stateId = uuid()
     OAuthHelper.storeStateCookie(req, res, stateId)
     let stateObj = { 'state': stateId }
-    if (req.originalUrl.match(/^\/dashboard\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\/(claimant|defendant)$/)) {
+    if (req.originalUrl.match(redirectToClaimRegex)) {
       stateObj['redirectToClaim'] = req.originalUrl
     }
     const state = Base64.encode(JSON.stringify(stateObj))
@@ -44,8 +45,8 @@ export class OAuthHelper {
 
   static forPin (req: express.Request, res: express.Response, claimReference: string): string {
     const redirectUri = buildURL(req, Paths.receiver.uri)
-    OAuthHelper.storeStateCookie(req, res, claimReference)
-    const state = Base64.encode(JSON.stringify({ 'state': claimReference }))
+    const state = claimReference
+    OAuthHelper.storeStateCookie(req, res, state)
 
     return `${loginPath}/pin?response_type=code&state=${state}&client_id=${clientId}&redirect_uri=${redirectUri}`
   }
@@ -54,9 +55,8 @@ export class OAuthHelper {
     const redirectUri = buildURL(req, Paths.receiver.uri)
     const user: User = res.locals.user
     OAuthHelper.storeStateCookie(req, res, user.id)
-    const state = Base64.encode(JSON.stringify({ 'state': user.id }))
 
-    return `${loginPath}/uplift?response_type=code&state=${state}&client_id=${clientId}&redirect_uri=${redirectUri}`
+    return `${loginPath}/uplift?response_type=code&state=${user.id}&client_id=${clientId}&redirect_uri=${redirectUri}`
   }
 
   static getStateCookie (req: express.Request): string {

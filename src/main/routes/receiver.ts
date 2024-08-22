@@ -19,7 +19,7 @@ import { JwtExtractor } from 'idam/jwtExtractor'
 import { RoutablePath } from 'shared/router/routablePath'
 import { hasTokenExpired } from 'idam/authorizationMiddleware'
 import { Logger } from '@hmcts/nodejs-logging'
-import { OAuthHelper } from 'idam/oAuthHelper'
+import { OAuthHelper, redirectToClaimRegex } from 'idam/oAuthHelper'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { trackCustomEvent } from 'logging/customEventTracker'
@@ -40,7 +40,15 @@ const eligibilityStore = new CookieEligibilityStore()
 const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
 
 function getPropertyFromQueryState (req: express.Request, property: string = 'state') {
-  return req.query.state ? JSON.parse(Base64.decode(req.query.state))[property] as string : undefined
+  const state = req.query.state as string
+  if (state) {
+    try {
+      return JSON.parse(Base64.decode(req.query.state))[property] as string
+    } catch {
+      return state
+    }
+  }
+  return undefined
 }
 
 async function getOAuthAccessToken (req: express.Request, receiver: RoutablePath): Promise<string> {
@@ -98,7 +106,7 @@ function loginErrorHandler (req: express.Request,
 
 async function retrieveRedirectForLandingPage (req: express.Request, res: express.Response): Promise<string> {
   const redirectToClaim = getPropertyFromQueryState(req, 'redirectToClaim')
-  if (redirectToClaim) {
+  if (redirectToClaim && redirectToClaimRegex.test(redirectToClaim)) {
     return redirectToClaim
   }
   const eligibility: Eligibility = eligibilityStore.read(req, res)
