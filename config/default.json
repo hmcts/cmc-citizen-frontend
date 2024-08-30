@@ -142,6 +142,6 @@
   },
   "civil-citizen-ui": {
     "url": "http://localhost:ENTER_PORT_HERE",
-    "sign-out-redirect": false
+    "dashboard-redirect": false
   }
 }

@@ -4,7 +4,7 @@ import { RoutablePath } from 'shared/router/routablePath'
 import { paidInFullPath } from 'paid-in-full/paths'
 
 const baseCivilCitizenUrl = config.get('civil-citizen-ui.url')
-const redirectToCivil = config.get('civil-citizen-ui.sign-out-redirect')
+const redirectToCivil = config.get('civil-citizen-ui.dashboard-redirect')
 
 export class Paths {
   static readonly dashboardPage = new RoutablePath('/dashboard/index')

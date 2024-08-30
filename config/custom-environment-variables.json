@@ -127,6 +127,6 @@
   },
   "civil-citizen-ui": {
     "url": "CIVIL_CITIZEN_URL",
-    "sign-out-redirect": "CIVIL_CITIZEN_UI_REDIRECT"
+    "dashboard-redirect": "CUI_DASHBOARD_REDIRECT"
   }
 }
