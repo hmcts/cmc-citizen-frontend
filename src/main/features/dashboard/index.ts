@@ -9,7 +9,7 @@ import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { OAuthHelper } from 'idam/oAuthHelper'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
-import { Paths } from 'dashboard/paths'
+import { dashboardUrl, Paths } from 'dashboard/paths'
 import { Claim } from 'claims/models/claim'
 import { ClaimStatusFlow } from 'dashboard/helpers/claimStatusFlow'
 import { app } from 'main/app'
@@ -54,6 +54,7 @@ export class DashboardFeature {
 
       if (app.settings.nunjucksEnv.globals) {
         app.settings.nunjucksEnv.globals.DashboardPaths = Paths
+        app.settings.nunjucksEnv.globals.dashboardUrl = dashboardUrl
       }
     }
 

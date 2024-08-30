@@ -9,7 +9,7 @@
       {% endif %}
       <ul id="proposition-links" class="pull-right">
         {% if isLoggedIn === true and isFirstContactPath === false %}
-          <li>{{ internalLink(t('My account'), DashboardPaths.dashboardPage.uri) }}</li>
+          <li>{{ internalLink(t('My account'), dashboardUrl) }}</li>
           <li>{{ internalLink(t('Sign out'), AppPaths.logoutReceiver.uri) }}</li>
         {% endif %}
       </ul>
