@@ -17,9 +17,9 @@
       {% else %}
         {{ claimConfirmation(claim) }}
       {% endif %}
-      
+
       {% include "includes/service-survey-link-claimant.njk" %}
-      {{ internalLink(t('Go to your account'), DashboardPaths.dashboardPage.uri, 'button') }}
+      {{ internalLink(t('Go to your account'), dashboardUrl, 'button') }}
       {{ supportWidget() }}
     </div>
   </div>

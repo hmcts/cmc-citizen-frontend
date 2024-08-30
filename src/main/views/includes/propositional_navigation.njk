@@ -5,7 +5,7 @@
     {{ internalLink(t('Menu'), '#proposition-links', 'js-header-toggle menu') }}
     <nav id="proposition-menu">
       {% if serviceName %}
-        {{ internalLink(t(serviceName), AppPaths.homePage.uri, id='proposition-name') }}
+        {{ internalLink(t(serviceName), dashboardUrl, id='proposition-name') }}
       {% endif %}
       <ul id="proposition-links" class="pull-right">
         {% if isLoggedIn === true and isFirstContactPath === false %}
