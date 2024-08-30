@@ -4,13 +4,14 @@
   },
   "idam": {
     "authentication-web": {
-      "url": "http://localhost:9002"
+      "url": "https://idam-web-public.aat.platform.hmcts.net",
+      "scope": "openid profile roles"
     },
     "api": {
-      "url": "http://localhost:5000"
+      "url": "https://idam-api.aat.platform.hmcts.net"
     },
     "service-2-service-auth": {
-      "url": "http://localhost:4552",
+      "url": "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal",
       "microservice": "cmc"
     }
   },
@@ -120,7 +121,7 @@
       "citizen-draft-store-primary": "not-a-real-primary-secret",
       "citizen-draft-store-secondary": "not-a-real-secondary-secret",
       "staff-email": "CONTACT_EMAIL",
-      "citizen-oauth-client-secret": "12345678",
+      "citizen-oauth-client-secret": "wrubu7ruprupAq6trexe3enay4memej7",
       "os-postcode-lookup-api-key": "AAAAAAA",
       "encryptionKey": "not-a-real-32-bit-encryption-key",
       "AppInsightsInstrumentationKey": "app_insights_instrumental_key",
@@ -139,5 +140,9 @@
   "pcq":
   {
     "url":"http://localhost:4001"
+  },
+  "civil-citizen-ui": {
+    "url": "http://localhost:ENTER_PORT_HERE",
+    "sign-out-redirect": false
   }
 }
