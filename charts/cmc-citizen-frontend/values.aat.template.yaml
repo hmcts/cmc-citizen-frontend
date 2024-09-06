@@ -5,3 +5,7 @@ nodejs:
     FEATURE_TESTING_SUPPORT: true
     FEATURE_RETURN_ERROR_TO_USER: true
     PAY_RETURN_URL: https://${SERVICE_FQDN}
+cmc-claim-store:
+  java:
+    environment:
+      USER_TOKEN_CACHE_ENABLED: true
