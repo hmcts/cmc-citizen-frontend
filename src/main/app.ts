@@ -93,14 +93,16 @@ if (env !== 'mocha') {
   new CsrfProtection().enableFor(app)
 }
 
-logger.info('Loading EligibilityFeature')
-new EligibilityFeature().enableFor(app)
-
 logger.info('Loading DashboardFeature')
 new DashboardFeature().enableFor(app)
 
-logger.info('Loading ClaimIssueFeature')
-new ClaimIssueFeature().enableFor(app)
+if (!FeatureToggles.isEnabled('disablePage')) {
+  logger.info('Loading EligibilityFeature')
+  new EligibilityFeature().enableFor(app)
+
+  logger.info('Loading ClaimIssueFeature')
+  new ClaimIssueFeature().enableFor(app)
+}
 
 logger.info('Loading DefendantFirstContactFeature')
 new DefendantFirstContactFeature().enableFor(app)

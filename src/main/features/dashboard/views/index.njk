@@ -11,7 +11,7 @@
   {% endif %}
   <div class="grid-row">
     <div class="column-full">
-      {% if not claimDraftSaved %}
+      {% if not claimDraftSaved and not featureToggles.disablePage %}
         {{ internalLink(t('Make a new money claim'), EligibilityPaths.startPage.uri, 'newclaim', 'start-now') }}
       {% endif %}
       {% if claimsAsClaimant | length or claimDraftSaved %}
