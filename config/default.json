@@ -99,7 +99,8 @@
     "dashboard_pagination_enabled": false,
     "breathingSpace": true,
     "newClaimFees": true,
-    "feeKeywordsEnable": false
+    "feeKeywordsEnable": false,
+    "disablePages": true
   },
   "oauth": {
     "clientId": "cmc_citizen"
