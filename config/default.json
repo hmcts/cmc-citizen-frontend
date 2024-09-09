@@ -100,7 +100,7 @@
     "breathingSpace": true,
     "newClaimFees": true,
     "feeKeywordsEnable": false,
-    "disablePages": true
+    "disablePages": false
   },
   "oauth": {
     "clientId": "cmc_citizen"
