@@ -96,7 +96,7 @@ if (env !== 'mocha') {
 logger.info('Loading DashboardFeature')
 new DashboardFeature().enableFor(app)
 
-if (!FeatureToggles.isEnabled('disablePage')) {
+if (!FeatureToggles.isEnabled('disablePages')) {
   logger.info('Loading EligibilityFeature')
   new EligibilityFeature().enableFor(app)
 
