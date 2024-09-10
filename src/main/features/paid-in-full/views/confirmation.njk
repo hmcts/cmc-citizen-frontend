@@ -14,7 +14,7 @@
       </div>
       {% include "includes/service-survey-link-claimant.njk" %}
 
-      <p>{{ internalLink(t('Go to your account'), dashboardUrl, 'button') }}</p>
+      <p>{{ internalLink(t('Go to your account'), cuiDashboardUrl if redirectToCUI else DashboardPaths.dashboardPage.uri, 'button') }}</p>
 
       {{ supportWidget() }}
     </div>

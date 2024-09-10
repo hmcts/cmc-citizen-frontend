@@ -43,7 +43,7 @@
       {% include "includes/service-survey-link-defendant.njk" %}
 
       <p>
-        {{ internalLink(t('Go to your account'), dashboardUrl, 'button') }}
+        {{ internalLink(t('Go to your account'), cuiDashboardUrl if redirectToCUI else DashboardPaths.dashboardPage.uri, 'button') }}
       </p>
 
       {{ supportWidget() }}

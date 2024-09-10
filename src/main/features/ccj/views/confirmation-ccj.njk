@@ -25,7 +25,7 @@
 
       <p><a target="_blank" rel="noreferrer noopener" href="https://www.smartsurvey.co.uk/s/CMCMVPT1/">{{  t('What did you think of this service? (opens in new tab).') }}</a></p>
 
-      <p>{{ internalLink('Go to your account', dashboardUrl, 'button') | safe }}</p>
+      <p>{{ internalLink('Go to your account', cuiDashboardUrl if redirectToCUI else DashboardPaths.dashboardPage.uri, 'button') | safe }}</p>
 
       {{ supportWidget() }}
     </div>

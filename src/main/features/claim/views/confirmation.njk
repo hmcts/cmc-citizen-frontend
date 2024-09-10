@@ -19,7 +19,7 @@
       {% endif %}
 
       {% include "includes/service-survey-link-claimant.njk" %}
-      {{ internalLink(t('Go to your account'), dashboardUrl, 'button') }}
+      {{ internalLink(t('Go to your account'), cuiDashboardUrl if redirectToCUI else DashboardPaths.dashboardPage.uri, 'button') }}
       {{ supportWidget() }}
     </div>
   </div>
