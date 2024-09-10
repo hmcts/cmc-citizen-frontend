@@ -33,7 +33,7 @@
           </tr>
           </thead>
           <tbody>
-          {% if claimDraftSaved %}
+          {% if claimDraftSaved and not featureToggles.disablePages  %}
             <tr class="draft mobile-table">
               <td>{{ internalLink(t('Draft claim'), DashboardPaths.claimantPage.evaluateUri({ externalId: 'draft' })) }}</td>
               <td>-</td>
