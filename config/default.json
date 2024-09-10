@@ -91,7 +91,7 @@
     "webChat": false,
     "AntennawebChat": true,
     "inversionOfControl": true,
-    "warningBanner": false,
+    "warningBanner": true,
     "helpWithFees": true,
     "pcq":true,
     "signPostingCTSC": true,
