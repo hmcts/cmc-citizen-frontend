@@ -6,3 +6,7 @@ nodejs:
     FEATURE_RETURN_ERROR_TO_USER: true
     PAY_RETURN_URL: https://${SERVICE_FQDN}
     CUI_DASHBOARD_REDIRECT: false
+cmc-claim-store:
+  java:
+    environment:
+      USER_TOKEN_CACHE_ENABLED: true
