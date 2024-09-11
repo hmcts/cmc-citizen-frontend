@@ -183,6 +183,7 @@
     "all": true
   },
   "resolutions": {
+    "path-to-regexp": "^0.1.10",
     "sass-lint/eslint": "^5.0.0",
     "bootstrap-datepicker/jquery": "^3.5.0",
     "lodash": "^4.17.21",
