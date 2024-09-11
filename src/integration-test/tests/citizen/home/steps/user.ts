@@ -17,6 +17,10 @@ export class UserSteps {
     loginPage.login(username,password)
   }
 
+  logout (): void {
+    loginPage.close()
+  }
+
   selectResolvingThisDispute (): void {
     taskListPage.selectTaskResolvingThisDispute()
   }

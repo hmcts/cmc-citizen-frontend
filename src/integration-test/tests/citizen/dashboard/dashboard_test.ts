@@ -10,6 +10,10 @@ const dashboardClaimDetails: DashboardClaimDetails = new DashboardClaimDetails()
 
 Feature('Dashboard')
 
+After(async () => {
+  userSteps.logout()
+})
+
 Scenario('Check newly created claim is in my account dashboard with correct claim amount @citizen', { retries: 3 }, async (I: I) => {
   const email: string = await I.getClaimantEmail()
   const claimData: ClaimData = await createClaimData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)

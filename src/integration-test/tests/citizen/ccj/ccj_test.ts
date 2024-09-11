@@ -26,6 +26,10 @@ Before(async (I: I) => {
 
 })
 
+After(async () => {
+  userSteps.logout()
+})
+
 Scenario('Default CCJ E2E @nightly @citizen', { retries: 3 }, async (I: I) => {
   userSteps.login(email)
   await ccjSteps.requestCCJWhenDefendantNotPaid(I, claimRef, defendantType)

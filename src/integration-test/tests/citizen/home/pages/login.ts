@@ -22,4 +22,7 @@ export class LoginPage {
     I.click(buttons.submit)
   }
 
+  close (): void {
+    I.amOnCitizenAppPage('/logout')
+  }
 }
