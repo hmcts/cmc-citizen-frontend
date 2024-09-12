@@ -5,7 +5,7 @@
     "returnErrorToUser": true,
     "directionsQuestionnaire": true,
     "newDashboardStatus": false,
-    "warningBanner": true,
+    "warningBanner": false,
     "inversionOfControl": true,
     "helpWithFees": false,
     "dashboard_pagination_enabled": false,
