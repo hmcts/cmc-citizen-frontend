@@ -109,11 +109,7 @@
     {% include "includes/phase_banner_beta.njk" %}
 
     <div>
-      {% block warning_message %}
-        {% if warningBanner %}
-          {% include "includes/banner.njk" %}
-        {% endif %}
-      {% endblock %}
+      {% block warning_message %}{% endblock %}
     </div>
 
     {% if form %}
