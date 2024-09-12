@@ -31,7 +31,6 @@ nodejs:
     CLAIM_STORE_URL: http://cmc-claim-store-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
     CUI_DASHBOARD_URL: https://civil-citizen-ui.{{ .Values.global.environment }}.platform.hmcts.net/dashboard
 
-
     UV_THREADPOOL_SIZE: 64
 
     GA_TRACKING_ID: UA-00000000-0
