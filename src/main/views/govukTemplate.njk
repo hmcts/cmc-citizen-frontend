@@ -107,14 +107,13 @@
 
   <main id="content" role="main">
     {% include "includes/phase_banner_beta.njk" %}
-    {% block warning_message %}
-      {% if warningBanner %}
-        {% include "includes/banner.njk" %}
-      {% endif %}
-    {% endblock %}
 
     <div>
-      {% block warning_message %}{% endblock %}
+      {% block warning_message %}
+        {% if warningBanner %}
+          {% include "includes/banner.njk" %}
+        {% endif %}
+      {% endblock %}
     </div>
 
     {% if form %}
