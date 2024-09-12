@@ -51,6 +51,7 @@ nodejs:
     AUTO_ENROLL_INTO_NEW_FEATURE: true
     FEATURE_BREATHING_SPACE: false
     FEES_API_KEYWORDS_ENABLE: false
+    FEATURE_DISABLE_PAGES: false
 
   keyVaults:
     cmc:

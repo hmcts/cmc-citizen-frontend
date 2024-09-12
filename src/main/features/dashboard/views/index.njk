@@ -9,7 +9,7 @@
   {% include "./banner/banner-claim-threshold.njk" %}
   <div class="grid-row">
     <div class="column-full">
-      {% if not claimDraftSaved %}
+      {% if not claimDraftSaved and not featureToggles.disablePages %}
         {{ internalLink(t('Make a new money claim'), EligibilityPaths.startPage.uri, 'newclaim', 'start-now') }}
       {% endif %}
       {% if claimsAsClaimant | length or claimDraftSaved %}
@@ -31,7 +31,7 @@
           </tr>
           </thead>
           <tbody>
-          {% if claimDraftSaved %}
+          {% if claimDraftSaved and not featureToggles.disablePages  %}
             <tr class="draft mobile-table">
               <td>{{ internalLink(t('Draft claim'), DashboardPaths.claimantPage.evaluateUri({ externalId: 'draft' })) }}</td>
               <td>-</td>
