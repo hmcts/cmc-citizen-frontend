@@ -33,7 +33,7 @@
     "directionsQuestionnaire": true,
     "newDashboardStatus": false,
     "inversionOfControl": true,
-    "warningBanner": false,
+    "warningBanner": true,
     "antennawebChat": true,
     "helpWithFees": true,
     "pcq": true,

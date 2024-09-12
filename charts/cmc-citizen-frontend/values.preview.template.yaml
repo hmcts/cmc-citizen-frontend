@@ -36,6 +36,7 @@ nodejs:
     FEATURE_ANTENNA_WEB_CHAT: true
     PCQ_URL: http://localhost:4000
     PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
+    FEATURE_WARNING_BANNER: true
 
 # sub-charts configuration
 
