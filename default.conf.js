@@ -40,6 +40,17 @@ exports.config = {
         proxy: new ProxySettings()
       }
     },
+    plugins: {
+      selenoid: {
+        enabled: true,
+        deletePassed: true,
+        autoCreate: true,
+        autoStart: true,
+        sessionTimeout: '30m',
+        enableVideo: true,
+        enableLog: true,
+      }
+    },
     IdamHelper: {
       require: './src/integration-test/helpers/idamHelper',
       claimantEmail,
