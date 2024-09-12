@@ -145,7 +145,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('reportProblemSurveyUrl', config.get('feedback.reportProblemSurvey.url'))
     nunjucksEnv.addGlobal('customerSurveyUrl', config.get('feedback.serviceSurvey.url'))
     nunjucksEnv.addGlobal('cuiDashboardUrl', config.get('civil-citizen-ui.url'))
-    nunjucksEnv.addGlobal('redirectToCUI', false)
+    nunjucksEnv.addGlobal('redirectToCUI', true)
 
     nunjucksEnv.addGlobal('featureToggles', this.convertPropertiesToBoolean(config.get('featureToggles')))
     nunjucksEnv.addGlobal('RejectAllOfClaimOption', RejectAllOfClaimOption)
