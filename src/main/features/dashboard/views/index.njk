@@ -6,9 +6,7 @@
 {% set heading = 'Your money claims account' %}
 
 {% block content %}
-  {% if claimsAsDefendant | length >=160 %}
-      {% include "./banner/banner-claim-threshold.njk" %}
-  {% endif %}
+  {% include "./banner/banner-claim-threshold.njk" %}
   <div class="grid-row">
     <div class="column-full">
       {% if not claimDraftSaved %}
