@@ -8,7 +8,7 @@
     "directionsQuestionnaire": true,
     "newDashboardStatus": false,
     "inversionOfControl": true,
-    "warningBanner": true,
+    "warningBanner": false,
     "helpWithFees": true,
     "pcq":true,
     "AntennawebChat": false,
