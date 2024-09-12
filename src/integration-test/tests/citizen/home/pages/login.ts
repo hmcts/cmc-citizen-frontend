@@ -23,6 +23,6 @@ export class LoginPage {
   }
 
   close (): void {
-    I.amOnCitizenAppPage('/logout')
+    I.click('Sign out')
   }
 }
