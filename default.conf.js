@@ -63,6 +63,21 @@ exports.config = {
       uniqueScreenshotNames: 'true'
     }
   },
+  plugins: {
+    autoDelay: {
+      enabled: true,
+      methods: [
+        'click',
+        'fillField',
+        'checkOption',
+        'selectOption',
+        'see',
+      ],
+    },
+    stepByStepReport: {
+      enabled: true
+    },
+  },
   mocha: {
     reporterOptions: {
       'codeceptjs-cli-reporter': {
