@@ -25,7 +25,6 @@ nodejs:
     FEATURE_TOGGLES_API_URL: http://${SERVICE_NAME}-ftr-tgl
     CLAIM_STORE_URL: http://${SERVICE_NAME}-claim-store
     PAY_RETURN_URL: https://${SERVICE_FQDN}
-    CIVIL_CITIZEN_UI_REDIRECT: false
 
     # config to make non prod testing easier
     FEATURE_TESTING_SUPPORT: true
