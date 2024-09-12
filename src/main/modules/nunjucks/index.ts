@@ -144,7 +144,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('betaFeedbackSurveyUrl', config.get('feedback.feedbackSurvey.url'))
     nunjucksEnv.addGlobal('reportProblemSurveyUrl', config.get('feedback.reportProblemSurvey.url'))
     nunjucksEnv.addGlobal('customerSurveyUrl', config.get('feedback.serviceSurvey.url'))
-    nunjucksEnv.addGlobal('cuiDashboardUrl', `${config.get('civil-citizen-ui.url')}/dashboard`)
+    nunjucksEnv.addGlobal('cuiDashboardUrl', config.get('civil-citizen-ui.url') + '/dashboard')
     nunjucksEnv.addGlobal('redirectToCUI', config.get('civil-citizen-ui.dashboard-redirect'))
 
     nunjucksEnv.addGlobal('featureToggles', this.convertPropertiesToBoolean(config.get('featureToggles')))
