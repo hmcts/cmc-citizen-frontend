@@ -10,7 +10,7 @@ const dashboardClaimDetails: DashboardClaimDetails = new DashboardClaimDetails()
 
 Feature('Dashboard')
 
-After(async () => {
+After(() => {
   userSteps.logout()
 })
 

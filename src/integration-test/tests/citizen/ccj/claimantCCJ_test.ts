@@ -26,7 +26,7 @@ Before(async (I: I) => {
 
 })
 
-After(async () => {
+After(() => {
   userSteps.logout()
 })
 
