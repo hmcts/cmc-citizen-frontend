@@ -10,8 +10,8 @@ import { Base64 } from 'js-base64'
 
 const clientId = config.get<string>('oauth.clientId')
 const scope = config.get('idam.authentication-web.scope')
-const baseCivilCitizenUrl = config.get('civil-citizen-ui.url')
-const redirectToCivil = config.get('civil-citizen-ui.sign-out-redirect')
+const baseCivilCitizenUrl = config.get('cui.url')
+const redirectToCivil = config.get('cui.signOutRedirect')
 
 const idamWebUrl = config.get('idam.authentication-web.url')
 const loginPath = `${idamWebUrl}/login`

@@ -142,8 +142,8 @@
   {
     "url":"http://localhost:4001"
   },
-  "civil-citizen-ui": {
-    "url": "http://localhost:ENTER_PORT_HERE",
-    "sign-out-redirect": false
+  "cui": {
+    "url": "http://localhost:3001",
+    "signOutRedirect": false
   }
 }
