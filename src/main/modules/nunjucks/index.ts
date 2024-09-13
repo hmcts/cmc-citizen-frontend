@@ -75,6 +75,9 @@ import { ResponseType as DomainResponseType } from 'claims/models/response/respo
 import { FeaturesBuilder } from 'claim/helpers/featuresBuilder'
 import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
 import * as uuid from 'uuid'
+import { Logger } from '@hmcts/nodejs-logging'
+
+const logger = Logger.getLogger('modules/nunjucks/index')
 
 const packageDotJson = require('../../../../package.json')
 
@@ -144,6 +147,10 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('betaFeedbackSurveyUrl', config.get('feedback.feedbackSurvey.url'))
     nunjucksEnv.addGlobal('reportProblemSurveyUrl', config.get('feedback.reportProblemSurvey.url'))
     nunjucksEnv.addGlobal('customerSurveyUrl', config.get('feedback.serviceSurvey.url'))
+    nunjucksEnv.addGlobal('cuiDashboardUrl', config.get<string>('cui.url'))
+    nunjucksEnv.addGlobal('redirectToCUI', config.get<boolean>('cui.dashboardRedirect'))
+    logger.info('redirectToCUI: ' + nunjucksEnv.getGlobal('redirectToCUI'))
+    logger.info('redirectToCUI: ' + typeof nunjucksEnv.getGlobal('redirectToCUI'))
 
     nunjucksEnv.addGlobal('featureToggles', this.convertPropertiesToBoolean(config.get('featureToggles')))
     nunjucksEnv.addGlobal('RejectAllOfClaimOption', RejectAllOfClaimOption)

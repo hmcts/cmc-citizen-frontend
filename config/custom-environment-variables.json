@@ -27,6 +27,13 @@
     "url": "DRAFT_STORE_URL",
     "apiVersion": "DRAFT_STORE_API_VERSION"
   },
+  "cui": {
+    "url": "CIVIL_CITIZEN_URL",
+    "dashboardRedirect": {
+      "__name": "CUI_DASHBOARD_REDIRECT",
+      "__format": "boolean"
+    }
+  },
   "analytics": {
     "gaTrackingId": "GA_TRACKING_ID"
   },
