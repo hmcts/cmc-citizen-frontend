@@ -1,6 +1,7 @@
 /* tslint:disable:no-console */
 
 import { IdamClient } from 'integration-test/helpers/clients/idamClient'
+import { UserSteps } from '../tests/citizen/home/steps/user'
 
 module.exports = {
   teardownAll: async function (claimantEmail, defendantEmail) {
@@ -18,6 +19,10 @@ module.exports = {
     } catch (error) {
       console.error('Error during teardown, exiting', error)
     }
+  },
+  teardown: function () {
+    const userSteps: UserSteps = new UserSteps()
+    userSteps.logout()
   }
 }
 
