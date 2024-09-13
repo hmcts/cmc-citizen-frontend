@@ -29,7 +29,10 @@
   },
   "cui": {
     "url": "CIVIL_CITIZEN_URL",
-    "dashboardRedirect": "CUI_DASHBOARD_REDIRECT"
+    "dashboardRedirect": {
+      "__name": "CUI_DASHBOARD_REDIRECT",
+      "__format": "boolean"
+    }
   },
   "analytics": {
     "gaTrackingId": "GA_TRACKING_ID"
