@@ -128,6 +128,9 @@
   },
   "cui": {
     "url": "CIVIL_CITIZEN_URL",
-    "signOutRedirect": "CIVIL_CITIZEN_UI_REDIRECT"
+    "signOutRedirect": {
+      "__name": "CIVIL_CITIZEN_UI_REDIRECT",
+      "__format": "boolean"
+    }
   }
 }
