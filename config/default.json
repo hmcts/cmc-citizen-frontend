@@ -23,6 +23,10 @@
   "draft-store": {
     "url": "http://localhost:8800"
   },
+  "cui": {
+    "url": "http://localhost:ENTER_PORT_HERE",
+    "dashboardRedirect": false
+  },
   "session": {
     "cookieName": "SESSION_ID"
   },
@@ -140,9 +144,5 @@
   "pcq":
   {
     "url":"http://localhost:4001"
-  },
-  "civil-citizen-ui": {
-    "url": "http://localhost:ENTER_PORT_HERE",
-    "dashboard-redirect": false
   }
 }
