@@ -5,7 +5,7 @@ const ProxySettings = require('./src/integration-test/config/proxy-settings').Pr
 const claimantEmail = `civilmoneyclaims+claimant-${require('randomstring').generate(7).toLowerCase()}@gmail.com`
 const defendantEmail = `civilmoneyclaims+defendant-${require('randomstring').generate(7).toLowerCase()}@gmail.com`
 const { bootstrapAll } = require('./src/integration-test/bootstrap/bootstrap')
-const { teardownAll } = require('./src/integration-test/bootstrap/teardown')
+const { teardownAll, teardown } = require('./src/integration-test/bootstrap/teardown')
 const outputDir = './output'
 
 exports.config = {
@@ -17,7 +17,7 @@ exports.config = {
     await teardownAll(claimantEmail, defendantEmail)
   },
   async teardown() {
-    await teardownAll(claimantEmail, defendantEmail)
+    await teardown()
   },
   tests: './src/integration-test/tests/**/*_test.*',
   output: `${process.cwd()}/${outputDir}`,
