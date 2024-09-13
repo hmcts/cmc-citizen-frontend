@@ -126,8 +126,11 @@
   {
     "url":"PCQ_URL"
   },
-  "civil-citizen-ui": {
+  "cui": {
     "url": "CIVIL_CITIZEN_URL",
-    "dashboard-redirect": "CUI_DASHBOARD_REDIRECT"
+    "dashboardRedirect": {
+      "__name": "CUI_DASHBOARD_REDIRECT",
+      "__format": "boolean"
+    }
   }
 }

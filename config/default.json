@@ -141,8 +141,8 @@
   {
     "url":"http://localhost:4001"
   },
-  "civil-citizen-ui": {
+  "cui": {
     "url": "http://localhost:ENTER_PORT_HERE",
-    "dashboard-redirect": false
+    "dashboardRedirect": false
   }
 }
