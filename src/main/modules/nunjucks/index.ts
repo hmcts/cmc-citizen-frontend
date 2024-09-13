@@ -144,8 +144,8 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('betaFeedbackSurveyUrl', config.get('feedback.feedbackSurvey.url'))
     nunjucksEnv.addGlobal('reportProblemSurveyUrl', config.get('feedback.reportProblemSurvey.url'))
     nunjucksEnv.addGlobal('customerSurveyUrl', config.get('feedback.serviceSurvey.url'))
-    nunjucksEnv.addGlobal('cuiDashboardUrl', config.get<string>('cui.url'))
-    nunjucksEnv.addGlobal('redirectToCUI', toBoolean(config.get<boolean>('cui.dashboardRedirect')))
+    nunjucksEnv.addGlobal('cuiDashboardUrl', config.get('cui.url'))
+    nunjucksEnv.addGlobal('redirectToCUI', toBoolean(config.get('cui.dashboardRedirect')))
 
     nunjucksEnv.addGlobal('featureToggles', this.convertPropertiesToBoolean(config.get('featureToggles')))
     nunjucksEnv.addGlobal('RejectAllOfClaimOption', RejectAllOfClaimOption)
