@@ -28,6 +28,11 @@
     "apiVersion": "DRAFT_STORE_API_VERSION"
   },
   "cui": {
+    "url": "CUI_URL",
+    "signOutRedirect": {
+      "__name": "CIVIL_CITIZEN_UI_REDIRECT",
+      "__format": "boolean"
+    },
     "dashboardUrl": "CUI_DASHBOARD_URL"
   },
   "analytics": {
@@ -128,12 +133,5 @@
   "pcq":
   {
     "url":"PCQ_URL"
-  },
-  "cui": {
-    "url": "CIVIL_CITIZEN_URL",
-    "signOutRedirect": {
-      "__name": "CIVIL_CITIZEN_UI_REDIRECT",
-      "__format": "boolean"
-    }
   }
 }
