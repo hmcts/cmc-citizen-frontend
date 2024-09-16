@@ -143,9 +143,8 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('isAfter4pm', isAfter4pm)
     nunjucksEnv.addGlobal('betaFeedbackSurveyUrl', config.get('feedback.feedbackSurvey.url'))
     nunjucksEnv.addGlobal('reportProblemSurveyUrl', config.get('feedback.reportProblemSurvey.url'))
-    nunjucksEnv.addGlobal('cuiDashboardUrl', config.get('cui.dashboardUrl'))
     nunjucksEnv.addGlobal('customerSurveyUrl', config.get('feedback.serviceSurvey.url'))
-    nunjucksEnv.addGlobal('cuiDashboardUrl', config.get('cui.url') + '/dashboard')
+    nunjucksEnv.addGlobal('cuiDashboardUrl', config.get('cui.dashboardUrl'))
     nunjucksEnv.addGlobal('redirectToCUI', toBoolean(config.get('cui.dashboardRedirect')))
 
     nunjucksEnv.addGlobal('featureToggles', this.convertPropertiesToBoolean(config.get('featureToggles')))
