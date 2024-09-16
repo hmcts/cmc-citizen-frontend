@@ -2,6 +2,7 @@ import * as config from 'config'
 import * as uuid from 'uuid'
 import * as Cookies from 'cookies'
 import * as express from 'express'
+import * as toBoolean from 'to-boolean'
 import { buildURL } from 'utils/callbackBuilder'
 import { Paths } from 'paths'
 import { RoutablePath } from 'shared/router/routablePath'
@@ -13,7 +14,7 @@ const logger = Logger.getLogger('app/idam/oAuthHelper')
 const clientId = config.get<string>('oauth.clientId')
 const scope = config.get('idam.authentication-web.scope')
 const baseCivilCitizenUrl = config.get('cui.url')
-const redirectToCivil = config.get('cui.signOutRedirect')
+const redirectToCivil = toBoolean(config.get('cui.signOutRedirect'))
 logger.info('redirectToCivil :' + redirectToCivil)
 logger.info('redirectToCivil :' + typeof redirectToCivil)
 const idamWebUrl = config.get('idam.authentication-web.url')
