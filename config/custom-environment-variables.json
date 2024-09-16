@@ -27,6 +27,9 @@
     "url": "DRAFT_STORE_URL",
     "apiVersion": "DRAFT_STORE_API_VERSION"
   },
+  "cui": {
+    "dashboardUrl": "CUI_DASHBOARD_URL"
+  },
   "analytics": {
     "gaTrackingId": "GA_TRACKING_ID"
   },
