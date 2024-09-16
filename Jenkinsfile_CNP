@@ -69,7 +69,7 @@ withPipeline("nodejs", product, component) {
   afterSuccess('build') {
     yarnBuilder.yarn('setup')
   }
-  
+
   before('smoketest:preview'){
     log.info env.TEST_URL
     env.CLAIM_STORE_URL = "https://claim-store-cmc-citizen-frontend-pr-${CHANGE_ID}.preview.platform.hmcts.net"
@@ -103,10 +103,11 @@ withPipeline("nodejs", product, component) {
     env.ENVIRONMENT="aat"
     loadVaultSecrets(secrets)
   }
-  
+
   onPR {
     env.ENVIRONMENT = "preview"
     env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+    env.CUI_DASHBOARD_REDIRECT = true
     loadVaultSecrets(secrets)
   }
 }
