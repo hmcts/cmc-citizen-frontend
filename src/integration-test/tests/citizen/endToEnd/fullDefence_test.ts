@@ -45,6 +45,8 @@ if (process.env.CUI_DASHBOARD_REDIRECT !== 'true') {
   })
 
   Scenario('Reject/Dispute all of the claim @citizen', {retries: 3}, async (I: I) => {
+    console.log('CUI_DASHBOARD_REDIRECT value: ' + process.env.CUI_DASHBOARD_REDIRECT)
+    console.log('CUI_DASHBOARD_REDIRECT type: ' + (typeof process.env.CUI_DASHBOARD_REDIRECT))
     claimantResponseSteps.decideToProceed()
     checkAndSendPage.checkFactsTrueAndSubmit(testData.defenceType)
     I.see('You’ve rejected their response')
