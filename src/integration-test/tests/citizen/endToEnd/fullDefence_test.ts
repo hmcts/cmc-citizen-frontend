@@ -17,7 +17,6 @@ const checkAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage(
 let testData
 let claimData
 
-if (process.env.CUI_DASHBOARD_REDIRECT !== 'true') {
   Feature('Full Defence E2E')
 
   Before(async (I: I) => {
@@ -44,6 +43,7 @@ if (process.env.CUI_DASHBOARD_REDIRECT !== 'true') {
     I.click('View and respond')
   })
 
+if (process.env.CUI_DASHBOARD_REDIRECT !== 'true') {
   Scenario('Reject/Dispute all of the claim @citizen', {retries: 3}, async (I: I) => {
     console.log('CUI_DASHBOARD_REDIRECT value: ' + process.env.CUI_DASHBOARD_REDIRECT)
     console.log('CUI_DASHBOARD_REDIRECT type: ' + (typeof process.env.CUI_DASHBOARD_REDIRECT))
