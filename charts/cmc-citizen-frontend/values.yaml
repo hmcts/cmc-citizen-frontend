@@ -31,7 +31,7 @@ nodejs:
     CLAIM_STORE_URL: http://cmc-claim-store-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
     CUI_DASHBOARD_URL: https://civil-citizen-ui.{{ .Values.global.environment }}.platform.hmcts.net/dashboard
     CUI_URL: https://civil-citizen-ui.{{ .Values.global.environment }}.platform.hmcts.net
-    CUI_DASHBOARD_REDIRECT: false
+    CUI_DASHBOARD_REDIRECT: true
 
     UV_THREADPOOL_SIZE: 64
 
