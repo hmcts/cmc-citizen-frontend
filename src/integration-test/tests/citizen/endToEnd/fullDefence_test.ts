@@ -17,7 +17,7 @@ const checkAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage(
 let testData
 let claimData
 
-if (!process.env.CUI_DASHBOARD_REDIRECT) {
+if (process.env.CUI_DASHBOARD_REDIRECT !== 'true') {
   Feature('Full Defence E2E')
 
   Before(async (I: I) => {
