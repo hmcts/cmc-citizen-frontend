@@ -4,9 +4,11 @@ import { PartyType } from 'integration-test/data/party-type'
 import { PaymentOption } from 'integration-test/data/payment-option'
 import { Helper } from 'integration-test/tests/citizen/endToEnd/steps/helper'
 import { DefenceSteps } from 'integration-test/tests/citizen/defence/steps/defence'
+import { UserSteps } from '../home/steps/user'
 
 const helperSteps: Helper = new Helper()
 const defenceSteps: DefenceSteps = new DefenceSteps()
+const userSteps: UserSteps = new UserSteps()
 let claimantEmail
 let defendantEmail
 let claimData
@@ -29,6 +31,10 @@ Before(async (I: I) => {
   helperSteps.linkClaimToDefendant(defendantEmail)
   helperSteps.startResponseFromDashboard(claimRef)
 
+})
+
+After(() => {
+  userSteps.logout()
 })
 
 if (process.env.FEATURE_ADMISSIONS === 'true') {
