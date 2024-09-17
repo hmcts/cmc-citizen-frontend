@@ -26,10 +26,6 @@ Before(async (I: I) => {
 
 })
 
-After(() => {
-  userSteps.logout()
-})
-
 Scenario('Claimant Requested CCJ(Individual Vs Limited Company) Against Limited Company @citizen @nightly', { retries: 3 }, async (I: I) => {
   userSteps.login(email)
   await ccjSteps.requestCCJ(I, claimRef, defendantType)
