@@ -54,7 +54,7 @@ nodejs:
     FEATURE_BREATHING_SPACE: false
     FEES_API_KEYWORDS_ENABLE: false
     FEATURE_DISABLE_PAGES: false
-    CIVIL_CITIZEN_UI_REDIRECT: false
+    CIVIL_CITIZEN_UI_REDIRECT: true
 
   keyVaults:
     cmc:

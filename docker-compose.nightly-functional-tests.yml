@@ -20,6 +20,7 @@ services:
         - FEATURE_PCQ
         - FEATURE_HELP_WITH_FEES
         - FEATURE_BREATHING_SPACE
+        - CIVIL_CITIZEN_UI_REDIRECT
         - NODE_TLS_REJECT_UNAUTHORIZED=0
       volumes:
         - ./functional-output:/usr/src/app/output

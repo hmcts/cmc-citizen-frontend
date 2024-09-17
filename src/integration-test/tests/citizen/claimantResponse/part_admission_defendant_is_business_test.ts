@@ -20,7 +20,7 @@ Before(async (I: I) => {
   testData = await EndToEndTestData.prepareData(I, PartyType.COMPANY, PartyType.INDIVIDUAL)
 })
 
-if (process.env.FEATURE_ADMISSIONS === 'true') {
+if (process.env.FEATURE_ADMISSIONS === 'true' && process.env.CIVIL_CITIZEN_UI_REDIRECT !== 'true') {
 
   Scenario('I can as a claimant accept and suggest an alternative payment intention with set date @admissions @business', { retries: 3 }, async (I: I) => {
     testData.defenceType = DefenceType.PART_ADMISSION_NONE_PAID
