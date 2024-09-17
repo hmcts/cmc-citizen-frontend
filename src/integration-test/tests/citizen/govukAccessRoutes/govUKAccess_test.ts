@@ -2,8 +2,10 @@ import I = CodeceptJS.I
 import { AccessRoutesSteps } from 'integration-test/tests/citizen/govukAccessRoutes/steps/accessRoutesSteps'
 import { PartyType } from 'integration-test/data/party-type'
 import { createClaimData } from 'integration-test/data/test-data'
+import { UserSteps } from '../home/steps/user'
 
 const accessRoutesSteps: AccessRoutesSteps = new AccessRoutesSteps()
+const userSteps: UserSteps = new UserSteps()
 let claimantEmail
 let claimRef
 
@@ -13,6 +15,10 @@ Before(async (I: I) => {
   claimantEmail = await I.getClaimantEmail()
   claimRef = await I.createClaim(await createClaimData(I, PartyType.SOLE_TRADER, PartyType.INDIVIDUAL), claimantEmail)
 
+})
+
+After(() => {
+  userSteps.logout()
 })
 
 Scenario('I can enter a moneyclaims reference and login to see the dashboard @citizen', { retries: 3 }, async (I: I) => {
