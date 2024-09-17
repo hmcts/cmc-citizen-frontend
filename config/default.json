@@ -3,8 +3,6 @@
     "referrerPolicy": "origin"
   },
   "cui": {
-    "url": "http://localhost:3001",
-    "signOutRedirect": false,
     "dashboardUrl": "https://www.moneyclaims.service.gov.uk/dashboard"
   },
   "idam": {

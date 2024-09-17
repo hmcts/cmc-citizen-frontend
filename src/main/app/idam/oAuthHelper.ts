@@ -2,21 +2,14 @@ import * as config from 'config'
 import * as uuid from 'uuid'
 import * as Cookies from 'cookies'
 import * as express from 'express'
-import * as toBoolean from 'to-boolean'
 import { buildURL } from 'utils/callbackBuilder'
 import { Paths } from 'paths'
 import { RoutablePath } from 'shared/router/routablePath'
 import { User } from 'idam/user'
 import { Base64 } from 'js-base64'
-import { Logger } from '@hmcts/nodejs-logging'
-const logger = Logger.getLogger('app/idam/oAuthHelper')
 
 const clientId = config.get<string>('oauth.clientId')
 const scope = config.get('idam.authentication-web.scope')
-const baseCivilCitizenUrl = config.get('cui.url')
-const redirectToCivil = toBoolean(config.get('cui.signOutRedirect'))
-logger.info('redirectToCivil :' + redirectToCivil)
-logger.info('redirectToCivil :' + typeof redirectToCivil)
 const idamWebUrl = config.get('idam.authentication-web.url')
 const loginPath = `${idamWebUrl}/login`
 const authorizePath = `${idamWebUrl}/o/authorize`
@@ -43,8 +36,7 @@ export class OAuthHelper {
   static forLogout (req: express.Request,
                    authToken: string,
                    receiver: RoutablePath = Paths.receiver): string {
-    const redirectUri = redirectToCivil ? `${baseCivilCitizenUrl}/logout` : buildURL(req, receiver.uri)
-    logger.info('redirectUri :' + redirectUri)
+    const redirectUri = buildURL(req, receiver.uri)
     return `${logoutPath}?id_token_hint=${authToken}&post_logout_redirect_uri=${redirectUri}`
   }
 
