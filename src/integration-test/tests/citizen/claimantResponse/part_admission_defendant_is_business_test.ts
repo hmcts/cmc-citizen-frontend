@@ -20,6 +20,10 @@ Before(async (I: I) => {
   testData = await EndToEndTestData.prepareData(I, PartyType.COMPANY, PartyType.INDIVIDUAL)
 })
 
+After(() => {
+  userSteps.logout()
+})
+
 if (process.env.FEATURE_ADMISSIONS === 'true') {
 
   Scenario('I can as a claimant accept and suggest an alternative payment intention with set date @admissions @business', { retries: 3 }, async (I: I) => {

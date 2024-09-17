@@ -19,6 +19,10 @@ Before(async (I: I) => {
   testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
 })
 
+After(() => {
+  userSteps.logout()
+})
+
 Scenario('I can as an Individual make a claim against an Individual who then fully rejects the claim as they have already paid the full amount and I proceed with the claim @citizen', { retries: 3 }, async (I: I) => {
   testData.defenceType = DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID
   await helperSteps.finishResponse(testData)

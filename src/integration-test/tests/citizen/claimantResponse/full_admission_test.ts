@@ -26,6 +26,10 @@ Before(async (I: I) => {
   testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
 })
 
+After(() => {
+  userSteps.logout()
+})
+
 if (process.env.FEATURE_ADMISSIONS === 'true') {
 
   Scenario('Defendant agreed to pay all of the claim via immediate payment route... @fullAdmission @citizen @admissions', { retries: 3 }, async (I: I) => {

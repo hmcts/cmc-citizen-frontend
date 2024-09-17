@@ -27,6 +27,10 @@ Before(async (I: I) => {
 
 })
 
+After(() => {
+  userSteps.logout()
+})
+
 Scenario('Claimant Accepted Offer @nightly @citizen', { retries: 3 }, async (I: I) => {
   userSteps.login(claimantEmail)
   offerSteps.acceptOfferFromDashboard(claimRef)

@@ -43,6 +43,10 @@ Before(async (I: I) => {
   I.click('View and respond')
 })
 
+After(() => {
+  userSteps.logout()
+})
+
 Scenario('Reject/Dispute all of the claim @citizen', { retries: 3 }, async (I: I) => {
   claimantResponseSteps.decideToProceed()
   checkAndSendPage.checkFactsTrueAndSubmit(testData.defenceType)

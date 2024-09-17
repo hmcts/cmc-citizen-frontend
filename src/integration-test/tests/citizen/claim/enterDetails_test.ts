@@ -23,7 +23,10 @@ Before(async (I: I) => {
     testingSupport.deleteClaimDraft()
   }
   claimSteps.completeEligibility()
+})
 
+After(() => {
+  userSteps.logout()
 })
 
 Scenario('Claim with no interest @citizen', { retries: 0 }, async (I: I) => {

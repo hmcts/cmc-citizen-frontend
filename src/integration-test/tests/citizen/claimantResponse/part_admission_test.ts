@@ -23,6 +23,10 @@ Before(async (I: I) => {
   testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
 })
 
+After(() => {
+  userSteps.logout()
+})
+
 if (process.env.FEATURE_ADMISSIONS === 'true') {
   Scenario('I can as a claimant reject the defendants part admission by immediately @nightly @admissions', { retries: 3 }, async (I: I) => {
     testData.paymentOption = PaymentOption.IMMEDIATELY

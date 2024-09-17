@@ -16,6 +16,10 @@ Before(async (I: I) => {
   testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
 })
 
+After(() => {
+  userSteps.logout()
+})
+
 Scenario('I have paid what i believe i owe @citizen @nightly', { retries: 3 }, async (I: I) => {
   testData.defenceType = DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID
   await helperSteps.finishResponse(testData)
