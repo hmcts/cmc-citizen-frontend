@@ -74,7 +74,6 @@ Scenario('I can as an Individual make a claim against an Individual who then rej
   I.see(`${testData.defendantName} has rejected your claim.`)
   I.click('View and respond')
   claimantResponseSteps.acceptFullDefencePaidFullAmount(testData)
-  I.click('Sign out')
 })
 
 Scenario('I can as an Individual make a claim against an Individual who then rejects the claim as they have paid less than the amount claimed and I then accept their defence @nightly', { retries: 3 }, async (I: I) => {
@@ -105,7 +104,6 @@ Scenario('I can as an Individual make a claim against an Individual who then rej
   I.see(`${testData.defendantName} says they paid you £50 on 1 January 2018.`)
   I.click('Respond')
   claimantResponseSteps.acceptFullDefencePaidLessThanFullAmount()
-  I.click('Sign out')
 })
 
 Scenario('I can as an Individual make a claim against an Individual who then rejects the claim as they have paid less than the amount claimed and I then proceed with the claim @citizen', { retries: 3 }, async (I: I) => {
@@ -136,5 +134,4 @@ Scenario('I can as an Individual make a claim against an Individual who then rej
   I.see(`${testData.defendantName} says they paid you £50 on 1 January 2018.`)
   I.click('Respond')
   claimantResponseSteps.rejectFullDefencePaidLessThanFullAmount(testData)
-  I.click('Sign out')
 })
