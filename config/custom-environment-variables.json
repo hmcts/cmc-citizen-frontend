@@ -28,7 +28,6 @@
     "apiVersion": "DRAFT_STORE_API_VERSION"
   },
   "cui": {
-    "url": "CUI_URL",
     "dashboardRedirect": {
       "__name": "CUI_DASHBOARD_REDIRECT",
       "__format": "boolean"
