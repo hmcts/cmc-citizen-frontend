@@ -27,44 +27,42 @@ Before(async (I: I) => {
 
 })
 
-if (process.env.CIVIL_CITIZEN_UI_REDIRECT !== 'true') {
-  Scenario('Claimant Accepted Offer @nightly @citizen', {retries: 3}, async (I: I) => {
-    userSteps.login(claimantEmail)
-    offerSteps.acceptOfferFromDashboard(claimRef)
-    I.seeTitleEquals('Confirmation - Money Claims')
-    I.click('Sign out')
-  })
+Scenario('Claimant Accepted Offer @nightly @citizen', { retries: 3 }, async (I: I) => {
+  userSteps.login(claimantEmail)
+  offerSteps.acceptOfferFromDashboard(claimRef)
+  I.seeTitleEquals('Confirmation - Money Claims')
+  I.click('Sign out')
+})
 
-  Scenario('Defendant Countersigned Offer @nightly @citizen', {retries: 3}, async (I: I) => {
-    userSteps.login(claimantEmail)
-    offerSteps.acceptOfferFromDashboard(claimRef)
-    I.click('Sign out')
+Scenario('Defendant Countersigned Offer @nightly @citizen', { retries: 3 }, async (I: I) => {
+  userSteps.login(claimantEmail)
+  offerSteps.acceptOfferFromDashboard(claimRef)
+  I.click('Sign out')
 
-    userSteps.login(defendantEmail)
-    offerSteps.countersignOfferFromDashboard(claimRef)
-    offerSteps.viewClaimFromDashboard(claimRef)
-  })
+  userSteps.login(defendantEmail)
+  offerSteps.countersignOfferFromDashboard(claimRef)
+  offerSteps.viewClaimFromDashboard(claimRef)
+})
 
-  Scenario('Claimant Rejected Offer @citizen @nightly', {retries: 3}, async (I: I) => {
-    userSteps.login(claimantEmail)
-    offerSteps.rejectOfferFromDashboard(claimRef)
-    I.click('Sign out')
+Scenario('Claimant Rejected Offer @citizen @nightly', { retries: 3 }, async (I: I) => {
+  userSteps.login(claimantEmail)
+  offerSteps.rejectOfferFromDashboard(claimRef)
+  I.click('Sign out')
 
-    userSteps.login(defendantEmail)
-    offerSteps.viewClaimFromDashboard(claimRef)
+  userSteps.login(defendantEmail)
+  offerSteps.viewClaimFromDashboard(claimRef)
 
-    I.see('The claimant has rejected your offer to settle the claim.')
-  })
+  I.see('The claimant has rejected your offer to settle the claim.')
+})
 
-  Scenario('Settle Out Of Court E2E @nightly', {retries: 3}, async (I: I) => {
-    userSteps.login(claimantEmail)
-    offerSteps.acceptOfferFromDashboard(claimRef)
-    I.click('Sign out')
+Scenario('Settle Out Of Court E2E @nightly', { retries: 3 }, async (I: I) => {
+  userSteps.login(claimantEmail)
+  offerSteps.acceptOfferFromDashboard(claimRef)
+  I.click('Sign out')
 
-    userSteps.login(defendantEmail)
-    offerSteps.countersignOfferFromDashboard(claimRef)
-    offerSteps.viewClaimFromDashboard(claimRef)
+  userSteps.login(defendantEmail)
+  offerSteps.countersignOfferFromDashboard(claimRef)
+  offerSteps.viewClaimFromDashboard(claimRef)
 
-    I.see('You’ve both signed a legal agreement. The claim is now settled.')
-  })
-}
+  I.see('You’ve both signed a legal agreement. The claim is now settled.')
+})

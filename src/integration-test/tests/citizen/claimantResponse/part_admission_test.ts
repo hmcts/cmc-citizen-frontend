@@ -23,7 +23,7 @@ Before(async (I: I) => {
   testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
 })
 
-if (process.env.FEATURE_ADMISSIONS === 'true' && process.env.CIVIL_CITIZEN_UI_REDIRECT !== 'true') {
+if (process.env.FEATURE_ADMISSIONS === 'true') {
   Scenario('I can as a claimant reject the defendants part admission by immediately @nightly @admissions', { retries: 3 }, async (I: I) => {
     testData.paymentOption = PaymentOption.IMMEDIATELY
     testData.defenceType = DefenceType.PART_ADMISSION
