@@ -31,7 +31,7 @@ exports.config = {
       browser: process.env.BROWSER || 'chrome',
       url: process.env.CITIZEN_APP_URL || 'https://localhost:3000',
       waitForTimeout: 60000,
-      restart: true,
+      restart: false,
       smartWait:5000,
       desiredCapabilities: {
         chromeOptions: {
