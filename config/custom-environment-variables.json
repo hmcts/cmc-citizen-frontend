@@ -33,11 +33,11 @@
       "__name": "CIVIL_CITIZEN_UI_REDIRECT",
       "__format": "boolean"
     },
+    "dashboardUrl": "CUI_DASHBOARD_URL",
     "dashboardRedirect": {
       "__name": "CUI_DASHBOARD_REDIRECT",
       "__format": "boolean"
-    },
-    "dashboardUrl": "CUI_DASHBOARD_URL"
+    }
   },
   "analytics": {
     "gaTrackingId": "GA_TRACKING_ID"
