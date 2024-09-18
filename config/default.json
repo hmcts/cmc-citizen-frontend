@@ -5,6 +5,7 @@
   "cui": {
     "url": "http://localhost:3001",
     "signOutRedirect": false,
+    "dashboardRedirect": false,
     "dashboardUrl": "https://www.moneyclaims.service.gov.uk/dashboard"
   },
   "idam": {

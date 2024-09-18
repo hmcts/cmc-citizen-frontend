@@ -43,12 +43,14 @@ Before(async (I: I) => {
   I.click('View and respond')
 })
 
-Scenario('Reject/Dispute all of the claim @citizen', { retries: 3 }, async (I: I) => {
-  claimantResponseSteps.decideToProceed()
-  checkAndSendPage.checkFactsTrueAndSubmit(testData.defenceType)
-  I.see('You’ve rejected their response')
-})
+if (process.env.CUI_DASHBOARD_REDIRECT !== 'true') {
+  Scenario('Reject/Dispute all of the claim @citizen', {retries: 3}, async (I: I) => {
+    claimantResponseSteps.decideToProceed()
+    checkAndSendPage.checkFactsTrueAndSubmit(testData.defenceType)
+    I.see('You’ve rejected their response')
+  })
 
-Scenario('Claimant Stop the claim /Case Stayed E2E @citizen @nightly', { retries: 3 }, async (I: I) => {
-  claimantResponseSteps.decideNotToProceed()
-})
+  Scenario('Claimant Stop the claim /Case Stayed E2E @citizen @nightly', {retries: 3}, async (I: I) => {
+    claimantResponseSteps.decideNotToProceed()
+  })
+}
