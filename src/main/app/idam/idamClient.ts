@@ -54,11 +54,15 @@ export class IdamClient {
   static exchangeCode (code: string, redirectUri: string): Promise<AuthToken> {
     const clientId = config.get<string>('oauth.clientId')
     const clientSecret = config.get<string>('secrets.cmc.citizen-oauth-client-secret')
-    const url = `${config.get('idam.api.url')}/o/token`
+    const url = `${config.get('idam.api.url')}/oauth2/token`
 
     return request.post({
       uri: url,
-      form: { client_id: clientId, client_secret: clientSecret, grant_type: 'authorization_code', code: code, redirect_uri: redirectUri }
+      auth: {
+        username: clientId,
+        password: clientSecret
+      },
+      form: { grant_type: 'authorization_code', code: code, redirect_uri: redirectUri }
     })
       .then((response: any) => {
         return new AuthToken(
