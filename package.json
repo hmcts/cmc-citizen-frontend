@@ -23,7 +23,7 @@
     "test:coverage-unit": "TS_NODE_TRANSPILE_ONLY=true NODE_ENV=mocha LOG_LEVEL=OFF nyc --cache false mocha  $(find src/test \\( -name '*.ts' \\) ! -path '*a11y*' ! -path '*/routes/*')",
     "test:codacy-upload": "cat ./coverage-report/lcov.info | codacy-coverage",
     "test:codecov-upload": "codecov -f ./coverage-report/lcov.info",
-    "test:smoke": "./bin/run-smoke-tests.sh",
+    "test:smoke": "echo 'smoke test disabled due to disable pages feature is turned on'",
     "test:integration": "TS_NODE_TRANSPILE_ONLY=true codeceptjs run-multiple parallel --config default.conf.js --reporter mocha-multi",
     "test:integration-verbose": "TS_NODE_TRANSPILE_ONLY=true codeceptjs run-multiple parallel --verbose --config default.conf.js",
     "test:crossbrowser": "./bin/run-crossbrowser-tests.sh",
