@@ -54,8 +54,8 @@ nodejs:
     FEATURE_BREATHING_SPACE: false
     FEES_API_KEYWORDS_ENABLE: false
     FEATURE_DISABLE_PAGES: false
-    CUI_DASHBOARD_REDIRECT: false
-    CUI_SIGN_OUT_REDIRECT: false
+    CUI_DASHBOARD_REDIRECT: true
+    CUI_SIGN_OUT_REDIRECT: true
 
   keyVaults:
     cmc:
