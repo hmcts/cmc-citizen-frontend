@@ -17,6 +17,8 @@ import { attachDefaultHooks } from 'test/routes/hooks'
 import { FeatureToggles } from 'utils/featureToggles'
 import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 import * as toBoolean from 'to-boolean'
+import { Base64 } from 'js-base64'
+import * as uuid from 'uuid'
 
 let isDashboardPaginationEnabledStub: sinon.SinonStub
 const cookieName: string = config.get<string>('session.cookieName')
@@ -107,6 +109,17 @@ describe('Login receiver', async () => {
           .expect(res => expect(res).to.be.redirect
             .toLocation(DashboardPaths.dashboardPage.uri))
       })
+
+      it('should redirect to claim details when redirect from CUI', async () => {
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+
+        const redirectToClaim = `/dashboard/${uuid()}/claimant`
+        const state = Base64.encode(JSON.stringify({ state: 'ABC', redirectToClaim }))
+        await request(app)
+          .get(AppPaths.receiver.uri + `?state=${encodeURIComponent(state)}`)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.redirect.toLocation(redirectToClaim))
+      })
     })
 
     describe('when defendant starts response journey', () => {
@@ -144,11 +157,10 @@ describe('Login receiver', async () => {
       it('For expired user credentials with valid input should redirect to login', async () => {
         const token = 'I am dummy access token'
         idamServiceMock.rejectExchangeCode(token)
-
         await request(app)
           .get(`${AppPaths.receiver.uri}?code=ABC&state=123`)
           .set('Cookie', 'state=123')
-          .expect(res => expect(res).to.be.redirect.toLocation(/.*\/login.*/))
+          .expect(res => expect(res).to.be.redirect.toLocation(/.*\/o\/authorize.*/))
       })
 
       it('For expired user credentials should return error otherwise', async () => {
@@ -242,7 +254,7 @@ describe('Defendant link receiver', () => {
 
         await request(app)
           .get(`${pagePath}?code=123`)
-          .expect(res => expect(res).to.be.redirect.toLocation(/.*\/login.*/))
+          .expect(res => expect(res).to.be.redirect.toLocation(/.*\/o\/authorize.*/))
       })
     })
   })

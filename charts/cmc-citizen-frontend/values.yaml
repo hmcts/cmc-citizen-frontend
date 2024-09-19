@@ -30,7 +30,7 @@ nodejs:
     DRAFT_STORE_URL: http://draft-store-service-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
     CLAIM_STORE_URL: http://cmc-claim-store-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
     CUI_DASHBOARD_URL: https://civil-citizen-ui.{{ .Values.global.environment }}.platform.hmcts.net/dashboard
-    CUI_DASHBOARD_REDIRECT: false
+    CUI_URL: https://civil-citizen-ui.{{ .Values.global.environment }}.platform.hmcts.net
 
     UV_THREADPOOL_SIZE: 64
 
@@ -54,6 +54,8 @@ nodejs:
     FEATURE_BREATHING_SPACE: false
     FEES_API_KEYWORDS_ENABLE: false
     FEATURE_DISABLE_PAGES: false
+    CUI_DASHBOARD_REDIRECT: false
+    CUI_SIGN_OUT_REDIRECT: false
 
   keyVaults:
     cmc:

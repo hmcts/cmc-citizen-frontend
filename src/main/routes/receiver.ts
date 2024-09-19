@@ -19,12 +19,13 @@ import { JwtExtractor } from 'idam/jwtExtractor'
 import { RoutablePath } from 'shared/router/routablePath'
 import { hasTokenExpired } from 'idam/authorizationMiddleware'
 import { Logger } from '@hmcts/nodejs-logging'
-import { OAuthHelper } from 'idam/oAuthHelper'
+import { OAuthHelper, redirectToClaimRegex } from 'idam/oAuthHelper'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { trackCustomEvent } from 'logging/customEventTracker'
 import { FeatureToggles } from 'utils/featureToggles'
 import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
+import { Base64 } from 'js-base64'
 
 const logger = Logger.getLogger('router/receiver')
 
@@ -38,11 +39,24 @@ const eligibilityStore = new CookieEligibilityStore()
 
 const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
 
+function getPropertyFromQueryState (req: express.Request, property: string = 'state') {
+  const state = req.query.state as string
+  if (state) {
+    try {
+      return JSON.parse(Base64.decode(req.query.state))[property] as string
+    } catch {
+      return state
+    }
+  }
+  return undefined
+}
+
 async function getOAuthAccessToken (req: express.Request, receiver: RoutablePath): Promise<string> {
-  if (req.query.state !== OAuthHelper.getStateCookie(req)) {
+  const state = getPropertyFromQueryState(req)
+  if (state !== OAuthHelper.getStateCookie(req)) {
     trackCustomEvent('State cookie mismatch (citizen)',
       {
-        requestValue: req.query.state,
+        requestValue: state,
         cookieValue: OAuthHelper.getStateCookie(req)
       })
   }
@@ -70,7 +84,7 @@ async function getAuthToken (req: express.Request,
 
 function isDefendantFirstContactPinLogin (req: express.Request): boolean {
   if (req.query) {
-    const state = req.query.state as string
+    const state = getPropertyFromQueryState(req)
     return state ? !!state.match(/[\d]{3}MC[\d]{3}/) : false
   }
 }
@@ -91,6 +105,10 @@ function loginErrorHandler (req: express.Request,
 }
 
 async function retrieveRedirectForLandingPage (req: express.Request, res: express.Response): Promise<string> {
+  const redirectToClaim = getPropertyFromQueryState(req, 'redirectToClaim')
+  if (redirectToClaim && redirectToClaimRegex.test(redirectToClaim)) {
+    return redirectToClaim
+  }
   const eligibility: Eligibility = eligibilityStore.read(req, res)
   if (eligibility.eligible) {
     const redirectUri = ClaimPaths.taskListPage.uri
@@ -146,7 +164,8 @@ export default express.Router()
       if (res.locals.isLoggedIn) {
         if (isDefendantFirstContactPinLogin(req)) {
           // re-set state cookie as it was cleared above, we need it in this case
-          cookies.set(stateCookieName, req.query.state as string)
+          const state = getPropertyFromQueryState(req)
+          cookies.set(stateCookieName, state)
           return res.redirect(FirstContactPaths.claimSummaryPage.uri)
         } else {
           if (await featureToggles.isDashboardPaginationEnabled()) {
@@ -163,8 +182,9 @@ export default express.Router()
         }
       } else {
         if (res.locals.code) {
+          const state = getPropertyFromQueryState(req)
           trackCustomEvent('Authentication token undefined (jwt defined)',
-            { requestValue: req.query.state })
+            { requestValue: state })
         }
         res.redirect(OAuthHelper.forLogin(req, res))
       }

@@ -2,14 +2,22 @@ import * as config from 'config'
 import * as uuid from 'uuid'
 import * as Cookies from 'cookies'
 import * as express from 'express'
+import * as toBoolean from 'to-boolean'
 import { buildURL } from 'utils/callbackBuilder'
 import { Paths } from 'paths'
 import { RoutablePath } from 'shared/router/routablePath'
 import { User } from 'idam/user'
+import { Base64 } from 'js-base64'
 
 const clientId = config.get<string>('oauth.clientId')
-
-const loginPath = `${config.get('idam.authentication-web.url')}/login`
+const scope = config.get('idam.authentication-web.scope')
+const baseCivilCitizenUrl = config.get('cui.url')
+const redirectToCivil = toBoolean(config.get('cui.signOutRedirect'))
+const idamWebUrl = config.get('idam.authentication-web.url')
+const loginPath = `${idamWebUrl}/login`
+const authorizePath = `${idamWebUrl}/o/authorize`
+const logoutPath = `${idamWebUrl}/o/endSession`
+export const redirectToClaimRegex = /^\/dashboard\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\/(claimant|defendant)$/
 
 export class OAuthHelper {
 
@@ -17,10 +25,22 @@ export class OAuthHelper {
                    res: express.Response,
                    receiver: RoutablePath = Paths.receiver): string {
     const redirectUri = buildURL(req, receiver.uri)
-    const state = uuid()
-    OAuthHelper.storeStateCookie(req, res, state)
+    const stateId = uuid()
+    OAuthHelper.storeStateCookie(req, res, stateId)
+    let stateObj = { 'state': stateId }
+    if (req.originalUrl.match(redirectToClaimRegex)) {
+      stateObj['redirectToClaim'] = req.originalUrl
+    }
+    const state = Base64.encode(JSON.stringify(stateObj))
 
-    return `${loginPath}?response_type=code&state=${state}&client_id=${clientId}&redirect_uri=${redirectUri}`
+    return `${authorizePath}?response_type=code&state=${state}&client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`
+  }
+
+  static forLogout (req: express.Request,
+                   authToken: string,
+                   receiver: RoutablePath = Paths.receiver): string {
+    const redirectUri = redirectToCivil ? `${baseCivilCitizenUrl}/logout` : buildURL(req, receiver.uri)
+    return `${logoutPath}?id_token_hint=${authToken}&post_logout_redirect_uri=${redirectUri}`
   }
 
   static forPin (req: express.Request, res: express.Response, claimReference: string): string {
