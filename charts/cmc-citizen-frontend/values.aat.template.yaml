@@ -9,3 +9,5 @@ cmc-claim-store:
   java:
     environment:
       USER_TOKEN_CACHE_ENABLED: true
+      CUI_DASHBOARD_REDIRECT: false
+      CUI_SIGN_OUT_REDIRECT: false
