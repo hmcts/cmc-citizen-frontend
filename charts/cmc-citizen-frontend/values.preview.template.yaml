@@ -76,7 +76,7 @@ cmc-claim-store:
   enabled: true
   java:
     imagePullPolicy: Always
-    image: hmctspublic.azurecr.io/cmc/claim-store:latest
+    image: hmctspublic.azurecr.io/cmc/claim-store:pr-2985
     releaseNameOverride: ${SERVICE_NAME}-claim-store
     ingressHost: claim-store-${SERVICE_FQDN}
     readinessDelay: 250  # ccd-stack will start much slower
@@ -278,6 +278,7 @@ ccd:
       disableKeyVaults: true
       imagePullPolicy: Always
       image: hmctspublic.azurecr.io/ccd/data-store-api:latest
+      ingressHost: ccd-data-store-api-${SERVICE_FQDN}
       environment:
         DATA_STORE_IDAM_KEY: ${DATA_STORE_S2S_KEY}
         IDAM_OAUTH2_DATA_STORE_CLIENT_SECRET: ${IDAM_OAUTH2_DATA_STORE_CLIENT_SECRET}
@@ -301,9 +302,54 @@ ccd:
 
   elasticsearch:
     nameOverride: ${SERVICE_NAME}-es
-    clusterName: "es"
-    replicas: 1
+    imageTag: "7.17.1"
+    initResources:
+      limits:
+        cpu: "500m"
+        memory: "512Mi"
+      requests:
+        cpu: "25m"
+        memory: "512Mi"
   logstash:
     image:
     tag: ccd-cmc-logstash-latest
+    extraEnvs:
+      - name: DATA_STORE_URL
+        value: jdbc:postgresql://${SERVICE_NAME}-postgresql:5432/data-store?ssl=disable&stringtype=unspecified
+      - name: DATA_STORE_USER
+        value: hmcts
+      - name: DATA_STORE_PASS
+        value: hmcts
+      - name: DB_URL
+        value: jdbc:postgresql://${SERVICE_NAME}-postgresql:5432/data-store?ssl=disable&stringtype=unspecified
+      - name: DB_USER
+        value: hmcts
+      - name: DB_PWD
+        value: hmcts
+      - name: ES_HOSTS
+        value: http://${SERVICE_NAME}-es-master:9200
+      - name: ES_DATA_NODES_URL
+        value: http://${SERVICE_NAME}-es-master:9200
+      - name: ELASTIC_SEARCH_DATA_NODES_HOSTS
+        value: http://${SERVICE_NAME}-es-master:9200
+      - name: ES_URL
+        value: http://${SERVICE_NAME}-es-master:9200
+    resources:
+      requests:
+        cpu: "500m"
+        memory: "1024Mi"
+      limits:
+        cpu: "2500m"
+        memory: "1024Mi"
+    configTpl:
+      db.url: jdbc:postgresql://${SERVICE_NAME}-postgresql:5432/data-store?ssl=disable&stringtype=unspecified
+      db.user: hmcts
+      db.pwd: hmcts
+      es.data.nodes.url: http://${SERVICE_NAME}-es-master:9200
+    livenessProbe:
+      initialDelaySeconds: 90
+
+  postgresql:
+    persistence:
+      enabled: false
 
