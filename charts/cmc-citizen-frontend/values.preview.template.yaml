@@ -38,7 +38,7 @@ nodejs:
     PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
     CUI_DASHBOARD_REDIRECT: false
     CUI_SIGN_OUT_REDIRECT: false
-    FEATURE_DISABLE_PAGES: false
+    FEATURE_DISABLE_PAGES: true
 
 # sub-charts configuration
 
