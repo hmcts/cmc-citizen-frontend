@@ -1,6 +1,11 @@
 #!/bin/bash
 set -ex
 
+if [[ "$FEATURE_DISABLE_PAGES" = "true" ]]; then
+  echo "Not running smoke tests due to feature toggle disable pages is true"
+  exit 0
+fi
+
 pip3 install --upgrade requests==2.31.0
 pip3 install docker==6.1.3
 
