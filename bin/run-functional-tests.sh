@@ -6,11 +6,6 @@ if [[ ${TEST_URL} = *"sprod"*  ]]; then
   exit 0
 fi
 
-if [[ "$FEATURE_DISABLE_PAGES" = "true" ]]; then
-  echo "Not running functional tests due to feature toggle disable pages is true"
-  exit 0
-fi
-
 ADDITIONAL_COMPOSE_FILE="docker-compose.functional-tests.yml -f docker-compose.yml"
 
 function shutdownDocker() {
