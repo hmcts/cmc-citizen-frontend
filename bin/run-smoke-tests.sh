@@ -2,7 +2,7 @@
 set -ex
 
 if [[ "$FEATURE_DISABLE_PAGES" = "true" ]]; then
-  echo "Not running smoke tests due to feature toggle disable pages is true"
+  echo "Not running smoke tests due to feature disable pages is true"
   exit 0
 fi
 
