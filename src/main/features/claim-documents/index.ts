@@ -1,7 +1,7 @@
 import * as express from 'express'
 import * as path from 'path'
 
-import { Paths } from 'claim/paths'
+import { Paths } from 'claim-documents/paths'
 
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
 import { RouterFinder } from 'shared/router/routerFinder'
@@ -25,7 +25,7 @@ function claimIssueRequestHandler (): express.RequestHandler {
 export class Feature {
   enableFor (app: express.Express) {
     if (app.settings.nunjucksEnv && app.settings.nunjucksEnv.globals) {
-      app.settings.nunjucksEnv.globals.ClaimPaths = Paths
+      app.settings.nunjucksEnv.globals.ClaimDocumentsPaths = Paths
     }
 
     app.all('/claim/*', claimIssueRequestHandler())
