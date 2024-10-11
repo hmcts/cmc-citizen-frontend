@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { Paths } from 'claim/paths'
+import { Paths } from 'claim-documents/paths'
 
 import { Claim } from 'claims/models/claim'
 import { ClaimMiddleware } from 'claims/claimMiddleware'
