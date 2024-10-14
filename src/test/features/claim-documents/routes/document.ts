@@ -16,10 +16,6 @@ const cookieName: string = config.get<string>('session.cookieName')
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
-const isEnabledStub = sinon.stub(FeatureToggles, 'isEnabled').returns(true)
-import { app } from 'main/app'
-isEnabledStub.restore()
-
 const claimDocuments = {
   claimDocumentCollection: {
     claimDocuments: [
@@ -44,7 +40,10 @@ const claimDocuments = {
 }
 
 describe('Claim Document Download', () => {
+  const isEnabledStub = sinon.stub(FeatureToggles, 'isEnabled').returns(true)
+  const { app } = require('main/app')
   attachDefaultHooks(app)
+  isEnabledStub.restore()
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', Paths.documentPage.evaluateUri({ externalId: externalId, documentURI: 'sealed-claim' }))

@@ -24,12 +24,11 @@ const cookieName: string = config.get<string>('session.cookieName')
 const externalId = '400f4c57-9684-49c0-adb4-4cf46579d6dc'
 const path: RoutablePath = ClaimPaths.sealedClaimPdfReceiver
 
-const isEnabledStub = sinon.stub(FeatureToggles, 'isEnabled').returns(true)
-import { app } from 'main/app'
-isEnabledStub.restore()
-
 describe('Claim Documents: Sealed Claim pdf', () => {
+  const isEnabledStub = sinon.stub(FeatureToggles, 'isEnabled').returns(true)
+  const { app } = require('main/app')
   attachDefaultHooks(app)
+  isEnabledStub.restore()
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', path.evaluateUri({ externalId: externalId }))
