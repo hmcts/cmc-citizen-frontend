@@ -48,7 +48,7 @@ We use [TSLint](https://palantir.github.io/tslint/) with [StandardJS](http://sta
 Running the linting:
 `yarn lint`
 
-### Running the tests
+### Running the tests check
 
 Mocha is used for writing tests.
 
