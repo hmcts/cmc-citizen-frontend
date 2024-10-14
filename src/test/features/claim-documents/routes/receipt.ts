@@ -4,27 +4,62 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
-import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
 
 import { Paths as ClaimPaths } from 'claim/paths'
+
+let app = require('main/app')
 
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as sinon from 'sinon'
 import { FeatureToggles } from 'utils/featureToggles'
+import * as mock from 'nock'
+import { defaultAccessDeniedPagePattern } from '../../../routes/authorization-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
 const externalId = '400f4c57-9684-49c0-adb4-4cf46579d6dc'
 
 describe('Claim documents: receipt', () => {
-  const isEnabledStub = sinon.stub(FeatureToggles, 'isEnabled').returns(true)
-  const { app } = require('main/app')
-  attachDefaultHooks(app)
-  isEnabledStub.restore()
+  let isEnabledStub
+
+  before(() => {
+    isEnabledStub = sinon.stub(FeatureToggles, 'isEnabled').returns(true)
+    delete require.cache[require.resolve('main/app')]
+    const { app: reloadedApp } = require('main/app')
+    app = reloadedApp
+    attachDefaultHooks(app)
+  })
+
+  after(() => {
+    isEnabledStub.restore()
+  })
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', ClaimPaths.receiptReceiver.evaluateUri({ externalId: externalId }))
+    const pagePath = ClaimPaths.receiptReceiver.evaluateUri({ externalId: externalId })
+
+    it('should redirect to access denied page when JWT token is missing', async () => {
+      await request(app)['get'](pagePath)
+        .expect(res => expect(res).redirect.toLocation(defaultAccessDeniedPagePattern))
+    })
+
+    it('should redirect to access denied page when cannot retrieve user details (possibly session expired)', async () => {
+      mock.cleanAll()
+      idamServiceMock.rejectRetrieveUserFor('Response 403 from /details')
+
+      await request(app)['get'](pagePath)
+        .set('Cookie', `${cookieName}=ABC`)
+        .expect(res => expect(res).redirect.toLocation(defaultAccessDeniedPagePattern))
+    })
+
+    it('should redirect to access denied page when user not in required role', async () => {
+      mock.cleanAll()
+      idamServiceMock.resolveRetrieveUserFor('1', 'divorce-private-beta')
+
+      await request.agent(app)['get'](pagePath)
+        .set('Cookie', `${cookieName}=ABC`)
+        .expect(res => expect(res).redirect.toLocation(defaultAccessDeniedPagePattern))
+    })
 
     describe('for authorized user', () => {
       beforeEach(() => {
@@ -35,7 +70,7 @@ describe('Claim documents: receipt', () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
         await request(app)
-          .get(ClaimPaths.receiptReceiver.evaluateUri({ externalId: externalId }))
+          .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -45,7 +80,7 @@ describe('Claim documents: receipt', () => {
         claimStoreServiceMock.rejectRetrieveDocument('HTTP error')
 
         await request(app)
-          .get(ClaimPaths.receiptReceiver.evaluateUri({ externalId: externalId }))
+          .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -55,7 +90,7 @@ describe('Claim documents: receipt', () => {
         claimStoreServiceMock.resolveRetrieveDocument()
 
         await request(app)
-          .get(ClaimPaths.receiptReceiver.evaluateUri({ externalId: externalId }))
+          .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful)
       })
