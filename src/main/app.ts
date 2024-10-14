@@ -97,6 +97,9 @@ if (env !== 'mocha') {
 logger.info('Loading DashboardFeature')
 new DashboardFeature().enableFor(app)
 
+logger.info('Loading ClaimDocumentsFeature')
+new ClaimDocumentsFeature().enableFor(app)
+
 if (!FeatureToggles.isEnabled('disablePages')) {
   logger.info('Loading EligibilityFeature')
   new EligibilityFeature().enableFor(app)
@@ -104,9 +107,6 @@ if (!FeatureToggles.isEnabled('disablePages')) {
   logger.info('Loading ClaimIssueFeature')
   new ClaimIssueFeature().enableFor(app)
 }
-
-logger.info('Loading ClaimDocumentsFeature')
-new ClaimDocumentsFeature().enableFor(app)
 
 logger.info('Loading DefendantFirstContactFeature')
 new DefendantFirstContactFeature().enableFor(app)
