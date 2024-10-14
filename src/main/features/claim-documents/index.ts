@@ -3,24 +3,7 @@ import * as path from 'path'
 
 import { Paths } from 'claim-documents/paths'
 
-import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
 import { RouterFinder } from 'shared/router/routerFinder'
-import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
-import { DraftService } from 'services/draftService'
-import { DraftClaim } from 'drafts/models/draftClaim'
-import { OAuthHelper } from 'idam/oAuthHelper'
-
-function claimIssueRequestHandler (): express.RequestHandler {
-  function accessDeniedCallback (req: express.Request, res: express.Response): void {
-    res.redirect(OAuthHelper.forLogin(req, res))
-  }
-
-  const requiredRoles = [
-    'citizen'
-  ]
-  const unprotectedPaths = []
-  return AuthorizationMiddleware.requestHandler(requiredRoles, accessDeniedCallback, unprotectedPaths)
-}
 
 export class Feature {
   enableFor (app: express.Express) {
@@ -29,10 +12,6 @@ export class Feature {
     }
 
     app.all('/claim/*', claimIssueRequestHandler())
-    app.all(/^\/claim\/(?!start|amount-exceeded|new-features-consent|.+\/confirmation|.+\/receipt|.+\/draftReceipt|.+\/sealed-claim).*$/,
-      DraftMiddleware.requestHandler(new DraftService(), 'claim', 100, (value: any): DraftClaim => {
-        return new DraftClaim().deserialize(value)
-      }))
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
   }
 }
