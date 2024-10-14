@@ -4,6 +4,7 @@ import * as path from 'path'
 import { Paths } from 'claim-documents/paths'
 
 import { RouterFinder } from 'shared/router/routerFinder'
+import { claimIssueRequestHandler } from 'claim/index'
 
 export class Feature {
   enableFor (app: express.Express) {
