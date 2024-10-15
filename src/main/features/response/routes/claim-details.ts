@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { Paths } from 'response/paths'
-import { Paths as ClaimPaths } from 'claim/paths'
+import { Paths as ClaimDocumentsPaths } from 'claim-documents/paths'
 import { Claim } from 'claims/models/claim'
 import { getInterestDetails } from 'shared/interestUtils'
 import { ErrorHandling } from 'shared/errorHandling'
@@ -27,7 +27,7 @@ export default express.Router()
       res.render(Paths.claimDetailsPage.associatedView, {
         interestData: interestData,
         numOfDayInYear: numOfDaysInYear,
-        pdfUrl: isCurrentUserLinkedToClaim(res.locals.user, res.locals.claim) ? ClaimPaths.sealedClaimPdfReceiver : ClaimPaths.receiptReceiver
+        pdfUrl: isCurrentUserLinkedToClaim(res.locals.user, res.locals.claim) ? ClaimDocumentsPaths.sealedClaimPdfReceiver : ClaimDocumentsPaths.receiptReceiver
       })
     })
   )

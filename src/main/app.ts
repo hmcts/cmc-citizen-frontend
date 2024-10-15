@@ -16,6 +16,7 @@ import { Nunjucks } from 'modules/nunjucks'
 import * as moment from 'moment'
 import { Feature as EligibilityFeature } from 'eligibility/index'
 import { Feature as ClaimIssueFeature } from 'claim/index'
+import { Feature as ClaimDocumentsFeature } from 'claim-documents/index'
 import { Feature as DefendantFirstContactFeature } from 'first-contact/index'
 import { Feature as DefendantResponseFeature } from 'response/index'
 import { Feature as SettlementAgreementFeature } from 'settlement-agreement/index'
@@ -95,6 +96,9 @@ if (env !== 'mocha') {
 
 logger.info('Loading DashboardFeature')
 new DashboardFeature().enableFor(app)
+
+logger.info('Loading ClaimDocumentsFeature')
+new ClaimDocumentsFeature().enableFor(app)
 
 if (!FeatureToggles.isEnabled('disablePages')) {
   logger.info('Loading EligibilityFeature')

@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { Paths } from 'claim/paths'
+import { Paths } from 'claim-documents/paths'
 
 import { Claim } from 'claims/models/claim'
 import { ClaimMiddleware } from 'claims/claimMiddleware'
@@ -16,7 +16,7 @@ const documentsClient: DocumentsClient = new DocumentsClient()
 const scannedDocumentsClient: ScannedDocumentsClient = new ScannedDocumentsClient()
 
 function getDocumentPath (path: string): string {
-  return path.match(`[^\/]+$`)[0]
+  return path.match(`[^\/]+$`)[0]// NOSONAR
 }
 /* tslint:disable:no-default-export */
 export default express.Router()

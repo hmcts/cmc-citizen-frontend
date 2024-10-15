@@ -10,6 +10,7 @@ import { expect } from 'chai'
 import { RoutablePath } from 'shared/router/routablePath'
 import { Paths as EligibilityPaths } from 'eligibility/paths'
 import { ErrorPaths as ClaimIssueErrorPaths, Paths as ClaimIssuePaths } from 'claim/paths'
+import { Paths as ClaimDocumentsPaths } from 'claim-documents/paths'
 import { ErrorPaths as DefendantFirstContactErrorPaths, Paths as DefendantFirstContactPaths } from 'first-contact/paths'
 import { FullAdmissionPaths, Paths, Paths as DefendantResponsePaths, StatementOfMeansPaths } from 'response/paths'
 import { Paths as ClaimantResponsePaths } from 'claimant-response/paths'
@@ -132,12 +133,12 @@ function ensureNoAccessibilityAlerts (issueType: string, issues: Issue[]): void 
 
 const excludedPaths: Paths[] = [
   ClaimIssuePaths.finishPaymentController,
-  ClaimIssuePaths.documentPage,
+  ClaimDocumentsPaths.documentPage,
   ClaimIssuePaths.startPaymentReceiver,
   ClaimIssuePaths.finishPaymentReceiver,
   ClaimIssuePaths.initiatePaymentController,
-  ClaimIssuePaths.receiptReceiver,
-  ClaimIssuePaths.sealedClaimPdfReceiver,
+  ClaimDocumentsPaths.receiptReceiver,
+  ClaimDocumentsPaths.sealedClaimPdfReceiver,
   ClaimIssuePaths.draftReceiptReceiver,
   DefendantResponsePaths.receiptReceiver,
   DefendantResponsePaths.scannedResponseForm,

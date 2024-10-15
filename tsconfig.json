@@ -89,6 +89,9 @@
       "claim/*": [
         "main/features/claim/*"
       ],
+      "claim-documents/*": [
+        "main/features/claim-documents/*"
+      ],
       "first-contact/*": [
         "main/features/first-contact/*"
       ],
