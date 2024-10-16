@@ -11,7 +11,7 @@ import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { OAuthHelper } from 'idam/oAuthHelper'
 
-function claimIssueRequestHandler (): express.RequestHandler {
+export function claimIssueRequestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
     res.redirect(OAuthHelper.forLogin(req, res))
   }
