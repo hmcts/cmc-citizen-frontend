@@ -35,14 +35,11 @@ export class Paths {
   static readonly startPaymentReceiver = new RoutablePath('/claim/pay')
   static readonly finishPaymentReceiver = new RoutablePath('/claim/pay/:externalId/receiver')
   static readonly confirmationPage = new RoutablePath('/claim/:externalId/confirmation')
-  static readonly receiptReceiver = new RoutablePath('/claim/:externalId/receipt')
   static readonly claimantPartyTypeSelectionPage = new RoutablePath('/claim/claimant-party-type-selection')
   static readonly defendantPartyTypeSelectionPage = new RoutablePath('/claim/defendant-party-type-selection')
   static readonly incompleteSubmissionPage = new RoutablePath('/claim/incomplete-submission')
-  static readonly sealedClaimPdfReceiver = new RoutablePath('/claim/:externalId/sealed-claim')
   static readonly initiatePaymentController = new RoutablePath('/claim/initiate-payment')
   static readonly finishPaymentController = new RoutablePath('/claim/:externalId/finish-payment')
-  static readonly documentPage = new RoutablePath('/claim/:externalId/document/:documentURI')
   static readonly draftReceiptReceiver = new RoutablePath('/claim/:externalId/draftReceipt')
 }
 

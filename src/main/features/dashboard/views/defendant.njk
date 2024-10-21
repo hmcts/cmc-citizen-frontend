@@ -34,7 +34,7 @@
         {% endif %}
       {% endset %}
       <p>
-        {{ internalLink(document.documentDisplayName + pdfText, ClaimPaths.documentPage.evaluateUri({ externalId: claim.externalId, documentURI: document.uri })) }}
+        {{ internalLink(document.documentDisplayName + pdfText, ClaimDocumentsPaths.documentPage.evaluateUri({ externalId: claim.externalId, documentURI: document.uri })) }}
         <br>
         <span style="color:grey; font-size: 15px">
           Created: {{ document.createdDatetime.format('LL') }}
@@ -43,7 +43,7 @@
     {% endfor %}
   {% elseif(claim) %}
     <p>
-      {{ internalLink('Download claim (PDF)', ClaimPaths.documentPage.evaluateUri({ externalId: claim.externalId, documentURI: 'claim-receipt' })) }}
+      {{ internalLink('Download claim (PDF)', ClaimDocumentsPaths.documentPage.evaluateUri({ externalId: claim.externalId, documentURI: 'claim-receipt' })) }}
       <br>
       <span style="color:grey; font-size: 15px">
         Created: {{ claim.createdAt.format('LL') }}
