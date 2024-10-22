@@ -102,12 +102,14 @@ withPipeline("nodejs", product, component) {
 
   onMaster {
     env.ENVIRONMENT="aat"
+    env.FEATURE_DISABLE_PAGES = 'true'
     loadVaultSecrets(secrets)
   }
 
   onPR {
     env.ENVIRONMENT = "preview"
     env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+    env.FEATURE_DISABLE_PAGES = 'true'
     loadVaultSecrets(secrets)
   }
 }
