@@ -19,10 +19,11 @@
           <legend class="visually-hidden">{{ t('Has the defendant paid some of the amount owed?') }}</legend>
 
           {{ radioOption(label = 'Yes', name = 'option', form = form, value = 'yes', checked = (selection == 'yes')) }}
-         <div class="govuk-inset-text">
-            <p>{{  t('The system only allows interest to be calculated on the full claim amount. If you have received any part payment, please use form N225 https://www.gov.uk/government/publications/form-n225-request-for-judgment-and-reply-to-admission-specified-amount or https://assets.publishing.service.gov.uk/media/63f49b03e90e077bb3d7af45/n225a-eng-04-13_save.pdf, where you can calculate the correct interest, and send to contactocmc@justice.gov.uk.') }}</p>
-         </div>
+
           <div class="panel panel-border-narrow js-hidden" id="option-yes">
+            <div class="govuk-inset-text">
+                <p>{{  t('The system only allows interest to be calculated on the full claim amount. If you have received any part payment, please use form N225 https://www.gov.uk/government/publications/form-n225-request-for-judgment-and-reply-to-admission-specified-amount or https://assets.publishing.service.gov.uk/media/63f49b03e90e077bb3d7af45/n225a-eng-04-13_save.pdf, where you can calculate the correct interest, and send to contactocmc@justice.gov.uk.') }}</p>
+            </div>
             <input type="hidden" name="claimedAmount" value="{{ totalAmount }}" />
             {{ poundInput(label = 'Amount already paid', name = 'amount', form = form) }}
           </div>
