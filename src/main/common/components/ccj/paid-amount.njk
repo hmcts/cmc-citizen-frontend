@@ -21,6 +21,10 @@
           {{ radioOption(label = 'Yes', name = 'option', form = form, value = 'yes', checked = (selection == 'yes')) }}
 
           <div class="panel panel-border-narrow js-hidden" id="option-yes">
+            <div class="govuk-inset-text">
+                <p>{{  t('The system only allows interest to be calculated on the full claim amount. If you have received any part payment and you are requesting a CCJ, please use form ') }}<a target="_blank" rel="noreferrer noopener" href="https://www.gov.uk/government/publications/form-n225-request-for-judgment-and-reply-to-admission-specified-amount">{{  t('N225') }}</a>{{  t('.  If you have received any part payment and you are requesting a Judgment on a Part Admission response, please use form  ') }}<a target="_blank" rel="noreferrer noopener" href="https://assets.publishing.service.gov.uk/media/63f49b03e90e077bb3d7af45/n225a-eng-04-13_save.pdf">{{  t('N225a') }}</a>.<br/>
+{{  t('You can calculate the correct interest, and send to ') }}<a href="mailto:contactocmc@justice.gov.uk">{{  t('contactocmc@justice.gov.uk') }}</a>{{  t('.') }}</p>
+            </div>
             <input type="hidden" name="claimedAmount" value="{{ totalAmount }}" />
             {{ poundInput(label = 'Amount already paid', name = 'amount', form = form) }}
           </div>
