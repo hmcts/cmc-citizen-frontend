@@ -1,8 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "local>hmcts/.github:renovate-config"
-  ],
+  "extends": ["github>hmcts/.github//renovate/automerge-all", "local>hmcts/.github:renovate-config"],
   "helm-requirements": {
     "enabled": true,
     "fileMatch": [
