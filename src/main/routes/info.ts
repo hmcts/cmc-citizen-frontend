@@ -3,9 +3,10 @@ import * as config from 'config'
 import * as fs from 'fs-extra'
 import { hostname } from 'os'
 import * as path from 'path'
+import * as requestPromise from 'request-promise-native'
 import { RequestPromiseOptions } from 'request-promise-native'
 
-import { InfoContributor, InfoContributorConfig, infoRequestHandler } from '@hmcts/info-provider'
+import { InfoContributor, infoRequestHandler } from '@hmcts/info-provider'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -36,9 +37,9 @@ function caCertRequiredLocallyInfoContributor (serviceName): InfoContributor {
     options.ca = fs.readFileSync(path.join(sslDirectory, 'localhost-ca.crt'))
   }
 
-  return new InfoContributor(
+  return new ConfigurableInfoContributor(
     url(serviceName),
-    new InfoContributorConfig(options)
+    options
   )
 }
 
@@ -49,5 +50,31 @@ function url (serviceName: string): string {
     return config.get<string>(healthCheckUrlLocation)
   } else {
     return config.get<string>(`${serviceName}.url`) + '/info'
+  }
+}
+
+class ConfigurableInfoContributor extends InfoContributor {
+  constructor (serviceUrl: string, private readonly requestOptions?: RequestPromiseOptions) {
+    super(serviceUrl)
+  }
+
+  async call (): Promise<object> {
+    if (!this.requestOptions) {
+      return super.call()
+    }
+
+    try {
+      return await requestPromise.get({
+        uri: this.url,
+        json: true,
+        ...this.requestOptions
+      })
+    } catch (error) {
+      return {
+        error: `Error calling ${this.url}`,
+        statusText: error?.message,
+        body: error?.response?.body
+      }
+    }
   }
 }
