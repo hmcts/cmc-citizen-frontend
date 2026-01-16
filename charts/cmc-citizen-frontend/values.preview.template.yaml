@@ -7,11 +7,11 @@ nodejs:
   livenessDelay: 130  # claim-store will start much slower
   memoryRequests: 512Mi
   cpuRequests: 1000m
-  memoryLimits: 1024Mi
+  memoryLimits: 2048Mi
   cpuLimits: 2500m
   devmemoryRequests: 512Mi
   devcpuRequests: 1000m
-  devmemoryLimits: 1024Mi
+  devmemoryLimits: 2048Mi
   devcpuLimits: 2500m
   autoscaling:        # Default is false
     enabled: true
@@ -306,4 +306,3 @@ ccd:
   logstash:
     image:
     tag: ccd-cmc-logstash-latest
-
