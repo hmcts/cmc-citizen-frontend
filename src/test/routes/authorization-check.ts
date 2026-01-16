@@ -1,7 +1,6 @@
 import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
-import * as mock from 'nock'
 
 import 'test/routes/expectations'
 
@@ -20,7 +19,7 @@ export function checkAuthorizationGuards (app: any,
   })
 
   it('should redirect to access denied page when cannot retrieve user details (possibly session expired)', async () => {
-    mock.cleanAll()
+    idamServiceMock.resetAuthMocks()
     idamServiceMock.rejectRetrieveUserFor('Response 403 from /details')
 
     await request(app)[method](pagePath)
@@ -29,7 +28,7 @@ export function checkAuthorizationGuards (app: any,
   })
 
   it('should redirect to access denied page when user not in required role', async () => {
-    mock.cleanAll()
+    idamServiceMock.resetAuthMocks()
     idamServiceMock.resolveRetrieveUserFor('1', 'divorce-private-beta')
 
     await request.agent(app)[method](pagePath)

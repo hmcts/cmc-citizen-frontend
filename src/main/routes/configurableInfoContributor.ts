@@ -1,3 +1,4 @@
+import * as express from 'express'
 import * as requestPromise from 'request-promise-native'
 import { RequestPromiseOptions } from 'request-promise-native'
 import { InfoContributor } from '@hmcts/info-provider'
@@ -27,3 +28,6 @@ export class ConfigurableInfoContributor extends InfoContributor {
     }
   }
 }
+
+/* tslint:disable:no-default-export */
+export default express.Router()
