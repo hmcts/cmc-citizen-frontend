@@ -5,7 +5,7 @@ import * as spies from 'sinon-chai'
 import * as requestPromise from 'request-promise-native'
 import { InfoContributor } from '@hmcts/info-provider'
 
-import { ConfigurableInfoContributor } from 'routes/info'
+import { ConfigurableInfoContributor } from 'routes/configurableInfoContributor'
 
 chai.use(spies)
 const expect = chai.expect
