@@ -8,6 +8,32 @@ import { RequestPromiseOptions } from 'request-promise-native'
 
 import { InfoContributor, infoRequestHandler } from '@hmcts/info-provider'
 
+class ConfigurableInfoContributor extends InfoContributor {
+  constructor (serviceUrl: string, private readonly requestOptions?: RequestPromiseOptions) {
+    super(serviceUrl)
+  }
+
+  async call (): Promise<object> {
+    if (!this.requestOptions) {
+      return super.call()
+    }
+
+    try {
+      return await requestPromise.get({
+        uri: this.url,
+        json: true,
+        ...this.requestOptions
+      })
+    } catch (error) {
+      return {
+        error: `Error calling ${this.url}`,
+        statusText: error?.message,
+        body: error?.response?.body
+      }
+    }
+  }
+}
+
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get('/info', infoRequestHandler({
@@ -50,31 +76,5 @@ function url (serviceName: string): string {
     return config.get<string>(healthCheckUrlLocation)
   } else {
     return config.get<string>(`${serviceName}.url`) + '/info'
-  }
-}
-
-class ConfigurableInfoContributor extends InfoContributor {
-  constructor (serviceUrl: string, private readonly requestOptions?: RequestPromiseOptions) {
-    super(serviceUrl)
-  }
-
-  async call (): Promise<object> {
-    if (!this.requestOptions) {
-      return super.call()
-    }
-
-    try {
-      return await requestPromise.get({
-        uri: this.url,
-        json: true,
-        ...this.requestOptions
-      })
-    } catch (error) {
-      return {
-        error: `Error calling ${this.url}`,
-        statusText: error?.message,
-        body: error?.response?.body
-      }
-    }
   }
 }
