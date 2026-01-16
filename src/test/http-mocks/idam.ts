@@ -53,6 +53,11 @@ export function resolveRetrieveServiceToken (token: string = defaultAuthToken) {
     .reply(HttpStatus.OK, token)
 }
 
+export function resetAuthMocks () {
+  mock.cleanAll()
+  return resolveRetrieveServiceToken()
+}
+
 export function rejectRetrieveServiceToken (reason: string = 'HTTP error') {
   return mock(s2sAuthServiceBaseURL)
     .post('/lease')

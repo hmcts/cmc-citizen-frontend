@@ -1,7 +1,6 @@
 import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
-import * as mock from 'nock'
 
 import 'test/routes/expectations'
 
@@ -15,7 +14,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 
 describe('Home page', () => {
   beforeEach(() => {
-    mock.cleanAll()
+    idamServiceMock.resetAuthMocks()
   })
 
   describe('on GET', () => {

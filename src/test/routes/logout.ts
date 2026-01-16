@@ -1,7 +1,6 @@
 import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
-import * as mock from 'nock'
 
 import 'test/routes/expectations'
 
@@ -18,7 +17,7 @@ describe('Logout receiver', () => {
   attachDefaultHooks(app)
 
   beforeEach(() => {
-    mock.cleanAll()
+    idamServiceMock.resetAuthMocks()
   })
 
   describe('on GET', () => {
