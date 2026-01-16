@@ -40,7 +40,7 @@
     "@hmcts/cookie-encrypter": "^1.0.1",
     "@hmcts/ctsc-web-chat": "^0.3.10",
     "@hmcts/draft-store-client": "^1.2.1",
-    "@hmcts/info-provider": "^1.0.0",
+    "@hmcts/info-provider": "^1.3.0",
     "@hmcts/nodejs-healthcheck": "^1.8.0",
     "@hmcts/nodejs-logging": "^4.0.4",
     "@hmcts/os-places-client": "^1.1.7",
@@ -69,7 +69,7 @@
     "cookie-parser": "^1.4.5",
     "cookies": "^0.8.0",
     "csurf": "^1.10.0",
-    "express": "^4.19.2",
+    "express": "^4.21.0",
     "fs": "0.0.2",
     "fs-extra": "^9.1.0",
     "govuk-elements-sass": "^3.1.3",
@@ -222,5 +222,5 @@
       "pre-push": "yarn tests && yarn test:routes"
     }
   },
-  "packageManager": "yarn@3.5.0"
+  "packageManager": "yarn@4.12.0"
 }
