@@ -16,6 +16,14 @@ def checkForEnableHelmLabel(branch_name) {
 }
 
 def secrets = [
+  's2s-${env}':
+    [
+     secret('microservicekey-ccd-data', 'DATA_STORE_S2S_KEY'),
+     secret('microservicekey-ccd-definition', 'DEFINITION_STORE_S2S_KEY'),
+     secret('microservicekey-ccd-gw', 'API_GATEWAY_S2S_KEY'),
+     secret('microservicekey-ccd-ps', 'PRINT_S2S_KEY'),
+     secret('microservicekey-ccd-admin', 'ADMIN_S2S_KEY')
+    ],
   'cmc-${env}':
     [
       secret('citizen-oauth-client-secret', 'OAUTH_CLIENT_SECRET'),
