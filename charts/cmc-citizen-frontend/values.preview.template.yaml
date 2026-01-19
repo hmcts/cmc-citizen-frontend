@@ -304,5 +304,5 @@ ccd:
     clusterName: "es"
     replicas: 1
   logstash:
-    image:
+    image: hmctspublic.azurecr.io/ccd/logstash
     tag: ccd-cmc-logstash-latest
