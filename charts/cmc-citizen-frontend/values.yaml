@@ -87,3 +87,6 @@ xui-webapp:
   enabled: false
 elastic:
   enabled: false
+logstash:
+  image: hmctspublic.azurecr.io/ccd/logstash
+  tag: ccd-cmc-logstash-latest
