@@ -305,4 +305,4 @@ ccd:
     replicas: 1
   logstash:
     image: hmctspublic.azurecr.io/ccd/logstash
-    tag: ccd-cmc-logstash-latest
+    imageTag: ccd-cmc-logstash-latest

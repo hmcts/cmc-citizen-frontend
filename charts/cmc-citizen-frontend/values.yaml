@@ -81,12 +81,12 @@ idam-pr:
   enabled: false
 ccd:
   enabled: false
+  logstash:
+    image: hmctspublic.azurecr.io/ccd/logstash
+    imageTag: ccd-cmc-logstash-latest
 cmc-claim-store:
   enabled: false
 xui-webapp:
   enabled: false
 elastic:
   enabled: false
-logstash:
-  image: hmctspublic.azurecr.io/ccd/logstash
-  tag: ccd-cmc-logstash-latest
