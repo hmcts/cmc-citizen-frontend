@@ -228,19 +228,16 @@ ccd:
 
   ccd-admin-web:
     nodejs:
-      disableKeyVaults: false
       imagePullPolicy: Always
       image: hmctspublic.azurecr.io/ccd/admin-web:latest
       ingressHost: ccd-admin-web-${SERVICE_FQDN}
+      keyVaults:
       environment:
-      IDAM_OAUTH2_AW_CLIENT_SECRET: ${ADMIN_WEB_IDAM_SECRET}
+        USER_PROFILE_DB_HOST: ${SERVICE_NAME}-postgresql
+        IDAM_ADMIN_WEB_SERVICE_KEY: ${ADMIN_S2S_KEY}
+        IDAM_OAUTH2_AW_CLIENT_SECRET: ${ADMIN_WEB_IDAM_SECRET}
     idam-pr:
       enabled: true
-    keyVaults:
-      ccd:
-        resourceGroup: s2s
-        secrets:
-          - microservicekey-ccd-admin
 
   ccd-api-gateway-web:
     nodejs:
