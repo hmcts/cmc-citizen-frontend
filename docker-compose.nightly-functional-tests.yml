@@ -22,7 +22,9 @@ services:
         - FEATURE_BREATHING_SPACE
         - CUI_DASHBOARD_REDIRECT
         - NODE_TLS_REJECT_UNAUTHORIZED=0
+        - HOME=/tmp
       volumes:
         - ./functional-output:/usr/src/app/output
     remote-webdriver:
-      image: selenium/standalone-chrome:3.141.59-20210607
+      image: selenium/standalone-chrome:4.23.0
+      platform: linux/amd64

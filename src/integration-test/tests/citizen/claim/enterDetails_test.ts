@@ -22,7 +22,7 @@ Before(async (I: I) => {
   if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
     testingSupport.deleteClaimDraft()
   }
-  claimSteps.completeEligibility()
+  await claimSteps.completeEligibility()
 
 })
 

@@ -9,30 +9,44 @@ export class ClaimantTaskListPage {
   }
 
   selectTaskResolvingThisDispute (): void {
-    I.click('Resolving this dispute')
+    const selector = 'a[href="/claim/resolving-this-dispute"]'
+    I.waitForElement(selector, 10)
+    I.click(selector)
   }
 
   selectTaskCompletingYourClaim (): void {
-    I.click('Completing your claim')
+    const selector = 'a[href="/claim/completing-claim"]'
+    I.waitForElement(selector, 10)
+    I.click(selector)
   }
 
   selectTaskYourDetails (): void {
-    I.click('Your details')
+    const selector = 'a[href="/claim/claimant-party-type-selection"]'
+    I.waitForElement(selector, 10)
+    I.click(selector)
   }
 
   selectTaskTheirDetails (): void {
-    I.click('Their details')
+    const selector = 'a[href="/claim/defendant-party-type-selection"]'
+    I.waitForElement(selector, 10)
+    I.click(selector)
   }
 
   selectTaskClaimAmount (): void {
-    I.click('Claim amount')
+    const selector = 'a[href="/claim/amount"]'
+    I.waitForElement(selector, 10)
+    I.click(selector)
   }
 
   selectTaskClaimDetails (): void {
-    I.click('Claim details')
+    const selector = 'a[href="/claim/reason"]'
+    I.waitForElement(selector, 10)
+    I.click(selector)
   }
 
   selectTaskCheckAndSubmitYourClaim (): void {
-    I.click('Check and submit your claim')
+    const selector = 'a[href="/claim/check-and-send"]'
+    I.waitForElement(selector, 10)
+    I.click(selector)
   }
 }
