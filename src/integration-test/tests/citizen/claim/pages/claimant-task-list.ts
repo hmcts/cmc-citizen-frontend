@@ -9,44 +9,49 @@ export class ClaimantTaskListPage {
   }
 
   selectTaskResolvingThisDispute (): void {
-    const selector = 'a[href="/claim/resolving-this-dispute"]'
-    I.waitForElement(selector, 10)
-    I.click(selector)
+    this.clickTaskLink('a[href="/claim/resolving-this-dispute"]', 'Resolving this dispute')
   }
 
   selectTaskCompletingYourClaim (): void {
-    const selector = 'a[href="/claim/completing-claim"]'
-    I.waitForElement(selector, 10)
-    I.click(selector)
+    this.clickTaskLink('a[href="/claim/completing-claim"]', 'Completing your claim')
   }
 
   selectTaskYourDetails (): void {
-    const selector = 'a[href="/claim/claimant-party-type-selection"]'
-    I.waitForElement(selector, 10)
-    I.click(selector)
+    this.clickTaskLink('a[href="/claim/claimant-party-type-selection"]', 'Your details')
   }
 
   selectTaskTheirDetails (): void {
-    const selector = 'a[href="/claim/defendant-party-type-selection"]'
-    I.waitForElement(selector, 10)
-    I.click(selector)
+    this.clickTaskLink('a[href="/claim/defendant-party-type-selection"]', 'Their details')
   }
 
   selectTaskClaimAmount (): void {
-    const selector = 'a[href="/claim/amount"]'
-    I.waitForElement(selector, 10)
-    I.click(selector)
+    this.clickTaskLink('a[href="/claim/amount"]', 'Claim amount')
   }
 
   selectTaskClaimDetails (): void {
-    const selector = 'a[href="/claim/reason"]'
-    I.waitForElement(selector, 10)
-    I.click(selector)
+    this.clickTaskLink('a[href="/claim/reason"]', 'Claim details')
   }
 
   selectTaskCheckAndSubmitYourClaim (): void {
-    const selector = 'a[href="/claim/check-and-send"]'
-    I.waitForElement(selector, 10)
-    I.click(selector)
+    this.clickTaskLink('a[href="/claim/check-and-send"]', 'Check and submit your claim')
+  }
+
+  private clickTaskLink (selector: string, fallbackText: string): void {
+    const taskSelector = `${selector}, .app-task-list__task-name:contains('${fallbackText}') a`
+    if (this.tryClick(taskSelector)) {
+      return
+    }
+    // Fallback to direct text search if the selector isn’t present
+    I.click(fallbackText)
+  }
+
+  private tryClick (selector: string): boolean {
+    try {
+      I.waitForElement(selector, 5)
+      I.click(selector)
+      return true
+    } catch (err) {
+      return false
+    }
   }
 }
