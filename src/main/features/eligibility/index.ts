@@ -14,7 +14,7 @@ import { DefendantAgeOption } from 'eligibility/model/defendantAgeOption'
 import { RouterFinder } from 'shared/router/routerFinder'
 
 async function authorizationRequestHandler (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const jwt: string = JwtExtractor.extract(req)
+  const jwt = JwtExtractor.extract(req)
   if (jwt) {
     try {
       await IdamClient.retrieveUserFor(jwt)

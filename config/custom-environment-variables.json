@@ -43,7 +43,17 @@
     "gaTrackingId": "GA_TRACKING_ID"
   },
   "session": {
-    "cookieName": "JWT_COOKIE_NAME"
+    "cookieMaxAge": "SESSION_COOKIE_MAX_AGE",
+    "secret": "SESSION_SECRET",
+    "name": "SESSION_NAME",
+    "redis": {
+      "url": "REDISCLOUD_URL",
+      "host": "SESSION_REDIS_HOST",
+      "port": "SESSION_REDIS_PORT",
+      "key": "SESSION_REDIS_KEY",
+      "tls": "SESSION_REDIS_TLS"
+    },
+    "useRedisStore": "SESSION_USE_REDIS_STORE"
   },
   "fees": {
     "url": "FEES_URL",

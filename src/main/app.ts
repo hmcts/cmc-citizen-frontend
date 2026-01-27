@@ -7,6 +7,8 @@ import * as path from 'path'
 import * as favicon from 'serve-favicon'
 import * as cookieParser from 'cookie-parser'
 import * as cookieEncrypter from '@hmcts/cookie-encrypter'
+import * as session from 'express-session'
+import { getSessionStore } from 'modules/session-store'
 import { ForbiddenError, NotFoundError } from 'errors'
 import { ErrorLogger } from 'logging/errorLogger'
 import { RouterFinder } from 'shared/router/routerFinder'
@@ -82,6 +84,25 @@ app.use(cookieParser())
 app.use(cookieEncrypter(config.get('secrets.cmc.encryptionKey'), {
   options: {
     algorithm: 'aes128'
+  }
+}))
+
+const productionMode = env === 'production'
+const cookieMaxAge = config.has('session.cookieMaxAge') ? config.get<number>('session.cookieMaxAge') : 86400000
+logger.info('Adding configuration for session store')
+const sessionStore = getSessionStore()
+app.use(session({
+  name: config.has('session.name') ? config.get<string>('session.name') : 'cmc-citizen-ui-session',
+  store: sessionStore,
+  secret: config.get<string>('session.secret'),
+  resave: false,
+  saveUninitialized: false,
+  rolling: true,
+  cookie: {
+    secure: productionMode,
+    httpOnly: true,
+    sameSite: 'strict',
+    maxAge: cookieMaxAge
   }
 }))
 

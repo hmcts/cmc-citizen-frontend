@@ -37,10 +37,11 @@ export class OAuthHelper {
   }
 
   static forLogout (req: express.Request,
-                   authToken: string,
+                   authToken: string | undefined,
                    receiver: RoutablePath = Paths.receiver): string {
     const redirectUri = redirectToCivil ? `${baseCivilCitizenUrl}/logout` : buildURL(req, receiver.uri)
-    return `${logoutPath}?id_token_hint=${authToken}&post_logout_redirect_uri=${redirectUri}`
+    const idTokenHint = authToken ? `id_token_hint=${authToken}&` : ''
+    return `${logoutPath}?${idTokenHint}post_logout_redirect_uri=${redirectUri}`
   }
 
   static forPin (req: express.Request, res: express.Response, claimReference: string): string {

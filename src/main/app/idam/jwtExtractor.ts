@@ -1,10 +1,13 @@
 import * as express from 'express'
-import * as config from 'config'
 
 export class JwtExtractor {
 
-  static extract (req: express.Request): string {
-    return req.cookies[config.get<string>('session.cookieName')]
+  /**
+   * Extracts the JWT/access token from the server-side session only.
+   * JWTs are never read from or written to cookies or any other browser storage.
+   */
+  static extract (req: express.Request): string | undefined {
+    return req.session?.user?.bearerToken
   }
 
 }

@@ -1,4 +1,10 @@
 {
+  "session": {
+    "cookieMaxAge": 86400000,
+    "secret": "cmc-citizen-frontend-session-secret",
+    "name": "cmc-citizen-ui-session",
+    "useRedisStore": false
+  },
   "idam": {
     "authentication-web": {
       "url": "http://localhost:19002"

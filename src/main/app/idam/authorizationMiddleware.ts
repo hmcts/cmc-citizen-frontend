@@ -1,14 +1,10 @@
 import * as express from 'express'
-import * as config from 'config'
 import * as HttpStatus from 'http-status-codes'
-import * as Cookies from 'cookies'
 
 import { JwtExtractor } from 'idam/jwtExtractor'
 import { IdamClient } from 'idam/idamClient'
 import { User } from 'idam/user'
 import { Logger } from '@hmcts/nodejs-logging'
-
-const sessionCookieName = config.get<string>('session.cookieName')
 
 const logger = Logger.getLogger('middleware/authorization')
 
@@ -29,7 +25,7 @@ export class AuthorizationMiddleware {
     }
 
     return (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const jwt: string = JwtExtractor.extract(req)
+      const jwt = JwtExtractor.extract(req)
 
       if (isPathUnprotected(req.path)) {
         logger.debug(`Unprotected path - access to ${req.path} granted`)
@@ -39,32 +35,63 @@ export class AuthorizationMiddleware {
       if (!jwt) {
         logger.debug(`Protected path - no JWT - access to ${req.path} rejected`)
         return accessDeniedCallback(req, res)
-      } else {
-        IdamClient
-          .retrieveUserFor(jwt)
-          .then((user: User) => {
-            if (!user.isInRoles(...requiredRoles)) {
-              logger.error(`Protected path - valid JWT but user not in ${requiredRoles} roles - redirecting to access denied page`)
-              return accessDeniedCallback(req, res)
-            } else {
-              res.locals.isLoggedIn = true
-              // setting isFirstContactPath = true to remove the signout and the My Account link in the 'first-contact/claim-summary' page
-              res.locals.isFirstContactPath = req.url === '/first-contact/claim-summary'
-              res.locals.user = user
-              logger.debug(`Protected path - valid JWT & role - access to ${req.path} granted`)
-              return next()
-            }
-          })
-          .catch((err) => {
-            if (hasTokenExpired(err)) {
-              const cookies = new Cookies(req, res)
-              cookies.set(sessionCookieName, '')
+      }
+
+      const sessionUser = req.session?.user
+      if (sessionUser && sessionUser.bearerToken === jwt && sessionUser.id) {
+        const user = new User(
+          sessionUser.id,
+          sessionUser.email,
+          sessionUser.forename,
+          sessionUser.surname,
+          sessionUser.roles,
+          sessionUser.group,
+          sessionUser.bearerToken
+        )
+        if (!user.isInRoles(...requiredRoles)) {
+          logger.error(`Protected path - valid session but user not in ${requiredRoles} roles - redirecting to access denied page`)
+          return accessDeniedCallback(req, res)
+        }
+        res.locals.isLoggedIn = true
+        res.locals.isFirstContactPath = req.url === '/first-contact/claim-summary'
+        res.locals.user = user
+        logger.debug(`Protected path - valid session & role - access to ${req.path} granted`)
+        return next()
+      }
+
+      IdamClient
+        .retrieveUserFor(jwt)
+        .then((user: User) => {
+          if (!user.isInRoles(...requiredRoles)) {
+            logger.error(`Protected path - valid JWT but user not in ${requiredRoles} roles - redirecting to access denied page`)
+            return accessDeniedCallback(req, res)
+          }
+          res.locals.isLoggedIn = true
+          res.locals.isFirstContactPath = req.url === '/first-contact/claim-summary'
+          res.locals.user = user
+          logger.debug(`Protected path - valid JWT & role - access to ${req.path} granted`)
+          return next()
+        })
+        .catch((err) => {
+          if (hasTokenExpired(err)) {
+            const deny = () => {
               logger.debug(`Protected path - invalid JWT - access to ${req.path} rejected`)
               return accessDeniedCallback(req, res)
             }
-            return next(err)
-          })
-      }
+            if (req.session) {
+              req.session.destroy((destroyErr) => {
+                if (destroyErr) {
+                  logger.error('Session destroy failed', destroyErr)
+                }
+                deny()
+              })
+            } else {
+              return deny()
+            }
+            return
+          }
+          return next(err)
+        })
     }
   }
 }
