@@ -32,7 +32,7 @@ import * as toBoolean from 'to-boolean'
 
 let isDashboardPaginationEnabledStub: sinon.SinonStub
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 
 const partAdmissionClaim = {
   ...claimStoreServiceMock.sampleClaimObj,
@@ -186,7 +186,7 @@ describe('Dashboard route page', () => {
 
         await request(app)
           .get(Paths.dashboardPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -196,7 +196,7 @@ describe('Dashboard route page', () => {
 
         await request(app)
           .get(Paths.dashboardPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -208,7 +208,7 @@ describe('Dashboard route page', () => {
 
         await request(app)
           .get(Paths.dashboardPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -225,7 +225,7 @@ describe('Dashboard route page', () => {
 
           await request(app)
             .get(Paths.dashboardPage.uri)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Make a new money claim'))
         })
 
@@ -234,7 +234,7 @@ describe('Dashboard route page', () => {
 
           await request(app)
             .get(Paths.dashboardPage.uri)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Continue with claim'))
         })
       })
@@ -253,7 +253,7 @@ describe('Dashboard route page', () => {
             await request(app)
               .get(Paths.dashboardPage.uri)
               .query({ c_pid: '1', d_pid: '1' })
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Make a new money claim'))
           })
 
@@ -264,7 +264,7 @@ describe('Dashboard route page', () => {
               await request(app)
                 .get(Paths.dashboardPage.uri)
                 .query({ c_pid: '1', d_pid: '1' })
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', testAuthCookie())
                 .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
             })
           })
@@ -282,7 +282,7 @@ describe('Dashboard route page', () => {
             claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
             await request(app)
               .get(Paths.dashboardPage.uri)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Make a new money claim'))
           })
 
@@ -291,7 +291,7 @@ describe('Dashboard route page', () => {
             claimStoreServiceMock.resolveRetrieveByDefendantId(claimStoreServiceMock.sampleClaimIssueObj.referenceNumber, '1', claimStoreServiceMock.sampleClaimIssueObj)
             await request(app)
               .get(Paths.dashboardPage.uri)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.successful.withText('000MC050', 'Respond to claim'))
           })
 
@@ -301,7 +301,7 @@ describe('Dashboard route page', () => {
               claimStoreServiceMock.resolveRetrieveByDefendantId(data.claim.referenceNumber, '1', data.claim, data.claimOverride)
               await request(app)
                 .get(Paths.dashboardPage.uri)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', testAuthCookie())
                 .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
             })
           })
@@ -324,7 +324,7 @@ describe('Dashboard route page', () => {
 
           await request(app)
             .get(Paths.dashboardPage.uri)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -339,7 +339,7 @@ describe('Dashboard route page', () => {
 
             await request(app)
               .get(Paths.dashboardPage.uri)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Make a new money claim'))
           })
 
@@ -348,7 +348,7 @@ describe('Dashboard route page', () => {
 
             await request(app)
               .get(Paths.dashboardPage.uri)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Continue with claim'))
           })
         })
@@ -364,7 +364,7 @@ describe('Dashboard route page', () => {
               claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
               await request(app)
                 .get(Paths.dashboardPage.uri)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', testAuthCookie())
                 .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Make a new money claim'))
             })
 
@@ -374,7 +374,7 @@ describe('Dashboard route page', () => {
                 claimStoreServiceMock.resolveRetrieveByClaimantId(data.claim, data.claimOverride)
                 await request(app)
                   .get(Paths.dashboardPage.uri)
-                  .set('Cookie', `${cookieName}=ABC`)
+                  .set('Cookie', testAuthCookie())
                   .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
               })
             })

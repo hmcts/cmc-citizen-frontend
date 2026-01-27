@@ -17,7 +17,7 @@ import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-r
 import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
 import { verifyRedirectForGetWhenAlreadyPaidInFull } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const pagePath: string = ResponsePaths.incompleteSubmissionPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 describe('Defendant response: incomplete submission page', () => {
@@ -45,7 +45,7 @@ describe('Defendant response: incomplete submission page', () => {
 
       await request(app)
         .get(pagePath)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', testAuthCookie())
         .expect(res => expect(res).to.be.successful
           .withText('You need to complete all sections before you submit your response'))
     })

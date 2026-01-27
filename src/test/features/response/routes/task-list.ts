@@ -20,7 +20,7 @@ import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-i
 import { MomentFactory } from 'shared/momentFactory'
 import { verifyRedirectForGetWhenAlreadyPaidInFull } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const pagePath = ResponsePaths.taskListPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 describe('Defendant response: task list page', () => {
@@ -46,7 +46,7 @@ describe('Defendant response: task list page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -59,7 +59,7 @@ describe('Defendant response: task list page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Respond to a money claim', 'Application incomplete', 'You have completed 5 of 6 sections'))
         })
 
@@ -72,7 +72,7 @@ describe('Defendant response: task list page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => {
               expect(res).to.be.successful.withText('Respond to a money claim')
               expect(res.text.match(/INCOMPLETE/g)).length(2)

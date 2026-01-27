@@ -17,7 +17,7 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const pagePath: string = StatementOfMeansPaths.courtOrdersPage.evaluateUri(
   { externalId: claimStoreServiceMock.sampleClaimObj.externalId }
 )
@@ -49,7 +49,7 @@ describe('Defendant response: Statement of means: court orders', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -59,7 +59,7 @@ describe('Defendant response: Statement of means: court orders', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -70,7 +70,7 @@ describe('Defendant response: Statement of means: court orders', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Are you paying money as a result of any court orders?'))
         })
       })
@@ -100,7 +100,7 @@ describe('Defendant response: Statement of means: court orders', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -110,7 +110,7 @@ describe('Defendant response: Statement of means: court orders', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
       })
@@ -128,7 +128,7 @@ describe('Defendant response: Statement of means: court orders', () => {
             await request(app)
               .post(pagePath)
               .send({ declared: 'true', rows: [{ instalmentAmount: '100', amount: '100', claimNumber: '12345' }] })
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.redirect
                 .toLocation(StatementOfMeansPaths.priorityDebtsPage.evaluateUri(
                   { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -145,7 +145,7 @@ describe('Defendant response: Statement of means: court orders', () => {
             await request(app)
               .post(pagePath)
               .send({ declared: 'false' })
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.redirect
                 .toLocation(StatementOfMeansPaths.priorityDebtsPage.evaluateUri(
                   { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -165,7 +165,7 @@ describe('Defendant response: Statement of means: court orders', () => {
           await request(app)
             .post(pagePath)
             .send({ action: { addRow: 'Add row' } })
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Are you paying money as a result of any court orders?'))
         })
       })

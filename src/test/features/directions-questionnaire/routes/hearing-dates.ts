@@ -29,14 +29,14 @@ const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const claim = createClaim(PartyType.INDIVIDUAL, PartyType.ORGANISATION, MadeBy.CLAIMANT)
 const pagePath = Paths.hearingDatesPage.evaluateUri({ externalId: externalId })
 const defendantTaskListPage = ResponsePaths.taskListPage.evaluateUri({ externalId: externalId })
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 
 function checkAccessGuard (app: any, method: string) {
   it('should redirect to dashboard page when DQ is not enabled for claim', async () => {
     idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
     claimStoreServiceMock.resolveRetrieveClaimByExternalId()
     await request(app)[method](pagePath)
-      .set('Cookie', `${cookieName}=ABC`)
+      .set('Cookie', testAuthCookie())
       .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
   })
 }
@@ -68,7 +68,7 @@ describe('Directions Questionnaire - hearing unavailable dates', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -78,7 +78,7 @@ describe('Directions Questionnaire - hearing unavailable dates', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -90,7 +90,7 @@ describe('Directions Questionnaire - hearing unavailable dates', () => {
 
             await request(app)
               .get(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.successful.withText(
                 'Select the dates you can’t go to a hearing',
                 'No dates added yet'
@@ -109,7 +109,7 @@ describe('Directions Questionnaire - hearing unavailable dates', () => {
 
             await request(app)
               .get(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.successful.withText(
                 '1 January 2018',
                 '5 January 2018'
@@ -143,7 +143,7 @@ describe('Directions Questionnaire - hearing unavailable dates', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send({})
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -154,7 +154,7 @@ describe('Directions Questionnaire - hearing unavailable dates', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send({})
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -172,7 +172,7 @@ describe('Directions Questionnaire - hearing unavailable dates', () => {
 
               await request(app)
                 .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', testAuthCookie())
                 .send(validFormData)
                 .expect(res => expect(res).to.be.serverError.withText('Error'))
             })
@@ -185,7 +185,7 @@ describe('Directions Questionnaire - hearing unavailable dates', () => {
 
               await request(app)
                 .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', testAuthCookie())
                 .send(validFormData)
                 .expect(res => expect(res).to.be.redirect.toLocation(defendantTaskListPage))
             })
@@ -199,7 +199,7 @@ describe('Directions Questionnaire - hearing unavailable dates', () => {
 
               await request(app)
                 .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', testAuthCookie())
                 .send(invalidFormData)
                 .expect(res => expect(res).to.be.successful.withText('Select the dates you can’t go to a hearing', 'div class="error-summary"'))
             })
@@ -229,7 +229,7 @@ describe('Directions Questionnaire - hearing unavailable dates', () => {
 
               await request(app)
                 .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', testAuthCookie())
                 .send(validFormData)
                 .expect(res => expect(res).to.be.serverError.withText('Error'))
             })
@@ -242,7 +242,7 @@ describe('Directions Questionnaire - hearing unavailable dates', () => {
 
               await request(app)
                 .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', testAuthCookie())
                 .send(validFormData)
                 .expect(res => expect(res).to.be.successful.withText('Select the dates you can’t go to a hearing'))
             })
@@ -257,7 +257,7 @@ describe('Directions Questionnaire - hearing unavailable dates', () => {
 
                 await request(app)
                   .post(pagePath)
-                  .set('Cookie', `${cookieName}=ABC`)
+                  .set('Cookie', testAuthCookie())
                   .send(invalidFormData)
                   .expect(res => expect(res).to.be.successful.withText('Select the dates you can’t go to a hearing', 'div class="error-summary"'))
               })

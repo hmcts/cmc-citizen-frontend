@@ -17,7 +17,7 @@ import { checkAuthorizationGuards } from 'test/routes/authorization-check'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const pagePath = Paths.datePaidPage.evaluateUri({ externalId: externalId })
 
 describe('claim - date money was received', () => {
@@ -38,7 +38,7 @@ describe('claim - date money was received', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -48,7 +48,7 @@ describe('claim - date money was received', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('When did you settle with the defendant?'))
       })
     })
@@ -71,7 +71,7 @@ describe('claim - date money was received', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send(validFormData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -83,7 +83,7 @@ describe('claim - date money was received', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send({ date: { day: '', month: '', year: '' } })
             .expect(res => expect(res).to.be.successful.withText('When did you settle with the defendant?', 'div class="error-summary"'))
         })
@@ -97,7 +97,7 @@ describe('claim - date money was received', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send({ date: { day: '10', month: '10', year: '2018' } })
             .expect(res => expect(res).to.be.redirect
               .toLocation(Paths.confirmationPage.evaluateUri({ externalId: externalId })))

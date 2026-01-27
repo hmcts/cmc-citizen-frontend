@@ -21,7 +21,7 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const pagePath: string = FullRejectionPaths.youHavePaidLessPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 describe('You have paid less page', () => {
@@ -46,7 +46,7 @@ describe('You have paid less page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -57,7 +57,7 @@ describe('You have paid less page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('You’ve paid less than the total claim amount'))
       })
     })
@@ -84,7 +84,7 @@ describe('You have paid less page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.redirect.toLocation(Paths.taskListPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
       })
     })

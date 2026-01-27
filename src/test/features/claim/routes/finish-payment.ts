@@ -13,7 +13,7 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = ClaimPaths.finishPaymentController.evaluateUri({ externalId })
 
@@ -29,7 +29,7 @@ describe('Claim issue: finish payment page', () => {
       claimStoreServiceMock.resolveRetrieveClaimByExternalIdTo404HttpCode()
       await request(app)
         .get(pagePath)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', testAuthCookie())
         .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.checkAndSendPage.uri))
     })
 
@@ -41,7 +41,7 @@ describe('Claim issue: finish payment page', () => {
 
       await request(app)
         .get(pagePath)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', testAuthCookie())
         .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.checkAndSendPage.uri))
     })
 
@@ -54,7 +54,7 @@ describe('Claim issue: finish payment page', () => {
 
       await request(app)
         .get(pagePath)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', testAuthCookie())
         .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.confirmationPage.evaluateUri({ externalId })))
     })
 
@@ -66,7 +66,7 @@ describe('Claim issue: finish payment page', () => {
 
       await request(app)
         .get(pagePath)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', testAuthCookie())
         .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.confirmationPage.evaluateUri({ externalId })))
     })
   })

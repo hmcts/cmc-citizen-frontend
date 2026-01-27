@@ -25,7 +25,7 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const pagePath = FullAdmissionPaths.paymentDatePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 const draft = _.cloneDeep(draftStoreServiceMock.sampleFullAdmissionResponseDraftObj)
@@ -69,7 +69,7 @@ describe('Pay by set date: payment date', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -79,7 +79,7 @@ describe('Pay by set date: payment date', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('What date will you pay on?'))
         })
       })
@@ -110,7 +110,7 @@ describe('Pay by set date: payment date', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -121,7 +121,7 @@ describe('Pay by set date: payment date', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send(nextDay())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -132,7 +132,7 @@ describe('Pay by set date: payment date', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send({})
             .expect(res => expect(res).to.be.successful.withText(ValidationErrors.DATE_REQUIRED))
         })
@@ -144,7 +144,7 @@ describe('Pay by set date: payment date', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send(nextDay())
             .expect(res => expect(res).to.be.redirect
               .toLocation(

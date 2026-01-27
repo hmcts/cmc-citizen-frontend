@@ -11,7 +11,7 @@ import { app } from 'main/app'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 
 describe('Home page', () => {
   beforeEach(() => {
@@ -24,7 +24,7 @@ describe('Home page', () => {
 
       await request(app)
         .get(AppPaths.homePage.uri)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', testAuthCookie())
         .expect(res => expect(res).to.be.redirect.toLocation(AppPaths.receiver.uri))
     })
   })

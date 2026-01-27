@@ -16,7 +16,7 @@ import { checkAuthorizationGuards } from 'test/common/checks/authorization-check
 import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
 import { MomentFactory } from 'shared/momentFactory'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = ClaimantResponsePaths.courtOfferedInstalmentsPage.evaluateUri({ externalId: externalId })
 const taskListPagePath = ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: externalId })
@@ -64,7 +64,7 @@ describe('Claimant Response - Court offer', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -87,7 +87,7 @@ describe('Claimant Response - Court offer', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('The defendant can’t afford your plan'))
       })
     })
@@ -110,7 +110,7 @@ describe('Claimant Response - Court offer', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ accept: 'yes' })
           .expect(res => expect(res).to.be.redirect.toLocation(taskListPagePath))
       })
@@ -122,7 +122,7 @@ describe('Claimant Response - Court offer', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ accept: 'no' })
           .expect(res => expect(res).to.be.redirect.toLocation(rejectionReasonPagePath))
       })

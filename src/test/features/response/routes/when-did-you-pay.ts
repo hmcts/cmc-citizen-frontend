@@ -20,7 +20,7 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 
 const pagePath = ResponsePaths.whenDidYouPay.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 describe('Defendant response: when did you pay', () => {
@@ -45,7 +45,7 @@ describe('Defendant response: when did you pay', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -55,7 +55,7 @@ describe('Defendant response: when did you pay', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -65,7 +65,7 @@ describe('Defendant response: when did you pay', () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('When did you pay?'))
         })
       })
@@ -92,7 +92,7 @@ describe('Defendant response: when did you pay', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
@@ -102,7 +102,7 @@ describe('Defendant response: when did you pay', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ date: { year: '2017', month: '1', day: '11' }, text: 'I paid cash' })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -117,7 +117,7 @@ describe('Defendant response: when did you pay', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ date: { year: '1978', month: '1', day: '11' }, text: 'Paid cash' })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -130,7 +130,7 @@ describe('Defendant response: when did you pay', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ date: { year: '1978', month: '1', day: '11' }, text: 'Paid cash' })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(

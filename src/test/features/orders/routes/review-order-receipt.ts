@@ -9,7 +9,7 @@ import { app } from 'main/app'
 import { Paths } from 'orders/paths'
 import { FeatureToggles } from 'utils/featureToggles'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 
 const pagePath = Paths.reviewOrderReceiver.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
@@ -32,7 +32,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
 
             await request(app)
               .get(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.successful)
           })
 
@@ -41,7 +41,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
 
             await request(app)
               .get(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
         })

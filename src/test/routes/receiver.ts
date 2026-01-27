@@ -19,9 +19,9 @@ import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 import * as toBoolean from 'to-boolean'
 import { Base64 } from 'js-base64'
 import * as uuid from 'uuid'
+import { testAuthCookie } from 'test/auth-helper'
 
 let isDashboardPaginationEnabledStub: sinon.SinonStub
-const cookieName: string = config.get<string>('session.cookieName')
 
 describe('Login receiver', async () => {
   attachDefaultHooks(app)
@@ -39,7 +39,7 @@ describe('Login receiver', async () => {
 
         await request(app)
           .get(AppPaths.receiver.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
       })
 
@@ -52,7 +52,7 @@ describe('Login receiver', async () => {
 
         await request(app)
           .get(AppPaths.receiver.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
       })
 
@@ -65,7 +65,7 @@ describe('Login receiver', async () => {
 
         await request(app)
           .get(AppPaths.receiver.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.redirect.toLocation(EligibilityPaths.startPage.uri))
       })
 
@@ -78,7 +78,7 @@ describe('Login receiver', async () => {
 
         await request(app)
           .get(AppPaths.receiver.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -91,7 +91,7 @@ describe('Login receiver', async () => {
 
         await request(app)
           .get(AppPaths.receiver.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.redirect
             .toLocation(DashboardPaths.dashboardPage.uri))
       })
@@ -105,7 +105,7 @@ describe('Login receiver', async () => {
 
         await request(app)
           .get(AppPaths.receiver.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.redirect
             .toLocation(DashboardPaths.dashboardPage.uri))
       })
@@ -117,7 +117,7 @@ describe('Login receiver', async () => {
         const state = Base64.encode(JSON.stringify({ state: 'ABC', redirectToClaim }))
         await request(app)
           .get(AppPaths.receiver.uri + `?state=${encodeURIComponent(state)}`)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.redirect.toLocation(redirectToClaim))
       })
     })
@@ -128,7 +128,7 @@ describe('Login receiver', async () => {
 
         await request(app)
           .get(AppPaths.receiver.uri + '?state=000MC027')
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.redirect
             .toLocation(FirstContactPaths.claimSummaryPage.uri))
       })
@@ -136,7 +136,7 @@ describe('Login receiver', async () => {
       it('when defendant tries to link and authentication is required', async () => {
         await request(app)
           .get(AppPaths.receiver.uri + '?state=123')
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError)
       })
 
@@ -150,7 +150,7 @@ describe('Login receiver', async () => {
 
         await request(app)
           .get(AppPaths.receiver.uri + '?state=123')
-          .set('Cookie', [`${cookieName}=ABC`, 'lid=lasjlfkkjlef'])
+          .set('Cookie', [testAuthCookie(), 'lid=lasjlfkkjlef'])
           .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
       })
 
@@ -191,7 +191,7 @@ describe('Login receiver', async () => {
 
         await request(app)
           .get(AppPaths.receiver.uri + '?state=123')
-          .set('Cookie', [`${cookieName}=ABC`, 'lid=lasjlfkkjlef'])
+          .set('Cookie', [testAuthCookie(), 'lid=lasjlfkkjlef'])
           .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
       })
     })
@@ -228,13 +228,16 @@ describe('Defendant link receiver', () => {
           .expect(res => expect(res).to.be.redirect.toLocation(AppPaths.receiver.uri))
       })
 
-      it('should set session cookie to token value returned from idam', async () => {
-        const token = 'token'
-        idamServiceMock.resolveExchangeCode(token)
+      it('should establish session and redirect to receiver after idam token exchange', async () => {
+        idamServiceMock.resolveExchangeCode('token')
 
-        await request(app)
+        const res = await request(app)
           .get(`${pagePath}?code=123`)
-          .expect(res => expect(res).to.have.cookie(cookieName, token))
+
+        expect(res).to.be.redirect.toLocation(AppPaths.receiver.uri)
+        const sessionName = config.has('session.name') ? config.get<string>('session.name') : 'cmc-citizen-ui-session'
+        expect(res.headers['set-cookie']).to.be.an('array')
+        expect(res.headers['set-cookie'].some((c: string) => String(c).startsWith(sessionName + '='))).to.be.true
       })
     })
 

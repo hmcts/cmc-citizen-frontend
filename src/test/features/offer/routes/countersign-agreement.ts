@@ -10,7 +10,7 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkAuthorizationGuards } from 'test/features/offer/routes/checks/authorization-check'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const externalId = '400f4c57-9684-49c0-adb4-4cf46579d6dc'
 const countersignAgreementPage = OfferPaths.countersignAgreementPage.evaluateUri({ externalId: externalId })
 
@@ -30,7 +30,7 @@ describe('Countersign agreement page', () => {
 
         await request(app)
           .get(countersignAgreementPage)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -38,7 +38,7 @@ describe('Countersign agreement page', () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         await request(app)
           .get(countersignAgreementPage)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('You can now make a legal agreement'))
       })
     })

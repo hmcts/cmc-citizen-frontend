@@ -31,7 +31,7 @@ const defenceClaim = createClaim(PartyType.INDIVIDUAL, PartyType.ORGANISATION, M
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const expertPath = Paths.expertPage.evaluateUri({ externalId: externalId })
 const pagePath = Paths.hearingLocationPage.evaluateUri({ externalId: externalId })
 
@@ -40,7 +40,7 @@ function checkAccessGuard (app: any, method: string) {
     idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
     claimStoreServiceMock.resolveRetrieveClaimByExternalId()
     await request(app)[method](pagePath)
-      .set('Cookie', `${cookieName}=ABC`)
+      .set('Cookie', testAuthCookie())
       .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
   })
 }
@@ -70,7 +70,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Request a hearing location'))
         })
       })
@@ -85,7 +85,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -95,7 +95,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -107,7 +107,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful)
         })
 
@@ -121,7 +121,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
             await request(app)
               .get(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', `${courtFinderMock.searchResponse[0].name}`, 'This is the closest court to the address you gave us'))
           })
         })
@@ -134,7 +134,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
             await request(app)
               .get(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', `${courtFinderMock.searchResponse[0].name}`, 'This is the closest court to the address you gave us'))
           })
         })
@@ -147,7 +147,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
             await request(app)
               .get(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', `${courtFinderMock.searchResponse[0].name}`, 'This is the closest court to the address you gave us'))
           })
         })
@@ -162,7 +162,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
             await request(app)
               .get(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', `${courtFinderMock.searchResponse[0].name}`, 'This is the closest court to the address you gave us'))
           })
         })
@@ -196,7 +196,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send(validFormDataAccept)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -207,7 +207,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send(validFormDataAccept)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -221,7 +221,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(validFormDataAccept)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -235,7 +235,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
               await request(app)
                 .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', testAuthCookie())
                 .send(validFormDataAccept)
                 .expect(res => expect(res).to.be.redirect.toLocation(expertPath))
             })
@@ -250,7 +250,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(invalidFormData)
               .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', 'div class="error-summary"'))
           })
@@ -266,7 +266,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
               await request(app)
                 .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', testAuthCookie())
                 .send({ courtAccepted: 'yes', alternativeCourtName: 'Test' })
                 .expect(res => expect(res).to.be.redirect.toLocation(expertPath))
             })
@@ -279,7 +279,7 @@ describe('Directions Questionnaire - hearing location', () => {
               draftStoreServiceMock.resolveFind('response')
               await request(app)
                 .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', testAuthCookie())
                 .send({ alternativeCourtName: undefined })
                 .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', 'div class="error-summary"'))
             })
@@ -300,7 +300,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(searchWithPostCodeFirstLoopFormData)
               .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to '))
           })
@@ -316,7 +316,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(searchWithPostCodeFirstLoopFormData)
               .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to '))
           })
@@ -330,7 +330,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(searchWithPostCodeFirstLoopFormData)
               .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', 'div class="error-summary"'))
           })
@@ -345,7 +345,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(searchWithPostCodeFirstLoopFormData)
               .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', 'div class="error-summary"'))
           })
@@ -360,7 +360,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(searchWithPostCodeFirstLoopFormData)
               .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', 'div class="error-summary"'))
           })
@@ -378,7 +378,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(searchWithPostCodeFirstLoopFormData)
               .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to ', 'div class="error-summary"'))
           })
@@ -398,7 +398,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(searchWithPostCodeSecondLoopFormData)
               .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to '))
           })
@@ -414,7 +414,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(searchWithPostCodeSecondLoopFormData)
               .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to '))
           })
@@ -432,7 +432,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(searchWithPostCodeSecondLoopFormData)
               .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to ', 'div class="error-summary"'))
           })
@@ -448,7 +448,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(searchWithPostCodeSecondLoopFormData)
               .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', 'div class="error-summary"'))
           })
@@ -466,7 +466,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(searchWithPostCodeSecondLoopFormData)
               .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to ', 'div class="error-summary"'))
           })
@@ -486,7 +486,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(searchWithLocationFirstLoopFormData)
               .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to '))
           })
@@ -504,7 +504,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(searchWithLocationFirstLoopFormData)
               .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to '))
           })
@@ -519,7 +519,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(searchWithLocationFirstLoopFormData)
               .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', 'div class="error-summary"'))
           })
@@ -537,7 +537,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(searchWithLocationFirstLoopFormData)
               .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to ', 'div class="error-summary"'))
           })
@@ -557,7 +557,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(searchWithLocationSecondLoopFormData)
               .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to '))
           })
@@ -575,7 +575,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(searchWithLocationSecondLoopFormData)
               .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to '))
           })
@@ -593,7 +593,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(searchWithLocationSecondLoopFormData)
               .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to ', 'div class="error-summary"'))
           })
@@ -607,7 +607,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(searchWithLocationSecondLoopFormData)
               .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', 'div class="error-summary"'))
           })
@@ -623,7 +623,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(searchWithLocationSecondLoopFormData)
               .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', 'div class="error-summary"'))
           })
@@ -642,7 +642,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(nearestCourtSelectedFormData)
               .expect(res => expect(res).to.be.redirect.toLocation(expertPath))
           })
@@ -657,7 +657,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(nearestCourtSelectedFormData)
               .expect(res => expect(res).to.be.redirect.toLocation(expertPath))
           })
@@ -676,7 +676,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(alternativeCourtSelectedFormData)
               .expect(res => expect(res).to.be.redirect.toLocation(expertPath))
           })
@@ -691,7 +691,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(alternativeCourtSelectedFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -706,7 +706,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(alternativeCourtSelectedFormData)
               .expect(res => expect(res).to.be.notFound.withText('Error'))
           })
@@ -725,7 +725,7 @@ describe('Directions Questionnaire - hearing location', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(alternativeCourtSelectedFormData)
               .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to ', 'div class="error-summary"'))
           })

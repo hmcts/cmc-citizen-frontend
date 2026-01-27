@@ -22,7 +22,7 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const pagePath: string = Paths.evidencePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 describe('Defendant response: evidence', () => {
@@ -52,7 +52,7 @@ describe('Defendant response: evidence', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -62,7 +62,7 @@ describe('Defendant response: evidence', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -73,7 +73,7 @@ describe('Defendant response: evidence', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('List your evidence (optional)'))
         })
       })
@@ -103,7 +103,7 @@ describe('Defendant response: evidence', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -113,7 +113,7 @@ describe('Defendant response: evidence', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
       })
@@ -130,7 +130,7 @@ describe('Defendant response: evidence', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ rows: [{ type: EvidenceType.CONTRACTS_AND_AGREEMENTS.value, description: 'Bla bla' }] })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(Paths.impactOfDisputePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
@@ -144,7 +144,7 @@ describe('Defendant response: evidence', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ rows: [{ type: EvidenceType.CONTRACTS_AND_AGREEMENTS.value, description: 'Bla bla' }] })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(Paths.taskListPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
@@ -158,7 +158,7 @@ describe('Defendant response: evidence', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ rows: [{ type: EvidenceType.CONTRACTS_AND_AGREEMENTS.value, description: 'Bla bla' }] })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(Paths.taskListPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
@@ -174,7 +174,7 @@ describe('Defendant response: evidence', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({
                 rows: [{
                   type: EvidenceType.CONTRACTS_AND_AGREEMENTS.value,
@@ -195,7 +195,7 @@ describe('Defendant response: evidence', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send({ action: { addRow: 'Add row' } })
             .expect(res => expect(res).to.be.successful.withText('List your evidence (optional)'))
         })

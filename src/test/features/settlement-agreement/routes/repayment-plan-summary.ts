@@ -17,7 +17,7 @@ import { Paths } from 'settlement-agreement/paths'
 
 import { verifyRedirectForGetWhenAlreadyPaidInFull } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.repaymentPlanSummary.evaluateUri({ externalId: externalId })
 
@@ -38,7 +38,7 @@ describe('Settlement agreement: repayment plan summary page', () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -56,7 +56,7 @@ describe('Settlement agreement: repayment plan summary page', () => {
           })
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('The claimant’s repayment plan'))
         })
 
@@ -74,7 +74,7 @@ describe('Settlement agreement: repayment plan summary page', () => {
           })
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('The court’s repayment plan'))
         })
 

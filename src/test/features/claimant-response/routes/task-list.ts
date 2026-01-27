@@ -10,7 +10,7 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 
 const taskListPagePath = ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 const incompleteSubmissionPagePath = ClaimantResponsePaths.incompleteSubmissionPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -31,7 +31,7 @@ describe('Claimant response: task list page', () => {
 
       await request(app)
         .get(taskListPagePath)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', testAuthCookie())
         .expect(res => expect(res).to.be.successful.withText('Your response', 'Application incomplete', 'You have completed 5 of 6 sections'))
     })
   })

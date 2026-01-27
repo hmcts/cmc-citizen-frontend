@@ -14,7 +14,7 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 
 describe('Claim issue: reason page', () => {
   attachDefaultHooks(app)
@@ -29,7 +29,7 @@ describe('Claim issue: reason page', () => {
 
       await request(app)
         .get(ClaimPaths.reasonPage.uri)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', testAuthCookie())
         .expect(res => expect(res).to.be.successful.withText('Briefly explain your claim'))
     })
 
@@ -39,7 +39,7 @@ describe('Claim issue: reason page', () => {
 
       await request(app)
         .get(ClaimPaths.reasonPage.uri)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', testAuthCookie())
         .expect(res => expect(res).to.be.successful.withText('Briefly explain your claim'))
     })
   })
@@ -58,7 +58,7 @@ describe('Claim issue: reason page', () => {
 
         await request(app)
           .post(ClaimPaths.reasonPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('Briefly explain your claim', 'div class="error-summary"'))
       })
 
@@ -68,7 +68,7 @@ describe('Claim issue: reason page', () => {
 
         await request(app)
           .post(ClaimPaths.reasonPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ reason: 'Roof started leaking soon after...' })
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -79,7 +79,7 @@ describe('Claim issue: reason page', () => {
 
         await request(app)
           .post(ClaimPaths.reasonPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ reason: 'Roof started leaking soon after...' })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.timelinePage.uri))
       })

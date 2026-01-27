@@ -14,7 +14,7 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const expectedTextOnPage: string = 'Who are you making the claim against?'
 
 describe('Claim issue: defendant party type selection page', () => {
@@ -30,7 +30,7 @@ describe('Claim issue: defendant party type selection page', () => {
 
       await request(app)
         .get(ClaimPaths.defendantPartyTypeSelectionPage.uri)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', testAuthCookie())
         .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage))
     })
   })
@@ -49,7 +49,7 @@ describe('Claim issue: defendant party type selection page', () => {
 
         await request(app)
           .post(ClaimPaths.defendantPartyTypeSelectionPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ type: undefined })
           .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage, 'div class="error-summary"'))
       })
@@ -60,7 +60,7 @@ describe('Claim issue: defendant party type selection page', () => {
 
         await request(app)
           .post(ClaimPaths.defendantPartyTypeSelectionPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ type: 'individual' })
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -71,7 +71,7 @@ describe('Claim issue: defendant party type selection page', () => {
 
         await request(app)
           .post(ClaimPaths.defendantPartyTypeSelectionPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ type: 'individual' })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.defendantIndividualDetailsPage.uri))
       })
@@ -82,7 +82,7 @@ describe('Claim issue: defendant party type selection page', () => {
 
         await request(app)
           .post(ClaimPaths.defendantPartyTypeSelectionPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ type: 'soleTrader' })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.defendantSoleTraderOrSelfEmployedDetailsPage.uri))
       })
@@ -93,7 +93,7 @@ describe('Claim issue: defendant party type selection page', () => {
 
         await request(app)
           .post(ClaimPaths.defendantPartyTypeSelectionPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ type: 'company' })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.defendantCompanyDetailsPage.uri))
       })
@@ -104,7 +104,7 @@ describe('Claim issue: defendant party type selection page', () => {
 
         await request(app)
           .post(ClaimPaths.defendantPartyTypeSelectionPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ type: 'organisation' })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.defendantOrganisationDetailsPage.uri))
       })

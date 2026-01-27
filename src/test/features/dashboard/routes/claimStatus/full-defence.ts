@@ -39,7 +39,7 @@ import { YesNoOption } from 'models/yesNoOption'
 import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
 import { ResponseMethod } from 'claims/models/response/responseMethod'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 
 function fullDefenceClaim () {
   return {
@@ -777,7 +777,7 @@ describe('Dashboard page', () => {
 
               await request(app)
                 .get(claimPagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', testAuthCookie())
                 .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
             })
           })
@@ -794,7 +794,7 @@ describe('Dashboard page', () => {
 
               await request(app)
                 .get(defendantPagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', testAuthCookie())
                 .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
             })
           })

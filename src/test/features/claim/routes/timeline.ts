@@ -14,7 +14,7 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const pagePath: string = ClaimPaths.timelinePage.uri
 
 describe('Claim issue: timeline page', () => {
@@ -30,7 +30,7 @@ describe('Claim issue: timeline page', () => {
 
       await request(app)
         .get(pagePath)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', testAuthCookie())
         .expect(res => expect(res).to.be.successful.withText(
           'Timeline of events',
           'If you don’t know the exact date, tell us the month and year.'
@@ -52,7 +52,7 @@ describe('Claim issue: timeline page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('Timeline of events', 'div class="error-summary"'))
       })
 
@@ -62,7 +62,7 @@ describe('Claim issue: timeline page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ rows: [{ 'date': 'may', 'description': 'ok' }] })
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -72,7 +72,7 @@ describe('Claim issue: timeline page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ rows: [{ date: 'may' }] })
           .expect(res => expect(res).to.be.successful.withText('Timeline of events', 'div class="error-summary"'))
       })
@@ -82,7 +82,7 @@ describe('Claim issue: timeline page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ rows: [{ description: 'ok' }] })
           .expect(res => expect(res).to.be.successful.withText('Timeline of events', 'div class="error-summary"'))
       })
@@ -93,7 +93,7 @@ describe('Claim issue: timeline page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ rows: [{ date: 'may', description: 'ok' }] })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.evidencePage.uri))
       })
@@ -104,7 +104,7 @@ describe('Claim issue: timeline page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send({ action: { addRow: 'Add row' } })
             .expect(res => expect(res).to.be.successful.withText('Timeline of events'))
         })

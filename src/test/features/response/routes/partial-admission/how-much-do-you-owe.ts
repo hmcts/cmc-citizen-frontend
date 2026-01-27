@@ -23,7 +23,7 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = PartAdmissionPaths.howMuchDoYouOwePage.evaluateUri({ externalId: externalId })
 const redirectPath = Paths.taskListPage.evaluateUri({ externalId: externalId })
@@ -53,7 +53,7 @@ describe('Defendant: partial admission - ' + header, () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -63,7 +63,7 @@ describe('Defendant: partial admission - ' + header, () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
       })
@@ -84,7 +84,7 @@ describe('Defendant: partial admission - ' + header, () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText(header))
         })
       })
@@ -108,7 +108,7 @@ describe('Defendant: partial admission - ' + header, () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -119,7 +119,7 @@ describe('Defendant: partial admission - ' + header, () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -132,7 +132,7 @@ describe('Defendant: partial admission - ' + header, () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -153,7 +153,7 @@ describe('Defendant: partial admission - ' + header, () => {
             draftStoreServiceMock.resolveUpdate()
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(validFormData)
               .expect(res => expect(res).to.be.redirect
                 .toLocation(redirectPath))
@@ -164,7 +164,7 @@ describe('Defendant: partial admission - ' + header, () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ amount: -100 })
               .expect(res => expect(res).to.be.successful.withText(header, 'div class="error-summary"'))
           })

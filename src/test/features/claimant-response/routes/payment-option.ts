@@ -17,7 +17,7 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
 import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.alternateRepaymentPlanPage.evaluateUri({ externalId: externalId })
 
@@ -42,7 +42,7 @@ describe('Claimant response: payment options', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -52,7 +52,7 @@ describe('Claimant response: payment options', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
       })
@@ -64,7 +64,7 @@ describe('Claimant response: payment options', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText(heading))
         })
       })
@@ -90,7 +90,7 @@ describe('Claimant response: payment options', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -101,7 +101,7 @@ describe('Claimant response: payment options', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -113,7 +113,7 @@ describe('Claimant response: payment options', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -133,7 +133,7 @@ describe('Claimant response: payment options', () => {
             async function checkThatSelectedPaymentOptionRedirectsToPage (data: object, expectedToRedirect: string) {
               await request(app)
                 .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', testAuthCookie())
                 .send(data)
                 .expect(res => expect(res).to.be.redirect.toLocation(expectedToRedirect))
             }
@@ -161,7 +161,7 @@ describe('Claimant response: payment options', () => {
             it(`should render page with heading '${heading}'`, async () => {
               await request(app)
                 .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', testAuthCookie())
                 .send({})
                 .expect(res => expect(res).to.be.successful.withText(heading, 'div class="error-summary"'))
             })
@@ -179,7 +179,7 @@ describe('Claimant response: payment options', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(dataToSend)
               .expect(res => expect(res).to.be.redirect.toLocation(Paths.taskListPage.evaluateUri({ externalId: externalId })))
           })
@@ -191,7 +191,7 @@ describe('Claimant response: payment options', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ option: PaymentType.IMMEDIATELY.value })
               .expect(res => expect(res).to.be.redirect.toLocation(Paths.courtOfferedInstalmentsPage.evaluateUri({ externalId: externalId })))
           })
@@ -203,7 +203,7 @@ describe('Claimant response: payment options', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ option: PaymentType.IMMEDIATELY.value })
               .expect(res => expect(res).to.be.redirect.toLocation(Paths.courtOfferedSetDatePage.evaluateUri({ externalId: externalId })))
           })
@@ -215,7 +215,7 @@ describe('Claimant response: payment options', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ option: PaymentType.IMMEDIATELY.value })
               .expect(res => expect(res).to.be.redirect.toLocation(Paths.courtOfferedInstalmentsPage.evaluateUri({ externalId: externalId })))
           })
@@ -227,7 +227,7 @@ describe('Claimant response: payment options', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ option: PaymentType.IMMEDIATELY.value })
               .expect(res => expect(res).to.be.redirect.toLocation(Paths.payBySetDateAcceptedPage.evaluateUri({ externalId: externalId })))
           })

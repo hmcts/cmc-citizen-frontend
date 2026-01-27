@@ -17,7 +17,7 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const pagePath: string = StatementOfMeansPaths.employmentPage.evaluateUri(
   { externalId: claimStoreServiceMock.sampleClaimObj.externalId }
 )
@@ -49,7 +49,7 @@ describe('Defendant response: Statement of means: employment', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -59,7 +59,7 @@ describe('Defendant response: Statement of means: employment', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -70,7 +70,7 @@ describe('Defendant response: Statement of means: employment', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Do you have a job?'))
         })
       })
@@ -100,7 +100,7 @@ describe('Defendant response: Statement of means: employment', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -110,7 +110,7 @@ describe('Defendant response: Statement of means: employment', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
       })
@@ -126,7 +126,7 @@ describe('Defendant response: Statement of means: employment', () => {
           await request(app)
             .post(pagePath)
             .send({ declared: false })
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.redirect
               .toLocation(StatementOfMeansPaths.unemployedPage.evaluateUri(
                 { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -143,7 +143,7 @@ describe('Defendant response: Statement of means: employment', () => {
           await request(app)
             .post(pagePath)
             .send({ declared: true, selfEmployed: true, employed: true })
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.redirect
               .toLocation(StatementOfMeansPaths.employersPage.evaluateUri(
                 { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -160,7 +160,7 @@ describe('Defendant response: Statement of means: employment', () => {
           await request(app)
             .post(pagePath)
             .send({ declared: true, selfEmployed: true, employed: false })
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.redirect
               .toLocation(StatementOfMeansPaths.selfEmploymentPage.evaluateUri(
                 { externalId: claimStoreServiceMock.sampleClaimObj.externalId })

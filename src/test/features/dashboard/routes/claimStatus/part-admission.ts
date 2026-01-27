@@ -44,7 +44,7 @@ import {
   settlementOfferBySetDate
 } from 'test/data/entity/partAdmitData'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 
 function partAdmissionClaim () {
   return {
@@ -931,7 +931,7 @@ describe('Dashboard page part admission claim status', () => {
 
               await request(app)
                 .get(claimPagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', testAuthCookie())
                 .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
             })
           })
@@ -942,7 +942,7 @@ describe('Dashboard page part admission claim status', () => {
 
               await request(app)
                 .get(claimPagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', testAuthCookie())
                 .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
             })
           })
@@ -959,7 +959,7 @@ describe('Dashboard page part admission claim status', () => {
 
               await request(app)
                 .get(defendantPagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', testAuthCookie())
                 .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
             })
           })
@@ -970,7 +970,7 @@ describe('Dashboard page part admission claim status', () => {
 
               await request(app)
                 .get(defendantPagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', testAuthCookie())
                 .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
             })
           })

@@ -21,7 +21,7 @@ import {
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const pagePath = Paths.expertGuidancePage.evaluateUri({ externalId })
 
 const claimWithDQ = {
@@ -34,7 +34,7 @@ function checkAccessGuard (app: any, method: string) {
     idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
     claimStoreServiceMock.resolveRetrieveClaimByExternalId()
     await request(app)[method](pagePath)
-      .set('Cookie', `${cookieName}=ABC`)
+      .set('Cookie', testAuthCookie())
       .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
   })
 }
@@ -69,7 +69,7 @@ describe('Directions Questionnaire - expert guidance page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Using an expert in small claims'))
         })
       })
@@ -101,7 +101,7 @@ describe('Directions Questionnaire - expert guidance page', () => {
             draftStoreServiceMock.resolveFind('response')
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send()
               .expect(res => expect(res).to.be.redirect.toLocation(Paths.permissionForExpertPage.evaluateUri(
                 { externalId: externalId })))

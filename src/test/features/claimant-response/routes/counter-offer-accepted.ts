@@ -17,7 +17,7 @@ import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-i
 import { MomentFactory } from 'shared/momentFactory'
 import { PaymentSchedule } from 'features/ccj/form/models/paymentSchedule'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = ClaimantResponsePaths.counterOfferAcceptedPage.evaluateUri({ externalId: externalId })
 const taskListPagePath = ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: externalId })
@@ -41,7 +41,7 @@ describe('Claimant Response - Counter offer accepted', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -87,7 +87,7 @@ describe('Claimant Response - Counter offer accepted', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('The court has accepted your repayment plan'))
       })
 
@@ -134,7 +134,7 @@ describe('Claimant Response - Counter offer accepted', () => {
         await
           request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('The court has accepted your repayment plan'))
       })
 
@@ -145,7 +145,7 @@ describe('Claimant Response - Counter offer accepted', () => {
         await
           request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Repayment plan accepted'))
       })
     })
@@ -168,7 +168,7 @@ describe('Claimant Response - Counter offer accepted', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.redirect.toLocation(taskListPagePath))
       })
     })

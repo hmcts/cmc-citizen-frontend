@@ -19,7 +19,7 @@ import {
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
 const externalId: string = claimStoreServiceMock.sampleClaimObj.externalId
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const pagePath: string = StatementOfMeansPaths.unemployedPage.evaluateUri({ externalId: externalId })
 const nextPagePath: string = StatementOfMeansPaths.courtOrdersPage.evaluateUri({ externalId: externalId })
 
@@ -50,7 +50,7 @@ describe('Defendant response: Statement of means: unemployment page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -60,7 +60,7 @@ describe('Defendant response: Statement of means: unemployment page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -71,7 +71,7 @@ describe('Defendant response: Statement of means: unemployment page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Are you unemployed or retired?'))
         })
       })
@@ -101,7 +101,7 @@ describe('Defendant response: Statement of means: unemployment page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -111,7 +111,7 @@ describe('Defendant response: Statement of means: unemployment page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -126,7 +126,7 @@ describe('Defendant response: Statement of means: unemployment page', () => {
             await request(app)
               .post(pagePath)
               .send({ option: UnemploymentType.UNEMPLOYED.value, unemploymentDetails: { years: 0, months: 1 } })
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.redirect.toLocation(nextPagePath))
           })
 
@@ -139,7 +139,7 @@ describe('Defendant response: Statement of means: unemployment page', () => {
             await request(app)
               .post(pagePath)
               .send({ option: UnemploymentType.RETIRED.value })
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.redirect.toLocation(nextPagePath))
           })
 
@@ -152,7 +152,7 @@ describe('Defendant response: Statement of means: unemployment page', () => {
             await request(app)
               .post(pagePath)
               .send({ option: UnemploymentType.OTHER.value, otherDetails: { details: 'story' } })
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.redirect.toLocation(nextPagePath))
           })
         })

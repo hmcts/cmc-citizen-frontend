@@ -18,7 +18,7 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const pagePath: string = StatementOfMeansPaths.monthlyIncomePage.evaluateUri(
   { externalId: claimStoreServiceMock.sampleClaimObj.externalId }
 )
@@ -50,7 +50,7 @@ describe('Defendant response: Statement of means: monthly-income', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -60,7 +60,7 @@ describe('Defendant response: Statement of means: monthly-income', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -71,7 +71,7 @@ describe('Defendant response: Statement of means: monthly-income', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('What regular income do you receive?'))
         })
       })
@@ -101,7 +101,7 @@ describe('Defendant response: Statement of means: monthly-income', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -111,7 +111,7 @@ describe('Defendant response: Statement of means: monthly-income', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -131,7 +131,7 @@ describe('Defendant response: Statement of means: monthly-income', () => {
                 amount: -200,
                 schedule: IncomeExpenseSchedule.TWO_WEEKS.value
               }})
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Enter a valid income from your job amount, maximum two decimal places'))
             .expect(res => expect(res).to.be.successful.withText('Enter a valid pension amount, maximum two decimal places'))
         })
@@ -152,7 +152,7 @@ describe('Defendant response: Statement of means: monthly-income', () => {
                 amount: 200.345,
                 schedule: IncomeExpenseSchedule.TWO_WEEKS.value
               } })
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Enter a valid income from your job amount, maximum two decimal places'))
             .expect(res => expect(res).to.be.successful.withText('Enter a valid Jobseeker’s Allowance (income based) amount, maximum two decimal places'))
         })
@@ -171,7 +171,7 @@ describe('Defendant response: Statement of means: monthly-income', () => {
               incomeSupportSource: {
                 schedule: IncomeExpenseSchedule.MONTH.value
               } })
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Enter how much income from your job you receive'))
             .expect(res => expect(res).to.be.successful.withText('Enter how much Income Support you receive'))
         })
@@ -190,7 +190,7 @@ describe('Defendant response: Statement of means: monthly-income', () => {
               childTaxCreditSource: {
                 amount: 700
               } })
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Select how often you receive income from your job'))
             .expect(res => expect(res).to.be.successful.withText('Select how often you receive Child Tax Credit'))
         })
@@ -247,7 +247,7 @@ describe('Defendant response: Statement of means: monthly-income', () => {
                 amount: 100,
                 schedule: IncomeExpenseSchedule.TWO_WEEKS.value
               } })
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.redirect
               .toLocation(StatementOfMeansPaths.explanationPage.evaluateUri(
                 { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -276,7 +276,7 @@ describe('Defendant response: Statement of means: monthly-income', () => {
                 }],
               action: { addOtherIncomeSource: 'Add another income' }
             })
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('otherSources[2][name]'))
             .expect(res => expect(res).to.be.successful.withoutText('otherSources[3][name]'))
         })
@@ -300,7 +300,7 @@ describe('Defendant response: Statement of means: monthly-income', () => {
                 }],
               action: { removeOtherIncomeSource: 'Remove this income source' }
             })
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('otherSources[0][name]'))
             .expect(res => expect(res).to.be.successful.withoutText('otherSources[1][name]'))
         })
@@ -324,7 +324,7 @@ describe('Defendant response: Statement of means: monthly-income', () => {
                 }
               }
             })
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('otherSources[0][name]'))
             .expect(res => expect(res).to.be.successful.withoutText('abcdefghijkl'))
         })

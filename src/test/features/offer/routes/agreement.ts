@@ -12,7 +12,7 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { Paths } from 'offer/paths'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
@@ -32,7 +32,7 @@ describe('Settlement agreement: receipt', () => {
 
         await request(app)
           .get(Paths.agreementReceiver.evaluateUri({ externalId: externalId }))
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -42,7 +42,7 @@ describe('Settlement agreement: receipt', () => {
 
         await request(app)
           .get(Paths.agreementReceiver.evaluateUri({ externalId: externalId }))
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -52,7 +52,7 @@ describe('Settlement agreement: receipt', () => {
 
         await request(app)
           .get(Paths.agreementReceiver.evaluateUri({ externalId: externalId }))
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful)
       })
     })

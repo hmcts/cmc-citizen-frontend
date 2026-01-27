@@ -21,7 +21,7 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const pagePath = ResponsePaths.defendantPhonePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 const headerText: string = 'Enter a phone number (optional)'
 
@@ -53,7 +53,7 @@ describe('Defendant user details: your phone page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText(headerText))
         })
       })
@@ -87,7 +87,7 @@ describe('Defendant user details: your phone page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.successful.withText(headerText, 'div class="error-summary"'))
           })
         })
@@ -100,7 +100,7 @@ describe('Defendant user details: your phone page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ number: '07123456789' })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -113,7 +113,7 @@ describe('Defendant user details: your phone page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ number: '07123456789' })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.taskListPage

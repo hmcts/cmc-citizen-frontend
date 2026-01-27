@@ -18,7 +18,7 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 
 const residencePage = Paths.residencePage.evaluateUri({
   externalId: claimStoreServiceMock.sampleClaimObj.externalId
@@ -43,7 +43,7 @@ describe('Statement of means', () => {
 
           await request(app)
             .get(residencePage)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -53,7 +53,7 @@ describe('Statement of means', () => {
 
           await request(app)
             .get(residencePage)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -64,7 +64,7 @@ describe('Statement of means', () => {
 
           await request(app)
             .get(residencePage)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Where do you live?'))
         })
       })
@@ -89,7 +89,7 @@ describe('Statement of means', () => {
 
           await request(app)
             .post(residencePage)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -99,7 +99,7 @@ describe('Statement of means', () => {
 
           await request(app)
             .post(residencePage)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -111,7 +111,7 @@ describe('Statement of means', () => {
 
           await request(app)
             .post(residencePage)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send(validFormData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -124,7 +124,7 @@ describe('Statement of means', () => {
 
           await request(app)
             .post(residencePage)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send(validFormData)
             .expect(res => expect(res).to.be.redirect
               .toLocation(Paths.partnerPage
@@ -138,7 +138,7 @@ describe('Statement of means', () => {
 
           await request(app)
             .post(residencePage)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send({})
             .expect(res => expect(res).to.be.successful.withText(ValidationErrors.SELECT_AN_OPTION))
         })

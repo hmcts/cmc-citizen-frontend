@@ -13,7 +13,7 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const headerText: string = 'Reference number must not be more than 16 characters'
 const bsNumberPagePath = BreathingSpacePaths.referencNumberPage.evaluateUri({ externalId: draftStoreServiceMock.sampleClaimDraftObj.externalId })
 
@@ -27,7 +27,7 @@ describe('Breathing space: reference number page page', () => {
       draftStoreServiceMock.resolveUpdate()
       request(app)
         .get(bsNumberPagePath)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', testAuthCookie())
         .send({ bsNumber: '07000000000' })
         .expect(res => expect(res).to.be.successful.withText('Do you have a Debt Respite Scheme reference number?'))
     })
@@ -46,7 +46,7 @@ describe('Breathing space: reference number page page', () => {
 
         await request(app)
           .post(bsNumberPagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ bsNumber: 'BS-12345678909876' })
           .expect(res => expect(res).to.be.successful.withText(headerText, 'div class="error-summary"'))
       })
@@ -57,7 +57,7 @@ describe('Breathing space: reference number page page', () => {
 
         await request(app)
           .post(bsNumberPagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ bsNumber: '' })
           .expect(res => expect(res).to.be.redirect.toLocation(BreathingSpacePaths.bsStartDatePage.uri))
       })
@@ -68,7 +68,7 @@ describe('Breathing space: reference number page page', () => {
 
         await request(app)
           .post(bsNumberPagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ bsNumber: '07000000000' })
           .expect(res => expect(res).to.be.redirect.toLocation(BreathingSpacePaths.bsStartDatePage.uri))
       })

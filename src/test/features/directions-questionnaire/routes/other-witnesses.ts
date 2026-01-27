@@ -28,7 +28,7 @@ const claimWithDQ = {
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const pagePath = Paths.otherWitnessesPage.evaluateUri({ externalId: externalId })
 const vulnerabilityQuestionsPage = Paths.vulnerabilityQuestionsPage.evaluateUri({ externalId: externalId })
 
@@ -37,7 +37,7 @@ function checkAccessGuard (app: any, method: string) {
     idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
     claimStoreServiceMock.resolveRetrieveClaimByExternalId()
     await request(app)[method](pagePath)
-      .set('Cookie', `${cookieName}=ABC`)
+      .set('Cookie', testAuthCookie())
       .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
   })
 }
@@ -70,7 +70,7 @@ describe('Directions Questionnaire - other witnesses page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -80,7 +80,7 @@ describe('Directions Questionnaire - other witnesses page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -91,7 +91,7 @@ describe('Directions Questionnaire - other witnesses page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Do you want other people to give evidence?'))
         })
       })
@@ -123,7 +123,7 @@ describe('Directions Questionnaire - other witnesses page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send(validFormData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -134,7 +134,7 @@ describe('Directions Questionnaire - other witnesses page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send(validFormData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -148,7 +148,7 @@ describe('Directions Questionnaire - other witnesses page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -161,7 +161,7 @@ describe('Directions Questionnaire - other witnesses page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(validFormData)
               .expect(res => expect(res).to.be.redirect.toLocation(vulnerabilityQuestionsPage))
           })
@@ -175,7 +175,7 @@ describe('Directions Questionnaire - other witnesses page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(invalidFormData)
               .expect(res => expect(res).to.be.successful.withText('Do you want other people to give evidence?', 'div class="error-summary"'))
           })

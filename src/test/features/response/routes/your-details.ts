@@ -21,7 +21,7 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const pagePath = ResponsePaths.defendantYourDetailsPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 const splitNameDetails = {
@@ -67,7 +67,7 @@ describe('Defendant user details: your name page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -78,7 +78,7 @@ describe('Defendant user details: your name page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Confirm your details'))
         })
 
@@ -89,7 +89,7 @@ describe('Defendant user details: your name page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withoutText('First Name'))
         })
 
@@ -100,7 +100,7 @@ describe('Defendant user details: your name page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withoutText('Last Name'))
         })
 
@@ -111,7 +111,7 @@ describe('Defendant user details: your name page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withoutText('Title'))
         })
 
@@ -122,7 +122,7 @@ describe('Defendant user details: your name page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('First name'))
         })
 
@@ -133,7 +133,7 @@ describe('Defendant user details: your name page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Last name'))
         })
 
@@ -144,7 +144,7 @@ describe('Defendant user details: your name page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Title'))
         })
       })
@@ -178,7 +178,7 @@ describe('Defendant user details: your name page', () => {
             await request(app)
               .post(pagePath)
               .send({ type: 'individual' })
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.successful.withText('Confirm your details', 'div class="error-summary"'))
           })
 
@@ -189,7 +189,7 @@ describe('Defendant user details: your name page', () => {
             await request(app)
               .post(pagePath)
               .send({ type: 'individual', name: 'John Smith', address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: 'E10AA' }, phone: '' })
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.successful.withText('Confirm your details', 'div class="error-summary"'))
           })
 
@@ -200,7 +200,7 @@ describe('Defendant user details: your name page', () => {
             await request(app)
               .post(pagePath)
               .send({ type: 'individual' })
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.successful.withText('Confirm your details', 'div class="error-summary"'))
           })
 
@@ -211,7 +211,7 @@ describe('Defendant user details: your name page', () => {
             await request(app)
               .post(pagePath)
               .send({ type: 'individual' })
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.successful.withText('Confirm your details', 'div class="error-summary"'))
           })
 
@@ -225,7 +225,7 @@ describe('Defendant user details: your name page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ type: 'individual', name: 'John Smith', address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: 'E10AA' } })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -237,7 +237,7 @@ describe('Defendant user details: your name page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ type: 'individual', name: 'John Smith', address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: 'E10AA' } })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.defendantDateOfBirthPage
@@ -258,7 +258,7 @@ describe('Defendant user details: your name page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({
             type: 'company',
             name: 'John Smith',
@@ -281,7 +281,7 @@ describe('Defendant user details: your name page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({
             type: 'company',
             name: 'John Smith',

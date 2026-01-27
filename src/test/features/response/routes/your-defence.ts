@@ -22,7 +22,7 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const expectedText: string = 'Why do you disagree with the claim'
 
 const pagePath = ResponsePaths.defencePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -49,7 +49,7 @@ describe('Defendant response: defence page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -60,7 +60,7 @@ describe('Defendant response: defence page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText(expectedText))
         })
       })
@@ -88,7 +88,7 @@ describe('Defendant response: defence page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
@@ -99,7 +99,7 @@ describe('Defendant response: defence page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.successful.withText(expectedText, 'div class="error-summary"'))
           })
         })
@@ -113,7 +113,7 @@ describe('Defendant response: defence page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ text: 'Some valid defence' })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -126,7 +126,7 @@ describe('Defendant response: defence page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ text: 'Some valid defence' })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.timelinePage

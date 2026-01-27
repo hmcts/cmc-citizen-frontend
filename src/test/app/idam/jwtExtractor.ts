@@ -1,21 +1,28 @@
-import * as config from 'config'
 import { expect } from 'chai'
 import { Request } from 'express'
 
 import { JwtExtractor } from 'idam/jwtExtractor'
 
-const sessionCookieName = config.get<string>('session.cookieName')
-
 describe('Extracting JWT', () => {
-  it('should return token from cookie', () => {
+  it('should return token from session', () => {
     const jwtValue = 'a'
 
     const req = {
-      cookies: {
-        [sessionCookieName]: jwtValue
+      session: {
+        user: { bearerToken: jwtValue }
       }
-    } as Request
+    } as unknown as Request
 
     expect(JwtExtractor.extract(req)).to.equal(jwtValue)
+  })
+
+  it('should return undefined when no session user', () => {
+    const req = { session: {} } as unknown as Request
+    expect(JwtExtractor.extract(req)).to.be.undefined
+  })
+
+  it('should return undefined when no session', () => {
+    const req = {} as Request
+    expect(JwtExtractor.extract(req)).to.be.undefined
   })
 })

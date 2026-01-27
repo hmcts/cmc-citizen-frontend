@@ -17,7 +17,7 @@ import { app } from 'main/app'
 import { FeatureToggles } from 'utils/featureToggles'
 import { MomentFactory } from 'shared/momentFactory'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 
 const pagePath = OrdersPaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
@@ -42,7 +42,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
 
             await request(app)
               .get(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
@@ -52,7 +52,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
 
             await request(app)
               .get(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.successful.withText('You’ve asked the court to review the order'))
           })
         })

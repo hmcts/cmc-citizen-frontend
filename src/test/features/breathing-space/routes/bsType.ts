@@ -9,7 +9,7 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 
 describe('Breathing Space: BS Type selection page', () => {
   describe('on GET', () => {
@@ -17,7 +17,7 @@ describe('Breathing Space: BS Type selection page', () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       request(app)
         .get(BreathingSpacePaths.bsTypePage.uri)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', testAuthCookie())
         .expect(res => expect(res).to.be.successful.withText('What type is it?'))
     })
   })
@@ -35,7 +35,7 @@ describe('Breathing Space: BS Type selection page', () => {
 
         await request(app)
           .post(BreathingSpacePaths.bsTypePage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ option: undefined })
           .expect(res => expect(res).to.be.successful.withText('What type is it?', 'div class="error-summary"'))
       })
@@ -46,7 +46,7 @@ describe('Breathing Space: BS Type selection page', () => {
 
         await request(app)
           .post(BreathingSpacePaths.bsTypePage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ option: 'STANDARD_BS_ENTERED' })
           .expect(res => expect(res).to.be.redirect.toLocation(BreathingSpacePaths.bsEndDatePage.uri))
       })
@@ -57,7 +57,7 @@ describe('Breathing Space: BS Type selection page', () => {
 
         await request(app)
           .post(BreathingSpacePaths.bsTypePage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ option: 'MENTAL_BS_ENTERED' })
           .expect(res => expect(res).to.be.redirect.toLocation(BreathingSpacePaths.bsEndDatePage.uri))
       })

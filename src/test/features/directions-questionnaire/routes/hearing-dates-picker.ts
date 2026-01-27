@@ -26,7 +26,7 @@ const claimWithDQ = {
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const claim = createClaim(PartyType.INDIVIDUAL, PartyType.ORGANISATION, MadeBy.CLAIMANT)
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const hearingDatesPath = Paths.hearingDatesPage.evaluateUri({ externalId: externalId })
 
 const unavailableDates: LocalDate[] = [
@@ -40,7 +40,7 @@ function checkAccessGuard (app: any, method: string, path: string) {
     idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
     claimStoreServiceMock.resolveRetrieveClaimByExternalId()
     await request(app)[method](path)
-      .set('Cookie', `${cookieName}=ABC`)
+      .set('Cookie', testAuthCookie())
       .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
   })
 }
@@ -74,7 +74,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
 
           await request(app)
             .get(deletePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.redirect.toLocation(hearingDatesPath))
         })
       })
@@ -104,7 +104,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
 
             await request(app)
               .post(replacePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(validData)
               .expect(res => expect(res).to.be.successful.withText(
                 'add-another-delete-link-0',
@@ -125,7 +125,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
 
             await request(app)
               .post(replacePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(invalidData)
               .expect(res => expect(res).to.be.badRequest)
           })

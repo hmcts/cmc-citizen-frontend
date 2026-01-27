@@ -12,7 +12,7 @@ import { checkAuthorizationGuards } from 'test/features/offer/routes/checks/auth
 import { StatementType } from 'offer/form/models/statementType'
 import { MadeBy } from 'claims/models/madeBy'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const externalId = '400f4c57-9684-49c0-adb4-4cf46579d6dc'
 const declarationPage = OfferPaths.declarationPage.evaluateUri({ externalId: externalId })
 const acceptedPage = OfferPaths.acceptedPage.evaluateUri({ externalId: externalId })
@@ -35,7 +35,7 @@ describe('declaration page', () => {
 
         await request(app)
           .get(declarationPage)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -43,7 +43,7 @@ describe('declaration page', () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         await request(app)
           .get(declarationPage)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText(pageHeading))
       })
     })
@@ -62,7 +62,7 @@ describe('declaration page', () => {
 
             await request(app)
               .post(declarationPage)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({})
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -78,7 +78,7 @@ describe('declaration page', () => {
               }
               await request(app)
                 .post(declarationPage)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', testAuthCookie())
                 .send(formData)
                 .expect(res => expect(res).to.be.redirect.toLocation(acceptedPage))
             })
@@ -107,7 +107,7 @@ describe('declaration page', () => {
               claimStoreServiceMock.resolveCountersignOffer()
               await request(app)
                 .post(declarationPage)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', testAuthCookie())
                 .send({ signed: 'true' })
                 .expect(res => expect(res).to.be.redirect.toLocation(settledPage))
             })
@@ -122,7 +122,7 @@ describe('declaration page', () => {
             }
             await request(app)
               .post(declarationPage)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(formData)
               .expect(res => expect(res).to.be.successful.withText('Please select I confirm I’ve read and accept the terms of the agreement.', 'div class="error-summary"'))
           })

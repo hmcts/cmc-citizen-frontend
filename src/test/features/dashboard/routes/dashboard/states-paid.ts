@@ -33,7 +33,7 @@ function statesPaidClaim () {
   }
 }
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 
 function testData () {
   return [
@@ -115,7 +115,7 @@ describe('Dashboard page states paid dashboard', () => {
               claimStoreServiceMock.resolveRetrieveByClaimantId(data.claim, data.claimOverride)
               await request(app)
                 .get(Paths.dashboardPage.uri)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', testAuthCookie())
                 .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
             })
           })
@@ -132,7 +132,7 @@ describe('Dashboard page states paid dashboard', () => {
               claimStoreServiceMock.resolveRetrieveByDefendantId(data.claim.referenceNumber, '1', data.claim, data.claimOverride)
               await request(app)
                 .get(Paths.dashboardPage.uri)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', testAuthCookie())
                 .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
             })
           })

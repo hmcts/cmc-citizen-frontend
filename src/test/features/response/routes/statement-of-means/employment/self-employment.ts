@@ -17,7 +17,7 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const pagePath: string = StatementOfMeansPaths.selfEmploymentPage.evaluateUri(
   { externalId: claimStoreServiceMock.sampleClaimObj.externalId }
 )
@@ -59,7 +59,7 @@ describe('Defendant response: Statement of means: self-employment', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -69,7 +69,7 @@ describe('Defendant response: Statement of means: self-employment', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -80,7 +80,7 @@ describe('Defendant response: Statement of means: self-employment', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('What are you self-employed as?'))
         })
       })
@@ -110,7 +110,7 @@ describe('Defendant response: Statement of means: self-employment', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -120,7 +120,7 @@ describe('Defendant response: Statement of means: self-employment', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
       })
@@ -136,7 +136,7 @@ describe('Defendant response: Statement of means: self-employment', () => {
           await request(app)
             .post(pagePath)
             .send({ jobTitle: 'my role', annualTurnover: 10, areYouBehindOnTax: false })
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.redirect
               .toLocation(StatementOfMeansPaths.onTaxPaymentsPage.evaluateUri(
                 { externalId: claimStoreServiceMock.sampleClaimObj.externalId })

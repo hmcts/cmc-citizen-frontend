@@ -13,7 +13,7 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import { checkAuthorizationGuards } from 'test/routes/authorization-check'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const pagePath: string = Paths.createClaimDraftPage.uri
 const pageText: string = 'Create Claim Draft'
 
@@ -31,7 +31,7 @@ describe('Testing Support: Create Claim Draft', () => {
       it('should render page when everything is fine', async () => {
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText(pageText))
       })
     })
@@ -51,7 +51,7 @@ describe('Testing Support: Create Claim Draft', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -61,7 +61,7 @@ describe('Testing Support: Create Claim Draft', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
     })

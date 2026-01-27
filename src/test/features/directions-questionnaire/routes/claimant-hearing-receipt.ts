@@ -9,7 +9,7 @@ import { Paths } from 'directions-questionnaire/paths'
 import { app } from 'main/app'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 
 const pagePath = Paths.claimantHearingRequirementsReceiver.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 const claimWithDQ = {
@@ -37,7 +37,7 @@ describe('Claimant response: confirmation page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful)
         })
       })

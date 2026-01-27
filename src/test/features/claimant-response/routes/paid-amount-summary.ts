@@ -16,7 +16,7 @@ import { checkAuthorizationGuards } from 'test/features/ccj/routes/checks/author
 import { checkNotClaimantInCaseGuard } from 'test/features/ccj/routes/checks/not-claimant-in-case-check'
 import { sampleFullAdmissionWithPaymentBySetDateResponseObj } from '../../../http-mocks/claim-store'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = CCJPaths.paidAmountSummaryPage.evaluateUri({ externalId: externalId })
 
@@ -40,7 +40,7 @@ describe('Claimant Response - paid amount summary page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -50,7 +50,7 @@ describe('Claimant Response - paid amount summary page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -60,7 +60,7 @@ describe('Claimant Response - paid amount summary page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText(heading))
       })
     })

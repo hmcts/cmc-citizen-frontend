@@ -13,7 +13,7 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { FreeMediationOption } from 'forms/models/freeMediation'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.partPaymentReceivedPage.evaluateUri({ externalId: externalId })
 
@@ -37,7 +37,7 @@ function checkPaymentLessThanClaimAmountGuard (app: any, method: string, pagePat
     draftStoreServiceMock.resolveFind('claimantResponse', {})
 
     await request(app)[method](pagePath)
-      .set('Cookie', `${cookieName}=ABC`)
+      .set('Cookie', testAuthCookie())
       .expect(res => expect(res).to.be.notFound)
 
   })
@@ -63,7 +63,7 @@ describe('Claimant Response: part payment received page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -77,7 +77,7 @@ describe('Claimant Response: part payment received page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Has the defendant paid you'))
         })
       })
@@ -102,7 +102,7 @@ describe('Claimant Response: part payment received page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Has the defendant paid you', 'div class="error-summary"'))
         })
       })
@@ -117,7 +117,7 @@ describe('Claimant Response: part payment received page', () => {
         it('should redirect to the task list page when yes is selected', async () => {
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send({ received: 'yes' })
             .expect(res => expect(res).to.be.redirect
               .toLocation(Paths.taskListPage.evaluateUri({ externalId: externalId })))
@@ -127,7 +127,7 @@ describe('Claimant Response: part payment received page', () => {
         it('should redirect to the task list page when no is selected', async () => {
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send({ received: 'no' })
             .expect(res => expect(res).to.be.redirect
               .toLocation(Paths.taskListPage.evaluateUri({ externalId: externalId })))

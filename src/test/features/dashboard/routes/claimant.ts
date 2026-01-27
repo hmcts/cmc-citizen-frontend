@@ -18,7 +18,7 @@ import { sampleClaimDraftObj } from 'test/http-mocks/draft-store'
 import { company, individual, organisation, soleTrader } from 'test/data/entity/party'
 import { ResponseMethod } from 'claims/models/response/responseMethod'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 
 const draftPagePath = Paths.claimantPage.evaluateUri({ externalId: 'draft' })
 const claimPagePath = Paths.claimantPage.evaluateUri({ externalId: sampleClaimDraftObj.externalId })
@@ -38,7 +38,7 @@ describe('Dashboard - claimant page', () => {
         it('should render page when everything is fine', async () => {
           await request(app)
             .get(draftPagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Claim number', 'Draft'))
         })
       })
@@ -49,7 +49,7 @@ describe('Dashboard - claimant page', () => {
 
           await request(app)
             .get(claimPagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -58,7 +58,7 @@ describe('Dashboard - claimant page', () => {
 
           await request(app)
             .get(claimPagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Claim number', claimStoreServiceMock.sampleClaimObj.referenceNumber))
         })
 
@@ -67,7 +67,7 @@ describe('Dashboard - claimant page', () => {
 
           await request(app)
             .get(claimPagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('We have received forms relating to your claim', 'Your claim will now continue offline', 'County Court Business Centre will contact you by post within 10 days to tell you what happens next'))
         })
 
@@ -76,7 +76,7 @@ describe('Dashboard - claimant page', () => {
 
           await request(app)
             .get(claimPagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('We’ve received a response that was not submitted through the online civil money claims service'))
         })
 
@@ -85,7 +85,7 @@ describe('Dashboard - claimant page', () => {
 
           await request(app)
                   .get(claimPagePath)
-                  .set('Cookie', `${cookieName}=ABC`)
+                  .set('Cookie', testAuthCookie())
                   .expect(res => expect(res).to.be.successful.withText('OCMCNton@justice.gov.uk'))
         })
 
@@ -98,7 +98,7 @@ describe('Dashboard - claimant page', () => {
           })
           await request(app)
             .get(claimPagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withoutText('Defendant response:', 'Download response'))
         })
 
@@ -111,7 +111,7 @@ describe('Dashboard - claimant page', () => {
           })
           await request(app)
             .get(claimPagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Defendant response:', 'Download response'))
         })
 
@@ -124,7 +124,7 @@ describe('Dashboard - claimant page', () => {
 
             await request(app)
               .get(claimPagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.forbidden)
           })
         })
@@ -143,7 +143,7 @@ describe('Dashboard - claimant page', () => {
         it(`should render error page`, async () => {
           await request(app)
             .post(draftPagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error', 'Draft external ID is not supported'))
         })
       })
@@ -158,7 +158,7 @@ describe('Dashboard - claimant page', () => {
 
             await request(app)
               .post(claimPagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.forbidden)
           })
         })
@@ -174,7 +174,7 @@ describe('Dashboard - claimant page', () => {
 
             await request(app)
               .post(claimPagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.redirect.toLocation(
                 CCJPaths.dateOfBirthPage.evaluateUri({ externalId: sampleClaimDraftObj.externalId })
               ))
@@ -193,7 +193,7 @@ describe('Dashboard - claimant page', () => {
 
               await request(app)
                 .post(claimPagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', testAuthCookie())
                 .expect(res => expect(res).to.be.redirect.toLocation(
                   CCJPaths.paidAmountPage.evaluateUri({ externalId: sampleClaimDraftObj.externalId })
                 ))

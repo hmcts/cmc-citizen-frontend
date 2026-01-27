@@ -23,7 +23,7 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const externalId: string = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = ResponsePaths.responseTypePage.evaluateUri({ externalId: externalId })
 
@@ -55,7 +55,7 @@ describe('Defendant response: response type page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.successful.withText('Do you owe the money claimed?'))
         })
       })
@@ -85,7 +85,7 @@ describe('Defendant response: response type page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.successful.withText('Do you owe the money claimed?', 'div class="error-summary"'))
           })
         })
@@ -99,7 +99,7 @@ describe('Defendant response: response type page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ type: ResponseType.DEFENCE })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -113,7 +113,7 @@ describe('Defendant response: response type page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ type: ResponseType.FULL_ADMISSION })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.taskListPage.evaluateUri({ externalId: externalId })))
@@ -127,7 +127,7 @@ describe('Defendant response: response type page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ type: ResponseType.PART_ADMISSION })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(PartAdmissionPaths.alreadyPaidPage.evaluateUri({ externalId: externalId })))
@@ -141,7 +141,7 @@ describe('Defendant response: response type page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ type: ResponseType.DEFENCE })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.defenceRejectAllOfClaimPage.evaluateUri({ externalId: externalId })))

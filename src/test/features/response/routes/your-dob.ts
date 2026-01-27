@@ -23,7 +23,7 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const pagePath = ResponsePaths.defendantDateOfBirthPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 const expectedText: string = 'Enter your date of birth'
 
@@ -55,7 +55,7 @@ describe('Defendant user details: your date of birth page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText(expectedText))
         })
       })
@@ -86,7 +86,7 @@ describe('Defendant user details: your date of birth page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.successful.withText(expectedText, 'div class="error-summary"'))
           })
         })
@@ -100,7 +100,7 @@ describe('Defendant user details: your date of birth page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ known: 'true', date: { year: '1978', month: '1', day: '11' } })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -113,7 +113,7 @@ describe('Defendant user details: your date of birth page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ known: 'true', date: { year: '1978', month: '1', day: '11' } })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.defendantPhonePage
@@ -128,7 +128,7 @@ describe('Defendant user details: your date of birth page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({
                 known: 'true', date: {
                   year: fifteenYearsAgo.year(),
@@ -149,7 +149,7 @@ describe('Defendant user details: your date of birth page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ known: 'true', date: { year: '1978', month: '1', day: '11' } })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.taskListPage

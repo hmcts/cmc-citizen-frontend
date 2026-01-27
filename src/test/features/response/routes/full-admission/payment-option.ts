@@ -21,7 +21,7 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = FullAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: externalId })
 
@@ -50,7 +50,7 @@ describe('Defendant - when will you pay options', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -60,7 +60,7 @@ describe('Defendant - when will you pay options', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
       })
@@ -78,7 +78,7 @@ describe('Defendant - when will you pay options', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText(fullAdmissionQuestion))
         })
       })
@@ -102,7 +102,7 @@ describe('Defendant - when will you pay options', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -113,7 +113,7 @@ describe('Defendant - when will you pay options', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -126,7 +126,7 @@ describe('Defendant - when will you pay options', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -151,7 +151,7 @@ describe('Defendant - when will you pay options', () => {
             async function checkThatSelectedPaymentOptionRedirectsToPage (data: object, expectedToRedirect: string) {
               await request(app)
                 .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', testAuthCookie())
                 .send(data)
                 .expect(res => expect(res).to.be.redirect.toLocation(expectedToRedirect))
             }
@@ -179,7 +179,7 @@ describe('Defendant - when will you pay options', () => {
             it('should render page', async () => {
               await request(app)
                 .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', testAuthCookie())
                 .send({ name: 'John Smith' })
                 .expect(res => expect(res).to.be.successful.withText('When do you want to pay?', 'div class="error-summary"'))
             })

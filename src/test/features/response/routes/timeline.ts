@@ -18,7 +18,7 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const externalId: string = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath: string = Paths.timelinePage.evaluateUri({ externalId: externalId })
 
@@ -49,7 +49,7 @@ describe('Defendant response: timeline', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -59,7 +59,7 @@ describe('Defendant response: timeline', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -70,7 +70,7 @@ describe('Defendant response: timeline', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Add your timeline of events'))
         })
       })
@@ -100,7 +100,7 @@ describe('Defendant response: timeline', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -110,7 +110,7 @@ describe('Defendant response: timeline', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
       })
@@ -128,7 +128,7 @@ describe('Defendant response: timeline', () => {
 
               await request(app)
                 .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', testAuthCookie())
                 .send({ rows: [{ date: 'Damaged roof', description: '299' }] })
                 .expect(res => expect(res).to.be.redirect
                   .toLocation(Paths.evidencePage.evaluateUri({ externalId: externalId })))
@@ -145,7 +145,7 @@ describe('Defendant response: timeline', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ rows: [{ date: undefined, description: '299' }] })
               .expect(res => expect(res).to.be.successful.withText('Enter a date'))
           })
@@ -157,7 +157,7 @@ describe('Defendant response: timeline', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ rows: [{ date: 'May', description: undefined }] })
               .expect(res => expect(res).to.be.successful.withText('Enter a description of what happened'))
           })
@@ -173,7 +173,7 @@ describe('Defendant response: timeline', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send({ action: { addRow: 'Add row' } })
             .expect(res => expect(res).to.be.successful.withText('Add your timeline of events'))
         })

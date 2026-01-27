@@ -18,7 +18,7 @@ import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 import { MadeBy } from 'claims/models/madeBy'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const pagePath = CCJPaths.redeterminationConfirmationPage.evaluateUri({ externalId: externalId })
 
 describe('CCJ: redetermination confirmation page', () => {
@@ -40,7 +40,7 @@ describe('CCJ: redetermination confirmation page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -71,7 +71,7 @@ describe('CCJ: redetermination confirmation page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('You’ve asked for a judge to decide a repayment plan'))
         })
       })

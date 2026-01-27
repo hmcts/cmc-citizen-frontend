@@ -15,7 +15,7 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { MomentFactory } from 'shared/momentFactory'
 import { EvidenceType } from 'forms/models/evidenceType'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 
 describe('Defendant first contact: claim summary page', () => {
   attachDefaultHooks(app)
@@ -33,7 +33,7 @@ describe('Defendant first contact: claim summary page', () => {
 
         await request(app)
           .get(Paths.claimSummaryPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.redirect.toLocation(ErrorPaths.claimSummaryAccessDeniedPage.uri))
       })
 
@@ -42,7 +42,7 @@ describe('Defendant first contact: claim summary page', () => {
 
         await request(app)
           .get(`${Paths.claimSummaryPage.uri}`)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -50,7 +50,7 @@ describe('Defendant first contact: claim summary page', () => {
         claimStoreServiceMock.resolveRetrieveByLetterHolderId('000MC001')
         await request(app)
           .get(Paths.claimSummaryPage.uri)
-          .set('Cookie', `${cookieName}=ABC;state=000MC001`)
+          .set('Cookie', `${testAuthCookie()};state=000MC001`)
           .expect(res => expect(res).to.be.successful.withText('Claim details'))
       })
 
@@ -67,7 +67,7 @@ describe('Defendant first contact: claim summary page', () => {
 
         await request(app)
           .get(Paths.claimSummaryPage.uri)
-          .set('Cookie', `${cookieName}=ABC;state=000MC001`)
+          .set('Cookie', `${testAuthCookie()};state=000MC001`)
           .expect(res => expect(res).to.be.successful.withText('Evidence'))
       })
 
@@ -79,7 +79,7 @@ describe('Defendant first contact: claim summary page', () => {
 
         await request(app)
           .get(Paths.claimSummaryPage.uri)
-          .set('Cookie', `${cookieName}=ABC;state=000MC001`)
+          .set('Cookie', `${testAuthCookie()};state=000MC001`)
           .expect(res => expect(res).to.be.successful.withoutText('Evidence'))
       })
 
@@ -90,22 +90,23 @@ describe('Defendant first contact: claim summary page', () => {
     checkAuthorizationGuards(app, 'post', Paths.claimSummaryPage.uri)
 
     it('should redirect to registration page when everything is fine', async () => {
-      const registrationPagePattern = new RegExp(`${config.get('idam.authentication-web.url')}/login/uplift\\?response_type=code&state=1&client_id=cmc_citizen&redirect_uri=https://127.0.0.1:[0-9]{5}/receiver&jwt=ABC`)
+      const registrationPagePattern = new RegExp(`${config.get('idam.authentication-web.url')}/login/uplift\\?response_type=code&state=1&client_id=cmc_citizen&redirect_uri=https://127.0.0.1:[0-9]{5}/receiver`)
 
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-holder')
 
       await request(app)
         .post(Paths.claimSummaryPage.uri)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', testAuthCookie())
         .expect(res => expect(res).to.be.redirect.toLocation(registrationPagePattern))
     })
     it('should clear session cookie when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-holder')
+      const sessionCookieName = config.has('session.name') ? config.get<string>('session.name') : 'cmc-citizen-ui-session'
 
       await request(app)
         .post(Paths.claimSummaryPage.uri)
-        .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.have.cookie(cookieName, ''))
+        .set('Cookie', testAuthCookie())
+        .expect(res => expect(res).to.have.cookie(sessionCookieName, ''))
     })
   })
 
@@ -118,7 +119,7 @@ describe('Defendant first contact: claim summary page', () => {
 
       await request(app)
         .get(Paths.claimSummaryPage.uri)
-        .set('Cookie', `${cookieName}=ABC;state = 000MC000`)
+        .set('Cookie', `${testAuthCookie()};state=000MC000`)
         .expect(res => expect(res).to.be.redirect.toLocation(ErrorPaths.ccjRequestedHandoffPage.uri))
     })
   })

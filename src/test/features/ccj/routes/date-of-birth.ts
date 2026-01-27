@@ -21,7 +21,7 @@ const sampleClaimObj = claimStoreServiceMock.sampleClaimObj
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const paidAmountPage = Paths.paidAmountPage.uri.replace(':externalId', externalId)
 const pagePath = Paths.dateOfBirthPage.uri.replace(':externalId', externalId)
 
@@ -40,7 +40,7 @@ function checkAccessGuard (app: any, method: string) {
       draftStoreServiceMock.resolveFind('ccj')
 
       await request(app)[method](pagePath)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', testAuthCookie())
         .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
     })
   })
@@ -66,7 +66,7 @@ describe('CCJ - defendant date of birth', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -76,7 +76,7 @@ describe('CCJ - defendant date of birth', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -86,7 +86,7 @@ describe('CCJ - defendant date of birth', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('Do you know the defendant’s date of birth?'))
       })
     })
@@ -111,7 +111,7 @@ describe('CCJ - defendant date of birth', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send(validFormData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -122,7 +122,7 @@ describe('CCJ - defendant date of birth', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send(validFormData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -135,7 +135,7 @@ describe('CCJ - defendant date of birth', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send(validFormData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -147,7 +147,7 @@ describe('CCJ - defendant date of birth', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send(validFormData)
             .expect(res => expect(res).to.be.redirect.toLocation(paidAmountPage))
         })
@@ -160,7 +160,7 @@ describe('CCJ - defendant date of birth', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send({ known: undefined })
             .expect(res => expect(res).to.be.successful.withText('Do you know the defendant’s date of birth?', 'div class="error-summary"'))
         })

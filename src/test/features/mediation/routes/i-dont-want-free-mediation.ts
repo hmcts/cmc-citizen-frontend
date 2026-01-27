@@ -19,7 +19,7 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
 import { NoMediationReasonOptions } from 'features/mediation/form/models/NoMediationReasonOptions'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const pagePath = MediationPaths.iDontWantFreeMediationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 const pageHeading = 'I do not agree to free mediation'
 
@@ -42,7 +42,7 @@ describe('Free mediation: I dont want free mediation page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -53,7 +53,7 @@ describe('Free mediation: I dont want free mediation page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText(pageHeading))
         })
       })
@@ -78,7 +78,7 @@ describe('Free mediation: I dont want free mediation page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ reject: 'reject' })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.taskListPage
@@ -94,7 +94,7 @@ describe('Free mediation: I dont want free mediation page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ })
               .expect(res => expect(res).to.be.successful.withText('Please select one reason'))
           })
@@ -109,7 +109,7 @@ describe('Free mediation: I dont want free mediation page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ iDoNotWantMediationReason: NoMediationReasonOptions.ALREADY_TRIED,
                 otherReasons: undefined })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -123,7 +123,7 @@ describe('Free mediation: I dont want free mediation page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ iDoNotWantMediationReason: NoMediationReasonOptions.ALREADY_TRIED,
                 otherReasons: undefined })
               .expect(res => expect(res).to.be.redirect
@@ -149,7 +149,7 @@ describe('Free mediation: I dont want free mediation page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ iDoNotWantMediationReason: NoMediationReasonOptions.ALREADY_TRIED,
             otherReasons: undefined })
           .expect(res => expect(res).to.be.redirect

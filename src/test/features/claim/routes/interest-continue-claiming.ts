@@ -14,7 +14,7 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { YesNoOption } from 'models/yesNoOption'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const pageContent: string = 'Continue to claim interest after you submit your claim?'
 const pagePath: string = ClaimPaths.interestContinueClaimingPage.uri
 
@@ -30,7 +30,7 @@ describe('Claim issue: interest continue claiming page', () => {
 
       await request(app)
         .get(pagePath)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', testAuthCookie())
         .expect(res => expect(res).to.be.successful.withText(pageContent))
     })
   })
@@ -48,7 +48,7 @@ describe('Claim issue: interest continue claiming page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText(pageContent, 'div class="error-summary"'))
       })
 
@@ -58,7 +58,7 @@ describe('Claim issue: interest continue claiming page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ option: YesNoOption.YES.option })
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -69,7 +69,7 @@ describe('Claim issue: interest continue claiming page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ option: YesNoOption.YES.option })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.interestHowMuchPage.uri))
       })
@@ -80,7 +80,7 @@ describe('Claim issue: interest continue claiming page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ option: YesNoOption.NO.option })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.helpWithFeesPage.uri))
       })

@@ -22,7 +22,7 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const pagePath = MediationPaths.canWeUseCompanyPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 describe('Free mediation: can we use company page', () => {
@@ -46,7 +46,7 @@ describe('Free mediation: can we use company page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -57,7 +57,7 @@ describe('Free mediation: can we use company page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Mary Richards the right person for the mediation service to call'))
         })
 
@@ -68,7 +68,7 @@ describe('Free mediation: can we use company page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Mary Richards the right person for the mediation service to call'))
         })
 
@@ -90,7 +90,7 @@ describe('Free mediation: can we use company page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('Enter this person’s phone number, including extension if required'))
       })
     })
@@ -114,7 +114,7 @@ describe('Free mediation: can we use company page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -128,7 +128,7 @@ describe('Free mediation: can we use company page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send({ option: FreeMediationOption.YES, mediationPhoneNumberConfirmation: '07777777777' })
             .expect(res => expect(res).to.be.redirect
               .toLocation(ResponsePaths.taskListPage
@@ -142,7 +142,7 @@ describe('Free mediation: can we use company page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send({ option: FreeMediationOption.YES, mediationPhoneNumberConfirmation: undefined })
             .expect(res => expect(res).to.be.successful.withText('div class="error-summary"'))
         })
@@ -155,7 +155,7 @@ describe('Free mediation: can we use company page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send({
               option: FreeMediationOption.NO,
               mediationPhoneNumber: '07777777777',
@@ -173,7 +173,7 @@ describe('Free mediation: can we use company page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send({ option: FreeMediationOption.NO, mediationPhoneNumber: undefined })
             .expect(res => expect(res).to.be.successful.withText('div class="error-summary"'))
         })
@@ -185,7 +185,7 @@ describe('Free mediation: can we use company page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send({
               option: FreeMediationOption.NO,
               mediationPhoneNumber: '07777777777',

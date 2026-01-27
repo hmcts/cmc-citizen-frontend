@@ -17,7 +17,7 @@ import { app } from 'main/app'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { MomentFactory } from 'shared/momentFactory'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 
 const pagePath = Paths.datePaidPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
@@ -40,7 +40,7 @@ describe('Claimant paid in full: money received on page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
       })
@@ -52,7 +52,7 @@ describe('Claimant paid in full: money received on page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('When did you settle with the defendant?'))
         })
       })
@@ -63,7 +63,7 @@ describe('Claimant paid in full: money received on page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.forbidden.withText('Forbidden'))
         })
       })

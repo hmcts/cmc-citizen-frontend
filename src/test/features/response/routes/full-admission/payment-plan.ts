@@ -21,7 +21,7 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = FullAdmissionPaths.paymentPlanPage.evaluateUri({ externalId: externalId })
 const taskListPage = Paths.taskListPage.evaluateUri({ externalId: externalId })
@@ -47,7 +47,7 @@ describe('Defendant: payment page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -57,7 +57,7 @@ describe('Defendant: payment page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -68,7 +68,7 @@ describe('Defendant: payment page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Your repayment plan'))
         })
 
@@ -104,7 +104,7 @@ describe('Defendant: payment page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send(validFormData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -115,7 +115,7 @@ describe('Defendant: payment page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send(validFormData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -133,7 +133,7 @@ describe('Defendant: payment page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send(validFormData)
             .expect(res => expect(res).to.be.redirect.toLocation(taskListPage))
         })
@@ -147,7 +147,7 @@ describe('Defendant: payment page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send({ instalmentAmount: undefined })
             .expect(res => expect(res).to.be.successful.withText(ValidationErrors.AMOUNT_INVALID_LESS_THAN_ONE_POUND))
         })

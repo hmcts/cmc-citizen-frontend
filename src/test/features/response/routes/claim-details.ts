@@ -17,7 +17,7 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { EvidenceType } from 'forms/models/evidenceType'
 import { verifyRedirectForGetWhenAlreadyPaidInFull } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const pagePath: string = ResponsePaths.claimDetailsPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 describe('Defendant response: claim details page', () => {
@@ -42,7 +42,7 @@ describe('Defendant response: claim details page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('Claim details'))
       })
 
@@ -51,7 +51,7 @@ describe('Defendant response: claim details page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -67,7 +67,7 @@ describe('Defendant response: claim details page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('Evidence'))
       })
 
@@ -79,7 +79,7 @@ describe('Defendant response: claim details page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withoutText('Evidence'))
       })
     })

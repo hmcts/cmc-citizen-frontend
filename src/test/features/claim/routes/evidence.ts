@@ -13,7 +13,7 @@ import { checkEligibilityGuards } from 'test/features/claim/routes/checks/eligib
 
 import { EvidenceType } from 'forms/models/evidenceType'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const pagePath: string = Paths.evidencePage.uri
 const pageContent: string = 'List any evidence'
 import { FeatureToggles } from 'utils/featureToggles'
@@ -32,7 +32,7 @@ describe('Claim issue: evidence', () => {
 
       await request(app)
         .get(pagePath)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', testAuthCookie())
         .expect(res => expect(res).to.be.successful.withText(pageContent))
     })
   })
@@ -52,7 +52,7 @@ describe('Claim issue: evidence', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -62,7 +62,7 @@ describe('Claim issue: evidence', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ rows: [{ type: EvidenceType.CONTRACTS_AND_AGREEMENTS.value, description: 'Bla bla' }] })
           .expect(res => {
             if (FeatureToggles.isEnabled('pcq')) {
@@ -85,7 +85,7 @@ describe('Claim issue: evidence', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({
             rows: [{
               type: EvidenceType.CONTRACTS_AND_AGREEMENTS.value,
@@ -113,7 +113,7 @@ describe('Claim issue: evidence', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send({ action: { addRow: 'Add row' } })
             .expect(res => expect(res).to.be.successful.withText('List any evidence (optional)'))
         })

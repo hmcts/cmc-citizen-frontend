@@ -16,7 +16,7 @@ import { checkAuthorizationGuards } from 'test/features/ccj/routes/checks/author
 import { checkNotClaimantInCaseGuard } from 'test/features/ccj/routes/checks/not-claimant-in-case-check'
 import { MomentFactory } from 'shared/momentFactory'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.paidAmountSummaryPage.evaluateUri({ externalId: externalId })
 
@@ -38,7 +38,7 @@ describe('CCJ - paid amount summary page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -48,7 +48,7 @@ describe('CCJ - paid amount summary page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -58,7 +58,7 @@ describe('CCJ - paid amount summary page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('Judgment amount'))
       })
       it('should render page when everything is fine when settlement is broken', async () => {
@@ -67,7 +67,7 @@ describe('CCJ - paid amount summary page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('Judgment amount'))
       })
 
@@ -77,7 +77,7 @@ describe('CCJ - paid amount summary page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('Judgment amount'))
       })
 
@@ -102,7 +102,7 @@ describe('CCJ - paid amount summary page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('£10'))
       })
     })

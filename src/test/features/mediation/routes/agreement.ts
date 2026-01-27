@@ -9,7 +9,7 @@ import { Paths } from 'mediation/paths'
 import { app } from 'main/app'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 
 const pagePath = Paths.mediationAgreementDocument.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 const claimWithDQ = {
@@ -37,7 +37,7 @@ describe('Free Mediation: download agreement', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful)
         })
       })
@@ -58,7 +58,7 @@ describe('Free Mediation: download agreement', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful)
         })
       })

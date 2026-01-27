@@ -16,7 +16,7 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { checkNotClaimantInCaseGuard } from 'test/features/ccj/routes/checks/not-claimant-in-case-check'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const pagePath = CCJPaths.repaymentPlanPage.evaluateUri({ externalId: externalId })
 const checkAndSendPage = CCJPaths.checkAndSendPage.evaluateUri({ externalId: externalId })
 
@@ -39,7 +39,7 @@ describe('CCJ: repayment page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -49,7 +49,7 @@ describe('CCJ: repayment page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -59,7 +59,7 @@ describe('CCJ: repayment page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Suggest instalments for the defendant'))
         })
       })
@@ -92,7 +92,7 @@ describe('CCJ: repayment page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send(validFormData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -103,7 +103,7 @@ describe('CCJ: repayment page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send(validFormData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -116,7 +116,7 @@ describe('CCJ: repayment page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send(validFormData)
             .expect(res => expect(res).to.be.redirect.toLocation(checkAndSendPage))
         })
@@ -129,7 +129,7 @@ describe('CCJ: repayment page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send({ signed: undefined })
             .expect(res => expect(res).to.be.successful.withText('Enter a valid payment amount', 'div class="error-summary"'))
         })

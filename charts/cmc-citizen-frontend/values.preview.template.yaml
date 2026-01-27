@@ -39,6 +39,10 @@ nodejs:
     CUI_DASHBOARD_REDIRECT: false
     CUI_SIGN_OUT_REDIRECT: false
 
+    # Session store (civil-citizen-ui style). Set SESSION_USE_REDIS_STORE=true and REDISCLOUD_URL when Redis is provisioned.
+    SESSION_USE_REDIS_STORE: "false"
+    REDISCLOUD_URL: ""
+
 # sub-charts configuration
 
 idam-pr:

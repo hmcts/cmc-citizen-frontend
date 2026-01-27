@@ -12,7 +12,7 @@ import { YesNoOption } from 'models/yesNoOption'
 
 const pagePath: string = ClaimPaths.helpWithFeesPage.uri
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const pageContent: string = 'Do you have a Help With Fees reference number?'
 
 describe('Claim issue: help with fees page', () => {
@@ -28,7 +28,7 @@ describe('Claim issue: help with fees page', () => {
 
       await request(app)
         .get(pagePath)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', testAuthCookie())
         .expect(res => expect(res).to.be.successful.withText(pageContent))
     })
   })
@@ -47,7 +47,7 @@ describe('Claim issue: help with fees page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText(pageContent, 'div class="error-summary"'))
       })
 
@@ -57,7 +57,7 @@ describe('Claim issue: help with fees page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ declared: YesNoOption.NO.option })
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -68,7 +68,7 @@ describe('Claim issue: help with fees page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ declared: YesNoOption.YES.option, helpWithFeesNumber: 'HWF012345' })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.totalPage.uri))
       })
@@ -79,7 +79,7 @@ describe('Claim issue: help with fees page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ declared: YesNoOption.NO.option, helpWithFeesNumber: '' })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.totalPage.uri))
       })

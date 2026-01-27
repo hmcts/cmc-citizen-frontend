@@ -14,7 +14,7 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 
 describe('Claim issue: task list page', () => {
   attachDefaultHooks(app)
@@ -29,7 +29,7 @@ describe('Claim issue: task list page', () => {
 
       await request(app)
         .get(ClaimPaths.taskListPage.uri)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', testAuthCookie())
         .expect(res => expect(res).to.be.successful.withText('Make a money claim'))
     })
 
@@ -39,7 +39,7 @@ describe('Claim issue: task list page', () => {
 
       await request(app)
         .get(ClaimPaths.taskListPage.uri)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', testAuthCookie())
         .expect(res => expect(res).to.be.successful.withText('Make a money claim', 'Application incomplete', 'You have completed 6 of 7 sections'))
     })
   })

@@ -14,7 +14,7 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const headerText: string = 'Enter a phone number (optional)'
 
 describe('Claim issue: claimant phone page', () => {
@@ -30,7 +30,7 @@ describe('Claim issue: claimant phone page', () => {
 
       await request(app)
         .get(ClaimPaths.claimantPhonePage.uri)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', testAuthCookie())
         .expect(res => expect(res).to.be.successful.withText(headerText))
     })
   })
@@ -49,7 +49,7 @@ describe('Claim issue: claimant phone page', () => {
 
         await request(app)
           .post(ClaimPaths.claimantPhonePage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText(headerText, 'div class="error-summary"'))
       })
 
@@ -59,7 +59,7 @@ describe('Claim issue: claimant phone page', () => {
 
         await request(app)
           .post(ClaimPaths.claimantPhonePage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ number: '07000000000' })
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -70,7 +70,7 @@ describe('Claim issue: claimant phone page', () => {
 
         await request(app)
           .post(ClaimPaths.claimantPhonePage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ number: '' })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.taskListPage.uri))
       })
@@ -81,7 +81,7 @@ describe('Claim issue: claimant phone page', () => {
 
         await request(app)
           .post(ClaimPaths.claimantPhonePage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ number: '07000000000' })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.taskListPage.uri))
       })

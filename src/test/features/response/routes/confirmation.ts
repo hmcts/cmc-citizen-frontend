@@ -16,7 +16,7 @@ import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-r
 import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
 import { verifyRedirectForGetWhenAlreadyPaidInFull } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const pagePath: string = ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 const fullDefenceWithStatesPaidLessThanClaimAmount = claimStoreServiceMock.sampleFullDefenceWithStatesPaidLessThanClaimAmount
@@ -43,7 +43,7 @@ describe('Defendant response: confirmation page', () => {
 
         await request(app)
           .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response',
             'You’ve said you owe £3,000 and offered to pay John Smith immediately.',
             'We’ll contact you when they respond.',
@@ -66,7 +66,7 @@ describe('Defendant response: confirmation page', () => {
 
         await request(app)
           .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response',
             'If John Smith rejects your response and agree to try mediation we’ll contact you to arrange a call with the mediator.',
             'If they reject mediation the court will review the case. You might have to go to a hearing.'))
@@ -77,7 +77,7 @@ describe('Defendant response: confirmation page', () => {
 
         await request(app)
           .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response',
             'We’ll contact you when John Smith responds, to tell you what to do next.',
             'If John Smith accepts your response the claim will be ended.',
@@ -90,7 +90,7 @@ describe('Defendant response: confirmation page', () => {
 
         await request(app)
           .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response',
             'We’ll contact you when John Smith responds, to tell you what to do next.',
             'If John Smith accepts your response the claim will be ended.',
@@ -102,7 +102,7 @@ describe('Defendant response: confirmation page', () => {
 
         await request(app)
           .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response',
             'We’ll contact you when John Smith responds, to tell you what to do next.',
             'If John Smith accepts your response the claim will be ended.',
@@ -115,7 +115,7 @@ describe('Defendant response: confirmation page', () => {
 
         await request(app)
           .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response',
             'We’ll contact you when John Smith responds, to tell you what to do next.',
             'If John Smith accepts your response the claim will be ended.'))
@@ -126,7 +126,7 @@ describe('Defendant response: confirmation page', () => {
 
         await request(app)
           .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response',
             'If John Smith accepts your response the claim will be ended. We’ll contact you when they respond.',
             'If John Smith rejects your response we’ll ask them to try mediation. If they agree, we’ll contact you to arrange a call with the mediator.',
@@ -140,7 +140,7 @@ describe('Defendant response: confirmation page', () => {
 
         await request(app)
           .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response',
             'If John Smith accepts your response the claim will be ended. We’ll contact you when they respond.',
             'If they reject your response the court will review the case. You might have to go to a hearing.',
@@ -153,7 +153,7 @@ describe('Defendant response: confirmation page', () => {
 
         await request(app)
           .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -162,7 +162,7 @@ describe('Defendant response: confirmation page', () => {
 
         await request(app)
           .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('The court will review the case. You might have to go to a hearing.'))
       })
 
@@ -171,7 +171,7 @@ describe('Defendant response: confirmation page', () => {
 
         await request(app)
           .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('We’ll ask if they want to try mediation. If they agree, we’ll contact you to try to arrange an appointment.'))
       })
     })

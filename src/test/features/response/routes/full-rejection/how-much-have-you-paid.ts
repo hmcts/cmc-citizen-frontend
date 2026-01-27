@@ -19,7 +19,7 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = FullRejectionPaths.howMuchHaveYouPaidPage.evaluateUri({ externalId: externalId })
 
@@ -48,7 +48,7 @@ describe('Defendant: reject all - ' + header, () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -58,7 +58,7 @@ describe('Defendant: reject all - ' + header, () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
       })
@@ -71,7 +71,7 @@ describe('Defendant: reject all - ' + header, () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText(header))
         })
       })
@@ -96,7 +96,7 @@ describe('Defendant: reject all - ' + header, () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send(validFormData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -107,7 +107,7 @@ describe('Defendant: reject all - ' + header, () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send(validFormData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -120,7 +120,7 @@ describe('Defendant: reject all - ' + header, () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send(validFormData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -134,7 +134,7 @@ describe('Defendant: reject all - ' + header, () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send({})
             .expect(res => expect(res).to.be.successful.withText(header, 'div class="error-summary"'))
         })
@@ -172,7 +172,7 @@ function testValidPost (paidDifference: number, redirect: string) {
 
     await request(app)
       .post(pagePath)
-      .set('Cookie', `${cookieName}=ABC`)
+      .set('Cookie', testAuthCookie())
       .send(validFormData)
       .expect(res => expect(res).to.be.redirect.toLocation(redirect))
   })

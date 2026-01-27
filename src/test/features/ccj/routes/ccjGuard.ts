@@ -15,7 +15,7 @@ import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 import { MadeBy } from 'claims/models/madeBy'
 import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const ccjWithDeterminationType = {
   respondedAt: MomentFactory.currentDateTime(),
   countyCourtJudgmentRequestedAt: '2017-10-10T22:45:51.785',
@@ -61,7 +61,7 @@ describe('CCJ guard', () => {
 
               await request(app)
                 .get(route)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', testAuthCookie())
                 .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
             })
           })
@@ -81,7 +81,7 @@ describe('CCJ guard', () => {
 
               await request(app)
                 .get(route)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', testAuthCookie())
                 .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
             })
           })
@@ -96,7 +96,7 @@ describe('CCJ guard', () => {
 
         await request(app)
           .get(route)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('County Court Judgment requested'))
       })
 
@@ -106,7 +106,7 @@ describe('CCJ guard', () => {
 
         await request(app)
           .get(route)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('Why do you believe the defendant can repay you sooner'))
       })
 
@@ -116,7 +116,7 @@ describe('CCJ guard', () => {
 
         await request(app)
           .get(route)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('The repayment plan'))
       })
     })

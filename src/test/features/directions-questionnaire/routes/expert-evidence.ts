@@ -21,7 +21,7 @@ const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.expertEvidencePage.evaluateUri({ externalId: externalId })
 const whyExpertIsNeededPage = Paths.whyExpertIsNeededPage.evaluateUri({ externalId: externalId })
 const selfWitnessPage = Paths.selfWitnessPage.evaluateUri({ externalId: externalId })
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const claimWithDQ = {
   ...claimStoreServiceMock.sampleClaimObj,
   ...{ features: ['directionsQuestionnaire'] }
@@ -32,7 +32,7 @@ function checkAccessGuard (app: any, method: string) {
     idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
     claimStoreServiceMock.resolveRetrieveClaimByExternalId()
     await request(app)[method](pagePath)
-      .set('Cookie', `${cookieName}=ABC`)
+      .set('Cookie', testAuthCookie())
       .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
   })
 }
@@ -64,7 +64,7 @@ describe('Directions questionnaire - expert evidence', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -74,7 +74,7 @@ describe('Directions questionnaire - expert evidence', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -85,7 +85,7 @@ describe('Directions questionnaire - expert evidence', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Does the claim involve something an expert can still examine?'))
         })
       })
@@ -117,7 +117,7 @@ describe('Directions questionnaire - expert evidence', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send(validFormData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -128,7 +128,7 @@ describe('Directions questionnaire - expert evidence', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send(validFormData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -142,7 +142,7 @@ describe('Directions questionnaire - expert evidence', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -155,7 +155,7 @@ describe('Directions questionnaire - expert evidence', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(validFormData)
               .expect(res => expect(res).to.be.redirect.toLocation(whyExpertIsNeededPage))
           })
@@ -168,7 +168,7 @@ describe('Directions questionnaire - expert evidence', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ expertEvidence: YesNoOption.NO.option })
               .expect(res => expect(res).to.be.redirect.toLocation(selfWitnessPage))
           })
@@ -182,7 +182,7 @@ describe('Directions questionnaire - expert evidence', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(invalidFormData)
               .expect(res => expect(res).to.be.successful.withText('Does the claim involve something an expert can still examine?', 'div class="error-summary"'))
           })

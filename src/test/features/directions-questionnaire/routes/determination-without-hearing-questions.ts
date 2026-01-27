@@ -20,7 +20,7 @@ import {
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.determinationWithoutHearingQuestionsPage.evaluateUri({ externalId: externalId })
 const supportPage = Paths.supportPage.evaluateUri({ externalId: externalId })
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const claimWithDQ = {
   ...claimStoreServiceMock.sampleClaimObj,
   ...{ features: ['directionsQuestionnaire'] }
@@ -31,7 +31,7 @@ function checkAccessGuard (app: any, method: string) {
     idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
     claimStoreServiceMock.resolveRetrieveClaimByExternalId()
     await request(app)[method](pagePath)
-      .set('Cookie', `${cookieName}=ABC`)
+      .set('Cookie', testAuthCookie())
       .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
   })
 }
@@ -63,7 +63,7 @@ describe('Directions questionnaire - determination questions', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -73,7 +73,7 @@ describe('Directions questionnaire - determination questions', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -84,7 +84,7 @@ describe('Directions questionnaire - determination questions', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Do you consider that this claim is suitable for determination without a hearing'))
         })
       })
@@ -116,7 +116,7 @@ describe('Directions questionnaire - determination questions', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send(validFormData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -127,7 +127,7 @@ describe('Directions questionnaire - determination questions', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send(validFormData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -141,7 +141,7 @@ describe('Directions questionnaire - determination questions', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -154,7 +154,7 @@ describe('Directions questionnaire - determination questions', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(validFormData)
               .expect(res => expect(res).to.be.redirect.toLocation(supportPage))
           })
@@ -167,7 +167,7 @@ describe('Directions questionnaire - determination questions', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ determinationWithoutHearingQuestions: YesNoOption.YES.option })
               .expect(res => expect(res).to.be.redirect.toLocation(supportPage))
           })
@@ -181,7 +181,7 @@ describe('Directions questionnaire - determination questions', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(invalidFormData)
               .expect(res => expect(res).to.be.successful.withText('Tell us why'))
           })

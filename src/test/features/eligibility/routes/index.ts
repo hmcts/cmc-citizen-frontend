@@ -12,7 +12,7 @@ import { app } from 'main/app'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const pagePath: string = Paths.startPage.uri
 
 describe('Claim eligibility: index page', () => {
@@ -27,7 +27,7 @@ describe('Claim eligibility: index page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC;`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('Find out if you can make a claim using this service'))
       })
     })

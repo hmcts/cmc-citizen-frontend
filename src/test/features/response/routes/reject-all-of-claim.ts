@@ -22,7 +22,7 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const pagePath = ResponsePaths.defenceRejectAllOfClaimPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 const draftOverride = {
@@ -53,7 +53,7 @@ describe('Defendant response: full admission options', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -64,7 +64,7 @@ describe('Defendant response: full admission options', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.responseTypePage
               .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
         })
@@ -76,7 +76,7 @@ describe('Defendant response: full admission options', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Why do you believe you don’t owe'))
         })
       })
@@ -104,7 +104,7 @@ describe('Defendant response: full admission options', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.redirect.toLocation(ResponsePaths.responseTypePage
               .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
         })
@@ -115,7 +115,7 @@ describe('Defendant response: full admission options', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
@@ -126,7 +126,7 @@ describe('Defendant response: full admission options', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.successful.withText('Why do you believe you don’t owe', 'div class="error-summary"'))
           })
         })
@@ -140,7 +140,7 @@ describe('Defendant response: full admission options', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ option: RejectAllOfClaimOption.ALREADY_PAID })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -153,7 +153,7 @@ describe('Defendant response: full admission options', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ option: RejectAllOfClaimOption.ALREADY_PAID })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.taskListPage
@@ -168,7 +168,7 @@ describe('Defendant response: full admission options', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ option: RejectAllOfClaimOption.COUNTER_CLAIM })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.sendYourResponseByEmailPage

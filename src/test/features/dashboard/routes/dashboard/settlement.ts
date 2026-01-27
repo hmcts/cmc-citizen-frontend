@@ -13,7 +13,7 @@ import * as draftStoreMock from 'test/http-mocks/draft-store'
 import * as data from 'test/data/entity/settlement'
 import { attachDefaultHooks } from 'test/routes/hooks'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 
 const pagePath = Paths.dashboardPage.uri
 
@@ -167,7 +167,7 @@ describe('Settlement dashboard statuses dashboard', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
       })
 
@@ -178,7 +178,7 @@ describe('Settlement dashboard statuses dashboard', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
       })
     })

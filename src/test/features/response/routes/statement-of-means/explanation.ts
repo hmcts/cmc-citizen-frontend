@@ -22,7 +22,7 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const expectedText: string = 'Briefly explain why you can’t pay immediately'
 
 const pagePath = StatementOfMeansPaths.explanationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -49,7 +49,7 @@ describe('Statement of means: Briefly explain why cannot pay immediately page', 
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -59,7 +59,7 @@ describe('Statement of means: Briefly explain why cannot pay immediately page', 
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -70,7 +70,7 @@ describe('Statement of means: Briefly explain why cannot pay immediately page', 
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText(expectedText))
         })
       })
@@ -98,7 +98,7 @@ describe('Statement of means: Briefly explain why cannot pay immediately page', 
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
@@ -108,7 +108,7 @@ describe('Statement of means: Briefly explain why cannot pay immediately page', 
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ text: 'My explanation' })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -123,7 +123,7 @@ describe('Statement of means: Briefly explain why cannot pay immediately page', 
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ text: 'I can`t pay immediately' })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -136,7 +136,7 @@ describe('Statement of means: Briefly explain why cannot pay immediately page', 
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ text: 'I can`t pay immediately' })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(Paths.taskListPage

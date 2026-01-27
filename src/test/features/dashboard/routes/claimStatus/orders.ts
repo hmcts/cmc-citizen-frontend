@@ -19,7 +19,7 @@ import { baseResponseData, defenceWithDisputeData } from 'test/data/entity/respo
 import { respondedAt } from 'test/data/entity/fullDefenceData'
 import { MadeBy } from 'claims/models/madeBy'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 
 function ordersClaim () {
   return {
@@ -232,7 +232,7 @@ describe('Dashboard page', () => {
 
               await request(app)
                 .get(claimPagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', testAuthCookie())
                 .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
             })
           })
@@ -245,7 +245,7 @@ describe('Dashboard page', () => {
 
               await request(app)
                 .get(claimPagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', testAuthCookie())
                 .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
             })
           })
@@ -263,7 +263,7 @@ describe('Dashboard page', () => {
 
               await request(app)
                 .get(defendantPagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', testAuthCookie())
                 .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
             })
           })
@@ -275,7 +275,7 @@ describe('Dashboard page', () => {
 
               await request(app)
                 .get(defendantPagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', testAuthCookie())
                 .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
             })
           })

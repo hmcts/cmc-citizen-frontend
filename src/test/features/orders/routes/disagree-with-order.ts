@@ -17,7 +17,7 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
 import { FeatureToggles } from 'utils/featureToggles'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const externalId = '400f4c57-9684-49c0-adb4-4cf46579d6dc'
 const pagePath = OrdersPaths.disagreeReasonPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 const pageTitle = 'How and why do you want the order changed?'
@@ -41,7 +41,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
         it('should render page when everything is fine', async () => {
@@ -50,7 +50,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText(pageTitle))
         })
       })
@@ -73,7 +73,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
         })
@@ -86,7 +86,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ reason: 'I want a judge to review' })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -101,7 +101,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ reason: '' })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(OrdersPaths.confirmationPage.evaluateUri({ externalId: externalId })))
@@ -117,7 +117,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ reason: 'I want a judge to review' })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(OrdersPaths.confirmationPage.evaluateUri({ externalId: externalId })))

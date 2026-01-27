@@ -14,7 +14,7 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 
 describe('Claim issue: defendant email page', () => {
   attachDefaultHooks(app)
@@ -29,7 +29,7 @@ describe('Claim issue: defendant email page', () => {
 
       await request(app)
         .get(ClaimPaths.defendantEmailPage.uri)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', testAuthCookie())
         .expect(res => expect(res).to.be.successful.withText('Their email address (optional)'))
     })
   })
@@ -48,7 +48,7 @@ describe('Claim issue: defendant email page', () => {
 
         await request(app)
           .post(ClaimPaths.defendantEmailPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ address: 'invalid-email-address' })
           .expect(res => expect(res).to.be.successful.withText('Their email address (optional)', 'div class="error-summary"'))
       })
@@ -59,7 +59,7 @@ describe('Claim issue: defendant email page', () => {
 
         await request(app)
           .post(ClaimPaths.defendantEmailPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ address: 'defendant@example.com' })
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -70,7 +70,7 @@ describe('Claim issue: defendant email page', () => {
 
         await request(app)
           .post(ClaimPaths.defendantEmailPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ address: 'defendant@example.com' })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.defendantPhonePage.uri))
       })
@@ -81,7 +81,7 @@ describe('Claim issue: defendant email page', () => {
 
         await request(app)
           .post(ClaimPaths.defendantEmailPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ address: '' })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.defendantPhonePage.uri))
       })

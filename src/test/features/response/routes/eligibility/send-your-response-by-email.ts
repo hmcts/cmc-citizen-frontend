@@ -24,7 +24,7 @@ import * as sinon from 'sinon'
 
 const mockLaunchDarklyClient: LaunchDarklyClient = mock(LaunchDarklyClient)
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const pagePath = ResponsePaths.sendYourResponseByEmailPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 describe('Defendant response: send your response by email', () => {
@@ -60,7 +60,7 @@ describe('Defendant response: send your response by email', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -73,7 +73,7 @@ describe('Defendant response: send your response by email', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('Post your response'))
       })
 
@@ -83,7 +83,7 @@ describe('Defendant response: send your response by email', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 

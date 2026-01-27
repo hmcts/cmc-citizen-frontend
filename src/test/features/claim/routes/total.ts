@@ -23,7 +23,7 @@ import * as sinon from 'sinon'
 
 const mockLaunchDarklyClient: LaunchDarklyClient = mock(LaunchDarklyClient)
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const pageContent: string = 'Total amount you’re claiming'
 const pagePath: string = ClaimPaths.totalPage.uri
 
@@ -57,7 +57,7 @@ describe('Claim issue: total page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -69,7 +69,7 @@ describe('Claim issue: total page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -81,7 +81,7 @@ describe('Claim issue: total page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText(
             pageContent,
             'Total claim amount',
@@ -100,7 +100,7 @@ describe('Claim issue: total page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText(
             pageContent,
             'Total claim amount',
@@ -116,7 +116,7 @@ describe('Claim issue: total page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.redirect.toLocation(ErrorPaths.amountExceededPage.uri))
       })
     })
@@ -133,7 +133,7 @@ describe('Claim issue: total page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -145,7 +145,7 @@ describe('Claim issue: total page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -157,7 +157,7 @@ describe('Claim issue: total page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText(
             pageContent,
             'Total claim amount',
@@ -176,7 +176,7 @@ describe('Claim issue: total page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText(
             pageContent,
             'Total claim amount',
@@ -192,7 +192,7 @@ describe('Claim issue: total page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.redirect.toLocation(ErrorPaths.amountExceededPage.uri))
       })
     })
@@ -212,7 +212,7 @@ describe('Claim issue: total page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.taskListPage.uri))
       })
     })

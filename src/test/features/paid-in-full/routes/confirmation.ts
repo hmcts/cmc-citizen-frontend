@@ -12,7 +12,7 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkNotClaimantInCaseGuard } from './checks/not-claimant-in-case-check'
 import { Paths } from 'paid-in-full/paths'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.datePaidPage.evaluateUri({ externalId: externalId })
@@ -35,7 +35,7 @@ describe('Paid In Full: confirmation page', () => {
 
         await request(app)
           .get(Paths.confirmationPage.evaluateUri({ externalId: externalId }))
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -44,7 +44,7 @@ describe('Paid In Full: confirmation page', () => {
 
         await request(app)
           .get(Paths.confirmationPage.evaluateUri({ externalId: externalId }))
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('The claim is now settled'))
       })
 

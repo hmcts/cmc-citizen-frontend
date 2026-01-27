@@ -36,7 +36,7 @@ function statesPaidClaim () {
   }
 }
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 
 const claimPagePath = Paths.claimantPage.evaluateUri({ externalId: statesPaidClaim().externalId })
 const defendantPagePath = Paths.defendantPage.evaluateUri({ externalId: statesPaidClaim().externalId })
@@ -224,7 +224,7 @@ describe('Dashboard page', () => {
 
               await request(app)
                 .get(claimPagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', testAuthCookie())
                 .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
             })
           })
@@ -240,7 +240,7 @@ describe('Dashboard page', () => {
               claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride)
               await request(app)
                 .get(defendantPagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', testAuthCookie())
                 .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
             })
           })

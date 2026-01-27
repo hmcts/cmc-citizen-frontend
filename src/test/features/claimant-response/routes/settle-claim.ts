@@ -13,7 +13,7 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { FreeMediationOption } from 'forms/models/freeMediation'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.settleClaimPage.evaluateUri({ externalId: externalId })
 
@@ -47,7 +47,7 @@ describe('Claimant Response: part payment received page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -61,7 +61,7 @@ describe('Claimant Response: part payment received page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Do you agree the defendant has paid'))
         })
         it('should render with "Do you want to settle" text if payment is less than claim amount', async () => {
@@ -74,7 +74,7 @@ describe('Claimant Response: part payment received page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Do you want to settle the claim'))
         })
       })
@@ -98,7 +98,7 @@ describe('Claimant Response: part payment received page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Do you agree the defendant has paid', 'div class="error-summary"'))
         })
       })
@@ -113,7 +113,7 @@ describe('Claimant Response: part payment received page', () => {
         it('should redirect to the task list page when yes is selected', async () => {
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send({ accepted: 'yes' })
             .expect(res => expect(res).to.be.redirect
               .toLocation(Paths.taskListPage.evaluateUri({ externalId: externalId })))
@@ -123,7 +123,7 @@ describe('Claimant Response: part payment received page', () => {
         it('should redirect to the reject reason page when no is selected', async () => {
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send({ accepted: 'no' })
             .expect(res => expect(res).to.be.redirect
               .toLocation(Paths.rejectionReasonPage.evaluateUri({ externalId: externalId })))

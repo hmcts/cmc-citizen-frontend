@@ -27,7 +27,7 @@ const claimWithDQ = {
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const selfWitnessPage = Paths.selfWitnessPage.evaluateUri({ externalId })
 const expertGuidance = Paths.expertGuidancePage.evaluateUri({ externalId })
 const pagePath = Paths.expertReportsPage.evaluateUri({ externalId })
@@ -37,7 +37,7 @@ function checkAccessGuard (app: any, method: string) {
     idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
     claimStoreServiceMock.resolveRetrieveClaimByExternalId()
     await request(app)[method](pagePath)
-      .set('Cookie', `${cookieName}=ABC`)
+      .set('Cookie', testAuthCookie())
       .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
   })
 }
@@ -70,7 +70,7 @@ describe('Directions Questionnaire - expert reports page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -80,7 +80,7 @@ describe('Directions Questionnaire - expert reports page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -91,7 +91,7 @@ describe('Directions Questionnaire - expert reports page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Have you already got a report written by an expert?'))
         })
       })
@@ -127,7 +127,7 @@ describe('Directions Questionnaire - expert reports page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send(validDeclinedFormData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -138,7 +138,7 @@ describe('Directions Questionnaire - expert reports page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send(validDeclinedFormData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -152,7 +152,7 @@ describe('Directions Questionnaire - expert reports page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(validDeclinedFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -165,7 +165,7 @@ describe('Directions Questionnaire - expert reports page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(validDeclaredFormData)
               .expect(res => expect(res).to.be.redirect.toLocation(selfWitnessPage))
           })
@@ -178,7 +178,7 @@ describe('Directions Questionnaire - expert reports page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(validDeclinedFormData)
               .expect(res => expect(res).to.be.redirect.toLocation(expertGuidance))
           })
@@ -192,7 +192,7 @@ describe('Directions Questionnaire - expert reports page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(invalidFormData)
               .expect(res => expect(res).to.be.successful.withText(
                 'Have you already got a report written by an expert?',

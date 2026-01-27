@@ -14,7 +14,7 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { InterestTypeOption } from 'claim/form/models/interestType'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const pageContent: string = 'How do you want to claim interest?'
 const pagePath: string = ClaimPaths.interestTypePage.uri
 
@@ -30,7 +30,7 @@ describe('Claim issue: interest type page', () => {
 
       await request(app)
         .get(pagePath)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', testAuthCookie())
         .expect(res => expect(res).to.be.successful.withText(pageContent))
     })
   })
@@ -48,7 +48,7 @@ describe('Claim issue: interest type page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText(pageContent, 'div class="error-summary"'))
       })
 
@@ -58,7 +58,7 @@ describe('Claim issue: interest type page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ option: InterestTypeOption.SAME_RATE })
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -69,7 +69,7 @@ describe('Claim issue: interest type page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ option: InterestTypeOption.SAME_RATE })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.interestRatePage.uri))
       })
@@ -80,7 +80,7 @@ describe('Claim issue: interest type page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ option: InterestTypeOption.BREAKDOWN })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.interestTotalPage.uri))
       })

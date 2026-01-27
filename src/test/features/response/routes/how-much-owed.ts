@@ -20,7 +20,7 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 
 const pagePath = ResponsePaths.defendantHowMuchOwed.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
@@ -46,7 +46,7 @@ describe('Defendant response: how much money do you believe you owe', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -57,7 +57,7 @@ describe('Defendant response: how much money do you believe you owe', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('How much money do you believe you owe?'))
         })
       })
@@ -83,7 +83,7 @@ describe('Defendant response: how much money do you believe you owe', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
@@ -94,7 +94,7 @@ describe('Defendant response: how much money do you believe you owe', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.successful.withText('How much money do you believe you owe?', 'div class="error-summary"'))
           })
         })
@@ -108,7 +108,7 @@ describe('Defendant response: how much money do you believe you owe', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ amount: 1, text: 'I don’t owe full amount' })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -121,7 +121,7 @@ describe('Defendant response: how much money do you believe you owe', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ amount: 1, text: 'I don’t owe full amount' })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(

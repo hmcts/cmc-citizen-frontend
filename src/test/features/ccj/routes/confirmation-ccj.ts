@@ -15,7 +15,7 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkNotClaimantInCaseGuard } from 'test/features/ccj/routes/checks/not-claimant-in-case-check'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const pagePath = CCJPaths.ccjConfirmationPage.evaluateUri({ externalId: externalId })
 
 describe('CCJ: confirmation page', () => {
@@ -37,7 +37,7 @@ describe('CCJ: confirmation page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -48,7 +48,7 @@ describe('CCJ: confirmation page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('County Court Judgment requested'))
         })
 
@@ -58,7 +58,7 @@ describe('CCJ: confirmation page', () => {
           )
           await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('We’ll process your request and post a copy of the judgment'))
         })
       })

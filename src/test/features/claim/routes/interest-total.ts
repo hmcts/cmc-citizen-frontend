@@ -13,7 +13,7 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const pageContent: string = 'What is the total interest for your claim?'
 const pagePath: string = ClaimPaths.interestTotalPage.uri
 
@@ -31,7 +31,7 @@ describe('Claim issue: interest total page', () => {
 
       await request(app)
         .get(pagePath)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', testAuthCookie())
         .expect(res => expect(res).to.be.successful.withText(pageContent))
     })
   })
@@ -51,7 +51,7 @@ describe('Claim issue: interest total page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText(pageContent, 'div class="error-summary"'))
       })
 
@@ -60,7 +60,7 @@ describe('Claim issue: interest total page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({
             amount: 1000
           })
@@ -72,7 +72,7 @@ describe('Claim issue: interest total page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({
             reason: 'Some reason'
           })
@@ -85,7 +85,7 @@ describe('Claim issue: interest total page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({
             amount: 1000,
             reason: 'Some reason'
@@ -99,7 +99,7 @@ describe('Claim issue: interest total page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({
             amount: 1000,
             reason: 'Some reason'

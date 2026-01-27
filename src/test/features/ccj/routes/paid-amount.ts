@@ -16,7 +16,7 @@ import { checkAuthorizationGuards } from 'test/features/ccj/routes/checks/author
 import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 import { checkNotClaimantInCaseGuard } from 'test/features/ccj/routes/checks/not-claimant-in-case-check'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.paidAmountPage.evaluateUri({ externalId: externalId })
 const paidAmountSummaryPage = Paths.paidAmountSummaryPage.evaluateUri({ externalId: externalId })
@@ -45,7 +45,7 @@ describe('CCJ - paid amount page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -55,7 +55,7 @@ describe('CCJ - paid amount page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -65,7 +65,7 @@ describe('CCJ - paid amount page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('Has the defendant paid some of the amount owed?'))
       })
     })
@@ -86,7 +86,7 @@ describe('CCJ - paid amount page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -97,7 +97,7 @@ describe('CCJ - paid amount page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -111,7 +111,7 @@ describe('CCJ - paid amount page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(validFormData)
               .expect(res => expect(res).to.be.redirect.toLocation(paidAmountSummaryPage))
           })
@@ -123,7 +123,7 @@ describe('CCJ - paid amount page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -136,7 +136,7 @@ describe('CCJ - paid amount page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ option: undefined })
               .expect(res => expect(res).to.be.successful.withText('Has the defendant paid some of the amount owed?', 'div class="error-summary"'))
           })
@@ -149,7 +149,7 @@ describe('CCJ - paid amount page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({
                 option: PaidAmountOption.YES.value,
                 amount: 101,

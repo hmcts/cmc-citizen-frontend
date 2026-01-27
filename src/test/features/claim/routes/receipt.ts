@@ -13,7 +13,7 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 
 const externalId = '400f4c57-9684-49c0-adb4-4cf46579d6dc'
 
@@ -33,7 +33,7 @@ describe('Claim issue: HWF Draft receipt', () => {
 
         await request(app)
           .get(ClaimPaths.draftReceiptReceiver.evaluateUri({ externalId: externalId }))
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -43,7 +43,7 @@ describe('Claim issue: HWF Draft receipt', () => {
 
         await request(app)
           .get(ClaimPaths.draftReceiptReceiver.evaluateUri({ externalId: externalId }))
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -53,7 +53,7 @@ describe('Claim issue: HWF Draft receipt', () => {
 
         await request(app)
           .get(ClaimPaths.draftReceiptReceiver.evaluateUri({ externalId: externalId }))
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful)
       })
     })

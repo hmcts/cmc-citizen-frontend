@@ -8,7 +8,7 @@ import { Paths } from 'eligibility/paths'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 
 export function checkEligibilityGuards (app: any, method: string, pagePath: string) {
   it('should redirect to eligibility start page when draft is not marked eligible', async () => {
@@ -18,7 +18,7 @@ export function checkEligibilityGuards (app: any, method: string, pagePath: stri
     draftStoreServiceMock.resolveFind('claim', { eligibility: undefined })
 
     await request(app)[method](pagePath)
-      .set('Cookie', `${cookieName}=ABC`)
+      .set('Cookie', testAuthCookie())
       .expect(res => expect(res).redirect.toLocation(Paths.startPage.uri))
   })
 }

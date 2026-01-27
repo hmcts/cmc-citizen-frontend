@@ -11,8 +11,9 @@ import { app } from 'main/app'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
 import { attachDefaultHooks } from 'test/routes/hooks'
+import { testAuthCookie } from 'test/auth-helper'
 
-const cookieName: string = config.get<string>('session.cookieName')
+const sessionCookieName: string = config.has('session.name') ? config.get<string>('session.name') : 'cmc-citizen-ui-session'
 
 describe('Logout receiver', () => {
   attachDefaultHooks(app)
@@ -22,21 +23,21 @@ describe('Logout receiver', () => {
   })
 
   describe('on GET', () => {
-    it('should remove session cookie', async () => {
+    it('should destroy session and clear session cookie', async () => {
       await request(app)
         .get(AppPaths.logoutReceiver.uri)
-        .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.have.cookie(cookieName, ''))
+        .set('Cookie', testAuthCookie())
+        .expect(res => expect(res).to.have.cookie(sessionCookieName, ''))
     })
 
-    it('should remove session cookie even when session invalidation is failed', async () => {
+    it('should destroy session and clear session cookie even when idam session invalidation fails', async () => {
       await request(app)
         .get(AppPaths.logoutReceiver.uri)
-        .set('Cookie', `${cookieName}=${idamServiceMock.defaultAuthToken}`)
-        .expect(res => expect(res).to.have.cookie(cookieName, ''))
+        .set('Cookie', testAuthCookie(idamServiceMock.defaultAuthToken))
+        .expect(res => expect(res).to.have.cookie(sessionCookieName, ''))
     })
 
-    it('should not remove session cookie or invalidate auth token when session cookie is missing', async () => {
+    it('should redirect to idam when no session present', async () => {
       await request(app)
         .get(AppPaths.logoutReceiver.uri)
         .set('Cookie', null)

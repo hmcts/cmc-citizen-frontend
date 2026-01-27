@@ -14,7 +14,7 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const input = {
   type: 'individual',
   firstName: 'John',
@@ -39,7 +39,7 @@ describe('defendant as individual details page', () => {
 
       await request(app)
         .get(ClaimPaths.defendantIndividualDetailsPage.uri)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', testAuthCookie())
         .expect(res => expect(res).to.be.successful.withText(theirTitle, theirFirstName, theirLastName))
     })
   })
@@ -58,7 +58,7 @@ describe('defendant as individual details page', () => {
         const nameMissingInput = { ...input, ...{ firstName: '', lastName: 'ok' } }
         await request(app)
           .post(ClaimPaths.defendantIndividualDetailsPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send(nameMissingInput)
           .expect(res => expect(res).to.be.successful.withText(theirTitle, theirFirstName, theirLastName, 'div class="error-summary"', 'Enter first name'))
       })
@@ -67,7 +67,7 @@ describe('defendant as individual details page', () => {
         const nameMissingInput = { ...input, ...{ firstName: 'ok', lastName: '' } }
         await request(app)
           .post(ClaimPaths.defendantIndividualDetailsPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send(nameMissingInput)
           .expect(res => expect(res).to.be.successful.withText(theirTitle, theirFirstName, theirLastName, 'div class="error-summary"', 'Enter last name'))
       })
@@ -76,7 +76,7 @@ describe('defendant as individual details page', () => {
         const nameMissingInput = { ...input, ...{ firstName: '', lastName: '' } }
         await request(app)
           .post(ClaimPaths.defendantIndividualDetailsPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send(nameMissingInput)
           .expect(res => expect(res).to.be.successful.withText(theirTitle, theirFirstName, theirLastName, 'div class="error-summary"', 'Enter first name', 'Enter last name'))
       })
@@ -88,7 +88,7 @@ describe('defendant as individual details page', () => {
           const invalidAddressInput = { ...input, ...{ address: { line1: '', line2: '', line3: '', city: 'London', postcode: 'SE28 0JE' } } }
           await request(app)
             .post(ClaimPaths.defendantIndividualDetailsPage.uri)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send(invalidAddressInput)
             .expect(res => expect(res).to.be.successful.withText(theirTitle, theirFirstName, theirLastName, 'div class="error-summary"', 'Enter first address line'))
         })
@@ -96,7 +96,7 @@ describe('defendant as individual details page', () => {
           const invalidAddressInput = { ...input, ...{ address: { line1: 'Apartment 99', line2: '', line3: '', city: '', postcode: 'SE28 0JE' } } }
           await request(app)
             .post(ClaimPaths.defendantIndividualDetailsPage.uri)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send(invalidAddressInput)
             .expect(res => expect(res).to.be.successful.withText(theirTitle, theirFirstName, theirLastName, 'div class="error-summary"', 'Enter a valid town/city'))
         })
@@ -104,7 +104,7 @@ describe('defendant as individual details page', () => {
           const invalidAddressInput = { ...input, ...{ address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: '' } } }
           await request(app)
             .post(ClaimPaths.defendantIndividualDetailsPage.uri)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send(invalidAddressInput)
             .expect(res => expect(res).to.be.successful.withText(theirTitle, theirFirstName, theirLastName, 'div class="error-summary"', 'Enter postcode'))
         })
@@ -118,7 +118,7 @@ describe('defendant as individual details page', () => {
           const invalidCorrespondenceAddressInput = { ...input, ...{ hasCorrespondenceAddress: 'true', correspondenceAddress: { line1: '', line2: '', line3: '', city: 'London', postcode: 'SE28 0JE' } } }
           await request(app)
             .post(ClaimPaths.defendantIndividualDetailsPage.uri)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send(invalidCorrespondenceAddressInput)
             .expect(res => expect(res).to.be.successful.withText(theirTitle, theirFirstName, theirLastName, 'div class="error-summary"', 'Enter first correspondence address line'))
         })
@@ -126,7 +126,7 @@ describe('defendant as individual details page', () => {
           const invalidCorrespondenceAddressInput = { ...input, ...{ hasCorrespondenceAddress: 'true', correspondenceAddress: { line1: 'Apartment 99', line2: '', line3: '', city: '', postcode: 'SE28 0JE' } } }
           await request(app)
             .post(ClaimPaths.defendantIndividualDetailsPage.uri)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send(invalidCorrespondenceAddressInput)
             .expect(res => expect(res).to.be.successful.withText(theirTitle, theirFirstName, theirLastName, 'div class="error-summary"', 'Enter correspondence town/city'))
         })
@@ -134,7 +134,7 @@ describe('defendant as individual details page', () => {
           const invalidCorrespondenceAddressInput = { ...input, ...{ hasCorrespondenceAddress: 'true', correspondenceAddress: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: '' } } }
           await request(app)
             .post(ClaimPaths.defendantIndividualDetailsPage.uri)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send(invalidCorrespondenceAddressInput)
             .expect(res => expect(res).to.be.successful.withText(theirTitle, theirFirstName, theirLastName, 'div class="error-summary"', 'Enter correspondence address postcode'))
         })
@@ -145,7 +145,7 @@ describe('defendant as individual details page', () => {
         draftStoreServiceMock.resolveUpdate()
         await request(app)
           .post(ClaimPaths.defendantIndividualDetailsPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send(input)
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.defendantEmailPage.uri))
       })

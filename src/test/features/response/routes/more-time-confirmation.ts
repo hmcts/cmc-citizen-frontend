@@ -22,7 +22,7 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const pagePath = ResponsePaths.moreTimeConfirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 describe('Defendant response: more time needed - confirmation page', () => {
@@ -51,7 +51,7 @@ describe('Defendant response: more time needed - confirmation page', () => {
 
             await request(app)
               .get(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.redirect
                 .toLocation(ResponsePaths.moreTimeRequestPage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
@@ -64,7 +64,7 @@ describe('Defendant response: more time needed - confirmation page', () => {
 
             await request(app)
               .get(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.redirect
                 .toLocation(ResponsePaths.moreTimeRequestPage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
@@ -78,7 +78,7 @@ describe('Defendant response: more time needed - confirmation page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('You have an extra 14 days to respond'))
         })
 
@@ -89,7 +89,7 @@ describe('Defendant response: more time needed - confirmation page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('You have an extra 14 days to respond'))
         })
 
@@ -98,7 +98,7 @@ describe('Defendant response: more time needed - confirmation page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
       })
@@ -128,7 +128,7 @@ describe('Defendant response: more time needed - confirmation page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.redirect
                 .toLocation(ResponsePaths.moreTimeRequestPage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
@@ -141,7 +141,7 @@ describe('Defendant response: more time needed - confirmation page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.redirect
                 .toLocation(ResponsePaths.moreTimeRequestPage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
@@ -155,7 +155,7 @@ describe('Defendant response: more time needed - confirmation page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.redirect
               .toLocation(ResponsePaths.taskListPage
                 .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))

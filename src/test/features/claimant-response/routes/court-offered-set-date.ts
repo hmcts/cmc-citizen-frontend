@@ -18,7 +18,7 @@ import { MomentFactory } from 'shared/momentFactory'
 import { LocalDate } from 'forms/models/localDate'
 import { PaymentDate } from 'shared/components/payment-intention/model/paymentDate'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = ClaimantResponsePaths.courtOfferedSetDatePage.evaluateUri({ externalId: externalId })
 const taskListPagePath = ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: externalId })
@@ -48,7 +48,7 @@ describe('Claimant response: court offered set date page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -58,7 +58,7 @@ describe('Claimant response: court offered set date page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -76,7 +76,7 @@ describe('Claimant response: court offered set date page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('The defendant can’t pay by your proposed date'))
       })
 
@@ -94,7 +94,7 @@ describe('Claimant response: court offered set date page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('The defendant can’t pay by your proposed date'))
       })
 
@@ -122,7 +122,7 @@ describe('Claimant response: court offered set date page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('The defendant can’t pay by your proposed date'))
       })
     })
@@ -145,7 +145,7 @@ describe('Claimant response: court offered set date page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send(validFormData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -156,7 +156,7 @@ describe('Claimant response: court offered set date page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send(validFormData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -170,7 +170,7 @@ describe('Claimant response: court offered set date page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send(validFormData)
             .expect(res => expect(res).to.be.redirect.toLocation(taskListPagePath))
         })
@@ -182,7 +182,7 @@ describe('Claimant response: court offered set date page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send(validFormData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -204,7 +204,7 @@ describe('Claimant response: court offered set date page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .send({ accept: undefined })
             .expect(res => expect(res).to.be.successful.withText('Please select yes or no'))
         })

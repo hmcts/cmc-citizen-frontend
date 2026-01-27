@@ -20,7 +20,7 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = PartAdmissionPaths.whyDoYouDisagreePage.evaluateUri({ externalId: externalId })
 
@@ -49,7 +49,7 @@ describe('Defendant: partial admission - why do you disagree?', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -59,7 +59,7 @@ describe('Defendant: partial admission - why do you disagree?', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
       })
@@ -75,7 +75,7 @@ describe('Defendant: partial admission - why do you disagree?', () => {
           draftStoreServiceMock.resolveFind('mediation')
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText(header))
         })
       })
@@ -99,7 +99,7 @@ describe('Defendant: partial admission - why do you disagree?', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -110,7 +110,7 @@ describe('Defendant: partial admission - why do you disagree?', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -123,7 +123,7 @@ describe('Defendant: partial admission - why do you disagree?', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -144,7 +144,7 @@ describe('Defendant: partial admission - why do you disagree?', () => {
             draftStoreServiceMock.resolveUpdate()
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send(validFormData)
               .expect(res => expect(res).to.be.redirect
                 .toLocation(Paths.timelinePage.evaluateUri({ externalId: externalId })))
@@ -153,7 +153,7 @@ describe('Defendant: partial admission - why do you disagree?', () => {
           it('when form is invalid should render page', async () => {
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ text: '' })
               .expect(res => expect(res).to.be.successful.withText(header, 'div class="error-summary"'))
           })

@@ -7,14 +7,14 @@ import 'test/routes/expectations'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { Paths } from 'dashboard/paths'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 
 export function checkAlreadySubmittedGuard (app: any, method: string, pagePath: string) {
   it('should return 500 and render error page when cannot retrieve claim in guard', async () => {
     claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
     await request(app)[method](pagePath)
-      .set('Cookie', `${cookieName}=ABC`)
+      .set('Cookie', testAuthCookie())
       .expect(res => expect(res).to.be.serverError.withText('Error'))
   })
 
@@ -22,7 +22,7 @@ export function checkAlreadySubmittedGuard (app: any, method: string, pagePath: 
     claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse()
 
     await request(app)[method](pagePath)
-      .set('Cookie', `${cookieName}=ABC`)
+      .set('Cookie', testAuthCookie())
       .expect(res => expect(res).to.be.redirect.toLocation(Paths.dashboardPage.uri))
   })
 }

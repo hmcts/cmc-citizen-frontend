@@ -14,7 +14,7 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 
 describe('Claim issue: defendant phone page', () => {
   attachDefaultHooks(app)
@@ -29,7 +29,7 @@ describe('Claim issue: defendant phone page', () => {
 
       await request(app)
         .get(ClaimPaths.defendantPhonePage.uri)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', testAuthCookie())
         .expect(res => expect(res).to.be.successful.withText('Their phone number (optional)'))
     })
   })
@@ -49,7 +49,7 @@ describe('Claim issue: defendant phone page', () => {
 
         await request(app)
           .post(ClaimPaths.defendantPhonePage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ number: '0298372746746' })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.taskListPage.uri))
       })
@@ -60,7 +60,7 @@ describe('Claim issue: defendant phone page', () => {
 
         await request(app)
           .post(ClaimPaths.defendantPhonePage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ number: '' })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.taskListPage.uri))
       })

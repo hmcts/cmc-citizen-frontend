@@ -19,7 +19,7 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.signSettlementAgreement.evaluateUri({ externalId: externalId })
 
@@ -52,7 +52,7 @@ describe('Settlement agreement: sign settlement agreement page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -61,7 +61,7 @@ describe('Settlement agreement: sign settlement agreement page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('Respond to the settlement agreement'))
         })
 
@@ -86,7 +86,7 @@ describe('Settlement agreement: sign settlement agreement page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
@@ -95,7 +95,7 @@ describe('Settlement agreement: sign settlement agreement page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .expect(res => expect(res).to.be.successful.withText('Respond to the settlement agreement', 'div class="error-summary"'))
           })
         })
@@ -108,7 +108,7 @@ describe('Settlement agreement: sign settlement agreement page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ option: 'no' })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -119,7 +119,7 @@ describe('Settlement agreement: sign settlement agreement page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ option: 'no' })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(Paths.settlementAgreementConfirmation
@@ -132,7 +132,7 @@ describe('Settlement agreement: sign settlement agreement page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', testAuthCookie())
               .send({ option: 'yes' })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(Paths.settlementAgreementConfirmation

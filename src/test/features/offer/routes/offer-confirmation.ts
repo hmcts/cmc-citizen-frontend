@@ -10,7 +10,7 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkAuthorizationGuards } from 'test/features/offer/routes/checks/authorization-check'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const confirmationPage = OfferPaths.offerConfirmationPage.evaluateUri({ externalId: externalId })
 
@@ -30,7 +30,7 @@ describe('Offer confirmation page', () => {
 
         await request(app)
           .get(confirmationPage)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -38,7 +38,7 @@ describe('Offer confirmation page', () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         await request(app)
           .get(confirmationPage)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('We’ve sent your offer'))
       })
     })

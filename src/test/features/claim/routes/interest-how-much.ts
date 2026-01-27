@@ -14,7 +14,7 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { InterestRateOption } from 'claim/form/models/interestRateOption'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const pageContent: string = 'How much do you want to continue claiming?'
 const pagePath: string = ClaimPaths.interestHowMuchPage.uri
 
@@ -32,7 +32,7 @@ describe('Claim issue: interest how much page', () => {
 
       await request(app)
         .get(pagePath)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', testAuthCookie())
         .expect(res => expect(res).to.be.successful.withText(pageContent))
     })
   })
@@ -52,7 +52,7 @@ describe('Claim issue: interest how much page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText(pageContent, 'div class="error-summary"'))
       })
 
@@ -61,7 +61,7 @@ describe('Claim issue: interest how much page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({
             type: InterestRateOption.DIFFERENT
           })
@@ -74,7 +74,7 @@ describe('Claim issue: interest how much page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ type: InterestRateOption.STANDARD })
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -85,7 +85,7 @@ describe('Claim issue: interest how much page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ type: InterestRateOption.STANDARD })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.helpWithFeesPage.uri))
       })
@@ -96,7 +96,7 @@ describe('Claim issue: interest how much page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({
             type: InterestRateOption.DIFFERENT,
             dailyAmount: '10'

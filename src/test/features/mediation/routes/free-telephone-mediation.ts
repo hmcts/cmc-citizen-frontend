@@ -21,7 +21,7 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = MediationPaths.freeTelephoneMediationPage.evaluateUri({ externalId })
 
@@ -46,7 +46,7 @@ describe('Mediation: free telephne mediation page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -57,7 +57,7 @@ describe('Mediation: free telephne mediation page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('How free mediation works'))
         })
       })
@@ -81,7 +81,7 @@ describe('Mediation: free telephne mediation page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -92,7 +92,7 @@ describe('Mediation: free telephne mediation page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', testAuthCookie())
             .expect(res => expect(res).to.be.successful.withText('How free mediation works'))
         })
       })
@@ -119,7 +119,7 @@ describe('Mediation: free telephne mediation page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ mediationYes: 'yes' })
           .expect(res => expect(res).to.be.redirect
             .toLocation(MediationPaths.canWeUsePage.evaluateUri({ externalId })))
@@ -134,7 +134,7 @@ describe('Mediation: free telephne mediation page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ mediationYes: 'yes' })
           .expect(res => expect(res).to.be.redirect
             .toLocation(MediationPaths.canWeUseCompanyPage.evaluateUri({ externalId })))
@@ -149,7 +149,7 @@ describe('Mediation: free telephne mediation page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ mediationNo: FreeMediationOption.NO })
           .expect(res => expect(res).to.be.redirect
             .toLocation(MediationPaths.mediationDisagreementPage.evaluateUri({ externalId })))
@@ -172,7 +172,7 @@ describe('Mediation: free telephne mediation page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ mediationYes: 'yes' })
           .expect(res => expect(res).to.be.redirect
             .toLocation(MediationPaths.canWeUsePage.evaluateUri({ externalId })))
@@ -187,7 +187,7 @@ describe('Mediation: free telephne mediation page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ mediationYes: 'yes' })
           .expect(res => expect(res).to.be.redirect
             .toLocation(MediationPaths.canWeUseCompanyPage.evaluateUri({ externalId })))
@@ -202,7 +202,7 @@ describe('Mediation: free telephne mediation page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .send({ mediationNo: FreeMediationOption.NO })
           .expect(res => expect(res).to.be.redirect
             .toLocation(MediationPaths.mediationDisagreementPage.evaluateUri({ externalId })))

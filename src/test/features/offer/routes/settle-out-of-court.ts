@@ -10,7 +10,7 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkAuthorizationGuards } from 'test/features/offer/routes/checks/authorization-check'
 
-const cookieName: string = config.get<string>('session.cookieName')
+import { testAuthCookie } from 'test/auth-helper'
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const settleOutOfCourtPage = OfferPaths.settleOutOfCourtPage.evaluateUri({ externalId: externalId })
 
@@ -30,7 +30,7 @@ describe('Settle out of court page', () => {
 
         await request(app)
           .get(settleOutOfCourtPage)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -38,7 +38,7 @@ describe('Settle out of court page', () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         await request(app)
           .get(settleOutOfCourtPage)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', testAuthCookie())
           .expect(res => expect(res).to.be.successful.withText('Make an offer to settle out of court'))
       })
     })
