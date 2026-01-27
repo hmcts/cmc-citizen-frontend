@@ -32,6 +32,7 @@
   },
   "session": {
     "cookieMaxAge": 86400000,
+    "cookieName": "cmc-citizen-ui-session",
     "secret": "cmc-citizen-frontend-session-secret",
     "name": "cmc-citizen-ui-session",
     "redis": {
