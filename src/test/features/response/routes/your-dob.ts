@@ -46,7 +46,7 @@ describe('Defendant user details: your date of birth page', () => {
 
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
-      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath, {}, () => sessionCookie)
 
       context('when response not submitted', () => {
         beforeEach(() => {
@@ -78,7 +78,7 @@ describe('Defendant user details: your date of birth page', () => {
 
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
-      verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
+      verifyRedirectForPostWhenAlreadyPaidInFull(pagePath, {}, {}, () => sessionCookie)
 
       context('when response not submitted', () => {
 

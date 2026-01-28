@@ -59,7 +59,7 @@ describe('Directions Questionnaire - hearing unavailable dates', () => {
           idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
         })
 
-        verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
+        verifyRedirectForGetWhenAlreadyPaidInFull(pagePath, {}, () => sessionCookie)
       })
 
       context('when user authorised', () => {
@@ -134,7 +134,7 @@ describe('Directions Questionnaire - hearing unavailable dates', () => {
           idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
         })
 
-        verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
+        verifyRedirectForPostWhenAlreadyPaidInFull(pagePath, {}, {}, () => sessionCookie)
       })
 
       context('when user authorised', () => {

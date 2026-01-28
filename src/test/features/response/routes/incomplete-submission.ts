@@ -37,7 +37,7 @@ describe('Defendant response: incomplete submission page', () => {
       })
 
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
-      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath, {}, () => sessionCookie)
     })
 
     it('should render page when everything is fine', async () => {

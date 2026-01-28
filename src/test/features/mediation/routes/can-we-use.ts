@@ -42,7 +42,7 @@ describe('Free mediation: can we use phone number page', () => {
       })
 
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
-      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath, {}, () => sessionCookie)
 
       it('should return 500 and render error page when cannot retrieve claim', async () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
@@ -86,7 +86,7 @@ describe('Free mediation: can we use phone number page', () => {
       })
 
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
-      verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
+      verifyRedirectForPostWhenAlreadyPaidInFull(pagePath, {}, {}, () => sessionCookie)
 
       context('when response not submitted', () => {
         it('should return 500 and render error page when cannot retrieve claim', async () => {

@@ -46,7 +46,7 @@ describe('Defendant - when will you pay options', () => {
         idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
 
-      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath, {}, () => sessionCookie)
 
       context('when service is unhealthy', () => {
         it('should return 500 and render error page when cannot retrieve claim by external id', async () => {
@@ -98,7 +98,7 @@ describe('Defendant - when will you pay options', () => {
           idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
         })
 
-        verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
+        verifyRedirectForPostWhenAlreadyPaidInFull(pagePath, {}, {}, () => sessionCookie)
 
         context('when service is unhealthy', () => {
           it('should return 500 and render error page when cannot retrieve claim by external id', async () => {

@@ -39,7 +39,7 @@ describe('Statement of means', () => {
           idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
         })
 
-        verifyRedirectForGetWhenAlreadyPaidInFull(partnerPensionPage)
+        verifyRedirectForGetWhenAlreadyPaidInFull(partnerPensionPage, {}, () => sessionCookie)
 
         it('should return error page when unable to retrieve claim', async () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('Error')
@@ -85,7 +85,7 @@ describe('Statement of means', () => {
           idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
         })
 
-        verifyRedirectForPostWhenAlreadyPaidInFull(partnerPensionPage)
+        verifyRedirectForPostWhenAlreadyPaidInFull(partnerPensionPage, {}, {}, () => sessionCookie)
 
         it('should return error page when unable to retrieve claim', async () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('Error')

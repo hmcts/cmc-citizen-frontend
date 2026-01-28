@@ -65,7 +65,7 @@ describe('Defendant response: priority-debt', () => {
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
       checkErrorHandling(method)
-      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath, {}, () => sessionCookie)
 
       it('should render page when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
@@ -93,7 +93,7 @@ describe('Defendant response: priority-debt', () => {
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
       checkErrorHandling(method)
-      verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
+      verifyRedirectForPostWhenAlreadyPaidInFull(pagePath, {}, {}, () => sessionCookie)
 
       describe('validation should be triggered correctly', () => {
         beforeEach(() => {

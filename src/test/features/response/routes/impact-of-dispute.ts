@@ -43,7 +43,7 @@ describe('Defendant response: impact of dispute page', () => {
 
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
-      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath, {}, () => sessionCookie)
 
       context('when response and CCJ not submitted', () => {
         it('should return 500 and render error page when cannot retrieve claim', async () => {
@@ -99,7 +99,7 @@ describe('Defendant response: impact of dispute page', () => {
 
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
-      verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
+      verifyRedirectForPostWhenAlreadyPaidInFull(pagePath, {}, {}, () => sessionCookie)
 
       context('when response and CCJ not submitted', () => {
         it('should return 500 and render error page when cannot retrieve claim', async () => {

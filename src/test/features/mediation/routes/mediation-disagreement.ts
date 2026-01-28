@@ -42,7 +42,7 @@ describe('Free mediation: mediation disagreement page', () => {
       })
 
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
-      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath, {}, () => sessionCookie)
 
       context('when response not submitted', () => {
         it('should return 500 and render error page when cannot retrieve claim', async () => {
@@ -78,7 +78,7 @@ describe('Free mediation: mediation disagreement page', () => {
       })
 
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
-      verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
+      verifyRedirectForPostWhenAlreadyPaidInFull(pagePath, {}, {}, () => sessionCookie)
 
       context('when response not submitted', () => {
         context('when form is invalid', () => {

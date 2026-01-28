@@ -63,7 +63,7 @@ describe('Directions Questionnaire - hearing location', () => {
           idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
         })
 
-        verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
+        verifyRedirectForGetWhenAlreadyPaidInFull(pagePath, {}, () => sessionCookie)
 
         it('should render page when everything is fine and claim is created by defendant', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(defenceClaim)
@@ -187,7 +187,7 @@ describe('Directions Questionnaire - hearing location', () => {
           idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
         })
 
-        verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
+        verifyRedirectForPostWhenAlreadyPaidInFull(pagePath, {}, {}, () => sessionCookie)
       })
 
       context('when user authorised', () => {

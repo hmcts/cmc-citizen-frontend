@@ -55,7 +55,7 @@ describe('Directions questionnaire - expert evidence', () => {
           idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
         })
 
-        verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
+        verifyRedirectForGetWhenAlreadyPaidInFull(pagePath, {}, () => sessionCookie)
       })
 
       context('when user authorised', () => {
@@ -108,7 +108,7 @@ describe('Directions questionnaire - expert evidence', () => {
           idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
         })
 
-        verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
+        verifyRedirectForPostWhenAlreadyPaidInFull(pagePath, {}, {}, () => sessionCookie)
       })
 
       context('when user authorised', () => {

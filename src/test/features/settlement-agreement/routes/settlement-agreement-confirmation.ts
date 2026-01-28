@@ -64,10 +64,9 @@ describe('Claimant response: confirmation page', () => {
             ...settlementAgreementServiceMock.sampleSettlementAgreementOffer
           },
           claimantResponse: {
-            type: 'ACCEPTATION',
-            formaliseOption: 'SETTLEMENT'
+            type: 'ACCEPTATION', formaliseOption: 'SETTLEMENT'
           }
-        })
+        }, () => sessionCookie)
       })
     })
   })

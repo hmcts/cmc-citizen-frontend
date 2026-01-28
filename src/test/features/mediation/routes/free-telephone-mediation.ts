@@ -42,7 +42,7 @@ describe('Mediation: free telephne mediation page', () => {
       })
 
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
-      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath, {}, () => sessionCookie)
 
       context('when response not submitted', () => {
         it('should return 500 and render error page when cannot retrieve claim', async () => {
@@ -112,7 +112,7 @@ describe('Mediation: free telephne mediation page', () => {
         idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
 
-      verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
+      verifyRedirectForPostWhenAlreadyPaidInFull(pagePath, {}, {}, () => sessionCookie)
 
       it('should redirect to Confirm your telephone number page when everything is fine for the defendant (individual)', async () => {
         checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)

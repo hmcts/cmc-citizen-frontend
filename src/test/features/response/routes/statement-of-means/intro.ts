@@ -44,7 +44,7 @@ describe('Statement of means', () => {
           idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
         })
 
-        verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
+        verifyRedirectForGetWhenAlreadyPaidInFull(pagePath, {}, () => sessionCookie)
 
         it('should return error page when unable to retrieve claim', async () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('Error')
@@ -92,7 +92,7 @@ describe('Statement of means', () => {
 
         checkAlreadySubmittedGuard(app, method, pagePath)
         checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
-        verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
+        verifyRedirectForPostWhenAlreadyPaidInFull(pagePath, {}, {}, () => sessionCookie)
 
         it('should return 500 and render error page when cannot save draft', async () => {
           draftStoreServiceMock.resolveFind('response:full-admission', { statementOfMeans: undefined })

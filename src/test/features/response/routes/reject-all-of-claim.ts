@@ -49,7 +49,7 @@ describe('Defendant response: full admission options', () => {
       })
 
       checkAlreadySubmittedGuard(app, method, pagePath)
-      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath, {}, () => sessionCookie)
 
       context('when response not submitted', () => {
         it('should return 500 and render error page when cannot retrieve claim', async () => {
@@ -98,7 +98,7 @@ describe('Defendant response: full admission options', () => {
       })
 
       checkAlreadySubmittedGuard(app, method, pagePath)
-      verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
+      verifyRedirectForPostWhenAlreadyPaidInFull(pagePath, {}, {}, () => sessionCookie)
 
       context('when response not submitted', () => {
         it('should redirect to response type page when response type is not full admission', async () => {

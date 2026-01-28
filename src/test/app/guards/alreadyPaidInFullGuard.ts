@@ -1,6 +1,5 @@
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import 'test/routes/expectations'
-import { getSessionCookie } from 'test/auth-helper'
 import { MomentFactory } from 'shared/momentFactory'
 import * as request from 'supertest'
 import { app } from 'main/app'
@@ -8,13 +7,10 @@ import { expect } from 'chai'
 import { Paths as DashboardPaths } from 'dashboard/paths'
 import * as config from 'config'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
-
-export function verifyRedirectForGetWhenAlreadyPaidInFull (pagePath: string, claimOverride: any = {}) {
+/**
+ * Callers must pass getCookie (e.g. () => sessionCookie) so the test runs with the describe's session.
+ */
+export function verifyRedirectForGetWhenAlreadyPaidInFull (pagePath: string, claimOverride: any = {}, getCookie: () => string) {
   it('should redirect to claim status when claimant declared paid in full', async () => {
     claimStoreServiceMock.resolveRetrieveClaimByExternalId({
       ...claimOverride,
@@ -24,13 +20,13 @@ export function verifyRedirectForGetWhenAlreadyPaidInFull (pagePath: string, cla
 
     await request(app)
       .get(pagePath)
-      .set('Cookie', sessionCookie)
+      .set('Cookie', getCookie())
       .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.defendantPage
         .evaluateUri({ externalId })))
   })
 }
 
-export function verifyRedirectForPostWhenAlreadyPaidInFull (pagePath: string, claimOverride: any = {}, postBody: any = {}) {
+export function verifyRedirectForPostWhenAlreadyPaidInFull (pagePath: string, claimOverride: any = {}, postBody: any = {}, getCookie: () => string) {
   it('should redirect to claim status when claimant declared paid in full', async () => {
     claimStoreServiceMock.resolveRetrieveClaimByExternalId({
       ...claimOverride,
@@ -40,7 +36,7 @@ export function verifyRedirectForPostWhenAlreadyPaidInFull (pagePath: string, cl
 
     await request(app)
       .post(pagePath)
-      .set('Cookie', sessionCookie)
+      .set('Cookie', getCookie())
       .send(postBody)
       .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.defendantPage
         .evaluateUri({ externalId })))

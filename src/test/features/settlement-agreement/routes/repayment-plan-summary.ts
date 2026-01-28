@@ -87,10 +87,9 @@ describe('Settlement agreement: repayment plan summary page', () => {
             ...settlementAgreementServiceMock.sampleSettlementAgreementOffer
           },
           claimantResponse: {
-            type: 'ACCEPTATION',
-            formaliseOption: 'SETTLEMENT'
+            type: 'ACCEPTATION', formaliseOption: 'SETTLEMENT'
           }
-        })
+        }, () => sessionCookie)
       })
     })
   })

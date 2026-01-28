@@ -91,7 +91,7 @@ describe('Defendant response: send your response by email', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath, {}, () => sessionCookie)
     })
   })
 })

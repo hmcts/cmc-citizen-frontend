@@ -40,7 +40,7 @@ describe('Defendant response: confirmation page', () => {
       })
 
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
-      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath, {}, () => sessionCookie)
 
       it('when part admit pay immediately should render page when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.samplePartialAdmissionWithPayImmediatelyDataV2())

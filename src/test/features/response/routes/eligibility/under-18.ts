@@ -44,6 +44,6 @@ describe('Defendant response: under 18', () => {
         .expect(res => expect(res).to.be.successful.withText('Contact the court'))
     })
 
-    verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
+    verifyRedirectForGetWhenAlreadyPaidInFull(pagePath, {}, () => sessionCookie)
   })
 })

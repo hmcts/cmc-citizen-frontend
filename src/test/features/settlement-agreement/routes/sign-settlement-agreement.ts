@@ -69,7 +69,7 @@ describe('Settlement agreement: sign settlement agreement page', () => {
             .expect(res => expect(res).to.be.successful.withText('Respond to the settlement agreement'))
         })
 
-        verifyRedirectForGetWhenAlreadyPaidInFull(pagePath, claim)
+        verifyRedirectForGetWhenAlreadyPaidInFull(pagePath, claim, () => sessionCookie)
       })
     })
   })
@@ -143,7 +143,7 @@ describe('Settlement agreement: sign settlement agreement page', () => {
                   .evaluateUri({ externalId: externalId })))
           })
 
-          verifyRedirectForPostWhenAlreadyPaidInFull(pagePath, claim, { option: 'yes' })
+          verifyRedirectForPostWhenAlreadyPaidInFull(pagePath, claim, { option: 'yes' }, () => sessionCookie)
         })
       })
     })
