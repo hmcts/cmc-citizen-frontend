@@ -24,15 +24,14 @@ import * as sinon from 'sinon'
 
 const mockLaunchDarklyClient: LaunchDarklyClient = mock(LaunchDarklyClient)
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const pageContent: string = 'Total amount you’re claiming'
 const pagePath: string = ClaimPaths.totalPage.uri
 
 describe('Claim issue: total page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   let newClaimFeesEnabledStub: sinon.SinonStub

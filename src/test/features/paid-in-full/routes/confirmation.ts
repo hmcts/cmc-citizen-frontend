@@ -13,16 +13,15 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkNotClaimantInCaseGuard } from './checks/not-claimant-in-case-check'
 import { Paths } from 'paid-in-full/paths'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.datePaidPage.evaluateUri({ externalId: externalId })
 
 describe('Paid In Full: confirmation page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

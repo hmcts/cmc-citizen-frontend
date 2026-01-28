@@ -14,15 +14,14 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 
 const externalId = '400f4c57-9684-49c0-adb4-4cf46579d6dc'
 
 describe('Claim issue: HWF Draft receipt', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET HWF draft claim', () => {

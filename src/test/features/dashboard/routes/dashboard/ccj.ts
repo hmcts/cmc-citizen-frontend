@@ -32,11 +32,6 @@ import {
   ccjDeterminationBySpecifiedDate
 } from 'test/data/entity/ccjData'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 
 const fullAdmissionClaim = {
   ...claimStoreServiceMock.sampleClaimObj,
@@ -431,6 +426,10 @@ const testData = [
 ]
 
 describe('Dashboard page ccj dashboard', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

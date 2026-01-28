@@ -29,11 +29,6 @@ const claimWithDQ = {
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const pagePath = Paths.otherWitnessesPage.evaluateUri({ externalId: externalId })
 const vulnerabilityQuestionsPage = Paths.vulnerabilityQuestionsPage.evaluateUri({ externalId: externalId })
 
@@ -48,6 +43,10 @@ function checkAccessGuard (app: any, method: string) {
 }
 
 describe('Directions Questionnaire - other witnesses page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
     attachDefaultHooks(app)
 

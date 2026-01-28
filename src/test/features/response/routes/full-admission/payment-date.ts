@@ -26,11 +26,6 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const pagePath = FullAdmissionPaths.paymentDatePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 const draft = _.cloneDeep(draftStoreServiceMock.sampleFullAdmissionResponseDraftObj)
@@ -48,6 +43,10 @@ function nextDay () {
 }
 
 describe('Pay by set date: payment date', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

@@ -27,11 +27,6 @@ const claimWithDQ = {
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const claim = createClaim(PartyType.INDIVIDUAL, PartyType.ORGANISATION, MadeBy.CLAIMANT)
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const hearingDatesPath = Paths.hearingDatesPage.evaluateUri({ externalId: externalId })
 
 const unavailableDates: LocalDate[] = [
@@ -52,6 +47,10 @@ function checkAccessGuard (app: any, method: string, path: string) {
 
 if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
   describe('Directions Questionnaire - hearing dates picker widget', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
     attachDefaultHooks(app)
 
     describe('delete a date', () => {

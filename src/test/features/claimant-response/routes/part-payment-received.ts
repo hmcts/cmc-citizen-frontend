@@ -14,11 +14,6 @@ import { getSessionCookie } from 'test/auth-helper'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { FreeMediationOption } from 'forms/models/freeMediation'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.partPaymentReceivedPage.evaluateUri({ externalId: externalId })
 
@@ -49,6 +44,10 @@ function checkPaymentLessThanClaimAmountGuard (app: any, method: string, pagePat
 }
 
 describe('Claimant Response: part payment received page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

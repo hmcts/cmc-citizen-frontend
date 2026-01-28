@@ -22,11 +22,6 @@ const sampleClaimObj = claimStoreServiceMock.sampleClaimObj
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const paidAmountPage = Paths.paidAmountPage.uri.replace(':externalId', externalId)
 const pagePath = Paths.dateOfBirthPage.uri.replace(':externalId', externalId)
 
@@ -52,6 +47,10 @@ function checkAccessGuard (app: any, method: string) {
 }
 
 describe('CCJ - defendant date of birth', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

@@ -14,15 +14,14 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 
 const pagePath = BreathingSpacePaths.bsLiftCheckAnswersPage.uri
 
 describe('Breathing Space: Lift check-answer page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
   context('when user authorised', () => {
     beforeEach(() => {

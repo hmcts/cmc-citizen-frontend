@@ -15,11 +15,6 @@ import { sampleClaimDraftObj } from 'test/http-mocks/draft-store'
 import * as data from 'test/data/entity/settlement'
 import { MomentFactory } from 'shared/momentFactory'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const externalId: string = sampleClaimDraftObj.externalId
 
 const claimantPagePath = Paths.claimantPage.evaluateUri({ externalId })
@@ -242,6 +237,10 @@ function mediationDQEnabledClaimDetails () {
 }
 
 describe('Settlement claim statuses', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   beforeEach(() => app.locals.csrf = 'dummy-token')
 
   mediationDQEnabledClaimDetails().forEach(data => {

@@ -30,11 +30,6 @@ const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const claim = createClaim(PartyType.INDIVIDUAL, PartyType.ORGANISATION, MadeBy.CLAIMANT)
 const pagePath = Paths.hearingDatesPage.evaluateUri({ externalId: externalId })
 const defendantTaskListPage = ResponsePaths.taskListPage.evaluateUri({ externalId: externalId })
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 
 function checkAccessGuard (app: any, method: string) {
   it('should redirect to dashboard page when DQ is not enabled for claim', async () => {
@@ -47,6 +42,10 @@ function checkAccessGuard (app: any, method: string) {
 }
 
 describe('Directions Questionnaire - hearing unavailable dates', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
     attachDefaultHooks(app)
 

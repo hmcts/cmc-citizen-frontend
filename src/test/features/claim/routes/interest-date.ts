@@ -16,16 +16,15 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { InterestDateType } from 'common/interestDateType'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const pageContent: string = 'When are you claiming interest from?'
 const pagePath: string = ClaimPaths.interestDatePage.uri
 
 describe('Claim issue: interest date page', () => {
 
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

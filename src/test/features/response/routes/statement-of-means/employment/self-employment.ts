@@ -18,11 +18,6 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const pagePath: string = StatementOfMeansPaths.selfEmploymentPage.evaluateUri(
   { externalId: claimStoreServiceMock.sampleClaimObj.externalId }
 )
@@ -39,6 +34,10 @@ const draftOverride = {
 
 describe('Defendant response: Statement of means: self-employment', () => {
 
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

@@ -18,15 +18,14 @@ import { app } from 'main/app'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { MomentFactory } from 'shared/momentFactory'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 
 const pagePath = Paths.datePaidPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 describe('Claimant paid in full: money received on page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

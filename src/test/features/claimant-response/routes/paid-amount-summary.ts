@@ -17,17 +17,16 @@ import { checkAuthorizationGuards } from 'test/features/ccj/routes/checks/author
 import { checkNotClaimantInCaseGuard } from 'test/features/ccj/routes/checks/not-claimant-in-case-check'
 import { sampleFullAdmissionWithPaymentBySetDateResponseObj } from '../../../http-mocks/claim-store'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = CCJPaths.paidAmountSummaryPage.evaluateUri({ externalId: externalId })
 
 const heading: string = 'Judgment amount'
 
 describe('Claimant Response - paid amount summary page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

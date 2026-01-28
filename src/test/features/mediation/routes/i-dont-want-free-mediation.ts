@@ -20,15 +20,14 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
 import { NoMediationReasonOptions } from 'features/mediation/form/models/NoMediationReasonOptions'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const pagePath = MediationPaths.iDontWantFreeMediationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 const pageHeading = 'I do not agree to free mediation'
 
 describe('Free mediation: I dont want free mediation page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

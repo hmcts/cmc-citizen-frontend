@@ -45,11 +45,6 @@ import { User } from 'idam/user'
 const mockLaunchDarklyClient: LaunchDarklyClient = mock(LaunchDarklyClient)
 const draftType = 'claim'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const event: string = config.get<string>('fees.issueFee.event')
 const channel: string = config.get<string>('fees.channel.online')
 const failureMessage: string = 'failure message'
@@ -60,6 +55,10 @@ let testRoles: string[]
 let testUser: User
 
 describe('Claim issue: initiate payment receiver', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   checkAuthorizationGuards(app, 'get', Paths.startPaymentReceiver.uri)

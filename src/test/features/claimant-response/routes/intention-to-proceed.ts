@@ -17,17 +17,16 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath: string = Paths.intentionToProceedPage.evaluateUri({ externalId: externalId })
 const pageContent: string = 'Do you want to proceed with the claim?'
 const defendantPartialAdmissionResponse = claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj
 
 describe('Claimant response: intention to proceed page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

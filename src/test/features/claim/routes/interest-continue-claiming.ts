@@ -15,15 +15,14 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { YesNoOption } from 'models/yesNoOption'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const pageContent: string = 'Continue to claim interest after you submit your claim?'
 const pagePath: string = ClaimPaths.interestContinueClaimingPage.uri
 
 describe('Claim issue: interest continue claiming page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

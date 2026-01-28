@@ -14,15 +14,14 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import { checkAuthorizationGuards } from 'test/routes/authorization-check'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const pagePath: string = Paths.createClaimDraftPage.uri
 const pageText: string = 'Create Claim Draft'
 
 describe('Testing Support: Create Claim Draft', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

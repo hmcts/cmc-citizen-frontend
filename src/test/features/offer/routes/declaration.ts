@@ -13,11 +13,6 @@ import { checkAuthorizationGuards } from 'test/features/offer/routes/checks/auth
 import { StatementType } from 'offer/form/models/statementType'
 import { MadeBy } from 'claims/models/madeBy'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const externalId = '400f4c57-9684-49c0-adb4-4cf46579d6dc'
 const declarationPage = OfferPaths.declarationPage.evaluateUri({ externalId: externalId })
 const acceptedPage = OfferPaths.acceptedPage.evaluateUri({ externalId: externalId })
@@ -25,6 +20,10 @@ const settledPage = OfferPaths.settledPage.evaluateUri({ externalId: externalId 
 const pageHeading: string = 'Sign a settlement agreement'
 
 describe('declaration page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

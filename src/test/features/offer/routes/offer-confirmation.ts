@@ -11,15 +11,14 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkAuthorizationGuards } from 'test/features/offer/routes/checks/authorization-check'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const confirmationPage = OfferPaths.offerConfirmationPage.evaluateUri({ externalId: externalId })
 
 describe('Offer confirmation page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

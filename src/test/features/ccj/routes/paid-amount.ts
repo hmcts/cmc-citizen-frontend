@@ -17,11 +17,6 @@ import { checkAuthorizationGuards } from 'test/features/ccj/routes/checks/author
 import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 import { checkNotClaimantInCaseGuard } from 'test/features/ccj/routes/checks/not-claimant-in-case-check'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.paidAmountPage.evaluateUri({ externalId: externalId })
 const paidAmountSummaryPage = Paths.paidAmountSummaryPage.evaluateUri({ externalId: externalId })
@@ -33,6 +28,10 @@ const validFormData = {
 }
 
 describe('CCJ - paid amount page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

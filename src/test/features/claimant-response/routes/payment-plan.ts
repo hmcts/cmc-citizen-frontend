@@ -20,11 +20,6 @@ import { PaymentType } from 'shared/components/payment-intention/model/paymentOp
 import { MomentFactory } from 'shared/momentFactory'
 import { Moment } from 'moment'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.paymentPlanPage.evaluateUri({ externalId: externalId })
 
@@ -42,6 +37,10 @@ const draftOverride: object = {
 }
 
 describe('Claimant response: payment plan', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

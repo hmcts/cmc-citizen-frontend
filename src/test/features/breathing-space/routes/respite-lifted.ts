@@ -15,15 +15,14 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const bsLiftPagePath = Paths.bsLiftPage.evaluateUri({ externalId: draftStoreServiceMock.sampleClaimDraftObj.externalId })
 
 describe('Lift breathing space: Lift date page', () => {
 
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   describe('on GET', () => {
     attachDefaultHooks(app)
     it('should render page when everything is fine', async () => {

@@ -18,14 +18,13 @@ import { checkAuthorizationGuards } from 'test/routes/authorization-check'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const pagePath = Paths.datePaidPage.evaluateUri({ externalId: externalId })
 
 describe('claim - date money was received', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

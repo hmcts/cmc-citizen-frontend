@@ -20,11 +20,6 @@ import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 import { MadeBy } from 'claims/models/madeBy'
 import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.redeterminationPage.evaluateUri({ externalId: externalId, madeBy: MadeBy.CLAIMANT.value })
 const confirmationPage = Paths.redeterminationConfirmationPage.evaluateUri({ externalId: externalId })
@@ -34,6 +29,10 @@ const validFormData = {
 } as ReDetermination
 
 describe('CCJ - re-determination page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

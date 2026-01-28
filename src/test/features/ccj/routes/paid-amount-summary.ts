@@ -17,15 +17,14 @@ import { checkAuthorizationGuards } from 'test/features/ccj/routes/checks/author
 import { checkNotClaimantInCaseGuard } from 'test/features/ccj/routes/checks/not-claimant-in-case-check'
 import { MomentFactory } from 'shared/momentFactory'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.paidAmountSummaryPage.evaluateUri({ externalId: externalId })
 
 describe('CCJ - paid amount summary page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

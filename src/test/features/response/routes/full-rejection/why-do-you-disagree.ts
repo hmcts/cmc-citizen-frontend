@@ -20,11 +20,6 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = FullRejectionPaths.whyDoYouDisagreePage.evaluateUri({ externalId: externalId })
 
@@ -33,6 +28,10 @@ const header: string = 'Why do you disagree with the claim amount?'
 
 describe('Defendant: full reject - why do you disagree?', () => {
 
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

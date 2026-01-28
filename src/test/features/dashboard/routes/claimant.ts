@@ -19,16 +19,15 @@ import { sampleClaimDraftObj } from 'test/http-mocks/draft-store'
 import { company, individual, organisation, soleTrader } from 'test/data/entity/party'
 import { ResponseMethod } from 'claims/models/response/responseMethod'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 
 const draftPagePath = Paths.claimantPage.evaluateUri({ externalId: 'draft' })
 const claimPagePath = Paths.claimantPage.evaluateUri({ externalId: sampleClaimDraftObj.externalId })
 
 describe('Dashboard - claimant page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

@@ -12,16 +12,15 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const pageContent: string = 'When do you want to stop claiming interest?'
 const pagePath: string = ClaimPaths.interestEndDatePage.uri
 
 describe('Claim issue: interest end date page', () => {
 
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

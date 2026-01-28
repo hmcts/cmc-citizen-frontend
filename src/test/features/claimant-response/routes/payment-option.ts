@@ -18,17 +18,16 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
 import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.alternateRepaymentPlanPage.evaluateUri({ externalId: externalId })
 
 const heading: string = 'How do you want the defendant to pay?'
 
 describe('Claimant response: payment options', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

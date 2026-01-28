@@ -14,16 +14,15 @@ import { checkEligibilityGuards } from 'test/features/claim/routes/checks/eligib
 
 import { EvidenceType } from 'forms/models/evidenceType'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const pagePath: string = Paths.evidencePage.uri
 const pageContent: string = 'List any evidence'
 import { FeatureToggles } from 'utils/featureToggles'
 
 describe('Claim issue: evidence', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

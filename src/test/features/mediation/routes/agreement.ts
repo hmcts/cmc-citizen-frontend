@@ -10,12 +10,6 @@ import { Paths } from 'mediation/paths'
 import { app } from 'main/app'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
-
 const pagePath = Paths.mediationAgreementDocument.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 const claimWithDQ = {
   ...claimStoreServiceMock.sampleClaimObj,
@@ -23,6 +17,10 @@ const claimWithDQ = {
 }
 
 describe('Free Mediation: download agreement', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

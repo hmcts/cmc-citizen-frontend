@@ -19,11 +19,6 @@ import { MomentFactory } from 'shared/momentFactory'
 import { LocalDate } from 'forms/models/localDate'
 import { PaymentDate } from 'shared/components/payment-intention/model/paymentDate'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = ClaimantResponsePaths.courtOfferedSetDatePage.evaluateUri({ externalId: externalId })
 const taskListPagePath = ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: externalId })
@@ -36,6 +31,10 @@ const defendantPartialAdmissionResponse = claimStoreServiceMock.samplePartialAdm
 const defendantFullAdmissionResponse = claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj
 
 describe('Claimant response: court offered set date page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

@@ -14,11 +14,6 @@ import * as draftStoreMock from 'test/http-mocks/draft-store'
 import * as data from 'test/data/entity/settlement'
 import { attachDefaultHooks } from 'test/routes/hooks'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 
 const pagePath = Paths.dashboardPage.uri
 
@@ -155,6 +150,10 @@ function testData () {
 }
 
 describe('Settlement dashboard statuses dashboard', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   testData().forEach(data => {

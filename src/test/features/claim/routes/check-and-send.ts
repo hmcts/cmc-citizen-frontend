@@ -35,17 +35,16 @@ import * as sinon from 'sinon'
 
 const mockLaunchDarklyClient: LaunchDarklyClient = mock(LaunchDarklyClient)
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const expectedLink = ({ href= '', text= '', hiddenText= '' }) => {
   return `<a class="govuk-link" href="${href}">${text} <span class="govuk-visually-hidden">${hiddenText}</span></a>`
 }
 const hiddenTextFullName = 'full name'
 
 describe('Claim issue: check and send page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

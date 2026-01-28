@@ -15,13 +15,12 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
-let sessionCookie: string
+
+describe('Claim issue: resolving this dispute page', () => {
+  let sessionCookie: string
   beforeEach(async () => {
     sessionCookie = await getSessionCookie(app)
   })
-
-
-describe('Claim issue: resolving this dispute page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {

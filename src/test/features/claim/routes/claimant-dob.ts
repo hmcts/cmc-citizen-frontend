@@ -17,13 +17,12 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { Moment } from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
 
-let sessionCookie: string
+
+describe('Claim issue: claimant date of birth page', () => {
+  let sessionCookie: string
   beforeEach(async () => {
     sessionCookie = await getSessionCookie(app)
   })
-
-
-describe('Claim issue: claimant date of birth page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {

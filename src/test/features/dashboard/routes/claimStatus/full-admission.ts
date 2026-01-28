@@ -45,11 +45,6 @@ import {
 
 import { getSessionCookie } from 'test/auth-helper'
 
-let sessionCookie: string
-beforeEach(async () => {
-  sessionCookie = await getSessionCookie(app)
-})
-
 const fullAdmissionClaim = {
   ...claimStoreServiceMock.sampleClaimObj,
   responseDeadline: MomentFactory.currentDate().add(5, 'days'),
@@ -651,6 +646,10 @@ const claimPagePath = Paths.claimantPage.evaluateUri({ externalId: fullAdmission
 const defendantPagePath = Paths.defendantPage.evaluateUri({ externalId: fullAdmissionClaim.externalId })
 
 describe('Dashboard page full admission claim status', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

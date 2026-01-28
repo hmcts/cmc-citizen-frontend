@@ -45,11 +45,6 @@ import {
   settlementOfferBySetDate
 } from 'test/data/entity/partAdmitData'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 
 function partAdmissionClaim () {
   return {
@@ -916,6 +911,10 @@ const claimPagePath = Paths.claimantPage.evaluateUri({ externalId: partAdmission
 const defendantPagePath = Paths.defendantPage.evaluateUri({ externalId: partAdmissionClaim().externalId })
 
 describe('Dashboard page part admission claim status', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

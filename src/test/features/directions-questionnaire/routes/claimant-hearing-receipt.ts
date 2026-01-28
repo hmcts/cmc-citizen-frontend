@@ -10,11 +10,6 @@ import { Paths } from 'directions-questionnaire/paths'
 import { app } from 'main/app'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 
 const pagePath = Paths.claimantHearingRequirementsReceiver.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 const claimWithDQ = {
@@ -23,6 +18,10 @@ const claimWithDQ = {
 }
 
 describe('Claimant response: confirmation page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

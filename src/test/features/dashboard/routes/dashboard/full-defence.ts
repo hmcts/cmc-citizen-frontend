@@ -40,11 +40,6 @@ import { YesNoOption } from 'models/yesNoOption'
 import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
 import { ResponseMethod } from 'claims/models/response/responseMethod'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 
 function fullDefenceClaim () {
   return {
@@ -343,6 +338,10 @@ function testData () {
 }
 
 describe('Dashboard page full defence dashboard', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

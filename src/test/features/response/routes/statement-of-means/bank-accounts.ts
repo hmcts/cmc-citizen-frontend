@@ -19,17 +19,16 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const pagePath: string = StatementOfMeansPaths.bankAccountsPage.evaluateUri(
   { externalId: claimStoreServiceMock.sampleClaimObj.externalId }
 )
 
 describe('Defendant response: Statement of means: bank accounts', () => {
 
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

@@ -14,15 +14,14 @@ import { getSessionCookie } from 'test/auth-helper'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 
 const externalId = '400f4c57-9684-49c0-adb4-4cf46579d6dc'
 
 describe('Claim issue: confirmation page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

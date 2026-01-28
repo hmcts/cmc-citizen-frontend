@@ -20,16 +20,15 @@ import {
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
 const externalId: string = claimStoreServiceMock.sampleClaimObj.externalId
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const pagePath: string = StatementOfMeansPaths.unemployedPage.evaluateUri({ externalId: externalId })
 const nextPagePath: string = StatementOfMeansPaths.courtOrdersPage.evaluateUri({ externalId: externalId })
 
 describe('Defendant response: Statement of means: unemployment page', () => {
 
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

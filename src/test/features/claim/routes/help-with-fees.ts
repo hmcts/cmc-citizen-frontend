@@ -13,14 +13,13 @@ import { YesNoOption } from 'models/yesNoOption'
 
 const pagePath: string = ClaimPaths.helpWithFeesPage.uri
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const pageContent: string = 'Do you have a Help With Fees reference number?'
 
 describe('Claim issue: help with fees page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   context('on GET', () => {

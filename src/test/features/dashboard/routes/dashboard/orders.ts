@@ -21,11 +21,6 @@ import { baseResponseData, defenceWithDisputeData } from 'test/data/entity/respo
 import { respondedAt } from 'test/data/entity/fullDefenceData'
 import { MadeBy } from 'claims/models/madeBy'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 
 function ordersClaim () {
   return {
@@ -111,6 +106,10 @@ function testData () {
 }
 
 describe('Dashboard page orders dashboard', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

@@ -13,11 +13,6 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { Paths } from 'claim-documents/paths'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
@@ -45,6 +40,10 @@ const claimDocuments = {
 }
 
 describe('Document Download', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

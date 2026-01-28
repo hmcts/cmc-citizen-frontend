@@ -16,14 +16,13 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkNotClaimantInCaseGuard } from 'test/features/ccj/routes/checks/not-claimant-in-case-check'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const pagePath = CCJPaths.ccjConfirmationPage.evaluateUri({ externalId: externalId })
 
 describe('CCJ: confirmation page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

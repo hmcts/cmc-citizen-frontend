@@ -17,11 +17,6 @@ import { checkAuthorizationGuards } from 'test/common/checks/authorization-check
 import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
 import { MomentFactory } from 'shared/momentFactory'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = ClaimantResponsePaths.courtOfferedInstalmentsPage.evaluateUri({ externalId: externalId })
 const taskListPagePath = ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: externalId })
@@ -52,6 +47,10 @@ const draftOverrideForClaimantReponse = {
 }
 
 describe('Claimant Response - Court offer', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

@@ -18,17 +18,16 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const pagePath: string = StatementOfMeansPaths.priorityDebtsPage.evaluateUri(
   { externalId: claimStoreServiceMock.sampleClaimObj.externalId }
 )
 
 function checkErrorHandling (method: string) {
   describe('errors should be handled correctly', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
     it('should return 500 and render error page when cannot retrieve claim', async () => {
       claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 

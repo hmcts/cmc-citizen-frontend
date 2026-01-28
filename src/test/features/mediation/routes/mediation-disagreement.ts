@@ -22,15 +22,14 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const pagePath = MediationPaths.mediationDisagreementPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 const pageHeading = 'You chose not to try free mediation'
 
 describe('Free mediation: mediation disagreement page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

@@ -30,11 +30,6 @@ const claim = createClaim(PartyType.INDIVIDUAL, PartyType.ORGANISATION, MadeBy.C
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const expertPath = Paths.expertPage.evaluateUri({ externalId: externalId })
 const pagePath = Paths.hearingLocationResultPage.evaluateUri({ externalId: externalId }) + '?name=court'
 
@@ -49,6 +44,10 @@ function checkAccessGuard (app: any, method: string) {
 }
 
 describe('Directions Questionnaire - court search', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
     attachDefaultHooks(app)
 

@@ -20,11 +20,6 @@ import { baseResponseData, defenceWithDisputeData } from 'test/data/entity/respo
 import { respondedAt } from 'test/data/entity/fullDefenceData'
 import { MadeBy } from 'claims/models/madeBy'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 
 function ordersClaim () {
   return {
@@ -216,6 +211,10 @@ const claimPagePath = Paths.claimantPage.evaluateUri({ externalId: ordersClaim()
 const defendantPagePath = Paths.defendantPage.evaluateUri({ externalId: ordersClaim().externalId })
 
 describe('Dashboard page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

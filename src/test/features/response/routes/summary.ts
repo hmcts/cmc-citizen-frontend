@@ -16,14 +16,13 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const pagePath: string = ResponsePaths.summaryPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 describe('Defendant response: summary page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

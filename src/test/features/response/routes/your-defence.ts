@@ -23,15 +23,14 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const expectedText: string = 'Why do you disagree with the claim'
 
 const pagePath = ResponsePaths.defencePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 describe('Defendant response: defence page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

@@ -22,11 +22,6 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = PartAdmissionPaths.alreadyPaidPage.evaluateUri({ externalId: externalId })
 
@@ -34,6 +29,10 @@ const validFormData = { option: YesNoOption.YES.option }
 
 describe('Defendant: partial admission - already paid?', () => {
 
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

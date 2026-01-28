@@ -14,16 +14,15 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const headerText: string = 'Reference number must not be more than 16 characters'
 const bsNumberPagePath = BreathingSpacePaths.referencNumberPage.evaluateUri({ externalId: draftStoreServiceMock.sampleClaimDraftObj.externalId })
 
 describe('Breathing space: reference number page page', () => {
 
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   describe('on GET', () => {
     it('should render page when everything is fine', async () => {
       checkAuthorizationGuards(app, 'get', bsNumberPagePath)

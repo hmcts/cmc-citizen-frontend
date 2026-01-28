@@ -34,11 +34,6 @@ function statesPaidClaim () {
   }
 }
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 
 function testData () {
   return [
@@ -96,6 +91,10 @@ function testData () {
 }
 
 describe('Dashboard page states paid dashboard', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

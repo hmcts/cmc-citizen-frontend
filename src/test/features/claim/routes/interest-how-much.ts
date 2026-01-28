@@ -15,16 +15,15 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { InterestRateOption } from 'claim/form/models/interestRateOption'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const pageContent: string = 'How much do you want to continue claiming?'
 const pagePath: string = ClaimPaths.interestHowMuchPage.uri
 
 describe('Claim issue: interest how much page', () => {
 
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

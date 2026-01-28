@@ -13,14 +13,13 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 
 describe('Enter breathing space: Respite end date page', () => {
 
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   describe('on GET', () => {
     attachDefaultHooks(app)
     it('should render page when everything is fine', async () => {

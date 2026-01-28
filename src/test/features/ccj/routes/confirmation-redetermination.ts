@@ -19,14 +19,13 @@ import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 import { MadeBy } from 'claims/models/madeBy'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const pagePath = CCJPaths.redeterminationConfirmationPage.evaluateUri({ externalId: externalId })
 
 describe('CCJ: redetermination confirmation page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

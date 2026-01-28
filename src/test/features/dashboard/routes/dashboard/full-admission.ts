@@ -45,11 +45,6 @@ import {
 
 } from 'test/data/entity/fullAdmission'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 
 const fullAdmissionClaim = {
   ...claimStoreServiceMock.sampleClaimObj,
@@ -370,6 +365,10 @@ function testData () {
 }
 
 describe('Dashboard page full admission dashboard', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

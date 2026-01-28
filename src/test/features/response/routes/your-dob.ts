@@ -24,15 +24,14 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const pagePath = ResponsePaths.defendantDateOfBirthPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 const expectedText: string = 'Enter your date of birth'
 
 describe('Defendant user details: your date of birth page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

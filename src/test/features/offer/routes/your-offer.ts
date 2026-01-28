@@ -14,11 +14,6 @@ import { checkAuthorizationGuards } from 'test/features/offer/routes/checks/auth
 
 import { LocalDate } from 'forms/models/localDate'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const confirmationPage = OfferPaths.offerConfirmationPage.evaluateUri({ externalId: externalId })
 const offerPage = OfferPaths.offerPage.evaluateUri({ externalId: externalId })
@@ -29,6 +24,10 @@ const validFormData = {
 }
 
 describe('Offer page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

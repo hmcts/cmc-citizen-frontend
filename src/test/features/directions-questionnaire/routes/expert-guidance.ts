@@ -22,11 +22,6 @@ import {
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const pagePath = Paths.expertGuidancePage.evaluateUri({ externalId })
 
 const claimWithDQ = {
@@ -45,6 +40,10 @@ function checkAccessGuard (app: any, method: string) {
 }
 
 describe('Directions Questionnaire - expert guidance page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
     attachDefaultHooks(app)
 

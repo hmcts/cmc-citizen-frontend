@@ -21,15 +21,14 @@ import {
 } from 'test/http-mocks/claim-store'
 import { RoutablePath } from 'shared/router/routablePath'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const externalId = '400f4c57-9684-49c0-adb4-4cf46579d6dc'
 const path: RoutablePath = ClaimDocumentsPaths.sealedClaimPdfReceiver
 
 describe('Sealed Claim: pdf', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

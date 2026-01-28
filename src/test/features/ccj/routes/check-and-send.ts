@@ -22,16 +22,15 @@ import { checkNotClaimantInCaseGuard } from 'test/features/ccj/routes/checks/not
 import { MomentFactory } from 'shared/momentFactory'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const pagePath = CCJPaths.checkAndSendPage.evaluateUri({ externalId: externalId })
 const dashboardUri = Paths.dashboardPage.uri
 const confirmationPage = CCJPaths.ccjConfirmationPage.evaluateUri({ externalId: externalId })
 
 describe('CCJ: check and send page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

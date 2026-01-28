@@ -15,11 +15,6 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const input = {
   type: 'individual',
   firstName: 'John',
@@ -32,6 +27,10 @@ const theirLastName: string = 'Last name'
 const theirTitle: string = 'Title'
 
 describe('defendant as individual details page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

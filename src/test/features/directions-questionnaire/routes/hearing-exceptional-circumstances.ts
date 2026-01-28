@@ -31,11 +31,6 @@ import {
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const hearingLocationPage = Paths.hearingLocationPage.evaluateUri({ externalId: externalId })
 const expertPath = Paths.expertPage.evaluateUri({ externalId: externalId })
 const pagePath = Paths.hearingExceptionalCircumstancesPage.evaluateUri({ externalId: externalId })
@@ -129,6 +124,10 @@ function checkAccessGuards (app: any, method: string) {
     })
 
     describe('should redirect to dashboard page when user is not authorised to view page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
       context('when the user is the claimant', () => {
         describe('when the claim has a defendant response', () => {
           it('Individual vs Individual should access page', async () => {

@@ -22,11 +22,6 @@ const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.expertEvidencePage.evaluateUri({ externalId: externalId })
 const whyExpertIsNeededPage = Paths.whyExpertIsNeededPage.evaluateUri({ externalId: externalId })
 const selfWitnessPage = Paths.selfWitnessPage.evaluateUri({ externalId: externalId })
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const claimWithDQ = {
   ...claimStoreServiceMock.sampleClaimObj,
   ...{ features: ['directionsQuestionnaire'] }
@@ -43,6 +38,10 @@ function checkAccessGuard (app: any, method: string) {
 }
 
 describe('Directions questionnaire - expert evidence', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
     attachDefaultHooks(app)
 

@@ -15,11 +15,6 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkAuthorizationGuards } from 'test/features/dashboard/routes/checks/authorization-check'
 import { MomentFactory } from 'shared/momentFactory'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 
 const testData = [
   {
@@ -76,6 +71,10 @@ const claimPagePath = Paths.claimantPage.evaluateUri({ externalId: claimStoreSer
 const defendantPagePath = Paths.defendantPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimIssueObj.externalId })
 
 describe('Dashboard page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

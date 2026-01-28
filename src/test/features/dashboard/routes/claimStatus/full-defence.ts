@@ -40,11 +40,6 @@ import { YesNoOption } from 'models/yesNoOption'
 import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
 import { ResponseMethod } from 'claims/models/response/responseMethod'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 
 function fullDefenceClaim () {
   return {
@@ -762,6 +757,10 @@ const claimPagePath = Paths.claimantPage.evaluateUri({ externalId: fullDefenceCl
 const defendantPagePath = Paths.defendantPage.evaluateUri({ externalId: fullDefenceClaim().externalId })
 
 describe('Dashboard page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

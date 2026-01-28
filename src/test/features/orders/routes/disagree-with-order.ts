@@ -18,17 +18,16 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
 import { FeatureToggles } from 'utils/featureToggles'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const externalId = '400f4c57-9684-49c0-adb4-4cf46579d6dc'
 const pagePath = OrdersPaths.disagreeReasonPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 const pageTitle = 'How and why do you want the order changed?'
 
 if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
   describe('Orders: why do you disagree with the order page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
     attachDefaultHooks(app)
 
     describe('on GET', () => {

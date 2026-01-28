@@ -17,17 +17,16 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 import { FormaliseRepaymentPlanOption } from 'features/claimant-response/form/models/formaliseRepaymentPlanOption'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath: string = Paths.chooseHowToProceedPage.evaluateUri({ externalId: externalId })
 const pageContent: string = 'Choose how to proceed'
 const defendantPartialAdmissionResponse = claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj
 
 describe('Claimant response: choose how to proceed page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

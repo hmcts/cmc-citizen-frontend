@@ -10,16 +10,15 @@ import { app } from 'main/app'
 import { Paths } from 'orders/paths'
 import { FeatureToggles } from 'utils/featureToggles'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 
 const pagePath = Paths.reviewOrderReceiver.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
   describe('Orders: confirmation page - review order pdf download', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
     attachDefaultHooks(app)
 
     describe('on GET', () => {

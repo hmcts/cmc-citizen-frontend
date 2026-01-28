@@ -15,15 +15,14 @@ import { Paths } from 'settlement-agreement/paths'
 import { app } from 'main/app'
 import { verifyRedirectForGetWhenAlreadyPaidInFull } from '../../../app/guards/alreadyPaidInFullGuard'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 
 const pagePath = Paths.settlementAgreementConfirmation.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 describe('Claimant response: confirmation page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

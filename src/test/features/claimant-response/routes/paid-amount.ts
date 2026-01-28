@@ -18,11 +18,6 @@ import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 import { checkNotClaimantInCaseGuard } from 'test/features/ccj/routes/checks/not-claimant-in-case-check'
 import { sampleFullAdmissionWithPaymentBySetDateResponseObj } from '../../../http-mocks/claim-store'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = CCJPaths.paidAmountPage.evaluateUri({ externalId: externalId })
 const paidAmountSummaryPage = CCJPaths.paidAmountSummaryPage.evaluateUri({ externalId: externalId })
@@ -36,6 +31,10 @@ const validFormData = {
 const heading: string = 'Has the defendant paid some of the amount owed?'
 
 describe('Claimant Response - paid amount page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

@@ -18,17 +18,16 @@ import { app } from 'main/app'
 import { FeatureToggles } from 'utils/featureToggles'
 import { MomentFactory } from 'shared/momentFactory'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 
 const pagePath = OrdersPaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
 
   describe('Orders confirmation page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
     attachDefaultHooks(app)
 
     describe('on GET', () => {

@@ -21,11 +21,6 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = PartAdmissionPaths.whyDoYouDisagreePage.evaluateUri({ externalId: externalId })
 
@@ -34,6 +29,10 @@ const header: string = 'Why do you disagree with the claim amount?'
 
 describe('Defendant: partial admission - why do you disagree?', () => {
 
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

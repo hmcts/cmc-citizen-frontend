@@ -33,11 +33,6 @@ import * as toBoolean from 'to-boolean'
 
 let isDashboardPaginationEnabledStub: sinon.SinonStub
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 
 const partAdmissionClaim = {
   ...claimStoreServiceMock.sampleClaimObj,
@@ -176,6 +171,10 @@ function testData () {
 }
 
 describe('Dashboard route page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

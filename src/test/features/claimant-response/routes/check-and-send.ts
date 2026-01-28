@@ -20,11 +20,6 @@ import { LocalDate } from 'forms/models/localDate'
 import { RejectionReason } from 'claimant-response/form/models/rejectionReason'
 import { FeatureToggles } from 'utils/featureToggles'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const draftType = 'claimantResponse'
 const defendantPartialAdmissionResponse = claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj
 
@@ -44,6 +39,10 @@ const settlementRequest = {
 }
 
 describe('Claimant response: check and send page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

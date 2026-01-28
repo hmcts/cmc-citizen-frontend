@@ -37,11 +37,6 @@ function statesPaidClaim () {
   }
 }
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 
 const claimPagePath = Paths.claimantPage.evaluateUri({ externalId: statesPaidClaim().externalId })
 const defendantPagePath = Paths.defendantPage.evaluateUri({ externalId: statesPaidClaim().externalId })
@@ -209,6 +204,10 @@ function testData () {
 }
 
 describe('Dashboard page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

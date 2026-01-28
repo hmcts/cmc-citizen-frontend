@@ -15,15 +15,14 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkAuthorizationGuards } from 'test/features/dashboard/routes/checks/authorization-check'
 import { MomentFactory } from 'shared/momentFactory'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 
 const defendantPage = Paths.directionsQuestionnairePage.evaluateUri({ externalId: 'b17af4d2-273f-4999-9895-bce382fa24c8' })
 
 describe('Dashboard - Complete your directions questionnaire form', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

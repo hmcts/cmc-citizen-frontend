@@ -47,11 +47,6 @@ import {
   settlementOfferBySetDate
 } from 'test/data/entity/partAdmitData'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 
 function partAdmissionClaim () {
   return {
@@ -504,6 +499,10 @@ function legacyClaimDetails () {
 }
 
 describe('Dashboard page part admission dashboard', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

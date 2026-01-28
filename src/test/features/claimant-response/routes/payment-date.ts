@@ -20,11 +20,6 @@ import { PaymentType } from 'shared/components/payment-intention/model/paymentOp
 import { MomentFactory } from 'shared/momentFactory'
 import { LocalDate } from 'forms/models/localDate'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.paymentDatePage.evaluateUri({ externalId: externalId })
 
@@ -53,6 +48,10 @@ const claimantResponseDraftOverrideWithNoDisposableIncome: object = {
 }
 
 describe('Claimant response: payment date', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

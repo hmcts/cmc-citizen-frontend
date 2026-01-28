@@ -24,11 +24,6 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = PartAdmissionPaths.howMuchDoYouOwePage.evaluateUri({ externalId: externalId })
 const redirectPath = Paths.taskListPage.evaluateUri({ externalId: externalId })
@@ -41,6 +36,10 @@ describe('Defendant: partial admission - ' + header, () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
     const method = 'get'
     checkAuthorizationGuards(app, method, pagePath)
     checkNotDefendantInCaseGuard(app, method, pagePath)

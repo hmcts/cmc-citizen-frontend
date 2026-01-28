@@ -12,17 +12,16 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkAuthorizationGuards } from 'test/features/offer/routes/checks/authorization-check'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const externalId = '400f4c57-9684-49c0-adb4-4cf46579d6dc'
 const responsePage = OfferPaths.responsePage.evaluateUri({ externalId: externalId })
 const makeLegalAgreementPage = OfferPaths.makeAgreementPage.evaluateUri({ externalId: externalId })
 const rejectedOfferPage = OfferPaths.rejectedPage.evaluateUri({ externalId: externalId })
 
 describe('defendant response page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {

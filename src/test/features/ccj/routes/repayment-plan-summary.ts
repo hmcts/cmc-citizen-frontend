@@ -20,15 +20,14 @@ import { MadeBy } from 'claims/models/madeBy'
 import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
 import { partialAdmissionWithImmediatePaymentData, fullAdmissionWithPaymentBySetDateData } from 'test/data/entity/responseData'
 
-let sessionCookie: string
-  beforeEach(async () => {
-    sessionCookie = await getSessionCookie(app)
-  })
-
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.repaymentPlanSummaryPage.evaluateUri({ externalId: externalId, madeBy: MadeBy.CLAIMANT.value })
 
 describe('CCJ - repayment plan summary page', () => {
+  let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
   attachDefaultHooks(app)
 
   describe('on GET', () => {
