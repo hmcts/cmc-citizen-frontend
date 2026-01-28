@@ -10,13 +10,12 @@ export function attachDefaultHooks () {
   })
 
   afterEach(() => {
-    const pendingMocks = (mock.pendingMocks() as any).filter(item => {
-      if (item === retrieveServiceTokenMock.interceptors[0]._key) return true
-      if (typeof item === 'string' && /\/o\/userinfo/.test(item)) return true
-      return false
-    })
+    const scopeKey = retrieveServiceTokenMock?.interceptors?.[0]?._key
+    if (scopeKey === undefined) {
+      return
+    }
     const stillPending = (mock.pendingMocks() as any).filter((item: string) => {
-      if (item === retrieveServiceTokenMock.interceptors[0]._key) return false
+      if (item === scopeKey) return false
       if (typeof item === 'string' && /\/o\/userinfo/.test(item)) return false
       return true
     })

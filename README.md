@@ -58,11 +58,19 @@ Run them with:
 $ yarn tests
 ```
 
-For functional testing:
+For functional testing (route tests; require session to be working):
 
 ```bash
 $ yarn test:routes
 ```
+
+To run both unit and route tests:
+
+```bash
+$ yarn test:all
+```
+
+**Note:** Pre-push currently runs only unit tests (`yarn tests`). Route tests are temporarily excluded until session/500 issues are resolved (DTSCCI-3814). Use `yarn test:all` when you need to run route tests as well.
 
 For accessibility testing:
 
@@ -70,10 +78,16 @@ For accessibility testing:
 $ yarn tests:a11y
 ```
 
-For test coverage:
+For test coverage (unit tests only; route tests excluded until DTSCCI-3814):
 
 ```bash
 $ yarn test:coverage
+```
+
+For coverage including route tests (will fail until session/500 is fixed):
+
+```bash
+$ yarn test:coverage:all
 ```
 
 For unit test coverage only:

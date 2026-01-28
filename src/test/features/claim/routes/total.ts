@@ -42,7 +42,9 @@ describe('Claim issue: total page', () => {
 
   afterEach(() => {
     reset(mockLaunchDarklyClient)
-    newClaimFeesEnabledStub.restore()
+    if (newClaimFeesEnabledStub) {
+      newClaimFeesEnabledStub.restore()
+    }
   })
 
   describe('on GET', () => {

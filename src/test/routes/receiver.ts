@@ -1,3 +1,4 @@
+import * as config from 'config'
 import { Paths as AppPaths } from 'paths'
 import { expect } from 'chai'
 import { Paths as EligibilityPaths } from 'eligibility/paths'

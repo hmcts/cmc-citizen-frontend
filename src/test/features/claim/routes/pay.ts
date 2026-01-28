@@ -259,7 +259,12 @@ describe('Claim issue: initiate payment receiver', () => {
 })
 
 describe('Claim issue: post payment callback receiver', () => {
+  let sessionCookie: string
   attachDefaultHooks(app)
+
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
 
   checkAuthorizationGuards(app, 'get', Paths.finishPaymentReceiver.uri)
   checkEligibilityGuards(app, 'get', ClaimPaths.finishPaymentReceiver.uri, () => sessionCookie)
