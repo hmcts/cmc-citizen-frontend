@@ -4,6 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 import { checkAuthorizationGuards } from 'test/features/ccj/routes/checks/authorization-check'
 
 import { Paths as CCJPaths } from 'ccj/paths'
@@ -21,7 +22,11 @@ import { checkNotClaimantInCaseGuard } from 'test/features/ccj/routes/checks/not
 import { MomentFactory } from 'shared/momentFactory'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const pagePath = CCJPaths.checkAndSendPage.evaluateUri({ externalId: externalId })
 const dashboardUri = Paths.dashboardPage.uri
 const confirmationPage = CCJPaths.ccjConfirmationPage.evaluateUri({ externalId: externalId })
@@ -45,7 +50,7 @@ describe('CCJ: check and send page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -55,7 +60,7 @@ describe('CCJ: check and send page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -65,7 +70,7 @@ describe('CCJ: check and send page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('Check your answers'))
         })
 
@@ -75,7 +80,7 @@ describe('CCJ: check and send page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('Check your answers', 'Date of birth', 'By instalments'))
             .expect(res => expect(res).to.be.successful.withoutText('/ccj/payment-options', '/ccj/date-of-birth'))
         })
@@ -86,7 +91,7 @@ describe('CCJ: check and send page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('Check your answers', 'By a set date'))
             .expect(res => expect(res).to.be.successful.withoutText('/ccj/payment-options'))
         })
@@ -112,7 +117,7 @@ describe('CCJ: check and send page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('£10'))
         })
 
@@ -121,7 +126,7 @@ describe('CCJ: check and send page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.redirect.toLocation(dashboardUri))
 
         })
@@ -152,7 +157,7 @@ describe('CCJ: check and send page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send(validBasicFormData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -163,7 +168,7 @@ describe('CCJ: check and send page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send(validBasicFormData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -177,7 +182,7 @@ describe('CCJ: check and send page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send(validBasicFormData)
             .expect(res => expect(res).to.be.redirect.toLocation(confirmationPage))
         })
@@ -190,7 +195,7 @@ describe('CCJ: check and send page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send(validQualifiedFormData)
             .expect(res => expect(res).to.be.redirect.toLocation(confirmationPage))
         })
@@ -202,7 +207,7 @@ describe('CCJ: check and send page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send(validBasicFormData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -215,7 +220,7 @@ describe('CCJ: check and send page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send({ signed: undefined, type: SignatureType.BASIC })
             .expect(res => expect(res).to.be.successful.withText(BasicValidationErrors.DECLARATION_REQUIRED,
               'div class="error-summary"'))
@@ -226,7 +231,7 @@ describe('CCJ: check and send page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send({ signed: 'true', type: SignatureType.QUALIFIED, signerName: '', signerRole: '' })
             .expect(res => expect(res).to.be.successful.withText(QualifiedValidationErrors.SIGNER_NAME_REQUIRED,
               'div class="error-summary"'))

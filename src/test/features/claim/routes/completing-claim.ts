@@ -4,6 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
 import { checkEligibilityGuards } from 'test/features/claim/routes/checks/eligibility-check'
 
@@ -14,7 +15,11 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const expectedTextOnPage: string = 'Get the details right'
 
 describe('Claim issue: completing claim page', () => {
@@ -30,7 +35,7 @@ describe('Claim issue: completing claim page', () => {
 
       await request(app)
         .get(ClaimPaths.completingClaimPage.uri)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', sessionCookie)
         .expect(res => expect(res).to.be.successful.withText(expectedTextOnPage))
     })
   })
@@ -50,7 +55,7 @@ describe('Claim issue: completing claim page', () => {
 
         await request(app)
           .post(ClaimPaths.completingClaimPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -60,7 +65,7 @@ describe('Claim issue: completing claim page', () => {
 
         await request(app)
           .post(ClaimPaths.completingClaimPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.taskListPage.uri))
       })
     })

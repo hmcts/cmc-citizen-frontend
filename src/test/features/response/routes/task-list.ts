@@ -4,6 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
 import { checkAlreadySubmittedGuard } from 'test/common/checks/already-submitted-check'
 
@@ -20,7 +21,11 @@ import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-i
 import { MomentFactory } from 'shared/momentFactory'
 import { verifyRedirectForGetWhenAlreadyPaidInFull } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const pagePath = ResponsePaths.taskListPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 describe('Defendant response: task list page', () => {
@@ -46,7 +51,7 @@ describe('Defendant response: task list page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -59,7 +64,7 @@ describe('Defendant response: task list page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('Respond to a money claim', 'Application incomplete', 'You have completed 5 of 6 sections'))
         })
 
@@ -72,7 +77,7 @@ describe('Defendant response: task list page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => {
               expect(res).to.be.successful.withText('Respond to a money claim')
               expect(res.text.match(/INCOMPLETE/g)).length(2)

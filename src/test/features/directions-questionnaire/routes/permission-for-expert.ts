@@ -4,6 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 
 import { Paths } from 'directions-questionnaire/paths'
 import { Paths as DashboardPaths } from 'dashboard/paths'
@@ -27,7 +28,11 @@ const claimWithDQ = {
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const selfWitnessPage = Paths.selfWitnessPage.evaluateUri({ externalId })
 const pagePath = Paths.permissionForExpertPage.evaluateUri({ externalId })
 const expertEvidencePage = Paths.expertEvidencePage.evaluateUri({ externalId })
@@ -37,7 +42,7 @@ function checkAccessGuard (app: any, method: string) {
     idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
     claimStoreServiceMock.resolveRetrieveClaimByExternalId()
     await request(app)[method](pagePath)
-      .set('Cookie', `${cookieName}=ABC`)
+      .set('Cookie', sessionCookie)
       .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
   })
 }
@@ -70,7 +75,7 @@ describe('Directions Questionnaire - ask court’s permission for expert page', 
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -80,7 +85,7 @@ describe('Directions Questionnaire - ask court’s permission for expert page', 
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -91,7 +96,7 @@ describe('Directions Questionnaire - ask court’s permission for expert page', 
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText(
               'Do you want to ask for the court’s permission to use an expert?'
             ))
@@ -123,7 +128,7 @@ describe('Directions Questionnaire - ask court’s permission for expert page', 
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send(undefined)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -134,7 +139,7 @@ describe('Directions Questionnaire - ask court’s permission for expert page', 
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send(formData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -148,7 +153,7 @@ describe('Directions Questionnaire - ask court’s permission for expert page', 
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send(formData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -161,7 +166,7 @@ describe('Directions Questionnaire - ask court’s permission for expert page', 
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send(formData)
               .expect(res => expect(res).to.be.redirect.toLocation(selfWitnessPage))
           })
@@ -174,7 +179,7 @@ describe('Directions Questionnaire - ask court’s permission for expert page', 
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send({ option: 'yes' })
               .expect(res => expect(res).to.be.redirect.toLocation(expertEvidencePage))
           })

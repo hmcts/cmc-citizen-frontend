@@ -4,6 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 
 import { Paths as ClaimantResponsePaths } from 'claimant-response/paths'
 
@@ -15,7 +16,11 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
 import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = ClaimantResponsePaths.rejectionReasonPage.evaluateUri({ externalId: externalId })
 const taskListPagePath = ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: externalId })
@@ -43,7 +48,7 @@ describe('Claimant Response - Rejection Reason', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -53,7 +58,7 @@ describe('Claimant Response - Rejection Reason', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -63,7 +68,7 @@ describe('Claimant Response - Rejection Reason', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText('Why did you reject the repayment plan'))
       })
     })
@@ -85,7 +90,7 @@ describe('Claimant Response - Rejection Reason', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send(rejectionReason)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -98,7 +103,7 @@ describe('Claimant Response - Rejection Reason', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send(rejectionReason)
             .expect(res => expect(res).to.be.redirect.toLocation(taskListPagePath))
         })
@@ -111,7 +116,7 @@ describe('Claimant Response - Rejection Reason', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send({ text: '' })
             .expect(res => expect(res).to.be.successful.withText('Enter why you rejected repayment plan'))
         })

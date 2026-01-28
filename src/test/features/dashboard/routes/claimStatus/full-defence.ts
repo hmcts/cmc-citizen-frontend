@@ -4,6 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 
 import { Paths } from 'dashboard/paths'
 
@@ -39,7 +40,11 @@ import { YesNoOption } from 'models/yesNoOption'
 import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
 import { ResponseMethod } from 'claims/models/response/responseMethod'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 
 function fullDefenceClaim () {
   return {
@@ -777,7 +782,7 @@ describe('Dashboard page', () => {
 
               await request(app)
                 .get(claimPagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', sessionCookie)
                 .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
             })
           })
@@ -794,7 +799,7 @@ describe('Dashboard page', () => {
 
               await request(app)
                 .get(defendantPagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', sessionCookie)
                 .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
             })
           })

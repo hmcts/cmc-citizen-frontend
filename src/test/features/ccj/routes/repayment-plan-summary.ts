@@ -4,6 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 
 import { Paths } from 'ccj/paths'
 
@@ -19,7 +20,11 @@ import { MadeBy } from 'claims/models/madeBy'
 import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
 import { partialAdmissionWithImmediatePaymentData, fullAdmissionWithPaymentBySetDateData } from 'test/data/entity/responseData'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.repaymentPlanSummaryPage.evaluateUri({ externalId: externalId, madeBy: MadeBy.CLAIMANT.value })
 
@@ -41,7 +46,7 @@ describe('CCJ - repayment plan summary page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -70,7 +75,7 @@ describe('CCJ - repayment plan summary page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText('The repayment plan'))
       })
 
@@ -98,7 +103,7 @@ describe('CCJ - repayment plan summary page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('£2,998'))
 
         })
@@ -126,7 +131,7 @@ describe('CCJ - repayment plan summary page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('£3,000'))
         })
       })
@@ -155,7 +160,7 @@ describe('CCJ - repayment plan summary page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('The defendant will pay £198 by 15 October 2017'))
 
         })
@@ -182,7 +187,7 @@ describe('CCJ - repayment plan summary page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('The defendant will pay £200 by 10 October 2018'))
         })
       })

@@ -4,6 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 
 import { FullRejectionPaths, Paths } from 'response/paths'
 
@@ -19,7 +20,11 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = FullRejectionPaths.whyDoYouDisagreePage.evaluateUri({ externalId: externalId })
 
@@ -48,7 +53,7 @@ describe('Defendant: full reject - why do you disagree?', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -58,7 +63,7 @@ describe('Defendant: full reject - why do you disagree?', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
       })
@@ -71,7 +76,7 @@ describe('Defendant: full reject - why do you disagree?', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText(header))
         })
       })
@@ -96,7 +101,7 @@ describe('Defendant: full reject - why do you disagree?', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send(validFormData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -107,7 +112,7 @@ describe('Defendant: full reject - why do you disagree?', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send(validFormData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -120,7 +125,7 @@ describe('Defendant: full reject - why do you disagree?', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send(validFormData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -136,7 +141,7 @@ describe('Defendant: full reject - why do you disagree?', () => {
         it('when form is invalid should render page with errors', async () => {
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send({})
             .expect(res => expect(res).to.be.successful.withText(header, 'div class="error-summary"'))
         })
@@ -146,7 +151,7 @@ describe('Defendant: full reject - why do you disagree?', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send(validFormData)
             .expect(res => expect(res).to.be.redirect
               .toLocation(Paths.timelinePage.evaluateUri({ externalId: externalId })))

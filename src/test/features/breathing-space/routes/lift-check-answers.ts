@@ -3,6 +3,7 @@ import * as request from 'supertest'
 import * as config from 'config'
 
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 
 import { Paths as BreathingSpacePaths } from 'breathing-space/paths'
 import { app } from 'main/app'
@@ -13,7 +14,11 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 
 const pagePath = BreathingSpacePaths.bsLiftCheckAnswersPage.uri
 
@@ -29,7 +34,7 @@ describe('Breathing Space: Lift check-answer page', () => {
       it('should render page when everything is fine', async () => {
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText('Are you sure you want to lift the debt respite scheme?'))
       })
 
@@ -39,7 +44,7 @@ describe('Breathing Space: Lift check-answer page', () => {
         await request(app)
           .post(pagePath)
           .send({ breathingSpaceLiftedbyInsolvencyTeamDate: '2021-01-01', breathingSpaceExternalId: 'bbb89313-7e4c-4124-8899-34389312033a' })
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).has.redirect)
       })
 
@@ -47,7 +52,7 @@ describe('Breathing Space: Lift check-answer page', () => {
         const date: Moment = MomentFactory.currentDate().subtract(1, 'year')
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ respiteLiftDate: { day: date.date(), month: date.month() - 1, year: date.year() } })
           .expect(res => expect(res).to.be.successful.withText('Are you sure you want to lift the debt respite scheme?'))
           .expect(res => expect(res).to.be.successful)

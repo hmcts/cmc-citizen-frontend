@@ -2,6 +2,7 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 import { Paths as BreathingSpacePaths } from 'breathing-space/paths'
 
 import { app } from 'main/app'
@@ -12,7 +13,11 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 
 describe('Enter breathing space: Respite start date page', () => {
 
@@ -24,7 +29,7 @@ describe('Enter breathing space: Respite start date page', () => {
 
       await request(app)
         .get(BreathingSpacePaths.bsStartDatePage.uri)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', sessionCookie)
         .expect(res => expect(res).to.be.successful.withText('When did it start?'))
     })
   })
@@ -43,7 +48,7 @@ describe('Enter breathing space: Respite start date page', () => {
 
         await request(app)
           .post(BreathingSpacePaths.bsStartDatePage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ respiteStart: { day: date.date() + 1, month: date.month() + 2, year: date.year() + 1 } })
           .expect(res => expect(res).to.be.successful.withText('There was a problem'))
       })
@@ -55,7 +60,7 @@ describe('Enter breathing space: Respite start date page', () => {
 
         await request(app)
           .post(BreathingSpacePaths.bsStartDatePage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ respiteStart: { day: '31', month: '12', year: date.year() - 1 } })
           .expect(res => expect(res).to.be.redirect.toLocation(BreathingSpacePaths.bsTypePage.uri))
       })
@@ -65,7 +70,7 @@ describe('Enter breathing space: Respite start date page', () => {
         draftStoreServiceMock.resolveUpdate()
         await request(app)
           .post(BreathingSpacePaths.bsStartDatePage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ respiteStart: { day: '', month: '', year: '' } })
           .expect(res => expect(res).to.be.redirect.toLocation(BreathingSpacePaths.bsTypePage.uri))
       })
@@ -74,7 +79,7 @@ describe('Enter breathing space: Respite start date page', () => {
         draftStoreServiceMock.resolveFind('bs')
         await request(app)
           .post(BreathingSpacePaths.bsStartDatePage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ respiteStart: { day: '33', month: '', year: '2021' } })
           .expect(res => expect(res).to.be.successful.withText('Please enter a valid date', 'There was a problem'))
       })
@@ -83,7 +88,7 @@ describe('Enter breathing space: Respite start date page', () => {
         draftStoreServiceMock.resolveFind('bs')
         await request(app)
           .post(BreathingSpacePaths.bsStartDatePage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ respiteStart: { day: '3', month: '18', year: '2021' } })
           .expect(res => expect(res).to.be.successful.withText('Please enter a valid date', 'There was a problem'))
       })
@@ -92,7 +97,7 @@ describe('Enter breathing space: Respite start date page', () => {
         draftStoreServiceMock.resolveFind('bs')
         await request(app)
           .post(BreathingSpacePaths.bsStartDatePage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ respiteStart: { day: '3', month: '3', year: '12345' } })
           .expect(res => expect(res).to.be.successful.withText('Please enter a valid date', 'There was a problem'))
       })

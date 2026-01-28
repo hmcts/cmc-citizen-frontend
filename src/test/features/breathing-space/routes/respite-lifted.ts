@@ -2,6 +2,7 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 import { Paths as BreathingSpacePaths, Paths } from 'breathing-space/paths'
 import { app } from 'main/app'
 
@@ -14,7 +15,11 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const bsLiftPagePath = Paths.bsLiftPage.evaluateUri({ externalId: draftStoreServiceMock.sampleClaimDraftObj.externalId })
 
 describe('Lift breathing space: Lift date page', () => {
@@ -29,7 +34,7 @@ describe('Lift breathing space: Lift date page', () => {
 
       await request(app)
         .get(bsLiftPagePath)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', sessionCookie)
         .expect(res => expect(res).to.be.successful.withText('Date for lifting debt respite scheme (breathing space)'))
     })
   })
@@ -47,7 +52,7 @@ describe('Lift breathing space: Lift date page', () => {
         const date: Moment = MomentFactory.currentDate().subtract(1, 'year')
         await request(app)
           .post(bsLiftPagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ respiteLiftDate: { day: date.date(), month: date.month() + 2, year: date.year() + 1 } })
           .expect(res => expect(res).to.be.successful.withText('There was a problem'))
       })
@@ -58,7 +63,7 @@ describe('Lift breathing space: Lift date page', () => {
 
         await request(app)
           .post(bsLiftPagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ respiteLiftDate: { day: '31', month: '12', year: date.year() - 1 } })
           .expect(res => expect(res).to.be.redirect.toLocation(BreathingSpacePaths.bsLiftCheckAnswersPage.uri))
       })
@@ -68,7 +73,7 @@ describe('Lift breathing space: Lift date page', () => {
 
         await request(app)
           .post(bsLiftPagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ respiteLiftDate: { day: '', month: '', year: '' } })
           .expect(res => expect(res).to.be.redirect.toLocation(BreathingSpacePaths.bsLiftCheckAnswersPage.uri))
       })
@@ -77,7 +82,7 @@ describe('Lift breathing space: Lift date page', () => {
 
         await request(app)
           .post(bsLiftPagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ respiteLiftDate: { day: '33', month: '', year: '2021' } })
           .expect(res => expect(res).to.be.successful.withText('Please enter a valid date', 'There was a problem'))
       })
@@ -86,7 +91,7 @@ describe('Lift breathing space: Lift date page', () => {
 
         await request(app)
           .post(bsLiftPagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ respiteLiftDate: { day: '3', month: '18', year: '2021' } })
           .expect(res => expect(res).to.be.successful.withText('Please enter a valid date', 'There was a problem'))
       })
@@ -95,7 +100,7 @@ describe('Lift breathing space: Lift date page', () => {
 
         await request(app)
           .post(bsLiftPagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ respiteLiftDate: { day: '3', month: '3', year: '12345' } })
           .expect(res => expect(res).to.be.successful.withText('Please enter a valid date', 'There was a problem'))
       })

@@ -4,6 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
 
 import { Paths } from 'claimant-response/paths'
@@ -16,7 +17,11 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath: string = Paths.intentionToProceedPage.evaluateUri({ externalId: externalId })
 const pageContent: string = 'Do you want to proceed with the claim?'
@@ -39,7 +44,7 @@ describe('Claimant response: intention to proceed page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -49,7 +54,7 @@ describe('Claimant response: intention to proceed page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -60,7 +65,7 @@ describe('Claimant response: intention to proceed page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText(pageContent))
       })
     })
@@ -84,7 +89,7 @@ describe('Claimant response: intention to proceed page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -94,7 +99,7 @@ describe('Claimant response: intention to proceed page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
       })
@@ -106,7 +111,7 @@ describe('Claimant response: intention to proceed page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText(pageContent, 'div class="error-summary"'))
       })
 
@@ -118,7 +123,7 @@ describe('Claimant response: intention to proceed page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ proceed: YesNoOption.YES })
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -131,7 +136,7 @@ describe('Claimant response: intention to proceed page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ proceed: YesNoOption.YES })
           .expect(res => expect(res).to.be.redirect.toLocation(Paths.taskListPage.evaluateUri({ externalId: externalId })))
       })
@@ -145,7 +150,7 @@ describe('Claimant response: intention to proceed page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ proceed: YesNoOption.NO })
           .expect(res => expect(res).to.be.redirect.toLocation(Paths.taskListPage.evaluateUri({ externalId: externalId })))
       })

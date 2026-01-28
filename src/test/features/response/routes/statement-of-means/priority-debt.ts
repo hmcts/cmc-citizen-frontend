@@ -8,6 +8,7 @@ import { attachDefaultHooks } from 'test/routes/hooks'
 import { checkAuthorizationGuards } from 'test/routes/authorization-check'
 import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
 import * as idamServiceMock from 'test/http-mocks/idam'
+import { getSessionCookie } from 'test/auth-helper'
 import { checkAlreadySubmittedGuard } from 'test/common/checks/already-submitted-check'
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
 import { expect } from 'chai'
@@ -17,7 +18,11 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const pagePath: string = StatementOfMeansPaths.priorityDebtsPage.evaluateUri(
   { externalId: claimStoreServiceMock.sampleClaimObj.externalId }
 )
@@ -28,7 +33,7 @@ function checkErrorHandling (method: string) {
       claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
       await request(app)[method](pagePath)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', sessionCookie)
         .expect(res => expect(res).to.be.serverError.withText('Error'))
     })
 
@@ -37,7 +42,7 @@ function checkErrorHandling (method: string) {
       draftStoreServiceMock.rejectFind('Error')
 
       await request(app)[method](pagePath)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', sessionCookie)
         .expect(res => expect(res).to.be.serverError.withText('Error'))
 
     })
@@ -70,7 +75,7 @@ describe('Defendant response: priority-debt', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText('Debts you’re behind on'))
       })
     })
@@ -107,7 +112,7 @@ describe('Defendant response: priority-debt', () => {
                 schedule: IncomeExpenseSchedule.MONTH.value
               }
             })
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('Enter a valid Mortgage amount, maximum two decimal places'))
         })
 
@@ -120,7 +125,7 @@ describe('Defendant response: priority-debt', () => {
                 schedule: IncomeExpenseSchedule.WEEK.value
               }
             })
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('Enter a valid Rent amount, maximum two decimal places'))
         })
 
@@ -132,7 +137,7 @@ describe('Defendant response: priority-debt', () => {
                 schedule: IncomeExpenseSchedule.WEEK.value
               }
             })
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('Enter how much you pay for Gas'))
         })
 
@@ -144,7 +149,7 @@ describe('Defendant response: priority-debt', () => {
                 schedule: IncomeExpenseSchedule.WEEK.value
               }
             })
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('Enter how much you pay for Gas'))
         })
       })
@@ -167,7 +172,7 @@ describe('Defendant response: priority-debt', () => {
               water: { amount: 100, schedule: IncomeExpenseSchedule.MONTH.value },
               maintenance: { amount: 100, schedule: IncomeExpenseSchedule.FOUR_WEEKS.value }
             })
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.redirect.toLocation(
               StatementOfMeansPaths.debtsPage.evaluateUri(
                 { externalId: claimStoreServiceMock.sampleClaimObj.externalId }
@@ -189,7 +194,7 @@ describe('Defendant response: priority-debt', () => {
               gas: { amount: '1000', schedule: IncomeExpenseSchedule.WEEK.value },
               action: { resetDebt: { 'gas': 'Reset this debt' } }
             })
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('gas[amount]"'))
             .expect(res => expect(res).to.be.successful.withoutText('1000'))
         })
@@ -207,7 +212,7 @@ describe('Defendant response: priority-debt', () => {
               gas: { amount: '1000', schedule: IncomeExpenseSchedule.WEEK.value },
               action: { doNotResetDebt: { 'gas': 'Do not reset this debt' } }
             })
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('gas[amount]"'))
             .expect(res => expect(res).to.be.successful.withText('1000'))
         })

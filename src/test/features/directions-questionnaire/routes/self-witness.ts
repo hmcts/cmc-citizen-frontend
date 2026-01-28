@@ -4,6 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 
 import { Paths } from 'directions-questionnaire/paths'
 import { Paths as DashboardPaths } from 'dashboard/paths'
@@ -28,7 +29,11 @@ const claimWithDQ = {
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const otherWitnessesPage = Paths.otherWitnessesPage.evaluateUri({ externalId: externalId })
 const pagePath = Paths.selfWitnessPage.evaluateUri({ externalId: externalId })
 
@@ -37,7 +42,7 @@ function checkAccessGuard (app: any, method: string) {
     idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
     claimStoreServiceMock.resolveRetrieveClaimByExternalId()
     await request(app)[method](pagePath)
-      .set('Cookie', `${cookieName}=ABC`)
+      .set('Cookie', sessionCookie)
       .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
   })
 }
@@ -70,7 +75,7 @@ describe('Directions Questionnaire - self witness page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -80,7 +85,7 @@ describe('Directions Questionnaire - self witness page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -91,7 +96,7 @@ describe('Directions Questionnaire - self witness page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('Do you want to give evidence?'))
         })
       })
@@ -123,7 +128,7 @@ describe('Directions Questionnaire - self witness page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send(validFormData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -134,7 +139,7 @@ describe('Directions Questionnaire - self witness page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send(validFormData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -148,7 +153,7 @@ describe('Directions Questionnaire - self witness page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -161,7 +166,7 @@ describe('Directions Questionnaire - self witness page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send(validFormData)
               .expect(res => expect(res).to.be.redirect.toLocation(otherWitnessesPage))
           })
@@ -175,7 +180,7 @@ describe('Directions Questionnaire - self witness page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send(invalidFormData)
               .expect(res => expect(res).to.be.successful.withText('Do you want to give evidence?', 'div class="error-summary"'))
           })

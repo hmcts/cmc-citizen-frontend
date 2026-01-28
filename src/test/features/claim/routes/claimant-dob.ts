@@ -4,6 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
 import { checkEligibilityGuards } from 'test/features/claim/routes/checks/eligibility-check'
 
@@ -16,7 +17,11 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { Moment } from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 
 describe('Claim issue: claimant date of birth page', () => {
   attachDefaultHooks(app)
@@ -31,7 +36,7 @@ describe('Claim issue: claimant date of birth page', () => {
 
       await request(app)
         .get(ClaimPaths.claimantDateOfBirthPage.uri)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', sessionCookie)
         .expect(res => expect(res).to.be.successful.withText('What is your date of birth?'))
     })
   })
@@ -50,7 +55,7 @@ describe('Claim issue: claimant date of birth page', () => {
 
         await request(app)
           .post(ClaimPaths.claimantDateOfBirthPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText('What is your date of birth?', 'div class="error-summary"'))
       })
 
@@ -59,7 +64,7 @@ describe('Claim issue: claimant date of birth page', () => {
         const date: Moment = MomentFactory.currentDate().subtract(1, 'year')
         await request(app)
           .post(ClaimPaths.claimantDateOfBirthPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ known: 'true', date: { day: date.date(), month: date.month() + 1, year: date.year() } })
           .expect(res => expect(res).to.be.successful.withText('Please enter a date of birth before', 'div class="error-summary"'))
       })
@@ -70,7 +75,7 @@ describe('Claim issue: claimant date of birth page', () => {
 
         await request(app)
           .post(ClaimPaths.claimantDateOfBirthPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ known: 'true', date: { day: '31', month: '12', year: '1980' } })
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -81,7 +86,7 @@ describe('Claim issue: claimant date of birth page', () => {
 
         await request(app)
           .post(ClaimPaths.claimantDateOfBirthPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ known: 'true', date: { day: '31', month: '12', year: '1980' } })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.claimantPhonePage.uri))
       })

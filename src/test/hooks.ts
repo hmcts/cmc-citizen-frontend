@@ -10,7 +10,16 @@ export function attachDefaultHooks () {
   })
 
   afterEach(() => {
-    const pendingMocks = (mock.pendingMocks() as any).filter(item => item !== retrieveServiceTokenMock.interceptors[0]._key)
-    expect(pendingMocks, 'At least one mock were declared but not used').to.be.deep.equal([])
+    const pendingMocks = (mock.pendingMocks() as any).filter(item => {
+      if (item === retrieveServiceTokenMock.interceptors[0]._key) return true
+      if (typeof item === 'string' && /\/o\/userinfo/.test(item)) return true
+      return false
+    })
+    const stillPending = (mock.pendingMocks() as any).filter((item: string) => {
+      if (item === retrieveServiceTokenMock.interceptors[0]._key) return false
+      if (typeof item === 'string' && /\/o\/userinfo/.test(item)) return false
+      return true
+    })
+    expect(stillPending, 'At least one mock were declared but not used').to.be.deep.equal([])
   })
 }

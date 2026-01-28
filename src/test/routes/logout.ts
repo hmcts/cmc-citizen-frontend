@@ -1,6 +1,5 @@
 import { expect } from 'chai'
 import * as request from 'supertest'
-import * as config from 'config'
 
 import 'test/routes/expectations'
 
@@ -10,8 +9,7 @@ import { app } from 'main/app'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
 import { attachDefaultHooks } from 'test/routes/hooks'
-
-const cookieName: string = config.get<string>('session.cookieName')
+import { getSessionCookie } from 'test/auth-helper'
 
 describe('Logout receiver', () => {
   attachDefaultHooks(app)
@@ -21,25 +19,33 @@ describe('Logout receiver', () => {
   })
 
   describe('on GET', () => {
-    it('should remove session cookie', async () => {
-      await request(app)
+    it('should redirect to idam endSession and clear session when user had session', async () => {
+      const sessionCookie = await getSessionCookie(app)
+
+      const res = await request(app)
         .get(AppPaths.logoutReceiver.uri)
-        .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.have.cookie(cookieName, ''))
+        .set('Cookie', sessionCookie)
+        .expect(302)
+
+      expect(res.header['location']).to.match(/\/o\/endSession/)
     })
 
-    it('should remove session cookie even when session invalidation is failed', async () => {
-      await request(app)
+    it('should redirect to idam endSession even when session invalidation fails', async () => {
+      const sessionCookie = await getSessionCookie(app)
+
+      const res = await request(app)
         .get(AppPaths.logoutReceiver.uri)
-        .set('Cookie', `${cookieName}=${idamServiceMock.defaultAuthToken}`)
-        .expect(res => expect(res).to.have.cookie(cookieName, ''))
+        .set('Cookie', sessionCookie)
+        .expect(302)
+
+      expect(res.header['location']).to.match(/\/o\/endSession/)
     })
 
-    it('should not remove session cookie or invalidate auth token when session cookie is missing', async () => {
+    it('should redirect to idam endSession when session cookie is missing', async () => {
       await request(app)
         .get(AppPaths.logoutReceiver.uri)
         .set('Cookie', null)
-        .expect(res => expect(res).not.to.have.cookie)
+        .expect(res => expect(res).to.be.redirect.toLocation(/.*\/o\/endSession.*/))
     })
 
     it('should redirect to idam endSession endpoint', async () => {

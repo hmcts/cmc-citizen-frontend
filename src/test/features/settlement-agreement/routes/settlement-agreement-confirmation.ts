@@ -4,6 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 
 import { checkAuthorizationGuards } from 'test/features/claimant-response/routes/checks/authorization-check'
 
@@ -14,7 +15,11 @@ import { Paths } from 'settlement-agreement/paths'
 import { app } from 'main/app'
 import { verifyRedirectForGetWhenAlreadyPaidInFull } from '../../../app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 
 const pagePath = Paths.settlementAgreementConfirmation.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
@@ -36,7 +41,7 @@ describe('Claimant response: confirmation page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -50,7 +55,7 @@ describe('Claimant response: confirmation page', () => {
             })
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res)
               .to.be.successful.withText('You’ve rejected the settlement agreement'))
         })

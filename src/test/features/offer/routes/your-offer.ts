@@ -4,6 +4,7 @@ import * as config from 'config'
 import * as moment from 'moment'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 
 import { app } from 'main/app'
 import { Paths as OfferPaths } from 'offer/paths'
@@ -13,7 +14,11 @@ import { checkAuthorizationGuards } from 'test/features/offer/routes/checks/auth
 
 import { LocalDate } from 'forms/models/localDate'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const confirmationPage = OfferPaths.offerConfirmationPage.evaluateUri({ externalId: externalId })
 const offerPage = OfferPaths.offerPage.evaluateUri({ externalId: externalId })
@@ -39,7 +44,7 @@ describe('Offer page', () => {
 
         await request(app)
           .get(offerPage)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -47,7 +52,7 @@ describe('Offer page', () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         await request(app)
           .get(offerPage)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText('Your offer'))
       })
     })
@@ -66,7 +71,7 @@ describe('Offer page', () => {
 
             await request(app)
               .post(offerPage)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -83,7 +88,7 @@ describe('Offer page', () => {
             }
             await request(app)
               .post(offerPage)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send(formData)
               .expect(res => expect(res).to.be.redirect.toLocation(confirmationPage))
           })
@@ -94,7 +99,7 @@ describe('Offer page', () => {
 
             await request(app)
               .post(offerPage)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -105,7 +110,7 @@ describe('Offer page', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             await request(app)
               .post(offerPage)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send({
                 offerText: 'Offer Text',
                 completionDate: new LocalDate(1980, 1, 1)

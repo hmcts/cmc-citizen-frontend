@@ -7,6 +7,7 @@ import { Paths as ClaimPaths, Paths } from 'claim/paths'
 import { app } from 'main/app'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
+import { getSessionCookie } from 'test/auth-helper'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
@@ -44,7 +45,11 @@ import { User } from 'idam/user'
 const mockLaunchDarklyClient: LaunchDarklyClient = mock(LaunchDarklyClient)
 const draftType = 'claim'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const event: string = config.get<string>('fees.issueFee.event')
 const channel: string = config.get<string>('fees.channel.online')
 const failureMessage: string = 'failure message'
@@ -155,7 +160,7 @@ describe('Claim issue: initiate payment receiver', () => {
 
       await request(app)
         .get(Paths.startPaymentReceiver.uri)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', sessionCookie)
         .expect(res => expect(res).to.be.serverError.withText('Error'))
     })
 
@@ -166,7 +171,7 @@ describe('Claim issue: initiate payment receiver', () => {
 
       await request(app)
         .get(Paths.startPaymentReceiver.uri)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', sessionCookie)
         .expect(res => expect(res).to.be.serverError.withText('Error'))
     })
 
@@ -178,7 +183,7 @@ describe('Claim issue: initiate payment receiver', () => {
 
       await request(app)
         .get(Paths.startPaymentReceiver.uri)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', sessionCookie)
         .expect(res => expect(res).to.be.serverError.withText('Error'))
     })
 
@@ -191,7 +196,7 @@ describe('Claim issue: initiate payment receiver', () => {
 
       await request(app)
         .get(Paths.startPaymentReceiver.uri)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', sessionCookie)
         .expect(res => expect(res).to.be.serverError.withText('Error'))
     })
 
@@ -205,7 +210,7 @@ describe('Claim issue: initiate payment receiver', () => {
 
       await request(app)
         .get(Paths.startPaymentReceiver.uri)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', sessionCookie)
         .expect(res => expect(res).to.be.serverError.withText('Error'))
     })
 
@@ -223,7 +228,7 @@ describe('Claim issue: initiate payment receiver', () => {
 
       await request(app)
         .get(Paths.startPaymentReceiver.uri)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', sessionCookie)
         .expect(res => expect(res).to.be.redirect.toLocation('https://www.payments.service.gov.uk/secure/8b647ade-02cc-4c85-938d-4db560404df8'))
     })
 
@@ -237,7 +242,7 @@ describe('Claim issue: initiate payment receiver', () => {
 
       await request(app)
         .get(Paths.startPaymentReceiver.uri)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', sessionCookie)
         .expect(res => expect(res).to.be.redirect.toLocation('https://www.payments.service.gov.uk/secure/8b647ade-02cc-4c85-938d-4db560404df8'))
     })
 
@@ -248,7 +253,7 @@ describe('Claim issue: initiate payment receiver', () => {
 
       await request(app)
         .get(Paths.startPaymentReceiver.uri)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', sessionCookie)
         .expect(res => expect(res).to.be.redirect.toLocation(Paths.finishPaymentReceiver.evaluateUri({ externalId: externalId })))
     })
   })
@@ -354,7 +359,7 @@ describe('Claim issue: post payment callback receiver', () => {
 
       await request(app)
         .get(Paths.finishPaymentReceiver.evaluateUri({ externalId: 'xyz' }))
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', sessionCookie)
         .expect(res => expect(res).to.be.serverError.withText('Error'))
     })
 
@@ -366,7 +371,7 @@ describe('Claim issue: post payment callback receiver', () => {
 
       await request(app)
         .get(Paths.finishPaymentReceiver.uri)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', sessionCookie)
         .expect(res => expect(res).to.be.serverError.withText('Error'))
     })
 
@@ -382,7 +387,7 @@ describe('Claim issue: post payment callback receiver', () => {
 
           await request(app)
             .get(Paths.finishPaymentReceiver.uri)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.redirect.toLocation(Paths.checkAndSendPage.uri))
         })
       })
@@ -397,7 +402,7 @@ describe('Claim issue: post payment callback receiver', () => {
 
           await request(app)
             .get(Paths.finishPaymentReceiver.uri)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.redirect.toLocation(Paths.checkAndSendPage.uri))
         })
       })
@@ -417,7 +422,7 @@ describe('Claim issue: post payment callback receiver', () => {
 
             await request(app)
               .get(Paths.finishPaymentReceiver.uri)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
@@ -433,7 +438,7 @@ describe('Claim issue: post payment callback receiver', () => {
 
             await request(app)
               .get(Paths.finishPaymentReceiver.uri)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .expect(res => expect(res).to.be.redirect.toLocation(`/claim/${externalId}/confirmation`))
           })
 
@@ -442,7 +447,7 @@ describe('Claim issue: post payment callback receiver', () => {
 
             await request(app)
               .get(Paths.finishPaymentReceiver.evaluateUri({ externalId: externalId }))
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .expect(res => expect(res).to.be.redirect.toLocation(`/claim/${externalId}/confirmation`))
           })
         })
@@ -459,7 +464,7 @@ describe('Claim issue: post payment callback receiver', () => {
 
             await request(app)
               .get(Paths.finishPaymentReceiver.uri)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
 
             reset(mockLaunchDarklyClient)
@@ -477,7 +482,7 @@ describe('Claim issue: post payment callback receiver', () => {
 
             await request(app)
               .get(Paths.finishPaymentReceiver.uri)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
 
             reset(mockLaunchDarklyClient)
@@ -492,7 +497,7 @@ describe('Claim issue: post payment callback receiver', () => {
 
             await request(app)
               .get(Paths.finishPaymentReceiver.uri)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .expect(res => expect(res).to.be.serverError)
 
             reset(mockLaunchDarklyClient)
@@ -510,7 +515,7 @@ describe('Claim issue: post payment callback receiver', () => {
 
             await request(app)
               .get(Paths.finishPaymentReceiver.uri)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .expect(res => expect(res).to.be.redirect.toLocation(`/claim/${externalId}/confirmation`))
 
             reset(mockLaunchDarklyClient)
@@ -528,7 +533,7 @@ describe('Claim issue: post payment callback receiver', () => {
 
             await request(app)
               .get(Paths.finishPaymentReceiver.uri)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .expect(res => expect(res).to.be.redirect.toLocation(`/claim/${externalId}/confirmation`))
 
             reset(mockLaunchDarklyClient)
@@ -546,7 +551,7 @@ describe('Claim issue: post payment callback receiver', () => {
 
           await request(app)
             .get(Paths.finishPaymentReceiver.uri)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
       })

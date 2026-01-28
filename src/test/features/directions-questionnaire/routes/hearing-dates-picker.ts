@@ -8,6 +8,7 @@ import { Paths as DashboardPaths } from 'dashboard/paths'
 
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as idamServiceMock from 'test/http-mocks/idam'
+import { getSessionCookie } from 'test/auth-helper'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import { checkAuthorizationGuards } from 'test/routes/authorization-check'
@@ -26,7 +27,11 @@ const claimWithDQ = {
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const claim = createClaim(PartyType.INDIVIDUAL, PartyType.ORGANISATION, MadeBy.CLAIMANT)
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const hearingDatesPath = Paths.hearingDatesPage.evaluateUri({ externalId: externalId })
 
 const unavailableDates: LocalDate[] = [
@@ -40,7 +45,7 @@ function checkAccessGuard (app: any, method: string, path: string) {
     idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
     claimStoreServiceMock.resolveRetrieveClaimByExternalId()
     await request(app)[method](path)
-      .set('Cookie', `${cookieName}=ABC`)
+      .set('Cookie', sessionCookie)
       .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
   })
 }
@@ -74,7 +79,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
 
           await request(app)
             .get(deletePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.redirect.toLocation(hearingDatesPath))
         })
       })
@@ -104,7 +109,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
 
             await request(app)
               .post(replacePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send(validData)
               .expect(res => expect(res).to.be.successful.withText(
                 'add-another-delete-link-0',
@@ -125,7 +130,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
 
             await request(app)
               .post(replacePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send(invalidData)
               .expect(res => expect(res).to.be.badRequest)
           })

@@ -4,6 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 
 import { Paths } from 'ccj/paths'
 
@@ -16,7 +17,11 @@ import { checkAuthorizationGuards } from 'test/features/ccj/routes/checks/author
 import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
 import { checkNotClaimantInCaseGuard } from 'test/features/ccj/routes/checks/not-claimant-in-case-check'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.paymentOptionsPage.evaluateUri({ externalId: externalId })
@@ -44,7 +49,7 @@ describe('CCJ - payment options', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -54,7 +59,7 @@ describe('CCJ - payment options', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
       })
@@ -66,7 +71,7 @@ describe('CCJ - payment options', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('Payment options'))
         })
       })
@@ -88,7 +93,7 @@ describe('CCJ - payment options', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -99,7 +104,7 @@ describe('CCJ - payment options', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -111,7 +116,7 @@ describe('CCJ - payment options', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -131,7 +136,7 @@ describe('CCJ - payment options', () => {
             async function checkThatSelectedPaymentOptionRedirectsToPage (data: object, expectedToRedirect: string) {
               await request(app)
                 .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', sessionCookie)
                 .send(data)
                 .expect(res => expect(res).to.be.redirect.toLocation(expectedToRedirect))
             }
@@ -153,7 +158,7 @@ describe('CCJ - payment options', () => {
             it('should render page', async () => {
               await request(app)
                 .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', sessionCookie)
                 .send({ name: 'John Smith' })
                 .expect(res => expect(res).to.be.successful.withText('Payment options', 'div class="error-summary"'))
             })

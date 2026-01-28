@@ -2,6 +2,7 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 import { Paths as BreathingSpacePaths } from 'breathing-space/paths'
 import { app } from 'main/app'
 
@@ -12,7 +13,11 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 
 describe('Enter breathing space: Respite end date page', () => {
 
@@ -24,7 +29,7 @@ describe('Enter breathing space: Respite end date page', () => {
 
       await request(app)
         .get(BreathingSpacePaths.bsEndDatePage.uri)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', sessionCookie)
         .expect(res => expect(res).to.be.successful.withText('Expected end date'))
     })
   })
@@ -42,7 +47,7 @@ describe('Enter breathing space: Respite end date page', () => {
         const date: Moment = MomentFactory.currentDate().subtract(1, 'year')
         await request(app)
           .post(BreathingSpacePaths.bsEndDatePage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ respiteEnd: { day: 30, month: 1, year: date.year() } })
           .expect(res => expect(res).to.be.successful.withText('Expected end date must not be before today', 'There was a problem'))
       })
@@ -53,7 +58,7 @@ describe('Enter breathing space: Respite end date page', () => {
 
         await request(app)
           .post(BreathingSpacePaths.bsEndDatePage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ respiteEnd: { day: '31', month: '12', year: date.year() + 1 } })
           .expect(res => expect(res).to.be.redirect.toLocation(BreathingSpacePaths.bsCheckAnswersPage.uri))
       })
@@ -63,7 +68,7 @@ describe('Enter breathing space: Respite end date page', () => {
 
         await request(app)
           .post(BreathingSpacePaths.bsEndDatePage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ respiteEnd: { day: '', month: '', year: '' } })
           .expect(res => expect(res).to.be.redirect.toLocation(BreathingSpacePaths.bsCheckAnswersPage.uri))
       })
@@ -72,7 +77,7 @@ describe('Enter breathing space: Respite end date page', () => {
 
         await request(app)
           .post(BreathingSpacePaths.bsEndDatePage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ respiteEnd: { day: '33', month: '', year: '2021' } })
           .expect(res => expect(res).to.be.successful.withText('Please enter a valid date', 'There was a problem'))
       })
@@ -81,7 +86,7 @@ describe('Enter breathing space: Respite end date page', () => {
 
         await request(app)
           .post(BreathingSpacePaths.bsEndDatePage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ respiteEnd: { day: '3', month: '18', year: '2021' } })
           .expect(res => expect(res).to.be.successful.withText('Please enter a valid date', 'There was a problem'))
       })
@@ -90,7 +95,7 @@ describe('Enter breathing space: Respite end date page', () => {
 
         await request(app)
           .post(BreathingSpacePaths.bsEndDatePage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ respiteEnd: { day: '3', month: '3', year: '12345' } })
           .expect(res => expect(res).to.be.successful.withText('Please enter a valid date', 'There was a problem'))
       })

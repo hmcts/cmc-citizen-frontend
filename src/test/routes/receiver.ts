@@ -1,7 +1,6 @@
 import { Paths as AppPaths } from 'paths'
 import { expect } from 'chai'
 import { Paths as EligibilityPaths } from 'eligibility/paths'
-import * as config from 'config'
 import { Paths as DashboardPaths } from 'dashboard/paths'
 import { Paths as FirstContactPaths } from 'first-contact/paths'
 import * as request from 'supertest'
@@ -11,6 +10,7 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
+import { getSessionCookie } from 'test/auth-helper'
 import 'test/routes/expectations'
 import * as sinon from 'sinon'
 import { attachDefaultHooks } from 'test/routes/hooks'
@@ -21,7 +21,6 @@ import { Base64 } from 'js-base64'
 import * as uuid from 'uuid'
 
 let isDashboardPaginationEnabledStub: sinon.SinonStub
-const cookieName: string = config.get<string>('session.cookieName')
 
 describe('Login receiver', async () => {
   attachDefaultHooks(app)
@@ -31,7 +30,7 @@ describe('Login receiver', async () => {
     describe('for authorized users', () => {
 
       it('should redirect to dashboard when claim exists', async () => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+        const sessionCookie = await getSessionCookie(app)
         claimStoreServiceMock.resolveRetrieveByClaimantId()
         claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
         draftStoreServiceMock.resolveFind('claim')
@@ -39,12 +38,12 @@ describe('Login receiver', async () => {
 
         await request(app)
           .get(AppPaths.receiver.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
       })
 
       it('should redirect to dashboard when only draft exists', async () => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-1')
+        const sessionCookie = await getSessionCookie(app, { roles: ['citizen', 'letter-1'] })
         claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
         claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
         draftStoreServiceMock.resolveFind('claim')
@@ -52,12 +51,12 @@ describe('Login receiver', async () => {
 
         await request(app)
           .get(AppPaths.receiver.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
       })
 
       it('when no claim issued or received and no drafts (new claimant) should redirect to start page', async () => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+        const sessionCookie = await getSessionCookie(app)
         claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
         claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
         draftStoreServiceMock.resolveFindNoDraftFound()
@@ -65,12 +64,12 @@ describe('Login receiver', async () => {
 
         await request(app)
           .get(AppPaths.receiver.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.redirect.toLocation(EligibilityPaths.startPage.uri))
       })
 
       it('should return 500 and render error page when cannot retrieve claim drafts', async () => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+        const sessionCookie = await getSessionCookie(app)
         claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
         claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
         draftStoreServiceMock.resolveFindNoDraftFound()
@@ -78,12 +77,12 @@ describe('Login receiver', async () => {
 
         await request(app)
           .get(AppPaths.receiver.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
       it('when claim received and draft response exists, should redirect to dashboard', async () => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-1')
+        const sessionCookie = await getSessionCookie(app, { roles: ['citizen', 'letter-1'] })
         claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
         claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
         draftStoreServiceMock.resolveFindNoDraftFound()
@@ -91,13 +90,13 @@ describe('Login receiver', async () => {
 
         await request(app)
           .get(AppPaths.receiver.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.redirect
             .toLocation(DashboardPaths.dashboardPage.uri))
       })
 
       it('when claim received first time, should redirect to dashboard', async () => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-1')
+        const sessionCookie = await getSessionCookie(app, { roles: ['citizen', 'letter-1'] })
         claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
         claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
         draftStoreServiceMock.resolveFindNoDraftFound()
@@ -105,43 +104,45 @@ describe('Login receiver', async () => {
 
         await request(app)
           .get(AppPaths.receiver.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.redirect
             .toLocation(DashboardPaths.dashboardPage.uri))
       })
 
       it('should redirect to claim details when redirect from CUI', async () => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-
         const redirectToClaim = `/dashboard/${uuid()}/claimant`
         const state = Base64.encode(JSON.stringify({ state: 'ABC', redirectToClaim }))
+        const sessionCookie = await getSessionCookie(app)
+
         await request(app)
           .get(AppPaths.receiver.uri + `?state=${encodeURIComponent(state)}`)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.redirect.toLocation(redirectToClaim))
       })
     })
 
     describe('when defendant starts response journey', () => {
       it('when claim is valid claim summary page to be displayed', async () => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-1')
+        const sessionCookie = await getSessionCookie(app, { roles: ['citizen', 'letter-1'] })
 
         await request(app)
           .get(AppPaths.receiver.uri + '?state=000MC027')
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.redirect
             .toLocation(FirstContactPaths.claimSummaryPage.uri))
       })
 
       it('when defendant tries to link and authentication is required', async () => {
+        const sessionCookie = await getSessionCookie(app)
+
         await request(app)
           .get(AppPaths.receiver.uri + '?state=123')
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.serverError)
       })
 
       it('when letter holder cookie present then by linking redirect to dashboard', async () => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-1')
+        const sessionCookie = await getSessionCookie(app, { roles: ['citizen', 'letter-1'] })
         claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
         claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
         draftStoreServiceMock.resolveFindNoDraftFound()
@@ -150,7 +151,7 @@ describe('Login receiver', async () => {
 
         await request(app)
           .get(AppPaths.receiver.uri + '?state=123')
-          .set('Cookie', [`${cookieName}=ABC`, 'lid=lasjlfkkjlef'])
+          .set('Cookie', [sessionCookie, 'lid=lasjlfkkjlef'])
           .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
       })
 
@@ -182,7 +183,7 @@ describe('Login receiver', async () => {
       })
 
       it('when claim received first time, should redirect to dashboard', async () => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-1')
+        const sessionCookie = await getSessionCookie(app, { roles: ['citizen', 'letter-1'] })
         claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
         claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
         draftStoreServiceMock.resolveFindNoDraftFound()
@@ -191,7 +192,7 @@ describe('Login receiver', async () => {
 
         await request(app)
           .get(AppPaths.receiver.uri + '?state=123')
-          .set('Cookie', [`${cookieName}=ABC`, 'lid=lasjlfkkjlef'])
+          .set('Cookie', [sessionCookie, 'lid=lasjlfkkjlef'])
           .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
       })
     })
@@ -228,13 +229,19 @@ describe('Defendant link receiver', () => {
           .expect(res => expect(res).to.be.redirect.toLocation(AppPaths.receiver.uri))
       })
 
-      it('should set session cookie to token value returned from idam', async () => {
+      it('should set session cookie (session id, not JWT) after OAuth callback', async () => {
         const token = 'token'
         idamServiceMock.resolveExchangeCode(token)
 
-        await request(app)
+        const res = await request(app)
           .get(`${pagePath}?code=123`)
-          .expect(res => expect(res).to.have.cookie(cookieName, token))
+          .expect(302)
+
+        expect(res.headers['set-cookie']).to.be.an('array')
+        const sessionCookie = (res.headers['set-cookie'] as string[]).find(c => c.startsWith('cmc-citizen-ui-session='))
+        expect(sessionCookie).to.be.ok
+        expect(sessionCookie).to.include('HttpOnly')
+        expect(sessionCookie).to.include('SameSite=Strict')
       })
     })
 

@@ -11,6 +11,7 @@ import { Paths as ResponsePaths } from 'response/paths'
 import { app } from 'main/app'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
+import { getSessionCookie } from 'test/auth-helper'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
@@ -21,7 +22,11 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const pagePath = ResponsePaths.defendantPhonePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 const headerText: string = 'Enter a phone number (optional)'
 
@@ -53,7 +58,7 @@ describe('Defendant user details: your phone page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText(headerText))
         })
       })
@@ -87,7 +92,7 @@ describe('Defendant user details: your phone page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .expect(res => expect(res).to.be.successful.withText(headerText, 'div class="error-summary"'))
           })
         })
@@ -100,7 +105,7 @@ describe('Defendant user details: your phone page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send({ number: '07123456789' })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -113,7 +118,7 @@ describe('Defendant user details: your phone page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send({ number: '07123456789' })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.taskListPage

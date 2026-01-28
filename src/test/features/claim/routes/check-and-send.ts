@@ -5,6 +5,7 @@ import * as toBoolean from 'to-boolean'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
 import { checkEligibilityGuards } from 'test/features/claim/routes/checks/eligibility-check'
 
@@ -34,7 +35,11 @@ import * as sinon from 'sinon'
 
 const mockLaunchDarklyClient: LaunchDarklyClient = mock(LaunchDarklyClient)
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const expectedLink = ({ href= '', text= '', hiddenText= '' }) => {
   return `<a class="govuk-link" href="${href}">${text} <span class="govuk-visually-hidden">${hiddenText}</span></a>`
 }
@@ -65,7 +70,7 @@ describe('Claim issue: check and send page', () => {
 
         await request(app)
           .get(ClaimPaths.checkAndSendPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.incompleteSubmissionPage.uri))
       })
 
@@ -76,7 +81,7 @@ describe('Claim issue: check and send page', () => {
 
         await request(app)
           .get(ClaimPaths.checkAndSendPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -87,7 +92,7 @@ describe('Claim issue: check and send page', () => {
 
         await request(app)
           .get(ClaimPaths.checkAndSendPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText('Check your answers'))
       })
 
@@ -98,7 +103,7 @@ describe('Claim issue: check and send page', () => {
 
         await request(app)
           .get(ClaimPaths.checkAndSendPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -109,7 +114,7 @@ describe('Claim issue: check and send page', () => {
 
         await request(app)
           .get(ClaimPaths.checkAndSendPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText('Check your answers'))
       })
 
@@ -129,7 +134,7 @@ describe('Claim issue: check and send page', () => {
 
         await request(app)
           .get(ClaimPaths.checkAndSendPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText('Check your answers'))
           .expect(res => expect(res).to.be.successful.withText(expectedLink({ href: '/claim/claimant-individual-details', text: 'Change', hiddenText: hiddenTextFullName })))
           .expect(res => expect(res).to.be.successful.withText(expectedLink({ href: '/claim/claimant-dob', text: 'Change', hiddenText: 'date of birth' })))
@@ -161,7 +166,7 @@ describe('Claim issue: check and send page', () => {
 
         await request(app)
           .get(ClaimPaths.checkAndSendPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText(expectedLink({ href: '/claim/claimant-individual-details', text: 'Change', hiddenText: hiddenTextFullName })))
           .expect(res => expect(res).to.be.successful.withText('Full name', 'John Smith'))
           .expect(res => expect(res).to.be.successful.withText('Statement of truth', 'I believe that the facts stated in this claim are true.', 'I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.'))
@@ -177,7 +182,7 @@ describe('Claim issue: check and send page', () => {
 
         await request(app)
           .get(ClaimPaths.checkAndSendPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText(expectedLink({ href: '/claim/claimant-individual-details', text: 'Change', hiddenText: hiddenTextFullName })))
           .expect(res => expect(res).to.be.successful.withText('Full name', 'John Smith'))
           .expect(res => expect(res).to.be.successful.withText('Statement of truth', 'I believe that the facts stated in this claim are true.', 'I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.'))
@@ -195,7 +200,7 @@ describe('Claim issue: check and send page', () => {
 
         await request(app)
           .get(ClaimPaths.checkAndSendPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText(expectedLink({ href: '/claim/claimant-individual-details', text: 'Change', hiddenText: hiddenTextFullName })))
           .expect(res => expect(res).to.be.successful.withText('Full name', 'John Smith'))
           .expect(res => expect(res).to.be.successful.withText('Statement of truth', 'I believe that the facts stated in this claim are true.', 'I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.'))
@@ -222,7 +227,7 @@ describe('Claim issue: check and send page', () => {
 
         await request(app)
           .get(ClaimPaths.checkAndSendPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText(expectedLink({ href: '/claim/claimant-sole-trader-details', text: 'Change', hiddenText: hiddenTextFullName })))
           .expect(res => expect(res).to.be.successful.withText('Business name', 'Trading as Claimant SoleTrader Ltd.'))
           .expect(res => expect(res).to.be.successful.withText('Statement of truth', 'I believe that the facts stated in this claim are true.', 'I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.'))
@@ -244,7 +249,7 @@ describe('Claim issue: check and send page', () => {
 
         await request(app)
           .get(ClaimPaths.checkAndSendPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText(expectedLink({ href: '/claim/claimant-sole-trader-details', text: 'Change', hiddenText: hiddenTextFullName })))
           .expect(res => expect(res).to.be.successful.withText('Business name', 'Trading as Claimant SoleTrader Ltd.'))
           .expect(res => expect(res).to.be.successful.withText('Statement of truth', 'I believe that the facts stated in this claim are true.', 'I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.'))
@@ -270,7 +275,7 @@ describe('Claim issue: check and send page', () => {
 
         await request(app)
           .get(ClaimPaths.checkAndSendPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText(expectedLink({ href: '/claim/claimant-sole-trader-details', text: 'Change', hiddenText: hiddenTextFullName })))
           .expect(res => expect(res).to.be.successful.withText('Business name', 'Trading as Claimant SoleTrader Ltd.'))
           .expect(res => expect(res).to.be.successful.withText('Statement of truth', 'I believe that the facts stated in this claim are true.', 'I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.'))
@@ -292,7 +297,7 @@ describe('Claim issue: check and send page', () => {
 
         await request(app)
           .get(ClaimPaths.checkAndSendPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText(expectedLink({ href: '/claim/claimant-sole-trader-details', text: 'Change', hiddenText: hiddenTextFullName })))
           .expect(res => expect(res).to.be.successful.withText('Business name', 'Trading as Claimant SoleTrader Ltd.'))
           .expect(res => expect(res).to.be.successful.withText('Statement of truth', 'I believe that the facts stated in this claim are true.', 'I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.'))
@@ -314,7 +319,7 @@ describe('Claim issue: check and send page', () => {
 
         await request(app)
           .get(ClaimPaths.checkAndSendPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText(expectedLink({ href: '/claim/claimant-company-details', text: 'Change', hiddenText: hiddenTextFullName })))
           .expect(res => expect(res).to.be.successful.withText('Company Ltd.'))
           .expect(res => expect(res).to.be.successful.withText('<input id="signerName" name="signerName"', '<input id="signerRole" name="signerRole"'))
@@ -334,7 +339,7 @@ describe('Claim issue: check and send page', () => {
 
         await request(app)
           .get(ClaimPaths.checkAndSendPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText(expectedLink({ href: '/claim/claimant-company-details', text: 'Change', hiddenText: hiddenTextFullName })))
           .expect(res => expect(res).to.be.successful.withText('Company Ltd.'))
           .expect(res => expect(res).to.be.successful.withText('<input id="signerName" name="signerName"', '<input id="signerRole" name="signerRole"'))
@@ -360,7 +365,7 @@ describe('Claim issue: check and send page', () => {
 
         await request(app)
           .get(ClaimPaths.checkAndSendPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText(expectedLink({ href: '/claim/claimant-company-details', text: 'Change', hiddenText: hiddenTextFullName })))
           .expect(res => expect(res).to.be.successful.withText('Company Ltd.'))
           .expect(res => expect(res).to.be.successful.withText('<input id="signerName" name="signerName"', '<input id="signerRole" name="signerRole"'))
@@ -382,7 +387,7 @@ describe('Claim issue: check and send page', () => {
 
         await request(app)
           .get(ClaimPaths.checkAndSendPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText(expectedLink({ href: '/claim/claimant-company-details', text: 'Change', hiddenText: hiddenTextFullName })))
           .expect(res => expect(res).to.be.successful.withText('Company Ltd.'))
           .expect(res => expect(res).to.be.successful.withText('<input id="signerName" name="signerName"', '<input id="signerRole" name="signerRole"'))
@@ -404,7 +409,7 @@ describe('Claim issue: check and send page', () => {
 
         await request(app)
           .get(ClaimPaths.checkAndSendPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText(expectedLink({ href: '/claim/claimant-organisation-details', text: 'Change', hiddenText: hiddenTextFullName })))
           .expect(res => expect(res).to.be.successful.withText('Organisation.'))
           .expect(res => expect(res).to.be.successful.withText('<input id="signerName" name="signerName"', '<input id="signerRole" name="signerRole"'))
@@ -423,7 +428,7 @@ describe('Claim issue: check and send page', () => {
 
         await request(app)
           .get(ClaimPaths.checkAndSendPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText(expectedLink({ href: '/claim/claimant-organisation-details', text: 'Change', hiddenText: hiddenTextFullName })))
           .expect(res => expect(res).to.be.successful.withText('Organisation.'))
           .expect(res => expect(res).to.be.successful.withText('<input id="signerName" name="signerName"', '<input id="signerRole" name="signerRole"'))
@@ -449,7 +454,7 @@ describe('Claim issue: check and send page', () => {
 
         await request(app)
           .get(ClaimPaths.checkAndSendPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText(expectedLink({ href: '/claim/claimant-organisation-details', text: 'Change', hiddenText: hiddenTextFullName })))
           .expect(res => expect(res).to.be.successful.withText('Organisation.'))
           .expect(res => expect(res).to.be.successful.withText('<input id="signerName" name="signerName"', '<input id="signerRole" name="signerRole"'))
@@ -471,7 +476,7 @@ describe('Claim issue: check and send page', () => {
 
         await request(app)
           .get(ClaimPaths.checkAndSendPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText(expectedLink({ href: '/claim/claimant-organisation-details', text: 'Change', hiddenText: hiddenTextFullName })))
           .expect(res => expect(res).to.be.successful.withText('Organisation.'))
           .expect(res => expect(res).to.be.successful.withText('<input id="signerName" name="signerName"', '<input id="signerRole" name="signerRole"'))
@@ -508,7 +513,7 @@ describe('Claim issue: check and send page', () => {
         await request(app)
           .post(ClaimPaths.checkAndSendPage.uri)
           .send({ type: SignatureType.BASIC })
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.incompleteSubmissionPage.uri))
       })
 
@@ -520,7 +525,7 @@ describe('Claim issue: check and send page', () => {
         await request(app)
           .post(ClaimPaths.checkAndSendPage.uri)
           .send({ type: SignatureType.BASIC })
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -532,7 +537,7 @@ describe('Claim issue: check and send page', () => {
         await request(app)
           .post(ClaimPaths.checkAndSendPage.uri)
           .send({ type: SignatureType.BASIC })
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText('Check your answers', 'div class="error-summary"'))
       })
 
@@ -545,7 +550,7 @@ describe('Claim issue: check and send page', () => {
         await request(app)
           .post(ClaimPaths.checkAndSendPage.uri)
           .send({ type: SignatureType.BASIC })
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ signed: 'true' })
           .expect(res => expect(res).to.be.redirect.toLocation(nextPage))
       })
@@ -565,7 +570,7 @@ describe('Claim issue: check and send page', () => {
         await request(app)
           .post(ClaimPaths.checkAndSendPage.uri)
           .send({ type: SignatureType.BASIC })
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ signed: 'true' })
           .expect(res => expect(res).to.be.redirect.toLocation(nextPage))
       })
@@ -584,7 +589,7 @@ describe('Claim issue: check and send page', () => {
         await request(app)
           .post(ClaimPaths.checkAndSendPage.uri)
           .send({ type: SignatureType.BASIC })
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ signed: 'true' })
           .expect(res => expect(res).to.be.redirect.toLocation(nextPage))
       })
@@ -599,7 +604,7 @@ describe('Claim issue: check and send page', () => {
         await request(app)
           .post(ClaimPaths.checkAndSendPage.uri)
           .send({ type: SignatureType.BASIC })
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ signed: 'true' })
           .expect(res => expect(res).to.be.redirect.toLocation(nextPage))
       })
@@ -623,7 +628,7 @@ describe('Claim issue: check and send page', () => {
         await request(app)
           .post(ClaimPaths.checkAndSendPage.uri)
           .send({ type: SignatureType.BASIC })
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ signed: 'true' })
           .expect(res => expect(res).to.be.redirect.toLocation(nextPage))
       })
@@ -644,7 +649,7 @@ describe('Claim issue: check and send page', () => {
         await request(app)
           .post(ClaimPaths.checkAndSendPage.uri)
           .send({ type: SignatureType.BASIC })
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ signed: 'true' })
           .expect(res => expect(res).to.be.redirect.toLocation(nextPage))
       })

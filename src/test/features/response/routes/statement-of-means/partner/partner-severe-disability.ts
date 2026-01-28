@@ -6,6 +6,7 @@ import { attachDefaultHooks } from 'test/routes/hooks'
 import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
+import { getSessionCookie } from 'test/auth-helper'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
@@ -20,7 +21,11 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 
 const partnerSevereDisabilityPage = Paths.partnerSevereDisabilityPage.evaluateUri({
   externalId: claimStoreServiceMock.sampleClaimObj.externalId
@@ -45,7 +50,7 @@ describe('Statement of means', () => {
 
           await request(app)
             .get(partnerSevereDisabilityPage)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -55,7 +60,7 @@ describe('Statement of means', () => {
 
           await request(app)
             .get(partnerSevereDisabilityPage)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -66,7 +71,7 @@ describe('Statement of means', () => {
 
           await request(app)
             .get(partnerSevereDisabilityPage)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('Is your partner severely disabled?'))
         })
       })
@@ -91,7 +96,7 @@ describe('Statement of means', () => {
 
           await request(app)
             .post(partnerSevereDisabilityPage)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -101,7 +106,7 @@ describe('Statement of means', () => {
 
           await request(app)
             .post(partnerSevereDisabilityPage)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -113,7 +118,7 @@ describe('Statement of means', () => {
 
           await request(app)
             .post(partnerSevereDisabilityPage)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send(validFormData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -126,7 +131,7 @@ describe('Statement of means', () => {
 
           await request(app)
             .post(partnerSevereDisabilityPage)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send(validFormData)
             .expect(res => expect(res).to.be.redirect
               .toLocation(Paths.dependantsPage
@@ -140,7 +145,7 @@ describe('Statement of means', () => {
 
           await request(app)
             .post(partnerSevereDisabilityPage)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send({})
             .expect(res => expect(res).to.be.successful.withText(ValidationErrors.OPTION_REQUIRED))
         })

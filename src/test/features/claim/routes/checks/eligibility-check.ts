@@ -5,9 +5,14 @@ import * as request from 'supertest'
 import { Paths } from 'eligibility/paths'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
+import { getSessionCookie } from 'test/auth-helper'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 
 export function checkEligibilityGuards (app: any, method: string, pagePath: string) {
   it('should redirect to eligibility start page when draft is not marked eligible', async () => {
@@ -16,7 +21,7 @@ export function checkEligibilityGuards (app: any, method: string, pagePath: stri
     draftStoreServiceMock.resolveFind('claim', { eligibility: undefined })
 
     await request(app)[method](pagePath)
-      .set('Cookie', `${cookieName}=ABC`)
+      .set('Cookie', sessionCookie)
       .expect(res => expect(res).redirect.toLocation(Paths.startPage.uri))
   })
 }

@@ -4,6 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
 
 import { Paths as ClaimPaths } from 'claim/paths'
@@ -14,7 +15,11 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { InterestRateOption } from 'claim/form/models/interestRateOption'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const pageContent: string = 'What annual rate of interest do you want to claim?'
 const pagePath: string = ClaimPaths.interestRatePage.uri
 
@@ -32,7 +37,7 @@ describe('Claim issue: interest rate page', () => {
 
       await request(app)
         .get(pagePath)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', sessionCookie)
         .expect(res => expect(res).to.be.successful.withText(pageContent))
     })
   })
@@ -52,7 +57,7 @@ describe('Claim issue: interest rate page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText(pageContent, 'div class="error-summary"'))
       })
 
@@ -61,7 +66,7 @@ describe('Claim issue: interest rate page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({
             type: InterestRateOption.DIFFERENT,
             reason: 'Special case'
@@ -74,7 +79,7 @@ describe('Claim issue: interest rate page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({
             type: InterestRateOption.DIFFERENT,
             rate: '10'
@@ -88,7 +93,7 @@ describe('Claim issue: interest rate page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ type: InterestRateOption.STANDARD })
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -99,7 +104,7 @@ describe('Claim issue: interest rate page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ type: InterestRateOption.STANDARD })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.interestDatePage.uri))
       })
@@ -110,7 +115,7 @@ describe('Claim issue: interest rate page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({
             type: InterestRateOption.DIFFERENT,
             rate: '10',

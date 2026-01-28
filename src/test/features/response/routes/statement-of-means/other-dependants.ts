@@ -2,6 +2,7 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 import { StatementOfMeansPaths } from 'response/paths'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
@@ -17,7 +18,11 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const pagePath: string = StatementOfMeansPaths.otherDependantsPage.evaluateUri(
   { externalId: claimStoreServiceMock.sampleClaimObj.externalId }
 )
@@ -49,7 +54,7 @@ describe('Defendant response: Statement of means: other dependants', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -59,7 +64,7 @@ describe('Defendant response: Statement of means: other dependants', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -70,7 +75,7 @@ describe('Defendant response: Statement of means: other dependants', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('Do you support anyone else financially?'))
         })
       })
@@ -100,7 +105,7 @@ describe('Defendant response: Statement of means: other dependants', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -110,7 +115,7 @@ describe('Defendant response: Statement of means: other dependants', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
       })
@@ -126,7 +131,7 @@ describe('Defendant response: Statement of means: other dependants', () => {
           await request(app)
             .post(pagePath)
             .send({ declared: 'false' })
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.redirect
               .toLocation(StatementOfMeansPaths.carerPage.evaluateUri(
                 { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -146,7 +151,7 @@ describe('Defendant response: Statement of means: other dependants', () => {
               declared: 'false',
               numberOfPeople: { value: 1, details: 'It is my story' }
             })
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.redirect
               .toLocation(StatementOfMeansPaths.carerPage.evaluateUri(
                 { externalId: claimStoreServiceMock.sampleClaimObj.externalId })

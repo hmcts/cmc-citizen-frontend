@@ -6,6 +6,7 @@ import { attachDefaultHooks } from 'test/routes/hooks'
 import { checkAuthorizationGuards } from 'test/features/claimant-response/routes/checks/authorization-check'
 import { checkNotClaimantInCaseGuard } from 'test/features/claimant-response/routes/checks/not-claimant-in-case-check'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 
 import { Paths } from 'claimant-response/paths'
 
@@ -17,7 +18,11 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
 import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.alternateRepaymentPlanPage.evaluateUri({ externalId: externalId })
 
@@ -42,7 +47,7 @@ describe('Claimant response: payment options', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -52,7 +57,7 @@ describe('Claimant response: payment options', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
       })
@@ -64,7 +69,7 @@ describe('Claimant response: payment options', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText(heading))
         })
       })
@@ -90,7 +95,7 @@ describe('Claimant response: payment options', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -101,7 +106,7 @@ describe('Claimant response: payment options', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -113,7 +118,7 @@ describe('Claimant response: payment options', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -133,7 +138,7 @@ describe('Claimant response: payment options', () => {
             async function checkThatSelectedPaymentOptionRedirectsToPage (data: object, expectedToRedirect: string) {
               await request(app)
                 .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', sessionCookie)
                 .send(data)
                 .expect(res => expect(res).to.be.redirect.toLocation(expectedToRedirect))
             }
@@ -161,7 +166,7 @@ describe('Claimant response: payment options', () => {
             it(`should render page with heading '${heading}'`, async () => {
               await request(app)
                 .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', sessionCookie)
                 .send({})
                 .expect(res => expect(res).to.be.successful.withText(heading, 'div class="error-summary"'))
             })
@@ -179,7 +184,7 @@ describe('Claimant response: payment options', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send(dataToSend)
               .expect(res => expect(res).to.be.redirect.toLocation(Paths.taskListPage.evaluateUri({ externalId: externalId })))
           })
@@ -191,7 +196,7 @@ describe('Claimant response: payment options', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send({ option: PaymentType.IMMEDIATELY.value })
               .expect(res => expect(res).to.be.redirect.toLocation(Paths.courtOfferedInstalmentsPage.evaluateUri({ externalId: externalId })))
           })
@@ -203,7 +208,7 @@ describe('Claimant response: payment options', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send({ option: PaymentType.IMMEDIATELY.value })
               .expect(res => expect(res).to.be.redirect.toLocation(Paths.courtOfferedSetDatePage.evaluateUri({ externalId: externalId })))
           })
@@ -215,7 +220,7 @@ describe('Claimant response: payment options', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send({ option: PaymentType.IMMEDIATELY.value })
               .expect(res => expect(res).to.be.redirect.toLocation(Paths.courtOfferedInstalmentsPage.evaluateUri({ externalId: externalId })))
           })
@@ -227,7 +232,7 @@ describe('Claimant response: payment options', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send({ option: PaymentType.IMMEDIATELY.value })
               .expect(res => expect(res).to.be.redirect.toLocation(Paths.payBySetDateAcceptedPage.evaluateUri({ externalId: externalId })))
           })

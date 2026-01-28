@@ -4,6 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 
 import { Paths } from 'directions-questionnaire/paths'
 import { Paths as DashboardPaths } from 'dashboard/paths'
@@ -21,7 +22,11 @@ import {
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const pagePath = Paths.expertGuidancePage.evaluateUri({ externalId })
 
 const claimWithDQ = {
@@ -34,7 +39,7 @@ function checkAccessGuard (app: any, method: string) {
     idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
     claimStoreServiceMock.resolveRetrieveClaimByExternalId()
     await request(app)[method](pagePath)
-      .set('Cookie', `${cookieName}=ABC`)
+      .set('Cookie', sessionCookie)
       .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
   })
 }
@@ -69,7 +74,7 @@ describe('Directions Questionnaire - expert guidance page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('Using an expert in small claims'))
         })
       })
@@ -101,7 +106,7 @@ describe('Directions Questionnaire - expert guidance page', () => {
             draftStoreServiceMock.resolveFind('response')
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send()
               .expect(res => expect(res).to.be.redirect.toLocation(Paths.permissionForExpertPage.evaluateUri(
                 { externalId: externalId })))

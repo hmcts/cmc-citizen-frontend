@@ -4,6 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
 import { checkEligibilityGuards } from 'test/features/claim/routes/checks/eligibility-check'
 
@@ -14,7 +15,11 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 
 describe('Claim issue: task list page', () => {
   attachDefaultHooks(app)
@@ -29,7 +34,7 @@ describe('Claim issue: task list page', () => {
 
       await request(app)
         .get(ClaimPaths.taskListPage.uri)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', sessionCookie)
         .expect(res => expect(res).to.be.successful.withText('Make a money claim'))
     })
 
@@ -39,7 +44,7 @@ describe('Claim issue: task list page', () => {
 
       await request(app)
         .get(ClaimPaths.taskListPage.uri)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', sessionCookie)
         .expect(res => expect(res).to.be.successful.withText('Make a money claim', 'Application incomplete', 'You have completed 6 of 7 sections'))
     })
   })

@@ -13,6 +13,7 @@ import { PartAdmissionPaths, Paths } from 'response/paths'
 import { app } from 'main/app'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
+import { getSessionCookie } from 'test/auth-helper'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
@@ -25,7 +26,11 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const pagePath = PartAdmissionPaths.paymentDatePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 const draft = _.cloneDeep(draftStoreServiceMock.samplePartialAdmissionResponseDraftObj)
@@ -69,7 +74,7 @@ describe('Pay by set date: payment date', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -79,7 +84,7 @@ describe('Pay by set date: payment date', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('What date will you pay on?'))
         })
       })
@@ -110,7 +115,7 @@ describe('Pay by set date: payment date', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -121,7 +126,7 @@ describe('Pay by set date: payment date', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send(nextDay())
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -132,7 +137,7 @@ describe('Pay by set date: payment date', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send({})
             .expect(res => expect(res).to.be.successful.withText(ValidationErrors.DATE_REQUIRED))
         })
@@ -144,7 +149,7 @@ describe('Pay by set date: payment date', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send(nextDay())
             .expect(res => expect(res).to.be.redirect
               .toLocation(

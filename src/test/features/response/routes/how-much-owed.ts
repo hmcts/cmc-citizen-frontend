@@ -4,6 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
 import { checkAlreadySubmittedGuard } from 'test/common/checks/already-submitted-check'
 
@@ -20,7 +21,11 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 
 const pagePath = ResponsePaths.defendantHowMuchOwed.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
@@ -46,7 +51,7 @@ describe('Defendant response: how much money do you believe you owe', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -57,7 +62,7 @@ describe('Defendant response: how much money do you believe you owe', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('How much money do you believe you owe?'))
         })
       })
@@ -83,7 +88,7 @@ describe('Defendant response: how much money do you believe you owe', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
@@ -94,7 +99,7 @@ describe('Defendant response: how much money do you believe you owe', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .expect(res => expect(res).to.be.successful.withText('How much money do you believe you owe?', 'div class="error-summary"'))
           })
         })
@@ -108,7 +113,7 @@ describe('Defendant response: how much money do you believe you owe', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send({ amount: 1, text: 'I don’t owe full amount' })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -121,7 +126,7 @@ describe('Defendant response: how much money do you believe you owe', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send({ amount: 1, text: 'I don’t owe full amount' })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(

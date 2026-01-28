@@ -4,6 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 
 import { Paths } from 'ccj/paths'
 import { app } from 'main/app'
@@ -18,7 +19,11 @@ import { MomentFactory } from 'shared/momentFactory'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const pagePath: string = Paths.payBySetDatePage.evaluateUri({ externalId : externalId })
 const checkAndSavePage: string = Paths.checkAndSendPage.evaluateUri({ externalId : externalId })
 const checkContent: string = 'When do you want the defendant to pay?'
@@ -41,7 +46,7 @@ describe('CCJ - Pay by set date', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -51,7 +56,7 @@ describe('CCJ - Pay by set date', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -61,7 +66,7 @@ describe('CCJ - Pay by set date', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText(checkContent))
       })
     })
@@ -85,7 +90,7 @@ describe('CCJ - Pay by set date', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send(validFormData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -96,7 +101,7 @@ describe('CCJ - Pay by set date', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send(validFormData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -109,7 +114,7 @@ describe('CCJ - Pay by set date', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send(validFormData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -121,7 +126,7 @@ describe('CCJ - Pay by set date', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send(validFormData)
             .expect(res => expect(res).to.be.redirect.toLocation(checkAndSavePage))
         })
@@ -134,7 +139,7 @@ describe('CCJ - Pay by set date', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send({ known: undefined })
             .expect(res => expect(res).to.be.successful.withText(checkContent, 'div class="error-summary"'))
         })

@@ -4,6 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
 
 import { Paths as MediationPaths } from 'mediation/paths'
@@ -22,7 +23,11 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const pagePath = MediationPaths.canWeUsePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 describe('Free mediation: can we use phone number page', () => {
@@ -45,7 +50,7 @@ describe('Free mediation: can we use phone number page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
       it('should render page when everything is fine and no defendant phone number is provided', async () => {
@@ -55,7 +60,7 @@ describe('Free mediation: can we use phone number page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText('Can the mediation service use'))
       })
 
@@ -66,7 +71,7 @@ describe('Free mediation: can we use phone number page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText('Enter a phone number'))
       })
     })
@@ -90,7 +95,7 @@ describe('Free mediation: can we use phone number page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
       })
@@ -104,7 +109,7 @@ describe('Free mediation: can we use phone number page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send({ option: FreeMediationOption.YES, mediationPhoneNumber: undefined })
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -117,7 +122,7 @@ describe('Free mediation: can we use phone number page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send({ option: FreeMediationOption.YES })
             .expect(res => expect(res).to.be.redirect
               .toLocation(ResponsePaths.taskListPage
@@ -132,7 +137,7 @@ describe('Free mediation: can we use phone number page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send({
               option: FreeMediationOption.NO,
               mediationPhoneNumber: '07777777777'
@@ -147,7 +152,7 @@ describe('Free mediation: can we use phone number page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send({ option: FreeMediationOption.NO, mediationPhoneNumber: undefined })
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })

@@ -4,6 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
 
 import { Paths as MediationPaths } from 'mediation/paths'
@@ -21,7 +22,11 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const pagePath = MediationPaths.mediationDisagreementPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 const pageHeading = 'You chose not to try free mediation'
 
@@ -46,7 +51,7 @@ describe('Free mediation: mediation disagreement page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -57,7 +62,7 @@ describe('Free mediation: mediation disagreement page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText(pageHeading))
         })
       })
@@ -83,7 +88,7 @@ describe('Free mediation: mediation disagreement page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
@@ -94,7 +99,7 @@ describe('Free mediation: mediation disagreement page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send({ })
               .expect(res => expect(res).to.be.successful.withText('There was a problem'))
           })
@@ -109,7 +114,7 @@ describe('Free mediation: mediation disagreement page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send({ option: FreeMediationOption.YES })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -122,7 +127,7 @@ describe('Free mediation: mediation disagreement page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send({ option: FreeMediationOption.YES })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(MediationPaths.canWeUsePage
@@ -137,7 +142,7 @@ describe('Free mediation: mediation disagreement page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send({ option: FreeMediationOption.NO })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(MediationPaths.iDontWantFreeMediationPage
@@ -152,7 +157,7 @@ describe('Free mediation: mediation disagreement page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send({ option: FreeMediationOption.YES })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(MediationPaths.canWeUsePage
@@ -177,7 +182,7 @@ describe('Free mediation: mediation disagreement page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ option: FreeMediationOption.NO })
           .expect(res => expect(res).to.be.redirect
             .toLocation(MediationPaths.iDontWantFreeMediationPage
@@ -192,7 +197,7 @@ describe('Free mediation: mediation disagreement page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ option: FreeMediationOption.YES })
           .expect(res => expect(res).to.be.redirect
             .toLocation(MediationPaths.canWeUsePage

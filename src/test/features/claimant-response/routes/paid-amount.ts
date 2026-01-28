@@ -4,6 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 
 import { CCJPaths } from 'claimant-response/paths'
 
@@ -17,7 +18,11 @@ import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 import { checkNotClaimantInCaseGuard } from 'test/features/ccj/routes/checks/not-claimant-in-case-check'
 import { sampleFullAdmissionWithPaymentBySetDateResponseObj } from '../../../http-mocks/claim-store'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = CCJPaths.paidAmountPage.evaluateUri({ externalId: externalId })
 const paidAmountSummaryPage = CCJPaths.paidAmountSummaryPage.evaluateUri({ externalId: externalId })
@@ -48,7 +53,7 @@ describe('Claimant Response - paid amount page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -58,7 +63,7 @@ describe('Claimant Response - paid amount page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -68,7 +73,7 @@ describe('Claimant Response - paid amount page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText(heading))
       })
     })
@@ -89,7 +94,7 @@ describe('Claimant Response - paid amount page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -100,7 +105,7 @@ describe('Claimant Response - paid amount page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -114,7 +119,7 @@ describe('Claimant Response - paid amount page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send(validFormData)
               .expect(res => expect(res).to.be.redirect.toLocation(paidAmountSummaryPage))
           })
@@ -126,7 +131,7 @@ describe('Claimant Response - paid amount page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -139,7 +144,7 @@ describe('Claimant Response - paid amount page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send({})
               .expect(res => expect(res).to.be.successful.withText(heading, 'div class="error-summary"'))
           })
@@ -152,7 +157,7 @@ describe('Claimant Response - paid amount page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send({
                 option: PaidAmountOption.YES.value,
                 amount: 101,

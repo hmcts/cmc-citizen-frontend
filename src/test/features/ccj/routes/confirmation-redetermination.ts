@@ -4,6 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 import { checkAuthorizationGuards } from 'test/features/ccj/routes/checks/authorization-check'
 
 import { Paths as CCJPaths } from 'ccj/paths'
@@ -18,7 +19,11 @@ import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 import { MadeBy } from 'claims/models/madeBy'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const pagePath = CCJPaths.redeterminationConfirmationPage.evaluateUri({ externalId: externalId })
 
 describe('CCJ: redetermination confirmation page', () => {
@@ -40,7 +45,7 @@ describe('CCJ: redetermination confirmation page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -71,7 +76,7 @@ describe('CCJ: redetermination confirmation page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('You’ve asked for a judge to decide a repayment plan'))
         })
       })

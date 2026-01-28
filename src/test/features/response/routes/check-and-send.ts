@@ -4,6 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
 import { checkAlreadySubmittedGuard } from 'test/common/checks/already-submitted-check'
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
@@ -33,7 +34,11 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 
 const draftType = 'response'
 const pagePath = ResponsePaths.checkAndSendPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -69,7 +74,7 @@ describe('Defendant response: check and send page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.redirect
               .toLocation(ResponsePaths.incompleteSubmissionPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
         })
@@ -79,7 +84,7 @@ describe('Defendant response: check and send page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -92,7 +97,7 @@ describe('Defendant response: check and send page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => {
               if (FeatureToggles.isEnabled('pcq')) {
                 expect(res.status).to.be.satisfy(function (code) {
@@ -118,12 +123,12 @@ describe('Defendant response: check and send page', () => {
             if (FeatureToggles.isEnabled('pcq')) {
               await request(app)
               .get(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .expect(res => res.status = 302)
             } else {
               await request(app)
               .get(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .expect(res => expect(res).to.be.successful.withText('Statement of truth'))
               .expect(res => expect(res).to.be.successful.withText('I believe that the facts stated in this response are true.'))
               .expect(res => expect(res).to.be.successful.withText('I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.'))
@@ -141,12 +146,12 @@ describe('Defendant response: check and send page', () => {
               if (FeatureToggles.isEnabled('pcq')) {
                 await request(app)
                 .get(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', sessionCookie)
                 .expect(res => res.status = 302)
               } else {
                 await request(app)
                 .get(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', sessionCookie)
                 .expect(res => expect(res).to.be.successful.withText(
                   'Your hearing requirements',
                   'Support required for a hearing',
@@ -234,7 +239,7 @@ describe('Defendant response: check and send page', () => {
 
             await request(app)
               .get(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .expect(res => expect(res).to.be.successful.withText(
                 'Statement of truth',
                 '<input id="signerName" name="signerName"',
@@ -312,7 +317,7 @@ describe('Defendant response: check and send page', () => {
             if (FeatureToggles.isEnabled('directionsQuestionnaire') && (draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.DEFENCE || draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.PART_ADMISSION)) {
               await request(app)
                 .get(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', sessionCookie)
                 .expect(res => expect(res).to.be.successful.withText(
                   'Statement of truth',
                   '<input id="signerName" name="signerName"',
@@ -327,7 +332,7 @@ describe('Defendant response: check and send page', () => {
             } else {
               await request(app)
                 .get(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', sessionCookie)
                 .expect(res => expect(res).to.be.successful.withText(
                   'Statement of truth',
                   '<input id="signerName" name="signerName"',
@@ -370,7 +375,7 @@ describe('Defendant response: check and send page', () => {
           await request(app)
             .post(pagePath)
             .send({ type: SignatureType.BASIC })
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.redirect
               .toLocation(ResponsePaths.incompleteSubmissionPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
         })
@@ -382,7 +387,7 @@ describe('Defendant response: check and send page', () => {
             await request(app)
               .post(pagePath)
               .send({ type: SignatureType.BASIC })
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
@@ -396,7 +401,7 @@ describe('Defendant response: check and send page', () => {
             await request(app)
               .post(pagePath)
               .send({ type: SignatureType.BASIC })
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .expect(res => expect(res).to.be.successful.withText('Check your answers', 'div class="error-summary"'))
           })
 
@@ -418,7 +423,7 @@ describe('Defendant response: check and send page', () => {
 
               await request(app)
                 .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', sessionCookie)
                 .send(sendData)
                 .expect(res => expect(res).to.be.successful.withText('Tell us if you believe the hearing requirement details on this page are true', 'div class="error-summary"'))
             })
@@ -431,7 +436,7 @@ describe('Defendant response: check and send page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send({ signed: 'true', type: SignatureType.BASIC })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -446,7 +451,7 @@ describe('Defendant response: check and send page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send({ signed: 'true', type: SignatureType.BASIC })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -462,7 +467,7 @@ describe('Defendant response: check and send page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send({ signed: 'true', type: SignatureType.BASIC })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -490,7 +495,7 @@ describe('Defendant response: check and send page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send(sendData)
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
@@ -512,7 +517,7 @@ describe('Defendant response: check and send page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send({ signed: 'true', type: SignatureType.QUALIFIED, signerName: 'signer', signerRole: 'role' })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
@@ -530,7 +535,7 @@ describe('Defendant response: check and send page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send({ signed: 'true', type: SignatureType.BASIC })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.counterClaimPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))

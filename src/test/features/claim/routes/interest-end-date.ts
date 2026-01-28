@@ -4,6 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
 import { Paths as ClaimPaths } from 'claim/paths'
 import { app } from 'main/app'
@@ -11,7 +12,11 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const pageContent: string = 'When do you want to stop claiming interest?'
 const pagePath: string = ClaimPaths.interestEndDatePage.uri
 
@@ -29,7 +34,7 @@ describe('Claim issue: interest end date page', () => {
 
       await request(app)
         .get(pagePath)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', sessionCookie)
         .expect(res => expect(res).to.be.successful.withText(pageContent))
     })
   })
@@ -49,7 +54,7 @@ describe('Claim issue: interest end date page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText(pageContent, 'div class="error-summary"'))
       })
 
@@ -59,7 +64,7 @@ describe('Claim issue: interest end date page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ option: InterestEndDateOption.SUBMISSION })
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -70,7 +75,7 @@ describe('Claim issue: interest end date page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ option: InterestEndDateOption.SUBMISSION })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.helpWithFeesPage.uri))
       })
@@ -81,7 +86,7 @@ describe('Claim issue: interest end date page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ option: InterestEndDateOption.SETTLED_OR_JUDGMENT })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.helpWithFeesPage.uri))
       })

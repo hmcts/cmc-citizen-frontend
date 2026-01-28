@@ -7,6 +7,7 @@ import { app } from 'main/app'
 import { checkAuthorizationGuards } from 'test/routes/authorization-check'
 import { Paths } from 'directions-questionnaire/paths'
 import * as idamServiceMock from 'test/http-mocks/idam'
+import { getSessionCookie } from 'test/auth-helper'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { Paths as DashboardPaths } from 'dashboard/paths'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
@@ -20,7 +21,11 @@ import {
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.determinationWithoutHearingQuestionsPage.evaluateUri({ externalId: externalId })
 const supportPage = Paths.supportPage.evaluateUri({ externalId: externalId })
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const claimWithDQ = {
   ...claimStoreServiceMock.sampleClaimObj,
   ...{ features: ['directionsQuestionnaire'] }
@@ -31,7 +36,7 @@ function checkAccessGuard (app: any, method: string) {
     idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
     claimStoreServiceMock.resolveRetrieveClaimByExternalId()
     await request(app)[method](pagePath)
-      .set('Cookie', `${cookieName}=ABC`)
+      .set('Cookie', sessionCookie)
       .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
   })
 }
@@ -63,7 +68,7 @@ describe('Directions questionnaire - determination questions', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -73,7 +78,7 @@ describe('Directions questionnaire - determination questions', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -84,7 +89,7 @@ describe('Directions questionnaire - determination questions', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('Do you consider that this claim is suitable for determination without a hearing'))
         })
       })
@@ -116,7 +121,7 @@ describe('Directions questionnaire - determination questions', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send(validFormData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -127,7 +132,7 @@ describe('Directions questionnaire - determination questions', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send(validFormData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -141,7 +146,7 @@ describe('Directions questionnaire - determination questions', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send(validFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -154,7 +159,7 @@ describe('Directions questionnaire - determination questions', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send(validFormData)
               .expect(res => expect(res).to.be.redirect.toLocation(supportPage))
           })
@@ -167,7 +172,7 @@ describe('Directions questionnaire - determination questions', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send({ determinationWithoutHearingQuestions: YesNoOption.YES.option })
               .expect(res => expect(res).to.be.redirect.toLocation(supportPage))
           })
@@ -181,7 +186,7 @@ describe('Directions questionnaire - determination questions', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send(invalidFormData)
               .expect(res => expect(res).to.be.successful.withText('Tell us why'))
           })

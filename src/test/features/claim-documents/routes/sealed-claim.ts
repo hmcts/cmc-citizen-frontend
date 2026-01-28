@@ -4,6 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
 
 import { Paths as ClaimDocumentsPaths } from 'claim-documents/paths'
@@ -20,7 +21,11 @@ import {
 } from 'test/http-mocks/claim-store'
 import { RoutablePath } from 'shared/router/routablePath'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const externalId = '400f4c57-9684-49c0-adb4-4cf46579d6dc'
 const path: RoutablePath = ClaimDocumentsPaths.sealedClaimPdfReceiver
 
@@ -40,7 +45,7 @@ describe('Sealed Claim: pdf', () => {
 
         await request(app)
           .get(path.evaluateUri({ externalId: externalId }))
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -50,7 +55,7 @@ describe('Sealed Claim: pdf', () => {
 
         await request(app)
           .get(path.evaluateUri({ externalId: externalId }))
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -60,7 +65,7 @@ describe('Sealed Claim: pdf', () => {
 
         await request(app)
           .get(path.evaluateUri({ externalId: externalId }))
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful)
       })
     })

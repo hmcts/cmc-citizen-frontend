@@ -4,6 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 
 import { Paths as ClaimantResponsePaths } from 'claimant-response/paths'
 
@@ -15,7 +16,11 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { checkAuthorizationGuards } from 'test/features/claimant-response/routes/checks/authorization-check'
 import { checkNotClaimantInCaseGuard } from 'test/features/claimant-response/routes/checks/not-claimant-in-case-check'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = ClaimantResponsePaths.defendantsResponsePage.evaluateUri({ externalId: externalId })
 const taskListPagePath = ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: externalId })
@@ -44,7 +49,7 @@ describe('Claimant response: view defendant response page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -54,7 +59,7 @@ describe('Claimant response: view defendant response page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -64,7 +69,7 @@ describe('Claimant response: view defendant response page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText('The defendant’s response'))
       })
 
@@ -74,7 +79,7 @@ describe('Claimant response: view defendant response page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText('The defendant’s response'))
       })
 
@@ -84,7 +89,7 @@ describe('Claimant response: view defendant response page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText('The defendant’s response'))
       })
 
@@ -94,7 +99,7 @@ describe('Claimant response: view defendant response page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText(`£20,000`))
       })
 
@@ -108,7 +113,7 @@ describe('Claimant response: view defendant response page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText(`has rejected the claim.`,
             `Download their full response and hearing requirements`))
       })
@@ -123,7 +128,7 @@ describe('Claimant response: view defendant response page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText(`They don’t believe they owe the full amount claimed.`))
       })
     })
@@ -144,7 +149,7 @@ describe('Claimant response: view defendant response page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send({ viewedDefendantResponse: true })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -155,7 +160,7 @@ describe('Claimant response: view defendant response page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send({ viewedDefendantResponse: true })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -167,7 +172,7 @@ describe('Claimant response: view defendant response page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send({ viewedDefendantResponse: true })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -179,7 +184,7 @@ describe('Claimant response: view defendant response page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send({ action: { showPage: 1 } })
             .expect(res => expect(res).to.be.successful.withText('How they want to pay'))
         })
@@ -191,7 +196,7 @@ describe('Claimant response: view defendant response page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send({ viewedDefendantResponse: true })
             .expect(res => expect(res).to.be.redirect.toLocation(taskListPagePath))
         })

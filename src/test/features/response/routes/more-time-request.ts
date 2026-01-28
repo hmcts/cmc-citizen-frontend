@@ -11,6 +11,7 @@ import { Paths as ResponsePaths } from 'response/paths'
 import { app } from 'main/app'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
+import { getSessionCookie } from 'test/auth-helper'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
@@ -22,7 +23,11 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const pagePath = ResponsePaths.moreTimeRequestPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 describe('Defendant response: more time needed page', () => {
@@ -52,7 +57,7 @@ describe('Defendant response: more time needed page', () => {
 
             await request(app)
               .get(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .expect(res => expect(res).to.be.successful.withText('Do you want more time to respond?',
                 'You’ll have to respond before 4pm on 1 January 2020'))
           })
@@ -65,7 +70,7 @@ describe('Defendant response: more time needed page', () => {
 
             await request(app)
               .get(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .expect(res => expect(res).to.be.successful.withText('Do you want more time to respond?',
                 'You’ll have to respond before 4pm on 1 January 2020'))
           })
@@ -78,7 +83,7 @@ describe('Defendant response: more time needed page', () => {
 
             await request(app)
               .get(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
         })
@@ -90,7 +95,7 @@ describe('Defendant response: more time needed page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.redirect
               .toLocation(ResponsePaths.moreTimeConfirmationPage
                 .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
@@ -121,7 +126,7 @@ describe('Defendant response: more time needed page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.redirect
               .toLocation(ResponsePaths.moreTimeConfirmationPage
                 .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
@@ -136,7 +141,7 @@ describe('Defendant response: more time needed page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .expect(HttpStatus.OK)
               .expect(res => expect(res.text).to.include('Do you want more time to respond?', 'div class="error-summary"'))
           })
@@ -151,7 +156,7 @@ describe('Defendant response: more time needed page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send({ option: 'no' })
               .expect(res => expect(res).to.redirect
                 .toLocation(ResponsePaths.taskListPage
@@ -167,7 +172,7 @@ describe('Defendant response: more time needed page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send({ option: 'yes' })
               .expect(res => expect(res).to.redirect
                 .toLocation(ResponsePaths.moreTimeConfirmationPage
@@ -182,7 +187,7 @@ describe('Defendant response: more time needed page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send({ option: 'yes' })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -192,7 +197,7 @@ describe('Defendant response: more time needed page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send({ option: 'yes' })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -206,7 +211,7 @@ describe('Defendant response: more time needed page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send({ option: 'yes' })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -219,7 +224,7 @@ describe('Defendant response: more time needed page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
         })

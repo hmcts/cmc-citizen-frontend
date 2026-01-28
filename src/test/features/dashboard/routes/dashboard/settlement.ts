@@ -3,6 +3,7 @@ import * as request from 'supertest'
 import * as config from 'config'
 
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 
 import { Paths } from 'dashboard/paths'
 
@@ -13,7 +14,11 @@ import * as draftStoreMock from 'test/http-mocks/draft-store'
 import * as data from 'test/data/entity/settlement'
 import { attachDefaultHooks } from 'test/routes/hooks'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 
 const pagePath = Paths.dashboardPage.uri
 
@@ -167,7 +172,7 @@ describe('Settlement dashboard statuses dashboard', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
       })
 
@@ -178,7 +183,7 @@ describe('Settlement dashboard statuses dashboard', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
       })
     })

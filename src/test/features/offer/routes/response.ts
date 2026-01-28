@@ -3,6 +3,7 @@ import * as request from 'supertest'
 import * as config from 'config'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 
 import { app } from 'main/app'
 import { Paths as OfferPaths } from 'offer/paths'
@@ -11,7 +12,11 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkAuthorizationGuards } from 'test/features/offer/routes/checks/authorization-check'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const externalId = '400f4c57-9684-49c0-adb4-4cf46579d6dc'
 const responsePage = OfferPaths.responsePage.evaluateUri({ externalId: externalId })
 const makeLegalAgreementPage = OfferPaths.makeAgreementPage.evaluateUri({ externalId: externalId })
@@ -33,7 +38,7 @@ describe('defendant response page', () => {
 
         await request(app)
           .get(responsePage)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -41,7 +46,7 @@ describe('defendant response page', () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         await request(app)
           .get(responsePage)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText('Do you accept the offer?'))
       })
 
@@ -49,7 +54,7 @@ describe('defendant response page', () => {
         claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId()
         await request(app)
           .get(responsePage)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.redirect)
       })
     })
@@ -69,7 +74,7 @@ describe('defendant response page', () => {
 
             await request(app)
               .post(responsePage)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send({})
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -84,7 +89,7 @@ describe('defendant response page', () => {
             }
             await request(app)
               .post(responsePage)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send(formData)
               .expect(res => expect(res).to.be.redirect.toLocation(makeLegalAgreementPage))
           })
@@ -97,7 +102,7 @@ describe('defendant response page', () => {
             }
             await request(app)
               .post(responsePage)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send(formData)
               .expect(res => expect(res).to.be.redirect.toLocation(rejectedOfferPage))
           })
@@ -109,7 +114,7 @@ describe('defendant response page', () => {
             }
             await request(app)
               .post(responsePage)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send(formData)
               .expect(res => expect(res).to.be.serverError.withText('not supported'))
           })
@@ -124,7 +129,7 @@ describe('defendant response page', () => {
             }
             await request(app)
               .post(responsePage)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send(formData)
               .expect(res => expect(res).to.be.successful.withText('Choose option: yes or no or make an offer', 'div class="error-summary"'))
           })

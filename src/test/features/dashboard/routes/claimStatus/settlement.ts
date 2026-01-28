@@ -3,6 +3,7 @@ import * as request from 'supertest'
 import * as config from 'config'
 
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 
 import { Paths } from 'dashboard/paths'
 
@@ -14,7 +15,11 @@ import { sampleClaimDraftObj } from 'test/http-mocks/draft-store'
 import * as data from 'test/data/entity/settlement'
 import { MomentFactory } from 'shared/momentFactory'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const externalId: string = sampleClaimDraftObj.externalId
 
 const claimantPagePath = Paths.claimantPage.evaluateUri({ externalId })
@@ -248,7 +253,7 @@ describe('Settlement claim statuses', () => {
 
         await request(app)
           .get(claimantContext.url)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
       })
 
@@ -259,7 +264,7 @@ describe('Settlement claim statuses', () => {
 
         await request(app)
           .get(defendantContext.url)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
       })
     })
@@ -274,7 +279,7 @@ describe('Settlement claim statuses', () => {
 
         await request(app)
           .get(claimantContext.url)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
       })
 
@@ -285,7 +290,7 @@ describe('Settlement claim statuses', () => {
 
         await request(app)
           .get(defendantContext.url)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
       })
     })
@@ -300,7 +305,7 @@ describe('Settlement claim statuses', () => {
 
         await request(app)
           .get(claimantContext.url)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
       })
 
@@ -311,7 +316,7 @@ describe('Settlement claim statuses', () => {
 
         await request(app)
           .get(defendantContext.url)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
       })
     })

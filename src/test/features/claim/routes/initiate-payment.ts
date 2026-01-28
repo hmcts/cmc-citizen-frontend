@@ -4,6 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
 import { checkEligibilityGuards } from 'test/features/claim/routes/checks/eligibility-check'
 import * as idamServiceMock from 'test/http-mocks/idam'
@@ -13,7 +14,11 @@ import { app } from 'main/app'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = ClaimPaths.initiatePaymentController.uri
 const draftType = 'claim:ioc'
@@ -33,7 +38,7 @@ describe('Claim: Initiate payment page', () => {
       claimStoreServiceMock.resolveInitiatePayment({ nextUrl: 'http://payment-api-initiate' })
       await request(app)
         .get(pagePath)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', sessionCookie)
         .expect(res => expect(res).to.be.redirect.toLocation('http://payment-api-initiate'))
     })
 
@@ -43,7 +48,7 @@ describe('Claim: Initiate payment page', () => {
       claimStoreServiceMock.resolveRetrieveClaimByExternalIdTo404HttpCode()
       await request(app)
         .get(pagePath)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', sessionCookie)
         .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPaymentReceiver.uri))
     })
 
@@ -55,7 +60,7 @@ describe('Claim: Initiate payment page', () => {
 
       await request(app)
         .get(pagePath)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', sessionCookie)
         .expect(res => expect(res).to.be.redirect.toLocation('http://payment-api-resume'))
     })
 
@@ -66,7 +71,7 @@ describe('Claim: Initiate payment page', () => {
 
       await request(app)
         .get(pagePath)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', sessionCookie)
         .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.confirmationPage.evaluateUri({ externalId })))
     })
   })

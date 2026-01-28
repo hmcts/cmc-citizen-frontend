@@ -1,28 +1,28 @@
 import { expect } from 'chai'
 import * as request from 'supertest'
-import * as config from 'config'
 
 import 'test/routes/expectations'
 
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { Paths } from 'dashboard/paths'
-
-const cookieName: string = config.get<string>('session.cookieName')
+import { getSessionCookie } from 'test/auth-helper'
 
 export function checkAlreadySubmittedGuard (app: any, method: string, pagePath: string) {
   it('should return 500 and render error page when cannot retrieve claim in guard', async () => {
+    const sessionCookie = await getSessionCookie(app)
     claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
     await request(app)[method](pagePath)
-      .set('Cookie', `${cookieName}=ABC`)
+      .set('Cookie', sessionCookie)
       .expect(res => expect(res).to.be.serverError.withText('Error'))
   })
 
   it('should redirect to your dashboard page when defendant has already responded', async () => {
+    const sessionCookie = await getSessionCookie(app)
     claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse()
 
     await request(app)[method](pagePath)
-      .set('Cookie', `${cookieName}=ABC`)
+      .set('Cookie', sessionCookie)
       .expect(res => expect(res).to.be.redirect.toLocation(Paths.dashboardPage.uri))
   })
 }

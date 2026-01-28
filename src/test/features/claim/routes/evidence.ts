@@ -3,6 +3,7 @@ import * as request from 'supertest'
 import * as config from 'config'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 import { Paths } from 'claim/paths'
 import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
@@ -13,7 +14,11 @@ import { checkEligibilityGuards } from 'test/features/claim/routes/checks/eligib
 
 import { EvidenceType } from 'forms/models/evidenceType'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const pagePath: string = Paths.evidencePage.uri
 const pageContent: string = 'List any evidence'
 import { FeatureToggles } from 'utils/featureToggles'
@@ -32,7 +37,7 @@ describe('Claim issue: evidence', () => {
 
       await request(app)
         .get(pagePath)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', sessionCookie)
         .expect(res => expect(res).to.be.successful.withText(pageContent))
     })
   })
@@ -52,7 +57,7 @@ describe('Claim issue: evidence', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -62,7 +67,7 @@ describe('Claim issue: evidence', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ rows: [{ type: EvidenceType.CONTRACTS_AND_AGREEMENTS.value, description: 'Bla bla' }] })
           .expect(res => {
             if (FeatureToggles.isEnabled('pcq')) {
@@ -85,7 +90,7 @@ describe('Claim issue: evidence', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({
             rows: [{
               type: EvidenceType.CONTRACTS_AND_AGREEMENTS.value,
@@ -113,7 +118,7 @@ describe('Claim issue: evidence', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send({ action: { addRow: 'Add row' } })
             .expect(res => expect(res).to.be.successful.withText('List any evidence (optional)'))
         })

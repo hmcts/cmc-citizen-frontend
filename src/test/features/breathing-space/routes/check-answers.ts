@@ -3,6 +3,7 @@ import * as request from 'supertest'
 import * as config from 'config'
 
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 
 import { Paths as BreathingSpacePaths } from 'breathing-space/paths'
 import { app } from 'main/app'
@@ -11,7 +12,11 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 
 const pagePath = BreathingSpacePaths.bsCheckAnswersPage.uri
 
@@ -28,7 +33,7 @@ describe('Breathing Space: check-answer page', () => {
           draftStoreServiceMock.resolveFind('bs')
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('Check your answers before submitting'))
         })
 
@@ -36,7 +41,7 @@ describe('Breathing Space: check-answer page', () => {
           draftStoreServiceMock.resolveFind('bs')
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send({ breathingSpaceType: 'STANDARD_BS_ENTERED', bsEndDate: '2025-01-01', breathingSpaceEndDate: '2021-01-01', breathingSpaceExternalId: 'bbb89313-7e4c-4124-8899-34389312033a', breathingSpaceReferenceNumber: 'BS-1234567890' })
             .expect(res => expect(res).to.be.successful.withText('Check your answers before submitting'))
         })
@@ -60,7 +65,7 @@ describe('Breathing Space: check-answer page', () => {
           await request(app)
             .post(pagePath)
             .send({ breathingSpaceType: 'STANDARD_BS_ENTERED' })
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).has.redirect)
         })
       })

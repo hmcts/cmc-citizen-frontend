@@ -4,6 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
 
 import { Paths } from 'claimant-response/paths'
@@ -16,7 +17,11 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 import { FormaliseRepaymentPlanOption } from 'features/claimant-response/form/models/formaliseRepaymentPlanOption'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath: string = Paths.chooseHowToProceedPage.evaluateUri({ externalId: externalId })
 const pageContent: string = 'Choose how to proceed'
@@ -39,7 +44,7 @@ describe('Claimant response: choose how to proceed page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -49,7 +54,7 @@ describe('Claimant response: choose how to proceed page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -59,7 +64,7 @@ describe('Claimant response: choose how to proceed page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText(pageContent))
       })
     })
@@ -83,7 +88,7 @@ describe('Claimant response: choose how to proceed page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send({ option: FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value })
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -94,7 +99,7 @@ describe('Claimant response: choose how to proceed page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send({ option: FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value })
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -106,7 +111,7 @@ describe('Claimant response: choose how to proceed page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText(pageContent, 'div class="error-summary"'))
       })
 
@@ -117,7 +122,7 @@ describe('Claimant response: choose how to proceed page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ option: FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value })
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -129,7 +134,7 @@ describe('Claimant response: choose how to proceed page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ option: FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value })
           .expect(res => expect(res).to.be.redirect.toLocation(Paths.taskListPage.evaluateUri({ externalId: externalId })))
       })
@@ -141,7 +146,7 @@ describe('Claimant response: choose how to proceed page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({ option: FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT.value })
           .expect(res => expect(res).to.be.redirect.toLocation(Paths.taskListPage.evaluateUri({ externalId: externalId })))
       })

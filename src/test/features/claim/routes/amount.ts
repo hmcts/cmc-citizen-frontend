@@ -4,6 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
 import { checkEligibilityGuards } from 'test/features/claim/routes/checks/eligibility-check'
 
@@ -14,7 +15,11 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 
 describe('Claim issue: amount page', () => {
   attachDefaultHooks(app)
@@ -29,7 +34,7 @@ describe('Claim issue: amount page', () => {
 
       await request(app)
         .get(ClaimPaths.amountPage.uri)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', sessionCookie)
         .expect(res => expect(res).to.be.successful.withText('Claim amount'))
     })
   })
@@ -49,7 +54,7 @@ describe('Claim issue: amount page', () => {
 
           await request(app)
             .post(ClaimPaths.amountPage.uri)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send({ action: { addRow: 'Add row' } })
             .expect(res => expect(res).to.be.successful.withText('Claim amount'))
         })
@@ -59,7 +64,7 @@ describe('Claim issue: amount page', () => {
 
           await request(app)
             .post(ClaimPaths.amountPage.uri)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send({ action: { addRow: 'Add row' }, rows: [{ reason: 'Damaged roof', amount: '299' }] })
             .expect(res => expect(res).to.be.successful.withText('Claim amount'))
         })
@@ -69,7 +74,7 @@ describe('Claim issue: amount page', () => {
 
           await request(app)
             .post(ClaimPaths.amountPage.uri)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send({ action: { addRow: 'Add row' }, rows: [{ reason: 'Damaged roof', amount: '10000.01' }] })
             .expect(res => expect(res).to.be.successful.withText('Claim amount'))
         })
@@ -81,7 +86,7 @@ describe('Claim issue: amount page', () => {
 
           await request(app)
             .post(ClaimPaths.amountPage.uri)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send({ action: { calculate: 'Calculate' } })
             .expect(res => expect(res).to.be.successful.withText('Claim amount', 'div class="error-summary"'))
         })
@@ -91,7 +96,7 @@ describe('Claim issue: amount page', () => {
 
           await request(app)
             .post(ClaimPaths.amountPage.uri)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send({ action: { calculate: 'Calculate' }, rows: [{ reason: 'Damaged roof', amount: '299' }] })
             .expect(res => expect(res).to.be.successful.withText('Claim amount'))
         })
@@ -101,7 +106,7 @@ describe('Claim issue: amount page', () => {
 
           await request(app)
             .post(ClaimPaths.amountPage.uri)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send({ action: { calculate: 'Calculate' }, rows: [{ reason: 'Damaged roof', amount: '10000.01' }] })
             .expect(res => expect(res).to.be.successful.withText('Claim amount'))
         })
@@ -113,7 +118,7 @@ describe('Claim issue: amount page', () => {
 
           await request(app)
             .post(ClaimPaths.amountPage.uri)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('Claim amount', 'div class="error-summary"'))
         })
 
@@ -122,7 +127,7 @@ describe('Claim issue: amount page', () => {
 
           await request(app)
             .post(ClaimPaths.amountPage.uri)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send({ rows: [{ reason: 'Damaged roof' }] })
             .expect(res => expect(res).to.be.successful.withText('Claim amount', 'div class="error-summary"'))
         })
@@ -132,7 +137,7 @@ describe('Claim issue: amount page', () => {
 
           await request(app)
             .post(ClaimPaths.amountPage.uri)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send({ rows: [{ amount: '299' }] })
             .expect(res => expect(res).to.be.successful.withText('Claim amount', 'div class="error-summary"'))
         })
@@ -143,7 +148,7 @@ describe('Claim issue: amount page', () => {
 
           await request(app)
             .post(ClaimPaths.amountPage.uri)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send({ rows: [{ reason: 'Damaged roof', amount: '299' }] })
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
@@ -154,7 +159,7 @@ describe('Claim issue: amount page', () => {
 
           await request(app)
             .post(ClaimPaths.amountPage.uri)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send({ rows: [{ reason: 'Damaged roof', amount: '299' }] })
             .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.interestPage.uri))
         })
@@ -164,7 +169,7 @@ describe('Claim issue: amount page', () => {
 
           await request(app)
             .post(ClaimPaths.amountPage.uri)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send({ rows: [{ reason: 'Damaged roof', amount: '10000.01' }] })
             .expect(res => expect(res).to.be.redirect.toLocation(ClaimErrorPaths.amountExceededPage.uri))
         })

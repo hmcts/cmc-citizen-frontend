@@ -3,6 +3,7 @@ import * as request from 'supertest'
 import * as config from 'config'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 import { Paths } from 'response/paths'
 import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
@@ -18,7 +19,11 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const externalId: string = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath: string = Paths.timelinePage.evaluateUri({ externalId: externalId })
 
@@ -49,7 +54,7 @@ describe('Defendant response: timeline', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -59,7 +64,7 @@ describe('Defendant response: timeline', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -70,7 +75,7 @@ describe('Defendant response: timeline', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('Add your timeline of events'))
         })
       })
@@ -100,7 +105,7 @@ describe('Defendant response: timeline', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -110,7 +115,7 @@ describe('Defendant response: timeline', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
       })
@@ -128,7 +133,7 @@ describe('Defendant response: timeline', () => {
 
               await request(app)
                 .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', sessionCookie)
                 .send({ rows: [{ date: 'Damaged roof', description: '299' }] })
                 .expect(res => expect(res).to.be.redirect
                   .toLocation(Paths.evidencePage.evaluateUri({ externalId: externalId })))
@@ -145,7 +150,7 @@ describe('Defendant response: timeline', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send({ rows: [{ date: undefined, description: '299' }] })
               .expect(res => expect(res).to.be.successful.withText('Enter a date'))
           })
@@ -157,7 +162,7 @@ describe('Defendant response: timeline', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send({ rows: [{ date: 'May', description: undefined }] })
               .expect(res => expect(res).to.be.successful.withText('Enter a description of what happened'))
           })
@@ -173,7 +178,7 @@ describe('Defendant response: timeline', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send({ action: { addRow: 'Add row' } })
             .expect(res => expect(res).to.be.successful.withText('Add your timeline of events'))
         })

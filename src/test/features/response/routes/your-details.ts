@@ -11,6 +11,7 @@ import { Paths as ResponsePaths } from 'response/paths'
 import { app } from 'main/app'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
+import { getSessionCookie } from 'test/auth-helper'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
@@ -21,7 +22,11 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const pagePath = ResponsePaths.defendantYourDetailsPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 const splitNameDetails = {
@@ -67,7 +72,7 @@ describe('Defendant user details: your name page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -78,7 +83,7 @@ describe('Defendant user details: your name page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('Confirm your details'))
         })
 
@@ -89,7 +94,7 @@ describe('Defendant user details: your name page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withoutText('First Name'))
         })
 
@@ -100,7 +105,7 @@ describe('Defendant user details: your name page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withoutText('Last Name'))
         })
 
@@ -111,7 +116,7 @@ describe('Defendant user details: your name page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withoutText('Title'))
         })
 
@@ -122,7 +127,7 @@ describe('Defendant user details: your name page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('First name'))
         })
 
@@ -133,7 +138,7 @@ describe('Defendant user details: your name page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('Last name'))
         })
 
@@ -144,7 +149,7 @@ describe('Defendant user details: your name page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('Title'))
         })
       })
@@ -178,7 +183,7 @@ describe('Defendant user details: your name page', () => {
             await request(app)
               .post(pagePath)
               .send({ type: 'individual' })
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .expect(res => expect(res).to.be.successful.withText('Confirm your details', 'div class="error-summary"'))
           })
 
@@ -189,7 +194,7 @@ describe('Defendant user details: your name page', () => {
             await request(app)
               .post(pagePath)
               .send({ type: 'individual', name: 'John Smith', address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: 'E10AA' }, phone: '' })
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .expect(res => expect(res).to.be.successful.withText('Confirm your details', 'div class="error-summary"'))
           })
 
@@ -200,7 +205,7 @@ describe('Defendant user details: your name page', () => {
             await request(app)
               .post(pagePath)
               .send({ type: 'individual' })
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .expect(res => expect(res).to.be.successful.withText('Confirm your details', 'div class="error-summary"'))
           })
 
@@ -211,7 +216,7 @@ describe('Defendant user details: your name page', () => {
             await request(app)
               .post(pagePath)
               .send({ type: 'individual' })
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .expect(res => expect(res).to.be.successful.withText('Confirm your details', 'div class="error-summary"'))
           })
 
@@ -225,7 +230,7 @@ describe('Defendant user details: your name page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send({ type: 'individual', name: 'John Smith', address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: 'E10AA' } })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
@@ -237,7 +242,7 @@ describe('Defendant user details: your name page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .send({ type: 'individual', name: 'John Smith', address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: 'E10AA' } })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.defendantDateOfBirthPage
@@ -258,7 +263,7 @@ describe('Defendant user details: your name page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({
             type: 'company',
             name: 'John Smith',
@@ -281,7 +286,7 @@ describe('Defendant user details: your name page', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send({
             type: 'company',
             name: 'John Smith',

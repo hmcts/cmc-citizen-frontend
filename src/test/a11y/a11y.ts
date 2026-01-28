@@ -2,7 +2,6 @@
 /* tslint:disable:no-unused-expression */
 /* tslint:disable:no-console */
 
-import * as config from 'config'
 import * as supertest from 'supertest'
 import * as pa11y from 'pa11y'
 import { expect } from 'chai'
@@ -26,10 +25,11 @@ import { customAccessibilityChecks, checkInputLabels, checkTaskList, checkAnswer
 import 'test/a11y/mocks'
 import { app } from 'main/app'
 import { MadeBy } from 'claims/models/madeBy'
+import { getSessionCookie } from 'test/auth-helper'
 
 app.locals.csrf = 'dummy-token'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
 
 const agent = supertest(app)
 
@@ -61,7 +61,7 @@ async function runPa11y (url: string): Promise<Issue[]> {
       'WCAG2AA.Principle2.Guideline2_5.2_5_3.F96'   // CTSC Web_Chat fnding
     ],
     headers: {
-      Cookie: `${cookieName}=ABC`
+      Cookie: sessionCookie
     },
     chromeLaunchConfig: {
       headless: true,
@@ -111,7 +111,7 @@ async function extractPageContent (url: string, requestDetails: RequestDetails =
       .send(requestDetails.send ? requestDetails.send : null)
   } else {
     res = await agent.get(url)
-    .set('Cookie', `${cookieName}=ABC;state=000MC000`)
+    .set('Cookie', `${sessionCookie};state=000MC000`)
   }
 
   if (res.redirect) {
@@ -231,6 +231,10 @@ const testsOnSpecificPages: TestsOnSpecificPages[] = [
 ]
 
 describe('Accessibility', () => {
+  before(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
   function checkPaths (pathsRegistry: object): void {
     Object.values(pathsRegistry).forEach((path: RoutablePath) => {
       const excluded = excludedPaths.some(_ => _ === path)

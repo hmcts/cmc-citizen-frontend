@@ -10,6 +10,7 @@ import { Paths as ResponsePaths } from 'response/paths'
 import { app } from 'main/app'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
+import { getSessionCookie } from 'test/auth-helper'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
@@ -17,7 +18,11 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { EvidenceType } from 'forms/models/evidenceType'
 import { verifyRedirectForGetWhenAlreadyPaidInFull } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const pagePath: string = ResponsePaths.claimDetailsPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 describe('Defendant response: claim details page', () => {
@@ -42,7 +47,7 @@ describe('Defendant response: claim details page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText('Claim details'))
       })
 
@@ -51,7 +56,7 @@ describe('Defendant response: claim details page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -67,7 +72,7 @@ describe('Defendant response: claim details page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText('Evidence'))
       })
 
@@ -79,7 +84,7 @@ describe('Defendant response: claim details page', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withoutText('Evidence'))
       })
     })

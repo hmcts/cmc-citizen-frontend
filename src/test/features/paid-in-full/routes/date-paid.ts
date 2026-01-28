@@ -4,6 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 
 import { Paths } from 'paid-in-full/paths'
 
@@ -17,7 +18,11 @@ import { checkAuthorizationGuards } from 'test/routes/authorization-check'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const pagePath = Paths.datePaidPage.evaluateUri({ externalId: externalId })
 
 describe('claim - date money was received', () => {
@@ -38,7 +43,7 @@ describe('claim - date money was received', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -48,7 +53,7 @@ describe('claim - date money was received', () => {
 
         await request(app)
           .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText('When did you settle with the defendant?'))
       })
     })
@@ -71,7 +76,7 @@ describe('claim - date money was received', () => {
 
         await request(app)
           .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send(validFormData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
@@ -83,7 +88,7 @@ describe('claim - date money was received', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send({ date: { day: '', month: '', year: '' } })
             .expect(res => expect(res).to.be.successful.withText('When did you settle with the defendant?', 'div class="error-summary"'))
         })
@@ -97,7 +102,7 @@ describe('claim - date money was received', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send({ date: { day: '10', month: '10', year: '2018' } })
             .expect(res => expect(res).to.be.redirect
               .toLocation(Paths.confirmationPage.evaluateUri({ externalId: externalId })))

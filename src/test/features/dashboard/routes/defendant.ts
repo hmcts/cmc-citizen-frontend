@@ -4,6 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 
 import { Paths } from 'dashboard/paths'
 
@@ -13,7 +14,11 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkAuthorizationGuards } from 'test/features/dashboard/routes/checks/authorization-check'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 
 const defendantPage = Paths.defendantPage.evaluateUri({ externalId: 'b17af4d2-273f-4999-9895-bce382fa24c8' })
 
@@ -33,7 +38,7 @@ describe('Dashboard - defendant page', () => {
 
         await request(app)
           .get(defendantPage)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -42,7 +47,7 @@ describe('Dashboard - defendant page', () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           await request(app)
             .get(defendantPage)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('Claim number', claimStoreServiceMock.sampleClaimObj.referenceNumber))
         })
 
@@ -53,7 +58,7 @@ describe('Dashboard - defendant page', () => {
           })
           await request(app)
             .get(defendantPage)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.forbidden)
         })
 
@@ -62,7 +67,7 @@ describe('Dashboard - defendant page', () => {
 
           await request(app)
             .get(defendantPage)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('We have received forms relating to your claim', 'Your claim will now continue offline', 'County Court Business Centre will contact you by post within 10 days to tell you what happens next'))
         })
 
@@ -71,7 +76,7 @@ describe('Dashboard - defendant page', () => {
 
           await request(app)
             .get(defendantPage)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('We’ve received a response that was not submitted through the online civil money claims service'))
         })
 
@@ -80,7 +85,7 @@ describe('Dashboard - defendant page', () => {
 
           await request(app)
                     .get(defendantPage)
-                    .set('Cookie', `${cookieName}=ABC`)
+                    .set('Cookie', sessionCookie)
                     .expect(res => expect(res).to.be.successful.withText('OCMCNton@justice.gov.uk'))
         })
 

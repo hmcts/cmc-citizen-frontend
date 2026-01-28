@@ -2,6 +2,7 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 import { StatementOfMeansPaths } from 'response/paths'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
@@ -17,7 +18,11 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const pagePath: string = StatementOfMeansPaths.courtOrdersPage.evaluateUri(
   { externalId: claimStoreServiceMock.sampleClaimObj.externalId }
 )
@@ -49,7 +54,7 @@ describe('Defendant response: Statement of means: court orders', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -59,7 +64,7 @@ describe('Defendant response: Statement of means: court orders', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -70,7 +75,7 @@ describe('Defendant response: Statement of means: court orders', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('Are you paying money as a result of any court orders?'))
         })
       })
@@ -100,7 +105,7 @@ describe('Defendant response: Statement of means: court orders', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -110,7 +115,7 @@ describe('Defendant response: Statement of means: court orders', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
       })
@@ -128,7 +133,7 @@ describe('Defendant response: Statement of means: court orders', () => {
             await request(app)
               .post(pagePath)
               .send({ declared: 'true', rows: [{ instalmentAmount: '100', amount: '100', claimNumber: '12345' }] })
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .expect(res => expect(res).to.be.redirect
                 .toLocation(StatementOfMeansPaths.priorityDebtsPage.evaluateUri(
                   { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -145,7 +150,7 @@ describe('Defendant response: Statement of means: court orders', () => {
             await request(app)
               .post(pagePath)
               .send({ declared: 'false' })
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .expect(res => expect(res).to.be.redirect
                 .toLocation(StatementOfMeansPaths.priorityDebtsPage.evaluateUri(
                   { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -165,7 +170,7 @@ describe('Defendant response: Statement of means: court orders', () => {
           await request(app)
             .post(pagePath)
             .send({ action: { addRow: 'Add row' } })
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('Are you paying money as a result of any court orders?'))
         })
       })

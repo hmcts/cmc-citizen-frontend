@@ -4,6 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
 import { checkEligibilityGuards } from 'test/features/claim/routes/checks/eligibility-check'
 import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
@@ -14,7 +15,11 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const heading: string = 'Enter your details'
 const input = {
   type: 'soleTrader',
@@ -38,7 +43,7 @@ describe('claimant as soleTrader details page', () => {
 
       await request(app)
         .get(ClaimPaths.claimantSoleTraderOrSelfEmployedDetailsPage.uri)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', sessionCookie)
         .expect(res => expect(res).to.be.successful.withText(heading))
     })
   })
@@ -57,7 +62,7 @@ describe('claimant as soleTrader details page', () => {
         const nameMissingInput = { ...input, ...{ firstName: '', lastName: '' } }
         await request(app)
           .post(ClaimPaths.claimantSoleTraderOrSelfEmployedDetailsPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send(nameMissingInput)
           .expect(res => expect(res).to.be.successful.withText(heading, 'div class="error-summary"', 'Enter first name'))
       })
@@ -69,7 +74,7 @@ describe('claimant as soleTrader details page', () => {
           const invalidAddressInput = { ...input, ...{ address: { line1: '', line2: '', line3: '', city: 'London', postcode: 'SE28 0JE' } } }
           await request(app)
             .post(ClaimPaths.claimantSoleTraderOrSelfEmployedDetailsPage.uri)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send(invalidAddressInput)
             .expect(res => expect(res).to.be.successful.withText(heading, 'div class="error-summary"', 'Enter first address line'))
         })
@@ -77,7 +82,7 @@ describe('claimant as soleTrader details page', () => {
           const invalidAddressInput = { ...input, ...{ address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: '' } } }
           await request(app)
             .post(ClaimPaths.claimantSoleTraderOrSelfEmployedDetailsPage.uri)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send(invalidAddressInput)
             .expect(res => expect(res).to.be.successful.withText(heading, 'div class="error-summary"', 'Enter postcode'))
         })
@@ -91,7 +96,7 @@ describe('claimant as soleTrader details page', () => {
           const invalidCorrespondenceAddressInput = { ...input, ...{ hasCorrespondenceAddress: 'true', correspondenceAddress: { line1: '', line2: '', line3: '', city: 'London', postcode: 'SE28 0JE' } } }
           await request(app)
             .post(ClaimPaths.claimantSoleTraderOrSelfEmployedDetailsPage.uri)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send(invalidCorrespondenceAddressInput)
             .expect(res => expect(res).to.be.successful.withText(heading, 'div class="error-summary"', 'Enter first correspondence address line'))
         })
@@ -99,7 +104,7 @@ describe('claimant as soleTrader details page', () => {
           const invalidCorrespondenceAddressInput = { ...input, ...{ hasCorrespondenceAddress: 'true', correspondenceAddress: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: '' } } }
           await request(app)
             .post(ClaimPaths.claimantSoleTraderOrSelfEmployedDetailsPage.uri)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .send(invalidCorrespondenceAddressInput)
             .expect(res => expect(res).to.be.successful.withText(heading, 'div class="error-summary"', 'Enter correspondence address postcode'))
         })
@@ -110,7 +115,7 @@ describe('claimant as soleTrader details page', () => {
         draftStoreServiceMock.resolveUpdate()
         await request(app)
           .post(ClaimPaths.claimantSoleTraderOrSelfEmployedDetailsPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send(input)
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.claimantPhonePage.uri))
       })
@@ -121,7 +126,7 @@ describe('claimant as soleTrader details page', () => {
         draftStoreServiceMock.resolveUpdate()
         await request(app)
           .post(ClaimPaths.claimantSoleTraderOrSelfEmployedDetailsPage.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .send(noTradingAsNameInput)
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.claimantPhonePage.uri))
       })

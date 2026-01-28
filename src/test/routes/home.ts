@@ -1,6 +1,5 @@
 import { expect } from 'chai'
 import * as request from 'supertest'
-import * as config from 'config'
 
 import 'test/routes/expectations'
 
@@ -9,8 +8,7 @@ import { Paths as AppPaths } from 'paths'
 import { app } from 'main/app'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
-
-const cookieName: string = config.get<string>('session.cookieName')
+import { getSessionCookie } from 'test/auth-helper'
 
 describe('Home page', () => {
   beforeEach(() => {
@@ -19,11 +17,11 @@ describe('Home page', () => {
 
   describe('on GET', () => {
     it('should redirect to start claim page', async () => {
-      idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+      const sessionCookie = await getSessionCookie(app)
 
       await request(app)
         .get(AppPaths.homePage.uri)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', sessionCookie)
         .expect(res => expect(res).to.be.redirect.toLocation(AppPaths.receiver.uri))
     })
   })

@@ -8,11 +8,16 @@ import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/auth
 import { app } from 'main/app'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
+import { getSessionCookie } from 'test/auth-helper'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkNotClaimantInCaseGuard } from './checks/not-claimant-in-case-check'
 import { Paths } from 'paid-in-full/paths'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.datePaidPage.evaluateUri({ externalId: externalId })
@@ -35,7 +40,7 @@ describe('Paid In Full: confirmation page', () => {
 
         await request(app)
           .get(Paths.confirmationPage.evaluateUri({ externalId: externalId }))
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -44,7 +49,7 @@ describe('Paid In Full: confirmation page', () => {
 
         await request(app)
           .get(Paths.confirmationPage.evaluateUri({ externalId: externalId }))
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText('The claim is now settled'))
       })
 

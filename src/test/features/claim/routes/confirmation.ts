@@ -10,10 +10,15 @@ import { Paths as ClaimPaths } from 'claim/paths'
 import { app } from 'main/app'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
+import { getSessionCookie } from 'test/auth-helper'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 
 const externalId = '400f4c57-9684-49c0-adb4-4cf46579d6dc'
 
@@ -33,7 +38,7 @@ describe('Claim issue: confirmation page', () => {
 
         await request(app)
           .get(ClaimPaths.confirmationPage.evaluateUri({ externalId: externalId }))
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -44,7 +49,7 @@ describe('Claim issue: confirmation page', () => {
 
         await request(app)
           .get(ClaimPaths.confirmationPage.evaluateUri({ externalId: externalId }))
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText('Claim submitted'))
       })
 
@@ -55,7 +60,7 @@ describe('Claim issue: confirmation page', () => {
 
         await request(app)
           .get(ClaimPaths.confirmationPage.evaluateUri({ externalId: externalId }))
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', sessionCookie)
           .expect(res => expect(res).to.be.successful.withText('1594-0301-3729-9050'))
       })
 

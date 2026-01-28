@@ -3,6 +3,7 @@ import * as request from 'supertest'
 import * as config from 'config'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 import { Paths } from 'directions-questionnaire/paths'
 import { Paths as DashboardPaths } from 'dashboard/paths'
 
@@ -30,7 +31,11 @@ import {
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const hearingLocationPage = Paths.hearingLocationPage.evaluateUri({ externalId: externalId })
 const expertPath = Paths.expertPage.evaluateUri({ externalId: externalId })
 const pagePath = Paths.hearingExceptionalCircumstancesPage.evaluateUri({ externalId: externalId })
@@ -91,14 +96,14 @@ function setupMocks (claimant: PartyType, defendant: PartyType, currentParty: Ma
 
 async function shouldRenderPageWithText (text: string, method: string, body?: any) {
   await request(app)[method](pagePath)
-    .set('Cookie', `${cookieName}=ABC`)
+    .set('Cookie', sessionCookie)
     .send(body)
     .expect(res => expect(res).to.be.successful.withText(text))
 }
 
 async function shouldRedirect (method: string, redirectUri: string, body?: any) {
   await request(app)[method](pagePath)
-    .set('Cookie', `${cookieName}=ABC`)
+    .set('Cookie', sessionCookie)
     .send(body)
     .expect(res => expect(res).to.be.redirect.toLocation(redirectUri))
 }
@@ -106,7 +111,7 @@ async function shouldRedirect (method: string, redirectUri: string, body?: any) 
 async function shouldBeServerError (method: string, text: string, body?: any) {
   await request(app)
     .post(pagePath)
-    .set('Cookie', `${cookieName}=ABC`)
+    .set('Cookie', sessionCookie)
     .send(body)
     .expect(res => expect(res).to.be.serverError.withText(text))
 }
@@ -119,7 +124,7 @@ function checkAccessGuards (app: any, method: string) {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
 
       await request(app)[method](pagePath)
-        .set('Cookie', `${cookieName}=ABC`)
+        .set('Cookie', sessionCookie)
         .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
     })
 

@@ -2,6 +2,7 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 import { StatementOfMeansPaths } from 'response/paths'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
@@ -18,7 +19,11 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const pagePath: string = StatementOfMeansPaths.monthlyExpensesPage.evaluateUri(
   { externalId: claimStoreServiceMock.sampleClaimObj.externalId }
 )
@@ -50,7 +55,7 @@ describe('Defendant response: Statement of means: monthly-expenses', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -60,7 +65,7 @@ describe('Defendant response: Statement of means: monthly-expenses', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -71,7 +76,7 @@ describe('Defendant response: Statement of means: monthly-expenses', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('What are your regular expenses?'))
         })
       })
@@ -101,7 +106,7 @@ describe('Defendant response: Statement of means: monthly-expenses', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -111,7 +116,7 @@ describe('Defendant response: Statement of means: monthly-expenses', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -132,7 +137,7 @@ describe('Defendant response: Statement of means: monthly-expenses', () => {
                 schedule: IncomeExpenseSchedule.TWO_WEEKS.value
               }
             })
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('Enter a valid mortgage amount, maximum two decimal places'))
             .expect(res => expect(res).to.be.successful.withText('Enter a valid rent amount, maximum two decimal places'))
         })
@@ -154,7 +159,7 @@ describe('Defendant response: Statement of means: monthly-expenses', () => {
                 schedule: IncomeExpenseSchedule.TWO_WEEKS.value
               }
             })
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('Enter a valid mortgage amount, maximum two decimal places'))
             .expect(res => expect(res).to.be.successful.withText('Enter a valid rent amount, maximum two decimal places'))
         })
@@ -174,7 +179,7 @@ describe('Defendant response: Statement of means: monthly-expenses', () => {
                 schedule: IncomeExpenseSchedule.MONTH.value
               }
             })
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('Enter how much you pay for mortgage'))
             .expect(res => expect(res).to.be.successful.withText('Enter how much you pay for rent'))
         })
@@ -194,7 +199,7 @@ describe('Defendant response: Statement of means: monthly-expenses', () => {
                 amount: 700
               }
             })
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('Select how often you pay for mortgage'))
             .expect(res => expect(res).to.be.successful.withText('Select how often you pay for rent'))
         })
@@ -225,7 +230,7 @@ describe('Defendant response: Statement of means: monthly-expenses', () => {
               maintenance: 1,
               rows: [{ amount: 10, description: 'bla bla bla' }]
             })
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.redirect
               .toLocation(StatementOfMeansPaths.monthlyIncomePage.evaluateUri(
                 { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -254,7 +259,7 @@ describe('Defendant response: Statement of means: monthly-expenses', () => {
                 }],
               action: { addOther: 'Add another expense' }
             })
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('other[2][name]'))
             .expect(res => expect(res).to.be.successful.withoutText('other[3][name]'))
         })
@@ -278,7 +283,7 @@ describe('Defendant response: Statement of means: monthly-expenses', () => {
                 }],
               action: { removeOther: 'Remove this expense source' }
             })
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('other[0][name]'))
             .expect(res => expect(res).to.be.successful.withoutText('other[1][name]'))
         })
@@ -302,7 +307,7 @@ describe('Defendant response: Statement of means: monthly-expenses', () => {
                 }
               }
             })
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('other[0][name]'))
             .expect(res => expect(res).to.be.successful.withoutText('abcdefghijkl'))
         })

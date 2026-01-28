@@ -11,6 +11,7 @@ import { Paths as ResponsePaths } from 'response/paths'
 import { app } from 'main/app'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
+import { getSessionCookie } from 'test/auth-helper'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
@@ -22,7 +23,11 @@ import {
   verifyRedirectForPostWhenAlreadyPaidInFull
 } from 'test/app/guards/alreadyPaidInFullGuard'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 const pagePath = ResponsePaths.moreTimeConfirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 describe('Defendant response: more time needed - confirmation page', () => {
@@ -51,7 +56,7 @@ describe('Defendant response: more time needed - confirmation page', () => {
 
             await request(app)
               .get(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .expect(res => expect(res).to.redirect
                 .toLocation(ResponsePaths.moreTimeRequestPage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
@@ -64,7 +69,7 @@ describe('Defendant response: more time needed - confirmation page', () => {
 
             await request(app)
               .get(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .expect(res => expect(res).to.redirect
                 .toLocation(ResponsePaths.moreTimeRequestPage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
@@ -78,7 +83,7 @@ describe('Defendant response: more time needed - confirmation page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('You have an extra 14 days to respond'))
         })
 
@@ -89,7 +94,7 @@ describe('Defendant response: more time needed - confirmation page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.successful.withText('You have an extra 14 days to respond'))
         })
 
@@ -98,7 +103,7 @@ describe('Defendant response: more time needed - confirmation page', () => {
 
           await request(app)
             .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
       })
@@ -128,7 +133,7 @@ describe('Defendant response: more time needed - confirmation page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .expect(res => expect(res).to.redirect
                 .toLocation(ResponsePaths.moreTimeRequestPage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
@@ -141,7 +146,7 @@ describe('Defendant response: more time needed - confirmation page', () => {
 
             await request(app)
               .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
+              .set('Cookie', sessionCookie)
               .expect(res => expect(res).to.redirect
                 .toLocation(ResponsePaths.moreTimeRequestPage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
@@ -155,7 +160,7 @@ describe('Defendant response: more time needed - confirmation page', () => {
 
           await request(app)
             .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
+            .set('Cookie', sessionCookie)
             .expect(res => expect(res).to.redirect
               .toLocation(ResponsePaths.taskListPage
                 .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))

@@ -4,6 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
+import { getSessionCookie } from 'test/auth-helper'
 
 import { Paths } from 'dashboard/paths'
 
@@ -30,7 +31,11 @@ import {
   ccjDeterminationBySpecifiedDate
 } from 'test/data/entity/ccjData'
 
-const cookieName: string = config.get<string>('session.cookieName')
+let sessionCookie: string
+  beforeEach(async () => {
+    sessionCookie = await getSessionCookie(app)
+  })
+
 
 const fullAdmissionClaim = {
   ...claimStoreServiceMock.sampleClaimObj,
@@ -790,7 +795,7 @@ describe('Dashboard page', () => {
               claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride)
               await request(app)
                 .get(claimPagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', sessionCookie)
                 .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
             })
           })
@@ -806,7 +811,7 @@ describe('Dashboard page', () => {
               claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride)
               await request(app)
                 .get(defendantPagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', sessionCookie)
                 .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
             })
           })
