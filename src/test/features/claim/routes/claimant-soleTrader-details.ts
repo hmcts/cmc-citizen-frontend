@@ -34,7 +34,7 @@ describe('claimant as soleTrader details page', () => {
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', ClaimPaths.claimantSoleTraderOrSelfEmployedDetailsPage.uri)
-    checkEligibilityGuards(app, 'get', ClaimPaths.claimantSoleTraderOrSelfEmployedDetailsPage.uri)
+    checkEligibilityGuards(app, 'get', ClaimPaths.claimantSoleTraderOrSelfEmployedDetailsPage.uri, () => sessionCookie)
 
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
@@ -49,7 +49,7 @@ describe('claimant as soleTrader details page', () => {
 
   describe('on POST', () => {
     checkAuthorizationGuards(app, 'post', ClaimPaths.claimantSoleTraderOrSelfEmployedDetailsPage.uri)
-    checkEligibilityGuards(app, 'post', ClaimPaths.claimantSoleTraderOrSelfEmployedDetailsPage.uri)
+    checkEligibilityGuards(app, 'post', ClaimPaths.claimantSoleTraderOrSelfEmployedDetailsPage.uri, () => sessionCookie)
 
     describe('for authorized user', () => {
       beforeEach(() => {

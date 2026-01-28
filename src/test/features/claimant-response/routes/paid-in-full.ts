@@ -31,7 +31,7 @@ describe('Claimant paid in full: money received on page', () => {
   describe('on GET', () => {
     const method = 'get'
     checkAuthorizationGuards(app, method, pagePath)
-    checkNotClaimantInCaseGuard(app, method, pagePath)
+    checkNotClaimantInCaseGuard(app, method, pagePath, () => sessionCookie)
 
     context('when user authorised', () => {
       beforeEach(() => {

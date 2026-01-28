@@ -25,7 +25,7 @@ describe('Claim issue: resolving this dispute page', () => {
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', ClaimPaths.resolvingThisDisputerPage.uri)
-    checkEligibilityGuards(app, 'get', ClaimPaths.resolvingThisDisputerPage.uri)
+    checkEligibilityGuards(app, 'get', ClaimPaths.resolvingThisDisputerPage.uri, () => sessionCookie)
 
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
@@ -40,7 +40,7 @@ describe('Claim issue: resolving this dispute page', () => {
 
   describe('on POST', () => {
     checkAuthorizationGuards(app, 'post', ClaimPaths.resolvingThisDisputerPage.uri)
-    checkEligibilityGuards(app, 'post', ClaimPaths.resolvingThisDisputerPage.uri)
+    checkEligibilityGuards(app, 'post', ClaimPaths.resolvingThisDisputerPage.uri, () => sessionCookie)
 
     describe('for authorized user', () => {
       beforeEach(() => {

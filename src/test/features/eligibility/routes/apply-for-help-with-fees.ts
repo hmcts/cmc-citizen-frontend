@@ -16,7 +16,7 @@ describe('Claim eligibility: Apply for help with fees', () => {
   attachDefaultHooks(app)
 
   context('on GET', () => {
-    checkAuthorizationMiddleware(app, 'get', pagePath)
+    checkAuthorizationMiddleware(app, 'get', pagePath, () => sessionCookie)
 
     it("should render page with 'Apply for Help with Fees' ", async () => {
 

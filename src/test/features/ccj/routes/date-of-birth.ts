@@ -56,7 +56,7 @@ describe('CCJ - defendant date of birth', () => {
   describe('on GET', () => {
     const method = 'get'
     checkAuthorizationGuards(app, method, pagePath)
-    checkNotClaimantInCaseGuard(app, method, pagePath)
+    checkNotClaimantInCaseGuard(app, method, pagePath, () => sessionCookie)
 
     context('when user authorised', () => {
       beforeEach(() => {
@@ -101,7 +101,7 @@ describe('CCJ - defendant date of birth', () => {
 
     const method = 'post'
     checkAuthorizationGuards(app, method, pagePath)
-    checkNotClaimantInCaseGuard(app, method, pagePath)
+    checkNotClaimantInCaseGuard(app, method, pagePath, () => sessionCookie)
 
     context('when user authorised', () => {
       beforeEach(() => {

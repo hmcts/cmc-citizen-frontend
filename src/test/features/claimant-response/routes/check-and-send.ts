@@ -48,7 +48,7 @@ describe('Claimant response: check and send page', () => {
   describe('on GET', () => {
     const method = 'get'
     checkAuthorizationGuards(app, method, pagePath)
-    checkNotClaimantInCaseGuard(app, method, pagePath)
+    checkNotClaimantInCaseGuard(app, method, pagePath, () => sessionCookie)
 
     context('when user authorised', () => {
       beforeEach(() => {
@@ -530,7 +530,7 @@ describe('Claimant response: check and send page', () => {
   describe('on POST', () => {
     const method = 'post'
     checkAuthorizationGuards(app, method, pagePath)
-    checkNotClaimantInCaseGuard(app, method, pagePath)
+    checkNotClaimantInCaseGuard(app, method, pagePath, () => sessionCookie)
 
     context('when user authorised', () => {
       beforeEach(() => {

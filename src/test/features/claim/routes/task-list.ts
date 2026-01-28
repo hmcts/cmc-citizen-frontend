@@ -25,7 +25,7 @@ describe('Claim issue: task list page', () => {
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', ClaimPaths.incompleteSubmissionPage.uri)
-    checkEligibilityGuards(app, 'get', ClaimPaths.incompleteSubmissionPage.uri)
+    checkEligibilityGuards(app, 'get', ClaimPaths.incompleteSubmissionPage.uri, () => sessionCookie)
 
     it('should render page when everything is fine when user role present', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')

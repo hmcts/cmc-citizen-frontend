@@ -49,7 +49,7 @@ describe('Claim issue: check and send page', () => {
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', ClaimPaths.checkAndSendPage.uri)
-    checkEligibilityGuards(app, 'get', ClaimPaths.checkAndSendPage.uri)
+    checkEligibilityGuards(app, 'get', ClaimPaths.checkAndSendPage.uri, () => sessionCookie)
 
     describe('for authorized user', () => {
       let newClaimFeesEnabledStub: sinon.SinonStub
@@ -491,7 +491,7 @@ describe('Claim issue: check and send page', () => {
 
   describe('on POST', () => {
     checkAuthorizationGuards(app, 'post', ClaimPaths.checkAndSendPage.uri)
-    checkEligibilityGuards(app, 'post', ClaimPaths.checkAndSendPage.uri)
+    checkEligibilityGuards(app, 'post', ClaimPaths.checkAndSendPage.uri, () => sessionCookie)
 
     describe('for authorized user', () => {
       let newClaimFeesEnabledStub: sinon.SinonStub

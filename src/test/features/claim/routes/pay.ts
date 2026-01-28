@@ -62,7 +62,7 @@ describe('Claim issue: initiate payment receiver', () => {
   attachDefaultHooks(app)
 
   checkAuthorizationGuards(app, 'get', Paths.startPaymentReceiver.uri)
-  checkEligibilityGuards(app, 'get', ClaimPaths.startPaymentReceiver.uri)
+  checkEligibilityGuards(app, 'get', ClaimPaths.startPaymentReceiver.uri, () => sessionCookie)
 
   describe('for authorized user', () => {
 
@@ -262,7 +262,7 @@ describe('Claim issue: post payment callback receiver', () => {
   attachDefaultHooks(app)
 
   checkAuthorizationGuards(app, 'get', Paths.finishPaymentReceiver.uri)
-  checkEligibilityGuards(app, 'get', ClaimPaths.finishPaymentReceiver.uri)
+  checkEligibilityGuards(app, 'get', ClaimPaths.finishPaymentReceiver.uri, () => sessionCookie)
 
   describe('for authorized user', () => {
 

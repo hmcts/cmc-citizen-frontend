@@ -33,7 +33,7 @@ describe('CCJ - repayment plan summary page', () => {
   describe('on GET', () => {
     const method = 'get'
     checkAuthorizationGuards(app, method, pagePath)
-    checkNotClaimantInCaseGuard(app, method, pagePath)
+    checkNotClaimantInCaseGuard(app, method, pagePath, () => sessionCookie)
 
     context('when user authorised', () => {
       beforeEach(() => {

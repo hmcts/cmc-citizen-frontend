@@ -19,7 +19,7 @@ describe('Claim eligibility: information about help with fees', () => {
   attachDefaultHooks(app)
 
   context('on GET', () => {
-    checkAuthorizationMiddleware(app, 'get', pagePath)
+    checkAuthorizationMiddleware(app, 'get', pagePath, () => sessionCookie)
 
     it("should render page with 'Some useful information about Help with Fees' ", async () => {
 
@@ -30,7 +30,7 @@ describe('Claim eligibility: information about help with fees', () => {
   })
 
   context('on POST', () => {
-    checkAuthorizationMiddleware(app, 'post', pagePath)
+    checkAuthorizationMiddleware(app, 'post', pagePath, () => sessionCookie)
 
     it('should render page with error message when form is invalid', async () => {
 

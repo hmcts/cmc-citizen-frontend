@@ -26,7 +26,7 @@ describe('Claim issue: defendant party type selection page', () => {
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', ClaimPaths.defendantPartyTypeSelectionPage.uri)
-    checkEligibilityGuards(app, 'get', ClaimPaths.defendantPartyTypeSelectionPage.uri)
+    checkEligibilityGuards(app, 'get', ClaimPaths.defendantPartyTypeSelectionPage.uri, () => sessionCookie)
 
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
@@ -41,7 +41,7 @@ describe('Claim issue: defendant party type selection page', () => {
 
   describe('on POST', () => {
     checkAuthorizationGuards(app, 'post', ClaimPaths.defendantPartyTypeSelectionPage.uri)
-    checkEligibilityGuards(app, 'post', ClaimPaths.defendantPartyTypeSelectionPage.uri)
+    checkEligibilityGuards(app, 'post', ClaimPaths.defendantPartyTypeSelectionPage.uri, () => sessionCookie)
 
     describe('for authorized user', () => {
       beforeEach(() => {

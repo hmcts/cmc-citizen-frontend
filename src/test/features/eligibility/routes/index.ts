@@ -18,7 +18,7 @@ describe('Claim eligibility: index page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationMiddleware(app, 'get', pagePath)
+    checkAuthorizationMiddleware(app, 'get', pagePath, () => sessionCookie)
 
     context('when user is logged in', () => {
       it('should render page when everything is fine', async () => {

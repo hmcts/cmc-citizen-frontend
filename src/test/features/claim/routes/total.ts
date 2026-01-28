@@ -47,7 +47,7 @@ describe('Claim issue: total page', () => {
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', pagePath)
-    checkEligibilityGuards(app, 'get', pagePath)
+    checkEligibilityGuards(app, 'get', pagePath, () => sessionCookie)
 
     describe('for authorized user and new claim fees feature toggle is off', () => {
       beforeEach(() => {
@@ -204,7 +204,7 @@ describe('Claim issue: total page', () => {
 
   describe('on POST', () => {
     checkAuthorizationGuards(app, 'post',pagePath)
-    checkEligibilityGuards(app, 'post', pagePath)
+    checkEligibilityGuards(app, 'post', pagePath, () => sessionCookie)
 
     describe('for authorized user', () => {
       beforeEach(() => {

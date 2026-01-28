@@ -28,7 +28,7 @@ describe('Claim issue: evidence', () => {
   describe('on GET', () => {
     const method = 'get'
     checkAuthorizationGuards(app, method, pagePath)
-    checkEligibilityGuards(app, method, pagePath)
+    checkEligibilityGuards(app, method, pagePath, () => sessionCookie)
 
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')

@@ -16,7 +16,7 @@ describe('Claim eligibility: You can use this Service HwF Eligible without refer
   attachDefaultHooks(app)
 
   context('on GET', () => {
-    checkAuthorizationMiddleware(app, 'get', pagePath)
+    checkAuthorizationMiddleware(app, 'get', pagePath, () => sessionCookie)
 
     it("should render page with 'You can use this service' ", async () => {
 

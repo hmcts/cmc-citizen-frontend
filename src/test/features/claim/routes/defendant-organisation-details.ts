@@ -32,7 +32,7 @@ describe('defendant as organisation details page', () => {
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', ClaimPaths.defendantOrganisationDetailsPage.uri)
-    checkEligibilityGuards(app, 'get', ClaimPaths.defendantOrganisationDetailsPage.uri)
+    checkEligibilityGuards(app, 'get', ClaimPaths.defendantOrganisationDetailsPage.uri, () => sessionCookie)
 
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
@@ -47,7 +47,7 @@ describe('defendant as organisation details page', () => {
 
   describe('on POST', () => {
     checkAuthorizationGuards(app, 'post', ClaimPaths.defendantOrganisationDetailsPage.uri)
-    checkEligibilityGuards(app, 'post', ClaimPaths.defendantOrganisationDetailsPage.uri)
+    checkEligibilityGuards(app, 'post', ClaimPaths.defendantOrganisationDetailsPage.uri, () => sessionCookie)
 
     describe('for authorized user', () => {
       beforeEach(() => {

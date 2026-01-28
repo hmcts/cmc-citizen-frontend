@@ -24,7 +24,7 @@ describe('Claim issue: help with fees page', () => {
 
   context('on GET', () => {
     checkAuthorizationGuards(app, 'get', pagePath)
-    checkEligibilityGuards(app, 'get', pagePath)
+    checkEligibilityGuards(app, 'get', pagePath, () => sessionCookie)
 
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
@@ -39,7 +39,7 @@ describe('Claim issue: help with fees page', () => {
 
   context('on POST', () => {
     checkAuthorizationGuards(app, 'post', pagePath)
-    checkEligibilityGuards(app, 'post', pagePath)
+    checkEligibilityGuards(app, 'post', pagePath, () => sessionCookie)
 
     context('for authorized user', () => {
       beforeEach(() => {

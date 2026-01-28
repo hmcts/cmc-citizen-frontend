@@ -53,7 +53,7 @@ describe('Claimant Response: part payment received page', () => {
   describe('on GET', () => {
     const method = 'get'
     checkAuthorizationGuards(app, method, pagePath)
-    checkNotClaimantInCaseGuard(app, method, pagePath)
+    checkNotClaimantInCaseGuard(app, method, pagePath, () => sessionCookie)
     checkPaymentLessThanClaimAmountGuard(app, method, pagePath)
 
     context('when user authorised', () => {
@@ -91,7 +91,7 @@ describe('Claimant Response: part payment received page', () => {
   describe('on POST', () => {
     const method = 'post'
     checkAuthorizationGuards(app, method, pagePath)
-    checkNotClaimantInCaseGuard(app, method, pagePath)
+    checkNotClaimantInCaseGuard(app, method, pagePath, () => sessionCookie)
     checkPaymentLessThanClaimAmountGuard(app, method, pagePath)
 
     context('when user authorised', () => {

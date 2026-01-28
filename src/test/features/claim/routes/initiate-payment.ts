@@ -28,7 +28,7 @@ describe('Claim: Initiate payment page', () => {
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', pagePath)
-    checkEligibilityGuards(app, 'get', pagePath)
+    checkEligibilityGuards(app, 'get', pagePath, () => sessionCookie)
 
     it('should redirect to nextUrl returned by initiate payment if claim is not found', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', roles)

@@ -27,7 +27,7 @@ describe('Claim issue: claimant date of birth page', () => {
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', ClaimPaths.claimantDateOfBirthPage.uri)
-    checkEligibilityGuards(app, 'get', ClaimPaths.claimantDateOfBirthPage.uri)
+    checkEligibilityGuards(app, 'get', ClaimPaths.claimantDateOfBirthPage.uri, () => sessionCookie)
 
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
@@ -42,7 +42,7 @@ describe('Claim issue: claimant date of birth page', () => {
 
   describe('on POST', () => {
     checkAuthorizationGuards(app, 'post', ClaimPaths.claimantDateOfBirthPage.uri)
-    checkEligibilityGuards(app, 'post', ClaimPaths.claimantDateOfBirthPage.uri)
+    checkEligibilityGuards(app, 'post', ClaimPaths.claimantDateOfBirthPage.uri, () => sessionCookie)
 
     describe('for authorized user', () => {
       beforeEach(() => {

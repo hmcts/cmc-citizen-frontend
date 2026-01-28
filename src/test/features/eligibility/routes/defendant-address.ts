@@ -21,7 +21,7 @@ describe('Claim eligibility: defendant address page', () => {
   attachDefaultHooks(app)
 
   context('on GET', () => {
-    checkAuthorizationMiddleware(app, 'get', pagePath)
+    checkAuthorizationMiddleware(app, 'get', pagePath, () => sessionCookie)
 
     it('should render page when everything is fine', async () => {
 
@@ -32,7 +32,7 @@ describe('Claim eligibility: defendant address page', () => {
   })
 
   context('on POST', () => {
-    checkAuthorizationMiddleware(app, 'post', pagePath)
+    checkAuthorizationMiddleware(app, 'post', pagePath, () => sessionCookie)
 
     it('should render page when form is invalid and everything is fine', async () => {
 
