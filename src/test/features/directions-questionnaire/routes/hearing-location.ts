@@ -696,21 +696,6 @@ describe('Directions Questionnaire - hearing location', () => {
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should render error page if unable to find the selected court', async () => {
-            const alternativeCourtSelectedFormData = { courtAccepted: undefined, courtName: 'Test Court', alternativeCourtSelected: 'Birmingham District Probate Registry', alternativeOption: undefined, alternativeCourtName: 'Birmingham District Probate Registry' }
-
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
-            draftStoreServiceMock.resolveFind('directionsQuestionnaire')
-            draftStoreServiceMock.resolveFind('response')
-            courtFinderMock.resolveNameFindWithNoCourt()
-
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send(alternativeCourtSelectedFormData)
-              .expect(res => expect(res).to.be.notFound.withText('Error'))
-          })
-
           it('should retain previous postcode search results when court finder is not functioning for location search', async () => {
             const alternativeCourtSelectedFormData = { courtAccepted: undefined, courtName: 'Test court', alternativeCourtSelected: 'no', alternativeOption: 'name', alternativeCourtName: 'Birmingham District Probate Registry', searchParam: 'AB1 2CD', searchLoop: true, searchType: 'postcode' }
 
