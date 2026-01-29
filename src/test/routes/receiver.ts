@@ -65,7 +65,7 @@ describe('Login receiver', async () => {
 
         await request(app)
           .get(AppPaths.receiver.uri)
-          .set('Cookie', `${cookieName}=ABC`)
+          .set('Cookie', `${cookieName}=${idamServiceMock.defaultAuthToken}`)
           .expect(res => expect(res).to.be.redirect.toLocation(EligibilityPaths.startPage.uri))
       })
 
@@ -228,13 +228,16 @@ describe('Defendant link receiver', () => {
           .expect(res => expect(res).to.be.redirect.toLocation(AppPaths.receiver.uri))
       })
 
-      it('should set session cookie to token value returned from idam', async () => {
+      it('should set session cookie (session id) when token is returned from idam', async () => {
         const token = 'token'
         idamServiceMock.resolveExchangeCode(token)
 
-        await request(app)
+        const res = await request(app)
           .get(`${pagePath}?code=123`)
-          .expect(res => expect(res).to.have.cookie(cookieName, token))
+        expect(res).to.be.redirect.toLocation(AppPaths.receiver.uri)
+        // Token is stored server-side; cookie holds session id only (signed)
+        const sessionCookie = res.headers['set-cookie']?.find((c: string) => c.startsWith(`${cookieName}=`))
+        expect(sessionCookie).to.be.ok
       })
     })
 

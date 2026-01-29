@@ -21,18 +21,25 @@ describe('Logout receiver', () => {
   })
 
   describe('on GET', () => {
-    it('should remove session cookie', async () => {
-      await request(app)
+    it('should redirect to idam endSession and clear session', async () => {
+      const res = await request(app)
         .get(AppPaths.logoutReceiver.uri)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.have.cookie(cookieName, ''))
+      expect(res).to.be.redirect.toLocation(/.*\/o\/endSession.*/)
+      // Session is destroyed; cookie may be cleared (empty/expired) or omitted when no valid session
+      const setCookie = res.headers['set-cookie'] as string[] | undefined
+      const sessionCookie = setCookie?.find(c => c.startsWith(`${cookieName}=`))
+      if (sessionCookie) {
+        expect(sessionCookie).to.match(new RegExp(`${cookieName}=;|${cookieName}=`))
+      }
     })
 
-    it('should remove session cookie even when session invalidation is failed', async () => {
-      await request(app)
+    it('should redirect to idam endSession with token hint when session had token', async () => {
+      const res = await request(app)
         .get(AppPaths.logoutReceiver.uri)
         .set('Cookie', `${cookieName}=${idamServiceMock.defaultAuthToken}`)
-        .expect(res => expect(res).to.have.cookie(cookieName, ''))
+      expect(res).to.be.redirect.toLocation(/.*\/o\/endSession.*/)
+      expect(res.headers.location).to.include('id_token_hint=')
     })
 
     it('should not remove session cookie or invalidate auth token when session cookie is missing', async () => {

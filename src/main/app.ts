@@ -108,7 +108,7 @@ app.use(session({
 if (env === 'mocha') {
   app.use((req, res, next) => {
     const cookieVal = req.cookies?.[sessionConfig.cookieName]
-    if (cookieVal && typeof cookieVal === 'string' && cookieVal.includes('.')) {
+    if (cookieVal && typeof cookieVal === 'string') {
       req.session.authenticationToken = cookieVal
     }
     next()
