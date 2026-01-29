@@ -31,7 +31,14 @@
     "url": "http://localhost:8800"
   },
   "session": {
-    "cookieName": "SESSION_ID"
+    "cookieName": "cmc-citizen-session",
+    "useRedisStore": true,
+    "secret": "not-a-real-session-secret-min-32-chars",
+    "maxAgeInMinutes": 120,
+    "redis": {
+      "url": null,
+      "keyPrefix": "cmc-citizen-session:"
+    }
   },
   "analytics": {
     "gaTrackingId": ""

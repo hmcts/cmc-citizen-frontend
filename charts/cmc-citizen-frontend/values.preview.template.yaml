@@ -39,6 +39,9 @@ nodejs:
     CUI_DASHBOARD_REDIRECT: false
     CUI_SIGN_OUT_REDIRECT: false
 
+    # Session store: Redis used when REDISCLOUD_URL is set (useRedisStore is true by default)
+    REDISCLOUD_URL: ${REDISCLOUD_URL}
+
 # sub-charts configuration
 
 idam-pr:
