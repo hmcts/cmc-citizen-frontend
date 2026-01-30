@@ -76,6 +76,10 @@ const defendantRepaymentPlan: PaymentPlan = {
   frequency: 'everyWeek'
 }
 
+const formatDateISO = (date) => {
+  return date.toLocaleDateString('en-GB')
+}
+
 export class DefenceSteps {
 
   async getClaimPin (claimRef: string, authorisation: string): Promise<string> {
@@ -471,8 +475,9 @@ export class DefenceSteps {
         defendantWhenWillYouPage.chooseImmediately()
         break
       case PaymentOption.BY_SET_DATE:
+        const currentDate = new Date()
         defendantWhenWillYouPage.chooseFullBySetDate()
-        defendantPaymentDatePage.enterDate('2025-01-01')
+        defendantPaymentDatePage.enterDate(formatDateISO(currentDate))
         defendantPaymentDatePage.saveAndContinue()
         defendantTaskListPage.selectShareYourFinancialDetailsTask()
         statementOfMeansSteps.fillStatementOfMeansWithMinimalDataSet()
