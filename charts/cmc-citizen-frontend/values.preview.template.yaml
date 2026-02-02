@@ -253,6 +253,9 @@ ccd:
       environment:
         USER_PROFILE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_definition,ccd_admin,cmc_claim_store,xui_webapp,xuiwebapp
 
+  ccd-definition-importer:
+    debug: true
+
   am-role-assignment-service:
     java:
       keyVaults:
