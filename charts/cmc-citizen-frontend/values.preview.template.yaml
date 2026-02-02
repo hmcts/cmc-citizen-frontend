@@ -43,6 +43,7 @@ nodejs:
 
 idam-pr:
   enabled: true
+  debug: true
   redirect_uris:
     Money Claims - Citizen:
       - https://${SERVICE_FQDN}/receiver
