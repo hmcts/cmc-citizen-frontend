@@ -130,7 +130,7 @@
     "codeceptjs": "^2.6.11",
     "codecov": "^3.8.2",
     "debug": "^4.1.1",
-    "eslint": "^8.20.0",
+    "eslint": "^9.0.0",
     "gulp-livereload": "^4.0.2",
     "gulp-nodemon": "^2.5.0",
     "gulp-plumber": "^1.2.1",
@@ -184,7 +184,7 @@
   },
   "resolutions": {
     "path-to-regexp": "^0.1.10",
-    "sass-lint/eslint": "^5.0.0",
+    "sass-lint/eslint": "^9.0.0",
     "bootstrap-datepicker/jquery": "^3.5.0",
     "lodash": "^4.17.21",
     "yargs-parser": "^20.2.7",
