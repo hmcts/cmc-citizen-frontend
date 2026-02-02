@@ -208,6 +208,8 @@ ccd:
       enabled: false
     elastic:
       enabled: true
+    definitionImporter:
+      enabled: false
 
   ingressHost: ${SERVICE_FQDN}
   ingressIP: ${INGRESS_IP}
