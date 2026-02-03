@@ -77,7 +77,7 @@ cmc-claim-store:
   enabled: true
   java:
     imagePullPolicy: Always
-    image: hmctspublic.azurecr.io/cmc/claim-store:pr-3389
+    image: hmctspublic.azurecr.io/cmc/claim-store:latest
     releaseNameOverride: ${SERVICE_NAME}-claim-store
     ingressHost: claim-store-${SERVICE_FQDN}
     readinessDelay: 250  # ccd-stack will start much slower
@@ -111,19 +111,13 @@ cmc-claim-store:
       LAUNCH_DARKLY_SDK_KEY: ${LAUNCH_DARKLY_SDK_KEY}
       SENDGRID_API_KEY: ${SENDGRID_API_KEY}
       STAFF_NOTIFICATIONS_LEGALRECIPIENT: ${STAFF_NOTIFICATIONS_LEGALRECIPIENT}
-    environment:
       LOG_LEVEL: DEBUG
       DOC_ASSEMBLY_URL: http://dg-docassembly-aat.service.core-compute-aat.internal
       FRONTEND_BASE_URL: https://${SERVICE_FQDN}
       RESPOND_TO_CLAIM_URL: https://${SERVICE_FQDN}/first-contact/start
-      CMC_DB_HOST: "{{ .Values.postgresql.releaseNameOverride}}"
-      CMC_DB_USERNAME: "{{ .Values.postgresql.auth.username}}"
-      CMC_DB_PASSWORD: "{{ .Values.postgresql.auth.password}}"
       CMC_DB_CONNECTION_OPTIONS: ''
       CORE_CASE_DATA_API_URL: http://${SERVICE_NAME}-ccd-data-store-api
       STAFF_NOTIFICATIONS_LEGAL_RECIPIENT: moneyclaims@justice.gov.uk
-      RPA_NOTIFICATIONS_LEGALSEALEDCLAIMRECIPIENT: civilmoneyclaims+rpa-legal-claim-issued@gmail.com
-      RPA_NOTIFICATIONS_BREATHINGSPACERECIPIENT: breathingSpace.auto@justice.gov.uk
       MANAGEMENT_HEALTH_MAIL_ENABLED: false
       FEATURE_TOGGLES_SAVE_CLAIM_STATE_ENABLED: true
       FEATURE_TOGGLES_CTSC_ENABLED: true
