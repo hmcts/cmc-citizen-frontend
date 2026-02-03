@@ -15,4 +15,20 @@ describe('AuthTokenExtractor', () => {
 
     expect(AuthTokenExtractor.extract(req)).to.equal(tokenValue)
   })
+
+  it('should return undefined when session is undefined', () => {
+    const req = {
+      session: undefined
+    } as Request
+
+    expect(AuthTokenExtractor.extract(req)).to.equal(undefined)
+  })
+
+  it('should return undefined when session has no authenticationToken', () => {
+    const req = {
+      session: {}
+    } as Request
+
+    expect(AuthTokenExtractor.extract(req)).to.equal(undefined)
+  })
 })

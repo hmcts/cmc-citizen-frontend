@@ -664,6 +664,21 @@ describe('Directions Questionnaire - hearing location', () => {
               .send(alternativeCourtSelectedFormData)
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
+
+          it('should return 404 when selected court name returns no results from court finder', async () => {
+            const alternativeCourtSelectedFormData = { courtAccepted: undefined, courtName: 'Test Court', alternativeCourtSelected: 'NonExistent Court Name', alternativeOption: undefined, alternativeCourtName: 'NonExistent Court Name' }
+
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
+            draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+            draftStoreServiceMock.resolveFind('response')
+            courtFinderMock.resolveNameFindWithNoCourt()
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send(alternativeCourtSelectedFormData)
+              .expect(res => expect(res).to.be.notFound)
+          })
         })
       })
     })
