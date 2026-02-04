@@ -106,14 +106,6 @@ withPipeline("nodejs", product, component) {
     yarnBuilder.yarn('setup')
   }
 
-  // Uninstall any failed/broken release before deploy so helm upgrade --install does a clean install.
-  // Fixes "has no deployed releases" after post-install hook failures and avoids "job already exists".
-  before('infrastructure:preview') {
-    sh """
-      helm uninstall cmc-citizen-frontend-pr-${CHANGE_ID} -n money-claims --ignore-not-found --wait --timeout 90s || true
-    """
-  }
-
   before('smoketest:preview'){
     log.info env.TEST_URL
     env.CLAIM_STORE_URL = "https://claim-store-cmc-citizen-frontend-pr-${CHANGE_ID}.preview.platform.hmcts.net"
