@@ -8,7 +8,6 @@ const logger = Logger.getLogger('session-store')
 
 const useRedisStore = config.get<boolean>('session.useRedisStore')
 const redisConfig = config.get<{
-  url?: string
   host?: string
   port?: number
   key?: string
@@ -20,7 +19,6 @@ const redisConfig = config.get<{
 logger.info('session-store config', {
   useRedisStore,
   redisConfig: redisConfig ? {
-    url: redisConfig.url ? '[SET]' : undefined,
     host: redisConfig.host,
     port: redisConfig.port,
     key: redisConfig.key ? '[REDACTED]' : undefined,
@@ -30,9 +28,6 @@ logger.info('session-store config', {
 })
 
 function getRedisConnectionString (): string {
-  if (redisConfig?.url) {
-    return redisConfig.url
-  }
   if (redisConfig?.host != null && redisConfig?.port != null) {
     const protocol = redisConfig.tls ? 'rediss://' : 'redis://'
     const auth = redisConfig.key ? `${redisConfig.key}@` : ''

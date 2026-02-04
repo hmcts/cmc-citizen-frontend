@@ -20,8 +20,7 @@ nodejs:
   environment:
     REFORM_TEAM: cmc
     REFORM_SERVICE_NAME: citizen-frontend
-    # Preview has no Redis; use in-memory session store and a non-production secret
-    SESSION_USE_REDIS_STORE: "false"
+    # Use Redis (civil-citizen-ui-draft-store) in preview; keep a non-production session secret for cookie signing
     SESSION_SECRET: "preview-session-secret-not-for-production-min-32-chars"
     LOG_LEVEL: DEBUG
     HTTP_TIMEOUT: 60000

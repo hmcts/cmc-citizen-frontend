@@ -60,7 +60,8 @@
       "tls": {
         "__name": "SESSION_REDIS_TLS",
         "__format": "boolean"
-      }
+      },
+      "keyPrefix": "SESSION_REDIS_KEY_PREFIX"
     }
   },
   "fees": {
