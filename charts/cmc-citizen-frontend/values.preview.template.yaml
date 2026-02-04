@@ -20,6 +20,9 @@ nodejs:
   environment:
     REFORM_TEAM: cmc
     REFORM_SERVICE_NAME: citizen-frontend
+    # Preview has no Redis; use in-memory session store and a non-production secret
+    SESSION_USE_REDIS_STORE: "false"
+    SESSION_SECRET: "preview-session-secret-not-for-production-min-32-chars"
     LOG_LEVEL: DEBUG
     HTTP_TIMEOUT: 60000
     FEATURE_TOGGLES_API_URL: http://${SERVICE_NAME}-ftr-tgl
