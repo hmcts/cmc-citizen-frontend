@@ -32,11 +32,13 @@
   },
   "session": {
     "cookieName": "cmc-citizen-session",
-    "useRedisStore": true,
-    "secret": "not-a-real-session-secret-min-32-chars",
+    "useRedisStore": false,
     "maxAgeInMinutes": 120,
     "redis": {
-      "url": null,
+      "host": "localhost",
+      "port": 6379,
+      "key": null,
+      "tls": false,
       "keyPrefix": "cmc-citizen-session:"
     }
   },

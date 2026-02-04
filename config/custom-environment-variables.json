@@ -51,7 +51,16 @@
     "secret": "SESSION_SECRET",
     "maxAgeInMinutes": "SESSION_MAX_AGE_IN_MINUTES",
     "redis": {
-      "url": "REDISCLOUD_URL"
+      "host": "SESSION_REDIS_HOST",
+      "port": {
+        "__name": "SESSION_REDIS_PORT",
+        "__format": "number"
+      },
+      "key": "SESSION_REDIS_KEY",
+      "tls": {
+        "__name": "SESSION_REDIS_TLS",
+        "__format": "boolean"
+      }
     }
   },
   "fees": {
