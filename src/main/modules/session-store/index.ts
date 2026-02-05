@@ -86,6 +86,17 @@ export function getSessionStore (options?: SessionStoreOptions): session.Store {
   const maxAgeInMinutes = options?.maxAgeInMinutes ?? config.get<number>('session.maxAgeInMinutes')
 
   if (useRedis) {
+    // PR/preview pods may use a different Key Vault (e.g. cmc-preview); if the secret is missing or a placeholder was used, we get the env var name
+    if (redisAuthKey === 'SESSION_REDIS_KEY') {
+      logger.error(
+        'SESSION_REDIS_KEY contains the env var name instead of the Redis key. ' +
+        'PR/preview builds often use a different Key Vault (e.g. cmc-preview, not cmc-aat). ' +
+        'Ensure secret "draft-store-access-key" in the Key Vault used by this pod contains the Redis primary key from Azure (civil-citizen-ui-draft-store-<env> Access keys), not the literal "SESSION_REDIS_KEY".'
+      )
+      throw new Error(
+        'Redis auth key is the placeholder "SESSION_REDIS_KEY". Set secret draft-store-access-key in the correct Key Vault (see logs).'
+      )
+    }
     const connectionString = getRedisConnectionString(redis, redisAuthKey)
     logger.info('connectionString', { connectionString })
     if (!connectionString) {

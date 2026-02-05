@@ -20,6 +20,8 @@ nodejs:
   environment:
     REFORM_TEAM: cmc
     REFORM_SERVICE_NAME: citizen-frontend
+    # Preview/PR builds typically use cmc-preview Key Vault (not cmc-aat); logged at startup for debugging
+    SECRETS_VAULT: "cmc-preview"
     # Use Redis (civil-citizen-ui-draft-store) in preview; keep a non-production session secret for cookie signing
     SESSION_SECRET: "preview-session-secret-not-for-production-min-32-chars"
     LOG_LEVEL: DEBUG

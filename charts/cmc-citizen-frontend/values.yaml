@@ -20,6 +20,8 @@ nodejs:
     NODE_ENV: production
     REFORM_TEAM: cmc
     REFORM_SERVICE_NAME: citizen-frontend
+    # Key Vault name used by the chart for secrets (cmc-<environment>); logged at startup for debugging
+    SECRETS_VAULT: "cmc-{{ .Values.global.environment }}"
 
     IDAM_API_URL: https://idam-api.{{ .Values.global.environment }}.platform.hmcts.net
     IDAM_AUTHENTICATION_WEB_URL: https://idam-web-public.{{ .Values.global.environment }}.platform.hmcts.net

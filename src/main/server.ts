@@ -14,6 +14,8 @@ import * as config from 'config'
 import * as toBoolean from 'to-boolean'
 
 logger.info('Loading app context')
+const secretsVault = process.env.SECRETS_VAULT ?? '(not set)'
+logger.info('Secrets Key Vault (SECRETS_VAULT)', { secretsVault })
 import { app } from './app'
 import { ApplicationCluster } from './applicationCluster'
 import { ApplicationRunner } from './applicationRunner'
