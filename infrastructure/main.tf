@@ -86,6 +86,6 @@ data "azurerm_key_vault_secret" "app_insights_instrumental_key" {
 }
 
 data "azurerm_key_vault_secret" "draft_store_access_key" {
-  name         = "draft-store-access-key'"
+  name         = "draft-store-access-key"
   key_vault_id = data.azurerm_key_vault.cmc_key_vault.id
 }
