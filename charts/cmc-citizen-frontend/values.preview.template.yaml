@@ -185,6 +185,7 @@ ccd:
     ccdApiGatewayIngress: gateway-${SERVICE_FQDN}
     ccdAdminWebIngress: ccd-admin-web-${SERVICE_FQDN}
     ccdDataStoreUrl: http://${SERVICE_NAME}-ccd-data-store-api
+    amRoleAssignmentServiceUrl: http://am-role-assignment-service-aat.service.core-compute-aat.internal
     idamApiUrl: https://idam-api.aat.platform.hmcts.net
     idamWebUrl: https://idam-web-public.aat.platform.hmcts.net
     s2sUrl: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
