@@ -60,7 +60,6 @@ nodejs:
     SESSION_REDIS_HOST: civil-citizen-ui-draft-store-{{ .Values.global.environment }}.redis.cache.windows.net
     SESSION_REDIS_PORT: 6380
     SESSION_REDIS_TLS: true
-    # SESSION_REDIS_KEY is required for Redis auth; injected from Key Vault below (citizen-draft-store-primary)
 
   keyVaults:
     cmc:
@@ -81,8 +80,8 @@ nodejs:
         - postcode-lookup-api-key
         - launchDarkly-sdk-key
         - pcq-token-key
-        - name: citizen-draft-store-primary
-          alias: SESSION_REDIS_KEY  # Redis access key for civil-citizen-ui-draft-store
+        - name: draft-store-access-key
+          alias: SESSION_REDIS_KEY 
 
 idam-pr:
   enabled: false

@@ -30,7 +30,7 @@ logger.info('session-store config', {
 function getRedisConnectionString (): string {
   if (redisConfig?.host != null && redisConfig?.port != null) {
     const protocol = redisConfig.tls ? 'rediss://' : 'redis://'
-    const auth = redisConfig.key ? `${redisConfig.key}@` : ''
+    const auth = redisConfig.key ? `${redisConfig.key}@` : `${config.get<string>('secrets.cmc.draft-store-access-key')}@`
     return `${protocol}${auth}${redisConfig.host}:${redisConfig.port}`
   }
   return ''
