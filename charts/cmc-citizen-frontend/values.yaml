@@ -81,7 +81,7 @@ nodejs:
         - launchDarkly-sdk-key
         - pcq-token-key
         - name: draft-store-access-key
-          alias: SESSION_REDIS_KEY 
+          alias: SESSION_REDIS_KEY
 
 idam-pr:
   enabled: false

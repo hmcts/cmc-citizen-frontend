@@ -52,14 +52,41 @@ function getRedisConnectionString (redis: typeof redisConfig, draftStoreAccessKe
   return ''
 }
 
+/** Redis auth key from draft-store-access-key Key Vault secret (mounted as SESSION_REDIS_KEY) */
+function getRedisAuthKey (options?: SessionStoreOptions): string {
+  if (options?.draftStoreAccessKey !== undefined) {
+    logger.info('Redis auth key source: options override (e.g. test)', { length: options.draftStoreAccessKey?.length ?? 0 })
+    return options.draftStoreAccessKey
+  }
+  const fromSessionKey = redisConfig?.key
+  if (fromSessionKey) {
+    logger.info('Redis auth key source: session.redis.key (SESSION_REDIS_KEY)', { length: fromSessionKey.length })
+    return fromSessionKey
+  }
+  let draftStoreAccessKey: string | undefined
+  try {
+    draftStoreAccessKey = config.get<string>('secrets.cmc.draft-store-access-key')
+  } catch (err) {
+    logger.error('Failed to read secrets.cmc.draft-store-access-key (SESSION_REDIS_KEY from Key Vault)', { error: (err as Error)?.message })
+    throw err
+  }
+  const firstFiveChars = (draftStoreAccessKey ?? '').substring(0, 5)
+  logger.info('Redis auth key source: secrets.cmc.draft-store-access-key (draft-store-access-key Key Vault)', {
+    present: draftStoreAccessKey != null && draftStoreAccessKey !== '',
+    length: draftStoreAccessKey?.length ?? 0,
+    firstFiveChars: firstFiveChars || '(empty)'
+  })
+  return draftStoreAccessKey
+}
+
 export function getSessionStore (options?: SessionStoreOptions): session.Store {
   const useRedis = options?.useRedisStore ?? useRedisStore
   const redis = options?.redis ?? redisConfig
-  const draftStoreAccessKey = options?.draftStoreAccessKey ?? config.get<string>('secrets.cmc.draft-store-access-key')
+  const redisAuthKey = getRedisAuthKey(options)
   const maxAgeInMinutes = options?.maxAgeInMinutes ?? config.get<number>('session.maxAgeInMinutes')
 
   if (useRedis) {
-    const connectionString = getRedisConnectionString(redis, draftStoreAccessKey)
+    const connectionString = getRedisConnectionString(redis, redisAuthKey)
     logger.info('connectionString', { connectionString })
     if (!connectionString) {
       logger.error('SESSION_USE_REDIS_STORE is true but Redis is not configured. Set SESSION_REDIS_HOST and SESSION_REDIS_PORT (and SESSION_REDIS_KEY from Key Vault), or set SESSION_USE_REDIS_STORE=false for in-memory store.')
