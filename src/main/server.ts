@@ -6,7 +6,6 @@ import { Logger } from '@hmcts/nodejs-logging'
 
 const logger = Logger.getLogger('server.ts')
 
-// App Insights needs to be enabled as early as possible as it monitors other libraries as well
 new AppInsights().enable()
 logger.info('enabling App Insights')
 

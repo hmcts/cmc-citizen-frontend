@@ -38,7 +38,6 @@
     "redis": {
       "host": "localhost",
       "port": 6379,
-      "key": null,
       "tls": false,
       "keyPrefix": "citizen-ui-session:"
     }
