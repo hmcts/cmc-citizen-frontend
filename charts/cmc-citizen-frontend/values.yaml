@@ -82,8 +82,7 @@ nodejs:
         - postcode-lookup-api-key
         - launchDarkly-sdk-key
         - pcq-token-key
-        - name: draft-store-access-key
-          alias: SESSION_REDIS_KEY
+        - draft-store-access-key
 
 idam-pr:
   enabled: false
