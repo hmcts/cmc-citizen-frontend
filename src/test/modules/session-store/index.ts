@@ -55,9 +55,10 @@ describe('session-store', () => {
   })
 
   describe('getSessionStore (Redis path)', () => {
-    it('returns store when useRedisStore is true and redis is configured (auth from redisConfig.key)', () => {
+    it('returns store when useRedisStore is true and redis is configured (auth from draftStoreAccessKey)', () => {
       const opts = redisPathOptions({
-        redis: { host: 'redis.example.com', port: 6379, key: 'redis-key', tls: false, keyPrefix: 'sess:' }
+        redis: { host: 'redis.example.com', port: 6379, tls: false, keyPrefix: 'sess:' },
+        draftStoreAccessKey: 'redis-key'
       })
       const store = getSessionStore(opts)
 
@@ -67,9 +68,9 @@ describe('session-store', () => {
       expect(lastConnectionString).to.include('redis.example.com:6379')
     })
 
-    it('returns store when useRedisStore is true and auth from draftStoreAccessKey', () => {
+    it('returns store when useRedisStore is true and auth from Key Vault (draftStoreAccessKey)', () => {
       const opts = redisPathOptions({
-        redis: { host: 'redis.example.com', port: 6379, key: undefined, tls: false, keyPrefix: 'citizen:' },
+        redis: { host: 'redis.example.com', port: 6379, tls: false, keyPrefix: 'citizen:' },
         draftStoreAccessKey: 'key-vault-redis-key'
       })
       const store = getSessionStore(opts)
@@ -80,7 +81,8 @@ describe('session-store', () => {
 
     it('uses rediss:// and TLS when session.redis.tls is true', () => {
       const opts = redisPathOptions({
-        redis: { host: 'redis.secure.com', port: 6380, key: 'secret', tls: true, keyPrefix: 'sess:' }
+        redis: { host: 'redis.secure.com', port: 6380, tls: true, keyPrefix: 'sess:' },
+        draftStoreAccessKey: 'secret'
       })
       getSessionStore(opts)
 
@@ -88,7 +90,7 @@ describe('session-store', () => {
     })
 
     it('uses default keyPrefix when session.redis.keyPrefix is not set', () => {
-      const opts = redisPathOptions({ redis: { host: 'localhost', port: 6379, key: 'k' } })
+      const opts = redisPathOptions({ redis: { host: 'localhost', port: 6379 }, draftStoreAccessKey: 'k' })
       getSessionStore(opts)
 
       expect(lastStoreOpts.prefix).to.equal('sess:')

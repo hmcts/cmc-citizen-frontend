@@ -30,20 +30,17 @@ export interface SessionStoreOptions {
   _redisStoreFactory?: (opts: { client: any; prefix: string; ttl: number }) => session.Store
 }
 
-function getRedisConnectionString (redis: typeof redisConfig, draftStoreAccessKey: string): string {
+function getRedisConnectionString (redis: typeof redisConfig, authKey: string): string {
   if (redis?.host != null && redis?.port != null) {
     const protocol = redis.tls ? 'rediss://' : 'redis://'
     // :password@ = password-only (empty username); required for Azure Redis
-    const auth = redis.key ? `:${redis.key}@` : `:${draftStoreAccessKey}@`
-    return `${protocol}${auth}${redis.host}:${redis.port}`
+    return `${protocol}:${authKey}@${redis.host}:${redis.port}`
   }
   return ''
 }
 
 function getRedisAuthKey (options?: SessionStoreOptions): string {
   if (options?.draftStoreAccessKey !== undefined) return options.draftStoreAccessKey
-  const fromSessionKey = redisConfig?.key
-  if (fromSessionKey) return fromSessionKey
   try {
     return config.get<string>('secrets.cmc.draft-store-access-key')
   } catch (err) {

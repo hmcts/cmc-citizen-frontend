@@ -148,7 +148,7 @@
       "cmc-webchat-button-agents-busy": "WEBCHAT_BUTTON_AGENTS_BUSY",
       "cmc-webchat-button-service-closed": "WEBCHAT_BUTTON_SERVICE_CLOSED",
       "pcq-token-key": "FEATURE_PCQ",
-      "draft-store-access-key": "SESSION_REDIS_KEY"
+      "draft-store-access-key": "DRAFT_STORE_ACCESS_KEY"
     }
   },
   "launchDarkly": {
