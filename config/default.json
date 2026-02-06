@@ -39,7 +39,7 @@
       "host": "localhost",
       "port": 6379,
       "tls": false,
-      "keyPrefix": "citizen-ui-session:"
+      "keyPrefix": "cmc-frontend-session:"
     }
   },
   "analytics": {
