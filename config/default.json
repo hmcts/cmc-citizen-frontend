@@ -32,7 +32,7 @@
   },
   "session": {
     "cookieName": "cmc-citizen-session",
-    "secret": "not-a-real-session-secret-min-32-chars",
+    "secret": "local-session-secret",
     "useRedisStore": false,
     "maxAgeInMinutes": 120,
     "redis": {

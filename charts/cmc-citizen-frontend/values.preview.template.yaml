@@ -19,9 +19,8 @@ nodejs:
     targetCPUUtilizationPercentage: 80 # Default is 80% target CPU utilization
   environment:
     REFORM_TEAM: cmc
-    REFORM_SERVICE_NAME: citizen-frontend
-    # Use Redis (civil-citizen-ui-draft-store) in preview; keep a non-production session secret for cookie signing
-    SESSION_SECRET: "preview-session-secret-not-for-production-min-32-chars"
+    REFORM_SERVICE_NAME: hmctspublic.azurecr.io/cmc/citizen-frontend:latest
+    SESSION_SECRET: "preview-session-secret"
     LOG_LEVEL: DEBUG
     HTTP_TIMEOUT: 60000
     FEATURE_TOGGLES_API_URL: http://${SERVICE_NAME}-ftr-tgl
