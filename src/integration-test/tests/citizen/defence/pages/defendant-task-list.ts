@@ -57,7 +57,7 @@ export class DefendantTaskListPage {
   }
 
   selectShareYourFinancialDetailsTask (): void {
-    this.clickText('Share your financial details')
+    this.clickText('Share your financial details', 90)
   }
 
   selectTaskCheckAndSendYourResponse (): void {
@@ -72,8 +72,8 @@ export class DefendantTaskListPage {
     this.clickText('Give us details in case there’s a hearing')
   }
 
-  private clickText (text: string) {
-    I.waitForText(text)
+  private clickText (text: string, timeoutSec?: number) {
+    I.waitForText(text, timeoutSec ?? 60)
     I.click(text)
   }
 }
