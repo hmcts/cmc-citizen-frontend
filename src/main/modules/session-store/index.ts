@@ -46,7 +46,8 @@ export interface SessionStoreOptions {
 function getRedisConnectionString (redis: typeof redisConfig, draftStoreAccessKey: string): string {
   if (redis?.host != null && redis?.port != null) {
     const protocol = redis.tls ? 'rediss://' : 'redis://'
-    const auth = redis.key ? `${redis.key}@` : `${draftStoreAccessKey}@`
+    // Use :password@ so ioredis treats it as password-only (empty username). Without the leading :, the key is parsed as username and Azure Redis returns WRONGPASS.
+    const auth = redis.key ? `:${redis.key}@` : `:${draftStoreAccessKey}@`
     return `${protocol}${auth}${redis.host}:${redis.port}`
   }
   return ''
