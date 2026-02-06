@@ -37,8 +37,7 @@ export class ClaimantTaskListPage {
   }
 
   private clickTaskLink (selector: string, fallbackText: string): void {
-    const taskSelector = `${selector}, .app-task-list__task-name:contains('${fallbackText}') a`
-    if (this.tryClick(taskSelector)) {
+    if (this.tryClick(selector)) {
       return
     }
     // Fallback to direct text search if the selector isn’t present
