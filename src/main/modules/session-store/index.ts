@@ -88,15 +88,24 @@ export function getSessionStore (options?: SessionStoreOptions): session.Store {
       throw new Error('Redis connection (session.redis.host/port/key) is required when session.useRedisStore is true')
     }
     const useTls = connectionString.startsWith('rediss://') || redis?.tls === true
+    const redisClientOptions = {
+      maxRetriesPerRequest: 3,
+      connectTimeout: 10000,
+      enableReadyCheck: true,
+      tls: useTls ? { rejectUnauthorized: true } : undefined
+    }
     const client = options?._redisFactory
-      ? options._redisFactory(connectionString, { maxRetriesPerRequest: undefined, enableReadyCheck: true, tls: useTls ? { rejectUnauthorized: true } : undefined })
-      : new Redis(connectionString, {
-          maxRetriesPerRequest: undefined,
-          enableReadyCheck: true,
-          tls: useTls ? { rejectUnauthorized: true } : undefined
-        })
-    client.on('error', (err: Error) => {
-      logger.error('[REDIS] Session store error', { error: err.message, host: redis?.host, port: redis?.port })
+      ? options._redisFactory(connectionString, redisClientOptions)
+      : new Redis(connectionString, redisClientOptions)
+    client.on('error', (err: Error & { code?: string }) => {
+      logger.error('[REDIS] Session store error', {
+        error: err.message,
+        errorName: err.name,
+        errorCode: err.code,
+        host: redis?.host,
+        port: redis?.port,
+        tls: useTls
+      })
     })
     client.on('ready', () => {
       logger.info('[REDIS] Session store connected successfully', { host: redis?.host, port: redis?.port, tls: useTls, keyPrefix: redis?.keyPrefix || 'sess:', status: 'ready' })
