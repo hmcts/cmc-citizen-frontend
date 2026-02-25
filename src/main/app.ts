@@ -8,7 +8,7 @@ import * as favicon from 'serve-favicon'
 import * as cookieParser from 'cookie-parser'
 import * as cookieEncrypter from '@hmcts/cookie-encrypter'
 import * as session from 'express-session'
-import { getSessionStore } from 'modules/session-store'
+import { getSessionStore, getSessionConfig } from 'modules/session-store'
 import { ForbiddenError, NotFoundError } from 'errors'
 import { ErrorLogger } from 'logging/errorLogger'
 import { RouterFinder } from 'shared/router/routerFinder'
@@ -87,7 +87,7 @@ app.use(cookieEncrypter(config.get('secrets.cmc.encryptionKey'), {
   }
 }))
 
-const sessionConfig = config.get<{ cookieName: string; secret: string; maxAgeInMinutes: number }>('session')
+const sessionConfig = getSessionConfig()
 const isSecure = env !== 'development' && env !== 'mocha'
 app.use(session({
   name: sessionConfig.cookieName,

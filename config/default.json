@@ -31,15 +31,15 @@
     "url": "http://localhost:8800"
   },
   "session": {
-    "cookieName": "cmc-citizen-session",
+    "cookieName": "citizen-ui-session",
     "secret": "local-session-secret",
-    "useRedisStore": false,
+    "useRedisStore": true,
     "maxAgeInMinutes": 120,
     "redis": {
       "host": "localhost",
       "port": 6379,
       "tls": false,
-      "keyPrefix": "cmc-frontend-session:"
+      "keyPrefix": "citizen-ui-session:"
     }
   },
   "analytics": {

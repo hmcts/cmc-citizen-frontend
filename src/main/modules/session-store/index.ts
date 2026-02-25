@@ -6,14 +6,40 @@ import { Logger } from '@hmcts/nodejs-logging'
 
 const logger = Logger.getLogger('session-store')
 
-const useRedisStore = config.get<boolean>('session.useRedisStore')
-const redisConfig = config.get<{
-  host?: string
-  port?: number
-  key?: string
-  tls?: boolean
-  keyPrefix?: string
-}>('session.redis')
+/** Fallback values when env vars (custom-environment-variables) are not set; match config/default.json except useRedisStore defaults true */
+const SESSION_DEFAULTS = {
+  cookieName: 'citizen-ui-session',
+  secret: 'local-session-secret',
+  useRedisStore: true,
+  maxAgeInMinutes: 120,
+  redis: {
+    host: 'localhost',
+    port: 6379,
+    tls: false,
+    keyPrefix: 'citizen-ui-session:'
+  } as { host: string; port: number; tls: boolean; keyPrefix: string }
+}
+
+function getSessionConfig (): typeof SESSION_DEFAULTS & { redis: typeof SESSION_DEFAULTS.redis & { key?: string } } {
+  const rawRedis = config.get<{ host?: string; port?: number; key?: string; tls?: boolean; keyPrefix?: string }>('session.redis') || {}
+  return {
+    cookieName: config.get<string>('session.cookieName') ?? SESSION_DEFAULTS.cookieName,
+    secret: config.get<string>('session.secret') ?? SESSION_DEFAULTS.secret,
+    useRedisStore: config.get<boolean>('session.useRedisStore') ?? SESSION_DEFAULTS.useRedisStore,
+    maxAgeInMinutes: config.get<number>('session.maxAgeInMinutes') ?? SESSION_DEFAULTS.maxAgeInMinutes,
+    redis: {
+      host: rawRedis.host ?? SESSION_DEFAULTS.redis.host,
+      port: rawRedis.port ?? SESSION_DEFAULTS.redis.port,
+      key: rawRedis.key,
+      tls: rawRedis.tls ?? SESSION_DEFAULTS.redis.tls,
+      keyPrefix: rawRedis.keyPrefix ?? SESSION_DEFAULTS.redis.keyPrefix
+    }
+  }
+}
+
+const sessionConfig = getSessionConfig()
+const useRedisStore = sessionConfig.useRedisStore
+const redisConfig = sessionConfig.redis
 
 export interface SessionStoreOptions {
   useRedisStore?: boolean
@@ -30,7 +56,7 @@ export interface SessionStoreOptions {
   _redisStoreFactory?: (opts: { client: any; prefix: string; ttl: number }) => session.Store
 }
 
-function getRedisConnectionString (redis: typeof redisConfig, authKey: string): string {
+function getRedisConnectionString (redis: SessionStoreOptions['redis'], authKey: string): string {
   if (redis?.host != null && redis?.port != null) {
     const protocol = redis.tls ? 'rediss://' : 'redis://'
     // :password@ = password-only (empty username); required for Azure Redis
@@ -53,7 +79,7 @@ export function getSessionStore (options?: SessionStoreOptions): session.Store {
   const useRedis = options?.useRedisStore ?? useRedisStore
   const redis = options?.redis ?? redisConfig
   const redisAuthKey = getRedisAuthKey(options)
-  const maxAgeInMinutes = options?.maxAgeInMinutes ?? config.get<number>('session.maxAgeInMinutes')
+  const maxAgeInMinutes = options?.maxAgeInMinutes ?? sessionConfig.maxAgeInMinutes
 
   if (useRedis) {
     const connectionString = getRedisConnectionString(redis, redisAuthKey)
@@ -69,7 +95,12 @@ export function getSessionStore (options?: SessionStoreOptions): session.Store {
           enableReadyCheck: true,
           tls: useTls ? { rejectUnauthorized: true } : undefined
         })
-    client.on('error', (err: Error) => logger.error('Redis session store error:', err))
+    client.on('error', (err: Error) => {
+      logger.error('[REDIS] Session store error', { error: err.message, host: redis?.host, port: redis?.port })
+    })
+    client.on('ready', () => {
+      logger.info('[REDIS] Session store connected successfully', { host: redis?.host, port: redis?.port, tls: useTls, keyPrefix: redis?.keyPrefix || 'sess:', status: 'ready' })
+    })
     const store = options?._redisStoreFactory
       ? options._redisStoreFactory({ client: client as any, prefix: redis?.keyPrefix || 'sess:', ttl: maxAgeInMinutes * 60 })
       : new RedisStore({
@@ -77,9 +108,12 @@ export function getSessionStore (options?: SessionStoreOptions): session.Store {
           prefix: redis?.keyPrefix || 'sess:',
           ttl: maxAgeInMinutes * 60
         })
-    logger.info('Session store: Redis')
+    logger.info('[REDIS] Session store initialised successfully', { host: redis?.host, port: redis?.port, tls: useTls, keyPrefix: redis?.keyPrefix || 'sess:', maxAgeInMinutes })
     return store
   }
   logger.info('Session store: Memory (useRedisStore false)')
   return new session.MemoryStore()
 }
+
+/** Session config with fallbacks to default.json when env vars are unset. Use in app.ts for cookieName, secret, maxAgeInMinutes. */
+export { getSessionConfig }
