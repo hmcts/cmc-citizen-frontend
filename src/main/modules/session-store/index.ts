@@ -75,6 +75,13 @@ function getRedisAuthKey (options?: SessionStoreOptions): string {
   }
 }
 
+/** Returns a safe hint for logging: first 3 and last 3 characters of the token, or "***" if too short. */
+function maskTokenHint (token: string): string {
+  if (!token || token.length === 0) return '(empty)'
+  if (token.length <= 6) return '***'
+  return `${token.slice(0, 3)}...${token.slice(-3)}`
+}
+
 export function getSessionStore (options?: SessionStoreOptions): session.Store {
   const useRedis = options?.useRedisStore ?? useRedisStore
   const redis = options?.redis ?? redisConfig
@@ -117,7 +124,15 @@ export function getSessionStore (options?: SessionStoreOptions): session.Store {
           prefix: redis?.keyPrefix || 'sess:',
           ttl: maxAgeInMinutes * 60
         })
-    logger.info('[REDIS] Session store initialised successfully', { host: redis?.host, port: redis?.port, tls: useTls, keyPrefix: redis?.keyPrefix || 'sess:', maxAgeInMinutes })
+    logger.info('[REDIS] Session store initialised successfully', {
+      host: redis?.host,
+      port: redis?.port,
+      tls: useTls,
+      keyPrefix: redis?.keyPrefix || 'sess:',
+      maxAgeInMinutes,
+      cookieName: sessionConfig.cookieName,
+      tokenHint: maskTokenHint(redisAuthKey)
+    })
     return store
   }
   logger.info('Session store: Memory (useRedisStore false)')
