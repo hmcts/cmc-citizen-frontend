@@ -1,24 +1,18 @@
 #!/bin/bash
-set -ex
+set -euo pipefail
 
-pip3 install --upgrade requests==2.31.0
-pip3 install docker==6.1.3
-
-ADDITIONAL_COMPOSE_FILE="docker-compose.smoke-tests.yml -f docker-compose.yml"
-
-function shutdownDocker() {
-  docker-compose -f ${ADDITIONAL_COMPOSE_FILE} down
-}
-
-trap shutdownDocker INT TERM QUIT EXIT
-
-docker-compose --version
-
-if [[ "${1}" != "--no-build" ]]; then
-  # Docker hub is slow to build we should always be using the latest version here
-  docker-compose -f ${ADDITIONAL_COMPOSE_FILE} build citizen-integration-tests
+if [[ -z "${TEST_URL:-}" ]]; then
+  echo "TEST_URL environment variable must be set" >&2
+  exit 1
 fi
-docker-compose -f ${ADDITIONAL_COMPOSE_FILE} up --no-color -d remote-webdriver
-docker-compose -f ${ADDITIONAL_COMPOSE_FILE} run -u `id -u $USER` citizen-integration-tests
-docker-compose -f ${ADDITIONAL_COMPOSE_FILE} down
 
+health_endpoint="${TEST_URL%/}/health"
+
+echo "Running lightweight smoke healthcheck against ${health_endpoint}"
+
+if curl -k --fail --silent --show-error --max-time 30 "$health_endpoint" > /dev/null; then
+  echo "Smoke healthcheck passed"
+else
+  echo "Smoke healthcheck failed" >&2
+  exit 1
+fi

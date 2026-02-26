@@ -5,7 +5,8 @@ import { hostname } from 'os'
 import * as path from 'path'
 import { RequestPromiseOptions } from 'request-promise-native'
 
-import { InfoContributor, InfoContributorConfig, infoRequestHandler } from '@hmcts/info-provider'
+import { InfoContributor, infoRequestHandler } from '@hmcts/info-provider'
+import { ConfigurableInfoContributor } from 'routes/configurableInfoContributor'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -36,9 +37,9 @@ function caCertRequiredLocallyInfoContributor (serviceName): InfoContributor {
     options.ca = fs.readFileSync(path.join(sslDirectory, 'localhost-ca.crt'))
   }
 
-  return new InfoContributor(
+  return new ConfigurableInfoContributor(
     url(serviceName),
-    new InfoContributorConfig(options)
+    options
   )
 }
 

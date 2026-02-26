@@ -205,7 +205,7 @@ export class ClaimSteps {
     if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
       testingSupport.deleteClaimDraft()
     }
-    this.completeEligibility()
+    await this.completeEligibility()
     userSteps.selectResolvingThisDispute()
     this.resolveDispute()
     userSteps.selectCompletingYourClaim()
@@ -239,8 +239,8 @@ export class ClaimSteps {
     return claimantClaimConfirmedPage.getClaimReference()
   }
 
-  completeEligibility (): void {
-    eligibilitySteps.complete()
+  async completeEligibility (): Promise<void> {
+    await eligibilitySteps.complete()
   }
 
   optIntoNewFeatures (): void {
@@ -255,7 +255,7 @@ export class ClaimSteps {
     if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
       testingSupport.deleteClaimDraft()
     }
-    this.completeEligibility()
+    await this.completeEligibility()
 
     userSteps.selectResolvingThisDispute()
     this.resolveDispute()
@@ -349,7 +349,7 @@ export class ClaimSteps {
     if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
       testingSupport.deleteClaimDraft()
     }
-    this.completeEligibility()
+    await this.completeEligibility()
     userSteps.selectResolvingThisDispute()
     this.resolveDispute()
     userSteps.selectCompletingYourClaim()

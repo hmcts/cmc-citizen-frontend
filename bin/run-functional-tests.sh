@@ -8,19 +8,27 @@ fi
 
 ADDITIONAL_COMPOSE_FILE="docker-compose.functional-tests.yml -f docker-compose.yml"
 
+if command -v docker-compose >/dev/null 2>&1; then
+  COMPOSE_CMD=(docker-compose)
+elif docker compose version >/dev/null 2>&1; then
+  COMPOSE_CMD=(docker compose)
+else
+  echo "docker compose is not available" >&2
+  exit 1
+fi
+
 function shutdownDocker() {
-  docker-compose -f ${ADDITIONAL_COMPOSE_FILE} down
+  "${COMPOSE_CMD[@]}" -f ${ADDITIONAL_COMPOSE_FILE} down
 }
 
 trap shutdownDocker INT TERM QUIT EXIT
 
-docker-compose --version
+"${COMPOSE_CMD[@]}" --version
 
 if [[ "${1}" != "--no-build" ]]; then
   # Docker hub is slow to build we should always be using the latest version here
-  docker-compose -f ${ADDITIONAL_COMPOSE_FILE} build citizen-integration-tests
+  "${COMPOSE_CMD[@]}" -f ${ADDITIONAL_COMPOSE_FILE} build citizen-integration-tests
 fi
-docker-compose -f ${ADDITIONAL_COMPOSE_FILE} up --no-color -d remote-webdriver
-docker-compose -f ${ADDITIONAL_COMPOSE_FILE} run -u `id -u $USER` citizen-integration-tests
-docker-compose -f ${ADDITIONAL_COMPOSE_FILE} down
-
+"${COMPOSE_CMD[@]}" -f ${ADDITIONAL_COMPOSE_FILE} up --no-color -d remote-webdriver
+"${COMPOSE_CMD[@]}" -f ${ADDITIONAL_COMPOSE_FILE} run -u `id -u $USER` citizen-integration-tests
+"${COMPOSE_CMD[@]}" -f ${ADDITIONAL_COMPOSE_FILE} down

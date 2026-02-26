@@ -5,10 +5,12 @@ USER root
 WORKDIR /usr/src/app
 
 RUN yarn config set proxy "$http_proxy" && yarn config set https-proxy "$https_proxy"
+RUN corepack enable
 
-COPY --chown=hmcts:hmcts package.json yarn.lock /usr/src/app/
+COPY --chown=hmcts:hmcts .yarn ./.yarn
+COPY --chown=hmcts:hmcts package.json yarn.lock .yarnrc.yml /usr/src/app/
 
-RUN PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true yarn install && yarn cache clean
+RUN PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true yarn install --immutable && yarn cache clean
 USER hmcts
 
 COPY tsconfig.json types default.conf.js saucelabs.conf.js /usr/src/app/

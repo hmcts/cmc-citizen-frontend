@@ -3,11 +3,11 @@ nodejs:
   applicationPort: 3000
   memoryRequests: 512Mi
   cpuRequests: 1000m
-  memoryLimits: 1024Mi
+  memoryLimits: 2048Mi
   cpuLimits: 2500m
   devmemoryRequests: 512Mi
   devcpuRequests: 1000m
-  devmemoryLimits: 1024Mi
+  devmemoryLimits: 2048Mi
   devcpuLimits: 2500m
   readinessDelay: 130  # claim-store will start much slower
   livenessDelay: 130  # claim-store will start much slower
@@ -81,6 +81,17 @@ idam-pr:
   enabled: false
 ccd:
   enabled: false
+  logstash:
+    image: hmctspublic.azurecr.io/ccd/logstash
+    imageTag: ccd-cmc-logstash-latest
+  ccd-admin-web:
+    nodejs:
+      disableKeyVaults: false
+    keyVaults:
+      ccd:
+        resourceGroup: s2s
+        secrets:
+          - microservicekey-ccd-admin
 cmc-claim-store:
   enabled: false
 xui-webapp:

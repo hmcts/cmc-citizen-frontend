@@ -5,6 +5,7 @@
 ./bin/ccd-add-role.sh "caseworker-cmc"
 ./bin/ccd-add-role.sh "caseworker-cmc-systemupdate"
 ./bin/ccd-add-role.sh "caseworker-cmc-pcqextractor"
+./bin/ccd-add-role.sh "caseworker-cmc-rparobot"
 ./bin/ccd-add-role.sh "payments"
 ./bin/ccd-add-role.sh "caseworker-cmc-legaladvisor"
 ./bin/ccd-add-role.sh "letter-holder"
@@ -14,3 +15,4 @@
 ./bin/ccd-add-role.sh "payments-refund"
 ./bin/ccd-add-role.sh "payments-refund-approver"
 ./bin/ccd-add-role.sh "TTL-admin"
+
