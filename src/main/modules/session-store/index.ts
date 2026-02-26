@@ -82,6 +82,13 @@ function maskTokenHint (token: string): string {
   return `${token.slice(0, 3)}...${token.slice(-3)}`
 }
 
+/** Returns the first 5 characters of the key for logging; "***" if empty or too short. */
+function draftStoreAccessKeyFirst5 (token: string): string {
+  if (!token || token.length === 0) return '(empty)'
+  if (token.length < 5) return '***'
+  return token.slice(0, 5)
+}
+
 export function getSessionStore (options?: SessionStoreOptions): session.Store {
   const useRedis = options?.useRedisStore ?? useRedisStore
   const redis = options?.redis ?? redisConfig
@@ -124,6 +131,7 @@ export function getSessionStore (options?: SessionStoreOptions): session.Store {
           prefix: redis?.keyPrefix || 'sess:',
           ttl: maxAgeInMinutes * 60
         })
+    const keyFirst5 = draftStoreAccessKeyFirst5(redisAuthKey)
     logger.info('[REDIS] Session store initialised successfully', {
       host: redis?.host,
       port: redis?.port,
@@ -131,8 +139,10 @@ export function getSessionStore (options?: SessionStoreOptions): session.Store {
       keyPrefix: redis?.keyPrefix || 'sess:',
       maxAgeInMinutes,
       cookieName: sessionConfig.cookieName,
-      tokenHint: maskTokenHint(redisAuthKey)
+      tokenHint: maskTokenHint(redisAuthKey),
+      draftStoreAccessKeyFirst5: keyFirst5
     })
+    logger.info('[REDIS] draft-store-access-key first 5 chars', { draftStoreAccessKeyFirst5: keyFirst5 })
     return store
   }
   logger.info('Session store: Memory (useRedisStore false)')
