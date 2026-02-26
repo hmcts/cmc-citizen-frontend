@@ -472,7 +472,7 @@ export class DefenceSteps {
         break
       case PaymentOption.BY_SET_DATE:
         defendantWhenWillYouPage.chooseFullBySetDate()
-        defendantPaymentDatePage.enterDate('2025-01-01')
+        defendantPaymentDatePage.enterDate('2028-01-01')
         defendantPaymentDatePage.saveAndContinue()
         defendantTaskListPage.selectShareYourFinancialDetailsTask()
         statementOfMeansSteps.fillStatementOfMeansWithMinimalDataSet()
