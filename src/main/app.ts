@@ -87,6 +87,11 @@ app.use(cookieEncrypter(config.get('secrets.cmc.encryptionKey'), {
   }
 }))
 
+// Static assets before session so they are not served with session cookies (S8441)
+logger.info('Enabling webchat feature')
+app.use('/webchat', express.static(path.join(__dirname, '/public/webchat')))
+app.use(express.static(path.join(__dirname, 'public')))
+
 const sessionConfig = config.get<{ cookieName: string; secret: string; maxAgeInMinutes: number }>('session')
 const isSecure = env !== 'development' && env !== 'mocha'
 app.use(session({
@@ -114,11 +119,6 @@ if (env === 'mocha') {
     next()
   })
 }
-
-// Web Chat
-logger.info('Enabling webchat feature')
-app.use('/webchat', express.static(path.join(__dirname, '/public/webchat')))
-app.use(express.static(path.join(__dirname, 'public')))
 
 if (env !== 'mocha') {
   new CsrfProtection().enableFor(app)
