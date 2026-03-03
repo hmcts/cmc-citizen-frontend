@@ -13,8 +13,13 @@ import { Draft } from '@hmcts/draft-store-client'
 import { LocalDate } from 'forms/models/localDate'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { BreathingSpace } from 'features/claim/form/models/breathingSpace'
+import { ServiceAuthTokenFactoryImpl } from 'shared/security/serviceTokenFactoryImpl'
 
-const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
+async function getClaimStoreClient (): Promise<ClaimStoreClient> {
+  const serviceAuthToken = await new ServiceAuthTokenFactoryImpl().get()
+  return new ClaimStoreClient(undefined, serviceAuthToken)
+}
+
 let breathingSpaceExternalId = null
 
 function renderView (form: Form<BreathingSpaceLiftDate>, res: express.Response, next: express.NextFunction) {
@@ -33,6 +38,7 @@ export default express.Router()
       let draft: Draft<DraftClaim> = res.locals.Draft
       breathingSpaceExternalId = externalId
       if (draft.document.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate === undefined) {
+        const claimStoreClient = await getClaimStoreClient()
         const claim = externalId !== undefined ? await claimStoreClient.retrieveByExternalId(externalId, res.locals.user) : undefined
         draft.document.breathingSpace = claim.claimData.breathingSpace !== undefined ? claim.claimData.breathingSpace : new BreathingSpace()
         draft.document.breathingSpace.breathingSpaceExternalId = externalId

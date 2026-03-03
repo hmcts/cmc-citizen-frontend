@@ -9,6 +9,7 @@ import { claimDraft as claimDraftData, claimDraftHelpWithFees } from 'test/data/
 import { claimData } from 'test/data/entity/claimData'
 import { RequestPromiseOptions } from 'request-promise-native'
 import { claimStoreApiUrl, ClaimStoreClient } from 'claims/claimStoreClient'
+import { ServiceAuthToken } from 'idam/serviceAuthToken'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { Claim } from 'claims/models/claim'
@@ -73,7 +74,8 @@ describe('ClaimStoreClient', () => {
       maxAttempts: retryAttempts
     } as RequestPromiseOptions)
 
-    const claimStoreClient: ClaimStoreClient = new ClaimStoreClient(retryingRequest)
+    const mockServiceAuthToken = new ServiceAuthToken('mock-s2s-token-for-testing')
+    const claimStoreClient: ClaimStoreClient = new ClaimStoreClient(retryingRequest, mockServiceAuthToken)
 
     describe('saveClaim', () => {
       function mockSuccessOnFirstSaveAttempt () {

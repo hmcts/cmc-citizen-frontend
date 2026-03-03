@@ -27,6 +27,7 @@ import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentDate } from 'shared/components/payment-intention/model/paymentDate'
 import { LocalDate } from 'forms/models/localDate'
 import * as CCJHelper from 'main/common/helpers/ccjHelper'
+import { ServiceAuthTokenFactoryImpl } from 'shared/security/serviceTokenFactoryImpl'
 
 import { MomentFactory } from 'shared/momentFactory'
 
@@ -155,7 +156,9 @@ export default express.Router()
           await new DraftService().save(draft, user.bearerToken)
         }
         const countyCourtJudgment = CCJModelConverter.convertForRequest(draft.document, claim)
-        await CCJClient.request(claim.externalId, countyCourtJudgment, user)
+        const serviceAuthToken = await new ServiceAuthTokenFactoryImpl().get()
+        const ccjClient = new CCJClient(serviceAuthToken)
+        await ccjClient.request(claim.externalId, countyCourtJudgment, user)
         await new DraftService().delete(draft.id, user.bearerToken)
         res.redirect(Paths.ccjConfirmationPage.evaluateUri({ externalId: req.params.externalId }))
       }

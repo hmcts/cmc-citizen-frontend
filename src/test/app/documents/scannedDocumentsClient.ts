@@ -6,11 +6,14 @@ import * as chai from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
 
 import { ScannedDocumentsClient } from 'documents/scannedDocumentsClient'
+import { ServiceAuthToken } from 'idam/serviceAuthToken'
+import * as requestPromise from 'request-promise-native'
 
 const mockClient = 'http://localhost/scanned-documents'
 
 describe('ScannedDocumentsClient', () => {
-  const client: ScannedDocumentsClient = new ScannedDocumentsClient(mockClient)
+  const mockServiceAuthToken = new ServiceAuthToken('mock-s2s-token-for-testing')
+  const client: ScannedDocumentsClient = new ScannedDocumentsClient(mockClient, requestPromise, mockServiceAuthToken)
   const bearerToken = 'IUgiYGOFUHSODFIUGHPASIYYUGLIYFGKUTF&TF'
   const externalId = 'b17af4d2-273f-4999-9895-bce382fa24c8'
   const documentType = 'FORM'

@@ -9,6 +9,7 @@ import { DraftClaim } from 'drafts/models/draftClaim'
 import { BreathingSpaceLiftDate } from '../models/bsLiftDate'
 import { DraftService } from 'services/draftService'
 import { Draft } from '@hmcts/draft-store-client'
+import { ServiceAuthTokenFactoryImpl } from 'shared/security/serviceTokenFactoryImpl'
 
 /*  tslint:disable:no-default-export */
 export default express.Router()
@@ -41,7 +42,9 @@ export default express.Router()
           draft.breathingSpace.breathingSpaceEnteredbyInsolvencyTeamDate = draftBS.document.breathingSpace.breathingSpaceEnteredbyInsolvencyTeamDate
           draft.breathingSpace.breathingSpaceEnteredDate = draftBS.document.breathingSpace.breathingSpaceEnteredDate
           draft.breathingSpace.breathingSpaceEndDate = draftBS.document.breathingSpace.breathingSpaceEndDate
-          await new ClaimStoreClient().saveBreatingSpace(draft, res.locals.user)
+          const serviceAuthToken = await new ServiceAuthTokenFactoryImpl().get()
+          const claimStoreClient = new ClaimStoreClient(undefined, serviceAuthToken)
+          await claimStoreClient.saveBreatingSpace(draft, res.locals.user)
           await new DraftService().delete(draftBS.id, res.locals.user.bearerToken)
           res.redirect(DashboardPaths.claimantPage.uri.replace(':externalId', draft.breathingSpace.breathingSpaceExternalId))
         } catch (error) {

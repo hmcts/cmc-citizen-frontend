@@ -12,6 +12,7 @@ import { Draft } from '@hmcts/draft-store-client'
 import { DraftService } from 'services/draftService'
 import { OrdersDraft } from 'orders/draft/ordersDraft'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
+import { ServiceAuthTokenFactoryImpl } from 'shared/security/serviceTokenFactoryImpl'
 
 function renderView (form: Form<DisagreeReason>, res: express.Response): void {
   const user: User = res.locals.user
@@ -48,7 +49,9 @@ export default express.Router()
 
         await new DraftService().save(draft, user.bearerToken)
 
-        await new ClaimStoreClient().saveOrder(draft.document, claim, user)
+        const serviceAuthToken = await new ServiceAuthTokenFactoryImpl().get()
+        const claimStoreClient = new ClaimStoreClient(undefined, serviceAuthToken)
+        await claimStoreClient.saveOrder(draft.document, claim, user)
 
         const updatedDraft: Draft<OrdersDraft>[] = await new DraftService().find('orders', '100', user.bearerToken, (value: any): OrdersDraft => {
           return new OrdersDraft().deserialize(value)

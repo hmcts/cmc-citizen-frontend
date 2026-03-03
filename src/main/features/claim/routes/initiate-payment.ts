@@ -11,9 +11,14 @@ import { Logger } from '@hmcts/nodejs-logging'
 import * as HttpStatus from 'http-status-codes'
 import { ErrorHandling } from 'shared/errorHandling'
 import { noRetryRequest } from 'client/request'
+import { ServiceAuthTokenFactoryImpl } from 'shared/security/serviceTokenFactoryImpl'
 
 const logger = Logger.getLogger('router/initiate-payment')
-const claimStoreClient: ClaimStoreClient = new ClaimStoreClient(noRetryRequest)
+
+async function getClaimStoreClient (): Promise<ClaimStoreClient> {
+  const serviceAuthToken = await new ServiceAuthTokenFactoryImpl().get()
+  return new ClaimStoreClient(noRetryRequest, serviceAuthToken)
+}
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -25,6 +30,7 @@ export default express.Router()
       throw new Error(`externalId is missing from the draft claim. User Id : ${user.id}`)
     }
     let existingClaim: Claim
+    const claimStoreClient = await getClaimStoreClient()
     try {
       existingClaim = await claimStoreClient.retrieveByExternalId(externalId, user)
     } catch (err) {

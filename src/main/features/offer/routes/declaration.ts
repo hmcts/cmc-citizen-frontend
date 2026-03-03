@@ -9,6 +9,7 @@ import { Claim } from 'claims/models/claim'
 import { OfferClient } from 'claims/offerClient'
 import { OfferAcceptedGuard } from 'offer/guards/offerAcceptedGuard'
 import { ClaimStatus } from 'claims/models/claimStatus'
+import { ServiceAuthTokenFactoryImpl } from 'shared/security/serviceTokenFactoryImpl'
 
 function renderView (form: Form<Declaration>, res: express.Response) {
   const claim: Claim = res.locals.claim
@@ -47,13 +48,15 @@ export default express.Router()
       } else {
         const claim: Claim = res.locals.claim
         const user: User = res.locals.user
+        const serviceAuthToken = await new ServiceAuthTokenFactoryImpl().get()
+        const offerClient = new OfferClient(serviceAuthToken)
 
         if (user.id === claim.defendantId && claim.settlement.isOfferAccepted()) {
-          await OfferClient.countersignOffer(claim.externalId, user)
+          await offerClient.countersignOffer(claim.externalId, user)
 
           res.redirect(Paths.settledPage.evaluateUri({ externalId: claim.externalId }))
         } else {
-          await OfferClient.acceptOffer(claim.externalId, user)
+          await offerClient.acceptOffer(claim.externalId, user)
 
           res.redirect(Paths.acceptedPage.evaluateUri({ externalId: claim.externalId }))
         }

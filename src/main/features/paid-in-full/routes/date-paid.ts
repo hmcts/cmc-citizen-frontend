@@ -9,6 +9,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { User } from 'idam/user'
 import { DatePaid } from 'paid-in-full/form/models/datePaid'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
+import { ServiceAuthTokenFactoryImpl } from 'shared/security/serviceTokenFactoryImpl'
 
 function renderView (form: Form<DatePaid>, res: express.Response): void {
   res.render(Paths.datePaidPage.associatedView, { form: form })
@@ -38,7 +39,9 @@ export default express.Router()
 
         const { externalId } = req.params
 
-        await new ClaimStoreClient().savePaidInFull(externalId, user, draft.document)
+        const serviceAuthToken = await new ServiceAuthTokenFactoryImpl().get()
+        const claimStoreClient = new ClaimStoreClient(undefined, serviceAuthToken)
+        await claimStoreClient.savePaidInFull(externalId, user, draft.document)
         res.redirect(Paths.confirmationPage.uri.replace(':externalId', externalId))
       }
     }))

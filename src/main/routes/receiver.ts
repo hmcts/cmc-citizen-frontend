@@ -26,6 +26,7 @@ import { trackCustomEvent } from 'logging/customEventTracker'
 import { FeatureToggles } from 'utils/featureToggles'
 import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 import { Base64 } from 'js-base64'
+import { ServiceAuthTokenFactoryImpl } from 'shared/security/serviceTokenFactoryImpl'
 
 const logger = Logger.getLogger('router/receiver')
 
@@ -33,9 +34,13 @@ const sessionCookie = config.get<string>('session.cookieName')
 const stateCookieName = 'state'
 
 const draftService: DraftService = new DraftService()
-const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
 const eligibilityStore = new CookieEligibilityStore()
+
+async function getClaimStoreClient (): Promise<ClaimStoreClient> {
+  const serviceAuthToken = await new ServiceAuthTokenFactoryImpl().get()
+  return new ClaimStoreClient(undefined, serviceAuthToken)
+}
 
 const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
 
@@ -118,6 +123,7 @@ async function retrieveRedirectForLandingPage (req: express.Request, res: expres
   const user: User = res.locals.user
   let noClaimIssued: boolean
   let noClaimReceived: boolean
+  const claimStoreClient = await getClaimStoreClient()
   if (await featureToggles.isDashboardPaginationEnabled()) {
     logger.info('Receiver: Dashboard feature is enabled')
     noClaimIssued = (await claimStoreClient.retrieveByClaimantId(user, 1)).length === 0
@@ -168,6 +174,7 @@ export default express.Router()
           cookies.set(stateCookieName, state)
           return res.redirect(FirstContactPaths.claimSummaryPage.uri)
         } else {
+          const claimStoreClient = await getClaimStoreClient()
           if (await featureToggles.isDashboardPaginationEnabled()) {
             if (cookies.get('lid') && cookies.get('lid') !== undefined && cookies.get('lid') !== '') {
               await claimStoreClient.linkDefendant(user, cookies.get('lid'))

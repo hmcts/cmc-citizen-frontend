@@ -5,21 +5,30 @@ import { User } from 'idam/user'
 import { Offer as OfferForm } from 'features/offer/form/models/offer'
 import * as config from 'config'
 import { request } from 'client/request'
+import { ServiceAuthToken } from 'idam/serviceAuthToken'
 
 export const claimStoreApiUrl: string = `${config.get<string>('claim-store.url')}/claims`
 
 export class OfferClient {
+  constructor (private serviceAuthToken?: ServiceAuthToken) {
+    // Nothing to do
+  }
 
-  static makeOffer (externalId: string, user: User, offerForm: OfferForm): Promise<Claim> {
+  makeOffer (externalId: string, user: User, offerForm: OfferForm): Promise<Claim> {
     const offer: Offer = OfferModelConverter.convert(offerForm)
+
+    const headers: any = {
+      Authorization: `Bearer ${user.bearerToken}`
+    }
+    if (this.serviceAuthToken) {
+      headers['ServiceAuthorization'] = `Bearer ${this.serviceAuthToken.bearerToken}`
+    }
 
     const options = {
       method: 'POST',
       uri: `${claimStoreApiUrl}/${externalId}/offers/defendant`,
       body: offer,
-      headers: {
-        Authorization: `Bearer ${user.bearerToken}`
-      }
+      headers
     }
 
     return request(options).then(function (response) {
@@ -27,14 +36,19 @@ export class OfferClient {
     })
   }
 
-  static acceptOffer (externalId: string, user: User): Promise<Claim> {
+  acceptOffer (externalId: string, user: User): Promise<Claim> {
+    const headers: any = {
+      Authorization: `Bearer ${user.bearerToken}`
+    }
+    if (this.serviceAuthToken) {
+      headers['ServiceAuthorization'] = `Bearer ${this.serviceAuthToken.bearerToken}`
+    }
+
     const options = {
       method: 'POST',
       uri: `${claimStoreApiUrl}/${externalId}/offers/claimant/accept`,
       body: '',
-      headers: {
-        Authorization: `Bearer ${user.bearerToken}`
-      }
+      headers
     }
 
     return request(options).then(function (response) {
@@ -42,14 +56,19 @@ export class OfferClient {
     })
   }
 
-  static rejectOffer (externalId: string, user: User): Promise<Claim> {
+  rejectOffer (externalId: string, user: User): Promise<Claim> {
+    const headers: any = {
+      Authorization: `Bearer ${user.bearerToken}`
+    }
+    if (this.serviceAuthToken) {
+      headers['ServiceAuthorization'] = `Bearer ${this.serviceAuthToken.bearerToken}`
+    }
+
     const options = {
       method: 'POST',
       uri: `${claimStoreApiUrl}/${externalId}/offers/claimant/reject`,
       body: '',
-      headers: {
-        Authorization: `Bearer ${user.bearerToken}`
-      }
+      headers
     }
 
     return request(options).then(function (response) {
@@ -57,14 +76,19 @@ export class OfferClient {
     })
   }
 
-  static countersignOffer (externalId: string, user: User): Promise<Claim> {
+  countersignOffer (externalId: string, user: User): Promise<Claim> {
+    const headers: any = {
+      Authorization: `Bearer ${user.bearerToken}`
+    }
+    if (this.serviceAuthToken) {
+      headers['ServiceAuthorization'] = `Bearer ${this.serviceAuthToken.bearerToken}`
+    }
+
     const options = {
       method: 'POST',
       uri: `${claimStoreApiUrl}/${externalId}/offers/defendant/countersign`,
       body: '',
-      headers: {
-        Authorization: `Bearer ${user.bearerToken}`
-      }
+      headers
     }
 
     return request(options).then(function (response) {

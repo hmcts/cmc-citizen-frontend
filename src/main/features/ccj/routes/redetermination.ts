@@ -10,6 +10,7 @@ import { CCJClient } from 'claims/ccjClient'
 import { ReDetermination } from 'ccj/form/models/reDetermination'
 import { MadeBy } from 'claims/models/madeBy'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
+import { ServiceAuthTokenFactoryImpl } from 'shared/security/serviceTokenFactoryImpl'
 
 function renderView (form: Form<ReDetermination>, req: express.Request, res: express.Response): void {
   const claim: Claim = res.locals.claim
@@ -48,7 +49,9 @@ export default express.Router()
       } else {
         const claim: Claim = res.locals.claim
         const user: User = res.locals.user
-        await CCJClient.redetermination(claim.externalId, form.model, user, MadeBy.valueOf(req.params.madeBy))
+        const serviceAuthToken = await new ServiceAuthTokenFactoryImpl().get()
+        const ccjClient = new CCJClient(serviceAuthToken)
+        await ccjClient.redetermination(claim.externalId, form.model, user, MadeBy.valueOf(req.params.madeBy))
         res.redirect(Paths.redeterminationConfirmationPage.evaluateUri({ externalId: req.params.externalId }))
       }
     }))

@@ -7,8 +7,12 @@ import { DocumentsClient } from 'documents/documentsClient'
 import { ErrorHandling } from 'shared/errorHandling'
 
 import { DownloadUtils } from 'utils/downloadUtils'
+import { ServiceAuthTokenFactoryImpl } from 'shared/security/serviceTokenFactoryImpl'
 
-const documentsClient: DocumentsClient = new DocumentsClient()
+async function getDocumentsClient (): Promise<DocumentsClient> {
+  const serviceAuthToken = await new ServiceAuthTokenFactoryImpl().get()
+  return new DocumentsClient(undefined, serviceAuthToken)
+}
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -16,6 +20,7 @@ export default express.Router()
     ClaimMiddleware.retrieveByExternalId,
     ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
       const { externalId } = req.params
+      const documentsClient = await getDocumentsClient()
       const pdf: Buffer = await documentsClient.getDraftClaimReceiptPDF(externalId, res.locals.user.bearerToken)
       DownloadUtils.downloadPDF(res, pdf, `draft-claim-${externalId}`)
     }))

@@ -1,12 +1,13 @@
 import * as config from 'config'
 import { request } from 'client/request'
 import { StringUtils } from 'utils/stringUtils'
+import { ServiceAuthToken } from 'idam/serviceAuthToken'
 
 const claimStoreBaseUrl = config.get<string>('claim-store.url')
 
 export class DocumentsClient {
 
-  constructor (public documentsUrl: string = `${claimStoreBaseUrl}/documents`) {
+  constructor (public documentsUrl: string = `${claimStoreBaseUrl}/documents`, private serviceAuthToken?: ServiceAuthToken) {
   }
 
   getSealedClaimPDF (claimExternalId: string, bearerToken: string): Promise<Buffer> {
@@ -55,12 +56,17 @@ export class DocumentsClient {
       throw new Error('User authorisation cannot be blank')
     }
 
+    const headers: any = {
+      Authorization: `Bearer ${bearerToken}`,
+      Accept: 'application/pdf'
+    }
+    if (this.serviceAuthToken) {
+      headers['ServiceAuthorization'] = `Bearer ${this.serviceAuthToken.bearerToken}`
+    }
+
     const options = {
       uri: `${this.documentsUrl}/${documentTemplate}/${claimExternalId}`,
-      headers: {
-        Authorization: `Bearer ${bearerToken}`,
-        Accept: 'application/pdf'
-      },
+      headers,
       encoding: null
     }
 

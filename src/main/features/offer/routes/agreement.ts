@@ -4,14 +4,19 @@ import { ErrorHandling } from 'shared/errorHandling'
 import { DocumentsClient } from 'documents/documentsClient'
 import { Claim } from 'claims/models/claim'
 import { DownloadUtils } from 'utils/downloadUtils'
+import { ServiceAuthTokenFactoryImpl } from 'shared/security/serviceTokenFactoryImpl'
 
-const documentsClient: DocumentsClient = new DocumentsClient()
+async function getDocumentsClient (): Promise<DocumentsClient> {
+  const serviceAuthToken = await new ServiceAuthTokenFactoryImpl().get()
+  return new DocumentsClient(undefined, serviceAuthToken)
+}
 
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.agreementReceiver.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const { externalId } = req.params
+      const documentsClient = await getDocumentsClient()
       const pdf: Buffer = await documentsClient.getSettlementAgreementPDF(externalId, res.locals.user.bearerToken)
 
       const claim: Claim = res.locals.claim

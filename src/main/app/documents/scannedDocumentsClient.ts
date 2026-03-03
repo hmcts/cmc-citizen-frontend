@@ -2,6 +2,7 @@ import * as config from 'config'
 import { StringUtils } from 'utils/stringUtils'
 import * as requestDefault from 'request'
 import * as requestPromise from 'request-promise-native'
+import { ServiceAuthToken } from 'idam/serviceAuthToken'
 
 const claimStoreBaseUrl = config.get<string>('claim-store.url')
 
@@ -10,7 +11,8 @@ export class ScannedDocumentsClient {
   constructor (public documentsUrl: string = `${claimStoreBaseUrl}/scanned-documents`,
                private readonly request: requestDefault.RequestAPI<requestPromise.RequestPromise,
                  requestPromise.RequestPromiseOptions,
-                 requestDefault.RequiredUriUrl> = requestPromise) {
+                 requestDefault.RequiredUriUrl> = requestPromise,
+               private serviceAuthToken?: ServiceAuthToken) {
   }
 
   public getScannedResponseFormPDF (claimExternalId: string, bearerToken: string): Promise<Buffer> {
@@ -35,12 +37,17 @@ export class ScannedDocumentsClient {
       throw new Error('User authorisation cannot be blank')
     }
 
+    const headers: any = {
+      Authorization: `Bearer ${bearerToken}`,
+      Accept: 'application/pdf'
+    }
+    if (this.serviceAuthToken) {
+      headers['ServiceAuthorization'] = `Bearer ${this.serviceAuthToken.bearerToken}`
+    }
+
     const options = {
       uri: `${this.documentsUrl}/${claimExternalId}/${documentType}/${documentSubtype}`,
-      headers: {
-        Authorization: `Bearer ${bearerToken}`,
-        Accept: 'application/pdf'
-      },
+      headers,
       encoding: null
     }
 

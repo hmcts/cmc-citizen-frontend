@@ -10,6 +10,7 @@ import { StatementType } from 'offer/form/models/statementType'
 import { OfferClient } from 'claims/offerClient'
 import { Claim } from 'claims/models/claim'
 import { Offer } from 'claims/models/offer'
+import { ServiceAuthTokenFactoryImpl } from 'shared/security/serviceTokenFactoryImpl'
 
 function renderView (form: Form<DefendantResponse>, res: express.Response, next: express.NextFunction) {
   const claim: Claim = res.locals.claim
@@ -43,12 +44,14 @@ export default express.Router()
       } else {
         const claim: Claim = res.locals.claim
         const user: User = res.locals.user
+        const serviceAuthToken = await new ServiceAuthTokenFactoryImpl().get()
+        const offerClient = new OfferClient(serviceAuthToken)
         switch (form.model.option) {
           case StatementType.ACCEPTATION:
             res.redirect(Paths.makeAgreementPage.evaluateUri({ externalId: claim.externalId }))
             break
           case StatementType.REJECTION:
-            await OfferClient.rejectOffer(claim.externalId, user)
+            await offerClient.rejectOffer(claim.externalId, user)
             res.redirect(Paths.rejectedPage.evaluateUri({ externalId: claim.externalId }))
             break
           default:

@@ -14,11 +14,16 @@ import { FeaturesBuilder } from 'claim/helpers/featuresBuilder'
 import * as HttpStatus from 'http-status-codes'
 import { ErrorHandling } from 'shared/errorHandling'
 import { noRetryRequest } from 'client/request'
+import { ServiceAuthTokenFactoryImpl } from 'shared/security/serviceTokenFactoryImpl'
 
-const claimStoreClient: ClaimStoreClient = new ClaimStoreClient(noRetryRequest)
 const featuresBuilder: FeaturesBuilder = new FeaturesBuilder()
 
 const logger = Logger.getLogger('router/finish-payment')
+
+async function getClaimStoreClient (): Promise<ClaimStoreClient> {
+  const serviceAuthToken = await new ServiceAuthTokenFactoryImpl().get()
+  return new ClaimStoreClient(noRetryRequest, serviceAuthToken)
+}
 
 /* tslint:disable:no-default-export */
 // noinspection JSUnusedGlobalSymbols
@@ -32,6 +37,7 @@ export default express.Router()
     logger.info(`IN FINISH PAYMENT, WAITING FOR PAYMENT TO COMPLETE, for external id (${externalId}):`)
 
     try {
+      const claimStoreClient = await getClaimStoreClient()
       const claim: Claim = await claimStoreClient.retrieveByExternalId(externalId, user)
       logger.info(`CLAIM IN FINISH PAYMENT, Payment state for external id (${externalId}): `, claim.state)
       if (ClaimState[claim.state] === ClaimState.AWAITING_CITIZEN_PAYMENT) {

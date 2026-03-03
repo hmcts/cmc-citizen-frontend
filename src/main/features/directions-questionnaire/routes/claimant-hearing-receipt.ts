@@ -4,8 +4,12 @@ import { Claim } from 'claims/models/claim'
 import { DocumentsClient } from 'documents/documentsClient'
 import { ErrorHandling } from 'shared/errorHandling'
 import { DownloadUtils } from 'utils/downloadUtils'
+import { ServiceAuthTokenFactoryImpl } from 'shared/security/serviceTokenFactoryImpl'
 
-const documentsClient: DocumentsClient = new DocumentsClient()
+async function getDocumentsClient (): Promise<DocumentsClient> {
+  const serviceAuthToken = await new ServiceAuthTokenFactoryImpl().get()
+  return new DocumentsClient(undefined, serviceAuthToken)
+}
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -13,6 +17,7 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
       const claim: Claim = res.locals.claim
       const user: User = res.locals.user
+      const documentsClient = await getDocumentsClient()
 
       if (claim.claimantId === user.id) {
         const pdf: Buffer = await documentsClient.getClaimantHearingRequirementPDF(claim.externalId, res.locals.user.bearerToken)

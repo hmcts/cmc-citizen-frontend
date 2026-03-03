@@ -33,11 +33,16 @@ import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { noRetryRequest } from 'client/request'
 import { Logger } from '@hmcts/nodejs-logging'
 import { MoneyConverter } from 'fees/moneyConverter'
+import { ServiceAuthTokenFactoryImpl } from 'shared/security/serviceTokenFactoryImpl'
 
 const logger = Logger.getLogger('claims/claimStoreClient')
 const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
-const claimStoreClient: ClaimStoreClient = new ClaimStoreClient(noRetryRequest)
 const featuresBuilder: FeaturesBuilder = new FeaturesBuilder()
+
+async function getClaimStoreClient (): Promise<ClaimStoreClient> {
+  const serviceAuthToken = await new ServiceAuthTokenFactoryImpl().get()
+  return new ClaimStoreClient(noRetryRequest, serviceAuthToken)
+}
 
 async function getClaimAmountTotal (draft: DraftClaim): Promise<TotalAmount> {
   const interest: number = await draftInterestAmount(draft)
@@ -161,6 +166,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response, next: 
 async function handleHelpwWithFees (draft: Draft<DraftClaim>, user: User): Promise<boolean> {
   const features = await featuresBuilder.features(draft.document.amount.totalAmount())
 
+  const claimStoreClient = await getClaimStoreClient()
   // retrieve claim to check if the claimant initiated payment
   const existingClaim: void | Claim = await claimStoreClient.retrieveByExternalId(draft.document.externalId, user)
     .catch((e) => {

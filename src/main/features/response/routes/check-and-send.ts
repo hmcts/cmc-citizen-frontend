@@ -29,8 +29,12 @@ import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 import * as uuid from 'uuid'
 import { PcqClient } from 'utils/pcqClient'
 import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
+import { ServiceAuthTokenFactoryImpl } from 'shared/security/serviceTokenFactoryImpl'
 
-const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
+async function getClaimStoreClient (): Promise<ClaimStoreClient> {
+  const serviceAuthToken = await new ServiceAuthTokenFactoryImpl().get()
+  return new ClaimStoreClient(undefined, serviceAuthToken)
+}
 
 async function renderView (form: Form<StatementOfTruth>, res: express.Response): Promise<void> {
   const claim: Claim = res.locals.claim
@@ -211,6 +215,7 @@ export default express.Router()
           draft.document.qualifiedStatementOfTruth = form.model as QualifiedStatementOfTruth
           await draftService.save(draft, user.bearerToken)
         }
+        const claimStoreClient = await getClaimStoreClient()
         await claimStoreClient.saveResponseForUser(claim, draft, mediationDraft, directionsQuestionnaireDraft, user)
         await draftService.delete(draft.id, user.bearerToken)
 

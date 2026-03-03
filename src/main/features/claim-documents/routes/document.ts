@@ -11,9 +11,18 @@ import { DownloadUtils } from 'utils/downloadUtils'
 import * as _ from 'lodash'
 import { ClaimDocument } from 'claims/models/claimDocument'
 import { ScannedDocumentsClient } from 'documents/scannedDocumentsClient'
+import { ServiceAuthTokenFactoryImpl } from 'shared/security/serviceTokenFactoryImpl'
+import * as requestPromise from 'request-promise-native'
 
-const documentsClient: DocumentsClient = new DocumentsClient()
-const scannedDocumentsClient: ScannedDocumentsClient = new ScannedDocumentsClient()
+async function getDocumentsClient (): Promise<DocumentsClient> {
+  const serviceAuthToken = await new ServiceAuthTokenFactoryImpl().get()
+  return new DocumentsClient(undefined, serviceAuthToken)
+}
+
+async function getScannedDocumentsClient (): Promise<ScannedDocumentsClient> {
+  const serviceAuthToken = await new ServiceAuthTokenFactoryImpl().get()
+  return new ScannedDocumentsClient(undefined, requestPromise, serviceAuthToken)
+}
 
 function getDocumentPath (path: string): string {
   return path.match(`[^\/]+$`)[0]// NOSONAR
@@ -26,11 +35,13 @@ export default express.Router()
       const claim: Claim = res.locals.claim
       const documentURI = getDocumentPath(req.path)
       const document: ClaimDocument = _.find(claim.claimDocuments,{ uri : documentURI })
-      const pdf: Buffer = await getPDF(claim.externalId, document, res.locals.user.bearerToken)
+      const documentsClient = await getDocumentsClient()
+      const scannedDocumentsClient = await getScannedDocumentsClient()
+      const pdf: Buffer = await getPDF(claim.externalId, document, res.locals.user.bearerToken, documentsClient, scannedDocumentsClient)
       DownloadUtils.downloadPDF(res, pdf, document.documentName)
     }))
 
-async function getPDF (claimExternalId: string, document: ClaimDocument, bearerToken: string): Promise<Buffer> {
+async function getPDF (claimExternalId: string, document: ClaimDocument, bearerToken: string, documentsClient: DocumentsClient, scannedDocumentsClient: ScannedDocumentsClient): Promise<Buffer> {
   if (document.documentType === 'GENERAL_LETTER') {
     return documentsClient.getPDF(claimExternalId, document.uri, bearerToken)
   } else if (document.subtype) {

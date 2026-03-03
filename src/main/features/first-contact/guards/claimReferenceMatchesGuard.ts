@@ -6,9 +6,14 @@ import { ErrorPaths } from 'first-contact/paths'
 import { User } from 'idam/user'
 import { Logger } from '@hmcts/nodejs-logging'
 import { OAuthHelper } from 'idam/oAuthHelper'
+import { ServiceAuthTokenFactoryImpl } from 'shared/security/serviceTokenFactoryImpl'
 
 const logger = Logger.getLogger('first-contact/guards/claimReferenceMatchesGuard')
-const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
+
+async function getClaimStoreClient (): Promise<ClaimStoreClient> {
+  const serviceAuthToken = await new ServiceAuthTokenFactoryImpl().get()
+  return new ClaimStoreClient(undefined, serviceAuthToken)
+}
 
 export class ClaimReferenceMatchesGuard {
 
@@ -19,6 +24,7 @@ export class ClaimReferenceMatchesGuard {
       const user: User = res.locals.user
       new Cookies(req, res).set('lid', user.id)
       logger.info(`Set lid cookie: ${user.id}`)
+      const claimStoreClient = await getClaimStoreClient()
       const claim: Claim = await claimStoreClient.retrieveByLetterHolderId(user.id, user.bearerToken)
       res.locals.claim = claim
 

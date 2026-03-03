@@ -3,8 +3,19 @@ import { User } from 'idam/user'
 import * as ld from 'ldclient-node'
 
 const sdkKey: string = config.get<string>('secrets.cmc.launchDarkly-sdk-key')
+const isOffline = config.get<boolean>('launchDarkly.offline')
+
+// Create a silent logger for offline mode to suppress warnings during tests
+const silentLogger: ld.LDLogger = {
+  debug: () => {},
+  info: () => {},
+  warn: () => {},
+  error: () => {}
+}
+
 const ldConfig = {
-  offline: config.get<boolean>('launchDarkly.offline')
+  offline: isOffline,
+  logger: isOffline ? silentLogger : undefined
 }
 
 export class LaunchDarklyClient {

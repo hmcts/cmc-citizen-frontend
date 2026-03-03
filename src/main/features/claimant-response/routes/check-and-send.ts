@@ -27,6 +27,7 @@ import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
 import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import { Moment } from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
+import { ServiceAuthTokenFactoryImpl } from 'shared/security/serviceTokenFactoryImpl'
 
 function getPaymentIntention (draft: DraftClaimantResponse, claim: Claim): PaymentIntention {
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
@@ -131,7 +132,9 @@ export default express.Router()
         const directionsQuestionnaireDraft = res.locals.directionsQuestionnaireDraft
         const draftService = new DraftService()
 
-        await new ClaimStoreClient().saveClaimantResponse(claim, draft, mediationDraft, user, directionsQuestionnaireDraft.document)
+        const serviceAuthToken = await new ServiceAuthTokenFactoryImpl().get()
+        const claimStoreClient = new ClaimStoreClient(undefined, serviceAuthToken)
+        await claimStoreClient.saveClaimantResponse(claim, draft, mediationDraft, user, directionsQuestionnaireDraft.document)
         await new DraftService().delete(draft.id, user.bearerToken)
 
         if (DirectionsQuestionnaireHelper.isDirectionsQuestionnaireEligible(draft.document, claim) && directionsQuestionnaireDraft.id) {

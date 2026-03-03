@@ -14,9 +14,14 @@ import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 import { FeatureToggles } from 'utils/featureToggles'
 import { formPaginationToDisplay } from '../helpers/paginationBuilder'
 import { Logger } from '@hmcts/nodejs-logging'
+import { ServiceAuthTokenFactoryImpl } from 'shared/security/serviceTokenFactoryImpl'
 
-const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 const logger = Logger.getLogger('router/dashboards')
+
+async function getClaimStoreClient (): Promise<ClaimStoreClient> {
+  const serviceAuthToken = await new ServiceAuthTokenFactoryImpl().get()
+  return new ClaimStoreClient(undefined, serviceAuthToken)
+}
 
 function renderPage (res: express.Response, claimParams: object) {
   res.render(Paths.dashboardPage.associatedView, claimParams)
@@ -37,6 +42,7 @@ export default express.Router()
     let paginationArgumentClaimant: object = undefined
     let paginationArgumentDefendant: object = undefined
 
+    const claimStoreClient = await getClaimStoreClient()
     if (await featureToggles.isDashboardPaginationEnabled()) {
       logger.info('Dashboard feature is enabled')
       const selectedPIdByClaimant: number = (req.query.c_pid === undefined || req.query.c_pid === '') ? 1 : Number(req.query.c_pid)

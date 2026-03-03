@@ -8,8 +8,12 @@ import { FormValidator } from 'main/app/forms/validation/formValidator'
 import { User } from 'main/app/idam/user'
 import { YesNoOption } from 'main/app/models/yesNoOption'
 import { SettlementAgreementClient } from 'main/app/claims/settlementAgreementClient'
+import { ServiceAuthTokenFactoryImpl } from 'shared/security/serviceTokenFactoryImpl'
 
-const settlementAgreementClient: SettlementAgreementClient = new SettlementAgreementClient()
+async function getSettlementAgreementClient (): Promise<SettlementAgreementClient> {
+  const serviceAuthToken = await new ServiceAuthTokenFactoryImpl().get()
+  return new SettlementAgreementClient(serviceAuthToken)
+}
 
 async function renderView (form: Form<DefendantSettlementResponse>, res: express.Response, next: express.NextFunction) {
   try {
@@ -43,6 +47,7 @@ export default express.Router()
       } else {
         const claim: Claim = res.locals.claim
         const user: User = res.locals.user
+        const settlementAgreementClient = await getSettlementAgreementClient()
 
         if (form.model.option === YesNoOption.YES.option) {
           await settlementAgreementClient.countersignSettlementAgreement(claim.externalId, user)

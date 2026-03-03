@@ -27,10 +27,14 @@ import { Claim } from 'claims/models/claim'
 import { MockPayClient } from 'mock-clients/mockPayClient'
 import { FeaturesBuilder } from 'claim/helpers/featuresBuilder'
 
-const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 const featuresBuilder: FeaturesBuilder = new FeaturesBuilder()
 
 const logger = Logger.getLogger('router/pay')
+
+async function getClaimStoreClient (): Promise<ClaimStoreClient> {
+  const serviceAuthToken = await new ServiceAuthTokenFactoryImpl().get()
+  return new ClaimStoreClient(undefined, serviceAuthToken)
+}
 const event: string = config.get<string>('fees.issueFee.event')
 const channel: string = config.get<string>('fees.channel.online')
 
@@ -60,6 +64,7 @@ async function successHandler (req, res, next) {
   const user: User = res.locals.user
   const externalId: string = draft.document.externalId
   let savedClaim: Claim
+  const claimStoreClient = await getClaimStoreClient()
 
   try {
     const features = await featuresBuilder.features(draft.document.amount.totalAmount())

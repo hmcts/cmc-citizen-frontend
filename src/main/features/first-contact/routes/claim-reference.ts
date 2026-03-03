@@ -12,8 +12,12 @@ import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { ErrorHandling } from 'shared/errorHandling'
 import { OAuthHelper } from 'idam/oAuthHelper'
 import { isCCBCCaseReference } from 'shared/utils/isCCBCCaseReference'
+import { ServiceAuthTokenFactoryImpl } from 'shared/security/serviceTokenFactoryImpl'
 
-const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
+async function getClaimStoreClient (): Promise<ClaimStoreClient> {
+  const serviceAuthToken = await new ServiceAuthTokenFactoryImpl().get()
+  return new ClaimStoreClient(undefined, serviceAuthToken)
+}
 
 function renderView (form: Form<ClaimReference>, res: express.Response): void {
   res.render(Paths.claimReferencePage.associatedView, { form: form })
@@ -37,6 +41,7 @@ export default express.Router()
           return res.redirect(mcolUrl)
         }
 
+        const claimStoreClient = await getClaimStoreClient()
         const linked: boolean = await claimStoreClient.isClaimLinked(form.model.reference)
 
         if (linked) {

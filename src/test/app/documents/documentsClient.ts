@@ -1,9 +1,11 @@
 import { expect } from 'chai'
 
 import { DocumentsClient } from 'documents/documentsClient'
+import { ServiceAuthToken } from 'idam/serviceAuthToken'
 
 describe('DocumentsClient', () => {
-  const client: DocumentsClient = new DocumentsClient()
+  const mockServiceAuthToken = new ServiceAuthToken('mock-s2s-token-for-testing')
+  const client: DocumentsClient = new DocumentsClient(undefined, mockServiceAuthToken)
   const bearerToken = 'IUgiYGOFUHSODFIUGHPASIYYUGLIYFGKUTF&TF'
   const externalId = 'b17af4d2-273f-4999-9895-bce382fa24c8'
 
