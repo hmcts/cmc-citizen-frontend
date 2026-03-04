@@ -1432,10 +1432,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^18.16.0":
-  version: 18.16.18
-  resolution: "@types/node@npm:18.16.18"
-  checksum: 10/4692b4c927bf63efbc3aed6e18c1a264eb8b5673fa7cc0649a38f394ab34d4d4d0e7a2b98f4235bc8dc7615e88080a1b443a06eac9324f67e426398ed857b4a1
+"@types/node@npm:^24.0.0":
+  version: 24.11.0
+  resolution: "@types/node@npm:24.11.0"
+  dependencies:
+    undici-types: "npm:~7.16.0"
+  checksum: 10/d2f4f898c6a0f14980e55c697904fb58681729fc46b4e264d5f64dc391b23da73c9b422cfffbca28c045e6e8eca72dab5f28ed633faa95398ef1528af5398382
   languageName: node
   linkType: hard
 
@@ -3714,7 +3716,7 @@ __metadata:
     "@types/jsonwebtoken": "npm:^9.0.10"
     "@types/lodash": "npm:^4.14.170"
     "@types/mocha": "npm:*"
-    "@types/node": "npm:^18.16.0"
+    "@types/node": "npm:^24.0.0"
     "@types/nunjucks": "npm:^3.1.4"
     "@types/request-promise-native": "npm:^1.0.16"
     "@types/shortid": "npm:^0.0.29"
@@ -14606,6 +14608,13 @@ __metadata:
     object.reduce: "npm:^1.0.0"
     undertaker-registry: "npm:^1.0.0"
   checksum: 10/6cb5898b0b8fd4b094fbd6ed9c2e155f436d698fdc13f45444d5083825cc29bca7a364c5e27922366f0ce3fff7bb5b834f6ff3583f77cb655bbc3a60fee632ed
+  languageName: node
+  linkType: hard
+
+"undici-types@npm:~7.16.0":
+  version: 7.16.0
+  resolution: "undici-types@npm:7.16.0"
+  checksum: 10/db43439f69c2d94cc29f75cbfe9de86df87061d6b0c577ebe9bb3255f49b22c50162a7d7eb413b0458b6510b8ca299ac7cff38c3a29fbd31af9f504bcf7fbc0d
   languageName: node
   linkType: hard
 
