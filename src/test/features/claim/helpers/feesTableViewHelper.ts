@@ -13,12 +13,18 @@ describe('FeesTableViewHelper', () => {
   let newClaimFeesEnabledStub: sinon.SinonStub
 
   beforeEach(() => {
+    const proto = FeatureToggles.prototype as any
+    if (proto.isNewClaimFeesEnabled?.restore) {
+      proto.isNewClaimFeesEnabled.restore()
+    }
     newClaimFeesEnabledStub = sinon.stub(FeatureToggles.prototype, 'isNewClaimFeesEnabled')
   })
 
   afterEach(() => {
     reset(mockLaunchDarklyClient)
-    newClaimFeesEnabledStub.restore()
+    if (newClaimFeesEnabledStub) {
+      newClaimFeesEnabledStub.restore()
+    }
   })
 
   it('should throw an error when issue fees array is undefined', () => {

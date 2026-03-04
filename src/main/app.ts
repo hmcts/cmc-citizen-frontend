@@ -7,6 +7,8 @@ import * as path from 'path'
 import * as favicon from 'serve-favicon'
 import * as cookieParser from 'cookie-parser'
 import * as cookieEncrypter from '@hmcts/cookie-encrypter'
+import * as session from 'express-session'
+import { getSessionStore } from 'modules/session-store'
 import { ForbiddenError, NotFoundError } from 'errors'
 import { ErrorLogger } from 'logging/errorLogger'
 import { RouterFinder } from 'shared/router/routerFinder'
@@ -85,10 +87,38 @@ app.use(cookieEncrypter(config.get('secrets.cmc.encryptionKey'), {
   }
 }))
 
-// Web Chat
+// Static assets before session so they are not served with session cookies (S8441)
 logger.info('Enabling webchat feature')
 app.use('/webchat', express.static(path.join(__dirname, '/public/webchat')))
 app.use(express.static(path.join(__dirname, 'public')))
+
+const sessionConfig = config.get<{ cookieName: string; secret: string; maxAgeInMinutes: number }>('session')
+const isSecure = env !== 'development' && env !== 'mocha'
+app.use(session({
+  name: sessionConfig.cookieName,
+  secret: sessionConfig.secret,
+  store: getSessionStore(),
+  resave: false,
+  saveUninitialized: false,
+  rolling: true,
+  cookie: {
+    secure: isSecure,
+    httpOnly: true,
+    sameSite: 'strict',
+    maxAge: sessionConfig.maxAgeInMinutes * 60 * 1000
+  }
+}))
+
+// Test-only: allow tests to pass token via cookie; copy into session so AuthTokenExtractor finds it (no token in cookie in production)
+if (env === 'mocha') {
+  app.use((req, res, next) => {
+    const cookieVal = req.cookies?.[sessionConfig.cookieName]
+    if (cookieVal && typeof cookieVal === 'string') {
+      req.session.authenticationToken = cookieVal
+    }
+    next()
+  })
+}
 
 if (env !== 'mocha') {
   new CsrfProtection().enableFor(app)

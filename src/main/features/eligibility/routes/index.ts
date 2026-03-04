@@ -1,12 +1,12 @@
 import * as express from 'express'
 
 import { Paths } from 'eligibility/paths'
-import { JwtExtractor } from 'idam/jwtExtractor'
+import { AuthTokenExtractor } from 'idam/authTokenExtractor'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.startPage.uri, (req: express.Request, res: express.Response): void => {
     res.render(Paths.startPage.associatedView, {
-      registeredUser: JwtExtractor.extract(req) !== undefined
+      registeredUser: AuthTokenExtractor.extract(req) !== undefined
     })
   })

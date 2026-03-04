@@ -12,10 +12,9 @@ import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { ErrorHandling } from 'shared/errorHandling'
 import * as Cookies from 'cookies'
 import { AuthToken } from 'idam/authToken'
-import * as config from 'config'
 import { IdamClient } from 'idam/idamClient'
 import { buildURL } from 'utils/callbackBuilder'
-import { JwtExtractor } from 'idam/jwtExtractor'
+import { AuthTokenExtractor } from 'idam/authTokenExtractor'
 import { RoutablePath } from 'shared/router/routablePath'
 import { hasTokenExpired } from 'idam/authorizationMiddleware'
 import { Logger } from '@hmcts/nodejs-logging'
@@ -29,7 +28,6 @@ import { Base64 } from 'js-base64'
 
 const logger = Logger.getLogger('router/receiver')
 
-const sessionCookie = config.get<string>('session.cookieName')
 const stateCookieName = 'state'
 
 const draftService: DraftService = new DraftService()
@@ -77,7 +75,7 @@ async function getAuthToken (req: express.Request,
   if (req.query.code) {
     authenticationToken = await getOAuthAccessToken(req, receiver)
   } else if (checkCookie) {
-    authenticationToken = JwtExtractor.extract(req)
+    authenticationToken = AuthTokenExtractor.extract(req)
   }
   return authenticationToken
 }
@@ -96,9 +94,11 @@ function loginErrorHandler (req: express.Request,
                             err: Error,
                             receiver: RoutablePath = AppPaths.receiver) {
   if (hasTokenExpired(err)) {
-    cookies.set(sessionCookie)
-    logger.debug(`Protected path - expired auth token - access to ${req.path} rejected`)
-    return res.redirect(OAuthHelper.forLogin(req, res, receiver))
+    req.session?.destroy(() => {
+      logger.debug(`Protected path - expired auth token - access to ${req.path} rejected`)
+      res.redirect(OAuthHelper.forLogin(req, res, receiver))
+    })
+    return
   }
   cookies.set(stateCookieName, '')
   return next(err)
@@ -135,8 +135,8 @@ async function retrieveRedirectForLandingPage (req: express.Request, res: expres
   return redirectUri
 }
 
-function setAuthCookie (cookies: Cookies, authenticationToken: string): void {
-  cookies.set(sessionCookie, authenticationToken)
+function persistTokenInSession (req: express.Request, cookies: Cookies, authenticationToken: string): void {
+  req.session.authenticationToken = authenticationToken
   cookies.set(stateCookieName, '')
 }
 
@@ -155,7 +155,7 @@ export default express.Router()
           user = await IdamClient.retrieveUserFor(authenticationToken)
           res.locals.isLoggedIn = true
           res.locals.user = user
-          setAuthCookie(cookies, authenticationToken)
+          persistTokenInSession(req, cookies, authenticationToken)
         }
       } catch (err) {
         return loginErrorHandler(req, res, cookies, next, err)
@@ -200,7 +200,7 @@ export default express.Router()
         if (authenticationToken) {
           res.locals.user = await IdamClient.retrieveUserFor(authenticationToken)
           res.locals.isLoggedIn = true
-          setAuthCookie(cookies, authenticationToken)
+          persistTokenInSession(req, cookies, authenticationToken)
           res.redirect(AppPaths.receiver.uri)
           return
         }

@@ -4,15 +4,15 @@ import * as Cookies from 'cookies'
 import { Paths } from 'first-contact/paths'
 import { Claim } from 'claims/models/claim'
 import { ClaimReferenceMatchesGuard } from 'first-contact/guards/claimReferenceMatchesGuard'
-import { JwtExtractor } from 'idam/jwtExtractor'
+import { AuthTokenExtractor } from 'idam/authTokenExtractor'
 import { ClaimantRequestedCCJGuard } from 'first-contact/guards/claimantRequestedCCJGuard'
 import { OAuthHelper } from 'idam/oAuthHelper'
 import { getInterestDetails } from 'shared/interestUtils'
 
-const sessionCookie = config.get<string>('session.cookieName')
+const sessionCookieName = config.get<string>('session.cookieName')
 
 function receiverPath (req: express.Request, res: express.Response): string {
-  return `${OAuthHelper.forUplift(req, res)}&jwt=${JwtExtractor.extract(req)}`
+  return `${OAuthHelper.forUplift(req, res)}&jwt=${AuthTokenExtractor.extract(req) ?? ''}`
 }
 
 /* tslint:disable:no-default-export */
@@ -28,6 +28,6 @@ export default express.Router()
       })
     })
   .post(Paths.claimSummaryPage.uri, (req: express.Request, res: express.Response): void => {
-    new Cookies(req, res).set(sessionCookie, '')
+    new Cookies(req, res).set(sessionCookieName, '')
     res.redirect(receiverPath(req, res))
   })
