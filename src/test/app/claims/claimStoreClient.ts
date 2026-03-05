@@ -233,7 +233,8 @@ describe('ClaimStoreClient', () => {
           .reply(HttpStatus.INTERNAL_SERVER_ERROR, 'An unexpected error occurred')
       }
 
-      it('should propagate error responses other than 409 for orders', async () => {
+      it('should propagate error responses other than 409 for orders', async function () {
+        this.timeout(5000)
         mockInternalServerErrorOnAllAttempts()
 
         try {

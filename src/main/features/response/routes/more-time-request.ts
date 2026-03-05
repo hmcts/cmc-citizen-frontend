@@ -16,7 +16,12 @@ import { Claim } from 'claims/models/claim'
 import { DeadlineCalculatorClient } from 'claims/deadlineCalculatorClient'
 import { Moment } from 'moment'
 
-const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
+import { ServiceAuthTokenFactoryImpl } from 'shared/security/serviceTokenFactoryImpl'
+
+async function getClaimStoreClient () {
+  const serviceAuthToken = await ServiceAuthTokenFactoryImpl.retrieveServiceToken()
+  return new ClaimStoreClient(undefined, serviceAuthToken)
+}
 
 async function renderView (form: Form<MoreTimeNeeded>, res: express.Response, next: express.NextFunction) {
   try {
@@ -62,6 +67,7 @@ export default express.Router()
         draft.document.moreTimeNeeded = form.model
         await new DraftService().save(draft, user.bearerToken)
 
+        const claimStoreClient = await getClaimStoreClient()
         if (form.model.option === MoreTimeNeededOption.YES) {
           await claimStoreClient.requestForMoreTime(claim.externalId, user)
 

@@ -12,7 +12,13 @@ import { ForbiddenError } from 'errors'
 import { Moment } from 'moment'
 import { DirectionOrder } from 'claims/models/directionOrder'
 
-const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
+import { ServiceAuthTokenFactoryImpl } from 'shared/security/serviceTokenFactoryImpl'
+
+async function getClaimStoreClient () {
+  const serviceAuthToken = await ServiceAuthTokenFactoryImpl.retrieveServiceToken()
+  return new ClaimStoreClient(undefined, serviceAuthToken)
+}
+
 const draftExternalId = 'draft'
 
 /* tslint:disable:no-default-export */
@@ -20,6 +26,7 @@ export default express.Router()
   .get(Paths.claimantPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
       const { externalId } = req.params
+      const claimStoreClient = await getClaimStoreClient()
       const claim = externalId !== draftExternalId ? await claimStoreClient.retrieveByExternalId(externalId, res.locals.user as User) : undefined
       const mediationDeadline: Moment = claim ? await claim.respondToMediationDeadline() : undefined
       const reconsiderationDeadline: Moment = claim ? await claim.respondToReconsiderationDeadline() : undefined
@@ -54,6 +61,7 @@ export default express.Router()
       }
 
       const user: User = res.locals.user
+      const claimStoreClient = await getClaimStoreClient()
       const claim: Claim = await claimStoreClient.retrieveByExternalId(externalId, user)
       if (claim && claim.claimantId !== user.id) {
         throw new ForbiddenError()

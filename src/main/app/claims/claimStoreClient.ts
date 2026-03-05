@@ -423,8 +423,15 @@ export class ClaimStoreClient {
       return Promise.reject(new Error('Claim reference is required'))
     }
 
+    const headers: any = {}
+    if (this.serviceAuthToken) {
+      headers['ServiceAuthorization'] = `Bearer ${this.serviceAuthToken.bearerToken}`
+    }
+
     return this.request
-      .get(`${claimStoreApiUrl}/${reference}/defendant-link-status`)
+      .get(`${claimStoreApiUrl}/${reference}/defendant-link-status`, {
+        headers
+      })
       .then(linkStatus => linkStatus.linked)
   }
 

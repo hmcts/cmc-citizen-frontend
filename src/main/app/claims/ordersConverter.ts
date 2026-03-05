@@ -3,6 +3,7 @@ import { MomentFactory } from 'shared/momentFactory'
 import { Claim } from 'claims/models/claim'
 import { ReviewOrder } from 'claims/models/reviewOrder'
 import { MadeBy } from 'claims/models/madeBy'
+import { User } from 'idam/user'
 
 export class OrdersConverter {
   static convert (ordersDraft: OrdersDraft, claim: Claim, user: User): ReviewOrder {
