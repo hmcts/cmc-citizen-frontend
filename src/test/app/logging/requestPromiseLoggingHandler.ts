@@ -16,14 +16,14 @@ describe('RequestLoggingHandler', () => {
 
   /* tslint:disable:no-empty allow empty for mocking */
   let requestPromise = {
-    get: (options) => { },
-    post: (options) => { },
-    put: (options) => { },
-    del: (options) => { },
-    delete: (options) => { },
-    patch: (options) => { },
-    head: (options) => { },
-    another: (options) => { }
+    get: (options, extra) => { return { options, extra } },
+    post: (options, extra) => { return { options, extra } },
+    put: (options, extra) => { return { options, extra } },
+    del: (options, extra) => { return { options, extra } },
+    delete: (options, extra) => { return { options, extra } },
+    patch: (options, extra) => { return { options, extra } },
+    head: (options, extra) => { return { options, extra } },
+    another: (options, extra) => { return { options, extra } }
   }
 
   let apiLogger = {
@@ -55,48 +55,53 @@ describe('RequestLoggingHandler', () => {
 
     const suiteParameters = [
       { paramName: 'options object', param: {} },
-      { paramName: 'uri string', param: 'http://local.instance/some/path' }
+      { paramName: 'uri string', param: 'http://local.instance/some/path' },
+      { paramName: 'uri and options', param: 'http://local.instance/some/path', extraParam: { headers: { 'X-Test': 'Test' } } }
     ]
 
     suiteParameters.forEach((suite) => {
       describe(`when passed an ${suite.paramName}`, () => {
         it('should handle logging on a get call', () => {
-          proxy.get(suite.param)
+          const result = proxy.get(suite.param, suite.extraParam)
           expect(logRequestCall).to.have.been.called
+          if (suite.extraParam) {
+            expect(result.extra).to.be.undefined
+            expect(result.options.headers).to.equal(suite.extraParam.headers)
+          }
         })
 
         it('should handle logging on a put call', () => {
-          proxy.put(suite.param)
+          proxy.put(suite.param, suite.extraParam)
           expect(logRequestCall).to.have.been.called
         })
 
         it('should handle logging on a post call', () => {
-          proxy.post(suite.param)
+          proxy.post(suite.param, suite.extraParam)
           expect(logRequestCall).to.have.been.called
         })
 
         it('should handle logging on a del call', () => {
-          proxy.del(suite.param)
+          proxy.del(suite.param, suite.extraParam)
           expect(logRequestCall).to.have.been.called
         })
 
         it('should handle logging on a delete call', () => {
-          proxy.delete(suite.param)
+          proxy.delete(suite.param, suite.extraParam)
           expect(logRequestCall).to.have.been.called
         })
 
         it('should handle logging on a patch call', () => {
-          proxy.patch(suite.param)
+          proxy.patch(suite.param, suite.extraParam)
           expect(logRequestCall).to.have.been.called
         })
 
         it('should handle logging on a head call', () => {
-          proxy.head(suite.param)
+          proxy.head(suite.param, suite.extraParam)
           expect(logRequestCall).to.have.been.called
         })
 
         it('should not handle logging on other calls', () => {
-          proxy.another(suite.param)
+          proxy.another(suite.param, suite.extraParam)
           expect(logRequestCall).not.to.have.been.called
         })
       })
