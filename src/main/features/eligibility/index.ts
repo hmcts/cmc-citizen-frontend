@@ -3,7 +3,7 @@ import * as path from 'path'
 
 import { Paths } from 'eligibility/paths'
 
-import { JwtExtractor } from 'idam/jwtExtractor'
+import { AuthTokenExtractor } from 'idam/authTokenExtractor'
 import { IdamClient } from 'idam/idamClient'
 import { hasTokenExpired } from 'idam/authorizationMiddleware'
 
@@ -14,10 +14,10 @@ import { DefendantAgeOption } from 'eligibility/model/defendantAgeOption'
 import { RouterFinder } from 'shared/router/routerFinder'
 
 async function authorizationRequestHandler (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const jwt: string = JwtExtractor.extract(req)
-  if (jwt) {
+  const token = AuthTokenExtractor.extract(req)
+  if (token) {
     try {
-      await IdamClient.retrieveUserFor(jwt)
+      await IdamClient.retrieveUserFor(token)
       res.locals.isLoggedIn = true
     } catch (err) {
       if (!hasTokenExpired(err)) {

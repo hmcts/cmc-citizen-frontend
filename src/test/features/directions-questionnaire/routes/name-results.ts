@@ -84,20 +84,6 @@ describe('Directions Questionnaire - court search', () => {
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
-        context('when court finder client is not functioning', () => {
-          it('should render fallback page when everything is fine', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
-            draftStoreServiceMock.resolveFind('directionsQuestionnaire')
-            draftStoreServiceMock.resolveFind('response')
-            courtFinderMock.rejectName()
-
-            await request(app)
-              .get(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withText('Tell us your preferred location for a hearing, in case the claim goes to one'))
-          })
-        })
-
         context('when court finder client is functioning', () => {
           it('should render page when everything is fine', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)

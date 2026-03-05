@@ -1,4 +1,8 @@
 {
+  "session": {
+    "useRedisStore": false,
+    "secret": "mocha-session-secret"
+  },
   "idam": {
     "authentication-web": {
       "url": "http://localhost:19002"

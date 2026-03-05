@@ -56,6 +56,10 @@ nodejs:
     FEATURE_DISABLE_PAGES: false
     CUI_DASHBOARD_REDIRECT: true
     CUI_SIGN_OUT_REDIRECT: true
+    SESSION_USE_REDIS_STORE: true
+    SESSION_REDIS_HOST: civil-citizen-ui-draft-store-{{ .Values.global.environment }}.redis.cache.windows.net
+    SESSION_REDIS_PORT: 6380
+    SESSION_REDIS_TLS: true
 
   keyVaults:
     cmc:
@@ -76,6 +80,7 @@ nodejs:
         - postcode-lookup-api-key
         - launchDarkly-sdk-key
         - pcq-token-key
+        - draft-store-access-key
 
 idam-pr:
   enabled: false

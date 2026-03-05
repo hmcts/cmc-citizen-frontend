@@ -43,7 +43,26 @@
     "gaTrackingId": "GA_TRACKING_ID"
   },
   "session": {
-    "cookieName": "JWT_COOKIE_NAME"
+    "cookieName": "SESSION_COOKIE_NAME",
+    "useRedisStore": {
+      "__name": "SESSION_USE_REDIS_STORE",
+      "__format": "boolean"
+    },
+    "secret": "SESSION_SECRET",
+    "maxAgeInMinutes": "SESSION_MAX_AGE_IN_MINUTES",
+    "redis": {
+      "host": "SESSION_REDIS_HOST",
+      "port": {
+        "__name": "SESSION_REDIS_PORT",
+        "__format": "number"
+      },
+      "key": "SESSION_REDIS_KEY",
+      "tls": {
+        "__name": "SESSION_REDIS_TLS",
+        "__format": "boolean"
+      },
+      "keyPrefix": "SESSION_REDIS_KEY_PREFIX"
+    }
   },
   "fees": {
     "url": "FEES_URL",
@@ -128,7 +147,8 @@
       "cmc-webchat-button-no-agents": "WEBCHAT_BUTTON_NO_AGENTS",
       "cmc-webchat-button-agents-busy": "WEBCHAT_BUTTON_AGENTS_BUSY",
       "cmc-webchat-button-service-closed": "WEBCHAT_BUTTON_SERVICE_CLOSED",
-      "pcq-token-key": "FEATURE_PCQ"
+      "pcq-token-key": "FEATURE_PCQ",
+      "draft-store-access-key": "DRAFT_STORE_ACCESS_KEY"
     }
   },
   "launchDarkly": {

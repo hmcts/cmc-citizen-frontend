@@ -23,7 +23,7 @@ export function checkAuthorizationGuards (app: any,
     idamServiceMock.rejectRetrieveUserFor('Response 403 from /details')
 
     await request(app)[method](pagePath)
-      .set('Cookie', `${cookieName}=ABC`)
+      .set('Cookie', `${cookieName}=${idamServiceMock.defaultAuthToken}`)
       .expect(res => expect(res).redirect.toLocation(accessDeniedPage))
   })
 
@@ -32,7 +32,7 @@ export function checkAuthorizationGuards (app: any,
     idamServiceMock.resolveRetrieveUserFor('1', 'divorce-private-beta')
 
     await request.agent(app)[method](pagePath)
-      .set('Cookie', `${cookieName}=ABC`)
+      .set('Cookie', `${cookieName}=${idamServiceMock.defaultAuthToken}`)
       .expect(res => expect(res).redirect.toLocation(accessDeniedPage))
   })
 }

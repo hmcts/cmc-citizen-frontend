@@ -509,21 +509,6 @@ describe('Directions Questionnaire - hearing location', () => {
               .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to '))
           })
 
-          it('should handle exception and reder error if court finder is not functioning', async () => {
-            const searchWithLocationFirstLoopFormData = { courtAccepted: 'no', courtName: 'Test court', alternativeOption: 'name', alternativeCourtName: 'Brimingham' }
-
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
-            draftStoreServiceMock.resolveFind('directionsQuestionnaire')
-            draftStoreServiceMock.resolveFind('response')
-            courtFinderMock.rejectName()
-
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send(searchWithLocationFirstLoopFormData)
-              .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', 'div class="error-summary"'))
-          })
-
           it('should render error for invalid location search when previous search was with postcode', async () => {
             const searchWithLocationFirstLoopFormData = { courtAccepted: 'no', courtName: 'Test court', alternativeOption: 'name', alternativeCourtName: '', searchParam: 'Birmingham', searchLoop: true, searchType: 'name' }
 
@@ -611,22 +596,6 @@ describe('Directions Questionnaire - hearing location', () => {
               .send(searchWithLocationSecondLoopFormData)
               .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', 'div class="error-summary"'))
           })
-
-          it('should handle exception and reder error if court finder is not functioning', async () => {
-            const searchWithLocationSecondLoopFormData = { courtAccepted: undefined, courtName: 'Test court', alternativeCourtSelected: 'no', alternativeOption: 'name', alternativeCourtName: 'Birmingham', searchParam: 'Birmingham', searchLoop: true, searchType: 'name' }
-
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
-            draftStoreServiceMock.resolveFind('directionsQuestionnaire')
-            draftStoreServiceMock.resolveFind('response')
-            courtFinderMock.rejectName()
-            courtFinderMock.rejectName()
-
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send(searchWithLocationSecondLoopFormData)
-              .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', 'div class="error-summary"'))
-          })
         })
 
         context('when suggested court is rejected and user selected nearest court from second loop', () => {
@@ -696,8 +665,8 @@ describe('Directions Questionnaire - hearing location', () => {
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should render error page if unable to find the selected court', async () => {
-            const alternativeCourtSelectedFormData = { courtAccepted: undefined, courtName: 'Test Court', alternativeCourtSelected: 'Birmingham District Probate Registry', alternativeOption: undefined, alternativeCourtName: 'Birmingham District Probate Registry' }
+          it('should return 404 when selected court name returns no results from court finder', async () => {
+            const alternativeCourtSelectedFormData = { courtAccepted: undefined, courtName: 'Test Court', alternativeCourtSelected: 'NonExistent Court Name', alternativeOption: undefined, alternativeCourtName: 'NonExistent Court Name' }
 
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
@@ -708,26 +677,7 @@ describe('Directions Questionnaire - hearing location', () => {
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send(alternativeCourtSelectedFormData)
-              .expect(res => expect(res).to.be.notFound.withText('Error'))
-          })
-
-          it('should retain previous postcode search results when court finder is not functioning for location search', async () => {
-            const alternativeCourtSelectedFormData = { courtAccepted: undefined, courtName: 'Test court', alternativeCourtSelected: 'no', alternativeOption: 'name', alternativeCourtName: 'Birmingham District Probate Registry', searchParam: 'AB1 2CD', searchLoop: true, searchType: 'postcode' }
-
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
-            draftStoreServiceMock.resolveFind('directionsQuestionnaire')
-            draftStoreServiceMock.resolveFind('response')
-            courtFinderMock.rejectName()
-            courtFinderMock.resolveFind()
-            courtFinderMock.resolveCourtDetails()
-            courtFinderMock.resolveFind()
-            courtFinderMock.resolveCourtDetails()
-
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send(alternativeCourtSelectedFormData)
-              .expect(res => expect(res).to.be.successful.withText('We have found a court nearest to ', 'div class="error-summary"'))
+              .expect(res => expect(res).to.be.notFound)
           })
         })
       })

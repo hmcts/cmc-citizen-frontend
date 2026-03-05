@@ -27,11 +27,10 @@ export class Court {
     const courtFinderClient: CourtFinderClient = new CourtFinderClient()
     const response: CourtFinderResponse = await courtFinderClient.findMoneyClaimCourtsByName(name)
 
-    if (response.statusCode !== 200 || response.courts.length === 0) {
-      return undefined
-    } else {
-      return response.courts
+    if (response.statusCode !== 200) {
+      throw new Error(`Court finder API returned ${response.statusCode}`)
     }
+    return response.courts.length === 0 ? [] : response.courts
   }
 
   static async getCourtDetails (slug: string): Promise<CourtDetails> {

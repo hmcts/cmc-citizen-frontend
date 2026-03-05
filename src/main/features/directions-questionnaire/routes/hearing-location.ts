@@ -13,6 +13,7 @@ import { getUsersRole } from 'directions-questionnaire/helpers/directionsQuestio
 import { User } from 'idam/user'
 
 import { CourtDetails } from 'court-finder-client/courtDetails'
+import { NotFoundError } from 'errors'
 import { handlePostCodeSearchError, getNearestCourtDetails, handleLocationSearchError, postCodeSearch,
   locationSearch, searchByPostCodeForEdgecase } from 'directions-questionnaire/helpers/hearingLocationsHelper'
 
@@ -123,6 +124,9 @@ export default express.Router()
             } else if (form.model.alternativeCourtSelected !== undefined && form.model.alternativeCourtSelected !== 'no') {
               let courtDetail: CourtDetails = undefined
               const court: Court[] = await Court.getCourtsByName(form.model.alternativeCourtSelected)
+              if (!court || court.length === 0) {
+                return next(new NotFoundError(req.path))
+              }
               if (court[0]) {
                 courtDetail = await Court.getCourtDetails(court[0].slug)
                 draft.document.hearingLocation = form.model

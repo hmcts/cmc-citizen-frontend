@@ -40,7 +40,7 @@ export const searchResponse = [
   }
 ]
 
-export const searchResponseWithNoCourt = [{}]
+export const searchResponseWithNoCourt: any[] = []
 
 export const courtDetailsResponse = {
   name: 'Birmingham District Probate Registry',
