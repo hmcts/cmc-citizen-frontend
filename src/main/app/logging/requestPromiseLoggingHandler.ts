@@ -27,16 +27,18 @@ export class RequestLoggingHandler {
       query: options.qs,
       headers: options.headers
     })
-    let originalCallback = intercept(options.callback)
-    options.callback = (err, response, body) => {
-      originalCallback(err, response, body)
-      this.apiLogger.logResponse({
-        uri: options.uri,
-        responseCode: ((response) ? response.statusCode : undefined),
-        responseBody: body,
-        error: err,
-        requestHeaders: options.headers
-      })
+    if (options.callback) {
+      let originalCallback = options.callback
+      options.callback = (err, response, body) => {
+        originalCallback(err, response, body)
+        this.apiLogger.logResponse({
+          uri: options.uri,
+          responseCode: ((response) ? response.statusCode : undefined),
+          responseBody: body,
+          error: err,
+          requestHeaders: options.headers
+        })
+      }
     }
   }
 }
@@ -55,10 +57,3 @@ function asOptions (param) {
   }
 }
 
-function intercept (callbackFunction) {
-  return (err, response, body) => {
-    if (callbackFunction) {
-      callbackFunction(err, response, body)
-    }
-  }
-}
