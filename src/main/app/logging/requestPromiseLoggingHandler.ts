@@ -14,8 +14,15 @@ export class RequestLoggingHandler {
   }
 
   get (target, key) {
+    if (key === 'defaults') {
+      return (...args) => {
+        return RequestLoggingHandler.proxy(target[key](...args))
+      }
+    }
     return HttpProxyCallInterceptor.intercept(target, key, (callTarget: Object, methodName: string, methodArgs: any[]) => {
-      this.handleLogging(methodName.toUpperCase(), asOptions(methodArgs[0]))
+      const options = asOptions(methodArgs[0])
+      methodArgs[0] = options
+      this.handleLogging(methodName.toUpperCase(), options)
     })
   }
 
@@ -53,7 +60,7 @@ function asOptions (param) {
       uri: param
     }
   } else {
-    return param
+    return { ...param }
   }
 }
 
