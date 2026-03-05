@@ -21,6 +21,8 @@ import { OrdersDraft } from 'orders/draft/ordersDraft'
 import { resolveSaveOrder, sampleClaimIssueObj } from 'test/http-mocks/claim-store'
 import { MadeBy } from 'claims/models/madeBy'
 
+import { ServiceAuthToken } from 'idam/serviceAuthToken'
+
 const claimDraft = new Draft<DraftClaim>(123, 'claim', new DraftClaim().deserialize(claimDraftData), moment(), moment())
 const claimDraftHwf = new Draft<DraftClaim>(123, 'claim', new DraftClaim().deserialize(claimDraftHelpWithFees), moment(), moment())
 
@@ -59,6 +61,8 @@ const claimant = {
   bearerToken: 'SuperSecretToken'
 } as any as User
 
+const serviceAuthToken = new ServiceAuthToken('SuperSecretServiceToken')
+
 const paymentResponse = {
   nextUrl: 'http://localhost/payment-page'
 }
@@ -73,11 +77,16 @@ describe('ClaimStoreClient', () => {
       maxAttempts: retryAttempts
     } as RequestPromiseOptions)
 
-    const claimStoreClient: ClaimStoreClient = new ClaimStoreClient(retryingRequest)
+    const claimStoreClient: ClaimStoreClient = new ClaimStoreClient(retryingRequest, serviceAuthToken)
 
     describe('saveClaim', () => {
       function mockSuccessOnFirstSaveAttempt () {
-        mock(`${claimStoreApiUrl}`)
+        mock(`${claimStoreApiUrl}`, {
+          reqheaders: {
+            'Authorization': `Bearer ${claimant.bearerToken}`,
+            'ServiceAuthorization': `Bearer ${serviceAuthToken.bearerToken}`
+          }
+        })
           .post(`/${claimant.id}`)
           .reply(HttpStatus.OK, returnedClaim)
       }
@@ -99,13 +108,28 @@ describe('ClaimStoreClient', () => {
       })
 
       function mockTimeoutOnFirstSaveAttemptAndConflictOnSecondOne () {
-        mock(`${claimStoreApiUrl}`)
+        mock(`${claimStoreApiUrl}`, {
+          reqheaders: {
+            'Authorization': `Bearer ${claimant.bearerToken}`,
+            'ServiceAuthorization': `Bearer ${serviceAuthToken.bearerToken}`
+          }
+        })
           .post(`/${claimant.id}`)
           .delayConnection(requestDelayInMillis + 10)
-        mock(`${claimStoreApiUrl}`)
+        mock(`${claimStoreApiUrl}`, {
+          reqheaders: {
+            'Authorization': `Bearer ${claimant.bearerToken}`,
+            'ServiceAuthorization': `Bearer ${serviceAuthToken.bearerToken}`
+          }
+        })
           .post(`/${claimant.id}`)
           .reply(HttpStatus.CONFLICT, `Duplicate claim for external id ${claimDraftData.externalId}`)
-        mock(`${claimStoreApiUrl}`)
+        mock(`${claimStoreApiUrl}`, {
+          reqheaders: {
+            'Authorization': `Bearer ${claimant.bearerToken}`,
+            'ServiceAuthorization': `Bearer ${serviceAuthToken.bearerToken}`
+          }
+        })
           .get(`/${claimDraftData.externalId}`)
           .reply(HttpStatus.OK, returnedClaim)
       }
@@ -120,8 +144,13 @@ describe('ClaimStoreClient', () => {
       })
 
       function resolveLinkDefendant () {
-        mock(`${claimStoreApiUrl}`)
-          .put('/defendant/link')
+        mock(`${claimStoreApiUrl}`, {
+          reqheaders: {
+            'Authorization': `Bearer ${claimant.bearerToken}`,
+            'ServiceAuthorization': `Bearer ${serviceAuthToken.bearerToken}`
+          }
+        })
+          .put('/claims/defendant/link')
           .reply(HttpStatus.OK)
       }
 
