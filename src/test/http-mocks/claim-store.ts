@@ -1206,7 +1206,11 @@ export function resolveUpdateHelpWithFeesClaimWithError (reason: string = 'HTTP 
 }
 
 export function resolveSaveCcjForExternalId () {
-  mock(`${serviceBaseURL}/claims`)
+  mock(`${serviceBaseURL}/claims`, {
+    reqheaders: {
+      'ServiceAuthorization': 'Bearer service-token'
+    }
+  })
     .post(new RegExp('/' + externalIdPattern +
       '/county-court-judgment'))
     .reply(HttpStatus.OK, { ...sampleClaimObj })
@@ -1214,14 +1218,22 @@ export function resolveSaveCcjForExternalId () {
 
 export function resolveSaveReDeterminationForExternalId (explanation: string) {
 
-  mock(`${serviceBaseURL}/claims`)
+  mock(`${serviceBaseURL}/claims`, {
+    reqheaders: {
+      'ServiceAuthorization': 'Bearer service-token'
+    }
+  })
     .post(new RegExp('/' + externalIdPattern +
       '/re-determination'))
     .reply(HttpStatus.OK, { explanation: explanation, partyType: MadeBy.CLAIMANT })
 }
 
 export function rejectSaveReDeterminationForExternalId (reason: string = 'HTTP error') {
-  mock(`${serviceBaseURL}/claims`)
+  mock(`${serviceBaseURL}/claims`, {
+    reqheaders: {
+      'ServiceAuthorization': 'Bearer service-token'
+    }
+  })
     .post(new RegExp('/.+/re-determination'))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
@@ -1283,7 +1295,11 @@ export function resolveCountersignOffer (by: string = 'defendant') {
 }
 
 export function rejectSaveCcjForExternalId (reason: string = 'HTTP error') {
-  mock(`${serviceBaseURL}/claims`)
+  mock(`${serviceBaseURL}/claims`, {
+    reqheaders: {
+      'ServiceAuthorization': 'Bearer service-token'
+    }
+  })
     .post(new RegExp('/' + externalIdPattern +
       '/county-court-judgment'))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
