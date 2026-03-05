@@ -27,18 +27,18 @@ export class RequestLoggingHandler {
       query: options.qs,
       headers: options.headers
     })
-    if (options.callback) {
-      let originalCallback = options.callback
-      options.callback = (err, response, body) => {
+    let originalCallback = options.callback
+    options.callback = (err, response, body) => {
+      if (originalCallback) {
         originalCallback(err, response, body)
-        this.apiLogger.logResponse({
-          uri: options.uri,
-          responseCode: ((response) ? response.statusCode : undefined),
-          responseBody: body,
-          error: err,
-          requestHeaders: options.headers
-        })
       }
+      this.apiLogger.logResponse({
+        uri: options.uri,
+        responseCode: ((response) ? response.statusCode : undefined),
+        responseBody: body,
+        error: err,
+        requestHeaders: options.headers
+      })
     }
   }
 }
