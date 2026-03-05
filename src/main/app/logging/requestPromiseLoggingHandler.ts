@@ -1,5 +1,4 @@
 import { ApiLogger } from 'logging/apiLogger'
-import { HttpProxyCallInterceptor } from 'logging/httpProxyCallInterceptor'
 import { RequestAPI } from 'client/request'
 
 export class RequestLoggingHandler {
@@ -14,51 +13,52 @@ export class RequestLoggingHandler {
   }
 
   get (target, key) {
-    return HttpProxyCallInterceptor.intercept(target, key, (callTarget: Object, methodName: string, methodArgs: any[]) => {
-      this.handleLogging(methodName.toUpperCase(), asOptions(methodArgs[0]))
-    })
-  }
-
-  handleLogging (method, options) {
-    this.apiLogger.logRequest({
-      method: method,
-      uri: options.uri,
-      requestBody: options.body,
-      query: options.qs,
-      headers: options.headers
-    })
-    let originalCallback = intercept(options.callback)
-    options.callback = (err, response, body) => {
-      originalCallback(err, response, body)
-      this.apiLogger.logResponse({
-        uri: options.uri,
-        responseCode: ((response) ? response.statusCode : undefined),
-        responseBody: body,
-        error: err,
-        requestHeaders: options.headers
+    const original = target[key]
+    if (typeof original !== 'function') return original
+    return (...methodArgs: any[]) => {
+      const options = asOptions(methodArgs[0] ?? {})
+      this.apiLogger.logRequest({
+        method: key.toString().toUpperCase(),
+        uri: options?.uri ?? options?.url,
+        requestBody: options?.body,
+        query: options?.qs,
+        headers: options?.headers
       })
+      const result = original.apply(target, methodArgs)
+      if (result && typeof result.then === 'function') {
+        return result
+          .then((body: any) => {
+            this.apiLogger.logResponse({
+              uri: options?.uri ?? options?.url,
+              responseCode: typeof body?.statusCode === 'number' ? body.statusCode : undefined,
+              responseBody: body?.body ?? body,
+              requestHeaders: options?.headers
+            })
+            return body
+          })
+          .catch((err: any) => {
+            this.apiLogger.logResponse({
+              uri: options?.uri ?? options?.url,
+              responseCode: err?.statusCode ?? err?.response?.status,
+              responseBody: err?.body ?? err?.response?.data,
+              error: err,
+              requestHeaders: options?.headers
+            })
+            throw err
+          })
+      }
+      return result
     }
   }
 }
 
 /**
  * Request provides a convenience method which accepts an URI string and builds the options
- * object behind the scenes. We need the options object upfront to set the logging callback on it.
+ * object behind the scenes. We need the options object upfront for logging.
  */
 function asOptions (param) {
   if (typeof param === 'string' || param instanceof String) {
-    return {
-      uri: param
-    }
-  } else {
-    return param
+    return { uri: param }
   }
-}
-
-function intercept (callbackFunction) {
-  return (err, response, body) => {
-    if (callbackFunction) {
-      callbackFunction(err, response, body)
-    }
-  }
+  return param ?? {}
 }

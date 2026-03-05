@@ -1,4 +1,4 @@
-import { request as requestPromiseApi, RequestPromiseAPI } from 'client/request'
+import { request as requestPromiseApi, RequestAPI } from 'client/request'
 import * as HttpStatus from 'http-status-codes'
 import * as config from 'config'
 import { Claim } from 'claims/models/claim'
@@ -39,7 +39,7 @@ function buildCaseSubmissionHeaders (claimant: User, features: string[]): object
 }
 
 export class ClaimStoreClient {
-  constructor (private request: RequestPromiseAPI = requestPromiseApi) {
+  constructor (private request: RequestAPI = requestPromiseApi) {
     // Nothing to do
   }
 

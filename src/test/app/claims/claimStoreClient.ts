@@ -7,7 +7,7 @@ import * as HttpStatus from 'http-status-codes'
 import { User } from 'idam/user'
 import { claimDraft as claimDraftData, claimDraftHelpWithFees } from 'test/data/draft/claimDraft'
 import { claimData } from 'test/data/entity/claimData'
-import { RequestPromiseOptions } from 'request-promise-native'
+import { RequestOptions } from 'client/httpClient'
 import { claimStoreApiUrl, ClaimStoreClient } from 'claims/claimStoreClient'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftClaim } from 'drafts/models/draftClaim'
@@ -69,9 +69,8 @@ describe('ClaimStoreClient', () => {
     const retryAttempts = 3
 
     const retryingRequest = request.defaults({
-      retryDelay: requestDelayInMillis,
       maxAttempts: retryAttempts
-    } as RequestPromiseOptions)
+    } as RequestOptions)
 
     const claimStoreClient: ClaimStoreClient = new ClaimStoreClient(retryingRequest)
 

@@ -1,19 +1,17 @@
-import * as requestDefault from 'request'
-import * as requestPromise from 'request-promise-native'
+import { RequestAPI } from 'client/request'
 import { Court } from './court'
 import { CourtFinderResponse } from './courtFinderResponse'
 import * as config from 'config'
 import { CourtDetailsResponse } from 'court-finder-client/courtDetailsResponse'
 import { CourtDetails } from 'court-finder-client/courtDetails'
+import { request } from 'client/request'
 
 export class CourtFinderClient {
   private readonly postCodeSearchUrl
   private readonly nameSearchUrl
   constructor (
     private readonly apiUrl: string = `${config.get<string>('claim-store.url')}`,
-    private readonly request: requestDefault.RequestAPI<requestPromise.RequestPromise,
-      requestPromise.RequestPromiseOptions,
-      requestDefault.RequiredUriUrl> = requestPromise
+    private readonly request: RequestAPI = request
   ) {
     this.postCodeSearchUrl = `${this.apiUrl}/court-finder/search-postcode/`
     this.nameSearchUrl = `${this.apiUrl}/court-finder/search-name/`
@@ -57,7 +55,7 @@ export class CourtFinderClient {
       }
 
       const courtFinderResponse: CourtFinderResponse = new CourtFinderResponse(200, true)
-      const responseBody: any[] = JSON.parse(response.body)
+      const responseBody: any[] = typeof response.body === 'string' ? JSON.parse(response.body) : response.body
 
       courtFinderResponse.addAll(
         responseBody.map((court: any) => {
@@ -83,7 +81,7 @@ export class CourtFinderClient {
       }
 
       const courtDetailsResponse: CourtDetailsResponse = new CourtDetailsResponse(200, true)
-      const responseBody: any = JSON.parse(response.body)
+      const responseBody: any = typeof response.body === 'string' ? JSON.parse(response.body) : response.body
 
       courtDetailsResponse.courtDetails = new CourtDetails(responseBody.name, responseBody.slug, responseBody.facilities)
 

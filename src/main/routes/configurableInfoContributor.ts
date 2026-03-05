@@ -1,10 +1,10 @@
 import * as express from 'express'
-import * as requestPromise from 'request-promise-native'
-import { RequestPromiseOptions } from 'request-promise-native'
+import { request } from 'client/request'
+import { RequestOptions } from 'client/httpClient'
 import { InfoContributor } from '@hmcts/info-provider'
 
 export class ConfigurableInfoContributor extends InfoContributor {
-  constructor (serviceUrl: string, private readonly requestOptions?: RequestPromiseOptions) {
+  constructor (serviceUrl: string, private readonly requestOptions?: RequestOptions) {
     super(serviceUrl)
   }
 
@@ -14,7 +14,7 @@ export class ConfigurableInfoContributor extends InfoContributor {
     }
 
     try {
-      return await requestPromise.get({
+      return await request.get({
         uri: this.url,
         json: true,
         ...this.requestOptions
@@ -23,7 +23,7 @@ export class ConfigurableInfoContributor extends InfoContributor {
       return {
         error: `Error calling ${this.url}`,
         statusText: error?.message,
-        body: error?.response?.body
+        body: error?.response?.body ?? error?.response?.data
       }
     }
   }

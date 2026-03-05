@@ -4,7 +4,7 @@ import { buildURL } from 'utils/callbackBuilder'
 import * as config from 'config'
 import { BaseParameters, InvokingParameters } from './models/pcqParameters'
 import { TokenGenerator } from './tokenGenerator'
-const request = require('request-promise-native')
+import { request } from 'client/request'
 
 const pcqBaseUrl: string = `${config.get<string>('pcq.url')}`
 const serviceId = 'CMC'

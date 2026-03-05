@@ -1,3 +1,3 @@
-import * as _request from 'request-promise-native'
+import { request as baseRequest } from 'client/request'
 
-export const request = _request.defaults({ json: true })
+export const request = baseRequest.defaults({ json: true })
