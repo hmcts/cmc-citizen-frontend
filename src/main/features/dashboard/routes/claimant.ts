@@ -15,7 +15,7 @@ import { DirectionOrder } from 'claims/models/directionOrder'
 import { ServiceAuthTokenFactoryImpl } from 'shared/security/serviceTokenFactoryImpl'
 
 async function getClaimStoreClient () {
-  const serviceAuthToken = await ServiceAuthTokenFactoryImpl.retrieveServiceToken()
+  const serviceAuthToken = await new ServiceAuthTokenFactoryImpl().get()
   return new ClaimStoreClient(undefined, serviceAuthToken)
 }
 
