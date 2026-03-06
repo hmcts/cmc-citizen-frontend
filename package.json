@@ -230,7 +230,6 @@
     "is-data-descriptor": "0.1.5",
     "tar": "7.5.8",
     "node-gyp": "11.0.0",
-    "glob": "11.0.0",
     "brace-expansion": "2.0.2",
     "tough-cookie": "4.1.3"
   },
