@@ -53,7 +53,7 @@ export async function createClaimData (I: I, claimantType: PartyType, defendantT
     },
     reason: claimReason,
     timeline: { rows: [{ date: 'may', description: 'ok' }] },
-    externalId: uuid(),
+    externalId: uuid.v4(),
     get total (): number {
       switch (interestType) {
         case InterestType.STANDARD:

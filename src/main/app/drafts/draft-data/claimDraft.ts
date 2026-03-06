@@ -4,7 +4,7 @@ import { YesNoOption } from 'models/yesNoOption'
 
 export function prepareClaimDraft (userEmailAddress: string, helpWithFees: boolean) {
   return {
-    externalId: uuid(),
+    externalId: uuid.v4(),
     breathingSpace: {},
     claimant: {
       payment: {},

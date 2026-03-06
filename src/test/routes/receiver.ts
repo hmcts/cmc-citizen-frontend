@@ -113,7 +113,7 @@ describe('Login receiver', async () => {
       it('should redirect to claim details when redirect from CUI', async () => {
         idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
 
-        const redirectToClaim = `/dashboard/${uuid()}/claimant`
+        const redirectToClaim = `/dashboard/${uuid.v4()}/claimant`
         const state = Base64.encode(JSON.stringify({ state: 'ABC', redirectToClaim }))
         await request(app)
           .get(AppPaths.receiver.uri + `?state=${encodeURIComponent(state)}`)

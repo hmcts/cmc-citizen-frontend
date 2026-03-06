@@ -60,7 +60,7 @@ export class MockPayClient implements PayClient {
         description: description,
         reference: paymentReference,
         currency: 'GBP',
-        caseReference: uuid(),
+        caseReference: uuid.v4(),
         channel: 'online',
         method: 'card',
         externalProvider: 'gov pay',

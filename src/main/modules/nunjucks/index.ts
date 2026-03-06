@@ -88,7 +88,7 @@ const appAssetPaths = {
   images_vendor: '/img/lib',
   pdf: '/pdf'
 }
-const nonce = uuid().replace(/-/g, '')
+const nonce = uuid.v4().replace(/-/g, '')
 
 export class Nunjucks {
 

@@ -24,7 +24,7 @@ import { BreathingSpace } from 'features/claim/form/models/breathingSpace'
 
 export class DraftClaim extends DraftDocument {
 
-  externalId = uuid()
+  externalId = uuid.v4()
   eligibility: boolean | Eligibility
   claimant: Claimant = new Claimant()
   defendant: Defendant = new Defendant()

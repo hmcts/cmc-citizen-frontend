@@ -25,7 +25,7 @@ export class OAuthHelper {
                    res: express.Response,
                    receiver: RoutablePath = Paths.receiver): string {
     const redirectUri = buildURL(req, receiver.uri)
-    const stateId = uuid()
+    const stateId = uuid.v4()
     OAuthHelper.storeStateCookie(req, res, stateId)
     let stateObj = { 'state': stateId }
     if (req.originalUrl.match(redirectToClaimRegex)) {

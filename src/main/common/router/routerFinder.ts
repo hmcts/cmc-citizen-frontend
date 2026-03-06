@@ -9,7 +9,7 @@ const options: object = {
   extensions: [fileExtension],
   recurse: true,
   rename: (name) => {
-    return `${name}-${uuid()}`
+    return `${name}-${uuid.v4()}`
   },
   visit: (obj: any) => {
     return (typeof obj === 'object' && obj.default !== undefined) ? obj.default : obj

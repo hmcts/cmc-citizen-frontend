@@ -38,7 +38,7 @@ describe('oAuthHelper', () => {
     })
 
     it('should return login Idam page with redirectToClaim to claimant claims detail', () => {
-      const redirectToClaim = `/dashboard/${uuid()}/claimant`
+      const redirectToClaim = `/dashboard/${uuid.v4()}/claimant`
       const req = {
         headers: {
           host: 'localhost:3000'
@@ -52,7 +52,7 @@ describe('oAuthHelper', () => {
     })
 
     it('should return login Idam page with redirectToClaim to defendant claims detail', () => {
-      const redirectToClaim = `/dashboard/${uuid()}/defendant`
+      const redirectToClaim = `/dashboard/${uuid.v4()}/defendant`
       const req = {
         headers: {
           host: 'localhost:3000'

@@ -105,7 +105,7 @@
     "ts-node": "^9.1.1",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^3.9.8",
-    "uuid": "^9.0.0",
+    "uuid": "^7.0.0",
     "webdriverio": "^7.7.4"
   },
   "devDependencies": {
@@ -225,7 +225,7 @@
     "minimatch@npm:^3.0.0": "3.1.4",
     "minimatch@npm:^9.0.0": "9.0.7",
     "node-gettext": "3.0.1",
-    "uuid": "9.0.0",
+    "uuid": "7.0.0",
     "is-accessor-descriptor": "0.1.7",
     "is-data-descriptor": "0.1.5",
     "tar": "7.5.8",
