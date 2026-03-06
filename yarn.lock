@@ -3559,7 +3559,7 @@ __metadata:
     "@typescript-eslint/parser": "npm:^5.30.7"
     analytics: "npm:^0.8.1"
     applicationinsights: "npm:^2.9.5"
-    axios: "npm:^1.7.9"
+    axios: "npm:^1.13.5"
     axios-retry: "npm:^4.2.0"
     babel-eslint: "npm:^10.1.0"
     body-parser: "npm:^1.20.4"
@@ -3640,14 +3640,14 @@ __metadata:
     sonarqube-scanner: "npm:^2.8.0"
     string.prototype.startswith: "npm:^0.2.0"
     supertest: "npm:^4.0.2"
-    tar: "npm:7.5.8"
+    tar: "npm:7.5.10"
     to-boolean: "npm:^1.0.0"
     ts-mockito: "npm:^2.6.1"
     ts-node: "npm:^9.1.1"
     tsconfig-paths: "npm:^3.9.0"
     typescript: "npm:^3.9.8"
     urlencode: "npm:^1.1.0"
-    uuid: "npm:^9.0.0"
+    uuid: "npm:^7.0.0"
     webdriverio: "npm:^7.7.4"
   languageName: unknown
   linkType: soft
@@ -6019,13 +6019,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.15.0":
-  version: 1.15.3
-  resolution: "follow-redirects@npm:1.15.3"
+"follow-redirects@npm:1.15.6":
+  version: 1.15.6
+  resolution: "follow-redirects@npm:1.15.6"
   peerDependenciesMeta:
     debug:
       optional: true
-  checksum: 10/60d98693f4976892f8c654b16ef6d1803887a951898857ab0cdc009570b1c06314ad499505b7a040ac5b98144939f8597766e5e6a6859c0945d157b473aa6f5f
+  checksum: 10/70c7612c4cab18e546e36b991bbf8009a1a41cf85354afe04b113d1117569abf760269409cb3eb842d9f7b03d62826687086b081c566ea7b1e6613cf29030bf7
   languageName: node
   linkType: hard
 
@@ -13007,16 +13007,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tar@npm:7.5.8":
-  version: 7.5.8
-  resolution: "tar@npm:7.5.8"
+"tar@npm:7.5.10":
+  version: 7.5.10
+  resolution: "tar@npm:7.5.10"
   dependencies:
     "@isaacs/fs-minipass": "npm:^4.0.0"
     chownr: "npm:^3.0.0"
     minipass: "npm:^7.1.2"
     minizlib: "npm:^3.1.0"
     yallist: "npm:^5.0.0"
-  checksum: 10/5fddc22e0fd03e73d5e9e922e71d8681f85443dee4f21403059a757e186ae4004abc9a709cdc7f4143d7d75758a2935f7306b3cc193123d46b6f786dd2b99c2a
+  checksum: 10/98ba6421a250b233c36a54f7441647bdfee1ed0b916cd57850259a3602154d996f5b8422f67ef5c8ce77f582ed938054775c2873fc7c901e0c7530ed50febc40
   languageName: node
   linkType: hard
 
@@ -13775,12 +13775,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:9.0.0":
-  version: 9.0.0
-  resolution: "uuid@npm:9.0.0"
+"uuid@npm:7.0.0":
+  version: 7.0.0
+  resolution: "uuid@npm:7.0.0"
   bin:
     uuid: dist/bin/uuid
-  checksum: 10/23857699a616d1b48224bc2b8440eae6e57d25463c3a0200e514ba8279dfa3bde7e92ea056122237839cfa32045e57d8f8f4a30e581d720fd72935572853ae2e
+  checksum: 10/617558ae44f06bd04830d2d6c491cf82f4d7eefcdf5c5eba0c90d08c70dea1c7c38d30fd68427b090b37e4e38eeac5b88ef61a5f06c0ad84e581dd661ef739a2
   languageName: node
   linkType: hard
 
