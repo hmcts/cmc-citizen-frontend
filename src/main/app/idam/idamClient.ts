@@ -1,8 +1,13 @@
 import * as config from 'config'
 import * as otp from 'otp'
 
-import { request } from 'client/request'
+import * as requestModule from 'client/request'
+import type { RequestAPI } from 'client/request'
 import { User } from 'idam/user'
+
+const requestClient: RequestAPI = (requestModule as { request?: RequestAPI; default?: RequestAPI }).request
+  ?? (requestModule as { default?: RequestAPI }).default
+  ?? (() => { throw new Error('client/request did not export request client') })()
 import { ServiceAuthToken } from 'idam/serviceAuthToken'
 import { AuthToken } from 'idam/authToken'
 import { trackCustomEvent } from 'logging/customEventTracker'
@@ -24,7 +29,7 @@ export class IdamClient {
   static retrieveServiceToken (): Promise<ServiceAuthToken> {
     const oneTimePassword = otp({ secret: totpSecret }).totp()
 
-    return request.post({
+    return requestClient.post({
       uri: `${s2sUrl}/lease`,
       body: new ServiceAuthRequest(microserviceName, oneTimePassword)
     }).then(token => {
@@ -33,7 +38,7 @@ export class IdamClient {
   }
 
   static retrieveUserFor (jwt: string): Promise<User> {
-    return request.get({
+    return requestClient.get({
       uri: `${idamApiUrl}/o/userinfo`,
       headers: {
         Authorization: `Bearer ${jwt}`
@@ -56,7 +61,7 @@ export class IdamClient {
     const clientSecret = config.get<string>('secrets.cmc.citizen-oauth-client-secret')
     const url = `${config.get('idam.api.url')}/oauth2/token`
 
-    return request.post({
+    return requestClient.post({
       uri: url,
       auth: {
         username: clientId,
@@ -95,6 +100,6 @@ export class IdamClient {
       }
     }
 
-    request(options)
+    requestClient(options)
   }
 }
