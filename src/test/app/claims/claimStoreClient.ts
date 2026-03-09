@@ -20,6 +20,8 @@ import { ReviewOrder } from 'claims/models/reviewOrder'
 import { OrdersDraft } from 'orders/draft/ordersDraft'
 import { resolveSaveOrder, sampleClaimIssueObj } from 'test/http-mocks/claim-store'
 import { MadeBy } from 'claims/models/madeBy'
+import * as idamServiceMock from 'test/http-mocks/idam'
+
 
 const claimDraft = new Draft<DraftClaim>(123, 'claim', new DraftClaim().deserialize(claimDraftData), moment(), moment())
 const claimDraftHwf = new Draft<DraftClaim>(123, 'claim', new DraftClaim().deserialize(claimDraftHelpWithFees), moment(), moment())
@@ -77,8 +79,10 @@ describe('ClaimStoreClient', () => {
 
     describe('saveClaim', () => {
       function mockSuccessOnFirstSaveAttempt () {
+        idamServiceMock.resolveRetrieveServiceToken()
         mock(`${claimStoreApiUrl}`)
           .post(`/${claimant.id}`)
+          .matchHeader('ServiceAuthorization', `Bearer ${idamServiceMock.defaultAuthToken}`)
           .reply(HttpStatus.OK, returnedClaim)
       }
 
@@ -99,11 +103,15 @@ describe('ClaimStoreClient', () => {
       })
 
       function mockTimeoutOnFirstSaveAttemptAndConflictOnSecondOne () {
+        idamServiceMock.resolveRetrieveServiceToken()
         mock(`${claimStoreApiUrl}`)
           .post(`/${claimant.id}`)
+          .matchHeader('ServiceAuthorization', `Bearer ${idamServiceMock.defaultAuthToken}`)
           .delayConnection(requestDelayInMillis + 10)
+        idamServiceMock.resolveRetrieveServiceToken()
         mock(`${claimStoreApiUrl}`)
           .post(`/${claimant.id}`)
+          .matchHeader('ServiceAuthorization', `Bearer ${idamServiceMock.defaultAuthToken}`)
           .reply(HttpStatus.CONFLICT, `Duplicate claim for external id ${claimDraftData.externalId}`)
         mock(`${claimStoreApiUrl}`)
           .get(`/${claimDraftData.externalId}`)
@@ -120,14 +128,18 @@ describe('ClaimStoreClient', () => {
       })
 
       function resolveLinkDefendant () {
+        idamServiceMock.resolveRetrieveServiceToken()
         mock(`${claimStoreApiUrl}`)
           .put('/defendant/link')
+          .matchHeader('ServiceAuthorization', `Bearer ${idamServiceMock.defaultAuthToken}`)
           .reply(HttpStatus.OK)
       }
 
       function mockInternalServerErrorOnAllAttempts () {
+        idamServiceMock.resolveRetrieveServiceToken()
         mock(`${claimStoreApiUrl}`)
           .post(`/${claimant.id}`)
+          .matchHeader('ServiceAuthorization', `Bearer ${idamServiceMock.defaultAuthToken}`)
           .times(retryAttempts)
           .reply(HttpStatus.INTERNAL_SERVER_ERROR, 'An unexpected error occurred')
       }
@@ -149,8 +161,10 @@ describe('ClaimStoreClient', () => {
 
     describe('saveHelpWithFeesClaim', () => {
       function mockSuccessOnFirstSaveAttempt () {
+        idamServiceMock.resolveRetrieveServiceToken()
         mock(`${claimStoreApiUrl}`)
           .post(`/${claimant.id}/hwf`)
+          .matchHeader('ServiceAuthorization', `Bearer ${idamServiceMock.defaultAuthToken}`)
           .reply(HttpStatus.OK, { ...returnedClaimWithHelpWithFee })
       }
 
@@ -170,11 +184,15 @@ describe('ClaimStoreClient', () => {
       })
 
       function mockTimeoutOnFirstSaveAttemptAndConflictOnSecondOne () {
+        idamServiceMock.resolveRetrieveServiceToken()
         mock(`${claimStoreApiUrl}`)
           .post(`/${claimant.id}/hwf`)
+          .matchHeader('ServiceAuthorization', `Bearer ${idamServiceMock.defaultAuthToken}`)
           .delayConnection(requestDelayInMillis + 10)
+        idamServiceMock.resolveRetrieveServiceToken()
         mock(`${claimStoreApiUrl}`)
           .post(`/${claimant.id}/hwf`)
+          .matchHeader('ServiceAuthorization', `Bearer ${idamServiceMock.defaultAuthToken}`)
           .reply(HttpStatus.CONFLICT, `Duplicate claim for external id ${claimDraftData.externalId}`)
         mock(`${claimStoreApiUrl}`)
           .get(`/${claimDraftData.externalId}`)
@@ -188,8 +206,10 @@ describe('ClaimStoreClient', () => {
         expect(claim.claimData).to.deep.equal(new ClaimData().deserialize(expectedClaimData))
       })
       function mockInternalServerErrorOnAllAttempts () {
+        idamServiceMock.resolveRetrieveServiceToken()
         mock(`${claimStoreApiUrl}`)
           .post(`/${claimant.id}/hwf`)
+          .matchHeader('ServiceAuthorization', `Bearer ${idamServiceMock.defaultAuthToken}`)
           .times(retryAttempts)
           .reply(HttpStatus.INTERNAL_SERVER_ERROR, 'An unexpected error occurred')
       }
@@ -218,6 +238,7 @@ describe('ClaimStoreClient', () => {
       const ordersDraft: OrdersDraft = new OrdersDraft().deserialize(sampleOrdersDraftObj)
 
       it('should retrieve an order that was successfully saved', async () => {
+        idamServiceMock.resolveRetrieveServiceToken()
         resolveSaveOrder()
         const claim: Claim = await claimStoreClient.saveOrder(ordersDraft, new Claim().deserialize(sampleClaimIssueObj), claimant)
 
@@ -225,8 +246,10 @@ describe('ClaimStoreClient', () => {
       })
 
       function mockInternalServerErrorOnAllAttempts () {
+        idamServiceMock.resolveRetrieveServiceToken()
         mock(`${claimStoreApiUrl}`)
           .put(`/${ordersDraft.externalId}/review-order`)
+          .matchHeader('ServiceAuthorization', `Bearer ${idamServiceMock.defaultAuthToken}`)
           .times(retryAttempts)
           .reply(HttpStatus.INTERNAL_SERVER_ERROR, 'An unexpected error occurred')
       }
@@ -248,8 +271,10 @@ describe('ClaimStoreClient', () => {
 
     describe('Initiate citizen payment', async () => {
       function resolveInitiatePayment () {
+        idamServiceMock.resolveRetrieveServiceToken()
         mock(`${claimStoreApiUrl}`)
           .post(`/initiate-citizen-payment`)
+          .matchHeader('ServiceAuthorization', `Bearer ${idamServiceMock.defaultAuthToken}`)
           .reply(HttpStatus.OK, paymentResponse)
       }
 
@@ -260,8 +285,10 @@ describe('ClaimStoreClient', () => {
       })
 
       function mockInternalServerErrorOnInitiatePayment () {
+        idamServiceMock.resolveRetrieveServiceToken()
         mock(`${claimStoreApiUrl}`)
           .post(`/initiate-citizen-payment`)
+          .matchHeader('ServiceAuthorization', `Bearer ${idamServiceMock.defaultAuthToken}`)
           .times(retryAttempts)
           .reply(HttpStatus.INTERNAL_SERVER_ERROR, 'An unexpected error occurred')
       }
@@ -282,8 +309,10 @@ describe('ClaimStoreClient', () => {
 
     describe('Resume citizen payment', async () => {
       function resolveInitiatePayment () {
+        idamServiceMock.resolveRetrieveServiceToken()
         mock(`${claimStoreApiUrl}`)
           .put(`/resume-citizen-payment`)
+          .matchHeader('ServiceAuthorization', `Bearer ${idamServiceMock.defaultAuthToken}`)
           .reply(HttpStatus.OK, paymentResponse)
       }
 
@@ -294,8 +323,10 @@ describe('ClaimStoreClient', () => {
       })
 
       function mockInternalServerErrorOnResumePayment () {
+        idamServiceMock.resolveRetrieveServiceToken()
         mock(`${claimStoreApiUrl}`)
           .put(`/resume-citizen-payment`)
+          .matchHeader('ServiceAuthorization', `Bearer ${idamServiceMock.defaultAuthToken}`)
           .times(retryAttempts)
           .reply(HttpStatus.INTERNAL_SERVER_ERROR, 'An unexpected error occurred')
       }
@@ -317,8 +348,10 @@ describe('ClaimStoreClient', () => {
     describe('createCitizenClaim', async () => {
 
       function mockCreateCitizenClaimCall () {
+        idamServiceMock.resolveRetrieveServiceToken()
         mock(`${claimStoreApiUrl}`)
           .put(`/create-citizen-claim`)
+          .matchHeader('ServiceAuthorization', `Bearer ${idamServiceMock.defaultAuthToken}`)
           .reply(HttpStatus.OK, returnedClaim)
       }
       it('should return a claim that was successfully saved', async () => {
@@ -328,8 +361,10 @@ describe('ClaimStoreClient', () => {
       })
 
       function mockInternalServerErrorOnAllAttempts () {
+        idamServiceMock.resolveRetrieveServiceToken()
         mock(`${claimStoreApiUrl}`)
           .put(`/create-citizen-claim`)
+          .matchHeader('ServiceAuthorization', `Bearer ${idamServiceMock.defaultAuthToken}`)
           .times(retryAttempts)
           .reply(HttpStatus.INTERNAL_SERVER_ERROR, 'An unexpected error occurred')
       }
@@ -348,8 +383,10 @@ describe('ClaimStoreClient', () => {
       })
 
       function mockInternalServerErrorforSaveBreathingSpaceOnAllAttempts () {
+        idamServiceMock.resolveRetrieveServiceToken()
         mock(`${claimStoreApiUrl}`)
-          .post(`/${claimant.id}/${claimDraftData.externalId}/breathingSpace`)
+          .post(`/${claimDraftData.externalId}/breathingSpace`)
+          .matchHeader('ServiceAuthorization', `Bearer ${idamServiceMock.defaultAuthToken}`)
           .times(retryAttempts)
           .reply(HttpStatus.INTERNAL_SERVER_ERROR, 'An unexpected error occurred')
       }

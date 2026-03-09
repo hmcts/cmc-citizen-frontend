@@ -19,6 +19,9 @@ import { OrdersDraft } from 'orders/draft/ordersDraft'
 import { OrdersConverter } from 'claims/ordersConverter'
 import { ReviewOrder } from 'claims/models/reviewOrder'
 import moment = require('moment')
+import { ServiceAuthTokenFactoryImpl } from 'shared/security/serviceTokenFactoryImpl'
+
+const serviceAuthTokenFactory = new ServiceAuthTokenFactoryImpl()
 
 export const claimApiBaseUrl: string = `${config.get<string>('claim-store.url')}`
 export const claimStoreApiUrl: string = `${claimApiBaseUrl}/claims`
@@ -26,9 +29,11 @@ const claimStoreResponsesApiUrl: string = `${claimApiBaseUrl}/responses/claim`
 
 const logger = Logger.getLogger('claims/claimStoreClient')
 
-function buildCaseSubmissionHeaders (claimant: User, features: string[]): object {
+async function buildCaseSubmissionHeaders (claimant: User, features: string[]): Promise<object> {
+  const serviceAuthToken = await serviceAuthTokenFactory.get()
   const headers = {
-    Authorization: `Bearer ${claimant.bearerToken}`
+    Authorization: `Bearer ${claimant.bearerToken}`,
+    ServiceAuthorization: `Bearer ${serviceAuthToken.bearerToken}`
   }
 
   if (features.length > 0) {
@@ -43,14 +48,16 @@ export class ClaimStoreClient {
     // Nothing to do
   }
 
-  savePaidInFull (externalId: string, submitter: User, draft: DraftPaidInFull): Promise<Claim> {
+  async savePaidInFull (externalId: string, submitter: User, draft: DraftPaidInFull): Promise<Claim> {
+    const serviceAuthToken = await serviceAuthTokenFactory.get()
     return this.request
       .put(`${claimStoreApiUrl}/${externalId}/paid-in-full`, {
         body: {
           'moneyReceivedOn': draft.datePaid.date.toMoment()
         },
         headers: {
-          Authorization: `Bearer ${submitter.bearerToken}`
+          Authorization: `Bearer ${submitter.bearerToken}`,
+          ServiceAuthorization: `Bearer ${serviceAuthToken.bearerToken}`
         }
       })
       .then(claim => {
@@ -58,13 +65,13 @@ export class ClaimStoreClient {
       })
   }
 
-  saveClaim (draft: Draft<DraftClaim>, claimant: User, ...features: string[]): Promise<Claim> {
+  async saveClaim (draft: Draft<DraftClaim>, claimant: User, ...features: string[]): Promise<Claim> {
     const convertedDraftClaim = ClaimModelConverter.convert(draft.document)
 
     return this.request
       .post(`${claimStoreApiUrl}/${claimant.id}`, {
         body: convertedDraftClaim,
-        headers: buildCaseSubmissionHeaders(claimant, features)
+        headers: await buildCaseSubmissionHeaders(claimant, features)
       })
       .then(claim => {
         return new Claim().deserialize(claim)
@@ -79,13 +86,13 @@ export class ClaimStoreClient {
       })
   }
 
-  saveHelpWithFeesClaim (draft: Draft<DraftClaim>, claimant: User, ...features: string[]): Promise<Claim> {
+  async saveHelpWithFeesClaim (draft: Draft<DraftClaim>, claimant: User, ...features: string[]): Promise<Claim> {
     const convertedDraftClaim = ClaimModelConverter.convert(draft.document)
 
     return this.request
       .post(`${claimStoreApiUrl}/${claimant.id}/hwf`, {
         body: convertedDraftClaim,
-        headers: buildCaseSubmissionHeaders(claimant, features)
+        headers: await buildCaseSubmissionHeaders(claimant, features)
       })
       .then(claim => new Claim().deserialize(claim))
       .catch(err => {
@@ -97,7 +104,7 @@ export class ClaimStoreClient {
       })
   }
 
-  saveBreatingSpace (draft: DraftClaim, claimant: User): Promise<Claim> {
+  async saveBreatingSpace (draft: DraftClaim, claimant: User): Promise<Claim> {
     try {
       let endDate = moment('9999-09-09').format('YYYY-MM-DD')
       let StartDate = moment('9999-09-09').format('YYYY-MM-DD')
@@ -120,6 +127,8 @@ export class ClaimStoreClient {
         endDateByInsolvencyTeam = moment(draft.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate).format('YYYY-MM-DD')
       }
 
+      const serviceAuthToken = await serviceAuthTokenFactory.get()
+
       return this.request
         .post(`${claimStoreApiUrl}/${draft.breathingSpace.breathingSpaceExternalId.toString()}/breathingSpace`, {
           body: {
@@ -132,7 +141,8 @@ export class ClaimStoreClient {
             'bs_lifted_date_by_insolvency_team': endDateByInsolvencyTeam
           },
           headers: {
-            Authorization: `Bearer ${claimant.bearerToken}`
+            Authorization: `Bearer ${claimant.bearerToken}`,
+            ServiceAuthorization: `Bearer ${serviceAuthToken.bearerToken}`
           }
         })
         .then(claim => new Claim().deserialize(claim))
@@ -148,13 +158,13 @@ export class ClaimStoreClient {
     }
   }
 
-  updateHelpWithFeesClaim (draft: Draft<DraftClaim>, claimant: User, ...features: string[]): Promise<Claim> {
+  async updateHelpWithFeesClaim (draft: Draft<DraftClaim>, claimant: User, ...features: string[]): Promise<Claim> {
     const convertedDraftClaim = ClaimModelConverter.convert(draft.document)
 
     return this.request
       .put(`${claimStoreApiUrl}/resume-hwf`, {
         body: convertedDraftClaim,
-        headers: buildCaseSubmissionHeaders(claimant, features)
+        headers: await buildCaseSubmissionHeaders(claimant, features)
       })
       .then(claim => new Claim().deserialize(claim))
       .catch(err => {
@@ -166,13 +176,13 @@ export class ClaimStoreClient {
       })
   }
 
-  createCitizenClaim (draft: Draft<DraftClaim>, claimant: User, ...features: string[]): Promise<Claim> {
+  async createCitizenClaim (draft: Draft<DraftClaim>, claimant: User, ...features: string[]): Promise<Claim> {
     const convertedDraftClaim = ClaimModelConverter.convert(draft.document)
 
     return this.request
       .put(`${claimStoreApiUrl}/create-citizen-claim`, {
         body: convertedDraftClaim,
-        headers: buildCaseSubmissionHeaders(claimant, features)
+        headers: await buildCaseSubmissionHeaders(claimant, features)
       })
       .then(claim => {
         return new Claim().deserialize(claim)
@@ -187,26 +197,26 @@ export class ClaimStoreClient {
       })
   }
 
-  initiatePayment (draft: Draft<DraftClaim>, claimant: User): Promise<string> {
+  async initiatePayment (draft: Draft<DraftClaim>, claimant: User): Promise<string> {
     const convertedDraftClaim = ClaimModelConverter.convert(draft.document)
 
     return this.request
       .post(`${claimStoreApiUrl}/initiate-citizen-payment`, {
         body: convertedDraftClaim,
-        headers: buildCaseSubmissionHeaders(claimant, [])
+        headers: await buildCaseSubmissionHeaders(claimant, [])
       })
       .then(response => {
         return response.nextUrl
       })
   }
 
-  resumePayment (draft: Draft<DraftClaim>, claimant: User): Promise<string> {
+  async resumePayment (draft: Draft<DraftClaim>, claimant: User): Promise<string> {
     const convertedDraftClaim = ClaimModelConverter.convert(draft.document)
 
     return this.request
       .put(`${claimStoreApiUrl}/resume-citizen-payment`, {
         body: convertedDraftClaim,
-        headers: buildCaseSubmissionHeaders(claimant, [])
+        headers: await buildCaseSubmissionHeaders(claimant, [])
       })
       .then(response => {
         return response.nextUrl
@@ -216,12 +226,15 @@ export class ClaimStoreClient {
   async saveResponseForUser (claim: Claim, draft: Draft<ResponseDraft>, mediationDraft: Draft<MediationDraft>, directionsQuestionnaireDraft: Draft<DirectionsQuestionnaireDraft>, user: User): Promise<void> {
     const response = await ResponseModelConverter.convert(draft.document, mediationDraft.document, directionsQuestionnaireDraft.document, claim)
     const externalId: string = claim.externalId
+    const serviceAuthToken = await serviceAuthTokenFactory.get()
+
     const options = {
       method: 'POST',
       uri: `${claimStoreResponsesApiUrl}/${externalId}/defendant/${user.id}`,
       body: response,
       headers: {
-        Authorization: `Bearer ${user.bearerToken}`
+        Authorization: `Bearer ${user.bearerToken}`,
+        ServiceAuthorization: `Bearer ${serviceAuthToken.bearerToken}`
       }
     }
 
@@ -230,16 +243,18 @@ export class ClaimStoreClient {
     })
   }
 
-  saveOrder (ordersDraft: OrdersDraft, claim: Claim, user: User): Promise<Claim> {
+  async saveOrder (ordersDraft: OrdersDraft, claim: Claim, user: User): Promise<Claim> {
     const reviewOrder: ReviewOrder = OrdersConverter.convert(ordersDraft, claim, user)
     const externalId: string = ordersDraft.externalId
+    const serviceAuthToken = await serviceAuthTokenFactory.get()
 
     const options = {
       method: 'PUT',
       uri: `${claimStoreApiUrl}/${externalId}/review-order`,
       body: reviewOrder,
       headers: {
-        Authorization: `Bearer ${user.bearerToken}`
+        Authorization: `Bearer ${user.bearerToken}`,
+        ServiceAuthorization: `Bearer ${serviceAuthToken.bearerToken}`
       }
     }
 
@@ -249,7 +264,7 @@ export class ClaimStoreClient {
       })
   }
 
-  retrieveByClaimantId (user: User, pageNo: number): Promise<Claim[]> {
+  async retrieveByClaimantId (user: User, pageNo: number): Promise<Claim[]> {
     if (!user) {
       return Promise.reject(new Error('User is required'))
     }
@@ -258,10 +273,12 @@ export class ClaimStoreClient {
       pageNo = 0
     }
 
+    const serviceAuthToken = await serviceAuthTokenFactory.get()
     return this.request
       .get(`${claimStoreApiUrl}/claimant/${user.id}?pageNo=${pageNo}`, {
         headers: {
-          Authorization: `Bearer ${user.bearerToken}`
+          Authorization: `Bearer ${user.bearerToken}`,
+          ServiceAuthorization: `Bearer ${serviceAuthToken.bearerToken}`
         }
       })
       .then((claims: object[]) => {
@@ -269,15 +286,17 @@ export class ClaimStoreClient {
       })
   }
 
-  retrieveByLetterHolderId (letterHolderId: string, bearerToken: string): Promise<Claim> {
+  async retrieveByLetterHolderId (letterHolderId: string, bearerToken: string): Promise<Claim> {
     if (!letterHolderId) {
       return Promise.reject(new Error('Letter holder id must be set'))
     }
 
+    const serviceAuthToken = await serviceAuthTokenFactory.get()
     return this.request
       .get(`${claimStoreApiUrl}/letter/${letterHolderId}`, {
         headers: {
-          Authorization: `Bearer ${bearerToken}`
+          Authorization: `Bearer ${bearerToken}`,
+          ServiceAuthorization: `Bearer ${serviceAuthToken.bearerToken}`
         }
       })
       .then(claim => {
@@ -289,15 +308,17 @@ export class ClaimStoreClient {
       })
   }
 
-  retrieveByExternalId (externalId: string, user: User): Promise<Claim> {
+  async retrieveByExternalId (externalId: string, user: User): Promise<Claim> {
     if (!externalId || !user) {
       return Promise.reject(new Error('External id must be set and user must be set'))
     }
 
+    const serviceAuthToken = await serviceAuthTokenFactory.get()
     return this.request
       .get(`${claimStoreApiUrl}/${externalId}`, {
         headers: {
-          Authorization: `Bearer ${user.bearerToken}`
+          Authorization: `Bearer ${user.bearerToken}`,
+          ServiceAuthorization: `Bearer ${serviceAuthToken.bearerToken}`
         }
       })
       .then((json: object) => {
@@ -309,7 +330,7 @@ export class ClaimStoreClient {
       })
   }
 
-  retrieveByDefendantId (user: User, pageNo: number): Promise<Claim[]> {
+  async retrieveByDefendantId (user: User, pageNo: number): Promise<Claim[]> {
     if (!user) {
       return Promise.reject('User is required')
     }
@@ -318,21 +339,25 @@ export class ClaimStoreClient {
       pageNo = 0
     }
 
+    const serviceAuthToken = await serviceAuthTokenFactory.get()
     return this.request
       .get(`${claimStoreApiUrl}/defendant/${user.id}?pageNo=${pageNo}`, {
         headers: {
-          Authorization: `Bearer ${user.bearerToken}`
+          Authorization: `Bearer ${user.bearerToken}`,
+          ServiceAuthorization: `Bearer ${serviceAuthToken.bearerToken}`
         }
       })
       .then((claims: object[]) => claims.map(claim => new Claim().deserialize(claim)))
   }
 
-  linkDefendant (user: User, letterHolderId: string): Promise<void> {
+  async linkDefendant (user: User, letterHolderId: string): Promise<void> {
+    const serviceAuthToken = await serviceAuthTokenFactory.get()
     const options = {
       method: 'PUT',
       uri: `${claimStoreApiUrl}/defendant/link`,
       headers: {
         Authorization: `Bearer ${user.bearerToken}`,
+        ServiceAuthorization: `Bearer ${serviceAuthToken.bearerToken}`,
         LetterHolderID: letterHolderId
       }
     }
@@ -341,7 +366,7 @@ export class ClaimStoreClient {
     })
   }
 
-  requestForMoreTime (externalId: string, user: User): Promise<Claim> {
+  async requestForMoreTime (externalId: string, user: User): Promise<Claim> {
     if (!externalId) {
       return Promise.reject(new Error('External ID is required'))
     }
@@ -350,11 +375,13 @@ export class ClaimStoreClient {
       return Promise.reject(new Error('Authorisation token required'))
     }
 
+    const serviceAuthToken = await serviceAuthTokenFactory.get()
     const options = {
       method: 'POST',
       uri: `${claimStoreApiUrl}/${externalId}/request-more-time`,
       headers: {
-        Authorization: `Bearer ${user.bearerToken}`
+        Authorization: `Bearer ${user.bearerToken}`,
+        ServiceAuthorization: `Bearer ${serviceAuthToken.bearerToken}`
       }
     }
 
@@ -363,13 +390,18 @@ export class ClaimStoreClient {
     })
   }
 
-  isClaimLinked (reference: string): Promise<boolean> {
+  async isClaimLinked (reference: string): Promise<boolean> {
     if (!reference) {
       return Promise.reject(new Error('Claim reference is required'))
     }
 
+    const serviceAuthToken = await serviceAuthTokenFactory.get()
     return this.request
-      .get(`${claimStoreApiUrl}/${reference}/defendant-link-status`)
+      .get(`${claimStoreApiUrl}/${reference}/defendant-link-status`, {
+        headers: {
+          ServiceAuthorization: `Bearer ${serviceAuthToken.bearerToken}`
+        }
+      })
       .then(linkStatus => linkStatus.linked)
   }
 
@@ -378,16 +410,17 @@ export class ClaimStoreClient {
       return Promise.reject(new Error('User must be set'))
     }
 
+    const serviceAuthToken = await serviceAuthTokenFactory.get()
     return this.request
       .get(`${claimApiBaseUrl}/user/roles`, {
         headers: {
-          Authorization: `Bearer ${user.bearerToken}`
+          Authorization: `Bearer ${user.bearerToken}`,
+          ServiceAuthorization: `Bearer ${serviceAuthToken.bearerToken}`
         }
       })
   }
 
-  // This is a tactical solution until SIDAM is able to add roles to user ID
-  addRoleToUser (user: User, role: string): Promise<void> {
+  async addRoleToUser (user: User, role: string): Promise<void> {
     if (!user) {
       return Promise.reject(new Error('User is required'))
     }
@@ -396,12 +429,14 @@ export class ClaimStoreClient {
       return Promise.reject(new Error('role is required'))
     }
 
+    const serviceAuthToken = await serviceAuthTokenFactory.get()
     const options = {
       method: 'POST',
       uri: `${claimApiBaseUrl}/user/roles`,
       body: { role: role },
       headers: {
-        Authorization: `Bearer ${user.bearerToken}`
+        Authorization: `Bearer ${user.bearerToken}`,
+        ServiceAuthorization: `Bearer ${serviceAuthToken.bearerToken}`
       }
     }
 
@@ -414,13 +449,15 @@ export class ClaimStoreClient {
     const isDefendantBusiness = claim.claimData.defendant.isBusiness()
     const response = await ClaimantResponseConverter.convertToClaimantResponse(claim, draft.document, mediationDraft.document, isDefendantBusiness, directionsQuestionnaireDraft)
     const externalId: string = claim.externalId
+    const serviceAuthToken = await serviceAuthTokenFactory.get()
 
     const options = {
       method: 'POST',
       uri: `${claimApiBaseUrl}/responses/${externalId}/claimant/${user.id}`,
       body: response,
       headers: {
-        Authorization: `Bearer ${user.bearerToken}`
+        Authorization: `Bearer ${user.bearerToken}`,
+        ServiceAuthorization: `Bearer ${serviceAuthToken.bearerToken}`
       }
     }
 
@@ -429,15 +466,17 @@ export class ClaimStoreClient {
     })
   }
 
-  retrievePaginationInfo (user: User, type: string): Promise<string[]> {
+  async retrievePaginationInfo (user: User, type: string): Promise<string[]> {
     if (!user) {
       return Promise.reject('User is required')
     }
 
+    const serviceAuthToken = await serviceAuthTokenFactory.get()
     return this.request
       .get(`${claimStoreApiUrl}/pagination-metadata?userType=${type}`, {
         headers: {
-          Authorization: `Bearer ${user.bearerToken}`
+          Authorization: `Bearer ${user.bearerToken}`,
+          ServiceAuthorization: `Bearer ${serviceAuthToken.bearerToken}`
         }
       })
       .then(response => {

@@ -1106,24 +1106,28 @@ export function rejectretrievePaginationInfo (reason: string) {
 export function resolveIsClaimLinked (status: boolean) {
   mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/.+/defendant-link-status'))
+    .matchHeader('ServiceAuthorization', `Bearer ${idamServiceMock.defaultAuthToken}`)
     .reply(HttpStatus.OK, { linked: status })
 }
 
 export function rejectIsClaimLinked () {
   mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/.+/defendant-link-status'))
+    .matchHeader('ServiceAuthorization', `Bearer ${idamServiceMock.defaultAuthToken}`)
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, 'Internal server error')
 }
 
 export function resolveRetrieveByLetterHolderId (referenceNumber: string, claimOverride?: any): mock.Scope {
   return mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/letter/[0-9]+'))
+    .matchHeader('ServiceAuthorization', `Bearer ${idamServiceMock.defaultAuthToken}`)
     .reply(HttpStatus.OK, { ...sampleClaimObj, referenceNumber: referenceNumber, ...claimOverride })
 }
 
 export function rejectRetrieveByLetterHolderId (reason: string) {
   mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/letter/[0-9]+'))
+    .matchHeader('ServiceAuthorization', `Bearer ${idamServiceMock.defaultAuthToken}`)
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
