@@ -10,7 +10,7 @@ import { RoutablePath } from 'shared/router/routablePath'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { Evidence } from 'forms/models/evidence'
-import * as uuid from 'uuid'
+import { v4 as uuidv4 } from 'uuid'
 import { FeatureToggles } from 'utils/featureToggles'
 import { PcqClient } from 'utils/pcqClient'
 import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
@@ -60,7 +60,7 @@ export default express.Router()
         if (await featureToggles.isPcqEnabled() && draft.document.claimant.partyDetails !== undefined) {
           const isEligible = await PcqClient.isEligibleRedirect(draft.document.claimant.partyDetails.pcqId, draft.document.claimant.partyDetails.type)
           if (draft.document.claimant.partyDetails.pcqId === undefined) {
-            let pcqID = uuid.v4()
+            let pcqID = uuidv4()
             draft.document.claimant.partyDetails.pcqId = pcqID
             if (isEligible) {
               redirectUri = PcqClient.generateRedirectUrl(req, 'CLAIMANT',pcqID, user.email, null, Paths.taskListPage,draft.document.externalId)

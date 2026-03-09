@@ -1,10 +1,10 @@
-import * as uuid from 'uuid'
+import { v4 as uuidv4 } from 'uuid'
 import { PartyType } from 'common/partyType'
 import { YesNoOption } from 'models/yesNoOption'
 
 export function prepareClaimDraft (userEmailAddress: string, helpWithFees: boolean) {
   return {
-    externalId: uuid.v4(),
+    externalId: uuidv4(),
     breathingSpace: {},
     claimant: {
       payment: {},

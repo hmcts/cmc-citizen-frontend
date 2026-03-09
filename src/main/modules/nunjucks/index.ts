@@ -74,7 +74,7 @@ import { PaymentOption } from 'claims/models/paymentOption'
 import { ResponseType as DomainResponseType } from 'claims/models/response/responseType'
 import { FeaturesBuilder } from 'claim/helpers/featuresBuilder'
 import { ProceedOfflineReason } from 'claims/models/proceedOfflineReason'
-import * as uuid from 'uuid'
+import { v4 as uuidv4 } from 'uuid'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -88,7 +88,7 @@ const appAssetPaths = {
   images_vendor: '/img/lib',
   pdf: '/pdf'
 }
-const nonce = uuid.v4().replace(/-/g, '')
+const nonce = uuidv4().replace(/-/g, '')
 
 export class Nunjucks {
 

@@ -3,7 +3,7 @@ import * as config from 'config'
 import { Fee } from 'payment-hub-client/fee'
 import { Payment } from 'payment-hub-client/payment'
 import { PaymentRetrieveResponse } from 'payment-hub-client/paymentRetrieveResponse'
-import * as uuid from 'uuid'
+import { v4 as uuidv4 } from 'uuid'
 import { MomentFactory } from 'shared/momentFactory'
 import { PayClient } from 'payment-hub-client/payClient'
 
@@ -60,7 +60,7 @@ export class MockPayClient implements PayClient {
         description: description,
         reference: paymentReference,
         currency: 'GBP',
-        caseReference: uuid.v4(),
+        caseReference: uuidv4(),
         channel: 'online',
         method: 'card',
         externalProvider: 'gov pay',
