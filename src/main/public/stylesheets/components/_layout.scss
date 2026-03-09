@@ -1,7 +1,9 @@
+@use 'sass:math';
+
 .column-three-quarters {
-  @include grid-column(3 / 4);
+  @include grid-column(math.div(3, 4));
 }
 
 .column-four-fifths {
-  @include grid-column(4.5 / 5);
+  @include grid-column(math.div(4.5, 5));
 }
