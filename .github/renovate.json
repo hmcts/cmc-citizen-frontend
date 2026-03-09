@@ -1,0 +1,44 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "local>hmcts/.github:renovate-config",
+    "local>hmcts/.github//renovate/automerge-minor"
+  ],
+  "helmv3": {
+    "bumpVersion": "patch"
+  },
+  "automergeSchedule": ["after 8am and before 10am every weekday"],
+  "schedule": ["after 8am and before 10am every weekday"],
+  "rebaseWhen": "conflicted",
+  "prConcurrentLimit": 5,
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "All non-major updates",
+      "groupSlug": "all-non-major",
+      "automerge": true,
+      "automergeType": "pr"
+    },
+    {
+      "matchManagers": ["terraform"],
+      "groupName": "Terraform updates",
+      "groupSlug": "terraform",
+      "automerge": true,
+      "automergeType": "pr"
+    },
+    {
+      "matchManagers": ["helmv3"],
+      "groupName": "Helm chart updates",
+      "groupSlug": "helm-charts",
+      "automerge": true,
+      "automergeType": "pr"
+    },
+    {
+      "matchManagers": ["dockerfile"],
+      "groupName": "Dockerfile updates",
+      "groupSlug": "dockerfile",
+      "automerge": true,
+      "automergeType": "pr"
+    }
+  ]
+}
