@@ -10,6 +10,7 @@ import { InterestDate } from 'claims/models/interestDate'
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 import { MomentFactory } from 'shared/momentFactory'
 
+import * as idamServiceMock from 'test/http-mocks/idam'
 import {
   defenceWithDisputeData,
   fullAdmissionWithSoMPaymentByInstalmentsData,
