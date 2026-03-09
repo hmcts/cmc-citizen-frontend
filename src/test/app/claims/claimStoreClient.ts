@@ -348,7 +348,7 @@ describe('ClaimStoreClient', () => {
 
       function mockInternalServerErrorforSaveBreathingSpaceOnAllAttempts () {
         mock(`${claimStoreApiUrl}`)
-          .post(`/${claimant.id}/${claimDraftData.externalId}/breathingSpace`)
+          .post(/\/[^/]+\/breathingSpace$/)
           .times(retryAttempts)
           .reply(HttpStatus.INTERNAL_SERVER_ERROR, 'An unexpected error occurred')
       }

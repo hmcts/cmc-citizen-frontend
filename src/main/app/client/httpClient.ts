@@ -89,6 +89,7 @@ export type RequestAPI = {
   put: (uriOrOptions: string | RequestOptions) => Promise<any>
   patch: (uriOrOptions: string | RequestOptions) => Promise<any>
   del?: (uriOrOptions: string | RequestOptions) => Promise<any>
+  delete?: (uriOrOptions: string | RequestOptions) => Promise<any>
   head?: (uriOrOptions: string | RequestOptions) => Promise<any>
   defaults: (defaults: Partial<RequestOptions>) => RequestAPI
 } & ((options: RequestOptions) => Promise<any>)
@@ -123,12 +124,14 @@ function createClient (defaultOptions: Partial<RequestOptions> = {}, retries = m
     })
   }
 
+  const deleteFn = request('delete')
   const api: RequestAPI = {
     get: request('get'),
     post: request('post'),
     put: request('put'),
     patch: request('patch'),
-    del: request('delete'),
+    del: deleteFn,
+    delete: deleteFn,
     head: request('head'),
     defaults (defaults: Partial<RequestOptions>) {
       const merged = { ...defaultOptions, ...defaults }

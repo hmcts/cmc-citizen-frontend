@@ -144,7 +144,7 @@ export class ClaimStoreClient {
           throw err
         })
     } catch (error) {
-      return error
+      throw error
     }
   }
 
