@@ -2,7 +2,7 @@ import { expect } from 'chai'
 
 import { CourtDecision } from 'common/court-calculations/courtDecision'
 import { DecisionType } from 'common/court-calculations/decisionType'
-import moment = require('moment')
+import moment from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
 
 describe('CourtDecision', () => {
