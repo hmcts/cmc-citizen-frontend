@@ -1,17 +1,16 @@
-import { RequestAPI } from 'client/request'
+import { RequestAPI, request as requestClient } from 'client/request'
 import { Court } from './court'
 import { CourtFinderResponse } from './courtFinderResponse'
 import * as config from 'config'
 import { CourtDetailsResponse } from 'court-finder-client/courtDetailsResponse'
 import { CourtDetails } from 'court-finder-client/courtDetails'
-import { request } from 'client/request'
 
 export class CourtFinderClient {
   private readonly postCodeSearchUrl
   private readonly nameSearchUrl
   constructor (
     private readonly apiUrl: string = `${config.get<string>('claim-store.url')}`,
-    private readonly request: RequestAPI = request
+    private readonly request: RequestAPI = requestClient
   ) {
     this.postCodeSearchUrl = `${this.apiUrl}/court-finder/search-postcode/`
     this.nameSearchUrl = `${this.apiUrl}/court-finder/search-name/`

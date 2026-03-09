@@ -1,9 +1,9 @@
-import { RequestAPI, request } from 'client/request'
+import { RequestAPI, request as requestClient } from 'client/request'
 
 export class PostcodeToCountryClient {
   constructor (
     private readonly apiToken: string,
-    private readonly request: RequestAPI = request,
+    private readonly request: RequestAPI = requestClient,
     private readonly apiUrl: string = 'https://api.os.uk'
   ) {}
 
