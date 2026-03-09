@@ -2,7 +2,7 @@
 import * as chai from 'chai'
 import * as sinon from 'sinon'
 import * as spies from 'sinon-chai'
-import { request } from 'client/request'
+import * as nock from 'nock'
 import { InfoContributor } from '@hmcts/info-provider'
 
 import { ConfigurableInfoContributor } from 'routes/configurableInfoContributor'
@@ -15,6 +15,7 @@ describe('ConfigurableInfoContributor', () => {
 
   afterEach(() => {
     sinon.restore()
+    nock.cleanAll()
   })
 
   it('should delegate to the base InfoContributor when no request options are provided', async () => {
@@ -29,34 +30,32 @@ describe('ConfigurableInfoContributor', () => {
 
   it('should invoke request with the provided request options', async () => {
     const requestOptions = { headers: { 'X-Test': '1' } }
-    const contributor = new ConfigurableInfoContributor(serviceUrl, requestOptions)
-    const superCall = sinon.stub(InfoContributor.prototype, 'call')
     const expectedResponse = { healthy: true }
-    const getStub = sinon.stub(request, 'get').resolves(expectedResponse)
+    nock('http://localhost')
+      .get('/info')
+      .matchHeader('X-Test', '1')
+      .reply(200, expectedResponse)
 
+    const contributor = new ConfigurableInfoContributor(serviceUrl, requestOptions)
     const result = await contributor.call()
 
-    expect(result).to.equal(expectedResponse)
-    expect(getStub).to.have.been.calledOnceWithExactly({
-      uri: serviceUrl,
-      json: true,
-      ...requestOptions
-    })
-    expect(superCall).not.to.have.been.called
+    expect(result).to.deep.equal(expectedResponse)
+    expect(nock.isDone()).to.be.true
   })
 
   it('should return a structured error payload when the upstream call fails', async () => {
-    const contributor = new ConfigurableInfoContributor(serviceUrl, {})
-    const error: any = new Error('Service unavailable')
-    error.response = { data: { message: 'bad' } }
-    sinon.stub(request, 'get').rejects(error)
+    nock('http://localhost')
+      .get('/info')
+      .reply(500, { message: 'bad' })
 
+    const contributor = new ConfigurableInfoContributor(serviceUrl, {})
     const result = await contributor.call()
 
     expect(result).to.deep.equal({
       error: `Error calling ${serviceUrl}`,
-      statusText: 'Service unavailable',
+      statusText: 'Request failed with status 500',
       body: { message: 'bad' }
     })
+    expect(nock.isDone()).to.be.true
   })
 })

@@ -1,13 +1,9 @@
 import * as config from 'config'
 import * as otp from 'otp'
 
-import * as requestModule from 'client/request'
+import { request as requestClient } from 'client/request'
 import type { RequestAPI } from 'client/request'
 import { User } from 'idam/user'
-
-const requestClient: RequestAPI = (requestModule as { request?: RequestAPI; default?: RequestAPI }).request
-  ?? (requestModule as { default?: RequestAPI }).default
-  ?? (() => { throw new Error('client/request did not export request client') })()
 import { ServiceAuthToken } from 'idam/serviceAuthToken'
 import { AuthToken } from 'idam/authToken'
 import { trackCustomEvent } from 'logging/customEventTracker'

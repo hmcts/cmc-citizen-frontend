@@ -4,7 +4,8 @@ import { Validator } from '@hmcts/class-validator'
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
 
 import { LocalDate, ValidationErrors } from 'forms/models/localDate'
-import moment from 'moment'
+
+const moment = require('moment')
 
 describe('LocalDate', () => {
 
