@@ -9,11 +9,13 @@ import { mockPostcodeLookupResponse } from '../data/entity/mockPostcodeLookupRes
 describe('PostCode Lookup', () => {
 
   const mockPostcodeServer = 'https://api.os.uk'
-  const mockPostcodePath = /\/search\/places\/v1\/postcode\?.+/
+  const mockPostcodePath = /\/search\/places\/v1\/postcode/
+  const mockPostcodeQuery = { postcode: 'SW2 1AN', dataset: 'DPA,LPI', key: 'AAAAAAA' }
 
   it('should return correct address when postCode lookup is used', async () => {
     mock(mockPostcodeServer)
       .get(mockPostcodePath)
+      .query(mockPostcodeQuery)
       .reply(200, mockPostcodeLookupResponse)
 
     await request(app)
@@ -35,9 +37,9 @@ describe('PostCode Lookup', () => {
   })
 
   it('should produce appinsights when failed', async () => {
-
     mock(mockPostcodeServer)
       .get(mockPostcodePath)
+      .query(true)
       .reply(400, 'Postcode lookup failed')
 
     await request(app)

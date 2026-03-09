@@ -12,20 +12,26 @@ export class RequestLoggingHandler {
     return new Proxy(request, new RequestLoggingHandler(request))
   }
 
+  private static readonly HTTP_METHODS = new Set(['get', 'post', 'put', 'patch', 'del', 'delete', 'head'])
+
   get (target, key) {
     const original = target[key]
     if (typeof original !== 'function') return original
+    const keyStr = key.toString().toLowerCase()
+    const shouldLog = RequestLoggingHandler.HTTP_METHODS.has(keyStr)
     return (...methodArgs: any[]) => {
       const options = asOptions(methodArgs[0] ?? {})
-      this.apiLogger.logRequest({
-        method: key.toString().toUpperCase(),
-        uri: options?.uri ?? options?.url,
-        requestBody: options?.body,
-        query: options?.qs,
-        headers: options?.headers
-      })
+      if (shouldLog) {
+        this.apiLogger.logRequest({
+          method: key.toString().toUpperCase(),
+          uri: options?.uri ?? options?.url,
+          requestBody: options?.body,
+          query: options?.qs,
+          headers: options?.headers
+        })
+      }
       const result = original.apply(target, methodArgs)
-      if (result && typeof result.then === 'function') {
+      if (result && typeof result.then === 'function' && shouldLog) {
         return result
           .then((body: any) => {
             this.apiLogger.logResponse({
@@ -37,13 +43,15 @@ export class RequestLoggingHandler {
             return body
           })
           .catch((err: any) => {
-            this.apiLogger.logResponse({
+            if (shouldLog) {
+              this.apiLogger.logResponse({
               uri: options?.uri ?? options?.url,
               responseCode: err?.statusCode ?? err?.response?.status,
               responseBody: err?.body ?? err?.response?.data,
               error: err,
               requestHeaders: options?.headers
-            })
+              })
+            }
             throw err
           })
       }

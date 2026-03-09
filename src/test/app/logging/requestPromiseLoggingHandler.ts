@@ -103,32 +103,4 @@ describe('RequestLoggingHandler', () => {
     })
   })
 
-  describe('handleLogging', () => {
-    let originalCallback
-
-    beforeEach(() => {
-      originalCallback = sinon.spy()
-    })
-
-    it('should assign a callback to the options object', () => {
-      handler.handleLogging('any', options)
-      // tslint:disable:disable-next-line no-unused-expression allow chai to be used without ()
-      expect(options.callback).not.to.be.undefined
-    })
-
-    it('should override the originally assigned callback', () => {
-      options.callback = originalCallback
-      handler.handleLogging('any', options)
-
-      expect(options.callback).not.to.equal(originalCallback)
-    })
-
-    it('should call the original callback defined in options object', () => {
-      options.callback = originalCallback
-      handler.handleLogging('any', options)
-      options.callback()
-
-      expect(originalCallback).to.have.been.called
-    })
-  })
 })

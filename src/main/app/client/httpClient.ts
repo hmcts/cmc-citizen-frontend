@@ -116,6 +116,7 @@ function createClient (defaultOptions: Partial<RequestOptions> = {}, retries = m
         err.statusCode = response.status
         err.response = response
         err.body = response.data
+        err.error = response.data
         throw err
       }
       return wrap(axiosInstance, options, resolveWithFullResponse)(response)

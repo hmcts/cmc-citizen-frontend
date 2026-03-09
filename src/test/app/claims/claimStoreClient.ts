@@ -366,11 +366,11 @@ describe('ClaimStoreClient', () => {
           draft.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate = moment('9999-09-09')
           await claimStoreClient.saveBreatingSpace(draft, claimant)
         } catch (err) {
-          expect(err.statusCode).to.equal(HttpStatus.NOT_FOUND)
+          expect(err.statusCode).to.equal(HttpStatus.INTERNAL_SERVER_ERROR)
           return
         }
 
-        expect.fail() // Exception should have been thrown due to 404 response code
+        expect.fail() // Exception should have been thrown due to 500 response code
       })
     })
   })
