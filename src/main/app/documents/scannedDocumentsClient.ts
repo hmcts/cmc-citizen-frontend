@@ -1,13 +1,13 @@
 import * as config from 'config'
 import { StringUtils } from 'utils/stringUtils'
-import { RequestAPI, request } from 'client/request'
+import { RequestAPI, request as requestClient } from 'client/request'
 
 const claimStoreBaseUrl = config.get<string>('claim-store.url')
 
 export class ScannedDocumentsClient {
 
   constructor (public documentsUrl: string = `${claimStoreBaseUrl}/scanned-documents`,
-               private readonly request: RequestAPI = request) {
+               private readonly request: RequestAPI = requestClient) {
   }
 
   public getScannedResponseFormPDF (claimExternalId: string, bearerToken: string): Promise<Buffer> {
