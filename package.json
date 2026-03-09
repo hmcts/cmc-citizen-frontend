@@ -30,7 +30,8 @@
     "test:crossbrowser-verbose": "TS_NODE_TRANSPILE_ONLY=true codeceptjs run-multiple ${BROWSER_GROUP:-'--all'} --verbose --config saucelabs.conf.js --grep @crossbrowser --reporter mocha-multi",
     "list-supported-browsers": "node -e 'Object.keys(require(\"@hmcts/cmc-supported-browsers\").supportedBrowsers).forEach(key => console.log(key))'",
     "sonar-scan": "sonar-scanner -Dsonar.projectName='CMC :: Citizen Frontend' -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.javascript.lcov.reportPaths=coverage-report/lcov.info",
-    "test:file": "TS_NODE_TRANSPILE_ONLY=true NODE_ENV=mocha LOG_LEVEL=OFF mocha  --watch --watch-extensions ts"
+    "test:file": "TS_NODE_TRANSPILE_ONLY=true NODE_ENV=mocha LOG_LEVEL=OFF mocha  --watch --watch-extensions ts",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@analytics/google-tag-manager": "^0.5.3",
@@ -142,6 +143,7 @@
     "node-gyp": "11.0.0",
     "nyc": "^15.1.0",
     "pa11y": "^8.0.0",
+    "patch-package": "^8.0.0",
     "randomstring": "^1.1.5",
     "sass": "^1.48.0",
     "sass-lint": "^1.13.1",
@@ -222,6 +224,7 @@
     "minimatch@npm:^9.0.0": "9.0.7",
     "node-gettext": "3.0.1",
     "uuid": "7.0.0",
+    "istanbul-lib-processinfo": "2.0.3",
     "is-accessor-descriptor": "0.1.7",
     "is-data-descriptor": "0.1.5",
     "tar": "7.5.10",
