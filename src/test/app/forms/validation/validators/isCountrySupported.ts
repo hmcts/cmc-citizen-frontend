@@ -47,7 +47,7 @@ describe('IsCountrySupported', () => {
         expect(await constraint.validate('RG10 4JE', validationArgs(Country.all()))).to.be.false
       })
 
-      it.skip('the postcode lookup client returns an error', async () => {
+      it('the postcode lookup client returns an error', async () => {
         // Skipped: nock does not intercept axios requests in Node 24 (known compatibility issue)
         nock(mockPostcodeServer)
           .get(mockPostcodePath)
@@ -56,7 +56,7 @@ describe('IsCountrySupported', () => {
         expect(await constraint.validate('SW2 1AN', validationArgs(Country.all()))).to.be.true
       })
 
-      it.skip('given a valid postcode', async () => {
+      it('given a valid postcode', async () => {
         // Skipped: nock does not intercept axios requests in Node 24 (known compatibility issue)
         nock(mockPostcodeServer)
           .get(mockPostcodePath)

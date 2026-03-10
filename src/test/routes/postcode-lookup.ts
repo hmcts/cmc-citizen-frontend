@@ -36,7 +36,7 @@ describe('PostCode Lookup', () => {
       .expect(res => expect(res).to.badRequest.withText('Authentication failed'))
   })
 
-  it.skip('should produce appinsights when failed', async () => {
+  it('should produce appinsights when failed', async () => {
     // Skipped: nock does not intercept axios requests in Node 24 (known compatibility issue)
     mock(mockPostcodeServer)
       .get(mockPostcodePath)
