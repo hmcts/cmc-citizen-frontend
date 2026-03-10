@@ -2,8 +2,10 @@ import * as config from 'config'
 import { StringUtils } from 'utils/stringUtils'
 import * as requestDefault from 'request'
 import * as requestPromise from 'request-promise-native'
+import { ServiceAuthTokenFactoryImpl } from 'shared/security/serviceTokenFactoryImpl'
 
 const claimStoreBaseUrl = config.get<string>('claim-store.url')
+const serviceAuthTokenFactory = new ServiceAuthTokenFactoryImpl()
 
 export class ScannedDocumentsClient {
 
@@ -21,7 +23,7 @@ export class ScannedDocumentsClient {
     return this.getPDF(claimExternalId, documentType, documentSubtype, bearerToken)
   }
 
-  private getPDF (claimExternalId: string, documentType: string, documentSubtype: string, bearerToken: string): Promise<Buffer> {
+  private async getPDF (claimExternalId: string, documentType: string, documentSubtype: string, bearerToken: string): Promise<Buffer> {
     if (StringUtils.isBlank(claimExternalId)) {
       throw new Error('Claim external ID cannot be blank')
     }
@@ -35,10 +37,12 @@ export class ScannedDocumentsClient {
       throw new Error('User authorisation cannot be blank')
     }
 
+    const serviceAuthToken = await serviceAuthTokenFactory.get()
     const options = {
       uri: `${this.documentsUrl}/${claimExternalId}/${documentType}/${documentSubtype}`,
       headers: {
         Authorization: `Bearer ${bearerToken}`,
+        ServiceAuthorization: `Bearer ${serviceAuthToken.bearerToken}`,
         Accept: 'application/pdf'
       },
       encoding: null
