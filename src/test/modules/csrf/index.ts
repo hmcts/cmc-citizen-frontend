@@ -12,7 +12,7 @@ function createApp (): express.Express {
     secret: 'test-secret',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false }
+    cookie: { secure: process.env.NODE_ENV === 'production' }
   }))
 
   const csrf = new CsrfProtection()
