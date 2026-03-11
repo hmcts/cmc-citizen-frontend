@@ -129,7 +129,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('serviceName', 'Money Claims')
     nunjucksEnv.addGlobal('supportEmailAddress', config.get('secrets.cmc.staff-email'))
     nunjucksEnv.addGlobal('development', this.developmentMode)
-    nunjucksEnv.addGlobal('govuk_template_version', packageDotJson.dependencies.govuk_template_jinja)
+    nunjucksEnv.addGlobal('govuk_template_version', packageDotJson.dependencies?.govuk_template_jinja || packageDotJson.devDependencies?.govuk_template_jinja)
     nunjucksEnv.addGlobal('gaTrackingId', config.get<string>('analytics.gaTrackingId'))
     nunjucksEnv.addGlobal('t', (key: string, options?: InitOptions): string => this.i18next.t(key, options))
     nunjucksEnv.addFilter('date', dateFilter)
