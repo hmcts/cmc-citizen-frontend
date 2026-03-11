@@ -48,7 +48,6 @@ describe('IsCountrySupported', () => {
       })
 
       it('the postcode lookup client returns an error', async () => {
-        // Skipped: nock does not intercept axios requests in Node 24 (known compatibility issue)
         nock(mockPostcodeServer)
           .get(mockPostcodePath)
           .reply(500)
@@ -57,7 +56,6 @@ describe('IsCountrySupported', () => {
       })
 
       it('given a valid postcode', async () => {
-        // Skipped: nock does not intercept axios requests in Node 24 (known compatibility issue)
         nock(mockPostcodeServer)
           .get(mockPostcodePath)
           .reply(200, mockPostcodeLookupResponse)

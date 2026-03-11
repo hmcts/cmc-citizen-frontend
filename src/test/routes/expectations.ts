@@ -1,9 +1,9 @@
 import * as chai from 'chai'
 import * as cookie from 'cookie'
 import * as HttpStatus from 'http-status-codes'
-import lodash from 'lodash'
+import * as lodashModule from 'lodash'
 
-const _ = lodash
+const _: any = (lodashModule as any).default || lodashModule
 const Assertion = chai['Assertion']
 
 function stringifyWithoutPropertyQuotes (value: object, pretty: boolean = false): string {

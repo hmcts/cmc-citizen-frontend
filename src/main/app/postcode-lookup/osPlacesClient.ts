@@ -47,6 +47,10 @@ export class OsPlacesClient {
         simple: false
       })
 
+      if (response.statusCode >= 500) {
+        throw new Error('Error with OS Places service')
+      }
+
       if (response.statusCode === 401) {
         throw new Error('Authentication failed')
       }
@@ -66,7 +70,7 @@ export class OsPlacesClient {
         isValid: totalResults > 0 && addresses.length > 0
       }
     } catch (err: any) {
-      if (err?.message === 'Authentication failed') throw err
+      if (err?.message === 'Authentication failed' || err?.message === 'Error with OS Places service') throw err
       return { addresses: [], isValid: false }
     }
   }

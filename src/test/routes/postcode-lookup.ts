@@ -36,8 +36,7 @@ describe('PostCode Lookup', () => {
       .expect(res => expect(res).to.badRequest.withText('Authentication failed'))
   })
 
-  it('should produce appinsights when failed', async () => {
-    // Skipped: nock does not intercept axios requests in Node 24 (known compatibility issue)
+  it('should return empty results when postcode lookup returns a client error', async () => {
     mock(mockPostcodeServer)
       .get(mockPostcodePath)
       .query(true)
@@ -46,6 +45,11 @@ describe('PostCode Lookup', () => {
     await request(app)
       .get(Paths.postcodeLookupProxy.uri)
       .query({ 'postcode': 'SW2 1AN' })
-      .expect(res => expect(res).to.badRequest.withText('Postcode lookup failed'))
+      .expect(200)
+      .expect(res => {
+        const body = JSON.parse(res.text)
+        expect(body.addresses).to.deep.equal([])
+        expect(body.isValid).to.equal(false)
+      })
   })
 })
