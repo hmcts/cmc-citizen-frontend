@@ -103,4 +103,102 @@ describe('RequestLoggingHandler', () => {
     })
   })
 
+  describe('async response logging', () => {
+    let logResponseCall
+
+    beforeEach(() => {
+      logResponseCall = sinon.spy(apiLogger, 'logResponse')
+    })
+
+    afterEach(() => {
+      logResponseCall.restore()
+    })
+
+    it('should log response on resolved promise', async () => {
+      const responseBody = { statusCode: 200, body: { data: 'test' } }
+      const asyncRequest = {
+        get: () => Promise.resolve(responseBody),
+        post: () => Promise.resolve(responseBody),
+        put: () => Promise.resolve(responseBody),
+        del: () => Promise.resolve(responseBody),
+        delete: () => Promise.resolve(responseBody),
+        patch: () => Promise.resolve(responseBody),
+        head: () => Promise.resolve(responseBody),
+        another: () => Promise.resolve(responseBody)
+      }
+      const asyncHandler = new RequestLoggingHandler(asyncRequest, apiLogger as ApiLogger)
+      const asyncProxy = new Proxy(asyncRequest, asyncHandler)
+
+      await asyncProxy.get({ uri: 'http://test/path' })
+      expect(logResponseCall).to.have.been.called
+    })
+
+    it('should log response and rethrow on rejected promise', async () => {
+      const err: any = new Error('Request failed')
+      err.statusCode = 500
+      err.body = { error: 'server error' }
+      const asyncRequest = {
+        get: () => Promise.reject(err),
+        post: () => Promise.reject(err),
+        put: () => Promise.reject(err),
+        del: () => Promise.reject(err),
+        delete: () => Promise.reject(err),
+        patch: () => Promise.reject(err),
+        head: () => Promise.reject(err),
+        another: () => Promise.reject(err)
+      }
+      const asyncHandler = new RequestLoggingHandler(asyncRequest, apiLogger as ApiLogger)
+      const asyncProxy = new Proxy(asyncRequest, asyncHandler)
+
+      try {
+        await asyncProxy.get({ uri: 'http://test/path' })
+        chai.expect.fail('should have thrown')
+      } catch (e) {
+        expect(logResponseCall).to.have.been.called
+        expect(e.message).to.equal('Request failed')
+      }
+    })
+
+    it('should not log response for non-http methods even on promise', async () => {
+      const asyncRequest = {
+        get: () => Promise.resolve('ok'),
+        post: () => Promise.resolve('ok'),
+        put: () => Promise.resolve('ok'),
+        del: () => Promise.resolve('ok'),
+        delete: () => Promise.resolve('ok'),
+        patch: () => Promise.resolve('ok'),
+        head: () => Promise.resolve('ok'),
+        another: () => Promise.resolve('ok')
+      }
+      const asyncHandler = new RequestLoggingHandler(asyncRequest, apiLogger as ApiLogger)
+      const asyncProxy = new Proxy(asyncRequest, asyncHandler)
+
+      await asyncProxy.another({})
+      expect(logResponseCall).not.to.have.been.called
+    })
+
+    it('should return non-function properties unchanged', () => {
+      const objWithProp = { get: () => {}, myProp: 'hello' }
+      const h = new RequestLoggingHandler(objWithProp, apiLogger as ApiLogger)
+      const p = new Proxy(objWithProp, h)
+      expect(p.myProp).to.equal('hello')
+    })
+  })
+
+  describe('static proxy', () => {
+    it('should create a logging proxy', () => {
+      const mockReq = {
+        get: () => {},
+        post: () => {},
+        put: () => {},
+        del: () => {},
+        delete: () => {},
+        patch: () => {},
+        head: () => {}
+      }
+      const proxied = RequestLoggingHandler.proxy(mockReq as any)
+      expect(proxied).to.not.equal(mockReq)
+    })
+  })
+
 })
