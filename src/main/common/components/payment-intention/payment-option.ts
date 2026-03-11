@@ -15,7 +15,7 @@ import { User } from 'main/app/idam/user'
 import { Form } from 'main/app/forms/form'
 import { FormValidator } from 'main/app/forms/validation/formValidator'
 import { DraftService } from 'services/draftService'
-import { Draft as DraftWrapper } from '@hmcts/draft-store-client'
+import { Draft as DraftWrapper } from 'draft-store'
 import { Claim } from 'claims/models/claim'
 
 export abstract class AbstractPaymentOptionPage<Draft> {

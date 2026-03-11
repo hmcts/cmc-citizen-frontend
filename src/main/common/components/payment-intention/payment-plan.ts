@@ -19,7 +19,7 @@ import { DraftService } from 'services/draftService'
 
 import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'
-import { Draft as DraftWrapper } from '@hmcts/draft-store-client'
+import { Draft as DraftWrapper } from 'draft-store'
 import { ResponseDraft } from 'response/draft/responseDraft'
 
 export abstract class AbstractPaymentPlanPage<Draft> {

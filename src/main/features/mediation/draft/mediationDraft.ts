@@ -1,4 +1,4 @@
-import { DraftDocument } from '@hmcts/cmc-draft-store-middleware'
+import { DraftDocument } from 'draft-store'
 import { FreeMediation } from 'forms/models/freeMediation'
 import { CanWeUse } from 'mediation/form/models/CanWeUse'
 import { CanWeUseCompany } from 'mediation/form/models/CanWeUseCompany'

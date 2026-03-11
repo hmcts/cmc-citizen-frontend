@@ -2,7 +2,7 @@
 import * as express from 'express'
 import { Paths } from 'directions-questionnaire/paths'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { ExpertEvidence } from 'directions-questionnaire/forms/models/expertEvidence'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'

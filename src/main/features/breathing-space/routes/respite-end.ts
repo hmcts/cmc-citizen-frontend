@@ -9,7 +9,7 @@ import { Moment } from 'moment'
 import { BreathingSpaceRespiteEnd } from '../models/bsEndDate'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { DraftService } from 'services/draftService'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { LocalDate } from 'forms/models/localDate'
 
 function renderView (form: Form<BreathingSpaceRespiteEnd>, res: express.Response, next: express.NextFunction) {

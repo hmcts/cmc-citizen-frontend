@@ -1,4 +1,4 @@
-import { DraftDocument } from '@hmcts/cmc-draft-store-middleware'
+import { DraftDocument } from 'draft-store'
 import { SelfWitness } from 'directions-questionnaire/forms/models/selfWitness'
 import { OtherWitnesses } from 'directions-questionnaire/forms/models/otherWitnesses'
 import { ExceptionalCircumstances } from 'directions-questionnaire/forms/models/exceptionalCircumstances'

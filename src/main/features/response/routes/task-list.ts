@@ -6,7 +6,7 @@ import { Claim } from 'claims/models/claim'
 
 import { TaskListBuilder } from 'response/helpers/taskListBuilder'
 import { ResponseDraft } from 'response/draft/responseDraft'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { MomentFactory } from 'shared/momentFactory'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { FeatureToggles } from 'utils/featureToggles'

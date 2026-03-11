@@ -10,7 +10,7 @@ import { MonthlyIncome } from 'response/form/models/statement-of-means/monthlyIn
 import { User } from 'idam/user'
 import { RoutablePath } from 'shared/router/routablePath'
 import { ResponseDraft } from 'response/draft/responseDraft'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { CalculateMonthlyIncomeExpense } from 'common/calculate-monthly-income-expense/calculateMonthlyIncomeExpense'
 import { IncomeExpenseSources } from 'common/calculate-monthly-income-expense/incomeExpenseSources'
 import { Validator } from '@hmcts/class-validator'

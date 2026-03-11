@@ -36,11 +36,9 @@
   "dependencies": {
     "@analytics/google-tag-manager": "^0.5.3",
     "@hmcts/class-validator": "^0.9.1-e",
-    "@hmcts/cmc-draft-store-middleware": "^2.0.1",
     "@hmcts/cmc-validators": "^0.2.6",
     "@hmcts/cookie-encrypter": "^1.0.1",
     "@hmcts/ctsc-web-chat": "^0.3.10",
-    "@hmcts/draft-store-client": "^1.2.1",
     "@hmcts/info-provider": "^1.4.0",
     "@hmcts/nodejs-healthcheck": "^1.8.6",
     "@hmcts/nodejs-logging": "^4.0.4",

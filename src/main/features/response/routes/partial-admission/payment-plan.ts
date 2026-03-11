@@ -4,7 +4,7 @@ import { AbstractPaymentPlanPage } from 'shared/components/payment-intention/pay
 import { AbstractModelAccessor } from 'shared/components/model-accessor'
 import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { CalculateMonthlyIncomeExpense } from 'common/calculate-monthly-income-expense/calculateMonthlyIncomeExpense'
 import { IncomeExpenseSources } from 'common/calculate-monthly-income-expense/incomeExpenseSources'

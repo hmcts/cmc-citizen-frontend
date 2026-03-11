@@ -1,7 +1,7 @@
 /* tslint:disable:no-default-export */
 import * as express from 'express'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { ErrorHandling } from 'shared/errorHandling'

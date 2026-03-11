@@ -1,4 +1,4 @@
-import { DraftDocument } from '@hmcts/cmc-draft-store-middleware'
+import { DraftDocument } from 'draft-store'
 import { SettleAdmitted } from 'claimant-response/form/models/settleAdmitted'
 import { AcceptPaymentMethod } from 'claimant-response/form/models/acceptPaymentMethod'
 import { FormaliseRepaymentPlan } from 'claimant-response/form/models/formaliseRepaymentPlan'

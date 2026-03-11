@@ -8,7 +8,7 @@ import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { ErrorHandling } from 'shared/errorHandling'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { MomentFactory } from 'shared/momentFactory'
 import { Moment } from 'moment'
 

@@ -8,7 +8,7 @@ import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { BreathingSpaceLiftDate } from '../models/bsLiftDate'
 import { DraftService } from 'services/draftService'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 
 /*  tslint:disable:no-default-export */
 export default express.Router()

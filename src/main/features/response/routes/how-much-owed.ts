@@ -12,7 +12,7 @@ import { Claim } from 'claims/models/claim'
 import { ValidationError } from '@hmcts/class-validator'
 import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 
 async function renderView (form: Form<HowMuchOwed>, res: express.Response, next: express.NextFunction) {
   try {

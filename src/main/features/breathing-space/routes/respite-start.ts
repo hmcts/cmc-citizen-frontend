@@ -9,7 +9,7 @@ import { MomentFactory } from 'shared/momentFactory'
 import { Moment } from 'moment'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { DraftService } from 'services/draftService'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { LocalDate } from 'forms/models/localDate'
 
 let breathingSpaceExternalId = null

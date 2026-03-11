@@ -10,7 +10,7 @@ import { YesNoOption } from 'models/yesNoOption'
 import { Claim } from 'claims/models/claim'
 
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { DraftService } from 'services/draftService'
 
 function renderView (form: Form<AcceptCourtOffer>, res: express.Response) {

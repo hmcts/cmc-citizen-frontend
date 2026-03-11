@@ -29,6 +29,12 @@
       "postcode-lookup/*": [
         "main/app/postcode-lookup/*"
       ],
+      "draft-store": [
+        "main/app/draft-store"
+      ],
+      "draft-store/*": [
+        "main/app/draft-store/*"
+      ],
       "drafts/*": [
         "main/app/drafts/*"
       ],

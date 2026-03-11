@@ -1,4 +1,4 @@
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import * as express from 'express'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Claim } from 'claims/models/claim'

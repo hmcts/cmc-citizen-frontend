@@ -457,16 +457,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hmcts/cmc-draft-store-middleware@npm:^2.0.1":
-  version: 2.0.1
-  resolution: "@hmcts/cmc-draft-store-middleware@npm:2.0.1"
-  dependencies:
-    "@hmcts/draft-store-client": "npm:^1.2.1"
-    moment: "npm:^2.19.1"
-  checksum: 10/4cbe58d3c988c6df30f5716db8e462a1644d08b36b6ed2fd71fe1a43d66763beb2dcbb967848d1e778ce2419c04ad9af7629862ab6f126d57bb1d4dd387a3668
-  languageName: node
-  linkType: hard
-
 "@hmcts/cmc-supported-browsers@npm:^1.0.1":
   version: 1.0.1
   resolution: "@hmcts/cmc-supported-browsers@npm:1.0.1"
@@ -494,17 +484,6 @@ __metadata:
   version: 0.3.12
   resolution: "@hmcts/ctsc-web-chat@npm:0.3.12"
   checksum: 10/37d5e14ace3480c5ed69af12a43ff9a3e749c2fa56497d90dd685e1159f999c91f8bc2e663d05851b7ff27c19986c2bfffa8784f2d33e535720fb91334cbf001
-  languageName: node
-  linkType: hard
-
-"@hmcts/draft-store-client@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "@hmcts/draft-store-client@npm:1.2.1"
-  dependencies:
-    moment: "npm:^2.18.1"
-    request: "npm:^2.81.0"
-    request-promise-native: "npm:^1.0.3"
-  checksum: 10/bf3ef7c5aabe9fa6bc17736ad60724d840ebacf37482b233fd681f1c9c35f6869abe90b3664a26ae21c16bb9acce0403b7f19239f00914e32e45b477d00ff776
   languageName: node
   linkType: hard
 
@@ -3248,12 +3227,10 @@ __metadata:
   dependencies:
     "@analytics/google-tag-manager": "npm:^0.5.3"
     "@hmcts/class-validator": "npm:^0.9.1-e"
-    "@hmcts/cmc-draft-store-middleware": "npm:^2.0.1"
     "@hmcts/cmc-supported-browsers": "npm:^1.0.1"
     "@hmcts/cmc-validators": "npm:^0.2.6"
     "@hmcts/cookie-encrypter": "npm:^1.0.1"
     "@hmcts/ctsc-web-chat": "npm:^0.3.10"
-    "@hmcts/draft-store-client": "npm:^1.2.1"
     "@hmcts/info-provider": "npm:^1.4.0"
     "@hmcts/nodejs-healthcheck": "npm:^1.8.6"
     "@hmcts/nodejs-logging": "npm:^4.0.4"
@@ -9535,7 +9512,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moment@npm:^2.18.1, moment@npm:^2.19.1, moment@npm:^2.19.3, moment@npm:^2.29.4":
+"moment@npm:^2.19.3, moment@npm:^2.29.4":
   version: 2.29.4
   resolution: "moment@npm:2.29.4"
   checksum: 10/157c5af5a0ba8196e577bc67feb583303191d21ba1f7f2af30b3b40d4c63a64d505ba402be2a1454832082fac6be69db1e0d186c3279dae191e6634b0c33705c
@@ -11368,19 +11345,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"request-promise-native@npm:^1.0.3":
-  version: 1.0.9
-  resolution: "request-promise-native@npm:1.0.9"
-  dependencies:
-    request-promise-core: "npm:1.1.4"
-    stealthy-require: "npm:^1.1.1"
-    tough-cookie: "npm:^2.3.3"
-  peerDependencies:
-    request: ^2.34
-  checksum: 10/6df0cf75cbddd08b568e462570fb63033f040efdf961f39af572e52821a831a13ee9027db7ba78f1d980759cc7913f2a12a34424deac5a0ec56c5d8ebbf45391
-  languageName: node
-  linkType: hard
-
 "request-promise@npm:^4.x":
   version: 4.2.6
   resolution: "request-promise@npm:4.2.6"
@@ -11395,7 +11359,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"request@npm:^2.81.0, request@npm:^2.83.0, request@npm:^2.88.0":
+"request@npm:^2.83.0, request@npm:^2.88.0":
   version: 2.88.2
   resolution: "request@npm:2.88.2"
   dependencies:

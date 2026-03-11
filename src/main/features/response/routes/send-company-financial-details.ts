@@ -3,7 +3,7 @@ import * as express from 'express'
 import { Paths } from 'response/paths'
 
 import { Claim } from 'claims/models/claim'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { DraftService } from 'services/draftService'
 import { ErrorHandling } from 'shared/errorHandling'

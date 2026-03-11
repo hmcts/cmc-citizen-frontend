@@ -5,7 +5,7 @@ import { Paths } from 'claim/paths'
 
 import { ClaimEligibilityGuard } from 'claim/guards/claimEligibilityGuard'
 import { RouterFinder } from 'shared/router/routerFinder'
-import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
+import { DraftMiddleware } from 'draft-store'
 import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
 // import { claimIssueRequestHandler } from 'claim-documents/index'

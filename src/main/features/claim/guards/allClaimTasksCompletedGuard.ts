@@ -2,7 +2,7 @@ import * as express from 'express'
 
 import { Paths } from 'claim/paths'
 import { TaskListBuilder } from 'claim/helpers/taskListBuilder'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { Logger } from '@hmcts/nodejs-logging'
 

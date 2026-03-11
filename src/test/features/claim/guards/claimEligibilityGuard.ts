@@ -13,7 +13,7 @@ import { cookieName as eligibilityCookieName } from 'eligibility/store'
 import { eligibleCookie } from 'test/data/cookie/eligibility'
 
 import { User } from 'idam/user'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { DraftClaim } from 'drafts/models/draftClaim'
 
 import * as idamServiceMock from 'test/http-mocks/idam'

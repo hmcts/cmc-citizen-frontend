@@ -10,7 +10,7 @@ import { ErrorHandling } from 'shared/errorHandling'
 import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { User } from 'idam/user'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 
 function renderView (form: Form<Phone>, res: express.Response): void {
   res.render(Paths.claimantPhonePage.associatedView, { form: form })

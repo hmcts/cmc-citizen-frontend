@@ -1,7 +1,7 @@
 import * as express from 'express'
 
 import { Paths } from 'claimant-response/paths'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { DraftService } from 'services/draftService'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 

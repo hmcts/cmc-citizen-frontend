@@ -12,7 +12,7 @@ import { GuardFactory } from 'response/guards/guardFactory'
 import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Claim } from 'claims/models/claim'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 
 function isRequestAllowed (res: express.Response): boolean {
   const draft: Draft<ResponseDraft> = res.locals.responseDraft

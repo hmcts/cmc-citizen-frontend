@@ -9,7 +9,7 @@ import { BreathingSpace } from 'features/claim/form/models/breathingSpace'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { DraftService } from 'services/draftService'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 
 function renderView (form: Form<BreathingSpace>, res: express.Response, next: express.NextFunction) {
   let bsType: any

@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { Logger } from '@hmcts/nodejs-logging'
 import { Claim } from 'claims/models/claim'
 import { Paths } from 'claimant-response/paths'

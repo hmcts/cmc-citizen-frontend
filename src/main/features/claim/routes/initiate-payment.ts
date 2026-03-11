@@ -2,7 +2,7 @@ import * as express from 'express'
 
 import { Paths } from 'claim/paths'
 import { DraftClaim } from 'drafts/models/draftClaim'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { Claim } from 'claims/models/claim'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { User } from 'idam/user'

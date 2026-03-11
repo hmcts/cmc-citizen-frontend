@@ -14,7 +14,7 @@ import { User } from 'idam/user'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { DraftService } from 'services/draftService'
-import { Draft as DraftWrapper } from '@hmcts/draft-store-client'
+import { Draft as DraftWrapper } from 'draft-store'
 import { Claim } from 'claims/models/claim'
 
 export abstract class AbstractPaymentDatePage<Draft> {

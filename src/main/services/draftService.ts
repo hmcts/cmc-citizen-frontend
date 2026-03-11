@@ -1,6 +1,6 @@
 import * as config from 'config'
 import { request } from 'client/request'
-import { Draft, DraftService as BaseDraftService, Secrets } from '@hmcts/draft-store-client'
+import { Draft, DraftService as BaseDraftService, Secrets } from 'draft-store'
 
 import { ServiceAuthTokenFactoryImpl } from 'shared/security/serviceTokenFactoryImpl'
 

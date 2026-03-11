@@ -21,7 +21,7 @@ import { getEarliestPaymentDateForPaymentPlan } from 'claimant-response/helpers/
 import { ValidationError } from '@hmcts/class-validator'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { User } from 'idam/user'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'
 import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
 import { DecisionType } from 'common/court-calculations/decisionType'

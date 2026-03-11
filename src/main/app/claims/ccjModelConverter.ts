@@ -14,7 +14,7 @@ import { calculateMonthIncrement } from 'common/calculate-month-increment/calcul
 import { MomentFactory } from 'shared/momentFactory'
 import { LocalDate } from 'forms/models/localDate'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
-import { Draft as DraftWrapper } from '@hmcts/draft-store-client'
+import { Draft as DraftWrapper } from 'draft-store'
 import { Offer } from 'claims/models/offer'
 
 function convertRepaymentPlan (repaymentPlan: RepaymentPlanForm): RepaymentPlan {

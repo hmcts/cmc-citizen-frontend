@@ -10,7 +10,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { ErrorHandling } from 'shared/errorHandling'
 import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { Claim } from 'claims/models/claim'
 
 function renderView (form: Form<Residence>, res: express.Response): void {

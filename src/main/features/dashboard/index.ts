@@ -4,7 +4,7 @@ import * as nunjucks from 'nunjucks'
 
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
 import { RouterFinder } from 'shared/router/routerFinder'
-import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
+import { DraftMiddleware } from 'draft-store'
 import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { OAuthHelper } from 'idam/oAuthHelper'

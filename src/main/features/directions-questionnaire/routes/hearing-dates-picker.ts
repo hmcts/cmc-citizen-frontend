@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { Paths } from 'directions-questionnaire/paths'
 import { ErrorHandling } from 'shared/errorHandling'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 import { Availability, ValidationErrors } from 'directions-questionnaire/forms/models/availability'
 import { DraftService } from 'services/draftService'

@@ -10,7 +10,7 @@ import { ErrorHandling } from 'shared/errorHandling'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { Claim } from 'claims/models/claim'
 
 async function renderView (form: Form<Defence>, res: express.Response, next: express.NextFunction) {

@@ -10,7 +10,7 @@ import { ErrorHandling } from 'shared/errorHandling'
 import { Claim } from 'claims/models/claim'
 import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 
 function renderView (form: Form<WhenDidYouPay>, res: express.Response) {
   res.render(Paths.whenDidYouPay.associatedView, {

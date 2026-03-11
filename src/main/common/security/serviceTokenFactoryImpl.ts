@@ -1,7 +1,7 @@
 import { IdamClient } from 'idam/idamClient'
 
 import { ServiceAuthToken } from 'idam/serviceAuthToken'
-import { ServiceAuthTokenFactory } from '@hmcts/draft-store-client'
+import { ServiceAuthTokenFactory } from 'draft-store'
 
 let token: ServiceAuthToken
 

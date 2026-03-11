@@ -2,7 +2,7 @@ import * as express from 'express'
 
 import { GuardFactory } from 'response/guards/guardFactory'
 
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { DraftService } from 'services/draftService'
 

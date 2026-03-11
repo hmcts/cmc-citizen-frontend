@@ -4,7 +4,7 @@ import { StatementOfMeansPaths, StatementOfMeansPaths as Paths } from 'response/
 import { StatementOfMeansStateGuard } from 'response/guards/statementOfMeansStateGuard'
 
 import { Claim } from 'claims/models/claim'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
 import { DraftService } from 'services/draftService'

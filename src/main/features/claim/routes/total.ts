@@ -6,7 +6,7 @@ import { FeesClient } from 'fees/feesClient'
 
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { ErrorHandling } from 'shared/errorHandling'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { YesNoOption } from 'models/yesNoOption'
 
 /* tslint:disable:no-default-export */

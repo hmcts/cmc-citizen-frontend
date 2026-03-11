@@ -4,7 +4,7 @@ import { GuardFactory } from 'response/guards/guardFactory'
 import { Logger } from '@hmcts/nodejs-logging'
 
 import { Claim } from 'claims/models/claim'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { Paths } from 'response/paths'
 import { ResponseDraft } from 'response/draft/responseDraft'
 

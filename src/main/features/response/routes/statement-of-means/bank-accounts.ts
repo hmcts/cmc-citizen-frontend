@@ -11,7 +11,7 @@ import { User } from 'idam/user'
 import { RoutablePath } from 'shared/router/routablePath'
 import { BankAccounts } from 'response/form/models/statement-of-means/bankAccounts'
 import { ResponseDraft } from 'response/draft/responseDraft'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { Claim } from 'claims/models/claim'
 
 const page: RoutablePath = StatementOfMeansPaths.bankAccountsPage

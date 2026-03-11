@@ -11,7 +11,7 @@ import { ErrorHandling } from 'main/common/errorHandling'
 import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
 import { Claim } from 'claims/models/claim'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { NoMediationReason } from 'mediation/form/models/NoMediationReason'
 

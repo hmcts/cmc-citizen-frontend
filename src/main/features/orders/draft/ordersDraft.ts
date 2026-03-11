@@ -1,4 +1,4 @@
-import { DraftDocument } from '@hmcts/cmc-draft-store-middleware'
+import { DraftDocument } from 'draft-store'
 import { DisagreeReason } from 'orders/form/models/disagreeReason'
 
 export class OrdersDraft extends DraftDocument {

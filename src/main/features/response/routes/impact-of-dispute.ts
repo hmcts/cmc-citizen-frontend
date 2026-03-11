@@ -8,7 +8,7 @@ import { ImpactOfDispute } from 'response/form/models/impactOfDispute'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { Claim } from 'claims/models/claim'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { ResponseDraft } from 'response/draft/responseDraft'
 
 function renderView (form: Form<ImpactOfDispute>, res: express.Response): void {

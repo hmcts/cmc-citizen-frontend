@@ -1,4 +1,4 @@
-import { DraftDocument } from '@hmcts/cmc-draft-store-middleware'
+import { DraftDocument } from 'draft-store'
 import { DatePaid } from 'paid-in-full/form/models/datePaid'
 
 export class DraftPaidInFull extends DraftDocument {

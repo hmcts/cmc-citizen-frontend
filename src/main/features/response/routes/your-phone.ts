@@ -9,7 +9,7 @@ import { ErrorHandling } from 'shared/errorHandling'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { Claim } from 'claims/models/claim'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 

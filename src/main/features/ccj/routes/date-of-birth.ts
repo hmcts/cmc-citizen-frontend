@@ -14,7 +14,7 @@ import { ErrorHandling } from 'shared/errorHandling'
 import { DraftService } from 'services/draftService'
 import { Claim } from 'claims/models/claim'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 
 import { Logger } from '@hmcts/nodejs-logging'
 

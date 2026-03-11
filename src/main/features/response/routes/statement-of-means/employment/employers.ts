@@ -11,7 +11,7 @@ import { DraftService } from 'services/draftService'
 import { Employers } from 'response/form/models/statement-of-means/employers'
 import { User } from 'idam/user'
 import { RoutablePath } from 'shared/router/routablePath'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { UUIDUtils } from 'shared/utils/uuidUtils'
 

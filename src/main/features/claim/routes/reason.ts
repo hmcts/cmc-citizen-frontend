@@ -9,7 +9,7 @@ import { ErrorHandling } from 'shared/errorHandling'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 
 function renderView (form: Form<Reason>, res: express.Response): void {
   const draft: Draft<DraftClaim> = res.locals.claimDraft

@@ -11,7 +11,7 @@ import { Claim } from 'claims/models/claim'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { CCJPaymentOption } from 'ccj/form/models/ccjPaymentOption'
 import { User } from 'idam/user'
-import { Draft as DraftWrapper } from '@hmcts/draft-store-client'
+import { Draft as DraftWrapper } from 'draft-store'
 import { DraftService } from 'services/draftService'
 import { retrievePaymentOptionsFromClaim } from 'claims/ccjModelConverter'
 

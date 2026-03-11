@@ -8,7 +8,7 @@ import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
 import { RoutablePath } from 'shared/router/routablePath'
 import { ClaimantTimeline } from 'claim/form/models/claimantTimeline'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { DraftClaim } from 'drafts/models/draftClaim'
 
 const page: RoutablePath = Paths.timelinePage

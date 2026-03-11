@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { Paths } from 'claimant-response/paths'
 import { TaskListBuilder } from 'claimant-response/helpers/taskListBuilder'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'

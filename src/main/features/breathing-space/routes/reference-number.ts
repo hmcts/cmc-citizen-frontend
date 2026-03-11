@@ -7,7 +7,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { ErrorHandling } from 'shared/errorHandling'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { DraftService } from 'services/draftService'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 
 let breathingSpaceExternalId = null
 

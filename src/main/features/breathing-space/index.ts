@@ -6,10 +6,10 @@ import { Paths } from 'breathing-space/paths'
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
 import { RouterFinder } from 'shared/router/routerFinder'
 import { OAuthHelper } from 'idam/oAuthHelper'
-import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
+import { DraftMiddleware } from 'draft-store'
 import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { BreathingSpace } from 'features/claim/form/models/breathingSpace'
 
 function breathingSpaceRequestHandler (): express.RequestHandler {

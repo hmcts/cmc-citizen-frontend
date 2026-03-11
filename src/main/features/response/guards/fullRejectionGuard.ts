@@ -3,7 +3,7 @@ import * as express from 'express'
 import { GuardFactory } from 'response/guards/guardFactory'
 import { Logger } from '@hmcts/nodejs-logging'
 
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { NotFoundError } from 'errors'
 

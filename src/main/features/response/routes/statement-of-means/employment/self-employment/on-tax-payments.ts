@@ -12,7 +12,7 @@ import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
 import { RoutablePath } from 'shared/router/routablePath'
 import { ResponseDraft } from 'response/draft/responseDraft'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { UUIDUtils } from 'shared/utils/uuidUtils'
 
 const page: RoutablePath = StatementOfMeansPaths.onTaxPaymentsPage

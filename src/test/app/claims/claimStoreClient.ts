@@ -9,7 +9,7 @@ import { claimDraft as claimDraftData, claimDraftHelpWithFees } from 'test/data/
 import { claimData } from 'test/data/entity/claimData'
 import { RequestOptions } from 'client/httpClient'
 import { claimStoreApiUrl, ClaimStoreClient } from 'claims/claimStoreClient'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { Claim } from 'claims/models/claim'
 import { ClaimData } from 'claims/models/claimData'

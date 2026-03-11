@@ -1,7 +1,7 @@
 /* tslint:disable:no-default-export */
 import * as express from 'express'
 import { Paths } from 'claim/paths'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { Form } from 'forms/form'
 import { HelpWithFees } from 'claim/form/models/helpWithFees'

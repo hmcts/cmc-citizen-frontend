@@ -14,7 +14,7 @@ import { IndividualDetails } from 'forms/models/individualDetails'
 import { PartyType } from 'common/partyType'
 import { Party } from 'claims/models/details/yours/party'
 import { DraftService } from 'services/draftService'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { Claim } from 'claims/models/claim'
 import {

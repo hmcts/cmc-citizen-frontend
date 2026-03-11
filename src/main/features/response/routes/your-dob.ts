@@ -9,7 +9,7 @@ import { ErrorHandling } from 'shared/errorHandling'
 import { IndividualDetails } from 'forms/models/individualDetails'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Claim } from 'claims/models/claim'
 

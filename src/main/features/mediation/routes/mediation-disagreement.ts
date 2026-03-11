@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { Paths } from 'mediation/paths'
 import { ErrorHandling } from 'main/common/errorHandling'
 import { FormValidator } from 'main/app/forms/validation/formValidator'

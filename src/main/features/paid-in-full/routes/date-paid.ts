@@ -2,7 +2,7 @@ import * as express from 'express'
 
 import { Paths } from 'paid-in-full/paths'
 import { ErrorHandling } from 'shared/errorHandling'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 import { DraftPaidInFull } from 'paid-in-full/draft/draftPaidInFull'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'

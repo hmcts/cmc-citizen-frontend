@@ -9,7 +9,7 @@ import { Moment } from 'moment'
 import { BreathingType } from '../models/bsType'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { DraftService } from 'services/draftService'
-import { Draft } from '@hmcts/draft-store-client'
+import { Draft } from 'draft-store'
 
 function renderView (form: Form<BreathingType>, res: express.Response, next: express.NextFunction) {
   const pastDate: Moment = MomentFactory.currentDate().subtract(1, 'day')
