@@ -162,7 +162,7 @@
     "sinon-express-mock": "^2.2.1",
     "sonarqube-scanner": "^2.8.0",
     "supertest": "^4.0.2",
-    "tar": "7.5.8",
+    "tar": "7.5.11",
     "ts-mockito": "^2.6.1",
     "tslint": "^5.20.1",
     "tslint-config-standard": "^9.0.0",
@@ -218,7 +218,7 @@
     "cookiejar": "2.1.4",
     "ajv": "6.12.3",
     "formidable": "^3.2.4",
-    "tar": "7.5.8",
+    "tar": "7.5.11",
     "node-gyp": "11.0.0",
     "brace-expansion": "2.0.2",
     "tough-cookie": "4.1.3"
