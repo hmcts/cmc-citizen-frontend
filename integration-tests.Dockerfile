@@ -14,6 +14,7 @@ RUN PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true yarn install --immutable && yarn cache
 USER hmcts
 
 COPY tsconfig.json types default.conf.js saucelabs.conf.js /usr/src/app/
+COPY ./config /usr/src/app/config
 COPY ./src/main/app/client /usr/src/app/src/main/app/client
 COPY ./src/main/app/logging /usr/src/app/src/main/app/logging
 COPY ./src/integration-test /usr/src/app/src/integration-test
