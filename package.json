@@ -40,7 +40,7 @@
     "@hmcts/cmc-validators": "^0.2.6",
     "@hmcts/cookie-encrypter": "^1.0.1",
     "@hmcts/ctsc-web-chat": "^0.3.10",
-    "@hmcts/draft-store-client": "^1.2.1",
+    "@hmcts/draft-store-client": "patch:@hmcts/draft-store-client@npm%3A1.2.1#~/.yarn/patches/@hmcts-draft-store-client-npm-1.2.1-f4227410a7.patch",
     "@hmcts/info-provider": "^1.4.0",
     "@hmcts/nodejs-healthcheck": "^1.8.6",
     "@hmcts/nodejs-logging": "^4.0.4",
@@ -66,7 +66,7 @@
     "hpkp": "^2.0.2",
     "http-status-codes": "^1.4.0",
     "i18next": "^18.0.0",
-    "i18next-conv": "^10.2.0",
+    "i18next-conv": "^16.0.0",
     "i18next-http-middleware": "^3.9.0",
     "i18next-sprintf-postprocessor": "^0.2.2",
     "ioredis": "^5.4.1",
@@ -234,7 +234,8 @@
     "table/ajv": "^8.18.0",
     "import-in-the-middle": "^1.14.4",
     "express": "4.21.2",
-    "@tootallnate/once": "3.0.1"
+    "@tootallnate/once": "3.0.1",
+    "@hmcts/draft-store-client@npm:^1.2.1": "patch:@hmcts/draft-store-client@npm%3A1.2.1#~/.yarn/patches/@hmcts-draft-store-client-npm-1.2.1-f4227410a7.patch"
   },
   "husky": {
     "hooks": {
