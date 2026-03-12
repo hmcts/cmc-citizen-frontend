@@ -1,6 +1,6 @@
 import * as config from 'config'
 import { User } from 'idam/user'
-import * as ld from 'launchdarkly-node-server-sdk'
+import * as ld from '@launchdarkly/node-server-sdk'
 
 const sdkKey: string = config.get<string>('secrets.cmc.launchDarkly-sdk-key')
 const ldConfig: ld.LDOptions = {
@@ -21,23 +21,20 @@ export class LaunchDarklyClient {
   }
 
   async userVariation (user: User, roles: string[], featureKey: string, offlineDefault: ld.LDFlagValue): Promise<ld.LDFlagValue> {
-    const ldUser: ld.LDUser = {
+    const ldContext: ld.LDContext = {
+      kind: 'user',
       key: user.id,
-      custom: {
-        roles
-      }
+      roles
     }
-    return LaunchDarklyClient.client.variation(featureKey, ldUser, offlineDefault)
+    return LaunchDarklyClient.client.variation(featureKey, ldContext, offlineDefault)
   }
 
   async serviceVariation (featureKey: string, offlineDefault: ld.LDFlagValue): Promise<ld.LDFlagValue> {
-    const roles: string[] = []
-    const ldUser: ld.LDUser = {
+    const ldContext: ld.LDContext = {
+      kind: 'user',
       key: 'citizen-frontend',
-      custom: {
-        roles
-      }
+      roles: []
     }
-    return LaunchDarklyClient.client.variation(featureKey, ldUser, offlineDefault)
+    return LaunchDarklyClient.client.variation(featureKey, ldContext, offlineDefault)
   }
 }
