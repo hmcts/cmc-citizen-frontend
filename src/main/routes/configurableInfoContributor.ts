@@ -23,7 +23,7 @@ export class ConfigurableInfoContributor extends InfoContributor {
       return {
         error: `Error calling ${this.url}`,
         statusText: error?.message,
-        body: error?.response?.body ?? error?.response?.data
+        body: error?.body ?? error?.response?.body ?? error?.response?.data
       }
     }
   }

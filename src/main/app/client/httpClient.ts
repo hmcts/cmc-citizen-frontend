@@ -45,7 +45,7 @@ function toAxiosConfig (options: RequestOptions, method: Method): AxiosRequestCo
     headers: options.headers ?? {},
     params: options.qs,
     maxRedirects: 0,
-    validateStatus: (status) => status < 500
+    validateStatus: () => true
   }
   if (options.auth) {
     cfg.auth = options.auth
@@ -111,29 +111,17 @@ function createClient (defaultOptions: Partial<RequestOptions> = {}, retries = m
     const options = { ...defaultOptions, ...normalizeOptions(uriOrOptions, second) }
     const resolveWithFullResponse = options.resolveWithFullResponse ?? options.fullResponse ?? false
     const axiosConfig = toAxiosConfig(options, method)
-    return axiosInstance.request(axiosConfig)
-      .then((response) => {
-        if (options.simple !== false && response.status >= 400) {
-          const err: any = new Error(`Request failed with status ${response.status}`)
-          err.statusCode = response.status
-          err.response = response
-          err.body = response.data
-          err.error = response.data
-          throw err
-        }
-        return wrap(resolveWithFullResponse)(response)
-      })
-      .catch((err: any) => {
-        if (err.response) {
-          const errOut: any = new Error(`Request failed with status ${err.response.status}`)
-          errOut.statusCode = err.response.status
-          errOut.response = err.response
-          errOut.body = err.response.data
-          errOut.error = err.response.data
-          throw errOut
-        }
+    return axiosInstance.request(axiosConfig).then((response) => {
+      if (options.simple !== false && response.status >= 400) {
+        const err: any = new Error(`Request failed with status ${response.status}`)
+        err.statusCode = response.status
+        err.response = response
+        err.body = response.data
+        err.error = response.data
         throw err
-      })
+      }
+      return wrap(resolveWithFullResponse)(response)
+    })
   }
 
   const deleteFn = request('delete')

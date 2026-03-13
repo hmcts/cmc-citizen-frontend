@@ -71,6 +71,7 @@ export class OsPlacesClient {
       }
     } catch (err: any) {
       if (err?.message === 'Authentication failed' || err?.message === 'Error with OS Places service') throw err
+      if (err?.statusCode >= 500) throw err
       return { addresses: [], isValid: false }
     }
   }
