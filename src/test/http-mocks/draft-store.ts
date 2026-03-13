@@ -1166,7 +1166,7 @@ export function rejectFind (reason: string = 'HTTP error'): mock.Scope {
 
 export function resolveUpdate (id: number = 100): mock.Scope {
   return mock(serviceBaseURL)
-    .put(`/drafts/${id}`)
+    .put(new RegExp(`/drafts/${id}$`))
     .reply(HttpStatus.OK)
 }
 
@@ -1184,18 +1184,18 @@ export function rejectSave (id: number = 100, reason: string = 'HTTP error'): mo
 
 export function rejectUpdate (id: number = 100, reason: string = 'HTTP error'): mock.Scope {
   return mock(serviceBaseURL)
-    .put(`/drafts/${id}`)
+    .put(new RegExp(`/drafts/${id}$`))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
 export function resolveDelete (id: number = 100): mock.Scope {
   return mock(serviceBaseURL)
-    .delete(`/drafts/${id}`)
+    .delete(new RegExp(`/drafts/${id}$`))
     .reply(HttpStatus.OK)
 }
 
 export function rejectDelete (id: number = 100, reason: string = 'HTTP error'): mock.Scope {
   return mock(serviceBaseURL)
-    .delete(`/drafts/${id}`)
+    .delete(new RegExp(`/drafts/${id}$`))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
