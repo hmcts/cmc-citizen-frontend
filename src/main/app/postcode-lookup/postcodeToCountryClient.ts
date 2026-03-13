@@ -1,12 +1,9 @@
-import * as requestDefault from 'request'
-import * as requestPromise from 'request-promise-native'
+import { RequestAPI, request as requestClient } from 'client/request'
 
 export class PostcodeToCountryClient {
   constructor (
     private readonly apiToken: string,
-    private readonly request: requestDefault.RequestAPI<requestPromise.RequestPromise,
-        requestPromise.RequestPromiseOptions,
-        requestDefault.RequiredUriUrl> = requestPromise,
+    private readonly request: RequestAPI = requestClient,
     private readonly apiUrl: string = 'https://api.os.uk'
   ) {}
 
@@ -22,7 +19,7 @@ export class PostcodeToCountryClient {
       simple: false,
       uri: uri
     })
-    .then((response) => response.body.results[0]['GAZETTEER_ENTRY']['COUNTRY'])
+    .then((response: any) => response.body.results[0]['GAZETTEER_ENTRY']['COUNTRY'])
     .catch(reason => Promise.reject(`Unable to find country for '${postcode}': ${reason}`))
   }
 }

@@ -2,7 +2,7 @@ import { claimApiBaseUrl } from 'claims/claimStoreClient'
 import { MomentFormatter } from 'utils/momentFormatter'
 import { Moment } from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
-import * as requestPromise from 'request-promise-native'
+import { request } from 'client/request'
 
 export class CalendarClient {
   constructor (
@@ -24,7 +24,7 @@ export class CalendarClient {
     }
 
     const formattedDate: string = encodeURI(MomentFormatter.formatDate(date))
-    return requestPromise
+    return request
       .get({
         json: true,
         uri: `${this.url}?date=${formattedDate}`

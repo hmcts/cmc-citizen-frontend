@@ -19,6 +19,15 @@ const stylesheetsDirectory = `${assetsDirectory}/stylesheets`
 const webChatDirectory = `${assetsDirectory}/webchat`
 const antennaWebChatDirectory = `./src/main/public/assets`
 const govUkFronendStylesheets = `${stylesheetsDirectory}/govuk-frontend`
+// Silence slash-div and other deprecation warnings from Sass (incl. from govuk node_modules)
+const sassSilenceSlashDiv = {
+  silenceDeprecations: ['slash-div'],
+  quietDeps: true,
+  logger: {
+    warn () { /* silence deprecation warnings from deps */ },
+    debug () { /* no-op */ }
+  }
+}
 
 gulp.task('sass', (done) => {
   gulp.src(stylesheetsDirectory + '/*.scss')
@@ -27,9 +36,9 @@ gulp.task('sass', (done) => {
       includePaths: [
         govUkFrontendToolkitRoot,
         govUkElementRoot
-      ]
+      ],
+      ...sassSilenceSlashDiv
     }))
-    .pipe(sass())
     .pipe(gulp.dest(stylesheetsDirectory))
     .pipe(livereload())
     done()
@@ -103,12 +112,12 @@ function copyCookieBanner() {
 gulp.task('sass-govuk-frontend', (done) => {
   gulp.src(govUkFrontendRoot + '/*.scss')
     .pipe(plumber())
-    .pipe(sass())
+    .pipe(sass(sassSilenceSlashDiv))
     .pipe(gulp.dest(`${stylesheetsDirectory}/govuk-frontend`))
 
   gulp.src(govUkFronendStylesheets + '/*.scss')
     .pipe(plumber())
-    .pipe(sass())
+    .pipe(sass(sassSilenceSlashDiv))
     .pipe(gulp.dest(govUkFronendStylesheets))
     .pipe(livereload())
   done()

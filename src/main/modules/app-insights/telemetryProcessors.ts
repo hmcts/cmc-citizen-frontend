@@ -1,4 +1,4 @@
-import Envelope = require('applicationinsights/out/Declarations/Contracts/Generated/Envelope')
+import Envelope from 'applicationinsights/out/Declarations/Contracts/Generated/Envelope'
 import { LoggerInstance } from 'winston'
 
 const fileRegexp = new RegExp('(\\..{2,5}$)')

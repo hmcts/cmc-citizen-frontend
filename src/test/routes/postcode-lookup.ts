@@ -9,11 +9,13 @@ import { mockPostcodeLookupResponse } from '../data/entity/mockPostcodeLookupRes
 describe('PostCode Lookup', () => {
 
   const mockPostcodeServer = 'https://api.os.uk'
-  const mockPostcodePath = /\/search\/places\/v1\/postcode\?.+/
+  const mockPostcodePath = /\/search\/places\/v1\/postcode/
+  const mockPostcodeQuery = { postcode: 'SW2 1AN', dataset: 'DPA,LPI', key: 'AAAAAAA' }
 
   it('should return correct address when postCode lookup is used', async () => {
     mock(mockPostcodeServer)
       .get(mockPostcodePath)
+      .query(mockPostcodeQuery)
       .reply(200, mockPostcodeLookupResponse)
 
     await request(app)
@@ -34,15 +36,20 @@ describe('PostCode Lookup', () => {
       .expect(res => expect(res).to.badRequest.withText('Authentication failed'))
   })
 
-  it('should produce appinsights when failed', async () => {
-
+  it('should return empty results when postcode lookup returns a client error', async () => {
     mock(mockPostcodeServer)
       .get(mockPostcodePath)
+      .query(true)
       .reply(400, 'Postcode lookup failed')
 
     await request(app)
       .get(Paths.postcodeLookupProxy.uri)
       .query({ 'postcode': 'SW2 1AN' })
-      .expect(res => expect(res).to.badRequest.withText('Postcode lookup failed'))
+      .expect(200)
+      .expect(res => {
+        const body = JSON.parse(res.text)
+        expect(body.addresses).to.deep.equal([])
+        expect(body.isValid).to.equal(false)
+      })
   })
 })

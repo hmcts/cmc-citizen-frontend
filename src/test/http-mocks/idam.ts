@@ -1,7 +1,9 @@
-import * as config from 'config'
+import * as configNs from 'config'
 import * as mock from 'nock'
 import * as HttpStatus from 'http-status-codes'
 
+// ESM loader exposes CJS module.exports as .default; CJS gives the object directly
+const config = (configNs as { default?: typeof configNs }).default ?? configNs
 const apiServiceBaseURL: string = config.get<string>('idam.api.url')
 const s2sAuthServiceBaseURL = config.get<string>('idam.service-2-service-auth.url')
 

@@ -6,9 +6,9 @@ jobs:
     runs-on: macOS-latest
     steps:
       - uses: actions/checkout@master
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v4
         with:
-          node-version: '18.x'
+          node-version: '24'
       - run: yarn install
       - run: npm install --global gulp-cli
       - run: gulp copy-files
