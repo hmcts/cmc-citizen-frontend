@@ -96,6 +96,6 @@ export class IdamClient {
       }
     }
 
-    requestClient(options)
+    return requestClient(options)
   }
 }

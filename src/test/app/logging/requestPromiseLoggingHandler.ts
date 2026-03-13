@@ -42,7 +42,7 @@ describe('RequestLoggingHandler', () => {
     expect(() => new RequestLoggingHandler(undefined)).to.throw(Error)
   })
 
-  describe('request-promise http calls proxy', () => {
+  describe('http calls proxy', () => {
     let logRequestCall
 
     beforeEach(() => {
