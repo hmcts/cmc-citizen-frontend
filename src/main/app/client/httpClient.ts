@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, Method } from 'axios'
-import https from 'https'
+import * as https from 'https'
 import axiosRetry from 'axios-retry'
 import * as config from 'config'
 
