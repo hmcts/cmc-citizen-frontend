@@ -1,6 +1,71 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "local>hmcts/.github:renovate-config"
+    "local>hmcts/.github:renovate-config",
+    "local>hmcts/.github//renovate/automerge-all"
+  ],
+  "labels": [
+    "dependencies"
+  ],
+  "automergeSchedule": ["after 8am and before 4pm every weekday"],
+  "schedule": ["after 8am and before 11am every weekday"],
+  "rebaseWhen": "conflicted",
+  "automergeStrategy": "squash",
+  "prConcurrentLimit": 5,
+  "helmv3": {
+    "bumpVersion": "patch"
+  },
+  "packageRules": [
+    {
+      "matchManagers": ["helmv3"],
+      "groupName": "Helm chart updates",
+      "groupSlug": "helm-charts",
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeSchedule": ["before 4pm every weekday"]
+    },
+    {
+      "matchPackageNames": ["eslint"],
+      "matchPackagePatterns": ["^@typescript-eslint/", "^eslint-", "^babel-eslint"],
+      "groupName": "ESLint",
+      "groupSlug": "eslint",
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeSchedule": ["before 4pm every weekday"]
+    },
+    {
+      "matchPackageNames": ["typescript"],
+      "matchPackagePatterns": ["^@types/"],
+      "groupName": "TypeScript",
+      "groupSlug": "typescript",
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeSchedule": ["before 4pm every weekday"]
+    },
+    {
+      "matchPackagePatterns": ["^@hmcts/"],
+      "groupName": "HMCTS packages",
+      "groupSlug": "hmcts",
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeSchedule": ["before 4pm every weekday"]
+    },
+    {
+      "matchPackageNames": ["mocha", "chai", "sinon", "nock", "nyc", "supertest", "codeceptjs", "webdriverio"],
+      "matchPackagePatterns": ["^@types/mocha", "^@types/chai", "^@types/sinon", "^mocha-", "^sinon-", "^chai-"],
+      "groupName": "Testing tools",
+      "groupSlug": "testing",
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeSchedule": ["before 4pm every weekday"]
+    },
+    {
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "All non-major updates",
+      "groupSlug": "all-non-major",
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeSchedule": ["before 4pm every weekday"]
+    }
   ]
 }
