@@ -20,3 +20,25 @@ modifying the downloaded dependency subchart.
 true
 {{- end -}}
 {{- end -}}
+
+{{/*
+Some nested Bitnami-postgresql versions expect a helper called `postgresql.port`
+that reads `.Values.service.port`. In some of our nested charts that value is
+missing, causing:
+  nil pointer evaluating interface {}.port
+
+Defining the helper here makes Helm templating resilient and defaults to
+5432 (the Bitnami chart default).
+*/}}
+{{- define "postgresql.port" -}}
+{{- if and .Values.service (hasKey .Values.service "port") -}}
+{{- $port := (index .Values.service "port") -}}
+{{- if $port -}}
+{{ $port }}
+{{- else -}}
+5432
+{{- end -}}
+{{- else -}}
+5432
+{{- end -}}
+{{- end -}}
