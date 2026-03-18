@@ -86,6 +86,19 @@ idam-pr:
   enabled: false
 ccd:
   enabled: false
+  # Prevent nil pointer in ccd->ccpay->ccd->draft-store-service->java deployment-tests template
+  ccpay:
+    ccd:
+      draft-store-service:
+        java:
+          smoketests:
+            enabled: false
+      ccpay:
+        ccd:
+          draft-store-service:
+            java:
+              smoketests:
+                enabled: false
   logstash:
     image: hmctsprod.azurecr.io/ccd/logstash
     imageTag: ccd-cmc-logstash-latest

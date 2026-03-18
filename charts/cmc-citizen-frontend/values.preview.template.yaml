@@ -158,6 +158,19 @@ cmc-claim-store:
         password: hmcts
 ccd:
   enabled: true
+  # Prevent nil pointer in ccd->ccpay->ccd->draft-store-service->java deployment-tests template
+  ccpay:
+    ccd:
+      draft-store-service:
+        java:
+          smoketests:
+            enabled: false
+      ccpay:
+        ccd:
+          draft-store-service:
+            java:
+              smoketests:
+                enabled: false
   ccd:
     s2s:
       enabled: false
