@@ -1,5 +1,5 @@
 # ---- Base image ----
-FROM hmctssbox.azurecr.io/base/node:24-alpine as base
+FROM hmctsprod.azurecr.io/base/node:22-alpine as base
 
 ENV PUPPETEER_SKIP_DOWNLOAD=true
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
