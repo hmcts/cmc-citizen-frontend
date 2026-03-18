@@ -99,6 +99,10 @@ ccd:
             java:
               smoketests:
                 enabled: false
+  draft-store-service:
+    java:
+      smoketests:
+        enabled: false
   logstash:
     image: hmctsprod.azurecr.io/ccd/logstash
     imageTag: ccd-cmc-logstash-latest
