@@ -13,24 +13,24 @@ maintainers:
 dependencies:
   - name: nodejs
     version: 3.2.0
-    repository: 'oci://hmctspublic.azurecr.io/helm'
+    repository: 'oci://hmctsprod.azurecr.io/helm'
 
   - name: idam-pr
     version: 2.2.7
-    repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
+    repository: 'https://hmctsprod.azurecr.io/helm/v1/repo/'
     condition: idam-pr.enabled
 
   - name: cmc-claim-store
     version: 4.1.43
-    repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
+    repository: 'https://hmctsprod.azurecr.io/helm/v1/repo/'
     condition: cmc-claim-store.enabled
 
   - name: ccd
     version: 8.0.27
-    repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
+    repository: 'https://hmctsprod.azurecr.io/helm/v1/repo/'
     condition: ccd.enabled
 
   - name: xui-webapp
     version: ~1.0.8
-    repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
+    repository: 'https://hmctsprod.azurecr.io/helm/v1/repo/'
     condition: xui-webapp.enabled
