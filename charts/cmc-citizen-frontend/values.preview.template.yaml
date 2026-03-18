@@ -198,6 +198,16 @@ ccd:
     postgresPassword: hmcts
     devMode: true
 
+  # Some nested java subcharts (e.g. draft-store-service under ccpay's embedded ccd)
+  # render a deployment-tests template guarded by `.Values.smoketests.enabled`.
+  # If `smoketests` is absent, Helm lint fails with a nil pointer.
+  ccpay:
+    ccd:
+      draft-store-service:
+        java:
+          smoketests:
+            enabled: false
+
   ccd-admin-web:
     nodejs:
       imagePullPolicy: Always
