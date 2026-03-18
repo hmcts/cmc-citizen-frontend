@@ -92,6 +92,8 @@ ccd:
         java:
           smoketests:
             enabled: false
+          functionaltests:
+            enabled: false
   logstash:
     image: hmctsprod.azurecr.io/ccd/logstash
     imageTag: ccd-cmc-logstash-latest

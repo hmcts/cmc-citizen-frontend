@@ -207,6 +207,8 @@ ccd:
         java:
           smoketests:
             enabled: false
+          functionaltests:
+            enabled: false
 
   ccd-admin-web:
     nodejs:
