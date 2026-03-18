@@ -14,5 +14,9 @@ By defining the legacy helper name here, we unblock templating without
 modifying the downloaded dependency subchart.
 */}}
 {{- define "postgresql.readReplicas.createExtendedConfigmap" -}}
-{{- include "postgresql.v1.readReplicas.createExtendedConfigmap" . -}}
+{{- /* This template is only used as a boolean gate by Bitnami's
+       templates/read/extended-configmap.yaml (it does not render the configmap itself). */ -}}
+{{- if .Values.readReplicas.extendedConfiguration -}}
+true
+{{- end -}}
 {{- end -}}
