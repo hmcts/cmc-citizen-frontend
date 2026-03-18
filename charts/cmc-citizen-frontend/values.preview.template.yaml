@@ -169,6 +169,8 @@ ccd:
             enabled: false
           smoketestscron:
             enabled: false
+          functionaltestscron:
+            enabled: false
       ccpay:
         ccd:
           draft-store-service:
@@ -179,6 +181,8 @@ ccd:
                 enabled: false
               smoketestscron:
                 enabled: false
+              functionaltestscron:
+                enabled: false
   draft-store-service:
     java:
       smoketests:
@@ -186,6 +190,8 @@ ccd:
       functionaltests:
         enabled: false
       smoketestscron:
+        enabled: false
+      functionaltestscron:
         enabled: false
   ccd:
     s2s:
