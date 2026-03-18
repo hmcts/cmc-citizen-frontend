@@ -17,20 +17,20 @@ dependencies:
 
   - name: idam-pr
     version: 2.2.7
-    repository: 'https://hmctsprod.azurecr.io/helm/v1/repo/'
+    repository: 'oci://hmctsprod.azurecr.io/helm'
     condition: idam-pr.enabled
 
   - name: cmc-claim-store
     version: 4.1.43
-    repository: 'https://hmctsprod.azurecr.io/helm/v1/repo/'
+    repository: 'oci://hmctsprod.azurecr.io/helm'
     condition: cmc-claim-store.enabled
 
   - name: ccd
     version: 8.0.27
-    repository: 'https://hmctsprod.azurecr.io/helm/v1/repo/'
+    repository: 'oci://hmctsprod.azurecr.io/helm'
     condition: ccd.enabled
 
   - name: xui-webapp
     version: ~1.0.8
-    repository: 'https://hmctsprod.azurecr.io/helm/v1/repo/'
+    repository: 'oci://hmctsprod.azurecr.io/helm'
     condition: xui-webapp.enabled
