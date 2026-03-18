@@ -88,6 +88,8 @@ ccd:
   enabled: false
   ccpay:
     ccd:
+      global:
+        ccdCaseManagementWebIngress: ccd-case-management-web-{{ .Values.global.environment }}
       draft-store-service:
         java:
           smoketests:

@@ -183,6 +183,7 @@ ccd:
   global:
     ccdApiGatewayIngress: gateway-${SERVICE_FQDN}
     ccdAdminWebIngress: ccd-admin-web-${SERVICE_FQDN}
+    ccdCaseManagementWebIngress: ccd-case-management-web-${SERVICE_FQDN}
     ccdDataStoreUrl: http://${SERVICE_NAME}-ccd-data-store-api
     amRoleAssignmentServiceUrl: http://am-role-assignment-service-aat.service.core-compute-aat.internal
     idamApiUrl: https://idam-api.aat.platform.hmcts.net
@@ -203,6 +204,8 @@ ccd:
   # If `smoketests` is absent, Helm lint fails with a nil pointer.
   ccpay:
     ccd:
+      global:
+        ccdCaseManagementWebIngress: ccd-case-management-web-${SERVICE_FQDN}
       draft-store-service:
         java:
           smoketests:
