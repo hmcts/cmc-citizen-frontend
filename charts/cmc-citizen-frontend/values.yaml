@@ -96,6 +96,8 @@ ccd:
             enabled: false
           smoketestscron:
             enabled: false
+          functionaltestscron:
+            enabled: false
   logstash:
     image: hmctsprod.azurecr.io/ccd/logstash
     imageTag: ccd-cmc-logstash-latest

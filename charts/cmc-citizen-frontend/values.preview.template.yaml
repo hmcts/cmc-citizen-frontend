@@ -211,6 +211,8 @@ ccd:
             enabled: false
           smoketestscron:
             enabled: false
+          functionaltestscron:
+            enabled: false
 
   ccd-admin-web:
     nodejs:
