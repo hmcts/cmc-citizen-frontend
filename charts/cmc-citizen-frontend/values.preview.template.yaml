@@ -139,6 +139,8 @@ cmc-claim-store:
         tag: '11.6.0'
         registry: hmctsprod.azurecr.io
         repository: imported/bitnami/postgresql
+      readReplicas:
+        replicaCount: 0
       primary:
         persistence:
           enabled: false
