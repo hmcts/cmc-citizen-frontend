@@ -16,7 +16,7 @@ dependencies:
     repository: 'oci://hmctsprod.azurecr.io/helm'
 
   - name: idam-pr
-    version: 2.2.7
+    version: ~2.3.0
     repository: 'oci://hmctsprod.azurecr.io/helm'
     condition: idam-pr.enabled
 
@@ -26,11 +26,11 @@ dependencies:
     condition: cmc-claim-store.enabled
 
   - name: ccd
-    version: 8.0.27
+    version: 9.2.2
     repository: 'oci://hmctsprod.azurecr.io/helm'
     condition: ccd.enabled
 
   - name: xui-webapp
-    version: ~1.0.8
+    version: 1.0.40
     repository: 'oci://hmctsprod.azurecr.io/helm'
     condition: xui-webapp.enabled
