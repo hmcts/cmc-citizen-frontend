@@ -22,7 +22,7 @@ dependencies:
 
   - name: cmc-claim-store
     version: 4.1.43
-    repository: 'oci://hmctsprod.azurecr.io/helm'
+    repository: 'https://hmctsprod.azurecr.io/helm/v1/repo/'
     condition: cmc-claim-store.enabled
 
   - name: ccd
