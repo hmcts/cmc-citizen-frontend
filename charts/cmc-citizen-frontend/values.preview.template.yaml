@@ -134,6 +134,7 @@ cmc-claim-store:
     postgresql:
       enabled: true
       releaseNameOverride: ${SERVICE_NAME}-postgresql
+      architecture: standalone
       image:
         tag: '11.6.0'
         registry: hmctsprod.azurecr.io
