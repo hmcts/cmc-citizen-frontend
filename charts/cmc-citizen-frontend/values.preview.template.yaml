@@ -233,7 +233,7 @@ ccd:
           key: PASSWORD
           disabled: true
       keyVaults: [ ]
-      ingressHost: ccd-definition-store-${SERVICE_FQDN}
+      ingressHost: ccd-user-profile-${SERVICE_FQDN}
 
   ccd-definition-importer:
     debug: true
