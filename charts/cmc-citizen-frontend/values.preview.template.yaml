@@ -226,6 +226,7 @@ ccd:
       image: hmctsprod.azurecr.io/ccd/user-profile-api:latest
       environment:
         USER_PROFILE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_definition,ccd_admin,cmc_claim_store,xui_webapp,xuiwebapp
+        USER_PROFILE_DB_OPTIONS: "?stringtype=unspecified"
       secrets:
         USER_PROFILE_DB_PASSWORD:
           secretRef: "{{ .Values.global.postgresSecret }}"
@@ -260,6 +261,7 @@ ccd:
         ELASTIC_SEARCH_CASE_INDEX_MAPPING_FIELDS_LIMIT: 50000
         DEFINITION_STORE_DEFAULT_LOG_LEVEL: DEBUG
         DEFINITION_STORE_TX_TIMEOUT_DEFAULT: 120
+        DEFINITION_STORE_DB_OPTIONS: "?stringtype=unspecified"
       ingressHost: ccd-definition-store-${SERVICE_FQDN}
       ingressIP: ${INGRESS_IP}
       secrets:
@@ -287,6 +289,7 @@ ccd:
         ELASTIC_SEARCH_HOSTS: ${SERVICE_NAME}-es-master:9200
         ELASTIC_SEARCH_DATA_NODES_HOSTS:  http://${SERVICE_NAME}-es-master:9200
         CASE_DOCUMENT_AM_URL: http://ccd-case-document-am-api-aat.service.core-compute-aat.internal
+        DATA_STORE_DB_OPTIONS: "?stringtype=unspecified"
       secrets:
         DATA_STORE_DB_PASSWORD:
           secretRef: "{{ .Values.global.postgresSecret }}"
