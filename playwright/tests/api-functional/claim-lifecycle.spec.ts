@@ -107,6 +107,9 @@ test.describe.serial('Claim Lifecycle - Create, Respond, Verify', () => {
   test('Defendant submits full defence response', async () => {
     expect(claimExternalId).toBeDefined();
 
+    // Allow CCD to finish processing the defendant link event before submitting response
+    await new Promise((resolve) => setTimeout(resolve, 10000));
+
     // POST /responses/claim/{externalId}/defendant/{defendantId} - same as claimStoreClient.ts:101
     const responseData = buildResponseData();
     const result = await ClaimStoreHelper.respondToClaim(
