@@ -299,6 +299,7 @@ ccd:
       ingressHost: ccd-data-store-api-${SERVICE_FQDN}
 
   ccd-user-profile-importer:
+    enabled: false
     image: hmctsprod.azurecr.io/ccd/user-profile-importer:db2r9a
     users:
       - civilmoneyclaims+ccd@gmail.com|CMC|MoneyClaimCase|open
