@@ -124,6 +124,24 @@ withPipeline("nodejs", product, component) {
       env.CCD_DEFINITION_CLAIM_STORE_URL = "http://cmc-citizen-frontend-pr-${CHANGE_ID}-claim-store"
   }
 
+  afterSuccess('functionalTest:preview') {
+    try {
+      sh './bin/run-preview-playwright-tests.sh'
+    } finally {
+      steps.sh 'npx allure generate allure-results -o allure-report || true'
+      publishHTML([
+        allowMissing         : true,
+        alwaysLinkToLastBuild: true,
+        keepAll              : true,
+        reportDir            : 'allure-report',
+        reportFiles          : 'index.html',
+        reportName           : 'CMC API Security & Functional Test Report'
+      ])
+      steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'allure-results/**/*,allure-report/**/*'
+      junit allowEmptyResults: true, testResults: 'playwright-report/results.xml'
+    }
+  }
+
   afterSuccess('test') {
     onMaster {
       yarnBuilder.yarn('tests:a11y')

@@ -28,6 +28,7 @@
     "test:integration-verbose": "TS_NODE_TRANSPILE_ONLY=true codeceptjs run-multiple parallel --verbose --config default.conf.js",
     "test:crossbrowser": "./bin/run-crossbrowser-tests.sh",
     "test:crossbrowser-verbose": "TS_NODE_TRANSPILE_ONLY=true codeceptjs run-multiple ${BROWSER_GROUP:-'--all'} --verbose --config saucelabs.conf.js --grep @crossbrowser --reporter mocha-multi",
+    "test:playwright-preview": "npx playwright test --config=playwright/playwright.config.ts",
     "list-supported-browsers": "node -e 'Object.keys(require(\"@hmcts/cmc-supported-browsers\").supportedBrowsers).forEach(key => console.log(key))'",
     "sonar-scan": "sonar-scanner -Dsonar.projectName='CMC :: Citizen Frontend' -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.javascript.lcov.reportPaths=coverage-report/lcov.info",
     "test:file": "TS_NODE_TRANSPILE_ONLY=true NODE_ENV=mocha LOG_LEVEL=OFF mocha  --watch --watch-extensions ts"
@@ -116,6 +117,7 @@
   },
   "devDependencies": {
     "@hmcts/cmc-supported-browsers": "^1.0.1",
+    "@playwright/test": "^1.58.2",
     "@types/chai": "^4.2.18",
     "@types/chai-as-promised": "^7.1.4",
     "@types/chai-spies": "^1.0.3",
@@ -126,6 +128,9 @@
     "@typescript-eslint/eslint-plugin": "^5.30.7",
     "@typescript-eslint/eslint-plugin-tslint": "^5.30.7",
     "@typescript-eslint/parser": "^5.30.7",
+    "allure-commandline": "^2.38.1",
+    "allure-js-commons": "^3.6.0",
+    "allure-playwright": "^3.6.0",
     "babel-eslint": "^10.1.0",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",

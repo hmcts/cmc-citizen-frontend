@@ -36,6 +36,10 @@ coverage-report
 .scannerwork
 smoke-output/
 functional-output/
+playwright-report/
+allure-results/
+allure-report/
+test-results/
 acb.yaml
 /src/main/public/webchat/sass/
 
@@ -47,3 +51,5 @@ acb.yaml
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+build/
+ccd-definition/
