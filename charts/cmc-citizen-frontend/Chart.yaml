@@ -21,8 +21,8 @@ dependencies:
     condition: idam-pr.enabled
 
   - name: cmc-claim-store
-    version: 4.1.43
-    repository: 'https://hmctsprod.azurecr.io/helm/v1/repo/'
+    version: 4.1.57
+    repository: 'oci://hmctsprod.azurecr.io/helm'
     condition: cmc-claim-store.enabled
 
   - name: ccd
