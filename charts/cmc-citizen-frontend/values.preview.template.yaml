@@ -299,10 +299,7 @@ ccd:
       ingressHost: ccd-data-store-api-${SERVICE_FQDN}
 
   ccd-user-profile-importer:
-    image: hmctsprod.azurecr.io/ccd/user-profile-importer:db3j14
-    environment:
-      AUTH_PROVIDER_BASE_URL: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
-      CCD_USER_PROFILE_URL: http://${SERVICE_NAME}-ccd-user-profile-api
+    image: hmctsprod.azurecr.io/ccd/user-profile-importer:latest
     users:
       - civilmoneyclaims+ccd@gmail.com|CMC|MoneyClaimCase|open
       - civilmoneyclaims+judge@gmail.com|CMC|MoneyClaimCase|orderForJudgeReview
