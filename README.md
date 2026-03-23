@@ -130,18 +130,9 @@ API security and functional tests are written using [Playwright](https://playwri
 
 **Running locally:**
 
-Set the following environment variables (connect to VPN first):
+Set the required environment variables from the Azure Key Vault (see `Jenkinsfile_CNP` for the vault secret names). Connect to VPN before running.
 
 ```bash
-export CLAIM_STORE_URL=https://claim-store-cmc-citizen-frontend-pr-<PR_NUMBER>.preview.platform.hmcts.net
-export IDAM_URL=https://idam-api.aat.platform.hmcts.net
-export TEST_URL=https://cmc-citizen-frontend-pr-<PR_NUMBER>.preview.platform.hmcts.net
-export OAUTH_CLIENT_SECRET=<from cmc-aat vault: citizen-oauth-client-secret>
-export DEFAULT_PASSWORD=<from cmc-aat vault: smoke-test-user-password>
-export NODE_TLS_REJECT_UNAUTHORIZED=0
-```
-
-Then run:
 
 ```bash
 # All tests (security + functional)

@@ -1,16 +1,17 @@
 /**
  * Test configuration for Playwright tests.
- * Follows the same pattern as:
- *   - civil-citizen-ui/src/test/config.js
- *   - cmc-ccd-e2e-tests/playwright/config/config.ts + urls.ts + users.ts
- *
- * All env vars are set in Jenkinsfile_CNP vault secrets for CI.
- * For local runs, export them before running (see env vars listed below).
+ * All values come from environment variables set by Jenkinsfile_CNP vault secrets.
+ * For local runs, export the required env vars before running.
+ * See Jenkinsfile_CNP for vault secret names.
  */
 
-const defaultPassword = process.env.DEFAULT_PASSWORD || process.env.SMOKE_TEST_USER_PASSWORD || 'Password12!';
-const citizenPassword = process.env.CLAIMANT_CITIZEN_PASSWORD || defaultPassword;
-const judgePassword = process.env.JUDGE_PASSWORD || process.env.JUDGE_DEFAULT_PASSWORD || 'Hmcts1234';
+function requireEnv(name: string): string {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(`Required environment variable ${name} is not set. Check Jenkinsfile_CNP for vault secret names.`);
+  }
+  return value;
+}
 
 export const config = {
   // Environment
@@ -18,58 +19,31 @@ export const config = {
   showBrowserWindow: process.env.SHOW_BROWSER_WINDOW === 'true',
   testHeadless: process.env.TEST_HEADLESS !== 'false',
 
-  // URLs - same pattern as cmc-ccd-e2e-tests/playwright/config/urls.ts
+  // URLs - all from env vars, no hardcoded defaults
   get claimStoreUrl(): string {
-    return process.env.CLAIM_STORE_URL || 'http://cmc-claim-store-aat.service.core-compute-aat.internal';
+    return requireEnv('CLAIM_STORE_URL');
   },
   get idamUrl(): string {
-    return process.env.IDAM_URL || process.env.IDAM_API_URL || 'https://idam-api.aat.platform.hmcts.net';
+    return process.env.IDAM_URL || requireEnv('IDAM_API_URL');
   },
   get citizenAppUrl(): string {
-    return process.env.TEST_URL || process.env.CITIZEN_APP_URL || 'https://moneyclaims.aat.platform.hmcts.net';
-  },
-  get s2sUrl(): string {
-    return process.env.SERVICE_AUTH_PROVIDER_API_BASE_URL || 'http://rpe-service-auth-provider-aat.service.core-compute-aat.internal';
+    return process.env.TEST_URL || requireEnv('CITIZEN_APP_URL');
   },
 
-  // Passwords
+  // Passwords - from vault secrets
   get defaultPassword(): string {
-    return defaultPassword;
-  },
-  get citizenPassword(): string {
-    return citizenPassword;
-  },
-  get judgePassword(): string {
-    return judgePassword;
+    return process.env.DEFAULT_PASSWORD || requireEnv('SMOKE_TEST_USER_PASSWORD');
   },
 
-  // OAuth2 - same as idamClient.ts:16-20
+  // OAuth2
   oauth2: {
     clientId: 'cmc_citizen',
     get redirectUri(): string {
-      const appUrl = process.env.TEST_URL || process.env.CITIZEN_APP_URL || 'https://localhost:3000';
+      const appUrl = process.env.TEST_URL || process.env.CITIZEN_APP_URL || '';
       return `${appUrl}/receiver`;
     },
     get clientSecret(): string {
       return process.env.OAUTH_CLIENT_SECRET || '';
-    },
-  },
-
-  // S2S - same as cmc-ccd-e2e-tests/playwright/config/config.ts:16-18
-  s2s: {
-    microservice: process.env.S2S_MICROSERVICE_KEY_CMC || 'cmc_citizen',
-    get secret(): string {
-      return process.env.S2S_SECRET || process.env.S2S_MICROSERVICE_KEY_PWD || '';
-    },
-  },
-
-  // Users - same pattern as civil-citizen-ui/src/test/config.js
-  claimantCitizenUser: {
-    get email(): string {
-      return process.env.CITIZEN_USERNAME || process.env.SMOKE_TEST_CITIZEN_USERNAME || '';
-    },
-    get password(): string {
-      return citizenPassword;
     },
   },
 
