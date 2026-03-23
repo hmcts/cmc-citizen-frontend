@@ -298,13 +298,6 @@ ccd:
       keyVaults: [ ]
       ingressHost: ccd-data-store-api-${SERVICE_FQDN}
 
-  ccd-user-profile-importer:
-    image: hmctsprod.azurecr.io/ccd/user-profile-importer:latest
-    users:
-      - civilmoneyclaims+ccd@gmail.com|CMC|MoneyClaimCase|open
-      - civilmoneyclaims+judge@gmail.com|CMC|MoneyClaimCase|orderForJudgeReview
-      - civilmoneyclaims+la@gmail.com|CMC|MoneyClaimCase|readyForDirections
-
   elasticsearch:
     nameOverride: ${SERVICE_NAME}-es
     clusterName: "es"
