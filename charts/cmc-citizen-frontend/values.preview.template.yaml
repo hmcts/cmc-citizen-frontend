@@ -226,6 +226,7 @@ ccd:
       imagePullPolicy: Always
       image: hmctsprod.azurecr.io/ccd/user-profile-api:latest
       environment:
+        USER_PROFILE_DB_HOST: ${SERVICE_NAME}-postgresql
         USER_PROFILE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_definition,ccd_admin,cmc_claim_store,xui_webapp,xuiwebapp
         USER_PROFILE_DB_OPTIONS: "?stringtype=unspecified"
       secrets:
@@ -252,6 +253,7 @@ ccd:
       imagePullPolicy: Always
       image: hmctsprod.azurecr.io/ccd/definition-store-api:latest
       environment:
+        DEFINITION_STORE_DB_HOST: ${SERVICE_NAME}-postgresql
         DEFINITION_STORE_IDAM_KEY: ${DEFINITION_STORE_S2S_KEY}
         DEFINITION_STORE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_gw,ccd_admin,xui_webapp,xuiwebapp,cmc_claim_store
         IDAM_API_BASE_URL: https://idam-api.aat.platform.hmcts.net
@@ -278,6 +280,7 @@ ccd:
       imagePullPolicy: Always
       image: hmctsprod.azurecr.io/ccd/data-store-api:latest
       environment:
+        DATA_STORE_DB_HOST: ${SERVICE_NAME}-postgresql
         DATA_STORE_IDAM_KEY: ${DATA_STORE_S2S_KEY}
         IDAM_OAUTH2_DATA_STORE_CLIENT_SECRET: ${IDAM_OAUTH2_DATA_STORE_CLIENT_SECRET}
         IDAM_DATA_STORE_SYSTEM_USER_USERNAME: ${IDAM_DATA_STORE_SYSTEM_USER_USERNAME}
