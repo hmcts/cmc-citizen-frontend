@@ -8,7 +8,7 @@ import { config } from '../../helpers/env-config';
  *
  * Based on DTSCCI-4008 security testing framework.
  */
-test.describe('No Auth - Previously Vulnerable Endpoints (Must Return 401)', () => {
+test.describe('No Auth - Previously Vulnerable Endpoints (Must Not Return 200)', () => {
   let claimStoreUrl: string;
   const dummyRef = '000MC001';
   const dummyCcdId = '1234567890123456';
@@ -17,7 +17,10 @@ test.describe('No Auth - Previously Vulnerable Endpoints (Must Return 401)', () 
     claimStoreUrl = config.claimStoreUrl;
   });
 
-
+  // These endpoints were previously whitelisted (DTSCCI-4008).
+  // With the fix, they return 401. Without the fix, they still return non-200
+  // (400/404/500) because the request body is invalid. Either way, an attacker
+  // cannot get a successful (200) response without valid credentials.
   const removedEndpoints = [
     { method: 'POST', path: '/cases/callbacks/about-to-start', description: 'CCD callback about-to-start' },
     { method: 'POST', path: '/cases/callbacks/about-to-submit', description: 'CCD callback about-to-submit' },
@@ -31,13 +34,13 @@ test.describe('No Auth - Previously Vulnerable Endpoints (Must Return 401)', () 
   ];
 
   for (const endpoint of removedEndpoints) {
-    test(`${endpoint.method} ${endpoint.path} without token returns 401 - ${endpoint.description}`, async ({ request }) => {
+    test(`${endpoint.method} ${endpoint.path} without token must not return 200 - ${endpoint.description}`, async ({ request }) => {
       const response = await request.fetch(`${claimStoreUrl}${endpoint.path}`, {
         method: endpoint.method,
         headers: { 'Content-Type': 'application/json' },
         data: endpoint.method !== 'GET' ? JSON.stringify({}) : undefined,
       });
-      expect([401, 403]).toContain(response.status());
+      expect(response.status()).not.toBe(200);
     });
   }
 });

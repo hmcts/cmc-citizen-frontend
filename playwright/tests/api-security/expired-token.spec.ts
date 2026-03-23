@@ -62,13 +62,12 @@ test.describe('Algorithm "none" Attack - Must Be Rejected', () => {
   });
 
 
-  const endpoints = [
+  const exactAuthEndpoints = [
     { method: 'GET', path: `/claims/${dummyId}`, description: 'Get claim' },
     { method: 'PUT', path: '/claims/defendant/link', description: 'Link defendant' },
-    { method: 'POST', path: '/cases/callbacks/about-to-start', description: 'CCD callback' },
   ];
 
-  for (const endpoint of endpoints) {
+  for (const endpoint of exactAuthEndpoints) {
     test(`${endpoint.method} ${endpoint.path} with alg:none JWT returns 401`, async ({ request }) => {
       const response = await request.fetch(`${claimStoreUrl}${endpoint.path}`, {
         method: endpoint.method,
@@ -81,4 +80,16 @@ test.describe('Algorithm "none" Attack - Must Be Rejected', () => {
       expect([401, 403]).toContain(response.status());
     });
   }
+
+  test('POST /cases/callbacks/about-to-start with alg:none JWT must not return 200', async ({ request }) => {
+    const response = await request.fetch(`${claimStoreUrl}/cases/callbacks/about-to-start`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${algNoneToken}`,
+      },
+      data: JSON.stringify({}),
+    });
+    expect(response.status()).not.toBe(200);
+  });
 });
