@@ -233,7 +233,7 @@ ccd:
       secrets:
         USER_PROFILE_DB_PASSWORD:
           secretRef: "{{ .Values.global.postgresSecret }}"
-          key: PASSWORD
+          key: password
       keyVaults: [ ]
       ingressHost: ccd-user-profile-${SERVICE_FQDN}
 
@@ -270,7 +270,7 @@ ccd:
       secrets:
         DEFINITION_STORE_DB_PASSWORD:
           secretRef: "{{ .Values.global.postgresSecret }}"
-          key: PASSWORD
+          key: password
       keyVaults: [ ]
 
   ccd-data-store-api:
@@ -296,7 +296,7 @@ ccd:
       secrets:
         DATA_STORE_DB_PASSWORD:
           secretRef: "{{ .Values.global.postgresSecret }}"
-          key: PASSWORD
+          key: password
       keyVaults: [ ]
       ingressHost: ccd-data-store-api-${SERVICE_FQDN}
 
