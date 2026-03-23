@@ -195,6 +195,7 @@ ccd:
     paymentsUrl: http://payment-api-aat.service.core-compute-aat.internal
     emAnnotationUrl: http://em-anno-aat.service.core-compute-aat.internal
     postgresHost: ${SERVICE_NAME}-postgresql
+    postgresSecret: ${SERVICE_NAME}-postgresql
     postgresUsername: hmcts
     postgresPassword: hmcts
     devMode: true
