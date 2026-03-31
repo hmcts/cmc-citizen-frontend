@@ -1,5 +1,5 @@
 nodejs:
-  image: hmctsprod.azurecr.io/cmc/citizen-frontend:latest
+  image: hmctspublic.azurecr.io/cmc/citizen-frontend:latest
   applicationPort: 3000
   memoryRequests: 512Mi
   cpuRequests: 1000m
@@ -87,7 +87,7 @@ idam-pr:
 ccd:
   enabled: false
   logstash:
-    image: hmctsprod.azurecr.io/ccd/logstash
+    image: hmctspublic.azurecr.io/ccd/logstash
     imageTag: ccd-cmc-logstash-latest
   ccd-admin-web:
     nodejs:

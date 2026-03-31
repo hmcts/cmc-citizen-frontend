@@ -19,7 +19,7 @@ nodejs:
     targetCPUUtilizationPercentage: 80 # Default is 80% target CPU utilization
   environment:
     REFORM_TEAM: cmc
-    REFORM_SERVICE_NAME: hmctsprod.azurecr.io/cmc/citizen-frontend:latest
+    REFORM_SERVICE_NAME: hmctspublic.azurecr.io/cmc/citizen-frontend:latest
     SESSION_SECRET: "preview-session-secret"
     LOG_LEVEL: DEBUG
     HTTP_TIMEOUT: 60000
@@ -54,7 +54,7 @@ xui-webapp:
   nodejs:
     imagePullPolicy: Always
     releaseNameOverride: ${SERVICE_NAME}-xui-webapp
-    image: hmctsprod.azurecr.io/xui/webapp:latest
+    image: hmctspublic.azurecr.io/xui/webapp:latest
     ingressHost: xui-${SERVICE_FQDN}
     environment:
       HEALTH_CCD_COMPONENT_API: http://gateway-${SERVICE_FQDN}/health
@@ -76,7 +76,7 @@ cmc-claim-store:
   enabled: true
   java:
     imagePullPolicy: Always
-    image: hmctsprod.azurecr.io/cmc/claim-store:latest
+    image: hmctspublic.azurecr.io/cmc/claim-store:latest
     releaseNameOverride: ${SERVICE_NAME}-claim-store
     ingressHost: claim-store-${SERVICE_FQDN}
     readinessDelay: 250  # ccd-stack will start much slower
@@ -136,7 +136,7 @@ cmc-claim-store:
       releaseNameOverride: ${SERVICE_NAME}-postgresql
       image:
         tag: '11.6.0'
-        registry: hmctsprod.azurecr.io
+        registry: hmctspublic.azurecr.io
         repository: imported/bitnami/postgresql
       primary:
         persistence:
@@ -201,7 +201,7 @@ ccd:
   ccd-admin-web:
     nodejs:
       imagePullPolicy: Always
-      image: hmctsprod.azurecr.io/ccd/admin-web:latest
+      image: hmctspublic.azurecr.io/ccd/admin-web:latest
       ingressHost: ccd-admin-web-${SERVICE_FQDN}
       keyVaults: []
       environment:
@@ -223,7 +223,7 @@ ccd:
     java:
       disableKeyVaults: true
       imagePullPolicy: Always
-      image: hmctsprod.azurecr.io/ccd/user-profile-api:latest
+      image: hmctspublic.azurecr.io/ccd/user-profile-api:latest
       environment:
         USER_PROFILE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_definition,ccd_admin,cmc_claim_store,xui_webapp,xuiwebapp
       keyVaults: []
@@ -242,7 +242,7 @@ ccd:
     java:
       disableKeyVaults: true
       imagePullPolicy: Always
-      image: hmctsprod.azurecr.io/ccd/definition-store-api:latest
+      image: hmctspublic.azurecr.io/ccd/definition-store-api:latest
       environment:
         DEFINITION_STORE_IDAM_KEY: ${DEFINITION_STORE_S2S_KEY}
         DEFINITION_STORE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_gw,ccd_admin,xui_webapp,xuiwebapp,cmc_claim_store
@@ -262,7 +262,7 @@ ccd:
     java:
       disableKeyVaults: true
       imagePullPolicy: Always
-      image: hmctsprod.azurecr.io/ccd/data-store-api:latest
+      image: hmctspublic.azurecr.io/ccd/data-store-api:latest
       environment:
         DATA_STORE_IDAM_KEY: ${DATA_STORE_S2S_KEY}
         IDAM_OAUTH2_DATA_STORE_CLIENT_SECRET: ${IDAM_OAUTH2_DATA_STORE_CLIENT_SECRET}
@@ -279,7 +279,7 @@ ccd:
       keyVaults: []
 
   ccd-user-profile-importer:
-    image: hmctsprod.azurecr.io/ccd/user-profile-importer:db2r9a
+    image: hmctspublic.azurecr.io/ccd/user-profile-importer:db2r9a
     users:
       - civilmoneyclaims+ccd@gmail.com|CMC|MoneyClaimCase|open
       - civilmoneyclaims+judge@gmail.com|CMC|MoneyClaimCase|orderForJudgeReview
@@ -324,7 +324,7 @@ ccd:
       requests:
         cpu: 1000m
         memory: 1024Mi
-    image: hmctsprod.azurecr.io/ccd/logstash
+    image: hmctspublic.azurecr.io/ccd/logstash
     imageTag: "latest"
     logstashJavaOpts: -Xmx1g -Xms512M
     extraEnvs:
