@@ -173,7 +173,7 @@
     "all": true
   },
   "resolutions": {
-    "path-to-regexp": "0.1.12",
+    "path-to-regexp": "0.1.13",
     "@babel/runtime": "7.26.10",
     "qs": "6.14.2",
     "sass-lint/eslint": "^5.0.0",
