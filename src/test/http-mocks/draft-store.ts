@@ -48,7 +48,7 @@ import * as moment from 'moment'
 import { CompanyDetails } from 'forms/models/companyDetails'
 
 function getDraftStoreBaseURL (): string {
-  return `${config.get('draft-store.url')}`
+  return `${config.get('draft-store.url')}`.replace(/\/+$/, '')
 }
 
 export const samplePaidInFullDraftObj = {
