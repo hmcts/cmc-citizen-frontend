@@ -99,7 +99,7 @@ app.use(session({
   secret: sessionConfig.secret,
   store: getSessionStore(),
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true, // Changed to true to ensure session is created before CSRF
   rolling: true,
   cookie: {
     secure: isSecure,
@@ -108,6 +108,23 @@ app.use(session({
     maxAge: sessionConfig.maxAgeInMinutes * 60 * 1000
   }
 }))
+
+// Ensure session is initialized before CSRF protection
+app.use((req, res, next) => {
+  if (!req.session) {
+    return next(new Error('Session not initialized'))
+  }
+  // Force session save to ensure sessionID is available
+  if (req.method === 'GET' && !req.session.initialized) {
+    req.session.initialized = true
+    req.session.save((err) => {
+      if (err) logger.error('Session save error:', err)
+      next()
+    })
+  } else {
+    next()
+  }
+})
 
 // Test-only: allow tests to pass token via cookie; copy into session so AuthTokenExtractor finds it (no token in cookie in production)
 if (env === 'mocha') {

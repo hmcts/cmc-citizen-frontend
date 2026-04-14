@@ -10,14 +10,22 @@ const {
   generateCsrfToken
 } = doubleCsrf({
   getSecret: () => sessionConfig.secret,
-  getSessionIdentifier: (req: express.Request) => (req.sessionID ?? req.session?.id) as string,
+  getSessionIdentifier: (req: express.Request) => {
+    const sessionId = req.sessionID ?? req.session?.id
+    if (!sessionId) {
+      throw new Error('Session ID not found - session middleware may not be properly configured')
+    }
+    return sessionId as string
+  },
   cookieName: '_csrf',
   cookieOptions: {
     secure: isSecure,
     httpOnly: true,
     sameSite: 'lax',
     path: '/'
-  }
+  },
+  size: 64,
+  ignoredMethods: ['GET', 'HEAD', 'OPTIONS']
 })
 
 export class CsrfProtection {

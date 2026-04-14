@@ -63,19 +63,27 @@ export function getSessionStore (options?: SessionStoreOptions): session.Store {
     }
     const useTls = connectionString.startsWith('rediss://') || redis?.tls === true
     const client = options?._redisFactory
-      ? options._redisFactory(connectionString, { maxRetriesPerRequest: undefined, enableReadyCheck: true, tls: useTls ? { rejectUnauthorized: true } : undefined })
+      ? options._redisFactory(connectionString, { 
+          maxRetriesPerRequest: undefined, 
+          enableReadyCheck: true, 
+          lazyConnect: false,
+          tls: useTls ? { rejectUnauthorized: true } : undefined 
+        })
       : new Redis(connectionString, {
           maxRetriesPerRequest: undefined,
           enableReadyCheck: true,
+          lazyConnect: false,
           tls: useTls ? { rejectUnauthorized: true } : undefined
         })
     client.on('error', (err: Error) => logger.error('Redis session store error:', err))
+    client.on('connect', () => logger.info('Redis session store connected'))
     const store = options?._redisStoreFactory
       ? options._redisStoreFactory({ client: client as any, prefix: redis?.keyPrefix || 'sess:', ttl: maxAgeInMinutes * 60 })
       : new RedisStore({
           client: client as any,
           prefix: redis?.keyPrefix || 'sess:',
-          ttl: maxAgeInMinutes * 60
+          ttl: maxAgeInMinutes * 60,
+          disableTouch: false
         })
     logger.info('Session store: Redis')
     return store
