@@ -17,6 +17,16 @@ const {
   // protection, but avoid hard binding to a mutable session id.
   getSessionIdentifier: () => '',
   cookieName: '_csrf',
+  getCsrfTokenFromRequest: (req: express.Request) => {
+    const bodyToken = (req.body && typeof req.body === 'object')
+      ? (req.body as Record<string, unknown>)._csrf
+      : undefined
+    if (typeof bodyToken === 'string') {
+      return bodyToken
+    }
+    const headerToken = req.headers['x-csrf-token']
+    return typeof headerToken === 'string' ? headerToken : ''
+  },
   cookieOptions: {
     secure: isSecure,
     httpOnly: true,
