@@ -50,7 +50,12 @@ export class CsrfProtection {
 
     app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
       const reqWithCsrf = req as express.Request & { csrfToken: () => string }
-      res.locals.csrf = typeof reqWithCsrf.csrfToken === 'function' ? reqWithCsrf.csrfToken() : generateCsrfToken(req, res)
+      const expectsHtml = req.accepts('html') && !req.xhr
+      if (expectsHtml) {
+        // Avoid rotating CSRF cookie for non-HTML requests (assets/XHR), which can
+        // invalidate a form token rendered moments earlier on the page.
+        res.locals.csrf = typeof reqWithCsrf.csrfToken === 'function' ? reqWithCsrf.csrfToken() : generateCsrfToken(req, res)
+      }
       next()
     })
   }
