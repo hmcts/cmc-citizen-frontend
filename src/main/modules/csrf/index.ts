@@ -25,7 +25,11 @@ const {
     path: '/'
   },
   size: 64,
-  ignoredMethods: ['GET', 'HEAD', 'OPTIONS']
+  ignoredMethods: ['GET', 'HEAD', 'OPTIONS'],
+  getTokenFromRequest: (req) => {
+    // Check body first (for form submissions), then header (for AJAX)
+    return req.body?._csrf || req.headers['x-csrf-token'] as string
+  }
 })
 
 export class CsrfProtection {
