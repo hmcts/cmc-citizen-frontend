@@ -12,7 +12,10 @@ const {
   generateCsrfToken
 } = doubleCsrf({
   getSecret: () => sessionConfig.secret,
-  getSessionIdentifier: (req: express.Request) => (req.sessionID ?? req.session?.id) as string,
+  // Session identifiers can rotate across auth/redirect boundaries in preview environments,
+  // causing legitimate submissions to fail CSRF validation. Keep double-submit-cookie
+  // protection, but avoid hard binding to a mutable session id.
+  getSessionIdentifier: () => '',
   cookieName: '_csrf',
   cookieOptions: {
     secure: isSecure,
