@@ -1166,10 +1166,15 @@ export function rejectFind (reason: string = 'HTTP error'): mock.Scope {
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-export function resolveUpdate (id: number = 100): mock.Scope {
-  return mock(getDraftStoreBaseURL())
-    .put(`/drafts/${id}`)
-    .reply(HttpStatus.OK)
+export function resolveUpdate (id: number = 100, optional: boolean = false): mock.Scope {
+  const normalizedPath = `/drafts/${id}`
+  const matchesDraftPath = (uri: string): boolean => uri.replace(/\/+$/, '') === normalizedPath
+  const interceptor = mock(getDraftStoreBaseURL())
+    .put(matchesDraftPath)
+  if (optional) {
+    interceptor.optionally()
+  }
+  return interceptor.reply(HttpStatus.OK)
 }
 
 export function resolveSave (id: number = 100): mock.Scope {
@@ -1185,8 +1190,11 @@ export function rejectSave (id: number = 100, reason: string = 'HTTP error'): mo
 }
 
 export function rejectUpdate (id: number = 100, reason: string = 'HTTP error'): mock.Scope {
+  const normalizedPath = `/drafts/${id}`
+  const matchesDraftPath = (uri: string): boolean => uri.replace(/\/+$/, '') === normalizedPath
+
   return mock(getDraftStoreBaseURL())
-    .put(`/drafts/${id}`)
+    .put(matchesDraftPath)
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
