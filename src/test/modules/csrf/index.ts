@@ -7,6 +7,8 @@ import { CsrfProtection } from 'modules/csrf/index'
 
 function createApp (): express.Express {
   const app = express()
+  app.use(express.urlencoded({ extended: true }))
+  app.use(express.json())
   app.use(cookieParser('test-secret'))
   app.use(session({
     secret: 'test-secret',
@@ -55,5 +57,64 @@ describe('CsrfProtection', () => {
     const res2 = await request(app).get('/test')
     expect(res1.body.csrf).to.be.a('string')
     expect(res2.body.csrf).to.be.a('string')
+  })
+
+  it('should accept valid csrf token from request body', async () => {
+    const agent = request.agent(app)
+    const getRes = await agent.get('/test')
+    const token = getRes.body.csrf
+    const cookies = getRes.headers['set-cookie']
+
+    const postRes = await agent
+      .post('/test')
+      .set('Cookie', cookies)
+      .send({ _csrf: token })
+
+    expect(postRes.status).to.equal(200)
+    expect(postRes.body.ok).to.equal(true)
+  })
+
+  it('should accept valid csrf token from header', async () => {
+    const agent = request.agent(app)
+    const getRes = await agent.get('/test')
+    const token = getRes.body.csrf
+    const cookies = getRes.headers['set-cookie']
+
+    const postRes = await agent
+      .post('/test')
+      .set('Cookie', cookies)
+      .set('x-csrf-token', token)
+      .send({})
+
+    expect(postRes.status).to.equal(200)
+    expect(postRes.body.ok).to.equal(true)
+  })
+
+  it('should reject request with invalid csrf token', async () => {
+    const agent = request.agent(app)
+    const getRes = await agent.get('/test')
+    const cookies = getRes.headers['set-cookie']
+
+    const postRes = await agent
+      .post('/test')
+      .set('Cookie', cookies)
+      .send({ _csrf: 'invalid-token' })
+
+    expect(postRes.status).to.equal(403)
+    expect(postRes.body.error).to.equal('invalid csrf token')
+  })
+
+  it('should reject request without csrf token', async () => {
+    const agent = request.agent(app)
+    const getRes = await agent.get('/test')
+    const cookies = getRes.headers['set-cookie']
+
+    const postRes = await agent
+      .post('/test')
+      .set('Cookie', cookies)
+      .send({})
+
+    expect(postRes.status).to.equal(403)
+    expect(postRes.body.error).to.equal('invalid csrf token')
   })
 })
