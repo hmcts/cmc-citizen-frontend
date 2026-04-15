@@ -63,11 +63,9 @@ describe('CsrfProtection', () => {
     const agent = request.agent(app)
     const getRes = await agent.get('/test')
     const token = getRes.body.csrf
-    const cookies = getRes.headers['set-cookie']
 
     const postRes = await agent
       .post('/test')
-      .set('Cookie', cookies)
       .send({ _csrf: token })
 
     expect(postRes.status).to.equal(200)
@@ -78,11 +76,9 @@ describe('CsrfProtection', () => {
     const agent = request.agent(app)
     const getRes = await agent.get('/test')
     const token = getRes.body.csrf
-    const cookies = getRes.headers['set-cookie']
 
     const postRes = await agent
       .post('/test')
-      .set('Cookie', cookies)
       .set('x-csrf-token', token)
       .send({})
 
@@ -93,11 +89,9 @@ describe('CsrfProtection', () => {
   it('should reject request with invalid csrf token', async () => {
     const agent = request.agent(app)
     const getRes = await agent.get('/test')
-    const cookies = getRes.headers['set-cookie']
 
     const postRes = await agent
       .post('/test')
-      .set('Cookie', cookies)
       .send({ _csrf: 'invalid-token' })
 
     expect(postRes.status).to.equal(403)
@@ -106,12 +100,10 @@ describe('CsrfProtection', () => {
 
   it('should reject request without csrf token', async () => {
     const agent = request.agent(app)
-    const getRes = await agent.get('/test')
-    const cookies = getRes.headers['set-cookie']
+    await agent.get('/test')
 
     const postRes = await agent
       .post('/test')
-      .set('Cookie', cookies)
       .send({})
 
     expect(postRes.status).to.equal(403)

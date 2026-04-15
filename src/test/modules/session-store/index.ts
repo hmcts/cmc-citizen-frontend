@@ -18,7 +18,7 @@ const mockStore = {
 }
 
 let lastConnectionString: string
-let lastStoreOpts: { prefix: string; ttl: number }
+let lastStoreOpts: { prefix: string; ttl: number; disableTouch?: boolean; client?: any }
 
 function redisPathOptions (overrides: Partial<SessionStoreOptions>): SessionStoreOptions {
   return {
