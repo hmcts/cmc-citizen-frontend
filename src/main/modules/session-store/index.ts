@@ -94,7 +94,7 @@ export function getSessionStore (options?: SessionStoreOptions): session.Store {
     client.on('close', () => logger.warn('Redis session store connection closed'))
     
     const store = options?._redisStoreFactory
-      ? options._redisStoreFactory({ client: client as any, prefix: redis?.keyPrefix || 'sess:', ttl: maxAgeInMinutes * 60 })
+      ? options._redisStoreFactory({ client: client as any, prefix: redis?.keyPrefix || 'sess:', ttl: maxAgeInMinutes * 60, disableTouch: false })
       : new RedisStore({
           client: client as any,
           prefix: redis?.keyPrefix || 'sess:',
