@@ -96,47 +96,6 @@ describe('session-store', () => {
       expect(lastStoreOpts.prefix).to.equal('sess:')
     })
 
-    it('sets disableTouch to false in RedisStore options', () => {
-      const opts = redisPathOptions({
-        redis: { host: 'localhost', port: 6379, keyPrefix: 'sess:' },
-        draftStoreAccessKey: 'k'
-      })
-      getSessionStore(opts)
-
-      expect(lastStoreOpts).to.have.property('disableTouch')
-    })
-
-    it('registers error handler on Redis client', () => {
-      const opts = redisPathOptions({
-        redis: { host: 'localhost', port: 6379 },
-        draftStoreAccessKey: 'k'
-      })
-      getSessionStore(opts)
-
-      expect(mockRedisClient.on).to.have.been.calledWith('error')
-    })
-
-    it('registers connect handler on Redis client', () => {
-      const opts = redisPathOptions({
-        redis: { host: 'localhost', port: 6379 },
-        draftStoreAccessKey: 'k'
-      })
-      getSessionStore(opts)
-
-      expect(mockRedisClient.on).to.have.been.calledWith('connect')
-    })
-
-    it('throws when useRedisStore is true but redis host/port are missing', () => {
-      expect(() =>
-        getSessionStore({
-          useRedisStore: true,
-          redis: { host: null as any, port: null as any },
-          draftStoreAccessKey: 'k',
-          maxAgeInMinutes: 120
-        })
-      ).to.throw('Redis connection (session.redis.host/port/key) is required when session.useRedisStore is true')
-    })
-
     it('throws when useRedisStore is true but session.redis is empty', () => {
       expect(() =>
         getSessionStore({

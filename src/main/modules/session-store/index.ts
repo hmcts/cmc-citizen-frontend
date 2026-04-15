@@ -55,12 +55,17 @@ export function getSessionStore (options?: SessionStoreOptions): session.Store {
   const redisAuthKey = getRedisAuthKey(options)
   const maxAgeInMinutes = options?.maxAgeInMinutes ?? config.get<number>('session.maxAgeInMinutes')
 
+  logger.info(`[Session Store] useRedis: ${useRedis}, maxAgeInMinutes: ${maxAgeInMinutes}`)
+
   if (useRedis) {
     const connectionString = getRedisConnectionString(redis, redisAuthKey)
     if (!connectionString) {
       logger.error('SESSION_USE_REDIS_STORE is true but Redis is not configured. Set SESSION_REDIS_HOST and SESSION_REDIS_PORT (and SESSION_REDIS_KEY from Key Vault), or set SESSION_USE_REDIS_STORE=false for in-memory store.')
       throw new Error('Redis connection (session.redis.host/port/key) is required when session.useRedisStore is true')
     }
+    logger.info(`[Session Store] Redis connection string protocol: ${connectionString.split('://')[0]}`)
+    logger.info(`[Session Store] Redis host: ${redis?.host}, port: ${redis?.port}, tls: ${redis?.tls}`)
+    
     const useTls = connectionString.startsWith('rediss://') || redis?.tls === true
     const client = options?._redisFactory
       ? options._redisFactory(connectionString, { 
@@ -75,8 +80,19 @@ export function getSessionStore (options?: SessionStoreOptions): session.Store {
           lazyConnect: false,
           tls: useTls ? { rejectUnauthorized: true } : undefined
         })
-    client.on('error', (err: Error) => logger.error('Redis session store error:', err))
-    client.on('connect', () => logger.info('Redis session store connected'))
+    
+    client.on('error', (err: Error) => {
+      logger.error('Redis session store error:', err)
+      logger.error(`Redis error details: ${err.message}`)
+    })
+    client.on('connect', () => {
+      logger.info('Redis session store connected')
+      logger.info(`Redis connection details - host: ${redis?.host}, port: ${redis?.port}`)
+    })
+    client.on('ready', () => logger.info('Redis session store ready'))
+    client.on('reconnecting', () => logger.warn('Redis session store reconnecting'))
+    client.on('close', () => logger.warn('Redis session store connection closed'))
+    
     const store = options?._redisStoreFactory
       ? options._redisStoreFactory({ client: client as any, prefix: redis?.keyPrefix || 'sess:', ttl: maxAgeInMinutes * 60 })
       : new RedisStore({
@@ -85,7 +101,7 @@ export function getSessionStore (options?: SessionStoreOptions): session.Store {
           ttl: maxAgeInMinutes * 60,
           disableTouch: false
         })
-    logger.info('Session store: Redis')
+    logger.info(`Session store: Redis (prefix: ${redis?.keyPrefix || 'sess:'}, ttl: ${maxAgeInMinutes * 60}s)`)
     return store
   }
   logger.info('Session store: Memory (useRedisStore false)')

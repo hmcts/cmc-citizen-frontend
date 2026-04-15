@@ -94,6 +94,9 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 const sessionConfig = config.get<{ cookieName: string; secret: string; maxAgeInMinutes: number }>('session')
 const isSecure = env !== 'development' && env !== 'mocha'
+
+logger.info(`[App] Session config - cookieName: ${sessionConfig.cookieName}, isSecure: ${isSecure}, maxAge: ${sessionConfig.maxAgeInMinutes}min`)
+
 app.use(session({
   name: sessionConfig.cookieName,
   secret: sessionConfig.secret,
@@ -109,6 +112,16 @@ app.use(session({
   }
 }))
 
+logger.info('[App] Session middleware registered')
+
+// Add session debugging middleware
+app.use((req, res, next) => {
+  if (req.method !== 'GET' || req.path.includes('/eligibility')) {
+    logger.info(`[Session Debug] ${req.method} ${req.path} - sessionID: ${req.sessionID ? req.sessionID.substring(0, 8) + '...' : 'NONE'}, session exists: ${!!req.session}`)
+  }
+  next()
+})
+
 // Test-only: allow tests to pass token via cookie; copy into session so AuthTokenExtractor finds it (no token in cookie in production)
 if (env === 'mocha') {
   app.use((req, res, next) => {
@@ -121,7 +134,9 @@ if (env === 'mocha') {
 }
 
 if (env !== 'mocha') {
+  logger.info('[App] Enabling CSRF protection')
   new CsrfProtection().enableFor(app)
+  logger.info('[App] CSRF protection enabled')
 }
 
 logger.info('Loading DashboardFeature')
@@ -192,6 +207,25 @@ app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
 // Below will match all routes not covered by the router, which effectively translates to a 404 response
 app.use((req, res, next) => {
   next(new NotFoundError(req.path))
+})
+
+// CSRF error handler with detailed logging
+app.use((err, req, res, next) => {
+  if (err && (err.code === 'EBADCSRFTOKEN' || err.message?.includes('csrf'))) {
+    logger.error(`[CSRF Error] ${req.method} ${req.path}`)
+    logger.error(`[CSRF Error] Error message: ${err.message}`)
+    logger.error(`[CSRF Error] Error code: ${err.code}`)
+    logger.error(`[CSRF Error] Session ID: ${req.sessionID ? req.sessionID.substring(0, 8) + '...' : 'MISSING'}`)
+    logger.error(`[CSRF Error] Session exists: ${!!req.session}`)
+    logger.error(`[CSRF Error] Cookies present: ${Object.keys(req.cookies || {}).join(', ')}`)
+    logger.error(`[CSRF Error] _csrf cookie: ${req.cookies?._csrf ? req.cookies._csrf.substring(0, 20) + '...' : 'MISSING'}`)
+    logger.error(`[CSRF Error] Body keys: ${Object.keys(req.body || {}).join(', ')}`)
+    logger.error(`[CSRF Error] Body _csrf: ${req.body?._csrf ? req.body._csrf.substring(0, 20) + '...' : 'MISSING'}`)
+    logger.error(`[CSRF Error] Header x-csrf-token: ${req.headers['x-csrf-token'] ? 'present' : 'MISSING'}`)
+    logger.error(`[CSRF Error] Content-Type: ${req.headers['content-type']}`)
+    logger.error(`[CSRF Error] User-Agent: ${req.headers['user-agent']}`)
+  }
+  next(err)
 })
 
 // error handlers
