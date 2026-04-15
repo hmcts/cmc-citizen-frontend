@@ -7,6 +7,8 @@ import { CsrfProtection } from 'modules/csrf/index'
 
 function createApp (): express.Express {
   const app = express()
+  app.use(express.urlencoded({ extended: true }))
+  app.use(express.json())
   app.use(cookieParser('test-secret'))
   app.use(session({
     secret: 'test-secret',
@@ -50,10 +52,53 @@ describe('CsrfProtection', () => {
     expect(res.body.csrf.length).to.be.greaterThan(0)
   })
 
-  it('should generate a csrf token on each request', async () => {
-    const res1 = await request(app).get('/test')
-    const res2 = await request(app).get('/test')
-    expect(res1.body.csrf).to.be.a('string')
-    expect(res2.body.csrf).to.be.a('string')
+  it('should set csrf token only for html requests', async () => {
+    const htmlRes = await request(app).get('/test').set('Accept', 'text/html')
+    const jsonRes = await request(app).get('/test').set('Accept', 'application/json')
+
+    expect(htmlRes.body.csrf).to.be.a('string')
+    expect(htmlRes.body.csrf.length).to.be.greaterThan(0)
+    expect(jsonRes.body.csrf).to.equal(undefined)
+  })
+
+  it('should allow post when csrf token is provided in body', async () => {
+    const getRes = await request(app).get('/test').set('Accept', 'text/html')
+    const cookies = getRes.headers['set-cookie']
+
+    const postRes = await request(app)
+      .post('/test')
+      .set('Cookie', cookies)
+      .type('form')
+      .send({ _csrf: getRes.body.csrf })
+
+    expect(postRes.status).to.equal(200)
+    expect(postRes.body.ok).to.equal(true)
+  })
+
+  it('should allow post when csrf token is provided in header', async () => {
+    const getRes = await request(app).get('/test').set('Accept', 'text/html')
+    const cookies = getRes.headers['set-cookie']
+
+    const postRes = await request(app)
+      .post('/test')
+      .set('Cookie', cookies)
+      .set('x-csrf-token', getRes.body.csrf)
+      .send({})
+
+    expect(postRes.status).to.equal(200)
+    expect(postRes.body.ok).to.equal(true)
+  })
+
+  it('should reject post when csrf token is missing', async () => {
+    const getRes = await request(app).get('/test').set('Accept', 'text/html')
+    const cookies = getRes.headers['set-cookie']
+
+    const postRes = await request(app)
+      .post('/test')
+      .set('Cookie', cookies)
+      .send({})
+
+    expect(postRes.status).to.equal(403)
+    expect(postRes.body.error).to.equal('invalid csrf token')
   })
 })
