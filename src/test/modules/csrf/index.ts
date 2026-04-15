@@ -59,6 +59,37 @@ describe('CsrfProtection', () => {
     expect(res2.body.csrf).to.be.a('string')
   })
 
+  it('should accept valid csrf token from request body', async () => {
+    const agent = request.agent(app)
+    const getRes = await agent.get('/test')
+    const token = getRes.body.csrf
+    const cookies = getRes.headers['set-cookie']
+
+    const postRes = await agent
+      .post('/test')
+      .set('Cookie', cookies)
+      .send({ _csrf: token })
+
+    expect(postRes.status).to.equal(200)
+    expect(postRes.body.ok).to.equal(true)
+  })
+
+  it('should accept valid csrf token from header', async () => {
+    const agent = request.agent(app)
+    const getRes = await agent.get('/test')
+    const token = getRes.body.csrf
+    const cookies = getRes.headers['set-cookie']
+
+    const postRes = await agent
+      .post('/test')
+      .set('Cookie', cookies)
+      .set('x-csrf-token', token)
+      .send({})
+
+    expect(postRes.status).to.equal(200)
+    expect(postRes.body.ok).to.equal(true)
+  })
+
   it('should reject request with invalid csrf token', async () => {
     const agent = request.agent(app)
     const getRes = await agent.get('/test')
