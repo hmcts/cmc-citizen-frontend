@@ -29,7 +29,10 @@ export default express.Router()
               (t.formattedAddress === addresses.formattedAddress)
             )
           )
-        res.json(addressInfoResponse)
+        res.json({
+          ...addressInfoResponse,
+          valid: addressInfoResponse.isValid
+        })
       })
       .catch(err => {
         if (err.message === 'Authentication failed') {

@@ -240,7 +240,11 @@
       }
 
       var postcodeResponse = JSON.parse(xhr.responseText)
-      if (!postcodeResponse.valid) {
+      var postcodeLookupIsValid = postcodeResponse.isValid
+      if (typeof postcodeLookupIsValid === 'undefined') {
+        postcodeLookupIsValid = postcodeResponse.valid
+      }
+      if (!postcodeLookupIsValid) {
 
         var ni = isNorthernIrelandPostcode(postcode)
         handlePostcodeError(ni, postcodeLookupWidget)
