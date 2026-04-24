@@ -1,0 +1,1 @@
+{"value":"uuid","children":{"ID":1116970,"Issue":"uuid: Missing buffer bounds check in v3/v5/v6 when buf is provided","URL":"https://github.com/advisories/GHSA-w5hq-g745-h8pq","Severity":"moderate","Vulnerable Versions":"<14.0.0","Tree Versions":["8.3.2"],"Dependents":["cmc-citizen-frontend@workspace:."]}}
