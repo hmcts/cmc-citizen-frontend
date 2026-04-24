@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { AddressInfoResponse } from '@hmcts/os-places-client'
+import { AddressInfoResponse } from 'postcode-lookup/osPlacesClient'
 
 import { Paths as AppPaths } from 'paths'
 import { Logger } from '@hmcts/nodejs-logging'
@@ -29,7 +29,10 @@ export default express.Router()
               (t.formattedAddress === addresses.formattedAddress)
             )
           )
-        res.json(addressInfoResponse)
+        res.json({
+          ...addressInfoResponse,
+          valid: addressInfoResponse.isValid
+        })
       })
       .catch(err => {
         if (err.message === 'Authentication failed') {

@@ -19,7 +19,7 @@ nodejs:
     targetCPUUtilizationPercentage: 80 # Default is 80% target CPU utilization
   environment:
     REFORM_TEAM: cmc
-    REFORM_SERVICE_NAME: hmctspublic.azurecr.io/cmc/citizen-frontend:latest
+    REFORM_SERVICE_NAME: hmctsprod.azurecr.io/cmc/citizen-frontend:latest
     SESSION_SECRET: "preview-session-secret"
     LOG_LEVEL: DEBUG
     HTTP_TIMEOUT: 60000
@@ -54,7 +54,7 @@ xui-webapp:
   nodejs:
     imagePullPolicy: Always
     releaseNameOverride: ${SERVICE_NAME}-xui-webapp
-    image: hmctspublic.azurecr.io/xui/webapp:latest
+    image: hmctsprod.azurecr.io/xui/webapp:latest
     ingressHost: xui-${SERVICE_FQDN}
     environment:
       HEALTH_CCD_COMPONENT_API: http://gateway-${SERVICE_FQDN}/health
@@ -76,7 +76,7 @@ cmc-claim-store:
   enabled: true
   java:
     imagePullPolicy: Always
-    image: hmctspublic.azurecr.io/cmc/claim-store:latest
+    image: hmctsprod.azurecr.io/cmc/claim-store:latest
     releaseNameOverride: ${SERVICE_NAME}-claim-store
     ingressHost: claim-store-${SERVICE_FQDN}
     readinessDelay: 250  # ccd-stack will start much slower
@@ -136,7 +136,7 @@ cmc-claim-store:
       releaseNameOverride: ${SERVICE_NAME}-postgresql
       image:
         tag: '11.6.0'
-        registry: hmctspublic.azurecr.io
+        registry: hmctsprod.azurecr.io
         repository: imported/bitnami/postgresql
       primary:
         persistence:
@@ -194,6 +194,8 @@ ccd:
     draftStoreUrl: http://draft-store-service-aat.service.core-compute-aat.internal
     paymentsUrl: http://payment-api-aat.service.core-compute-aat.internal
     emAnnotationUrl: http://em-anno-aat.service.core-compute-aat.internal
+    postgresHost: ${SERVICE_NAME}-postgresql
+    postgresSecret: ${SERVICE_NAME}-postgresql
     postgresUsername: hmcts
     postgresPassword: hmcts
     devMode: true
@@ -201,7 +203,7 @@ ccd:
   ccd-admin-web:
     nodejs:
       imagePullPolicy: Always
-      image: hmctspublic.azurecr.io/ccd/admin-web:latest
+      image: hmctsprod.azurecr.io/ccd/admin-web:latest
       ingressHost: ccd-admin-web-${SERVICE_FQDN}
       keyVaults: []
       environment:
@@ -223,10 +225,17 @@ ccd:
     java:
       disableKeyVaults: true
       imagePullPolicy: Always
-      image: hmctspublic.azurecr.io/ccd/user-profile-api:latest
+      image: hmctsprod.azurecr.io/ccd/user-profile-api:latest
       environment:
+        USER_PROFILE_DB_HOST: ${SERVICE_NAME}-postgresql
         USER_PROFILE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_definition,ccd_admin,cmc_claim_store,xui_webapp,xuiwebapp
-      keyVaults: []
+        USER_PROFILE_DB_OPTIONS: "?stringtype=unspecified"
+      secrets:
+        USER_PROFILE_DB_PASSWORD:
+          secretRef: "{{ .Values.global.postgresSecret }}"
+          key: password
+      keyVaults: [ ]
+      ingressHost: ccd-user-profile-${SERVICE_FQDN}
 
   ccd-definition-importer:
     debug: true
@@ -242,8 +251,9 @@ ccd:
     java:
       disableKeyVaults: true
       imagePullPolicy: Always
-      image: hmctspublic.azurecr.io/ccd/definition-store-api:latest
+      image: hmctsprod.azurecr.io/ccd/definition-store-api:latest
       environment:
+        DEFINITION_STORE_DB_HOST: ${SERVICE_NAME}-postgresql
         DEFINITION_STORE_IDAM_KEY: ${DEFINITION_STORE_S2S_KEY}
         DEFINITION_STORE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_gw,ccd_admin,xui_webapp,xuiwebapp,cmc_claim_store
         IDAM_API_BASE_URL: https://idam-api.aat.platform.hmcts.net
@@ -254,16 +264,22 @@ ccd:
         ELASTIC_SEARCH_CASE_INDEX_MAPPING_FIELDS_LIMIT: 50000
         DEFINITION_STORE_DEFAULT_LOG_LEVEL: DEBUG
         DEFINITION_STORE_TX_TIMEOUT_DEFAULT: 120
+        DEFINITION_STORE_DB_OPTIONS: "?stringtype=unspecified"
       ingressHost: ccd-definition-store-${SERVICE_FQDN}
       ingressIP: ${INGRESS_IP}
-      keyVaults: []
+      secrets:
+        DEFINITION_STORE_DB_PASSWORD:
+          secretRef: "{{ .Values.global.postgresSecret }}"
+          key: password
+      keyVaults: [ ]
 
   ccd-data-store-api:
     java:
       disableKeyVaults: true
       imagePullPolicy: Always
-      image: hmctspublic.azurecr.io/ccd/data-store-api:latest
+      image: hmctsprod.azurecr.io/ccd/data-store-api:latest
       environment:
+        DATA_STORE_DB_HOST: ${SERVICE_NAME}-postgresql
         DATA_STORE_IDAM_KEY: ${DATA_STORE_S2S_KEY}
         IDAM_OAUTH2_DATA_STORE_CLIENT_SECRET: ${IDAM_OAUTH2_DATA_STORE_CLIENT_SECRET}
         IDAM_DATA_STORE_SYSTEM_USER_USERNAME: ${IDAM_DATA_STORE_SYSTEM_USER_USERNAME}
@@ -276,14 +292,16 @@ ccd:
         ELASTIC_SEARCH_HOSTS: ${SERVICE_NAME}-es-master:9200
         ELASTIC_SEARCH_DATA_NODES_HOSTS:  http://${SERVICE_NAME}-es-master:9200
         CASE_DOCUMENT_AM_URL: http://ccd-case-document-am-api-aat.service.core-compute-aat.internal
-      keyVaults: []
+        DATA_STORE_DB_OPTIONS: "?stringtype=unspecified"
+      secrets:
+        DATA_STORE_DB_PASSWORD:
+          secretRef: "{{ .Values.global.postgresSecret }}"
+          key: password
+      keyVaults: [ ]
+      ingressHost: ccd-data-store-api-${SERVICE_FQDN}
 
   ccd-user-profile-importer:
-    image: hmctspublic.azurecr.io/ccd/user-profile-importer:db2r9a
-    users:
-      - civilmoneyclaims+ccd@gmail.com|CMC|MoneyClaimCase|open
-      - civilmoneyclaims+judge@gmail.com|CMC|MoneyClaimCase|orderForJudgeReview
-      - civilmoneyclaims+la@gmail.com|CMC|MoneyClaimCase|readyForDirections
+    enabled: false
 
   elasticsearch:
     nameOverride: ${SERVICE_NAME}-es
@@ -324,7 +342,7 @@ ccd:
       requests:
         cpu: 1000m
         memory: 1024Mi
-    image: hmctspublic.azurecr.io/ccd/logstash
+    image: hmctsprod.azurecr.io/ccd/logstash
     imageTag: "latest"
     logstashJavaOpts: -Xmx1g -Xms512M
     extraEnvs:

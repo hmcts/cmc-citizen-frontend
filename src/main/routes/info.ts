@@ -3,7 +3,7 @@ import * as config from 'config'
 import * as fs from 'fs-extra'
 import { hostname } from 'os'
 import * as path from 'path'
-import { RequestPromiseOptions } from 'request-promise-native'
+import { RequestOptions } from 'client/httpClient'
 
 import { InfoContributor, infoRequestHandler } from '@hmcts/info-provider'
 import { ConfigurableInfoContributor } from 'routes/configurableInfoContributor'
@@ -31,7 +31,7 @@ function basicInfoContributor (serviceName): InfoContributor {
 }
 
 function caCertRequiredLocallyInfoContributor (serviceName): InfoContributor {
-  const options: RequestPromiseOptions = {}
+  const options: RequestOptions = {}
   if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'dockertests' || !process.env.NODE_ENV) {
     const sslDirectory = path.join(__dirname, '..', 'resources', 'localhost-ssl')
     options.ca = fs.readFileSync(path.join(sslDirectory, 'localhost-ca.crt'))

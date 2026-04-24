@@ -1,7 +1,8 @@
 import * as mock from 'nock'
 import * as HttpStatus from 'http-status-codes'
-import * as config from 'config'
+import * as configNs from 'config'
 
+const config = (configNs as { default?: typeof configNs }).default ?? configNs
 const baseURL = config.get<string>('pay.url')
 const endpointPath = '/card-payments'
 const paymentsPath = '/payments'

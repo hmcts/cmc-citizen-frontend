@@ -26,7 +26,7 @@ import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
 import { FeatureToggles } from 'utils/featureToggles'
 import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { DefendantEvidence } from 'response/form/models/defendantEvidence'
-import * as uuid from 'uuid'
+import { v4 as uuidv4 } from 'uuid'
 import { PcqClient } from 'utils/pcqClient'
 import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
@@ -161,7 +161,7 @@ export default express.Router()
        if (await featureToggles.isPcqEnabled()) {
          const isEligible = await PcqClient.isEligibleRedirect(draft.document.defendantDetails.partyDetails.pcqId,draft.document.defendantDetails.partyDetails.type)
          if (draft.document.defendantDetails.partyDetails.pcqId === undefined) {
-           let pcqID = uuid()
+           let pcqID = uuidv4()
            draft.document.defendantDetails.partyDetails.pcqId = pcqID
            new DraftService().save(draft, user.bearerToken)
            if (isEligible) {

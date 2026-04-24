@@ -1,1 +1,22 @@
-{}
+{
+  "draft-store": {
+    "url": "http://localhost:18800"
+  },
+  "claim-store": {
+    "url": "http://localhost:14400"
+  },
+  "feature-toggles-api": {
+    "url": "http://localhost:18580"
+  },
+  "idam": {
+    "authentication-web": {
+      "url": "http://localhost:19002"
+    },
+    "api": {
+      "url": "http://localhost:15000"
+    },
+    "service-2-service-auth": {
+      "url": "http://localhost:14552"
+    }
+  }
+}

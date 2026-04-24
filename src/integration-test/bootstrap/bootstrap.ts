@@ -2,7 +2,6 @@
 
 import * as fs from 'fs'
 import { request } from 'integration-test/helpers/clients/base/request'
-import { RequestResponse } from 'request'
 import { IdamClient } from 'integration-test/helpers/clients/idamClient'
 import { ClaimStoreClient } from 'integration-test/helpers/clients/claimStoreClient'
 import { Logger } from '@hmcts/nodejs-logging'
@@ -11,14 +10,13 @@ const citizenAppURL = process.env.CITIZEN_APP_URL
 const logger = Logger.getLogger('idamClient')
 
 class Client {
-  static checkHealth (appURL: string): Promise<RequestResponse> {
+  static checkHealth (appURL: string): Promise<{ statusCode: number; body?: any }> {
     return request.get({
       uri: `${appURL}/health`,
       resolveWithFullResponse: true,
-      rejectUnauthorized: false,
       ca: fs.readFileSync('./src/integration-test/resources/localhost.crt')
-    }).catch((error) => {
-      return error
+    }).catch((error: any) => {
+      return { statusCode: error?.response?.status ?? error?.statusCode ?? 0, body: error?.response?.data ?? error?.message }
     })
   }
 }
@@ -50,10 +48,10 @@ async function waitTillHealthy (appURL: string) {
 
   console.log(`Verifying health for ${appURL}`)
 
-  let response: RequestResponse
+  let response: { statusCode: number; body?: any }
   for (let i = 0; i < maxTries; i++) {
     response = await Client.checkHealth(appURL)
-    console.log(`Attempt ${i + 1} - received status code ${response.statusCode} from ${appURL}/health`)
+    console.log(`Attempt ${i + 1} - received status code ${response?.statusCode} from ${appURL}/health`)
 
     if (response.statusCode === 200) {
       console.log(`Service ${appURL} became ready after ${sleepInterval * i} seconds`)

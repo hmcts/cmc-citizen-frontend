@@ -33,7 +33,14 @@ export class ApiLogger {
 
   _stringifyObject (object): string {
     if (object !== null && typeof object === 'object') {
-      return JSON.stringify(object)
+      try {
+        return JSON.stringify(object)
+      } catch (_) {
+        if (object instanceof Error) {
+          return `{ message: "${object.message}" }`
+        }
+        return String(object)
+      }
     }
 
     if (typeof object === 'string' && object.startsWith('%PDF')) {

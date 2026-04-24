@@ -240,7 +240,11 @@
       }
 
       var postcodeResponse = JSON.parse(xhr.responseText)
-      if (!postcodeResponse.valid) {
+      var postcodeLookupIsValid = postcodeResponse.isValid
+      if (typeof postcodeLookupIsValid === 'undefined') {
+        postcodeLookupIsValid = postcodeResponse.valid
+      }
+      if (!postcodeLookupIsValid) {
 
         var ni = isNorthernIrelandPostcode(postcode)
         handlePostcodeError(ni, postcodeLookupWidget)
@@ -255,20 +259,18 @@
       clearPostcodeDropdown(postcodeLookupWidget)
 
 
-      var listOfUprns = [];
-      //declaring a list of UPRNS
+      var seenAddressKeys = [];
+      // Track unique addresses by UPRN when available, otherwise by formatted address.
       postcodeResponse.addresses.forEach(function (address) {
-        //Going through each address
-        if(!listOfUprns.includes(address.uprn)){
-          //if list of uprns doesn't contain the address then add to list
-          listOfUprns.push(address.uprn)
+        var uniqueAddressKey = (address.uprn && address.uprn !== '') ? address.uprn : address.formattedAddress
+        if (uniqueAddressKey && !seenAddressKeys.includes(uniqueAddressKey)) {
+          seenAddressKeys.push(uniqueAddressKey)
           var option = postcodeDropdownOption(address)
-          if(option != undefined){
+          if (option != undefined) {
             postcodeSelectDropdown.appendChild(option)
           }
         }
       })
-      //If already in list we don't do above as already in list
 
       nonSelectableOption.text = postcodeLookupWidget.querySelector('select').options.length + ' addresses found'
       postcodeSelectDropdown.appendChild(nonSelectableOption)
@@ -316,10 +318,10 @@
       var formattedAddressArr = formattedAddress.split(",");
       var length = formattedAddressArr.length
 
-      if(length >= 5){
+      if (length >= 2) {
         var formattedAddressJSON = {
           'addressLines': [],
-          'townOrCity': formattedAddressArr[3],
+          'townOrCity': formattedAddressArr[length - 2].trim(),
           'postCode': formattedAddressArr[length-1]
         }
 
@@ -332,10 +334,17 @@
         //array into JSON
         //townorCity at array position 3 and postcode at length -1 as always last element in array
 
-        formattedAddressJSON.addressLines.push(formattedAddressArr[0]);
-        formattedAddressJSON.addressLines.push(formattedAddressArr[1]);
-        formattedAddressJSON.addressLines.push(formattedAddressArr[2]);
-        //changed to formattedAddress as this always displays correct info
+        var rawAddressLines = formattedAddressArr
+          .slice(0, length - 2)
+          .map(function (line) { return line.trim() })
+          .filter(function (line) { return line !== '' })
+
+        for (var i = 0; i < rawAddressLines.length && i < 3; i++) {
+          formattedAddressJSON.addressLines.push(rawAddressLines[i])
+        }
+        while (formattedAddressJSON.addressLines.length < 3) {
+          formattedAddressJSON.addressLines.push('')
+        }
 
         var option = document.createElement('option')
         option.value = JSON.stringify(formattedAddressJSON)

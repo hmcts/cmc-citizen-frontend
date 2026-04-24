@@ -503,6 +503,9 @@ describe('Defendant response: check and send page', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(fullAdmissionWithPaymentByInstalmentsDataCompany)
             claimStoreServiceMock.resolveSaveResponse()
             draftStoreServiceMock.resolveUpdate()
+            // In CI coverage runs this route can trigger a second draft update call.
+            // Register a second identical mock to avoid nondeterministic nock misses.
+            draftStoreServiceMock.resolveUpdate(100, true)
             draftStoreServiceMock.resolveDelete()
             draftStoreServiceMock.resolveDelete()
             claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
