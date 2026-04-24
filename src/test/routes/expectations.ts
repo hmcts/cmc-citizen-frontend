@@ -1,8 +1,9 @@
 import * as chai from 'chai'
 import * as cookie from 'cookie'
-import * as _ from 'lodash'
 import * as HttpStatus from 'http-status-codes'
+import * as lodashModule from 'lodash'
 
+const _: any = (lodashModule as any).default || lodashModule
 const Assertion = chai['Assertion']
 
 function stringifyWithoutPropertyQuotes (value: object, pretty: boolean = false): string {
@@ -86,11 +87,12 @@ Assertion.addMethod('toLocation', function (location: string | RegExp) {
   const res = this._obj
 
   if (_.isRegExp(location)) {
+    const re = location as RegExp
     this.assert(
-      location.test(res.header['location'])
+      re.test(res.header['location'])
       , errorMessageWithResponseExtract('expected redirect location to match #{exp} pattern but got #{act}', res)
       , errorMessageWithResponseExtract('expected redirect location to not match #{act}', res)
-      , location.source // expected
+      , re.source // expected
       , res.header['location'] // actual
     )
   } else {

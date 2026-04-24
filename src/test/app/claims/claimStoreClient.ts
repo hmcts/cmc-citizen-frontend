@@ -7,7 +7,7 @@ import * as HttpStatus from 'http-status-codes'
 import { User } from 'idam/user'
 import { claimDraft as claimDraftData, claimDraftHelpWithFees } from 'test/data/draft/claimDraft'
 import { claimData } from 'test/data/entity/claimData'
-import { RequestPromiseOptions } from 'request-promise-native'
+import { RequestOptions } from 'client/httpClient'
 import { claimStoreApiUrl, ClaimStoreClient } from 'claims/claimStoreClient'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftClaim } from 'drafts/models/draftClaim'
@@ -69,9 +69,8 @@ describe('ClaimStoreClient', () => {
     const retryAttempts = 3
 
     const retryingRequest = request.defaults({
-      retryDelay: requestDelayInMillis,
       maxAttempts: retryAttempts
-    } as RequestPromiseOptions)
+    } as RequestOptions)
 
     const claimStoreClient: ClaimStoreClient = new ClaimStoreClient(retryingRequest)
 
@@ -349,7 +348,7 @@ describe('ClaimStoreClient', () => {
 
       function mockInternalServerErrorforSaveBreathingSpaceOnAllAttempts () {
         mock(`${claimStoreApiUrl}`)
-          .post(`/${claimant.id}/${claimDraftData.externalId}/breathingSpace`)
+          .post(/\/[^/]+\/breathingSpace$/)
           .times(retryAttempts)
           .reply(HttpStatus.INTERNAL_SERVER_ERROR, 'An unexpected error occurred')
       }
@@ -367,11 +366,11 @@ describe('ClaimStoreClient', () => {
           draft.breathingSpace.breathingSpaceLiftedbyInsolvencyTeamDate = moment('9999-09-09')
           await claimStoreClient.saveBreatingSpace(draft, claimant)
         } catch (err) {
-          expect(err.statusCode).to.equal(HttpStatus.NOT_FOUND)
+          expect(err.statusCode).to.equal(HttpStatus.INTERNAL_SERVER_ERROR)
           return
         }
 
-        expect.fail() // Exception should have been thrown due to 404 response code
+        expect.fail() // Exception should have been thrown due to 500 response code
       })
     })
   })

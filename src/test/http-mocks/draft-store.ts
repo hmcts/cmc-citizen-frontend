@@ -1,5 +1,7 @@
-import * as config from 'config'
+import * as configNs from 'config'
 import * as mock from 'nock'
+
+const config = (configNs as { default?: typeof configNs }).default ?? configNs
 import * as HttpStatus from 'http-status-codes'
 
 import { ResponseType } from 'response/form/models/responseType'
@@ -45,7 +47,9 @@ import { MomentFactory } from 'shared/momentFactory'
 import * as moment from 'moment'
 import { CompanyDetails } from 'forms/models/companyDetails'
 
-const serviceBaseURL: string = `${config.get('draft-store.url')}`
+function getDraftStoreBaseURL (): string {
+  return `${config.get('draft-store.url')}`.replace(/\/+$/, '')
+}
 
 export const samplePaidInFullDraftObj = {
   datePaid: moment()
@@ -1094,7 +1098,7 @@ export function resolveFind (draftType: string, draftOverride?: object): mock.Sc
       documentDocument = { ...draftOverride }
   }
 
-  return mock(serviceBaseURL)
+  return mock(getDraftStoreBaseURL())
     .get(new RegExp('/drafts.*'))
     .reply(HttpStatus.OK, {
       data: [{
@@ -1108,7 +1112,7 @@ export function resolveFind (draftType: string, draftOverride?: object): mock.Sc
 }
 
 export function resolveFindAllDrafts (): mock.Scope {
-  return mock(serviceBaseURL)
+  return mock(getDraftStoreBaseURL())
     .get(new RegExp('/drafts.*'))
     .reply(HttpStatus.OK, {
       data: [{
@@ -1149,7 +1153,7 @@ export function resolveFindAllDrafts (): mock.Scope {
 }
 
 export function resolveFindNoDraftFound (): mock.Scope {
-  return mock(serviceBaseURL)
+  return mock(getDraftStoreBaseURL())
     .get(new RegExp('/drafts.*'))
     .reply(HttpStatus.OK, {
       data: []
@@ -1157,43 +1161,47 @@ export function resolveFindNoDraftFound (): mock.Scope {
 }
 
 export function rejectFind (reason: string = 'HTTP error'): mock.Scope {
-  return mock(serviceBaseURL)
+  return mock(getDraftStoreBaseURL())
     .get(new RegExp('/drafts.*'))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-export function resolveUpdate (id: number = 100): mock.Scope {
-  return mock(serviceBaseURL)
-    .put(`/drafts/${id}`)
-    .reply(HttpStatus.OK)
+export function resolveUpdate (id: number = 100, optional: boolean = false): mock.Scope {
+  const pathMatcher = new RegExp(`^/drafts/${id}/?$`)
+  const interceptor = mock(getDraftStoreBaseURL())
+    .put(pathMatcher)
+  if (optional) {
+    interceptor.optionally()
+  }
+  return interceptor.reply(HttpStatus.OK)
 }
 
 export function resolveSave (id: number = 100): mock.Scope {
-  return mock(serviceBaseURL)
+  return mock(getDraftStoreBaseURL())
     .post(`/drafts`)
     .reply(HttpStatus.OK, sampleOrdersDraftObj)
 }
 
 export function rejectSave (id: number = 100, reason: string = 'HTTP error'): mock.Scope {
-  return mock(serviceBaseURL)
+  return mock(getDraftStoreBaseURL())
     .post(`/drafts`)
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
 export function rejectUpdate (id: number = 100, reason: string = 'HTTP error'): mock.Scope {
-  return mock(serviceBaseURL)
-    .put(`/drafts/${id}`)
+  return mock(getDraftStoreBaseURL())
+    .put(new RegExp(`^/drafts/${id}/?$`))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
 export function resolveDelete (id: number = 100): mock.Scope {
-  return mock(serviceBaseURL)
+  return mock(getDraftStoreBaseURL())
     .delete(`/drafts/${id}`)
     .reply(HttpStatus.OK)
 }
 
 export function rejectDelete (id: number = 100, reason: string = 'HTTP error'): mock.Scope {
-  return mock(serviceBaseURL)
+  return mock(getDraftStoreBaseURL())
     .delete(`/drafts/${id}`)
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }

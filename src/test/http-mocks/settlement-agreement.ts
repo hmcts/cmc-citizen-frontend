@@ -1,9 +1,10 @@
 import * as HttpStatus from 'http-status-codes'
-import * as config from 'config'
+import * as configNs from 'config'
 import * as mock from 'nock'
 import { MadeBy } from 'claims/models/madeBy'
 import { StatementType } from 'offer/form/models/statementType'
 
+const config = (configNs as { default?: typeof configNs }).default ?? configNs
 const serviceBaseURL: string = config.get<string>('claim-store.url')
 const externalIdPattern: string = '[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'
 

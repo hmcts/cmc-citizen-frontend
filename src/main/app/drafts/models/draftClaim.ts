@@ -5,7 +5,7 @@ import { ClaimAmountBreakdown } from 'claim/form/models/claimAmountBreakdown'
 import { InterestRate } from 'claim/form/models/interestRate'
 import { InterestDate } from 'claim/form/models/interestDate'
 import { Reason } from 'claim/form/models/reason'
-import * as uuid from 'uuid'
+import { v4 as uuidv4 } from 'uuid'
 import { Defendant } from 'drafts/models/defendant'
 import { DraftDocument } from '@hmcts/cmc-draft-store-middleware'
 import { QualifiedStatementOfTruth } from 'forms/models/qualifiedStatementOfTruth'
@@ -24,7 +24,7 @@ import { BreathingSpace } from 'features/claim/form/models/breathingSpace'
 
 export class DraftClaim extends DraftDocument {
 
-  externalId = uuid()
+  externalId = uuidv4()
   eligibility: boolean | Eligibility
   claimant: Claimant = new Claimant()
   defendant: Defendant = new Defendant()

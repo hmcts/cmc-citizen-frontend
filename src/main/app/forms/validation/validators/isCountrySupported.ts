@@ -7,7 +7,7 @@ import {
 } from '@hmcts/class-validator'
 import { Country } from 'common/country'
 import { ErrorLogger } from 'logging/errorLogger'
-import { AddressInfoResponse } from '@hmcts/os-places-client'
+import { AddressInfoResponse } from 'postcode-lookup/osPlacesClient'
 import { ClientFactory } from 'postcode-lookup/clientFactory'
 
 const postcodeClient = ClientFactory.createOSPlacesClient()

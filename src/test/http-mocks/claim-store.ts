@@ -1,5 +1,7 @@
-import * as config from 'config'
+import * as configNs from 'config'
 import * as mock from 'nock'
+
+const config = (configNs as { default?: typeof configNs }).default ?? configNs
 import * as HttpStatus from 'http-status-codes'
 import { StatementType } from 'features/offer/form/models/statementType'
 import { MadeBy } from 'claims/models/madeBy'

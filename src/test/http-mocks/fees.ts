@@ -1,7 +1,8 @@
-import * as config from 'config'
+import * as configNs from 'config'
 import * as mock from 'nock'
 import * as HttpStatus from 'http-status-codes'
 
+const config = (configNs as { default?: typeof configNs }).default ?? configNs
 const service = config.get<string>('fees.service')
 const jurisdiction1 = config.get<string>('fees.jurisdiction1')
 const jurisdiction2 = config.get<string>('fees.jurisdiction2')

@@ -1,0 +1,73 @@
+diff --git a/dist/draft/draftService.d.ts b/dist/draft/draftService.d.ts
+index f5a5bb89a3a8cb9860092edb17b455a9b8e097f8..4478e8c98d888338f1ffd420fb3309936f6d6faf 100644
+--- a/dist/draft/draftService.d.ts
++++ b/dist/draft/draftService.d.ts
+@@ -1,7 +1,3 @@
+-/// <reference types="request" />
+-/// <reference types="request-promise-native" />
+-import { CoreOptions, RequestAPI } from 'request';
+-import { RequestPromise } from 'request-promise-native';
+ import { ServiceAuthTokenFactory } from '../security/serviceAuthTokenFactory';
+ import { Draft } from './draft';
+ import { Secrets } from '../crypto/secrets';
+@@ -9,7 +5,7 @@ export declare class DraftService {
+     private draftStoreUri;
+     private request;
+     private serviceAuthTokenFactory;
+-    constructor(draftStoreUri: string, request: RequestAPI<RequestPromise, CoreOptions, CoreOptions>, serviceAuthTokenFactory: ServiceAuthTokenFactory);
++    constructor(draftStoreUri: string, request: any, serviceAuthTokenFactory: ServiceAuthTokenFactory);
+     find<T>(draftType: string, limit: string | undefined, userToken: string, deserializationFn: (value: any) => T, secrets?: Secrets): Promise<Draft<T>[]>;
+     save<T>(draft: Draft<T>, userToken: string, secrets?: Secrets): Promise<void>;
+     delete<T>(draftId: number, userToken: string): Promise<void>;
+diff --git a/dist/draft/draftStoreClient.d.ts b/dist/draft/draftStoreClient.d.ts
+index 0e4edd5c8d1b7f5fbe9608277c8ea7a20331dd7a..5742a63a2f63d8ce8a3793899d099dfe134199f0 100644
+--- a/dist/draft/draftStoreClient.d.ts
++++ b/dist/draft/draftStoreClient.d.ts
+@@ -1,14 +1,10 @@
+-/// <reference types="request" />
+-/// <reference types="request-promise-native" />
+-import { CoreOptions, RequestAPI } from 'request';
+-import { RequestPromise } from 'request-promise-native';
+ import { Draft } from './draft';
+ import { Secrets } from '../crypto/secrets';
+ export declare class DraftStoreClient<T> {
+     private endpointURL;
+     private serviceAuthToken;
+     private request;
+-    constructor(endpointURL: string, serviceAuthToken: string, request: RequestAPI<RequestPromise, CoreOptions, CoreOptions>);
++    constructor(endpointURL: string, serviceAuthToken: string, request: any);
+     find(query: {
+         [key: string]: string;
+     }, userAuthToken: string, deserializationFn: (value: any) => T, secrets?: Secrets): Promise<Draft<T>[]>;
+diff --git a/dist/draft/draftStoreClientFactory.d.ts b/dist/draft/draftStoreClientFactory.d.ts
+index e2366231b9e4451ecc890d650de968f249e1a082..1391da3a91735fb040adef110a6c2a96728e2588 100644
+--- a/dist/draft/draftStoreClientFactory.d.ts
++++ b/dist/draft/draftStoreClientFactory.d.ts
+@@ -1,11 +1,7 @@
+-/// <reference types="request" />
+-/// <reference types="request-promise-native" />
+-import { CoreOptions, RequestAPI } from 'request';
+-import { RequestPromise } from 'request-promise-native';
+ import { ServiceAuthTokenFactory } from '../security/serviceAuthTokenFactory';
+ import { DraftStoreClient } from './draftStoreClient';
+ export declare class DraftStoreClientFactory {
+     private serviceAuthTokenFactory;
+     constructor(serviceAuthTokenFactory: ServiceAuthTokenFactory);
+-    create<T>(draftStoreUrl: string, request: RequestAPI<RequestPromise, CoreOptions, CoreOptions>): Promise<DraftStoreClient<T>>;
++    create<T>(draftStoreUrl: string, request: any): Promise<DraftStoreClient<T>>;
+ }
+diff --git a/package.json b/package.json
+index f4461bdacc749ac3d4efbf1d4495fe8b557114cf..23cf186f7c739242ba2f5b18f902f6e1216040ac 100644
+--- a/package.json
++++ b/package.json
+@@ -23,9 +23,7 @@
+   "author": "HMCTS Reform",
+   "license": "MIT",
+   "dependencies": {
+-    "moment": "^2.18.1",
+-    "request": "^2.81.0",
+-    "request-promise-native": "^1.0.3"
++    "moment": "^2.18.1"
+   },
+   "devDependencies": {
+     "@types/chai": "^4.0.3",

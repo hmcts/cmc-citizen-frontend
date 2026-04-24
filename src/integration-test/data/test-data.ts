@@ -1,6 +1,6 @@
 import { PartyType } from 'integration-test/data/party-type'
 import { InterestType } from 'integration-test/data/interest-type'
-import * as uuid from 'uuid'
+import { v4 as uuidv4 } from 'uuid'
 import * as moment from 'moment'
 import I = CodeceptJS.I
 
@@ -53,7 +53,7 @@ export async function createClaimData (I: I, claimantType: PartyType, defendantT
     },
     reason: claimReason,
     timeline: { rows: [{ date: 'may', description: 'ok' }] },
-    externalId: uuid(),
+    externalId: uuidv4(),
     get total (): number {
       switch (interestType) {
         case InterestType.STANDARD:

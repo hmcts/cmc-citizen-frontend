@@ -1,5 +1,5 @@
 import * as config from 'config'
-import * as uuid from 'uuid'
+import { v4 as uuidv4 } from 'uuid'
 import * as Cookies from 'cookies'
 import * as express from 'express'
 import * as toBoolean from 'to-boolean'
@@ -25,7 +25,7 @@ export class OAuthHelper {
                    res: express.Response,
                    receiver: RoutablePath = Paths.receiver): string {
     const redirectUri = buildURL(req, receiver.uri)
-    const stateId = uuid()
+    const stateId = uuidv4()
     OAuthHelper.storeStateCookie(req, res, stateId)
     let stateObj = { 'state': stateId }
     if (req.originalUrl.match(redirectToClaimRegex)) {

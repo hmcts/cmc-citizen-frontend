@@ -4,8 +4,13 @@ import * as _ from 'lodash'
 import { ValidationError } from '@hmcts/class-validator'
 import * as randomstring from 'randomstring'
 
+/** Plain class - avoid parameter properties so file parses under Node ESM strip-only. */
 class Violation {
-  constructor (public property: string, public message: string) {
+  property: string
+  message: string
+  constructor (property: string, message: string) {
+    this.property = property
+    this.message = message
   }
 }
 
