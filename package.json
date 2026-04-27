@@ -93,6 +93,7 @@
   },
   "devDependencies": {
     "@hmcts/cmc-supported-browsers": "^1.0.1",
+    "@playwright/test": "1.59.1",
     "@types/chai": "^4.2.18",
     "@types/chai-as-promised": "^7.1.4",
     "@types/chai-spies": "^1.0.3",
