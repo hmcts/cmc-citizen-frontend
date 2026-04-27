@@ -110,6 +110,7 @@
     "@types/supertest": "*",
     "@typescript-eslint/eslint-plugin": "^5.30.7",
     "@typescript-eslint/parser": "^5.30.7",
+    "allure-playwright": "^3.7.1",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "codacy-coverage": "3.4.0",
