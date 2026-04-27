@@ -106,6 +106,57 @@ $ ./bin/start-local-environment.sh
 
 For more details on the dockerized environment please refer to integration-tests repository's[`README`](https://github.com/hmcts/cmc-integration-tests/blob/master/README.md) file.
 
+### Playwright API Security and Functional Tests
+
+API security and functional tests are written using [Playwright](https://playwright.dev/) and reside in the [`playwright/`](playwright/) directory. These tests run as part of the preview pipeline after the existing CodeceptJS functional tests pass.
+
+**What they cover (70 tests):**
+
+| Category | Tests | What it validates |
+|----------|-------|-------------------|
+| No Auth - Removed Endpoints | 9 | `/support/**` and `/cases/callbacks/**` return 401 without token |
+| No Auth - Protected Endpoints | 6 | `/claims/**`, `/responses/**`, `/user/**` return 401 without token |
+| Fake JWT | 5 | Forged tokens with fake signatures are rejected |
+| Algorithm "none" Attack | 3 | Classic JWT bypass using `alg:none` is rejected |
+| Expired Token | 3 | Expired JWTs are rejected |
+| Role Escalation | 3 | Forged caseworker/admin role tokens are rejected |
+| Path Traversal | 9 | URL encoding, double slashes, null bytes, semicolons are blocked |
+| HTTP Method Tampering | 5 | Unexpected HTTP methods (DELETE, PATCH, TRACE) are rejected |
+| Header Injection | 5 | X-Forwarded-For, X-Original-URL bypass attempts are rejected |
+| SQL Injection | 10 | Malicious SQL payloads do not cause 500 errors |
+| XSS (Reflected) | 4 | Script injection payloads are not reflected in responses |
+| Health Check Sanity | 3 | `/health`, `/health/liveness`, `/health/readiness` remain accessible |
+| Claim Lifecycle | 5 | Create claim, retrieve, link defendant, submit defence, verify response |
+
+**Running locally:**
+
+Set the required environment variables from the Azure Key Vault (see `Jenkinsfile_CNP` for the vault secret names). Connect to VPN before running.
+
+```bash
+
+```bash
+# All tests (security + functional)
+$ yarn test:playwright-preview
+
+# Security tests only
+$ npx playwright test --config=playwright/playwright.config.ts --project=api-security
+
+# Functional tests only
+$ npx playwright test --config=playwright/playwright.config.ts --project=api-functional
+```
+
+**Generating Allure report locally:**
+
+```bash
+$ npx allure generate allure-results -o allure-report --open
+```
+
+**In the pipeline:**
+
+Tests run automatically in `afterSuccess('functionalTest:preview')`. The Allure report is published as a Jenkins artifact ("CMC API Security & Functional Test Report" link on the build page).
+
+Based on DTSCCI-4008 API Security Testing Framework.
+
 ## Troubleshooting
 
 ### Warnings while running ```yarn install``` on yarn version 1.0.1
