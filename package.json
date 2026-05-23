@@ -177,7 +177,7 @@
   "resolutions": {
     "path-to-regexp": "0.1.13",
     "@babel/runtime": "7.26.10",
-    "qs": "6.14.2",
+    "qs": "6.15.2",
     "sass-lint/eslint": "^5.0.0",
     "bootstrap-datepicker/jquery": "^3.5.0",
     "lodash": "4.18.1",
