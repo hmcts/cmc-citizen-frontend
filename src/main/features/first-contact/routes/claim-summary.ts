@@ -12,7 +12,7 @@ import { getInterestDetails } from 'shared/interestUtils'
 const sessionCookieName = config.get<string>('session.cookieName')
 
 function receiverPath (req: express.Request, res: express.Response): string {
-  return `${OAuthHelper.forUplift(req, res)}&jwt=${AuthTokenExtractor.extract(req) ?? ''}`
+  return `${OAuthHelper.forUplift(req, res)}&jwt=${AuthTokenExtractor.extractAccessToken(req) ?? ''}`
 }
 
 /* tslint:disable:no-default-export */

@@ -8,7 +8,7 @@ import { OAuthHelper } from 'idam/oAuthHelper'
 export default express.Router()
   .get(Paths.logoutReceiver.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
-      const authToken = req.session?.authenticationToken
+      const authToken = req.session?.idToken
       req.session?.destroy((err) => {
         if (err) {
           return next(err)

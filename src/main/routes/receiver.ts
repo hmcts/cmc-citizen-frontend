@@ -49,7 +49,7 @@ function getPropertyFromQueryState (req: express.Request, property: string = 'st
   return undefined
 }
 
-async function getOAuthAccessToken (req: express.Request, receiver: RoutablePath): Promise<string> {
+async function getOAuthToken (req: express.Request, receiver: RoutablePath): Promise<AuthToken> {
   const state = getPropertyFromQueryState(req)
   if (state !== OAuthHelper.getStateCookie(req)) {
     trackCustomEvent('State cookie mismatch (citizen)',
@@ -63,19 +63,19 @@ async function getOAuthAccessToken (req: express.Request, receiver: RoutablePath
     buildURL(req, receiver.uri)
   )
   if (authToken) {
-    return authToken.accessToken
+    return authToken
   }
   return Promise.reject()
 }
 
 async function getAuthToken (req: express.Request,
                              receiver: RoutablePath = AppPaths.receiver,
-                             checkCookie = true): Promise<string> {
+                             checkCookie = true): Promise<AuthToken> {
   let authenticationToken
   if (req.query.code) {
-    authenticationToken = await getOAuthAccessToken(req, receiver)
+    authenticationToken = await getOAuthToken(req, receiver)
   } else if (checkCookie) {
-    authenticationToken = AuthTokenExtractor.extract(req)
+    authenticationToken = AuthTokenExtractor.extractAccessToken(req)
   }
   return authenticationToken
 }
@@ -135,8 +135,9 @@ async function retrieveRedirectForLandingPage (req: express.Request, res: expres
   return redirectUri
 }
 
-function persistTokenInSession (req: express.Request, cookies: Cookies, authenticationToken: string): void {
-  req.session.authenticationToken = authenticationToken
+function persistTokenInSession (req: express.Request, cookies: Cookies, authenticationToken: AuthToken): void {
+  req.session.authenticationToken = authenticationToken.accessToken
+  req.session.idToken = authenticationToken.idToken
   cookies.set(stateCookieName, '')
 }
 
@@ -152,7 +153,7 @@ export default express.Router()
       try {
         const authenticationToken = await getAuthToken(req)
         if (authenticationToken) {
-          user = await IdamClient.retrieveUserFor(authenticationToken)
+          user = await IdamClient.retrieveUserFor(authenticationToken.accessToken)
           res.locals.isLoggedIn = true
           res.locals.user = user
           persistTokenInSession(req, cookies, authenticationToken)
@@ -198,7 +199,7 @@ export default express.Router()
       try {
         const authenticationToken = await getAuthToken(req, AppPaths.linkDefendantReceiver, false)
         if (authenticationToken) {
-          res.locals.user = await IdamClient.retrieveUserFor(authenticationToken)
+          res.locals.user = await IdamClient.retrieveUserFor(authenticationToken.accessToken)
           res.locals.isLoggedIn = true
           persistTokenInSession(req, cookies, authenticationToken)
           res.redirect(AppPaths.receiver.uri)

@@ -8,6 +8,9 @@ import { Paths } from 'paths'
 import { RoutablePath } from 'shared/router/routablePath'
 import { User } from 'idam/user'
 import { Base64 } from 'js-base64'
+import {Logger} from '@hmcts/nodejs-logging'
+const logger = Logger.getLogger('middleware/authorization')
+
 
 const clientId = config.get<string>('oauth.clientId')
 const scope = config.get('idam.authentication-web.scope')
@@ -40,7 +43,9 @@ export class OAuthHelper {
                    authToken: string,
                    receiver: RoutablePath = Paths.receiver): string {
     const redirectUri = redirectToCivil ? `${baseCivilCitizenUrl}/logout` : buildURL(req, receiver.uri)
-    return `${logoutPath}?id_token_hint=${authToken}&post_logout_redirect_uri=${redirectUri}`
+    const logoutUrl = `${logoutPath}?id_token_hint=${authToken}&post_logout_redirect_uri=${redirectUri}`
+    logger.info(`Logging out user from IDAM. Redirecting to ${logoutUrl}`)
+    return logoutUrl
   }
 
   static forPin (req: express.Request, res: express.Response, claimReference: string): string {

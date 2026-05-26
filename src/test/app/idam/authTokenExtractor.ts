@@ -13,7 +13,7 @@ describe('AuthTokenExtractor', () => {
       }
     } as Request
 
-    expect(AuthTokenExtractor.extract(req)).to.equal(tokenValue)
+    expect(AuthTokenExtractor.extractAccessToken(req)).to.equal(tokenValue)
   })
 
   it('should return undefined when session is undefined', () => {
@@ -21,7 +21,7 @@ describe('AuthTokenExtractor', () => {
       session: undefined
     } as Request
 
-    expect(AuthTokenExtractor.extract(req)).to.equal(undefined)
+    expect(AuthTokenExtractor.extractAccessToken(req)).to.equal(undefined)
   })
 
   it('should return undefined when session has no authenticationToken', () => {
@@ -29,6 +29,6 @@ describe('AuthTokenExtractor', () => {
       session: {}
     } as Request
 
-    expect(AuthTokenExtractor.extract(req)).to.equal(undefined)
+    expect(AuthTokenExtractor.extractAccessToken(req)).to.equal(undefined)
   })
 })
