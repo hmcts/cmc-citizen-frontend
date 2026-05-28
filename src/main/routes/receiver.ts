@@ -198,7 +198,7 @@ export default express.Router()
 
       try {
         const authenticationToken = await getAuthToken(req, AppPaths.linkDefendantReceiver, false)
-        if (authenticationToken) {
+        if (authenticationToken.accessToken) {
           res.locals.user = await IdamClient.retrieveUserFor(authenticationToken.accessToken)
           res.locals.isLoggedIn = true
           persistTokenInSession(req, cookies, authenticationToken)
