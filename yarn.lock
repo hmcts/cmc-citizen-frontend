@@ -1953,15 +1953,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ajv@npm:6.12.6":
-  version: 6.12.6
-  resolution: "ajv@npm:6.12.6"
+"ajv@npm:6.14.0":
+  version: 6.14.0
+  resolution: "ajv@npm:6.14.0"
   dependencies:
     fast-deep-equal: "npm:^3.1.1"
     fast-json-stable-stringify: "npm:^2.0.0"
     json-schema-traverse: "npm:^0.4.1"
     uri-js: "npm:^4.2.2"
-  checksum: 10/48d6ad21138d12eb4d16d878d630079a2bda25a04e745c07846a4ad768319533031e28872a9b3c5790fa1ec41aabdf2abed30a56e5a03ebc2cf92184b8ee306c
+  checksum: 10/c71f14dd2b6f2535d043f74019c8169f7aeb1106bafbb741af96f34fdbf932255c919ddd46344043d03b62ea0ccb319f83667ec5eedf612393f29054fe5ce4a5
   languageName: node
   linkType: hard
 
@@ -14446,8 +14446,8 @@ __metadata:
   linkType: hard
 
 "ws@npm:^7.4.6":
-  version: 7.5.7
-  resolution: "ws@npm:7.5.7"
+  version: 7.5.10
+  resolution: "ws@npm:7.5.10"
   peerDependencies:
     bufferutil: ^4.0.1
     utf-8-validate: ^5.0.2
@@ -14456,7 +14456,7 @@ __metadata:
       optional: true
     utf-8-validate:
       optional: true
-  checksum: 10/675a3553220de69f742aff61f90f89d03376fca18de0e066e564e9834bd9bda9e1885d9c7b406955066426c8c66aac25ec01cc10b77459a5e88a5b9582d39055
+  checksum: 10/9c796b84ba80ffc2c2adcdfc9c8e9a219ba99caa435c9a8d45f9ac593bba325563b3f83edc5eb067cc6d21b9a6bf2c930adf76dd40af5f58a5ca6859e81858f0
   languageName: node
   linkType: hard
 

@@ -207,7 +207,7 @@
     "config": "^3.3.12",
     "cookie": "0.7.0",
     "cookiejar": "2.1.4",
-    "ajv": "6.12.6",
+    "ajv": "6.14.0",
     "formidable": "3.5.4",
     "form-data@npm:^2.0.0": "2.5.5",
     "form-data@npm:~2.3.2": "2.5.5",
