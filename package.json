@@ -198,7 +198,7 @@
     "glob-parent": "^5.1.2",
     "trim-newlines": "^4.0.1",
     "normalize-url": "^6.0.1",
-    "ansi-regex": "^3.0.1",
+    "ansi-regex": "^6.0.0",
     "decode-uri-component": "0.2.1",
     "http-cache-semantics": "4.1.1",
     "json5": "1.0.2",

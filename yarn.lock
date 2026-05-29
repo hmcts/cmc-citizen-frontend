@@ -1904,10 +1904,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ansi-regex@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "ansi-regex@npm:3.0.1"
-  checksum: 10/09daf180c5f59af9850c7ac1bd7fda85ba596cc8cbeb210826e90755f06c818af86d9fa1e6e8322fab2c3b9e9b03f56c537b42241139f824dd75066a1e7257cc
+"ansi-regex@npm:^6.0.0":
+  version: 6.2.2
+  resolution: "ansi-regex@npm:6.2.2"
+  checksum: 10/9b17ce2c6daecc75bcd5966b9ad672c23b184dc3ed9bf3c98a0702f0d2f736c15c10d461913568f2cf527a5e64291c7473358885dd493305c84a1cfed66ba94f
   languageName: node
   linkType: hard
 
