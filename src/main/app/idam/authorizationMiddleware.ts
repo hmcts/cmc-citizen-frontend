@@ -25,7 +25,7 @@ export class AuthorizationMiddleware {
     }
 
     return (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const token: string | undefined = AuthTokenExtractor.extract(req)
+      const token: string | undefined = AuthTokenExtractor.extractAccessToken(req)
 
       if (isPathUnprotected(req.path)) {
         logger.debug(`Unprotected path - access to ${req.path} granted`)

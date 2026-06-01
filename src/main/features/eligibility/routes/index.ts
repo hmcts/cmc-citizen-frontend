@@ -7,6 +7,6 @@ import { AuthTokenExtractor } from 'idam/authTokenExtractor'
 export default express.Router()
   .get(Paths.startPage.uri, (req: express.Request, res: express.Response): void => {
     res.render(Paths.startPage.associatedView, {
-      registeredUser: AuthTokenExtractor.extract(req) !== undefined
+      registeredUser: AuthTokenExtractor.extractAccessToken(req) !== undefined
     })
   })

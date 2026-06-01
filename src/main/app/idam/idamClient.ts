@@ -2,7 +2,6 @@ import * as config from 'config'
 import * as otp from 'otp'
 
 import { request as requestClient } from 'client/request'
-import type { RequestAPI } from 'client/request'
 import { User } from 'idam/user'
 import { ServiceAuthToken } from 'idam/serviceAuthToken'
 import { AuthToken } from 'idam/authToken'
@@ -68,6 +67,7 @@ export class IdamClient {
       .then((response: any) => {
         return new AuthToken(
           response.access_token,
+          response.id_token,
           response.token_type,
           response.expires_in
         )

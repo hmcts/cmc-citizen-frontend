@@ -6,8 +6,11 @@ import * as express from 'express'
  */
 export class AuthTokenExtractor {
 
-  static extract (req: express.Request): string | undefined {
+  static extractAccessToken (req: express.Request): string | undefined {
     return req.session?.authenticationToken
   }
 
+  static extractIdToken (req: express.Request): string | undefined {
+    return req.session?.idToken
+  }
 }
