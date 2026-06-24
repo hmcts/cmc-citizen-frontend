@@ -16,7 +16,12 @@ let healthCheckConfig = {
     'fees': basicHealthCheck('fees'),
     'pay': basicHealthCheck('pay'),
     'idam-service-2-service-auth': basicHealthCheck('idam.service-2-service-auth'),
-    'idam-api': basicHealthCheck('idam.api')
+    'idam-api': basicHealthCheck('idam.api'),
+    // DTSCCI-5286 (HMCTS Access migration): probe the new HMCTS Access front door.
+    // basicHealthCheck hits ${idam.hmcts-access.url}/health (or idam.hmcts-access.healthCheckUrl if set).
+    // TODO(DTSCCI-5286): confirm the HMCTS Access health path in a lower env; if it is not '/health',
+    // add "healthCheckUrl" under idam.hmcts-access in config instead of relying on the '/health' suffix.
+    'hmcts-access': basicHealthCheck('idam.hmcts-access')
   }
 }
 

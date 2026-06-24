@@ -10,6 +10,9 @@
     "authentication-web": {
       "url": "IDAM_AUTHENTICATION_WEB_URL"
     },
+    "hmcts-access": {
+      "url": "IDAM_HMCTS_ACCESS_URL"
+    },
     "api": {
       "url": "IDAM_API_URL"
     },
