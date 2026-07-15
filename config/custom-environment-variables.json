@@ -123,7 +123,8 @@
     "breathingSpace": "FEATURE_BREATHING_SPACE",
     "newClaimFees": "FEATURE_NEW_CLAIM_FEES",
     "feeKeywordsEnable": "FEES_API_KEYWORDS_ENABLE",
-    "disablePages": "FEATURE_DISABLE_PAGES"
+    "disablePages": "FEATURE_DISABLE_PAGES",
+    "hmctsAccessMigration": "FEATURE_HMCTS_ACCESS_MIGRATION"
   },
 
   "oauth": {

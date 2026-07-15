@@ -8,9 +8,15 @@ import { Paths } from 'paths'
 import { RoutablePath } from 'shared/router/routablePath'
 import { User } from 'idam/user'
 import { Base64 } from 'js-base64'
+import { FeatureToggles } from 'utils/featureToggles'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 import {Logger} from '@hmcts/nodejs-logging'
 const logger = Logger.getLogger('middleware/authorization')
 
+// DTSCCI-5286 (HMCTS Access migration): used only to log the 'hmcts-access-migration' flag value
+// on each login so we can confirm from environment logs whether the LaunchDarkly toggle is
+// evaluating as expected during the migration. It does not change the login URL.
+const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
 
 const clientId = config.get<string>('oauth.clientId')
 const scope = config.get('idam.authentication-web.scope')
@@ -36,7 +42,16 @@ export class OAuthHelper {
     }
     const state = Base64.encode(JSON.stringify(stateObj))
 
-    return `${authorizePath}?response_type=code&state=${state}&client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`
+    const idamAuthorizeUrl = `${authorizePath}?response_type=code&state=${state}&client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`
+
+    // DTSCCI-5286: log the resolved hmcts-access-migration flag value on each login. Fire-and-forget
+    // so forLogin stays synchronous; the flag does not affect idamAuthorizeUrl (entry point is
+    // always /o/authorize per the IDAM migration guide).
+    featureToggles.isHmctsAccessMigrationEnabled()
+      .then(enabled => logger.info(`hmcts-access-migration flag = ${enabled}; redirecting to IDAM login URL: ${idamAuthorizeUrl}`))
+      .catch(err => logger.error('Failed to read hmcts-access-migration flag', err))
+
+    return idamAuthorizeUrl
   }
 
   static forLogout (req: express.Request,

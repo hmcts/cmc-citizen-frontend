@@ -71,4 +71,8 @@ export class FeatureToggles {
   async isFeeKeywordsEnabled (): Promise<boolean> {
     return this.launchDarklyClient.serviceVariation('fee-keywords-enable', toBoolean(config.get<boolean>(`featureToggles.feeKeywordsEnable`)))
   }
+
+  async isHmctsAccessMigrationEnabled (): Promise<boolean> {
+    return this.launchDarklyClient.serviceVariation('hmcts-access-migration', toBoolean(config.get<boolean>(`featureToggles.hmctsAccessMigration`)))
+  }
 }

@@ -119,7 +119,8 @@
     "breathingSpace": true,
     "newClaimFees": true,
     "feeKeywordsEnable": false,
-    "disablePages": false
+    "disablePages": false,
+    "hmctsAccessMigration": false
   },
   "oauth": {
     "clientId": "cmc_citizen"
