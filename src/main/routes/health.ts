@@ -16,11 +16,16 @@ let healthCheckRouter = express.Router()
 // stay healthy and deployments are not blocked before cutover.
 const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
 const hmctsAccessProbe = basicHealthCheck('idam.hmcts-access')
-const hmctsAccessCheck = healthcheck.raw(async () => {
-  return (await featureToggles.isHmctsAccessMigrationEnabled())
-    ? hmctsAccessProbe.call()
+
+// Exported for unit testing. Runs the HMCTS Access probe only when the flag is on;
+// otherwise reports UP so pods stay healthy (e.g. production until cutover).
+export async function hmctsAccessHealthCheck (toggles: FeatureToggles = featureToggles, probe = hmctsAccessProbe) {
+  return (await toggles.isHmctsAccessMigrationEnabled())
+    ? probe.call()
     : healthcheck.up()
-})
+}
+
+export const hmctsAccessCheck = healthcheck.raw(() => hmctsAccessHealthCheck())
 
 let healthCheckConfig = {
   checks: {

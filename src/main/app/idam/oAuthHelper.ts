@@ -18,6 +18,14 @@ const logger = Logger.getLogger('middleware/authorization')
 // evaluating as expected during the migration. It does not change the login URL.
 const featureToggles: FeatureToggles = new FeatureToggles(new LaunchDarklyClient())
 
+// Exported for unit testing. Reads the hmcts-access-migration flag and logs its value; any error
+// reading the flag is swallowed so it can never affect the login journey.
+export function logHmctsAccessMigrationFlag (idamAuthorizeUrl: string, toggles: FeatureToggles = featureToggles): Promise<void> {
+  return toggles.isHmctsAccessMigrationEnabled()
+    .then(enabled => logger.info(`hmcts-access-migration flag = ${enabled}; redirecting to IDAM login URL: ${idamAuthorizeUrl}`))
+    .catch(err => logger.error('Failed to read hmcts-access-migration flag', err))
+}
+
 const clientId = config.get<string>('oauth.clientId')
 const scope = config.get('idam.authentication-web.scope')
 const baseCivilCitizenUrl = config.get('cui.url')
@@ -47,9 +55,7 @@ export class OAuthHelper {
     // DTSCCI-5286: log the resolved hmcts-access-migration flag value on each login. Fire-and-forget
     // so forLogin stays synchronous; the flag does not affect idamAuthorizeUrl (entry point is
     // always /o/authorize per the IDAM migration guide).
-    featureToggles.isHmctsAccessMigrationEnabled()
-      .then(enabled => logger.info(`hmcts-access-migration flag = ${enabled}; redirecting to IDAM login URL: ${idamAuthorizeUrl}`))
-      .catch(err => logger.error('Failed to read hmcts-access-migration flag', err))
+    void logHmctsAccessMigrationFlag(idamAuthorizeUrl)
 
     return idamAuthorizeUrl
   }
