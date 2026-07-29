@@ -23,6 +23,8 @@ nodejs:
 
     IDAM_API_URL: https://idam-api.{{ .Values.global.environment }}.platform.hmcts.net
     IDAM_AUTHENTICATION_WEB_URL: https://idam-web-public.{{ .Values.global.environment }}.platform.hmcts.net
+    # DTSCCI-5286: HMCTS Access front door, probed by the 'hmcts-access' health check.
+    IDAM_HMCTS_ACCESS_URL: https://hmcts-access.{{ .Values.global.environment }}.platform.hmcts.net
     IDAM_S2S_AUTH: http://rpe-service-auth-provider-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
     PAY_URL: http://payment-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
     PAY_RETURN_URL: https://moneyclaims.{{ .Values.global.environment }}.platform.hmcts.net

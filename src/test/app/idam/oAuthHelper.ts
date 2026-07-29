@@ -1,4 +1,4 @@
-import { OAuthHelper } from 'idam/oAuthHelper'
+import { OAuthHelper, logHmctsAccessMigrationFlag } from 'idam/oAuthHelper'
 import { Request } from 'express'
 import * as sinon from 'sinon'
 import { mockRes as res } from 'sinon-express-mock'
@@ -77,6 +77,18 @@ describe('oAuthHelper', () => {
       const state = extractStateValue(loginUrl)
       const results = JSON.parse(Base64.decode(state))['redirectToClaim']
       expect(results).to.equal(undefined)
+    })
+  })
+
+  describe('logHmctsAccessMigrationFlag', () => {
+    it('should resolve after logging when the hmcts-access-migration flag is read', async () => {
+      const toggles = { isHmctsAccessMigrationEnabled: () => Promise.resolve(true) }
+      await logHmctsAccessMigrationFlag('https://idam/o/authorize', toggles as any)
+    })
+
+    it('should swallow errors when the flag read fails so login is never affected', async () => {
+      const toggles = { isHmctsAccessMigrationEnabled: () => Promise.reject(new Error('LD unavailable')) }
+      await logHmctsAccessMigrationFlag('https://idam/o/authorize', toggles as any)
     })
   })
 })

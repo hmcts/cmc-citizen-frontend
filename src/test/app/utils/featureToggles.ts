@@ -116,4 +116,14 @@ describe('FeatureToggles', () => {
       expect(result).to.equal(actual)
     })
   })
+
+  describe('isHmctsAccessMigrationEnabled', () => {
+    it('should return toggle if hmcts access migration toggle exists', async () => {
+      const mockLaunchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
+      const featureToggles = new FeatureToggles(mockLaunchDarklyClient)
+      let actual = toBoolean(config.get<boolean>(`featureToggles.hmctsAccessMigration`))
+      let result = await featureToggles.isHmctsAccessMigrationEnabled()
+      expect(result).to.equal(actual)
+    })
+  })
 })

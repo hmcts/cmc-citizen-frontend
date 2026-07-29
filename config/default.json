@@ -13,6 +13,9 @@
       "url": "http://localhost:9002",
       "scope": "openid profile roles"
     },
+    "hmcts-access": {
+      "url": "http://localhost:9002"
+    },
     "api": {
       "url": "http://localhost:5000"
     },
@@ -116,7 +119,8 @@
     "breathingSpace": true,
     "newClaimFees": true,
     "feeKeywordsEnable": false,
-    "disablePages": false
+    "disablePages": false,
+    "hmctsAccessMigration": false
   },
   "oauth": {
     "clientId": "cmc_citizen"
