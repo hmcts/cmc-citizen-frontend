@@ -47,7 +47,7 @@
     "@hmcts/properties-volume": "^1.0.0",
     "@launchdarkly/node-server-sdk": "^9.10.9",
     "@taoqf/javascript-state-machine": "^3.1.6",
-    "applicationinsights": "^2.9.8",
+    "applicationinsights": "^3.0.0",
     "axios": "^1.15.2",
     "axios-retry": "^4.2.0",
     "bootstrap-datepicker": "1.9.0",
