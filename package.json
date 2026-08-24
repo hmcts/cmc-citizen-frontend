@@ -112,7 +112,7 @@
     "allure-playwright": "^3.10.2",
     "chai": "^4.5.0",
     "chai-as-promised": "^7.1.1",
-    "codeceptjs": "^4.1.0",
+    "codeceptjs": "^2.6.11",
     "codecov": "^3.8.2",
     "debug": "^4.1.1",
     "eslint": "^8.20.0",
@@ -151,7 +151,7 @@
     "tar": "7.5.22",
     "ts-mockito": "^2.6.1",
     "urlencode": "^1.1.0",
-    "webdriverio": "^9.31.2"
+    "webdriverio": "^7.7.4"
   },
   "nyc": {
     "extension": [
