@@ -2,7 +2,7 @@
 import * as chai from 'chai'
 import * as telemetryProcessors from 'modules/app-insights/telemetryProcessors'
 import { LoggerInstance } from 'winston'
-import Envelope from 'applicationinsights/out/Declarations/Contracts/Generated/Envelope'
+import { TelemetryItem as Envelope } from 'applicationinsights/out/src/declarations/generated'
 
 const expect = chai.expect
 
