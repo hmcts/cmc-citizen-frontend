@@ -3659,13 +3659,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bl@npm:^1.2.3":
-  version: 1.2.3
-  resolution: "bl@npm:1.2.3"
-  dependencies:
-    readable-stream: "npm:^2.3.5"
-    safe-buffer: "npm:^5.1.1"
-  checksum: 10/11d775b09ebd7d8c0df1ed7efd03cc8a2b1283c804a55153c81a0b586728a085fa24240647cac9a60163eb6f36a28cf8c45b80bf460a46336d4c84c40205faff
+"bl@npm:^7.0.0":
+  version: 7.0.12
+  resolution: "bl@npm:7.0.12"
+  checksum: 10/6fd645a67489968dcf9881115d3277217ad3dd81fd878e8782fa17b24a3e021a4c6ba647552207f803795a18712a5e3036184cfb2a53b62f684b46e5ab0779ba
   languageName: node
   linkType: hard
 
@@ -13026,7 +13023,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"safe-buffer@npm:5.2.1, safe-buffer@npm:>=5.1.0, safe-buffer@npm:^5.0.1, safe-buffer@npm:^5.1.0, safe-buffer@npm:^5.1.1, safe-buffer@npm:^5.1.2, safe-buffer@npm:^5.2.1, safe-buffer@npm:~5.2.0, safe-buffer@npm:~5.2.1":
+"safe-buffer@npm:5.2.1, safe-buffer@npm:>=5.1.0, safe-buffer@npm:^5.0.1, safe-buffer@npm:^5.1.0, safe-buffer@npm:^5.1.2, safe-buffer@npm:^5.2.1, safe-buffer@npm:~5.2.0, safe-buffer@npm:~5.2.1":
   version: 5.2.1
   resolution: "safe-buffer@npm:5.2.1"
   checksum: 10/32872cd0ff68a3ddade7a7617b8f4c2ae8764d8b7d884c651b74457967a9e0e886267d3ecc781220629c44a865167b61c375d2da6c720c840ecd73f45d5d9451
