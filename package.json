@@ -112,7 +112,7 @@
     "allure-playwright": "^3.10.2",
     "chai": "^4.5.0",
     "chai-as-promised": "^7.1.1",
-    "codeceptjs": "^2.6.11",
+    "codeceptjs": "^3.7.9",
     "codecov": "^3.8.2",
     "debug": "^4.1.1",
     "eslint": "^8.20.0",
@@ -151,7 +151,7 @@
     "tar": "7.5.22",
     "ts-mockito": "^2.6.1",
     "urlencode": "^1.1.0",
-    "webdriverio": "^7.7.4"
+    "webdriverio": "^9.31.2"
   },
   "nyc": {
     "extension": [
@@ -184,6 +184,7 @@
     "get-func-name": "2.0.2",
     "immutable@npm:^4.0.0": "4.3.9",
     "ip-address@npm:^10.0.1": "10.5.0",
+    "joi": "18.2.1",
     "nanoid@npm:3.3.3": "3.3.18",
     "picomatch@npm:^2.2.1": "2.3.2",
     "picomatch@npm:^2.3.1": "2.3.2",
@@ -280,7 +281,8 @@
     "import-in-the-middle": "^1.14.4",
     "express": "4.21.2",
     "@tootallnate/once": "3.0.1",
-    "@hmcts/draft-store-client@npm:^1.2.1": "patch:@hmcts/draft-store-client@npm%3A1.2.1#~/.yarn/patches/@hmcts-draft-store-client-npm-1.2.1-f4227410a7.patch"
+    "@hmcts/draft-store-client@npm:^1.2.1": "patch:@hmcts/draft-store-client@npm%3A1.2.1#~/.yarn/patches/@hmcts-draft-store-client-npm-1.2.1-f4227410a7.patch",
+    "extract-zip@npm:^2.0.1": "patch:extract-zip@npm%3A2.0.1#~/.yarn/patches/extract-zip-npm-2.0.1-92a28e392b.patch"
   },
   "husky": {
     "hooks": {
