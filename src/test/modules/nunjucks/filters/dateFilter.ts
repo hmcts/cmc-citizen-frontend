@@ -139,7 +139,7 @@ describe('addDaysFilter', () => {
   })
 
   it('adds days to a valid string', () => {
-    expect(addDaysFilter('2018-01-1', 10).toJSON()).to.eq(moment('2018-01-11').toJSON())
+    expect(addDaysFilter('2018-01-01', 10).toJSON()).to.eq(moment('2018-01-11').toJSON())
   })
 
   it('adds negative days', () => {
