@@ -6,10 +6,6 @@ import { calculateMonthIncrement } from 'common/calculate-month-increment/calcul
 
 const logger = Logger.getLogger('modules/nunjucks/dateFilter')
 
-function parseDate (value: string): moment.Moment {
-  return moment(value, moment.ISO_8601, true)
-}
-
 /* *
  * This filter should be used when you need a date in long format for content
  *
@@ -25,7 +21,7 @@ export function dateFilter (value: moment.Moment | string): string {
       throw new Error('Input should be moment or string, cannot be empty')
     }
 
-    const date: moment.Moment = typeof value === 'string' ? parseDate(value) : value
+    const date: moment.Moment = typeof value === 'string' ? moment(value) : value
     if (!date.isValid()) {
       throw new Error('Invalid date')
     }
@@ -51,7 +47,7 @@ export function dateInputFilter (value: moment.Moment | string): string {
       throw new Error('Input should be moment or string, cannot be empty')
     }
 
-    const date: moment.Moment = typeof value === 'string' ? parseDate(value) : value
+    const date: moment.Moment = typeof value === 'string' ? moment(value) : value
     if (!date.isValid()) {
       throw new Error('Invalid date')
     }
@@ -77,7 +73,7 @@ export function dateWithDayAtFrontFilter (value: moment.Moment | string): string
       throw new Error('Input should be moment or string, cannot be empty')
     }
 
-    const date: moment.Moment = typeof value === 'string' ? parseDate(value) : value
+    const date: moment.Moment = typeof value === 'string' ? moment(value) : value
     if (!date.isValid()) {
       throw new Error('Invalid date')
     }
@@ -116,7 +112,7 @@ export function addDaysFilter (value: moment.Moment | string, num: number): mome
       if (value === 'now') {
         date = MomentFactory.currentDate()
       } else {
-        date = parseDate(value)
+        date = moment(value)
       }
     } else {
       date = value.clone()
@@ -153,7 +149,7 @@ export function monthIncrementFilter (value: moment.Moment | string): moment.Mom
       if (value === 'now') {
         date = moment()
       } else {
-        date = parseDate(value)
+        date = moment(value)
       }
     } else {
       date = value
