@@ -2207,13 +2207,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@postalsys/gettext@npm:^4.1.0":
-  version: 4.1.1
-  resolution: "@postalsys/gettext@npm:4.1.1"
-  checksum: 10/eb94234009a1ef72de5338265d975f63cd40bb3551ef6159b23ed72bb8a80f630a170124d5a4e51b3f5e6b4d534a6cbc5d419387323613c7355a88f23cfe9306
-  languageName: node
-  linkType: hard
-
 "@promptbook/utils@npm:0.69.5":
   version: 0.69.5
   resolution: "@promptbook/utils@npm:0.69.5"
@@ -5329,7 +5322,7 @@ __metadata:
     http-status-codes: "npm:^1.4.0"
     husky: "npm:^6.0.0"
     i18next: "npm:^18.0.0"
-    i18next-conv: "npm:^16.0.0"
+    i18next-conv: "npm:10.2.0"
     i18next-http-middleware: "npm:^3.9.3"
     i18next-sprintf-postprocessor: "npm:^0.2.2"
     ioredis: "npm:^5.4.1"
@@ -5554,13 +5547,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"colorette@npm:^2.0.20":
-  version: 2.0.20
-  resolution: "colorette@npm:2.0.20"
-  checksum: 10/0b8de48bfa5d10afc160b8eaa2b9938f34a892530b2f7d7897e0458d9535a066e3998b49da9d21161c78225b272df19ae3a64d6df28b4c9734c0e55bbd02406f
-  languageName: node
-  linkType: hard
-
 "colors@npm:1.0.x":
   version: 1.0.3
   resolution: "colors@npm:1.0.3"
@@ -5612,7 +5598,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:^14.0.2, commander@npm:^14.0.3, commander@npm:~14.0.3":
+"commander@npm:^14.0.3, commander@npm:~14.0.3":
   version: 14.0.3
   resolution: "commander@npm:14.0.3"
   checksum: 10/dfa9ebe2a433d277de5cb0252d23b10a543d245d892db858d23b516336a835c50fd4f52bee4cd13c705cc8acb6f03dc632c73dd806f7d06d3353eb09953dd17a
@@ -5754,7 +5740,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"content-type@npm:1.0.5, content-type@npm:^1.0.5, content-type@npm:~1.0.4, content-type@npm:~1.0.5":
+"content-type@npm:^1.0.4, content-type@npm:~1.0.4, content-type@npm:~1.0.5":
   version: 1.0.5
   resolution: "content-type@npm:1.0.5"
   checksum: 10/585847d98dc7fb8035c02ae2cb76c7a9bd7b25f84c447e5ed55c45c2175e83617c8813871b4ee22f368126af6b2b167df655829007b21aa10302873ea9c62662
@@ -6650,7 +6636,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"encoding@npm:0.1.13, encoding@npm:^0.1.13":
+"encoding@npm:^0.1.13":
   version: 0.1.13
   resolution: "encoding@npm:0.1.13"
   dependencies:
@@ -8203,26 +8189,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gettext-converter@npm:1.3.4":
-  version: 1.3.4
-  resolution: "gettext-converter@npm:1.3.4"
+"gettext-parser@npm:^4.0.3":
+  version: 4.2.0
+  resolution: "gettext-parser@npm:4.2.0"
   dependencies:
-    arrify: "npm:^2.0.1"
-    content-type: "npm:1.0.5"
-    encoding: "npm:0.1.13"
-  checksum: 10/cf5b31ea05aefeb7083b3f3799ff81eec4572ae11309a1ce06eef5935771a1f935b821125014e54273bdc395f62d76d3bc241051df26c1e82843451863d807d6
-  languageName: node
-  linkType: hard
-
-"gettext-parser@npm:^8.0.0":
-  version: 8.0.0
-  resolution: "gettext-parser@npm:8.0.0"
-  dependencies:
-    content-type: "npm:^1.0.5"
+    content-type: "npm:^1.0.4"
     encoding: "npm:^0.1.13"
-    readable-stream: "npm:^4.5.2"
+    readable-stream: "npm:^3.6.0"
     safe-buffer: "npm:^5.2.1"
-  checksum: 10/e22f42241f9fea3d8379879792a97e705b0bb31539246ee1bec024f247a6e8940c4feb66b24ab6412fa0cd778263c32a1d055992f3a2bc6983d5d191712c128f
+  checksum: 10/44f97cc4216da7e23f344b947048bb46d7349e1127f01cd976e5250249588f966d1cbe3b59f5a228f0650259140c90cc41e1d858815f7913c77f887689611fa6
   languageName: node
   linkType: hard
 
@@ -8990,19 +8965,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next-conv@npm:^16.0.0":
-  version: 16.0.0
-  resolution: "i18next-conv@npm:16.0.0"
+"i18next-conv@npm:10.2.0":
+  version: 10.2.0
+  resolution: "i18next-conv@npm:10.2.0"
   dependencies:
-    "@postalsys/gettext": "npm:^4.1.0"
-    colorette: "npm:^2.0.20"
-    commander: "npm:^14.0.2"
-    gettext-converter: "npm:^1.3.0"
-    gettext-parser: "npm:^8.0.0"
-    p-from-callback: "npm:^2.0.0"
+    arrify: "npm:^2.0.1"
+    chalk: "npm:^4.0.0"
+    commander: "npm:^5.1.0"
+    gettext-parser: "npm:^4.0.3"
+    mkdirp: "npm:^1.0.4"
+    node-gettext: "npm:^3.0.0"
   bin:
     i18next-conv: bin/index.js
-  checksum: 10/f05114e775c8e4d72184f016f94ebba28576c46bbb72c8c75c2b2d64fee25ef8b78987041899ae2e61ebde043e8cb9c3a3accc507ce5e920f6d24a7d3a000cb3
+  checksum: 10/0aaf5ee54560c1fd4a6593bc1a7cc75c04586de66a22ce35a4831c4f750f545c3dffa017c8ef9490ac1c4bed720d95330ac6b7fabb36fe0eb73630e0069a4187
   languageName: node
   linkType: hard
 
@@ -10540,6 +10515,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lodash.get@npm:^4.4.2":
+  version: 4.4.2
+  resolution: "lodash.get@npm:4.4.2"
+  checksum: 10/2a4925f6e89bc2c010a77a802d1ba357e17ed1ea03c2ddf6a146429f2856a216663e694a6aa3549a318cbbba3fd8b7decb392db457e6ac0b83dc745ed0a17380
+  languageName: node
+  linkType: hard
+
 "lodash.includes@npm:^4.3.0":
   version: 4.3.0
   resolution: "lodash.includes@npm:4.3.0"
@@ -11816,6 +11798,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"node-gettext@npm:3.0.1":
+  version: 3.0.1
+  resolution: "node-gettext@npm:3.0.1"
+  dependencies:
+    lodash.get: "npm:^4.4.2"
+  checksum: 10/1387b048085f871a6466cfaebc3e695c30afa23c893fd4742ef9249bd4cca0e65ab5fae11356df5b5ff6dbc8d0f1903a45fb13571b3a7ce67f24d18a8262055e
+  languageName: node
+  linkType: hard
+
 "node-gyp@npm:12.2.0":
   version: 12.2.0
   resolution: "node-gyp@npm:12.2.0"
@@ -12346,13 +12337,6 @@ __metadata:
   dependencies:
     thirty-two: "npm:^0.0.2"
   checksum: 10/82c8511323ef82a18c7dd9f1b479c18a653fcb664023aa67bb1d48721fff7282e81fa9be56735c246f2e85757d9f4e3181a1851e2c4e61f1378c6e80bbaac846
-  languageName: node
-  linkType: hard
-
-"p-from-callback@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "p-from-callback@npm:2.0.0"
-  checksum: 10/34adbfd0d5ddcb48244f18060180fa93c0248243d9b96d62b626ca788f41b99dca004502c6f0af8cb199ca368855836c94a8fabfbaaaa04e6087f06b60491442
   languageName: node
   linkType: hard
 
@@ -13437,7 +13421,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"readable-stream@npm:^3.0.2, readable-stream@npm:^3.0.6, readable-stream@npm:^3.4.0, readable-stream@npm:^3.6.2":
+"readable-stream@npm:^3.0.2, readable-stream@npm:^3.0.6, readable-stream@npm:^3.4.0, readable-stream@npm:^3.6.0, readable-stream@npm:^3.6.2":
   version: 3.6.2
   resolution: "readable-stream@npm:3.6.2"
   dependencies:
@@ -13448,7 +13432,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"readable-stream@npm:^4.0.0, readable-stream@npm:^4.5.2":
+"readable-stream@npm:^4.0.0":
   version: 4.7.0
   resolution: "readable-stream@npm:4.7.0"
   dependencies:
