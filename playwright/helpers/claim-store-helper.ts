@@ -10,6 +10,14 @@ export class ClaimStoreHelper {
     return config.claimStoreUrl;
   }
 
+  private static sleep(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  private static isTransientCcdUpdateFailure(status: number, body: string): boolean {
+    return status === 424 && body.includes('Failed updating claim in CCD store');
+  }
+
   /**
    * POST /claims/{submitterId}
    * Same as ClaimStoreClient.create() in claimStoreClient.ts:61
@@ -103,23 +111,35 @@ export class ClaimStoreHelper {
     token: string,
     defendantId: string
   ): Promise<any> {
-    const response = await fetch(
-      `${this.baseUrl}/responses/claim/${externalId}/defendant/${defendantId}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(responseData),
-      }
-    );
+    const maxAttempts = 6;
+    const intervalMs = 10000;
 
-    if (!response.ok) {
-      throw new Error(`Failed to respond to claim: ${response.status} ${await response.text()}`);
+    for (let i = 1; i <= maxAttempts; i++) {
+      const response = await fetch(
+        `${this.baseUrl}/responses/claim/${externalId}/defendant/${defendantId}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(responseData),
+        }
+      );
+
+      if (response.ok) {
+        return response.json();
+      }
+
+      const body = await response.text();
+      if (!this.isTransientCcdUpdateFailure(response.status, body) || i === maxAttempts) {
+        throw new Error(`Failed to respond to claim: ${response.status} ${body}`);
+      }
+
+      await this.sleep(intervalMs);
     }
 
-    return response.json();
+    throw new Error('Failed to respond to claim');
   }
 
   /**
@@ -166,7 +186,7 @@ export class ClaimStoreHelper {
       } catch {
         // retry on network errors
       }
-      await new Promise((resolve) => setTimeout(resolve, intervalMs));
+      await this.sleep(intervalMs);
     }
     throw new Error(
       `Claim ${referenceNumber} did not become OPEN within ${maxAttempts * intervalMs / 1000}s`

@@ -23,6 +23,7 @@ import { buildClaimData, buildResponseData, generateTestEmail } from '../../help
  *   7. Verify claim has response attached
  */
 test.describe.serial('Claim Lifecycle - Create, Respond, Verify', () => {
+  test.setTimeout(120_000);
 
   const claimantEmail = generateTestEmail('pw-claimant');
   const defendantEmail = generateTestEmail('pw-defendant');
@@ -68,14 +69,12 @@ test.describe.serial('Claim Lifecycle - Create, Respond, Verify', () => {
 
     claimReferenceNumber = claim.referenceNumber;
     claimExternalId = claim.externalId;
+    await ClaimStoreHelper.waitForOpenClaim(claimReferenceNumber);
     console.log('Claim created:', claimReferenceNumber);
   });
 
   test('Claim is retrievable and data is correct', async () => {
     expect(claimReferenceNumber).toBeDefined();
-
-    // Allow CCD async processing
-    await new Promise((resolve) => setTimeout(resolve, 5000));
 
     // GET /claims/claimant/{userId} - retrieves all claims for this user
     const claims = await ClaimStoreHelper.getClaimsByClaimant(claimantId, claimantToken);
@@ -102,13 +101,11 @@ test.describe.serial('Claim Lifecycle - Create, Respond, Verify', () => {
       defendantEmail,
       config.defaultPassword
     );
+    await ClaimStoreHelper.waitForOpenClaim(claimReferenceNumber);
   });
 
   test('Defendant submits full defence response', async () => {
     expect(claimExternalId).toBeDefined();
-
-    // Allow CCD to finish processing the defendant link event before submitting response
-    await new Promise((resolve) => setTimeout(resolve, 10000));
 
     // POST /responses/claim/{externalId}/defendant/{defendantId} - same as claimStoreClient.ts:101
     const responseData = buildResponseData();
