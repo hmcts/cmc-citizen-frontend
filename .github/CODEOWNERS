@@ -4,9 +4,16 @@
 *       @hmcts/pet
 
 # Renovate
+.nvmrc
 .pnp.cjs
 .yarn/**
+.yarnrc.yml
+Jenkinsfile_CNP
 package.json
 yarn.lock
+charts/**/Chart.lock
 charts/**/Chart.yaml
+docker-compose*.yml
+infrastructure/.terraform-version
 .github/workflows/*.yaml
+.github/workflows/*.yml

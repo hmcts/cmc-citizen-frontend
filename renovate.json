@@ -9,7 +9,7 @@
   ],
   "automergeSchedule": ["after 8am and before 4pm every weekday"],
   "schedule": ["after 8am and before 11am every weekday"],
-  "rebaseWhen": "conflicted",
+  "rebaseWhen": "behind-base-branch",
   "automergeStrategy": "squash",
   "prConcurrentLimit": 5,
   "helmv3": {
