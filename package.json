@@ -172,8 +172,8 @@
     "all": true
   },
   "resolutions": {
-    "@babel/traverse": "7.29.8",
-    "@babel/helpers": "7.29.7",
+    "@babel/traverse": "8.0.4",
+    "@babel/helpers": "8.0.0",
     "basic-ftp": "5.3.1",
     "websocket-driver": "0.7.5",
     "brace-expansion@npm:2.1.3": "2.1.4",
@@ -199,7 +199,7 @@
     "uuid@npm:^8.0.0": "11.1.1",
     "uuid@npm:^8.3.2": "11.1.1",
     "path-to-regexp": "0.1.13",
-    "@babel/runtime": "7.26.10",
+    "@babel/runtime": "8.0.0",
     "qs": "^6.14.2",
     "sass-lint/eslint": "^5.0.0",
     "bootstrap-datepicker/jquery": "^3.5.0",
