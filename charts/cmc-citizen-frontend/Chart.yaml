@@ -1,7 +1,7 @@
 apiVersion: v2
 name: cmc-citizen-frontend
 home: https://github.com/hmcts/cmc-citizen-frontend
-version: 4.1.63
+version: 4.1.64
 description: Helm chart for the HMCTS CMC Citizen Frontend service
 # be aware when bumping version that it is used elsewhere, e.g.:
 # chart-cmc - demo: https://github.com/hmcts/chart-cmc/tree/master/cmc
@@ -12,7 +12,7 @@ maintainers:
     email: cmc-developers@HMCTS.NET
 dependencies:
   - name: nodejs
-    version: 3.2.0
+    version: 3.3.1
     repository: 'oci://hmctsprod.azurecr.io/helm'
 
   - name: idam-pr
@@ -21,16 +21,16 @@ dependencies:
     condition: idam-pr.enabled
 
   - name: cmc-claim-store
-    version: 4.1.57
+    version: 4.1.61
     repository: 'oci://hmctsprod.azurecr.io/helm'
     condition: cmc-claim-store.enabled
 
   - name: ccd
-    version: 9.2.2
+    version: 9.2.4
     repository: 'oci://hmctsprod.azurecr.io/helm'
     condition: ccd.enabled
 
   - name: xui-webapp
-    version: 1.0.40
+    version: 1.0.46
     repository: 'oci://hmctsprod.azurecr.io/helm'
     condition: xui-webapp.enabled
