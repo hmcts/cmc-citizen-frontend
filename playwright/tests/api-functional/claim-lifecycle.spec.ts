@@ -103,7 +103,8 @@ test.describe.serial('Claim Lifecycle - Create, Respond, Verify', () => {
       defendantEmail,
       config.defaultPassword
     );
-    await ClaimStoreHelper.waitForOpenClaim(claimReferenceNumber);
+    // Allow CCD to finish processing the defendant link event before submitting response
+    await new Promise((resolve) => setTimeout(resolve, 10000));
   });
 
   test('Defendant submits full defence response', async () => {
