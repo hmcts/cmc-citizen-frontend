@@ -111,7 +111,8 @@ export class ClaimStoreHelper {
     token: string,
     defendantId: string
   ): Promise<any> {
-    const maxAttempts = 6;
+    // CCD can take more than a minute to complete the DISPUTE event in preview.
+    const maxAttempts = 12;
     const intervalMs = 10000;
 
     for (let i = 1; i <= maxAttempts; i++) {
@@ -133,7 +134,7 @@ export class ClaimStoreHelper {
 
       const body = await response.text();
       if (!this.isTransientCcdUpdateFailure(response.status, body) || i === maxAttempts) {
-        throw new Error(`Failed to respond to claim: ${response.status} ${body}`);
+        throw new Error(`Failed to respond to claim (attempt ${i}/${maxAttempts}): ${response.status} ${body}`);
       }
 
       await this.sleep(intervalMs);
