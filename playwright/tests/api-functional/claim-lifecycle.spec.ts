@@ -23,8 +23,6 @@ import { buildClaimData, buildResponseData, generateTestEmail } from '../../help
  *   7. Verify claim has response attached
  */
 test.describe.serial('Claim Lifecycle - Create, Respond, Verify', () => {
-  test.setTimeout(180_000);
-
   const claimantEmail = generateTestEmail('pw-claimant');
   const defendantEmail = generateTestEmail('pw-defendant');
 
@@ -103,12 +101,13 @@ test.describe.serial('Claim Lifecycle - Create, Respond, Verify', () => {
       defendantEmail,
       config.defaultPassword
     );
-    // Allow CCD to finish processing the defendant link event before submitting response
-    await new Promise((resolve) => setTimeout(resolve, 10000));
   });
 
   test('Defendant submits full defence response', async () => {
     expect(claimExternalId).toBeDefined();
+
+    // Allow CCD to finish processing the defendant link event before submitting response
+    await new Promise((resolve) => setTimeout(resolve, 10000));
 
     // POST /responses/claim/{externalId}/defendant/{defendantId} - same as claimStoreClient.ts:101
     const responseData = buildResponseData();
