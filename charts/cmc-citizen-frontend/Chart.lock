@@ -1,18 +1,18 @@
 dependencies:
 - name: nodejs
   repository: oci://hmctsprod.azurecr.io/helm
-  version: 3.2.0
+  version: 3.3.1
 - name: idam-pr
   repository: oci://hmctsprod.azurecr.io/helm
   version: 2.3.1
 - name: cmc-claim-store
   repository: oci://hmctsprod.azurecr.io/helm
-  version: 4.1.57
+  version: 4.1.61
 - name: ccd
   repository: oci://hmctsprod.azurecr.io/helm
-  version: 9.2.2
+  version: 9.2.4
 - name: xui-webapp
   repository: oci://hmctsprod.azurecr.io/helm
-  version: 1.0.40
-digest: sha256:6ec730e25a5c4cc110b9a846697b9bdeea9e258c4bec7d6ab8017297223a8549
-generated: "2026-03-20T13:15:15.522449Z"
+  version: 1.0.47
+digest: sha256:dfebf9f5fd157618a1fe735d4ab7ae018465fafa9cabd682ca5cf227a040331d
+generated: "2026-09-13T07:01:17.820225424Z"
