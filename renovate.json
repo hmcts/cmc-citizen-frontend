@@ -7,9 +7,13 @@
   "labels": [
     "dependencies"
   ],
-  "automergeSchedule": ["after 8am and before 4pm every weekday"],
+"automergeSchedule": [
+  "after 7am and before 8am every weekday",
+  "after 6pm and before 8pm every weekday"
+],
+"platformAutomerge": false,
   "schedule": ["after 8am and before 11am every weekday"],
-  "rebaseWhen": "conflicted",
+  "rebaseWhen": "behind-base-branch",
   "automergeStrategy": "squash",
   "prConcurrentLimit": 5,
   "helmv3": {
@@ -21,8 +25,7 @@
       "groupName": "Helm chart updates",
       "groupSlug": "helm-charts",
       "automerge": true,
-      "automergeType": "pr",
-      "automergeSchedule": ["before 4pm every weekday"]
+      "automergeType": "pr"
     },
     {
       "matchPackageNames": ["eslint"],
@@ -30,8 +33,7 @@
       "groupName": "ESLint",
       "groupSlug": "eslint",
       "automerge": true,
-      "automergeType": "pr",
-      "automergeSchedule": ["before 4pm every weekday"]
+      "automergeType": "pr"
     },
     {
       "matchPackageNames": ["typescript"],
@@ -39,16 +41,14 @@
       "groupName": "TypeScript",
       "groupSlug": "typescript",
       "automerge": true,
-      "automergeType": "pr",
-      "automergeSchedule": ["before 4pm every weekday"]
+      "automergeType": "pr"
     },
     {
       "matchPackagePatterns": ["^@hmcts/"],
       "groupName": "HMCTS packages",
       "groupSlug": "hmcts",
       "automerge": true,
-      "automergeType": "pr",
-      "automergeSchedule": ["before 4pm every weekday"]
+      "automergeType": "pr"
     },
     {
       "matchPackageNames": ["mocha", "chai", "sinon", "nock", "nyc", "supertest", "codeceptjs", "webdriverio"],
@@ -56,16 +56,14 @@
       "groupName": "Testing tools",
       "groupSlug": "testing",
       "automerge": true,
-      "automergeType": "pr",
-      "automergeSchedule": ["before 4pm every weekday"]
+      "automergeType": "pr"
     },
     {
       "matchUpdateTypes": ["minor", "patch"],
       "groupName": "All non-major updates",
       "groupSlug": "all-non-major",
       "automerge": true,
-      "automergeType": "pr",
-      "automergeSchedule": ["before 4pm every weekday"]
+      "automergeType": "pr"
     }
   ]
 }
