@@ -13,6 +13,6 @@ dependencies:
   version: 9.2.2
 - name: xui-webapp
   repository: oci://hmctsprod.azurecr.io/helm
-  version: 1.0.40
-digest: sha256:6ec730e25a5c4cc110b9a846697b9bdeea9e258c4bec7d6ab8017297223a8549
-generated: "2026-03-20T13:15:15.522449Z"
+  version: 1.0.49
+digest: sha256:e6b810fca3554e872e780aad967bc8744a38d7caa2ac9b534d2ffb5ec7329987
+generated: "2026-09-22T18:33:07.878473+01:00"

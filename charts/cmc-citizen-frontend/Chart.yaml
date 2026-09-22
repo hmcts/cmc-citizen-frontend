@@ -1,7 +1,7 @@
 apiVersion: v2
 name: cmc-citizen-frontend
 home: https://github.com/hmcts/cmc-citizen-frontend
-version: 4.1.63
+version: 4.1.64
 description: Helm chart for the HMCTS CMC Citizen Frontend service
 # be aware when bumping version that it is used elsewhere, e.g.:
 # chart-cmc - demo: https://github.com/hmcts/chart-cmc/tree/master/cmc
@@ -31,6 +31,6 @@ dependencies:
     condition: ccd.enabled
 
   - name: xui-webapp
-    version: 1.0.40
+    version: 1.0.49
     repository: 'oci://hmctsprod.azurecr.io/helm'
     condition: xui-webapp.enabled
