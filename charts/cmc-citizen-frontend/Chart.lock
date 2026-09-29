@@ -1,7 +1,7 @@
 dependencies:
 - name: nodejs
   repository: oci://hmctsprod.azurecr.io/helm
-  version: 3.2.0
+  version: 3.3.1
 - name: idam-pr
   repository: oci://hmctsprod.azurecr.io/helm
   version: 2.3.1
@@ -14,5 +14,5 @@ dependencies:
 - name: xui-webapp
   repository: oci://hmctsprod.azurecr.io/helm
   version: 1.0.49
-digest: sha256:e6b810fca3554e872e780aad967bc8744a38d7caa2ac9b534d2ffb5ec7329987
-generated: "2026-09-22T18:33:07.878473+01:00"
+digest: sha256:f4ec1caf9bc69fedad5a46f6f7b097d3fa77bb15974529ca084817920fb25c94
+generated: "2026-09-25T12:26:08.160593+01:00"
