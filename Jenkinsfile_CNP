@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure@2.4.2")
+@Library("Infrastructure@2.11.0")
 
 import uk.gov.hmcts.contino.GithubAPI
 
