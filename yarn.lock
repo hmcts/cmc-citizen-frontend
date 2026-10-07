@@ -731,13 +731,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grpc/grpc-js@npm:^1.14.3":
-  version: 1.14.4
-  resolution: "@grpc/grpc-js@npm:1.14.4"
+"@grpc/grpc-js@npm:1.14.5":
+  version: 1.14.5
+  resolution: "@grpc/grpc-js@npm:1.14.5"
   dependencies:
     "@grpc/proto-loader": "npm:^0.8.0"
     "@js-sdsl/ordered-map": "npm:^4.4.2"
-  checksum: 10/f9cdbd81e7388dc784c57274fcf6f4f4484da8968dd0975b97a14708d3fb117ae4a7bc2848e1bd1cc8b8ed9ee7a80ff131bfe728c85260da90a4e0b170e31ca9
+  checksum: 10/3be7fe0105c94e83e8a18b895fd534290cf3a26712940e95e0149b869da775a59551dafd60fd6c17213d3032b83fbfa64c6c2c9a0f569f6ef5968607174b7d79
   languageName: node
   linkType: hard
 
@@ -1120,6 +1120,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@opentelemetry/api-logs@npm:0.221.0":
+  version: 0.221.0
+  resolution: "@opentelemetry/api-logs@npm:0.221.0"
+  dependencies:
+    "@opentelemetry/api": "npm:^1.3.0"
+  checksum: 10/8f2f98c8ce62d2c8bbe1955700eb7ee97795bbf43395da835b6f3eacca775b44b8057b67145e6bed3854625334f2f39428bc34164b9794eb730f4383d71cdbaf
+  languageName: node
+  linkType: hard
+
 "@opentelemetry/api@npm:^1.3.0, @opentelemetry/api@npm:^1.9.0, @opentelemetry/api@npm:^1.9.1":
   version: 1.9.1
   resolution: "@opentelemetry/api@npm:1.9.1"
@@ -1397,32 +1406,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@opentelemetry/instrumentation-mysql@npm:^0.66.0":
-  version: 0.66.0
-  resolution: "@opentelemetry/instrumentation-mysql@npm:0.66.0"
+"@opentelemetry/instrumentation-mysql@npm:0.67.0":
+  version: 0.67.0
+  resolution: "@opentelemetry/instrumentation-mysql@npm:0.67.0"
   dependencies:
-    "@opentelemetry/instrumentation": "npm:^0.220.0"
+    "@opentelemetry/instrumentation": "npm:^0.221.0"
     "@opentelemetry/semantic-conventions": "npm:^1.33.0"
     "@types/mysql": "npm:2.15.27"
   peerDependencies:
     "@opentelemetry/api": ^1.3.0
-  checksum: 10/0e3d17d50b98f112b3ee2fc4b0a3b9ccb1ccaa8a8e516bcf872c131a9c9e623d18932a24bd7b2dbb5b685c6e3840980cb80c507edd9a92bd05d95efc96e1d89a
+  checksum: 10/7d7aab1c04e0f0fde08987728856dd7af31bd01ebcd65090e31ff87bb3d053333b69ce2624fed3086b51cf8566cefd69f5327f4fd05be5732e2814336f843f9e
   languageName: node
   linkType: hard
 
-"@opentelemetry/instrumentation-pg@npm:^0.72.0":
-  version: 0.72.0
-  resolution: "@opentelemetry/instrumentation-pg@npm:0.72.0"
+"@opentelemetry/instrumentation-pg@npm:0.73.0":
+  version: 0.73.0
+  resolution: "@opentelemetry/instrumentation-pg@npm:0.73.0"
   dependencies:
-    "@opentelemetry/core": "npm:^2.0.0"
-    "@opentelemetry/instrumentation": "npm:^0.220.0"
+    "@opentelemetry/core": "npm:^2.9.0"
+    "@opentelemetry/instrumentation": "npm:^0.221.0"
     "@opentelemetry/semantic-conventions": "npm:^1.34.0"
     "@opentelemetry/sql-common": "npm:^0.42.0"
     "@types/pg": "npm:8.15.6"
     "@types/pg-pool": "npm:2.0.7"
   peerDependencies:
     "@opentelemetry/api": ^1.3.0
-  checksum: 10/6d61d072120b9f292623b70ac525453c33abb76d20ca332d5d1beee9088c2fdd4e5210720025306d114bbce9b720c3c0d3e8c6c62e0e9f30af052281c1cbcb2a
+  checksum: 10/d855cfd55a77ebcaf256818de85429acd6652c8a1d53996193acda8429d27a9a49fcbb52fc9bd83dad1db936914bd7c10d167a2753425083408f8b5c987acd54
   languageName: node
   linkType: hard
 
@@ -1474,6 +1483,19 @@ __metadata:
   peerDependencies:
     "@opentelemetry/api": ^1.3.0
   checksum: 10/d9efa3bf9108fec3869194cb52b0761ca4d003629c7458ac006c04a81991744d7b836bf5ec2cb153142934d446e3d2304c2b5aa7248ba17f667a680839836e39
+  languageName: node
+  linkType: hard
+
+"@opentelemetry/instrumentation@npm:^0.221.0":
+  version: 0.221.0
+  resolution: "@opentelemetry/instrumentation@npm:0.221.0"
+  dependencies:
+    "@opentelemetry/api-logs": "npm:0.221.0"
+    import-in-the-middle: "npm:^3.0.0"
+    require-in-the-middle: "npm:^8.0.0"
+  peerDependencies:
+    "@opentelemetry/api": ^1.3.0
+  checksum: 10/b7012dd7b56344decf78a3a62786559975f89d6c55602819089268cc6b6109b4cc617795f00b926bf46dfc15334579ae298e78fa865e6c46b0400bfae91971c2
   languageName: node
   linkType: hard
 
@@ -3597,15 +3619,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:1.19.0":
-  version: 1.19.0
-  resolution: "axios@npm:1.19.0"
+"axios@npm:1.20.0":
+  version: 1.20.0
+  resolution: "axios@npm:1.20.0"
   dependencies:
     follow-redirects: "npm:^1.16.0"
     form-data: "npm:^4.0.6"
     https-proxy-agent: "npm:^5.0.1"
     proxy-from-env: "npm:^2.1.0"
-  checksum: 10/d27e263b003f2dc1e6d0e2ab062dbc7c2b15668c25723e1e2072f139505c1fbd1f8cffef77d5ec05bb8e3cefa6fc5325c6446e747669fd95d85519529fa0db0b
+  checksum: 10/0376b6178baecbe0f5d36088f5b5f6c21362ce301e0731f77172f9c89be740bdee20d8ae6ab186340d7cb752020c6a4f1381290e5a5cd10f6f9003941615ac77
   languageName: node
   linkType: hard
 
@@ -4539,7 +4561,7 @@ __metadata:
     "@typescript-eslint/parser": "npm:^5.30.7"
     allure-playwright: "npm:^3.10.2"
     applicationinsights: "npm:^3.16.0"
-    axios: "npm:^1.19.0"
+    axios: "npm:^1.20.0"
     axios-retry: "npm:^4.2.0"
     bootstrap-datepicker: "npm:1.9.0"
     chai: "npm:^4.5.0"
@@ -4589,7 +4611,7 @@ __metadata:
     mocha-multi: "npm:^1.1.7"
     mochawesome: "npm:^7.0.3"
     mock-require: "npm:^3.0.3"
-    moment: "npm:^2.29.4"
+    moment: "npm:^2.31.0"
     moment-precise-range-plugin: "npm:^1.3.0"
     nocache: "npm:^3.0.1"
     nock: "npm:^13.3.1"
@@ -10551,10 +10573,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moment@npm:^2.18.1, moment@npm:^2.19.1, moment@npm:^2.29.4":
-  version: 2.29.4
-  resolution: "moment@npm:2.29.4"
-  checksum: 10/157c5af5a0ba8196e577bc67feb583303191d21ba1f7f2af30b3b40d4c63a64d505ba402be2a1454832082fac6be69db1e0d186c3279dae191e6634b0c33705c
+"moment@npm:2.31.0":
+  version: 2.31.0
+  resolution: "moment@npm:2.31.0"
+  checksum: 10/fd3708d46f820c64fe1e064a60747533a55ee0aefd944490e18f08b2a83a5b6418bb4f42e1de47ef1f1a29f450c7ac41edd1fa6f940db30ded247c9717301b9f
   languageName: node
   linkType: hard
 
@@ -11933,13 +11955,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"proxy-addr@npm:~2.0.7":
-  version: 2.0.7
-  resolution: "proxy-addr@npm:2.0.7"
+"proxy-addr@npm:2.0.8":
+  version: 2.0.8
+  resolution: "proxy-addr@npm:2.0.8"
   dependencies:
     forwarded: "npm:0.2.0"
     ipaddr.js: "npm:1.9.1"
-  checksum: 10/f24a0c80af0e75d31e3451398670d73406ec642914da11a2965b80b1898ca6f66a0e3e091a11a4327079b2b268795f6fa06691923fef91887215c3d0e8ea3f68
+  checksum: 10/6922b732c5625a9ba174c053bf3a750a80c87f19b7c62919f88ff01834eb80e2467834cfa72fc48b3a7ed6b3d18daadf773f6efb21db1c5fcc76d784509fcf1f
   languageName: node
   linkType: hard
 
