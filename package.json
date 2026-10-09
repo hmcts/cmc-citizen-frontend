@@ -186,7 +186,7 @@
     "flatted": "3.4.4",
     "get-func-name": "2.0.2",
     "immutable@npm:^4.0.0": "4.3.9",
-    "ip-address@npm:^10.0.1": "10.5.0",
+    "ip-address@npm:^10.0.1": "10.7.1",
     "nanoid@npm:3.3.3": "3.3.18",
     "picomatch@npm:^2.2.1": "2.3.2",
     "picomatch@npm:^2.3.1": "2.3.2",
