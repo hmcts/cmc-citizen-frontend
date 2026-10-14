@@ -143,9 +143,15 @@ withPipeline("nodejs", product, component) {
   }
 
   afterSuccess('test') {
-    onMaster {
-      yarnBuilder.yarn('tests:a11y')
-    }
+    sh '''
+      echo "HOME=$HOME"
+      echo "PUPPETEER_CACHE_DIR=$PUPPETEER_CACHE_DIR"
+      ls -la "$HOME/.cache/puppeteer" || true
+      which google-chrome || true
+      which chromium || true
+      which chromium-browser || true
+    '''
+    yarnBuilder.yarn('tests:a11y')
   }
 
   enableAksStagingDeployment()
