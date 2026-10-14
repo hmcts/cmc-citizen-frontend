@@ -144,6 +144,10 @@ withPipeline("nodejs", product, component) {
 
   afterSuccess('test') {
     onMaster {
+      // node_modules can be restored from the Jenkins cache, in which case yarn does not run puppeteer's postinstall
+      // and Chrome is missing from this agent's puppeteer cache. Rebuilding puppeteer downloads the Chrome it needs
+      // (or does nothing if it is already there).
+      yarnBuilder.yarn('rebuild puppeteer')
       yarnBuilder.yarn('tests:a11y')
     }
   }
