@@ -88,7 +88,7 @@
     "ts-node": "^9.1.1",
     "tsconfig-paths": "^4.0.0",
     "typescript": "^3.9.8",
-    "uuid": "^11.1.1"
+    "uuid": "^14.0.0"
   },
   "devDependencies": {
     "@hmcts/cmc-supported-browsers": "^1.0.1",
@@ -198,9 +198,9 @@
     "nodemon": "3.1.14",
     "word-wrap": "1.2.5",
     "yaml@npm:^2.2.2": "2.9.0",
-    "uuid@npm:11.1.0": "11.1.1",
-    "uuid@npm:^8.0.0": "11.1.1",
-    "uuid@npm:^8.3.2": "11.1.1",
+    "uuid@npm:11.1.0": "14.0.3",
+    "uuid@npm:^8.0.0": "14.0.3",
+    "uuid@npm:^8.3.2": "14.0.3",
     "path-to-regexp": "0.1.13",
     "@babel/runtime": "7.26.10",
     "express/qs": "6.16.0",
