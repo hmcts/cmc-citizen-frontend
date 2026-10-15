@@ -4635,7 +4635,7 @@ __metadata:
     ts-node: "npm:^9.1.1"
     tsconfig-paths: "npm:^4.0.0"
     typescript: "npm:^3.9.8"
-    urlencode: "npm:^1.1.0"
+    urlencode: "npm:^2.0.0"
     uuid: "npm:^11.1.1"
     webdriverio: "npm:^7.7.4"
   languageName: unknown
@@ -8282,7 +8282,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"iconv-lite@npm:0.4.24, iconv-lite@npm:^0.4.24, iconv-lite@npm:~0.4.11, iconv-lite@npm:~0.4.24":
+"iconv-lite@npm:0.4.24, iconv-lite@npm:^0.4.24, iconv-lite@npm:~0.4.24":
   version: 0.4.24
   resolution: "iconv-lite@npm:0.4.24"
   dependencies:
@@ -8291,7 +8291,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"iconv-lite@npm:^0.6.2":
+"iconv-lite@npm:^0.6.2, iconv-lite@npm:~0.6.3":
   version: 0.6.3
   resolution: "iconv-lite@npm:0.6.3"
   dependencies:
@@ -14622,12 +14622,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"urlencode@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "urlencode@npm:1.1.0"
+"urlencode@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "urlencode@npm:2.0.0"
   dependencies:
-    iconv-lite: "npm:~0.4.11"
-  checksum: 10/1219de93106d72477bec78fd7670def5c73a0352ab2f0d3f96340dc453ba72d7f82fd94986fd388fa75db1a46b3117d1574346916895a56b145d61a1334a84e2
+    iconv-lite: "npm:~0.6.3"
+  checksum: 10/6d7965c91aab318d8cfc6901f99197ba2bdbd6a0c8d68855ff9b36b6ce728a0759e73db800301e1bea77db135b961906711b079898d1711622348a6ffc22c1cd
   languageName: node
   linkType: hard
 
