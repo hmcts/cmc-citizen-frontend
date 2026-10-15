@@ -144,6 +144,8 @@ withPipeline("nodejs", product, component) {
 
   afterSuccess('test') {
     onMaster {
+      // Jenkins is cacheing.  This in turn means puppeteer is not rebuilt which is needed for Chrome to be reinstalled
+      yarnBuilder.yarn('rebuild puppeteer')
       yarnBuilder.yarn('tests:a11y')
     }
   }
