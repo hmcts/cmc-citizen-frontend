@@ -223,7 +223,7 @@
     "websocket-extensions": "^0.1.4",
     "redis": "^3.1.1",
     "merge": "^2.1.1",
-    "ua-parser-js": "^0.7.24",
+    "ua-parser-js": "^2.0.0",
     "hosted-git-info": "^3.0.8",
     "sass-lint/merge": "^2.1.1",
     "glob-parent": "^5.1.2",
