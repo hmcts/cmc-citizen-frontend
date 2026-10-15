@@ -304,6 +304,8 @@ ccd:
     enabled: false
 
   elasticsearch:
+    securityContext:
+      allowPrivilegeEscalation: false
     nameOverride: ${SERVICE_NAME}-es
     clusterName: "es"
     imageTag: "7.17.1"
@@ -334,6 +336,8 @@ ccd:
         - es-${SERVICE_FQDN}
 
   logstash:
+    securityContext:
+      allowPrivilegeEscalation: false
     devmemoryRequests: 512Mi
     devcpuRequests: "1000m"
     devmemoryLimits: 1024Mi
