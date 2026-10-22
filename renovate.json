@@ -101,6 +101,11 @@
       "groupSlug": "all-non-major",
       "automerge": true,
       "automergeType": "pr"
+    },
+    {
+      "groupName": "opentelemetry stack",
+      "matchPackageNames": ["applicationinsights", "@azure/monitor-opentelemetry"],
+      "matchPackagePrefixes": ["@opentelemetry/"]
     }
   ]
 }
