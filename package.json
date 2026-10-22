@@ -173,8 +173,8 @@
   },
   "resolutions": {
     "@grpc/grpc-js": "1.14.5",
-    "@opentelemetry/instrumentation-mysql": "0.67.0",
-    "@opentelemetry/instrumentation-pg": "0.73.0",
+    "@opentelemetry/instrumentation-mysql": "0.70.0",
+    "@opentelemetry/instrumentation-pg": "0.77.0",
     "@babel/traverse": "7.29.8",
     "@babel/helpers": "7.29.7",
     "basic-ftp": "6.2.1",
