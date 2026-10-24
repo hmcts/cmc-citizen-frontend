@@ -22,8 +22,7 @@ import { buildClaimData, buildResponseData, generateTestEmail } from '../../help
  *   6. Defendant responds via POST /responses/claim/{externalId}/defendant/{defendantId}
  *   7. Verify claim has response attached
  */
-test.describe.skip('Claim Lifecycle - Create, Respond, Verify', () => {
-  test.describe.configure({ mode: 'serial' });
+test.describe.serial('Claim Lifecycle - Create, Respond, Verify', () => {
 
   const claimantEmail = generateTestEmail('pw-claimant');
   const defendantEmail = generateTestEmail('pw-defendant');
