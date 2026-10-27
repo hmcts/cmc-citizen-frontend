@@ -7,12 +7,16 @@
   "labels": [
     "dependencies"
   ],
-"automergeSchedule": [
-  "after 7am and before 8am every weekday",
-  "after 6pm and before 8pm every weekday"
-],
-"platformAutomerge": false,
-  "schedule": ["after 8am and before 11am every weekday"],
+  "timezone": "Europe/London",
+  "automergeSchedule": [
+    "after 7am and before 8am every weekday",
+    "after 6pm and before 8pm every weekday"
+  ],
+  "platformAutomerge": false,
+  "schedule": [
+    "after 7am and before 8am every weekday",
+    "after 6pm and before 8pm every weekday"
+  ],
   "rebaseWhen": "behind-base-branch",
   "automergeStrategy": "squash",
   "prConcurrentLimit": 5,
@@ -21,49 +25,87 @@
   },
   "packageRules": [
     {
-      "matchManagers": ["helmv3"],
+      "matchManagers": [
+        "helmv3"
+      ],
       "groupName": "Helm chart updates",
       "groupSlug": "helm-charts",
       "automerge": true,
       "automergeType": "pr"
     },
     {
-      "matchPackageNames": ["eslint"],
-      "matchPackagePatterns": ["^@typescript-eslint/", "^eslint-", "^babel-eslint"],
+      "matchPackageNames": [
+        "eslint"
+      ],
+      "matchPackagePatterns": [
+        "^@typescript-eslint/",
+        "^eslint-",
+        "^babel-eslint"
+      ],
       "groupName": "ESLint",
       "groupSlug": "eslint",
       "automerge": true,
       "automergeType": "pr"
     },
     {
-      "matchPackageNames": ["typescript"],
-      "matchPackagePatterns": ["^@types/"],
+      "matchPackageNames": [
+        "typescript"
+      ],
+      "matchPackagePatterns": [
+        "^@types/"
+      ],
       "groupName": "TypeScript",
       "groupSlug": "typescript",
       "automerge": true,
       "automergeType": "pr"
     },
     {
-      "matchPackagePatterns": ["^@hmcts/"],
+      "matchPackagePatterns": [
+        "^@hmcts/"
+      ],
       "groupName": "HMCTS packages",
       "groupSlug": "hmcts",
       "automerge": true,
       "automergeType": "pr"
     },
     {
-      "matchPackageNames": ["mocha", "chai", "sinon", "nock", "nyc", "supertest", "codeceptjs", "webdriverio"],
-      "matchPackagePatterns": ["^@types/mocha", "^@types/chai", "^@types/sinon", "^mocha-", "^sinon-", "^chai-"],
+      "matchPackageNames": [
+        "mocha",
+        "chai",
+        "sinon",
+        "nock",
+        "nyc",
+        "supertest",
+        "codeceptjs",
+        "webdriverio"
+      ],
+      "matchPackagePatterns": [
+        "^@types/mocha",
+        "^@types/chai",
+        "^@types/sinon",
+        "^mocha-",
+        "^sinon-",
+        "^chai-"
+      ],
       "groupName": "Testing tools",
       "groupSlug": "testing",
       "automerge": true,
       "automergeType": "pr"
     },
     {
-      "matchUpdateTypes": ["minor", "patch"],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
       "groupName": "All non-major updates",
       "groupSlug": "all-non-major",
       "automerge": true,
       "automergeType": "pr"
+    },
+    {
+      "groupName": "opentelemetry stack",
+      "matchPackageNames": ["applicationinsights", "@azure/monitor-opentelemetry"],
+      "matchPackagePrefixes": ["@opentelemetry/"]
     }
   ]
 }

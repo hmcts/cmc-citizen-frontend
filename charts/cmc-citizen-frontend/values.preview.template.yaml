@@ -166,7 +166,7 @@ ccd:
     postgresql:
       enabled: false
     adminWeb:
-      enabled: true
+      enabled: false
     managementWeb:
       enabled: false
     elastic:
