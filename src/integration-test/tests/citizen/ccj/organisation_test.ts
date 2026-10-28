@@ -16,7 +16,7 @@ let claimRef
 
 Feature('CCJ Requested Against Organisation')
 
-Before(async (I: I) => {
+Before(async ({ I }: { I: I }) => {
   email = await I.getClaimantEmail()
   claimantType = PartyType.COMPANY
   defendantType = PartyType.COMPANY
@@ -27,7 +27,7 @@ Before(async (I: I) => {
 })
 
 if (process.env.CUI_DASHBOARD_REDIRECT !== 'true') {
-  Scenario('CCJ requested as a Company(Pay by set date) @nightly', {retries: 3}, async (I: I) => {
+  Scenario('CCJ requested as a Company(Pay by set date) @nightly', {retries: 3}, async ({ I }: { I: I }) => {
     userSteps.login(email)
     await ccjSteps.requestCCJ(I, claimRef, defendantType)
     ccjSteps.ccjDefendantToPayBySetDate()

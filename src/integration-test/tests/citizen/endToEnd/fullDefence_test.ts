@@ -19,7 +19,7 @@ let claimData
 
 Feature('Full Defence E2E')
 
-Before(async (I: I) => {
+Before(async ({ I }: { I: I }) => {
   testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
   claimData = await createClaimData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
   testData.defenceType = DefenceType.FULL_REJECTION_WITH_DISPUTE
@@ -44,13 +44,13 @@ Before(async (I: I) => {
 })
 
 if (process.env.CUI_DASHBOARD_REDIRECT !== 'true') {
-  Scenario('Reject/Dispute all of the claim @citizen', {retries: 3}, async (I: I) => {
+  Scenario('Reject/Dispute all of the claim @citizen', {retries: 3}, async ({ I }: { I: I }) => {
     claimantResponseSteps.decideToProceed()
     checkAndSendPage.checkFactsTrueAndSubmit(testData.defenceType)
     I.see('You’ve rejected their response')
   })
 
-  Scenario('Claimant Stop the claim /Case Stayed E2E @citizen @nightly', {retries: 3}, async (I: I) => {
+  Scenario('Claimant Stop the claim /Case Stayed E2E @citizen @nightly', {retries: 3}, async ({ I }: { I: I }) => {
     claimantResponseSteps.decideNotToProceed()
   })
 }

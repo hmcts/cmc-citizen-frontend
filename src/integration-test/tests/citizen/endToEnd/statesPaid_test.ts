@@ -12,12 +12,12 @@ let testData
 
 Feature('States Paid E2E')
 
-Before(async (I: I) => {
+Before(async ({ I }: { I: I }) => {
   testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
 })
 
 if (process.env.CUI_DASHBOARD_REDIRECT !== 'true') {
-  Scenario('I have paid what i believe i owe @citizen @nightly', {retries: 3}, async (I: I) => {
+  Scenario('I have paid what i believe i owe @citizen @nightly', {retries: 3}, async ({ I }: { I: I }) => {
     testData.defenceType = DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID
     await helperSteps.finishResponse(testData)
     I.click('My account')
