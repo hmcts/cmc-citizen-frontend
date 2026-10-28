@@ -35,12 +35,10 @@
     },
     {
       "matchPackageNames": [
-        "eslint"
-      ],
-      "matchPackagePatterns": [
-        "^@typescript-eslint/",
-        "^eslint-",
-        "^babel-eslint"
+        "eslint",
+        "/^@typescript-eslint//",
+        "/^eslint-/",
+        "/^babel-eslint/"
       ],
       "groupName": "ESLint",
       "groupSlug": "eslint",
@@ -49,10 +47,8 @@
     },
     {
       "matchPackageNames": [
-        "typescript"
-      ],
-      "matchPackagePatterns": [
-        "^@types/"
+        "typescript",
+        "/^@types//"
       ],
       "groupName": "TypeScript",
       "groupSlug": "typescript",
@@ -60,13 +56,13 @@
       "automergeType": "pr"
     },
     {
-      "matchPackagePatterns": [
-        "^@hmcts/"
-      ],
       "groupName": "HMCTS packages",
       "groupSlug": "hmcts",
       "automerge": true,
-      "automergeType": "pr"
+      "automergeType": "pr",
+      "matchPackageNames": [
+        "/^@hmcts//"
+      ]
     },
     {
       "matchPackageNames": [
@@ -77,15 +73,13 @@
         "nyc",
         "supertest",
         "codeceptjs",
-        "webdriverio"
-      ],
-      "matchPackagePatterns": [
-        "^@types/mocha",
-        "^@types/chai",
-        "^@types/sinon",
-        "^mocha-",
-        "^sinon-",
-        "^chai-"
+        "webdriverio",
+        "/^@types/mocha/",
+        "/^@types/chai/",
+        "/^@types/sinon/",
+        "/^mocha-/",
+        "/^sinon-/",
+        "/^chai-/"
       ],
       "groupName": "Testing tools",
       "groupSlug": "testing",
@@ -104,8 +98,7 @@
     },
     {
       "groupName": "opentelemetry stack",
-      "matchPackageNames": ["applicationinsights", "@azure/monitor-opentelemetry"],
-      "matchPackagePrefixes": ["@opentelemetry/"]
+      "matchPackageNames": ["applicationinsights", "@azure/monitor-opentelemetry", "@opentelemetry/{/,}**"]
     }
   ]
 }
