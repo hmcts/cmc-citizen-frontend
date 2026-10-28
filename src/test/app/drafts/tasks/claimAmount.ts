@@ -1,6 +1,6 @@
 // tslint:disable:no-unused-expression
 import { expect, use } from 'chai'
-import * as ChaiAsPromised from 'chai-as-promised'
+import ChaiAsPromised from 'chai-as-promised'
 
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { ClaimAmount } from 'drafts/tasks/claimAmount'

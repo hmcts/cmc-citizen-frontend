@@ -2,7 +2,7 @@
 
 import * as chai from 'chai'
 import * as sinon from 'sinon'
-import * as spies from 'sinon-chai'
+import spies from 'sinon-chai'
 import { mockReq as req, mockRes as res } from 'sinon-express-mock'
 import * as moment from 'moment'
 

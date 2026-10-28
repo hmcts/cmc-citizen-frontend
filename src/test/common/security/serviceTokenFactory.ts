@@ -1,6 +1,6 @@
 /* tslint:disable:no-unused-expression */
 import * as chai from 'chai'
-import * as spies from 'sinon-chai'
+import spies from 'sinon-chai'
 import * as sinon from 'sinon'
 
 import { ServiceAuthToken } from 'idam/serviceAuthToken'

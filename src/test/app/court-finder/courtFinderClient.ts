@@ -1,6 +1,6 @@
 import * as nock from 'nock'
 import * as chai from 'chai'
-import * as chaiAsPromised from 'chai-as-promised'
+import chaiAsPromised from 'chai-as-promised'
 import { CourtFinderClient } from 'court-finder-client/courtFinderClient'
 import { CourtFinderResponse } from 'court-finder-client/courtFinderResponse'
 

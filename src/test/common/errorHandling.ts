@@ -4,7 +4,7 @@ import * as express from 'express'
 
 import * as chai from 'chai'
 import * as sinon from 'sinon'
-import * as spies from 'sinon-chai'
+import spies from 'sinon-chai'
 import { mockReq, mockRes } from 'sinon-express-mock'
 
 chai.use(spies)
