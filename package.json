@@ -60,7 +60,7 @@
     "csrf-csrf": "^4.0.3",
     "express": "^4.21.0",
     "express-session": "^1.18.0",
-    "fs-extra": "^9.1.0",
+    "fs-extra": "^11.0.0",
     "govuk-frontend": "4.8.0",
     "helmet": "^4.6.0",
     "hpkp": "^2.0.2",
