@@ -4669,7 +4669,7 @@ __metadata:
     gulp-rename: "npm:^2.0.0"
     gulp-replace: "npm:^1.1.3"
     gulp-sass: "npm:^5.1.0"
-    helmet: "npm:^4.6.0"
+    helmet: "npm:^8.0.0"
     hpkp: "npm:^2.0.2"
     html_codesniffer: "npm:2.4.1"
     http-status-codes: "npm:^1.4.0"
@@ -8216,10 +8216,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"helmet@npm:^4.6.0":
-  version: 4.6.0
-  resolution: "helmet@npm:4.6.0"
-  checksum: 10/47129c540dc815a30274b687699738e7dd9acdeeaa5eb4682cba8d364a381fb502b140c7fef5b8d5f9a01d9d17ed8a17ef62c884816bd9e4535d750ce3a9a6be
+"helmet@npm:^8.0.0":
+  version: 8.3.0
+  resolution: "helmet@npm:8.3.0"
+  checksum: 10/077db98df8f8ea749aeab0f56eabe1f37d0ca2ae475c095bc30adf850fe714ea67469dc94b6a6e1b786cde25a40452784e20b728e59c63baa2b18ba12518a6fe
   languageName: node
   linkType: hard
 

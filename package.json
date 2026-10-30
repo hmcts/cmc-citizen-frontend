@@ -62,7 +62,7 @@
     "express-session": "^1.18.0",
     "fs-extra": "^11.0.0",
     "govuk-frontend": "4.8.0",
-    "helmet": "^4.6.0",
+    "helmet": "^8.0.0",
     "hpkp": "^2.0.2",
     "http-status-codes": "^1.4.0",
     "i18next": "^18.0.0",
