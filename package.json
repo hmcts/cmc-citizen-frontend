@@ -58,7 +58,7 @@
     "cookie-parser": "^1.4.5",
     "cookies": "^0.8.0",
     "csrf-csrf": "^4.0.3",
-    "express": "^4.21.0",
+    "express": "^5.0.0",
     "express-session": "^1.18.0",
     "fs-extra": "^11.0.0",
     "govuk-frontend": "4.8.0",
@@ -287,7 +287,7 @@
     "follow-redirects": "1.16.1",
     "table/ajv": "^8.18.0",
     "import-in-the-middle": "^1.14.4",
-    "express": "4.21.2",
+    "express": "^5.0.0",
     "@tootallnate/once": "3.0.1",
     "@hmcts/draft-store-client@npm:^1.2.1": "patch:@hmcts/draft-store-client@npm%3A1.2.1#~/.yarn/patches/@hmcts-draft-store-client-npm-1.2.1-f4227410a7.patch"
   },
