@@ -7,12 +7,12 @@ dependencies:
   version: 2.3.1
 - name: cmc-claim-store
   repository: oci://hmctsprod.azurecr.io/helm
-  version: 4.1.57
+  version: 4.1.63
 - name: ccd
   repository: oci://hmctsprod.azurecr.io/helm
-  version: 9.2.2
+  version: 9.3.0
 - name: xui-webapp
   repository: oci://hmctsprod.azurecr.io/helm
-  version: 1.0.55
-digest: sha256:ad6bae8c8eefa4212299748068ff96987be0e1ed9d41697fa8acdcd2dfc778b7
-generated: "2026-10-27T13:50:16.600059+00:00"
+  version: 1.0.56
+digest: sha256:c05dd67379a6584624599d9319f8f6d260b9a7fc7de55dce105eace6ee0e15e6
+generated: "2026-10-30T19:59:17.631946498Z"
