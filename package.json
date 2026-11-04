@@ -284,7 +284,7 @@
     "node-gyp": "12.2.0",
     "brace-expansion": "2.1.7",
     "tough-cookie": "6.0.2",
-    "follow-redirects": "1.16.1",
+    "follow-redirects": "1.16.2",
     "table/ajv": "^8.18.0",
     "import-in-the-middle": "^1.14.4",
     "express": "4.21.2",
