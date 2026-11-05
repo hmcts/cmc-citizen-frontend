@@ -16,7 +16,7 @@ const hwfSteps: HwfSteps = new HwfSteps()
 
 Feature('Claimant Enter details of claim')
 
-Before(async (I: I) => {
+Before(async ({ I }: { I: I }) => {
   const claimantEmail = await I.getClaimantEmail()
   userSteps.login(claimantEmail)
   if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
@@ -26,7 +26,7 @@ Before(async (I: I) => {
 
 })
 
-Scenario('Claim with no interest @citizen', { retries: 0 }, async (I: I) => {
+Scenario('Claim with no interest @citizen', { retries: 0 }, async ({ I }: { I: I }) => {
   await claimSteps.completeStartOfClaimJourney(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true)
   interestSteps.skipClaimInterest()
   const isHwfEnabled = await I.checkHWF()
@@ -60,7 +60,7 @@ Scenario('Claim with no interest @citizen', { retries: 0 }, async (I: I) => {
   I.waitForText('Claim submitted')
 })
 
-Scenario('Claim with different interest rate and date @citizen', { retries: 3 }, async (I: I) => {
+Scenario('Claim with different interest rate and date @citizen', { retries: 3 }, async ({ I }: { I: I }) => {
   await claimSteps.completeStartOfClaimJourney(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true)
   interestSteps.enterSpecificInterestRateAndDate(2, '1990-01-01')
   const isHwfEnabled = await I.checkHWF()
@@ -79,7 +79,7 @@ Scenario('Claim with different interest rate and date @citizen', { retries: 3 },
   }
 })
 
-Scenario('Claim with a manually entered interest amount and a daily amount added @citizen', { retries: 3 }, async (I: I) => {
+Scenario('Claim with a manually entered interest amount and a daily amount added @citizen', { retries: 3 }, async ({ I }: { I: I }) => {
   await claimSteps.completeStartOfClaimJourney(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true)
   interestSteps.enterBreakdownInterestAmountAndDailyAmount()
   const isHwfEnabled = await I.checkHWF()
@@ -101,7 +101,7 @@ Scenario('Claim with a manually entered interest amount and a daily amount added
 })
 
 // PCQ related tests
-Scenario('I should not see PCQ if "Your deails" are missing while making a claim @citizen', { retries: 3 }, async (I: I) => {
+Scenario('I should not see PCQ if "Your deails" are missing while making a claim @citizen', { retries: 3 }, async ({ I }: { I: I }) => {
   claimSteps.enterClaimDetails()
 
   // I shouldn't be navigated to PCQ instead I should be taken back to "Make a money claim" page
@@ -112,7 +112,7 @@ Scenario('I should not see PCQ if "Your deails" are missing while making a claim
   }
 })
 
-Scenario('I should be redirected to PCQ if "Your details" are filled in while making a claim @citizen', { retries: 3 }, async (I: I) => {
+Scenario('I should be redirected to PCQ if "Your details" are filled in while making a claim @citizen', { retries: 3 }, async ({ I }: { I: I }) => {
   // add your details
   userSteps.selectYourDetails()
   claimSteps.enterMyDetails(PartyType.INDIVIDUAL)

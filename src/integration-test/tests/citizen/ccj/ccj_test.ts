@@ -16,7 +16,7 @@ let claimRef
 
 Feature('Default CCJ')
 
-Before(async (I: I) => {
+Before(async ({ I }: { I: I }) => {
   email = await I.getClaimantEmail()
   claimantType = PartyType.INDIVIDUAL
   defendantType = PartyType.INDIVIDUAL
@@ -27,7 +27,7 @@ Before(async (I: I) => {
 })
 
 if (process.env.CUI_DASHBOARD_REDIRECT !== 'true') {
-  Scenario('Default CCJ E2E @nightly @citizen', {retries: 3}, async (I: I) => {
+  Scenario('Default CCJ E2E @nightly @citizen', {retries: 3}, async ({ I }: { I: I }) => {
     userSteps.login(email)
     await ccjSteps.requestCCJWhenDefendantNotPaid(I, claimRef, defendantType)
     ccjSteps.ccjDefendantToPayImmediately()
@@ -35,7 +35,7 @@ if (process.env.CUI_DASHBOARD_REDIRECT !== 'true') {
     I.see('County Court Judgment requested', 'h1.bold-large')
   })
 
-  Scenario('CCJ requested with no defendant email... @citizen @nightly', {retries: 3}, async (I: I) => {
+  Scenario('CCJ requested with no defendant email... @citizen @nightly', {retries: 3}, async ({ I }: { I: I }) => {
     userSteps.login(email)
     await ccjSteps.requestCCJ(I, claimRef, defendantType)
     ccjSteps.ccjDefendantToPayByInstalments()
