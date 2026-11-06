@@ -225,7 +225,7 @@
     "redis": "^6.0.0",
     "merge": "^2.1.1",
     "ua-parser-js": "^2.0.0",
-    "hosted-git-info": "^3.0.8",
+    "hosted-git-info": "^10.0.0",
     "sass-lint/merge": "^2.1.1",
     "glob-parent": "^6.0.0",
     "trim-newlines": "^5.0.0",
