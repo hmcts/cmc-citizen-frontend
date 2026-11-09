@@ -10947,10 +10947,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"normalize-url@npm:^6.0.1":
-  version: 6.1.0
-  resolution: "normalize-url@npm:6.1.0"
-  checksum: 10/5ae699402c9d5ffa330adc348fcd6fc6e6a155ab7c811b96e30b7ecab60ceef821d8f86443869671dda71bbc47f4b9625739c82ad247e883e9aefe875bfb8659
+"normalize-url@npm:^10.0.0":
+  version: 10.0.0
+  resolution: "normalize-url@npm:10.0.0"
+  checksum: 10/e26a6fdaa7f19db7b1be5f3279d2f9418f979160500e65357a020b29f9216981127b5a471a2dabd97502c721f020bcfec71716150aef66b47f3f767c4465abc8
   languageName: node
   linkType: hard
 
