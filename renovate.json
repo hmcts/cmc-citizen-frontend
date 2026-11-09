@@ -99,6 +99,64 @@
     {
       "groupName": "opentelemetry stack",
       "matchPackageNames": ["applicationinsights", "@azure/monitor-opentelemetry", "@opentelemetry/{/,}**"]
+    },
+    {
+      "description": "Keep the Terraform CLI version (infrastructure/.terraform-version) out of the npm non-major group; large jumps can affect state and providers, so review and merge manually",
+      "matchManagers": [
+        "terraform-version"
+      ],
+      "groupName": "Terraform version",
+      "groupSlug": "terraform-version",
+      "automerge": false
+    },
+    {
+      "description": "Keep the cnp-jenkins-library @Library bump in Jenkinsfiles out of the npm non-major group so pipeline changes are tested on their own",
+      "matchDatasources": [
+        "github-tags"
+      ],
+      "matchPackageNames": [
+        "hmcts/cnp-jenkins-library"
+      ],
+      "groupName": "Jenkins library",
+      "groupSlug": "jenkins-library"
+    },
+    {
+      "description": "cookie v1+ is ESM-only and drops parse/serialize used by express 4, express-session and cookie-parser; upgrade alongside express 5",
+      "matchPackageNames": [
+        "cookie"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "enabled": false
+    },
+    {
+      "description": "express 5 needs path-to-regexp v8/body-parser v2 (conflicting with resolutions pins) and wildcard route rewrites; upgrade as a planned migration",
+      "matchPackageNames": [
+        "express",
+        "@types/express"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "enabled": false
+    },
+    {
+      "description": "govuk-frontend 5+ moves files under dist/ (breaking gulp/Sass paths and imported tabs macro), switches JS to ES modules and brings the brand refresh; upgrade as a planned migration",
+      "matchPackageNames": [
+        "govuk-frontend"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "enabled": false
+    },
+    {
+      "description": "express 4 needs path-to-regexp 0.1.x (0.1.12+ has the ReDoS fixes); 0.2.x is an abandoned 2014 line that breaks '*' wildcard routes and silently skips auth/guard middleware",
+      "matchPackageNames": [
+        "path-to-regexp"
+      ],
+      "allowedVersions": "<0.2.0"
     }
   ]
 }
