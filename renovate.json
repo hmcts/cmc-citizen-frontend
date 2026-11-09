@@ -101,6 +101,26 @@
       "matchPackageNames": ["applicationinsights", "@azure/monitor-opentelemetry", "@opentelemetry/{/,}**"]
     },
     {
+      "description": "Keep the Terraform CLI version (infrastructure/.terraform-version) out of the npm non-major group; large jumps can affect state and providers, so review and merge manually",
+      "matchManagers": [
+        "terraform-version"
+      ],
+      "groupName": "Terraform version",
+      "groupSlug": "terraform-version",
+      "automerge": false
+    },
+    {
+      "description": "Keep the cnp-jenkins-library @Library bump in Jenkinsfiles out of the npm non-major group so pipeline changes are tested on their own",
+      "matchDatasources": [
+        "github-tags"
+      ],
+      "matchPackageNames": [
+        "hmcts/cnp-jenkins-library"
+      ],
+      "groupName": "Jenkins library",
+      "groupSlug": "jenkins-library"
+    },
+    {
       "description": "cookie v1+ is ESM-only and drops parse/serialize used by express 4, express-session and cookie-parser; upgrade alongside express 5",
       "matchPackageNames": [
         "cookie"
