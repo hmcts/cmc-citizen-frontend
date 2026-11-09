@@ -209,7 +209,7 @@
     "uuid@npm:11.1.0": "11.1.1",
     "uuid@npm:^8.0.0": "11.1.1",
     "uuid@npm:^8.3.2": "11.1.1",
-    "path-to-regexp": "0.1.13",
+    "path-to-regexp": "9.0.0",
     "@babel/runtime": "7.26.10",
     "express/qs": "6.16.1",
     "body-parser/qs": "6.16.1",

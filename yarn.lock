@@ -11019,10 +11019,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"path-to-regexp@npm:0.1.13":
-  version: 0.1.13
-  resolution: "path-to-regexp@npm:0.1.13"
-  checksum: 10/f1e4bdedc4fd41a3b8dd76e8b2e1183105348c6b205badc072581ca63dc6aa7976a8a67feaffcf0e505f51ac12cb1a2de7f3fef3e9085b6849e76232d73ddcba
+"path-to-regexp@npm:9.0.0":
+  version: 9.0.0
+  resolution: "path-to-regexp@npm:9.0.0"
+  checksum: 10/1c247e243804e5490c74eee63a0e5fb2caa71125c1d652582b1e0e0a46de9479f0f6d27bb57756e365d09c1e9f0473231c0f9fbf92ca3bc75dc36893daa229eb
   languageName: node
   linkType: hard
 
