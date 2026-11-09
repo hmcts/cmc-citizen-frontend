@@ -5,12 +5,12 @@ const claimSteps: ClaimSteps = new ClaimSteps()
 Feature('Smoke Tests...')
 
 // The @citizen-smoke-test tag used for running smoke tests with pre-registered user
-Scenario('Navigate Payment Page by providing claim details... @smoke-test', { retries: 0 }, async (I: I) => {
+Scenario('Navigate Payment Page by providing claim details... @smoke-test', { retries: 0 }, async ({ I }: { I: I }) => {
   await claimSteps.makeAClaimAndNavigateUpToPayment(I)
 })
 
 Feature('Help With Fee E2E Tests...')
 
-Scenario('Submit Claim via HWF Reference... @citizen', { retries: 3 }, async (I: I) => {
+Scenario('Submit Claim via HWF Reference... @citizen', { retries: 3 }, async ({ I }: { I: I }) => {
   await claimSteps.makeAHwfClaimAndSubmit(I)
 })

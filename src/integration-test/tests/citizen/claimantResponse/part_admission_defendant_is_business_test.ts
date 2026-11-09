@@ -16,12 +16,12 @@ let testData
 
 Feature('Claimant Response ::: Part admit when defendant is business')
 
-Before(async (I: I) => {
+Before(async ({ I }: { I: I }) => {
   testData = await EndToEndTestData.prepareData(I, PartyType.COMPANY, PartyType.INDIVIDUAL)
 })
 
 if (process.env.FEATURE_ADMISSIONS === 'true' && process.env.CUI_DASHBOARD_REDIRECT !== 'true') {
-  Scenario('I can as a claimant accept and suggest an alternative payment intention with set date @admissions @business', { retries: 3 }, async (I: I) => {
+  Scenario('I can as a claimant accept and suggest an alternative payment intention with set date @admissions @business', { retries: 3 }, async ({ I }: { I: I }) => {
     testData.defenceType = DefenceType.PART_ADMISSION_NONE_PAID
     testData.paymentOption = PaymentOption.BY_SET_DATE
     // as defendant

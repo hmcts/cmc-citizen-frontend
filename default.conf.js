@@ -33,6 +33,7 @@ exports.config = {
       waitForTimeout: 60000,
       restart: true,
       smartWait:5000,
+      bidiProtocol: false,
       desiredCapabilities: {
         chromeOptions: {
           args: [ "--no-sandbox", "--disable-dev-shm-usage", "--allow-running-insecure-content", "--ignore-certificate-errors"]

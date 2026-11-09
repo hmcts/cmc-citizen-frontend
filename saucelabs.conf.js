@@ -62,6 +62,7 @@ const setupConfig = {
       host: 'ondemand.eu-central-1.saucelabs.com',
       port: 80,
       region: 'eu',
+      bidiProtocol: false,
       capabilities: {}
     },
     IdamHelper: {
