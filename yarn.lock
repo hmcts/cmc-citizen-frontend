@@ -4649,7 +4649,7 @@ __metadata:
     cmc-cookies-manager: "github:hmcts/cmc-cookies-manager#3.0.3"
     codeceptjs: "npm:^2.6.11"
     codecov: "npm:^3.8.2"
-    config: "npm:^3.3.12"
+    config: "npm:^5.0.0"
     connect-redis: "npm:^7.1.0"
     cookie-parser: "npm:^1.4.5"
     cookies: "npm:^0.8.0"
@@ -4973,12 +4973,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"config@npm:^3.3.12":
-  version: 3.3.12
-  resolution: "config@npm:3.3.12"
+"config@npm:^5.0.0":
+  version: 5.0.1
+  resolution: "config@npm:5.0.1"
   dependencies:
     json5: "npm:^2.2.3"
-  checksum: 10/f7973d1192c98d9b8d49e273bef816b4c74a6bab6e7c500792d3fe239e87fa3a80fac89ee552b7da7e2c3d9f6f8f3568e856f08ebd9861917cf47a655cee3e6a
+  checksum: 10/20920c671a4b49e4da2a64c53806f37d787e806abf7c5e205b2a22abef74a82cdd7336c66d78c92b585b1bd2320300df40e55a70c644ebae73a391865bcc377b
   languageName: node
   linkType: hard
 
