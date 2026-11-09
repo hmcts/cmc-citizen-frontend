@@ -1,16 +1,7 @@
 const Helper = codecept_helper;
 
+// WebdriverIO 9 speaks only the W3C protocol, so IE11 window handling is gone.
 class SauceLabsBrowserHelper extends Helper {
-
-    async _before() {
-    const webdriver = this.helpers['WebDriver'];
-    if (webdriver) {
-      if (webdriver.config.browser === 'internet explorer') {
-        console.log('Maximising IE11 browser window size');
-        await webdriver.browser.maximizeWindow();
-      }
-    }
-  }
 }
 
 module.exports = SauceLabsBrowserHelper;
