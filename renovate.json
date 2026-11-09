@@ -120,6 +120,16 @@
         "major"
       ],
       "enabled": false
+    },
+    {
+      "description": "govuk-frontend 5+ moves files under dist/ (breaking gulp/Sass paths and imported tabs macro), switches JS to ES modules and brings the brand refresh; upgrade as a planned migration",
+      "matchPackageNames": [
+        "govuk-frontend"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "enabled": false
     }
   ]
 }
