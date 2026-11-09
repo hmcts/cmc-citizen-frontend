@@ -99,6 +99,16 @@
     {
       "groupName": "opentelemetry stack",
       "matchPackageNames": ["applicationinsights", "@azure/monitor-opentelemetry", "@opentelemetry/{/,}**"]
+    },
+    {
+      "description": "cookie v1+ is ESM-only and drops parse/serialize used by express 4, express-session and cookie-parser; upgrade alongside express 5",
+      "matchPackageNames": [
+        "cookie"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "enabled": false
     }
   ]
 }
