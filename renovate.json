@@ -150,6 +150,13 @@
         "major"
       ],
       "enabled": false
+    },
+    {
+      "description": "express 4 needs path-to-regexp 0.1.x (0.1.12+ has the ReDoS fixes); 0.2.x is an abandoned 2014 line that breaks '*' wildcard routes and silently skips auth/guard middleware",
+      "matchPackageNames": [
+        "path-to-regexp"
+      ],
+      "allowedVersions": "<0.2.0"
     }
   ]
 }
