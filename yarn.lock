@@ -5018,10 +5018,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cookie@npm:0.7.0":
-  version: 0.7.0
-  resolution: "cookie@npm:0.7.0"
-  checksum: 10/2e69a615fa2c5a1e1126012dd2118b0de4fbbdede38ebcc1f971a9b08075718bc4465b119896bac61969b38c6cacaf471b0fd2601ea978fd8f3e834f2c2393f8
+"cookie@npm:2.0.2":
+  version: 2.0.2
+  resolution: "cookie@npm:2.0.2"
+  checksum: 10/ce650de56a06afe15bc49c89ec3332c6246942798c06d6e2267172e2b1ba482abacfd580687210378666ba27983362dfdd220b82f28310ea179ea28988e52c1f
   languageName: node
   linkType: hard
 
