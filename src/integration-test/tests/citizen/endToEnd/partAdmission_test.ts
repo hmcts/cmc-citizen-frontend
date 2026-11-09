@@ -15,7 +15,7 @@ let claimRef
 
 Feature('Admit part of the claim E2E')
 
-Before(async (I: I) => {
+Before(async ({ I }: { I: I }) => {
   claimantEmail = await I.getClaimantEmail()
   defendantEmail = await I.getDefendantEmail()
 
@@ -31,22 +31,22 @@ Before(async (I: I) => {
 
 if (process.env.FEATURE_ADMISSIONS === 'true') {
 
-  Scenario('Admit part of the claim with payment already made @citizen @admissions', { retries: 3 }, async (I: I) => {
+  Scenario('Admit part of the claim with payment already made @citizen @admissions', { retries: 3 }, async ({ I }: { I: I }) => {
     defenceSteps.makePartialAdmission(defendant)
     await defenceSteps.partialPaymentMade(PartyType.INDIVIDUAL)
   })
 
-  Scenario('Admit part of the claim (Pay Immediately) @nightly @admissions', { retries: 3 }, async (I: I) => {
+  Scenario('Admit part of the claim (Pay Immediately) @nightly @admissions', { retries: 3 }, async ({ I }: { I: I }) => {
     defenceSteps.makePartialAdmission(defendant)
     await defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.IMMEDIATELY)
   })
 
-  Scenario('Admit part of the claim (Pay By Set Date) @citizen @admissions', { retries: 3 }, async (I: I) => {
+  Scenario('Admit part of the claim (Pay By Set Date) @citizen @admissions', { retries: 3 }, async ({ I }: { I: I }) => {
     defenceSteps.makePartialAdmission(defendant)
     await defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE)
   })
 
-  Scenario('Admit part of the claim (Pay By Instalment) @nightly @admissions', { retries: 3 }, async (I: I) => {
+  Scenario('Admit part of the claim (Pay By Instalment) @nightly @admissions', { retries: 3 }, async ({ I }: { I: I }) => {
     defenceSteps.makePartialAdmission(defendant)
     await defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS)
   })

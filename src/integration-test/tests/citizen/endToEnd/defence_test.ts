@@ -15,12 +15,12 @@ let testData
 
 Feature('Full Defence E2E Journeys @citizen-defence')
 
-Before(async (I: I) => {
+Before(async ({ I }: { I: I }) => {
   testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
 })
 
 if (process.env.CUI_DASHBOARD_REDIRECT !== 'true') {
-  Scenario('I can as an Individual make a claim against an Individual who then fully rejects the claim as they have already paid the full amount and I proceed with the claim @citizen', {retries: 3}, async (I: I) => {
+  Scenario('I can as an Individual make a claim against an Individual who then fully rejects the claim as they have already paid the full amount and I proceed with the claim @citizen', {retries: 3}, async ({ I }: { I: I }) => {
     testData.defenceType = DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID
     await helperSteps.finishResponse(testData)
     I.click('My account')
@@ -40,7 +40,7 @@ if (process.env.CUI_DASHBOARD_REDIRECT !== 'true') {
     I.see('You’ve rejected their response')
   })
 
-  Scenario('I can as an Individual make a claim against an Individual who then rejects the claim as they have paid the full amount then I accept the defence @nightly', {retries: 3}, async (I: I) => {
+  Scenario('I can as an Individual make a claim against an Individual who then rejects the claim as they have paid the full amount then I accept the defence @nightly', {retries: 3}, async ({ I }: { I: I }) => {
     const claimantResponseTestData = new ClaimantResponseTestData()
     claimantResponseTestData.pageSpecificValues.howMuchHaveYouPaidPageEnterAmountPaidWithDateAndExplanation = {
       paidAmount: 115.5,
@@ -74,7 +74,7 @@ if (process.env.CUI_DASHBOARD_REDIRECT !== 'true') {
     I.click('Sign out')
   })
 
-  Scenario('I can as an Individual make a claim against an Individual who then rejects the claim as they have paid less than the amount claimed and I then accept their defence @nightly', {retries: 3}, async (I: I) => {
+  Scenario('I can as an Individual make a claim against an Individual who then rejects the claim as they have paid less than the amount claimed and I then accept their defence @nightly', {retries: 3}, async ({ I }: { I: I }) => {
     const claimantResponseTestData = new ClaimantResponseTestData()
     claimantResponseTestData.pageSpecificValues.howMuchHaveYouPaidPageEnterAmountPaidWithDateAndExplanation = {
       paidAmount: 50,
@@ -105,7 +105,7 @@ if (process.env.CUI_DASHBOARD_REDIRECT !== 'true') {
     I.click('Sign out')
   })
 
-  Scenario('I can as an Individual make a claim against an Individual who then rejects the claim as they have paid less than the amount claimed and I then proceed with the claim @citizen', {retries: 3}, async (I: I) => {
+  Scenario('I can as an Individual make a claim against an Individual who then rejects the claim as they have paid less than the amount claimed and I then proceed with the claim @citizen', {retries: 3}, async ({ I }: { I: I }) => {
     const claimantResponseTestData = new ClaimantResponseTestData()
     claimantResponseTestData.pageSpecificValues.howMuchHaveYouPaidPageEnterAmountPaidWithDateAndExplanation = {
       paidAmount: 50,
