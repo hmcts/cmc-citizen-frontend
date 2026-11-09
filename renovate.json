@@ -109,6 +109,17 @@
         "major"
       ],
       "enabled": false
+    },
+    {
+      "description": "express 5 needs path-to-regexp v8/body-parser v2 (conflicting with resolutions pins) and wildcard route rewrites; upgrade as a planned migration",
+      "matchPackageNames": [
+        "express",
+        "@types/express"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "enabled": false
     }
   ]
 }
