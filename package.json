@@ -75,7 +75,7 @@
     "lodash": "4.18.1",
     "moment": "^2.31.0",
     "moment-precise-range-plugin": "^1.3.0",
-    "nocache": "^3.0.1",
+    "nocache": "^4.0.0",
     "nodelist-foreach-polyfill": "^1.2.0",
     "nunjucks": "^3.2.4",
     "nunjucks-numeral-filter": "0.0.2",

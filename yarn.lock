@@ -4569,7 +4569,7 @@ __metadata:
     mock-require: "npm:^3.0.3"
     moment: "npm:^2.31.0"
     moment-precise-range-plugin: "npm:^1.3.0"
-    nocache: "npm:^3.0.1"
+    nocache: "npm:^4.0.0"
     nock: "npm:^13.3.1"
     node-cache: "npm:^5.1.2"
     node-gyp: "npm:13.1.0"
@@ -10160,10 +10160,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nocache@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "nocache@npm:3.0.1"
-  checksum: 10/6412ec4346b2c9bf9e9e842f8807cfbbf570fcf0b699905702aa265a52a8d97c7993143e875f09af151f47fa41ca3a45527494f8239a5ca488d4fc22a14480d8
+"nocache@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "nocache@npm:4.0.0"
+  checksum: 10/5b018b7900fbc580c327b1a87decb20e8d9d233face8b8dfa286a54304f2cc11bfaea9828d0d4b635ca55a73539269a6b64a85185c4a363cc288fd706f6e3825
   languageName: node
   linkType: hard
 
