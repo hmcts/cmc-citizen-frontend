@@ -40,15 +40,6 @@ nodejs:
     CUI_DASHBOARD_REDIRECT: false
     CUI_SIGN_OUT_REDIRECT: false
 
-idam-pr:
-  enabled: true
-  debug: true
-  redirect_uris:
-    Money Claims - Citizen:
-      - https://${SERVICE_FQDN}/receiver
-    XUI:
-      - https://xui-${SERVICE_FQDN}/oauth2/callback
-
 xui-webapp:
   enabled: true
   nodejs:
