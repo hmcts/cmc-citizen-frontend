@@ -84,8 +84,6 @@ nodejs:
         - pcq-token-key
         - draft-store-access-key
 
-idam-pr:
-  enabled: false
 ccd:
   enabled: false
   logstash:
