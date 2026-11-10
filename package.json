@@ -66,7 +66,7 @@
     "hpkp": "^3.0.0",
     "http-status-codes": "^2.0.0",
     "i18next": "^27.0.0",
-    "i18next-conv": "^16.0.0",
+    "i18next-conv": "^17.0.0",
     "i18next-http-middleware": "^3.9.3",
     "i18next-sprintf-postprocessor": "^0.2.2",
     "ioredis": "^5.4.1",
