@@ -902,6 +902,8 @@ __metadata:
   resolution: "@hmcts/draft-store-client@npm:1.2.1"
   dependencies:
     moment: "npm:^2.18.1"
+    request: "npm:^2.81.0"
+    request-promise-native: "npm:^1.0.3"
   checksum: 10/bf3ef7c5aabe9fa6bc17736ad60724d840ebacf37482b233fd681f1c9c35f6869abe90b3664a26ae21c16bb9acce0403b7f19239f00914e32e45b477d00ff776
   languageName: node
   linkType: hard
@@ -911,6 +913,8 @@ __metadata:
   resolution: "@hmcts/draft-store-client@patch:@hmcts/draft-store-client@npm%3A1.2.1#~/.yarn/patches/@hmcts-draft-store-client-npm-1.2.1-f4227410a7.patch::version=1.2.1&hash=c1f03f"
   dependencies:
     moment: "npm:^2.18.1"
+    request: "npm:^2.81.0"
+    request-promise-native: "npm:^1.0.3"
   checksum: 10/a940729571a0acaf08bd8bc961a5bf14d3940ae57c9472447cc26dea20cf020112d3a0a1604471422cb1d04336f44aac6c70caa2912a1a36f5a959c57091ce3a
   languageName: node
   linkType: hard
@@ -11811,6 +11815,13 @@ __metadata:
     object-assign: "npm:^4.0.1"
     readable-stream: "npm:^2.0.2"
   checksum: 10/6bd57c945d3cdc5731fc062a7dcb0bb53ad73fada88c7f19f206e201e98e43e5a94dd49812212fd7a671bdac526407c3373062b5c242bdbe82d581cc91de9cd7
+  languageName: node
+  linkType: hard
+
+"request-promise-native@npm:@favware/skip-dependency@1.2.2, request@npm:@favware/skip-dependency@1.2.2":
+  version: 1.2.2
+  resolution: "@favware/skip-dependency@npm:1.2.2"
+  checksum: 10/1318b83ab874729ffc4b0b74756b2f691d43081172fb895605edda6ff474a748e1dcd59213275860854cca4bead9f2bef118d1dac832647abd5dfdb9f54b7d46
   languageName: node
   linkType: hard
 

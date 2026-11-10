@@ -296,7 +296,9 @@
     "import-in-the-middle": "^1.14.4",
     "express": "4.21.2",
     "@tootallnate/once": "3.0.1",
-    "@hmcts/draft-store-client@npm:^1.2.1": "patch:@hmcts/draft-store-client@npm%3A1.2.1#~/.yarn/patches/@hmcts-draft-store-client-npm-1.2.1-f4227410a7.patch"
+    "@hmcts/draft-store-client@npm:^1.2.1": "patch:@hmcts/draft-store-client@npm%3A1.2.1#~/.yarn/patches/@hmcts-draft-store-client-npm-1.2.1-f4227410a7.patch",
+    "request": "npm:@favware/skip-dependency@1.2.2",
+    "request-promise-native": "npm:@favware/skip-dependency@1.2.2"
   },
   "husky": {
     "hooks": {
