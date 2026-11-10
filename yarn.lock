@@ -1958,10 +1958,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@postalsys/gettext@npm:^4.1.0":
-  version: 4.1.1
-  resolution: "@postalsys/gettext@npm:4.1.1"
-  checksum: 10/eb94234009a1ef72de5338265d975f63cd40bb3551ef6159b23ed72bb8a80f630a170124d5a4e51b3f5e6b4d534a6cbc5d419387323613c7355a88f23cfe9306
+"@postalsys/gettext@npm:^4.1.1":
+  version: 4.3.0
+  resolution: "@postalsys/gettext@npm:4.3.0"
+  checksum: 10/ee2cae85ebe07f4d05d76bbbc7e2f339edabf4b069b906b2ec0962616f3ec59d83e10561625797ae4ca861378e200f39b9d9a84134ebaa16a480aaebd44c6904
   languageName: node
   linkType: hard
 
@@ -4553,7 +4553,7 @@ __metadata:
     http-status-codes: "npm:^2.0.0"
     husky: "npm:^9.0.0"
     i18next: "npm:^27.0.0"
-    i18next-conv: "npm:^16.0.0"
+    i18next-conv: "npm:^17.0.0"
     i18next-http-middleware: "npm:^3.9.3"
     i18next-sprintf-postprocessor: "npm:^0.2.2"
     ioredis: "npm:^5.4.1"
@@ -4794,7 +4794,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:^14.0.2, commander@npm:^14.0.3":
+"commander@npm:^14.0.3":
   version: 14.0.3
   resolution: "commander@npm:14.0.3"
   checksum: 10/dfa9ebe2a433d277de5cb0252d23b10a543d245d892db858d23b516336a835c50fd4f52bee4cd13c705cc8acb6f03dc632c73dd806f7d06d3353eb09953dd17a
@@ -7161,15 +7161,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gettext-parser@npm:^8.0.0":
-  version: 8.0.0
-  resolution: "gettext-parser@npm:8.0.0"
+"gettext-parser@npm:^9.0.2":
+  version: 9.1.1
+  resolution: "gettext-parser@npm:9.1.1"
   dependencies:
     content-type: "npm:^1.0.5"
     encoding: "npm:^0.1.13"
-    readable-stream: "npm:^4.5.2"
-    safe-buffer: "npm:^5.2.1"
-  checksum: 10/e22f42241f9fea3d8379879792a97e705b0bb31539246ee1bec024f247a6e8940c4feb66b24ab6412fa0cd778263c32a1d055992f3a2bc6983d5d191712c128f
+  checksum: 10/eec7b077ad3cc528ab1865c2ef0c6700e6679f306ad2c939eebbfef3b74f1b4f71ab4048d2de741e12166c12002bd26d8594b502d3766ff374c131ff36e222a5
   languageName: node
   linkType: hard
 
@@ -7981,19 +7979,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next-conv@npm:^16.0.0":
-  version: 16.0.0
-  resolution: "i18next-conv@npm:16.0.0"
+"i18next-conv@npm:^17.0.0":
+  version: 17.0.0
+  resolution: "i18next-conv@npm:17.0.0"
   dependencies:
-    "@postalsys/gettext": "npm:^4.1.0"
+    "@postalsys/gettext": "npm:^4.1.1"
     colorette: "npm:^2.0.20"
-    commander: "npm:^14.0.2"
-    gettext-converter: "npm:^1.3.0"
-    gettext-parser: "npm:^8.0.0"
-    p-from-callback: "npm:^2.0.0"
+    commander: "npm:^14.0.3"
+    gettext-converter: "npm:^1.3.2"
+    gettext-parser: "npm:^9.0.2"
+    p-from-callback: "npm:^3.0.0"
   bin:
     i18next-conv: bin/index.js
-  checksum: 10/f05114e775c8e4d72184f016f94ebba28576c46bbb72c8c75c2b2d64fee25ef8b78987041899ae2e61ebde043e8cb9c3a3accc507ce5e920f6d24a7d3a000cb3
+  checksum: 10/c9e58127ef2c41f468753a0c6a06cbe8bbdc5feff624f864df418ccd67bd8afbb3290dccecff1c79da39402a4707d6395b3d1993776f1d067c196b547b9e301e
   languageName: node
   linkType: hard
 
@@ -10699,10 +10697,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"p-from-callback@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "p-from-callback@npm:2.0.0"
-  checksum: 10/34adbfd0d5ddcb48244f18060180fa93c0248243d9b96d62b626ca788f41b99dca004502c6f0af8cb199ca368855836c94a8fabfbaaaa04e6087f06b60491442
+"p-from-callback@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "p-from-callback@npm:3.0.0"
+  checksum: 10/ff18aa083e9340f76142275235c4b8f95099ee583d3ba805ea9e524c1f8213b16079afcd3b3afb6b0eae7e057a2800c6299e9d859cd9ed78fdac5619a2cf6b2f
   languageName: node
   linkType: hard
 
@@ -11601,19 +11599,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"readable-stream@npm:^4.5.2":
-  version: 4.7.0
-  resolution: "readable-stream@npm:4.7.0"
-  dependencies:
-    abort-controller: "npm:^3.0.0"
-    buffer: "npm:^6.0.3"
-    events: "npm:^3.3.0"
-    process: "npm:^0.11.10"
-    string_decoder: "npm:^1.3.0"
-  checksum: 10/bdf096c8ff59452ce5d08f13da9597f9fcfe400b4facfaa88e74ec057e5ad1fdfa140ffe28e5ed806cf4d2055f0b812806e962bca91dce31bc4cef08e53be3a4
-  languageName: node
-  linkType: hard
-
 "readdir-glob@npm:^3.0.0":
   version: 3.0.0
   resolution: "readdir-glob@npm:3.0.0"
@@ -12097,7 +12082,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"safe-buffer@npm:5.2.1, safe-buffer@npm:>=5.1.0, safe-buffer@npm:^5.0.1, safe-buffer@npm:^5.1.0, safe-buffer@npm:^5.1.1, safe-buffer@npm:^5.2.1, safe-buffer@npm:~5.2.0, safe-buffer@npm:~5.2.1":
+"safe-buffer@npm:5.2.1, safe-buffer@npm:>=5.1.0, safe-buffer@npm:^5.0.1, safe-buffer@npm:^5.1.0, safe-buffer@npm:^5.1.1, safe-buffer@npm:~5.2.0, safe-buffer@npm:~5.2.1":
   version: 5.2.1
   resolution: "safe-buffer@npm:5.2.1"
   checksum: 10/32872cd0ff68a3ddade7a7617b8f4c2ae8764d8b7d884c651b74457967a9e0e886267d3ecc781220629c44a865167b61c375d2da6c720c840ecd73f45d5d9451
