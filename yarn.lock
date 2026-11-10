@@ -4550,7 +4550,7 @@ __metadata:
     helmet: "npm:^8.0.0"
     hpkp: "npm:^3.0.0"
     html_codesniffer: "npm:2.4.1"
-    http-status-codes: "npm:^1.4.0"
+    http-status-codes: "npm:^2.0.0"
     husky: "npm:^6.0.0"
     i18next: "npm:^18.0.0"
     i18next-conv: "npm:^16.0.0"
@@ -7935,10 +7935,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"http-status-codes@npm:^1.4.0":
-  version: 1.4.0
-  resolution: "http-status-codes@npm:1.4.0"
-  checksum: 10/3506f225350a6c5daaf66c80316c337c3203e57ce3528d47ca53e4e005fb4b141234b1a1d148b25f788b754fcd667b9d22ca1d84cfeb2aeb793ebf04200848d1
+"http-status-codes@npm:^2.0.0":
+  version: 2.3.0
+  resolution: "http-status-codes@npm:2.3.0"
+  checksum: 10/1b8a01940b5e14d3c5b2f842313f4531469b41ce4fa40ca3aae5c82a3101828db2cc9406bfb2d50a46e6d521d106577b6656c2b065c76125b99ee54b2cbbac09
   languageName: node
   linkType: hard
 
