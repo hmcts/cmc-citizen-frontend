@@ -4920,7 +4920,7 @@ __metadata:
     nunjucks: "npm:^3.2.4"
     nunjucks-numeral-filter: "npm:0.0.2"
     nyc: "npm:^18.0.0"
-    otp: "npm:^0.1.3"
+    otp: "npm:^2.0.0"
     pa11y: "npm:^10.0.0"
     patch-package: "npm:^8.0.0"
     randomstring: "npm:^1.1.5"
@@ -11743,12 +11743,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"otp@npm:^0.1.3":
-  version: 0.1.3
-  resolution: "otp@npm:0.1.3"
-  dependencies:
-    thirty-two: "npm:^0.0.2"
-  checksum: 10/82c8511323ef82a18c7dd9f1b479c18a653fcb664023aa67bb1d48721fff7282e81fa9be56735c246f2e85757d9f4e3181a1851e2c4e61f1378c6e80bbaac846
+"otp@npm:^2.0.0":
+  version: 2.0.1
+  resolution: "otp@npm:2.0.1"
+  checksum: 10/5d2092126a1d26c5d2d9dafa5ceab08c85ac3b6e35c39df2d2c979cc54f5fff028ac05cffa7fdb887c411579bcf72c961deb0a01d693eba3d5083176ecccc26e
   languageName: node
   linkType: hard
 
@@ -14550,13 +14548,6 @@ __metadata:
   version: 3.3.0
   resolution: "textextensions@npm:3.3.0"
   checksum: 10/16cf2991b3134e64f322f24473fc6ecd28006c441fa41481a9e505e6a64a508dca5be8824cb7797bbd34db452639ea0d564a82406339f6416e383682ca6d3f0f
-  languageName: node
-  linkType: hard
-
-"thirty-two@npm:^0.0.2":
-  version: 0.0.2
-  resolution: "thirty-two@npm:0.0.2"
-  checksum: 10/e5766d18e713fca70c6795c24063299ddfebec1ebe0c338df06d5be14f3def140e49f6bbff283d6149cf34be99b31dd0e8cff41664adec8df131335dfda1d764
   languageName: node
   linkType: hard
 
