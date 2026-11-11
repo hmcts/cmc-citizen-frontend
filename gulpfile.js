@@ -7,6 +7,7 @@ const path = require('path')
 const replace = require('gulp-replace')
 const rename = require('gulp-rename')
 const fs = require('fs')
+const browserify = require('browserify')
 
 const repoRoot = path.join(__dirname, '/')
 const govUkFrontendToolkitRoot = path.join(repoRoot, 'node_modules/govuk_frontend_toolkit/stylesheets')
@@ -47,14 +48,13 @@ gulp.task('sass', (done) => {
 gulp.task('copy-files', (done) => {
   copyGovUkTemplate()
   copyWebChatTemplate()
-  copyClientPolyfills()
+  copyClientPolyfills(done)
   copyA11ySniffer()
   copyClientModules()
   copyDatePickerDependencies()
   copyComponents()
   copyGovukFrontendFonts()
   copyCookieBanner()
-  done()
 })
 
 function copyCookieBanner() {
@@ -195,7 +195,7 @@ function copyGovUkTemplate () {
     .pipe(gulp.dest(`${assetsDirectory}/stylesheets/lib/`))
 }
 
-function copyClientPolyfills () {
+function copyClientPolyfills (done) {
   gulp.src('./node_modules/nodelist-foreach-polyfill/index.js')
     .pipe(rename('nodelist-foreach-polyfill.js'))
     .pipe(gulp.dest(`${assetsDirectory}/js/lib/`))
@@ -204,9 +204,15 @@ function copyClientPolyfills () {
     .pipe(rename('classlist-polyfill.js'))
     .pipe(gulp.dest(`${assetsDirectory}/js/lib/`))
 
-  gulp.src('./node_modules/string.prototype.startswith/startswith.js')
-    .pipe(rename('startswith-polyfill.js'))
-    .pipe(gulp.dest(`${assetsDirectory}/js/lib/`))
+  // Version 1 ships CommonJS modules, so bundle the shim for direct browser use.
+  browserify(require.resolve('string.prototype.startswith/auto')).bundle((error, bundle) => {
+    if (error) return done(error)
+    const destination = `${assetsDirectory}/js/lib`
+    fs.mkdir(destination, { recursive: true }, (error) => {
+      if (error) return done(error)
+      fs.writeFile(`${destination}/startswith-polyfill.js`, bundle, done)
+    })
+  })
 }
 
 function copyA11ySniffer () {
