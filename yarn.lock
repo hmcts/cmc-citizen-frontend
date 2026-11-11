@@ -4509,7 +4509,7 @@ __metadata:
     i18next-sprintf-postprocessor: "npm:^0.2.2"
     ioredis: "npm:^6.0.0"
     jquery: "npm:4.0.0"
-    js-base64: "npm:^2.5.1"
+    js-base64: "npm:^3.0.0"
     jsdom: "npm:^31.0.0"
     jsonwebtoken: "npm:^9.0.3"
     lodash: "npm:4.18.1"
@@ -8663,10 +8663,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-base64@npm:^2.5.1":
-  version: 2.6.4
-  resolution: "js-base64@npm:2.6.4"
-  checksum: 10/c1a740a34fbb0ad0a528c2ab8749d7f873b1856a0638826306fcd98502e3c8c833334dff233085407e3201be543e5e71bf9692da7891ca680d9b03d027247a6a
+"js-base64@npm:^3.0.0":
+  version: 3.9.6
+  resolution: "js-base64@npm:3.9.6"
+  checksum: 10/3be38244d33a8c6f1c7e20f2c1a62245e60c8f7e02702b11ca43bbeeec9d9097270a2dff08fe422859dc994876eaf38b00e290c38b365d7793aa54f6cf7554b4
   languageName: node
   linkType: hard
 
