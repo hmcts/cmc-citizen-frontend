@@ -127,7 +127,7 @@
     "gulp-sass": "^6.0.0",
     "html_codesniffer": "2.4.1",
     "husky": "^9.0.0",
-    "jsdom": "^16.6.0",
+    "jsdom": "^31.0.0",
     "jsonwebtoken": "^9.0.3",
     "mocha": "^10.2.0",
     "mocha-junit-reporter": "^2.2.0",
