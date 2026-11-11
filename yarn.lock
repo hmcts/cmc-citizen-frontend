@@ -4508,7 +4508,7 @@ __metadata:
     i18next-http-middleware: "npm:^3.9.3"
     i18next-sprintf-postprocessor: "npm:^0.2.2"
     ioredis: "npm:^5.4.1"
-    jquery: "npm:3.6.0"
+    jquery: "npm:4.0.0"
     js-base64: "npm:^2.5.1"
     jsdom: "npm:^31.0.0"
     jsonwebtoken: "npm:^9.0.3"
@@ -8660,17 +8660,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jquery@npm:3.6.0":
-  version: 3.6.0
-  resolution: "jquery@npm:3.6.0"
-  checksum: 10/9785a3a13718ae51a13394e9953cc321fc11fb820e98b92ad1e76bc81086e596b3e7627fd2f23db79f4088cc0862eb2541ad775ea75d3079cc1fec834c28d5ad
-  languageName: node
-  linkType: hard
-
-"jquery@npm:^3.5.0":
-  version: 3.7.0
-  resolution: "jquery@npm:3.7.0"
-  checksum: 10/ff4c075740048157e0cd131c83b9359b4608b13c4493ab41a5459144a85c06450ae1a254b281a0d56d785d995fd9ad03d2caae17a3b408c53862241fd8ada494
+"jquery@npm:4.0.0, jquery@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "jquery@npm:4.0.0"
+  checksum: 10/722be14779518f27f50463d9aaa8d6b42782673a23f65335c4ff9e2ad124cb4d5267696dfc7bc4f40ecf04e852cbb05b1630b50daacf2821737d5d3b480fbf19
   languageName: node
   linkType: hard
 
