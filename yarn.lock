@@ -4871,7 +4871,7 @@ __metadata:
     codeceptjs: "npm:3.7.9"
     codecov: "npm:^3.8.2"
     config: "npm:^5.0.0"
-    connect-redis: "npm:^7.1.0"
+    connect-redis: "npm:^10.0.0"
     cookie-parser: "npm:^1.4.5"
     cookies: "npm:^0.8.0"
     csrf-csrf: "npm:^4.0.3"
@@ -5235,12 +5235,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"connect-redis@npm:^7.1.0":
-  version: 7.1.1
-  resolution: "connect-redis@npm:7.1.1"
+"connect-redis@npm:^10.0.0":
+  version: 10.0.0
+  resolution: "connect-redis@npm:10.0.0"
   peerDependencies:
     express-session: ">=1"
-  checksum: 10/1a0801356783c977c6467eea5bee1e91690c7ca62b6b699cf6de0aedbeb0e481eeacc32f372eda6530bdf3867259b7230bc00cf13b295abe9349aaa50fe0c8fb
+    redis: ">=5"
+  checksum: 10/6263130357f9fb29e612e181137bce3493d7a57a2f25481cb737d62020401007d934da99e4ccdded7b4401ba8431d5df38a9abd4356342d498afc704b12c0991
   languageName: node
   linkType: hard
 

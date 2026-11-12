@@ -54,7 +54,7 @@
     "classlist-polyfill": "^1.2.0",
     "cmc-cookies-manager": "github:hmcts/cmc-cookies-manager#3.0.3",
     "config": "^5.0.0",
-    "connect-redis": "^7.1.0",
+    "connect-redis": "^10.0.0",
     "cookie-parser": "^1.4.5",
     "cookies": "^0.8.0",
     "csrf-csrf": "^4.0.3",
