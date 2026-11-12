@@ -1,5 +1,5 @@
 import * as config from 'config'
-import * as otp from 'otp'
+import { OTP } from 'otp'
 
 import { request as requestClient } from 'client/request'
 import { User } from 'idam/user'
@@ -21,8 +21,8 @@ class ServiceAuthRequest {
 
 export class IdamClient {
 
-  static retrieveServiceToken (): Promise<ServiceAuthToken> {
-    const oneTimePassword = otp({ secret: totpSecret }).totp()
+  static async retrieveServiceToken (): Promise<ServiceAuthToken> {
+    const oneTimePassword = await new OTP({ secret: totpSecret }).totp(Date.now())
 
     return requestClient.post({
       uri: `${s2sUrl}/lease`,
