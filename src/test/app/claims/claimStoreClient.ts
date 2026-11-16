@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import * as mock from 'nock'
+import mock from 'nock'
 
 import { request } from 'client/request'
 import * as HttpStatus from 'http-status-codes'
@@ -100,7 +100,7 @@ describe('ClaimStoreClient', () => {
       function mockTimeoutOnFirstSaveAttemptAndConflictOnSecondOne () {
         mock(`${claimStoreApiUrl}`)
           .post(`/${claimant.id}`)
-          .delayConnection(requestDelayInMillis + 10)
+          .delay(requestDelayInMillis + 10)
         mock(`${claimStoreApiUrl}`)
           .post(`/${claimant.id}`)
           .reply(HttpStatus.CONFLICT, `Duplicate claim for external id ${claimDraftData.externalId}`)
@@ -171,7 +171,7 @@ describe('ClaimStoreClient', () => {
       function mockTimeoutOnFirstSaveAttemptAndConflictOnSecondOne () {
         mock(`${claimStoreApiUrl}`)
           .post(`/${claimant.id}/hwf`)
-          .delayConnection(requestDelayInMillis + 10)
+          .delay(requestDelayInMillis + 10)
         mock(`${claimStoreApiUrl}`)
           .post(`/${claimant.id}/hwf`)
           .reply(HttpStatus.CONFLICT, `Duplicate claim for external id ${claimDraftData.externalId}`)

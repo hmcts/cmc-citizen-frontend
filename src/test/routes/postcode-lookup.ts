@@ -3,7 +3,7 @@ import { expect } from 'chai'
 import { app } from 'main/app'
 import { Paths } from 'paths'
 import 'test/routes/expectations'
-import * as mock from 'nock'
+import mock from 'nock'
 import { mockPostcodeLookupResponse } from '../data/entity/mockPostcodeLookupResponse'
 
 describe('PostCode Lookup', () => {

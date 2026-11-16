@@ -1,5 +1,5 @@
 import * as configNs from 'config'
-import * as mock from 'nock'
+import mock from 'nock'
 import * as HttpStatus from 'http-status-codes'
 
 // ESM loader exposes CJS module.exports as .default; CJS gives the object directly

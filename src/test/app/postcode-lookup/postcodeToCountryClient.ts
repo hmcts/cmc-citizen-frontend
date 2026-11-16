@@ -1,5 +1,5 @@
 import { ClientFactory } from 'postcode-lookup/clientFactory'
-import * as nock from 'nock'
+import nock from 'nock'
 import { expect } from 'chai'
 import { mockCountryLookupResponse } from 'test/data/entity/mockCountryLookupResponse'
 

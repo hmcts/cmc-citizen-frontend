@@ -1,6 +1,6 @@
 /* tslint:disable:no-unused-expression */
 import * as chai from 'chai'
-import * as spies from 'sinon-chai'
+import spies from 'sinon-chai'
 import * as path from 'path'
 import { Backend } from 'modules/i18n/backend'
 
