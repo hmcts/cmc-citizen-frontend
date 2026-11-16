@@ -1,7 +1,6 @@
 'use strict'
 
-const event = require('codeceptjs/lib/event')
-const container = require('codeceptjs/lib/container')
+const { event, container } = require('codeceptjs')
 const axios = require('axios')
 
 const SUCCESS = true

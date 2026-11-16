@@ -1,8 +1,8 @@
 /* tslint:disable:no-unused-expression */
 import * as chai from 'chai'
 import * as sinon from 'sinon'
-import * as spies from 'sinon-chai'
-import * as nock from 'nock'
+import spies from 'sinon-chai'
+import nock from 'nock'
 import { InfoContributor } from '@hmcts/info-provider'
 
 import { ConfigurableInfoContributor } from 'routes/configurableInfoContributor'
