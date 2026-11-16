@@ -1,25 +1,25 @@
 import { expect } from 'chai'
 import * as sinon from 'sinon'
-import * as config from 'config'
-import * as nock from 'nock'
 import { OTP } from 'otp'
+import { request } from 'client/httpClient'
 import { IdamClient } from 'idam/idamClient'
 
 describe('IdamClient service authentication', () => {
+  const sandbox = sinon.createSandbox()
+
   afterEach(() => {
-    sinon.restore()
-    nock.cleanAll()
+    sandbox.restore()
   })
 
   it('should send a resolved six-digit password when requesting a service token', async () => {
-    sinon.stub(Date, 'now').returns(59000)
-    const lease = nock(config.get<string>('idam.service-2-service-auth.url'))
-      .post('/lease', body => typeof body.oneTimePassword === 'string' && /^\d{6}$/.test(body.oneTimePassword))
-      .reply(200, 'service-token')
+    const post = sandbox.stub(request, 'post').resolves('service-token')
 
     const token = await IdamClient.retrieveServiceToken()
 
-    expect(lease.isDone()).to.equal(true)
+    expect(post.calledOnce).to.equal(true)
+    const options = post.firstCall.args[0]
+    expect(options.uri).to.match(/\/lease$/)
+    expect(options.body.oneTimePassword).to.match(/^\d{6}$/)
     expect(token.bearerToken).to.equal('service-token')
   })
 
