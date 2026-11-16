@@ -173,6 +173,7 @@
     "all": true
   },
   "resolutions": {
+    "@opentelemetry/instrumentation-http": "0.222.0",
     "joi": "18.3.2",
     "@xmldom/xmldom": "0.9.12",
     "@azure/msal-node": "7.1.0",
