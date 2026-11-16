@@ -173,13 +173,13 @@
     "all": true
   },
   "resolutions": {
-    "@opentelemetry/instrumentation-http": "0.222.0",
+    "@opentelemetry/instrumentation-http": "0.301.2",
     "joi": "18.3.2",
     "@xmldom/xmldom": "0.9.12",
     "@azure/msal-node": "7.1.0",
     "@grpc/grpc-js": "1.14.5",
-    "@opentelemetry/instrumentation-mysql": "0.67.0",
-    "@opentelemetry/instrumentation-pg": "0.73.0",
+    "@opentelemetry/instrumentation-mysql": "0.71.0",
+    "@opentelemetry/instrumentation-pg": "0.78.0",
     "@babel/traverse": "8.1.0",
     "@babel/helpers": "8.1.0",
     "basic-ftp": "6.2.1",
