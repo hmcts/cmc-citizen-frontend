@@ -1,5 +1,5 @@
 import * as configNs from 'config'
-import * as mock from 'nock'
+import mock from 'nock'
 
 const config = (configNs as { default?: typeof configNs }).default ?? configNs
 import * as HttpStatus from 'http-status-codes'

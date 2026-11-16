@@ -1,4 +1,4 @@
-import * as mock from 'nock'
+import mock from 'nock'
 import * as HttpStatus from 'http-status-codes'
 import * as configNs from 'config'
 

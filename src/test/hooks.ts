@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import * as mock from 'nock'
+import mock from 'nock'
 import * as idamServiceMock from 'test/http-mocks/idam'
 
 export function attachDefaultHooks () {

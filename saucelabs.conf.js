@@ -50,7 +50,7 @@ const setupConfig = {
   async teardownAll() {
     await teardownAll(claimantEmail, defendantEmail)
   },
-  tests: './src/integration-test/tests/**/*_test.*',
+  tests: require('./src/integration-test/config/commonjs-tests')(),
   output: `${process.cwd()}/${outputDir}`,
   helpers: {
     WebDriver: {
@@ -66,12 +66,12 @@ const setupConfig = {
       capabilities: {}
     },
     IdamHelper: {
-      require: './src/integration-test/helpers/idamHelper',
+      require: './src/integration-test/helpers/idamHelper.cjs',
       claimantEmail,
       defendantEmail
     },
     ClaimStoreHelper: {
-      require: './src/integration-test/helpers/claimStoreHelper',
+      require: './src/integration-test/helpers/claimStoreHelper.cjs',
       claimantEmail,
       defendantEmail
     },
@@ -89,12 +89,10 @@ const setupConfig = {
     },
     SauceLabsBrowserHelper: {
       require: './src/integration-test/helpers/SauceLabsBrowserHelper.js'
-    },
-    Mochawesome: {
-      uniqueScreenshotNames: 'true'
     }
   },
   plugins: {
+    screenshot: { enabled: true, uniqueScreenshotNames: true },
     retryFailedStep: {
       enabled: true,
       retries: 2
@@ -106,13 +104,13 @@ const setupConfig = {
   },
   mocha: {
     reporterOptions: {
-      'codeceptjs-cli-reporter': {
+      [require.resolve('./src/integration-test/config/codecept-reporter.cjs')]: {
         stdout: '-',
         options: {
           steps: true
         }
       },
-      'mocha-junit-reporter': {
+      xunit: {
         stdout: `${outputDir}/${browser}-citizen-mocha-junit-reporter-stdout.log`,
         options: {
           mochaFile: `${outputDir}/${browser}-citizen-e2e-result.xml`,

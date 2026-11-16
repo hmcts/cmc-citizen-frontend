@@ -1,9 +1,9 @@
 /* Allow chai assertions which don't end in a function call, e.g. expect(thing).to.be.undefined */
 /* tslint:disable:no-unused-expression */
 
-import * as nock from 'nock'
+import nock from 'nock'
 import * as chai from 'chai'
-import * as chaiAsPromised from 'chai-as-promised'
+import chaiAsPromised from 'chai-as-promised'
 
 import { ScannedDocumentsClient } from 'documents/scannedDocumentsClient'
 
