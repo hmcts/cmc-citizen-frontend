@@ -16,7 +16,7 @@ exports.config = {
   async teardownAll() {
     await teardownAll(claimantEmail, defendantEmail)
   },
-  tests: './src/integration-test/tests/**/*_test.*',
+  tests: require('./src/integration-test/config/commonjs-tests')(),
   output: `${process.cwd()}/${outputDir}`,
   timeout: 20000,
   multiple: {
@@ -42,12 +42,12 @@ exports.config = {
       }
     },
     IdamHelper: {
-      require: './src/integration-test/helpers/idamHelper',
+      require: './src/integration-test/helpers/idamHelper.cjs',
       claimantEmail,
       defendantEmail
     },
     ClaimStoreHelper: {
-      require: './src/integration-test/helpers/claimStoreHelper',
+      require: './src/integration-test/helpers/claimStoreHelper.cjs',
       claimantEmail,
       defendantEmail
     },
@@ -59,20 +59,20 @@ exports.config = {
     },
     hwfHelper: {
       require: './src/integration-test/helpers/hwfHelper'
-    },
-    Mochawesome: {
-      uniqueScreenshotNames: 'true'
     }
+  },
+  plugins: {
+    screenshot: { enabled: true, uniqueScreenshotNames: true }
   },
   mocha: {
     reporterOptions: {
-      'codeceptjs-cli-reporter': {
+      [require.resolve('./src/integration-test/config/codecept-reporter.cjs')]: {
         stdout: '-',
         options: {
           steps: true
         }
       },
-      'mocha-junit-reporter': {
+      xunit: {
         stdout: `${outputDir}/citizen-mocha-stdout.log`,
         options: {
           mochaFile: process.env.MOCHA_JUNIT_FILE_LOCATION || `${outputDir}/citizen-integration-result.xml`
