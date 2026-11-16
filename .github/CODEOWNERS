@@ -1,7 +1,9 @@
-# The default owners for everything in the repo are @hmcts/pet.
-# When someone submits a pull request, @hmcts/pet will be
-# requested for review.
-*       @hmcts/pet
+# The default owners for everything in the repo are @hmcts/civil and @hmcts/pet,
+# so any Civil developer can approve a pull request.
+*       @hmcts/civil @hmcts/pet
+
+# Changes to this file need a Civil admin, as on the civil repos.
+.github/CODEOWNERS @hmcts/civil-admins
 
 # Renovate
 .nvmrc
