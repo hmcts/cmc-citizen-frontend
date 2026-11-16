@@ -11,7 +11,6 @@ COPY --chown=hmcts:hmcts .yarn ./.yarn
 COPY --chown=hmcts:hmcts package.json yarn.lock .yarnrc.yml /usr/src/app/
 
 RUN PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true yarn install --immutable && yarn cache clean
-RUN mkdir -p /usr/src/app/build/codecept-tests && chown -R hmcts:hmcts /usr/src/app/build
 USER hmcts
 
 COPY tsconfig.json types default.conf.js saucelabs.conf.js /usr/src/app/
