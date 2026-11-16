@@ -5,6 +5,7 @@ ENV PUPPETEER_SKIP_DOWNLOAD=true
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 
 USER root
+RUN apk add --no-cache git
 RUN corepack enable
 USER hmcts
 
