@@ -30,11 +30,22 @@ const sassSilenceSlashDiv = {
   }
 }
 
+// Keep the watcher alive on a Sass error, but make `yarn setup` (and so the
+// Docker build) exit non-zero instead of silently shipping without the CSS.
+const failBuildOnError = () => plumber({
+  errorHandler (err) {
+    console.error(err.messageFormatted || err.message)
+    process.exitCode = 1
+    this.emit('end')
+  }
+})
+
 gulp.task('sass', (done) => {
   gulp.src(stylesheetsDirectory + '/*.scss')
-    .pipe(plumber())
+    .pipe(failBuildOnError())
     .pipe(sass({
-      includePaths: [
+      // gulp-sass v6 uses the modern Sass API, which ignores the legacy `includePaths`
+      loadPaths: [
         govUkFrontendToolkitRoot,
         govUkElementRoot
       ],
