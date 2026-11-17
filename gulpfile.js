@@ -122,13 +122,15 @@ function copyCookieBanner() {
 
 gulp.task('sass-govuk-frontend', (done) => {
   gulp.src(govUkFrontendRoot + '/*.scss')
-    .pipe(plumber())
+    .pipe(failBuildOnError())
     .pipe(sass(sassSilenceSlashDiv))
     .pipe(gulp.dest(`${stylesheetsDirectory}/govuk-frontend`))
 
   gulp.src(govUkFronendStylesheets + '/*.scss')
-    .pipe(plumber())
-    .pipe(sass(sassSilenceSlashDiv))
+    .pipe(failBuildOnError())
+    // task-list.scss imports 'node_modules/govuk-frontend/...' relative to the repo root,
+    // which the legacy Sass API resolved from the working directory and the modern API does not
+    .pipe(sass({ loadPaths: [repoRoot], ...sassSilenceSlashDiv }))
     .pipe(gulp.dest(govUkFronendStylesheets))
     .pipe(livereload())
   done()
