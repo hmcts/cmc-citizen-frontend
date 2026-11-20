@@ -30,11 +30,22 @@ const sassSilenceSlashDiv = {
   }
 }
 
+// Keep the watcher alive on a Sass error, but make `yarn setup` (and so the
+// Docker build) exit non-zero instead of silently shipping without the CSS.
+const failBuildOnError = () => plumber({
+  errorHandler (err) {
+    console.error(err.messageFormatted || err.message)
+    process.exitCode = 1
+    this.emit('end')
+  }
+})
+
 gulp.task('sass', (done) => {
   gulp.src(stylesheetsDirectory + '/*.scss')
-    .pipe(plumber())
+    .pipe(failBuildOnError())
     .pipe(sass({
-      includePaths: [
+      // gulp-sass v6 uses the modern Sass API, which ignores the legacy `includePaths`
+      loadPaths: [
         govUkFrontendToolkitRoot,
         govUkElementRoot
       ],
@@ -111,13 +122,15 @@ function copyCookieBanner() {
 
 gulp.task('sass-govuk-frontend', (done) => {
   gulp.src(govUkFrontendRoot + '/*.scss')
-    .pipe(plumber())
+    .pipe(failBuildOnError())
     .pipe(sass(sassSilenceSlashDiv))
     .pipe(gulp.dest(`${stylesheetsDirectory}/govuk-frontend`))
 
   gulp.src(govUkFronendStylesheets + '/*.scss')
-    .pipe(plumber())
-    .pipe(sass(sassSilenceSlashDiv))
+    .pipe(failBuildOnError())
+    // task-list.scss imports 'node_modules/govuk-frontend/...' relative to the repo root,
+    // which the legacy Sass API resolved from the working directory and the modern API does not
+    .pipe(sass({ loadPaths: [repoRoot], ...sassSilenceSlashDiv }))
     .pipe(gulp.dest(govUkFronendStylesheets))
     .pipe(livereload())
   done()
