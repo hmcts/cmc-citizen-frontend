@@ -7976,12 +7976,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob-parent@npm:^6.0.0":
-  version: 6.0.2
-  resolution: "glob-parent@npm:6.0.2"
+"glob-parent@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "glob-parent@npm:7.0.0"
   dependencies:
-    is-glob: "npm:^4.0.3"
-  checksum: 10/c13ee97978bef4f55106b71e66428eb1512e71a7466ba49025fc2aec59a5bfb0954d5abd58fc5ee6c9b076eef4e1f6d3375c2e964b88466ca390da4419a786a8
+    minimatch: "npm:10.2.6"
+  checksum: 10/cae2f67a620705bbf07f5eab1a3d60be3cfd45e0f625792eefd3818b00a95c919f93d8154734d6ba3f21ce640d16eba19cc3aa10fe0a306991296d1c02d1a722
   languageName: node
   linkType: hard
 
@@ -10889,6 +10889,15 @@ __metadata:
   version: 1.0.1
   resolution: "minimalistic-crypto-utils@npm:1.0.1"
   checksum: 10/6e8a0422b30039406efd4c440829ea8f988845db02a3299f372fceba56ffa94994a9c0f2fd70c17f9969eedfbd72f34b5070ead9656a34d3f71c0bd72583a0ed
+  languageName: node
+  linkType: hard
+
+"minimatch@npm:10.2.6":
+  version: 10.2.6
+  resolution: "minimatch@npm:10.2.6"
+  dependencies:
+    brace-expansion: "npm:^5.0.8"
+  checksum: 10/a5e43f7c57d6061a77da320b42aa35ffff826030cf67c83c0eee47a26ede4d66486935881492b968c609bf27a7d48cc4b9f54b2806643cd8fb792fcf9240cc1b
   languageName: node
   linkType: hard
 
