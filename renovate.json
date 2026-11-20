@@ -157,6 +157,13 @@
         "path-to-regexp"
       ],
       "allowedVersions": "<0.2.0"
+    },
+    {
+      "description": "hmcts/cmc-cookies-manager is archived and its package.json says 1.0.6 at tag 3.0.3, so Renovate reports a phantom major lockfile update that never produces a PR; nothing newer will ever be released",
+      "matchPackageNames": [
+        "hmcts/cmc-cookies-manager"
+      ],
+      "enabled": false
     }
   ]
 }
