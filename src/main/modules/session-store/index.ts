@@ -1,6 +1,6 @@
 import * as config from 'config'
 import * as session from 'express-session'
-import RedisStore from 'connect-redis'
+import { RedisStore } from 'connect-redis'
 import Redis from 'ioredis'
 import { Logger } from '@hmcts/nodejs-logging'
 

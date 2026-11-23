@@ -1,6 +1,7 @@
 import * as chai from 'chai'
 import * as sinon from 'sinon'
 import sinonChai from 'sinon-chai'
+import * as session from 'express-session'
 import { getSessionStore } from 'modules/session-store'
 import type { SessionStoreOptions } from 'modules/session-store'
 
@@ -94,6 +95,14 @@ describe('session-store', () => {
       getSessionStore(opts)
 
       expect(lastStoreOpts.prefix).to.equal('sess:')
+    })
+
+    it('builds a real connect-redis store when no store factory is injected', () => {
+      const opts = redisPathOptions({ _redisStoreFactory: undefined })
+      const store = getSessionStore(opts)
+
+      expect(store).to.be.instanceOf(session.Store)
+      expect(store.constructor.name).to.equal('RedisStore')
     })
 
     it('throws when useRedisStore is true but redis host/port are missing', () => {
