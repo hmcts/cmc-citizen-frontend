@@ -164,6 +164,13 @@
         "hmcts/cmc-cookies-manager"
       ],
       "enabled": false
+    },
+    {
+      "description": "connect-redis 9+ only supports node-redis v5 (and 11 is ESM-only); the session store uses ioredis. Remove when the app moves to node-redis.",
+      "matchPackageNames": [
+        "connect-redis"
+      ],
+      "allowedVersions": "<9.0.0"
     }
   ]
 }
