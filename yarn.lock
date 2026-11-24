@@ -682,13 +682,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:8.1.0":
-  version: 8.1.0
-  resolution: "@babel/runtime@npm:8.1.0"
-  checksum: 10/b14d2bb7844460af0a8e71fab226156bebd68aad9ebec35bd0b57260e2c007ae4b5d2e3d8a0d6256ee07e183652b2de3c252b0727c9fe25a4aa923f7dc88d5ea
-  languageName: node
-  linkType: hard
-
 "@babel/template@npm:^7.29.7":
   version: 7.29.7
   resolution: "@babel/template@npm:7.29.7"
@@ -5034,7 +5027,6 @@ __metadata:
     html_codesniffer: "npm:2.4.1"
     http-status-codes: "npm:^2.0.0"
     husky: "npm:^9.0.0"
-    i18next: "npm:^27.0.0"
     i18next-conv: "npm:^17.0.0"
     i18next-http-middleware: "npm:^3.9.3"
     i18next-sprintf-postprocessor: "npm:^0.2.2"
@@ -8884,23 +8876,14 @@ __metadata:
   linkType: hard
 
 "i18next@npm:>=17.0.11":
-  version: 21.6.14
-  resolution: "i18next@npm:21.6.14"
-  dependencies:
-    "@babel/runtime": "npm:^7.17.2"
-  checksum: 10/4b72f8a0b696a43f21c447aa0fdd2008539aa9f69ce25c0e1337b53880c852013f6b72a63737fb4443a59c2ec6b94980ac3774aa7608f2b55f13799cc1dfc10f
-  languageName: node
-  linkType: hard
-
-"i18next@npm:^27.0.0":
-  version: 27.1.1
-  resolution: "i18next@npm:27.1.1"
+  version: 27.2.6
+  resolution: "i18next@npm:27.2.6"
   peerDependencies:
     typescript: ^5 || ^6 || ^7
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10/f4be22eeccd16daee51cfb72a98ea343f5abd87d7dcd952e11442c6c48ddc34c075667d9cfaf87f464554f99d5d6b6f481f7f8bcbc016c0072019f7a0e51bae4
+  checksum: 10/48b9d0aecdb313b81bf83df571ec572dee0c7388d8bbc21bb422e7cdc04d1cfbc5c13590d292ea782ae3bcaf32441c2246ba356cb24baaedce7f4cd81d71ffad
   languageName: node
   linkType: hard
 
