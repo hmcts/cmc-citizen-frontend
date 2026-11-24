@@ -213,6 +213,19 @@
         "@types/config"
       ],
       "allowedVersions": "<4.0.0"
+    },
+    {
+      "description": "Each brace-expansion resolution must stay on the major its consumers request: minimatch 3 calls require('brace-expansion') as a function, which 3.x+ no longer exports, so moving the ^1/^2 overrides to 5.x (#3961) broke every {a,b} glob. Allow patches and minors only.",
+      "matchPackageNames": [
+        "brace-expansion"
+      ],
+      "matchDepTypes": [
+        "resolutions"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "enabled": false
     }
   ]
 }
