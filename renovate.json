@@ -213,6 +213,34 @@
         "@types/config"
       ],
       "allowedVersions": "<4.0.0"
+    },
+    {
+      "description": "ESLint 9 defaults to flat config and 10 drops .eslintrc.js/.eslintignore; @typescript-eslint 5 supports ESLint 6-8 only. Upgrade as one planned migration: TypeScript, typescript-eslint, ESLint with eslint.config.js, and sass-lint replaced by stylelint (as civil-citizen-ui did in #8417).",
+      "matchPackageNames": [
+        "eslint"
+      ],
+      "matchDepTypes": [
+        "dependencies",
+        "devDependencies"
+      ],
+      "allowedVersions": "<9.0.0"
+    },
+    {
+      "description": "The sass-lint/eslint resolution only feeds sass-lint 1.x, which loads eslint/lib/formatters/*; that path moved in ESLint 6 and is blocked by the exports map in 8+. Remove when sass-lint is replaced.",
+      "matchPackageNames": [
+        "eslint"
+      ],
+      "matchDepTypes": [
+        "resolutions"
+      ],
+      "allowedVersions": "<6.0.0"
+    },
+    {
+      "description": "typescript-eslint 6+ requires TypeScript >=4.3 (8 requires >=4.8.4) and ESLint 8.56+/flat config; TypeScript is held on 3.9. See the eslint rule.",
+      "matchPackageNames": [
+        "/^@typescript-eslint//"
+      ],
+      "allowedVersions": "<6.0.0"
     }
   ]
 }
