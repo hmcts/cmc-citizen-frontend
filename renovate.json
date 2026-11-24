@@ -171,6 +171,27 @@
         "connect-redis"
       ],
       "allowedVersions": "<9.0.0"
+    },
+    {
+      "description": "Hold the OpenTelemetry resolutions on the 2.x line that @azure/monitor-opentelemetry (via applicationinsights) is built on: it declares instrumentation-http ^0.221.0 (the 0.222.0 pin is already slightly ahead). instrumentation-http 0.300+ moves to @opentelemetry/core 3.x and needs @opentelemetry/api 1.10, but core 2.x peers on api <1.10.0. Raise these pins together once Azure Monitor moves to a newer OpenTelemetry line.",
+      "matchPackageNames": [
+        "@opentelemetry/instrumentation-http"
+      ],
+      "allowedVersions": "<0.222.1"
+    },
+    {
+      "description": "See the instrumentation-http rule: @azure/monitor-opentelemetry declares instrumentation-pg ^0.73.0; newer releases depend on @opentelemetry/instrumentation 0.301 and core 3.x.",
+      "matchPackageNames": [
+        "@opentelemetry/instrumentation-pg"
+      ],
+      "allowedVersions": "<0.74.0"
+    },
+    {
+      "description": "See the instrumentation-http rule: @azure/monitor-opentelemetry declares instrumentation-mysql ^0.67.0; newer releases depend on @opentelemetry/instrumentation 0.301.",
+      "matchPackageNames": [
+        "@opentelemetry/instrumentation-mysql"
+      ],
+      "allowedVersions": "<0.68.0"
     }
   ]
 }
