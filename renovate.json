@@ -194,6 +194,27 @@
       "allowedVersions": "<0.68.0"
     },
     {
+      "description": "@typescript-eslint 5 supports TypeScript <5.2, and tsconfig.json relies on baseUrl and implicit node10 module resolution, which TypeScript 6 deprecates and 7 removes. TypeScript 7 also drops the JavaScript compiler API that ts-node (server.js, mocha, nyc, codecept) needs. Raise together with typescript-eslint, eslint and tsconfig.json as a planned migration, as civil-citizen-ui did for TypeScript 6.",
+      "matchPackageNames": [
+        "typescript"
+      ],
+      "allowedVersions": "<5.0.0"
+    },
+    {
+      "description": "Keep Node types on the Node 24 runtime the Docker base image uses.",
+      "matchPackageNames": [
+        "@types/node"
+      ],
+      "allowedVersions": "<25.0.0"
+    },
+    {
+      "description": "@types/config 4 is an empty stub package (types ship with config itself).",
+      "matchPackageNames": [
+        "@types/config"
+      ],
+      "allowedVersions": "<4.0.0"
+    },
+    {
       "description": "ESLint 9 defaults to flat config and 10 drops .eslintrc.js/.eslintignore; @typescript-eslint 5 supports ESLint 6-8 only. Upgrade as one planned migration: TypeScript, typescript-eslint, ESLint with eslint.config.js, and sass-lint replaced by stylelint (as civil-citizen-ui did in #8417).",
       "matchPackageNames": [
         "eslint"
