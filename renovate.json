@@ -241,6 +241,13 @@
         "/^@typescript-eslint//"
       ],
       "allowedVersions": "<6.0.0"
+    },
+    {
+      "description": "glob-parent 7 is ESM-only with a default export, but every consumer of the resolution (fast-glob, eslint, glob-stream, glob-watcher, chokidar) calls require('glob-parent') as a function, so 7 throws 'globParent is not a function'. 6.0.2 already has the ReDoS fix.",
+      "matchPackageNames": [
+        "glob-parent"
+      ],
+      "allowedVersions": "<7.0.0"
     }
   ]
 }
