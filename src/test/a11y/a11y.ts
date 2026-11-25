@@ -3,6 +3,8 @@
 /* tslint:disable:no-console */
 
 import * as config from 'config'
+import { Server } from 'http'
+import { AddressInfo } from 'net'
 import * as supertest from 'supertest'
 import * as pa11y from 'pa11y'
 import { expect } from 'chai'
@@ -32,6 +34,11 @@ app.locals.csrf = 'dummy-token'
 const cookieName: string = config.get<string>('session.cookieName')
 
 const agent = supertest(app)
+
+// Pa11y drives a real browser, so it needs a server that is already listening.
+// SuperTest (7.3+) only starts its server when a request is sent, so its URLs carry no port.
+const server: Server = app.listen(0)
+const baseUrl = `http://127.0.0.1:${(server.address() as AddressInfo).port}`
 
 interface Issue {
   type,
@@ -89,7 +96,7 @@ function check (uri: string, customTests: CustomChecks = [], requestDetails: Req
     describe(`Pa11y tests for ${uri}`, () => {
       let issues: Issue[]
       before(async () => {
-        issues = await runPa11y(agent.get(uri).url)
+        issues = await runPa11y(`${baseUrl}${uri}`)
       })
 
       it('should have no accessibility errors', () => {
@@ -231,6 +238,8 @@ const testsOnSpecificPages: TestsOnSpecificPages[] = [
 ]
 
 describe('Accessibility', () => {
+  after(() => server.close())
+
   function checkPaths (pathsRegistry: object): void {
     Object.values(pathsRegistry).forEach((path: RoutablePath) => {
       const excluded = excludedPaths.some(_ => _ === path)
