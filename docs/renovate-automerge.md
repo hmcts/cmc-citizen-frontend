@@ -13,8 +13,6 @@ Repo-level settings:
 - `automergeStrategy`: `squash`.
 - `prConcurrentLimit`: `5`.
 
-`renovate.json.bak` is a leftover copy from #3730. Renovate doesn't read it; delete it.
-
 Groups, in the order they appear in `packageRules`:
 
 | Group | Matches | Automerge |
