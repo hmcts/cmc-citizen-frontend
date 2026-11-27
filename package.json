@@ -113,7 +113,7 @@
     "browserify": "^17.0.1",
     "chai": "^6.0.0",
     "chai-as-promised": "^8.0.0",
-    "codeceptjs": "4.2.5",
+    "codeceptjs": "4.2.6",
     "codecov": "^3.8.2",
     "debug": "^4.1.1",
     "eslint": "^8.20.0",
