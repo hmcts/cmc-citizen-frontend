@@ -126,7 +126,7 @@ cmc-claim-store:
       enabled: true
       releaseNameOverride: ${SERVICE_NAME}-postgresql
       image:
-        tag: '11.6.0'
+        tag: '16.5.0'
         registry: hmctsprod.azurecr.io
         repository: imported/bitnami/postgresql
       primary:
